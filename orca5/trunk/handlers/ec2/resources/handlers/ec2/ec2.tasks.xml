@@ -1,0 +1,9 @@
+<!--                                                                                                                                                                                           
+    This file contains definitions of tasks used by the ec2 package.
+-->
+
+<target name="ec2.load.tasks" depends="set.classpath">
+   <!-- ec2 tasks -->
+   <taskdef name="ec2.setup" classname="orca.handlers.ec2.EC2SetupTask" classpathref="run.classpath" loaderref="run.classpath.loader" />
+   <taskdef name="ec2.teardown" classname="orca.handlers.ec2.EC2TeardownTask" classpathref="run.classpath" loaderref="run.classpath.loader" />
+</target>

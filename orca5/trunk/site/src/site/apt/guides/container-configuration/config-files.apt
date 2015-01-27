@@ -1,0 +1,94 @@
+ ----
+ Orca Container Configuration Files
+ -----
+ The Orca Team
+ -----
+
+Orca Container Configuration Files
+
+ This document describes the configuration files of an Orca Container.
+
+* {ORCA_HOME}
+
+ A running Orca container stores the majority of its configuration into its home
+ directory. We refer to it as: ORCA_HOME. A container's home directory is
+ resolved using a multi-step approach
+ and is set to the following (in order of resolution):
+
+  [[1]] The value of the containing JVM's system property called <<ORCA_HOME>>.
+
+  [[2]] The value of the environment variable <<ORCA_HOME>>.
+
+  [[3]] The web application's root directory (when running inside an application
+  server).
+
+  [[4]] The current directory (when invoked from the command line).
+
+
+* {ORCA_LOCAL}
+
+ In addition to ORCA_HOME an Orca container stores some configuration files
+ relative to a directory, which we would refer to as ORCA_LOCAL.
+
+ ORCA_LOCAL is set to:
+
+  [[1]] The current directory (when invoked from the command line).
+
+  [[2]] The web application's root directory (when running inside an application
+  server.
+
+* {Container configuration}
+
+ The main Orca configuration is stored under <<$ORCA_HOME/config/>>. This
+ directory currently contains the following files:
+
+  [[1]] <<container.properties>>
+
+  This is the main Orca configuration file. It is described
+  {{{properties.html}here}}.
+
+
+  []
+
+  <<$ORCA_HOME/runtime/>> stores the security settings for Orca actors and the
+  admin user. The security settings currently consists of a keystore and axis2
+  cofniguration files. This directory contains the following subdirectories:
+
+   [[1]] <<axis2>>
+
+   Stores axis2 configuration files to be used by the admin user and the various
+   actors running inside an Orca container. There are three files per actor:
+
+     [[1]] <<${actor-guid}.axis2.xml>>
+
+     Axis2 configuration file to be used when communication must be digitally
+     signed.
+
+     [[2]] <<${actor-guid}.nosign.axis2.xml>>
+
+	 Axis2 configuration file to be used when communication must not be
+	 digitally signed.
+
+     [[3]] <<${actor-guid}.client.properties>>
+
+     Keystore information needed for digitall signatures.
+
+
+    ${actor-guid} is the GUID of an Orca actor or <<admin>> for the admin user.
+
+   [[2]] <<keystores>>
+	
+	Stores a keystore for every Orca actor and the admin user:
+	<<${actor-guid}.jks>>   
+
+   []
+   
+   The files for the admin user must be created before starting the container.
+   The settings for an actor can be created before instatiating the actor, or,
+   if missing, would be created dynamically at runtime.
+   	  
+   Please refer to the {{{../config-tools/}Config Tools}} documentation for more
+   information about creating security settings for the admin user or an actor. 
+   	    
+
+

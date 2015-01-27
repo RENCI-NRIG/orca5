@@ -1,0 +1,7 @@
+To test the controller, run 
+$ mvn clean package
+$ cd xmlrpc
+$ sh bin/xmlrpc
+
+
+Either a system property or environment variable ORCA_CONTROLLER_HOME sets the root directory for configuration

@@ -1,0 +1,7 @@
+# 'contains' match for part of DN
+CN=renci
+ibaldin
+yxin
+# 'matches' regex match for entire ID 
+.*orcatu[012][0-9].*
+

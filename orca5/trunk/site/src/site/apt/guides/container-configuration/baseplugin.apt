@@ -1,0 +1,169 @@
+ ----
+ Shirako Base Plugin
+ ----
+ Aydan Yumerefendi
+ ----
+ 13 December 2007
+ ----
+
+ 
+Shirako Base Plugin
+
+ This is the base implementation for a Shirako Plugin. This
+ implementation is inteded to serve as the parent of all Shirako
+ Plugin implementations. This is a generic plugin: it provides only
+ the minimal set of features expected by the leasing core.
+
+
+* Plugin structure
+
+  Each instance of the Shirako Base Plugin supplies the following
+  services:
+
+   * Persistent storage
+
+   Each actor stores its persistent state into a database backend. The
+   leasing core accesses the specific backend used by the actor
+   through the Shirako plugin.
+ 
+   * Configuration of leased resources
+
+   Leased resource require some configuration actions to be applied to
+   them before sites transfer them to service managers, and once
+   service managers receive them. The Shirako plugin provides the core
+   services to configure leased resources. These services are invoked
+   by the core as needed.
+   
+   * Storage and management of public/private keys
+
+   Communication within Orca sometimes requires the use and
+   verification of secret keys. The Shirako plugin provides services
+   to store and access secret keys.
+
+   * Serialization and deserialization factories for IConcreteSet
+     objects
+
+   Shirako maintains information about leased resources in objects
+   implementing the IConcreteSet interface. When these objects are
+   passed from one actor to another, a factory class for the specific
+   communication protocol is used to encode and decode the
+   objects. The Shirako plugin provides access to these factories.
+
+ 
+* Plugin configuration
+
+  The plugin configuration is an XML object {{{xml.html}descriptor}}.
+
+   * <<Class name:>>  orca.shirako.plugins.ShirakoPlugin
+
+   * <<Supported parameters:>>
+
+     * Database
+
++---
+<parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
++---
+
+     Specifies the actor database configuration. This is a required
+     parameter.
+
+     The class implementing database access should be an instance of
+     IDatabase. The currently supported classes all derive from
+     orca.util.db.MySqlBase and support the following properties:
+
+       * <<db.mysql.server>> Location of the MySQL server (DNS name or IP address).
+
+       * <<db.mysql.db>> Name of the database on the server.
+
+       * <<db.mysql.user>> User name to use when connecting to the database server.
+
+       * <<db.mysql.password>> Password to use when connecting to the
+         database server.
+
+     Full example:
+
++---  
+   <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+    <instance>
+     <className>orca.cod.plugins.db.MySqlCodDatabase</className>
+     <properties>
+      <property name="db.mysql.server" value="localhost" />
+      <property name="db.mysql.db" value="orca" />
+      <property name="db.mysql.user" value="orca" />
+      <property name="db.mysql.password" value="" />
+     </properties>
+    </instance>
+   </parameter>
++---    
+
+    * Config
+
++---    
+   <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
++---
+
+    Specifies the leased resource configuration service to use. This
+    is a required parameter for sites and service managers. Brokers do
+    not use configuration services.
+
+    Shirako provides a generic interface for configuration services as
+    well as base implementation for a configuration service using the
+    {{{http://ant.apache.org/}ant}} scripting language. The ant-based
+    implementation is provided in
+    <<orca.shirako.plguins.config.AntConfig>> and supports the
+    following properties:
+
+      * <<config.count>> number of configuration mappings. A
+        configuration mapping maps a resource type to an ant
+        configuration handler (script).
+
+      * <<config.type.X>> the type of the X-th mapping (counting
+        starts from 0)
+
+      * <<config.file.X>> the handler for the X-th mapping (counting
+        starts from 0)
+
+    Full example:
+
++---    
+    <instance>
+     <className>orca.shirako.plugins.config.AntConfig</className>
+     <properties>
+      <property name="config.count" value="1" />
+      <property name="config.type.0" value="1" />
+      <property name="config.file.0" value="common/noop.xml" />
+     </properties>
+    </instance>
+   </parameter>
++---
+
+ Putting all together:
+ 
++---
+ <plugin>
+  <className>orca.cod.plugins.ServiceManagerCodPlugin</className>
+  <parameters>
+   <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+    <instance>
+     <className>orca.cod.plugins.db.MySqlCodDatabase</className>
+     <properties>
+      <property name="db.mysql.server" value="localhost" />
+      <property name="db.mysql.db" value="orca" />
+      <property name="db.mysql.user" value="orca" />
+      <property name="db.mysql.password" value="" />
+     </properties>
+    </instance>
+   </parameter>
+   <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+    <instance>
+     <className>orca.shirako.plugins.config.AntConfig</className>
+     <properties>
+      <property name="config.count" value="1" />
+      <property name="config.type.0" value="1" />
+      <property name="config.file.0" value="common/noop.xml" />
+     </properties>
+    </instance>
+   </parameter>
+  </parameters>
+</plugin>
++---

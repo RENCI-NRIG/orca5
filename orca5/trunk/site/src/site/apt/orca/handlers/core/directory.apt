@@ -1,0 +1,23 @@
+ ----
+ Common Handlers Library Directory
+ -----
+ Aydan Yumerefendi
+ -----
+ December 14, 2007
+ -----
+ 
+Common Handlers Library Directory
+
+ All handlers in this directory are supplied in the Common Handlers
+ Package.
+
+ <<PackageId:>> 583c10bfdbd326ba:6cfc1a6b:11644881e09:-8000
+ 
+*-----------+-------------------------------------------+
+| Handler  | Description 
+*-----------+-------------------------------------------+
+| {{{smemulation.html}Service Manager Emulation Hanlder}}   | A "no-op" service manager handler useful for emulation.
+*-----------+-------------------------------------------+
+| {{{siteemulation.html}Site Emulation Handler}}   | A "no-op" site authority handler useful for emulation.
+*-----------+-------------------------------------------+
+

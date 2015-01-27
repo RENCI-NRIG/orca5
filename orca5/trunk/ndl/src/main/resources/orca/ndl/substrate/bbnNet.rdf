@@ -1,0 +1,729 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY wgs84_pos "http://www.w3.org/2003/01/geo/wgs84_pos#" >
+    <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
+    <!ENTITY orca "https://geni-orca.renci.org/owl/orca.rdf#" >
+    <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
+    <!ENTITY layer2 "http://geni-orca.renci.org/owl/layer.owl#10" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY ethernet "http://geni-orca.renci.org/owl/ethernet.owl#" >
+    <!ENTITY openflow "http://geni-orca.renci.org/owl/openflow.owl#" >
+    <!ENTITY location "http://geni-orca.renci.org/owl/location.owl#" >
+    <!ENTITY topology "http://geni-orca.renci.org/owl/topology.owl#" >
+    <!ENTITY bbnvmsite "http://geni-orca.renci.org/owl/bbnvmsite.rdf#" >
+    <!ENTITY collections "http://geni-orca.renci.org/owl/collections.owl#" >
+    <!ENTITY bbnNet "http://geni-orca.renci.org/owl/bbnNet.rdf#bbnNet/" >
+    <!ENTITY BbnNet "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/" >
+    <!ENTITY RciNet "http://geni-orca.renci.org/owl/bbnNet.rdf#RciNet/" >
+    <!ENTITY AcisRenci "http://geni-orca.renci.org/owl/bbnNet.rdf#AcisRenci/" >
+    <!ENTITY IBM2 "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/" >
+    <!ENTITY IBM "http://geni-orca.renci.org/owl/bbnNet.rdf#RciNet/IBM/" >
+    <!ENTITY G80522 "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/" >
+    <!ENTITY TengigabitEthernet "http://geni-orca.renci.org/owl/bbnvmsite.rdf#bbn/ExoGeni/TengigabitEthernet/2/" >
+    <!ENTITY TenGigabitEthernet7 "http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn/ExoGeni/TenGigabitEthernet/1/" >
+    <!ENTITY TengigabitEthernet2 "http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn/ExoGeni/TengigabitEthernet/2/" >
+    <!ENTITY TenGigabitEthernet9 "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/BM/G8052/TenGigabitEthernet/1/2/" >
+    <!ENTITY TenGigabitEthernet8 "http://geni-orca.renci.org/owl/nlr.rdf#NLR/BBN/Cisco/6509/TenGigabitEthernet/1/2/" >
+    <!ENTITY TenGigabitEthernet10 "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/2/" >
+    <!ENTITY TenGigabitEthernet6 "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/0/" >
+    <!ENTITY TenGigabitEthernet5 "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/1/" >
+]>
+
+
+<rdf:RDF xmlns="http://geni-orca.renci.org/owl/bbnNet.rdf#"
+     xml:base="http://geni-orca.renci.org/owl/bbnNet.rdf"
+     xmlns:layer2="&layer;10"
+     xmlns:RciNet="http://geni-orca.renci.org/owl/bbnNet.rdf#RciNet/"
+     xmlns:location="http://geni-orca.renci.org/owl/location.owl#"
+     xmlns:AcisRenci="http://geni-orca.renci.org/owl/bbnNet.rdf#AcisRenci/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:IBM="&RciNet;IBM/"
+     xmlns:bbnNet="http://geni-orca.renci.org/owl/bbnNet.rdf#bbnNet/"
+     xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
+     xmlns:TengigabitEthernet2="&bbnvmsite;Bbn/ExoGeni/TengigabitEthernet/2/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
+     xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
+     xmlns:G80522="&BbnNet;IBM/G8052/"
+     xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
+     xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
+     xmlns:orca="https://geni-orca.renci.org/owl/orca.rdf#"
+     xmlns:BbnNet="http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:TenGigabitEthernet9="&BbnNet;BM/G8052/TenGigabitEthernet/1/2/"
+     xmlns:TenGigabitEthernet10="&BbnNet;IBM/G8052/TenGigabitEthernet/1/2/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:TengigabitEthernet="&bbnvmsite;bbn/ExoGeni/TengigabitEthernet/2/"
+     xmlns:TenGigabitEthernet7="&bbnvmsite;Bbn/ExoGeni/TenGigabitEthernet/1/"
+     xmlns:TenGigabitEthernet8="http://geni-orca.renci.org/owl/nlr.rdf#NLR/BBN/Cisco/6509/TenGigabitEthernet/1/2/"
+     xmlns:IBM2="&BbnNet;IBM/"
+     xmlns:TenGigabitEthernet5="&BbnNet;IBM/G8052/TenGigabitEthernet/1/1/"
+     xmlns:TenGigabitEthernet6="&BbnNet;IBM/G8052/TenGigabitEthernet/1/0/"
+     xmlns:bbnvmsite="http://geni-orca.renci.org/owl/bbnvmsite.rdf#">
+    <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/bbnNet.rdf">
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/openflow.owl"/>
+        <owl:imports rdf:resource="https://geni-orca.renci.org/owl/orca.rdf"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/collections.owl#element -->
+
+    <owl:ObjectProperty rdf:about="&collections;element"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#hasAccessMethod -->
+
+    <owl:ObjectProperty rdf:about="&domain;hasAccessMethod"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#hasBroker -->
+
+    <owl:ObjectProperty rdf:about="&domain;hasBroker"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#hasResourceType -->
+
+    <owl:ObjectProperty rdf:about="&domain;hasResourceType"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#hasService -->
+
+    <owl:ObjectProperty rdf:about="&domain;hasService"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#hasTopology -->
+
+    <owl:ObjectProperty rdf:about="&domain;hasTopology"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#availableVLANSet -->
+
+    <owl:ObjectProperty rdf:about="&ethernet;availableVLANSet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#atLayer -->
+
+    <owl:ObjectProperty rdf:about="&layer;atLayer"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#hasBitRate -->
+
+    <owl:ObjectProperty rdf:about="&layer;hasBitRate"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#lowerBound -->
+
+    <owl:ObjectProperty rdf:about="&layer;lowerBound"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#switchingCapability -->
+
+    <owl:ObjectProperty rdf:about="&layer;switchingCapability"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#upperBound -->
+
+    <owl:ObjectProperty rdf:about="&layer;upperBound"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/location.owl#locatedAt -->
+
+    <owl:ObjectProperty rdf:about="&location;locatedAt"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#hasInterface -->
+
+    <owl:ObjectProperty rdf:about="&topology;hasInterface"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#hasSwitchMatrix -->
+
+    <owl:ObjectProperty rdf:about="&topology;hasSwitchMatrix"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#interfaceOf -->
+
+    <owl:ObjectProperty rdf:about="&topology;interfaceOf"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#linkTo -->
+
+    <owl:ObjectProperty rdf:about="&topology;linkTo"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/collections.owl#size -->
+
+    <owl:DatatypeProperty rdf:about="&collections;size"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#bandwidth -->
+
+    <owl:DatatypeProperty rdf:about="&layer;bandwidth"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#isLabelProducer -->
+
+    <owl:DatatypeProperty rdf:about="&layer;isLabelProducer"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#label_ID -->
+
+    <owl:DatatypeProperty rdf:about="&layer;label_ID"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/collections.owl#Set -->
+
+    <owl:Class rdf:about="&collections;Set"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#NetworkService -->
+
+    <owl:Class rdf:about="&domain;NetworkService"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement -->
+
+    <owl:Class rdf:about="&ethernet;EthernetNetworkElement"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix -->
+
+    <owl:Class rdf:about="&ethernet;EthernetSwitchingMatrix"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#VLAN -->
+
+    <owl:Class rdf:about="&ethernet;VLAN"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#LabelRange -->
+
+    <owl:Class rdf:about="&layer;LabelRange"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#LabelSet -->
+
+    <owl:Class rdf:about="&layer;LabelSet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#Device -->
+
+    <owl:Class rdf:about="&topology;Device"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#Interface -->
+
+    <owl:Class rdf:about="&topology;Interface"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#NetworkDomain -->
+
+    <owl:Class rdf:about="&topology;NetworkDomain"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/G8052/VLANLabel/1009 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;G8052/VLANLabel/1009">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1009.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052">
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasSwitchMatrix rdf:resource="&BbnNet;IBM/G8052/EthernetSwitchMatrix"/>
+        <topology:hasInterface rdf:resource="&BbnNet;IBM/G8052/GigabitEthernet/1/0/ethernet"/>
+        <topology:hasInterface rdf:resource="&BbnNet;IBM/G8052/GigabitEthernet/1/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&BbnNet;IBM/G8052/GigabitEthernet/1/2/ethernet"/>
+        <topology:hasInterface rdf:resource="&BbnNet;IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&BbnNet;IBM/G8052/TenGigabitEthernet/1/2/ethernet"/>
+        <topology:hasInterface rdf:resource="&BbnNet;IBM/G8052/TenGigabitEthernet/1/3/etherent"/>
+        <topology:hasInterface rdf:resource="&bbnNet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&bbnNet;IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/AL2SVLANSet/1 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/AL2SVLANSet/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&BbnNet;IBM/G8052/VLANLabel/2601"/>
+        <layer:upperBound rdf:resource="&BbnNet;IBM/G8052/VLANLabel/2610"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/AL2SVlanSet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/AL2SVlanSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/AL2SVLANSet/1"/>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/GigabitEthernet/1/0/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/GigabitEthernet/1/0/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>64</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/AL2SVlanSet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;1G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/GigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>64</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasName>InstaGeni-BBN</topology:hasName>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/InstaGeniVlanSet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/BBN/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;1G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/GigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/GigabitEthernet/1/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>64</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasName>ion</topology:hasName>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/IONVlanSet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;1G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/IONVlanSet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/IONVlanSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">5</collections:size>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/IONVlanSet/1"/>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/VLANLabel/3741"/>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/IONVlanSet/1 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/IONVlanSet/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&BbnNet;IBM/G8052/VLANLabel/3736"/>
+        <layer:upperBound rdf:resource="&BbnNet;IBM/G8052/VLANLabel/3739"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/InstaGeniVlanSet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/InstaGeniVlanSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">101</collections:size>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/InstaGeniVlanSet/1"/>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/InstaGeniVlanSet/1 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/InstaGeniVlanSet/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&BbnNet;IBM/G8052/VLANLabel/2400"/>
+        <layer:upperBound rdf:resource="&BbnNet;IBM/G8052/VLANLabel/2500"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/TenGigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>17-24</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/availableVLANSet"/>
+        <topology:linkTo rdf:resource="&bbnvmsite;Bbn/ExoGeni/TenGigabitEthernet/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/TenGigabitEthernet/1/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>41-48</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/availableVLANSet"/>
+        <topology:linkTo rdf:resource="&bbnvmsite;Bbn/ExoGeni/TengigabitEthernet/2/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/3/etherent -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/TenGigabitEthernet/1/3/etherent">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <ethernet:Tagged-Ethernet rdf:resource="&BbnNet;IBM/G8052/TenGigabitEthernet/1/3/ethernet/VLAN/1009"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/3/ethernet/VLAN/1009 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/TenGigabitEthernet/1/3/ethernet/VLAN/1009">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <ethernet:vlan rdf:resource="&BbnNet;G8052/VLANLabel/1009"/>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <topology:linkTo rdf:resource="&bbnvmsite;Bbn/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/VLANLabel/2400 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/VLANLabel/2400">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2400.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/VLANLabel/2500 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/VLANLabel/2500">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2500.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/VLANLabel/2601 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/VLANLabel/2601">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2601.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/VLANLabel/2610 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/VLANLabel/2610">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2610.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/VLANLabel/3736 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/VLANLabel/3736">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3736.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/VLANLabel/3739 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/VLANLabel/3739">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3739.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/VLANLabel/3741 -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/VLANLabel/3741">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3741.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/availableVLANSet -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;IBM/G8052/availableVLANSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">116</collections:size>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/AL2SVLANSet/1"/>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/IONVlanSet/1"/>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/InstaGeniVlanSet/1"/>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052/VLANLabel/3741"/>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <domain:hasBroker rdf:resource="&orca;ExoGENIBroker"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/PoP -->
+
+    <owl:NamedIndividual rdf:about="&BbnNet;PoP">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:element rdf:resource="&BbnNet;IBM/G8052"/>
+        <location:locatedAt rdf:resource="&bbnvmsite;Bbn"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#bbnNet/Domain -->
+
+    <owl:NamedIndividual rdf:about="&bbnNet;Domain">
+        <rdf:type rdf:resource="&topology;NetworkDomain"/>
+        <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
+        <collections:element rdf:resource="&BbnNet;PoP"/>
+        <domain:hasService rdf:resource="&bbnNet;Domain/NetworkService/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#bbnNet/Domain/NetworkService/1 -->
+
+    <owl:NamedIndividual rdf:about="&bbnNet;Domain/NetworkService/1">
+        <rdf:type rdf:resource="&domain;NetworkService"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/availableVLANSet"/>
+        <domain:hasTopology rdf:resource="&domain;Node"/>
+        <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
+        <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <domain:hasAggregateManager rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#BbnRackController"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#bbnNet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&bbnNet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>25-26</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/availableVLANSet"/>
+        <topology:linkTo rdf:resource="&bbnvmsite;Bbn/BareMetal/TenGigabitEthernet/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnNet.rdf#bbnNet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&bbnNet;IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>49-50</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
+        <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&BbnNet;IBM/G8052/availableVLANSet"/>
+        <topology:linkTo rdf:resource="&bbnvmsite;Bbn/BareMetal/TengigabitEthernet/2/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn -->
+
+    <owl:NamedIndividual rdf:about="&bbnvmsite;Bbn"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn/BareMetal/TenGigabitEthernet/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&bbnvmsite;Bbn/BareMetal/TenGigabitEthernet/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn/BareMetal/TengigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&bbnvmsite;Bbn/BareMetal/TengigabitEthernet/2/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn/ExoGeni/TenGigabitEthernet/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&bbnvmsite;Bbn/ExoGeni/TenGigabitEthernet/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
+
+    <owl:NamedIndividual rdf:about="&bbnvmsite;Bbn/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/bbnvmsite.rdf#Bbn/ExoGeni/TengigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&bbnvmsite;Bbn/ExoGeni/TengigabitEthernet/2/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/BBN/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/BBN/Cisco/6509/GigabitEthernet/1/1/ethernet">
+        <topology:hasURN>urn:publicid:IDN+instageni.gpolab.bbn.com+interface+procurve2:5.24.gpo-eg</topology:hasURN>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet">
+        <topology:hasURN>urn:publicid:IDN+ion.internet2.edu+interface+rtr.newy:et-5/0/0:gpo-eg</topology:hasURN>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/nlr.rdf#NLR/BBN/Cisco/6509/TenGigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&TenGigabitEthernet8;ethernet"/>
+    
+
+
+    <!-- https://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker -->
+
+    <owl:NamedIndividual rdf:about="&orca;ExoGENIBroker"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

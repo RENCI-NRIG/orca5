@@ -1,0 +1,408 @@
+ ----
+ Actors XML File
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Actors XML File
+
+ Actor-specific configuration, e.g., actor name, policy, resources, and
+ topology, can be specified programmatically, manually (by using the web
+ interface), or with the help of an XML file. The XML file can be loadeded
+ automatically when an Orca container boots for the first time, or it can be
+ loaded at a later time using the web interface.
+
+ If you want to start an Orca container and already have one or more actors
+ defined in it, you can define your actors in an XML file, whose structure is
+ described in this document. To have the container load and process the file
+ automatically during its first boot, you will have to place the file as:
+ <<$ORCA_LOCAL/config.xml>>. Please refer to {{{config-files.html}this}} page
+ for the definition of $ORCA_LOCAL.
+ 
+ <<Note:>> $ORCA_LOCAL/config.xml would be loaded only the first time an Orca
+ container starts. If the container is restarted, this file will be ingnored.
+ However, since an Orca container is persistent, once restarted it would restore
+ all actors and their internal state. 
+
+ An actors configuration XML file consists of the following sections:
+ 
+  * {{{#Actors}Actors}}
+  
+  * {{{#Topology}Topology}}
+
+ The structure of this configuration file is described in an XSD file, located at:
+ $ORCA_ROOT/manage/boot/resources/orca.boot.beans.schema.xsd.
+
+
+ This page describes the most recent Actors XML configuration file
+ format. For a description of the supported legacy format, please
+ refer to {{{xml-old.html}this}} page.
+
+ You can find sample actor configuration files in
+ $ORCA_ROOT/tests/cmdline/tests
+ ({{{https://geni-orca.renci.org/svn/orca/tools/cmdline/tags/2.0/tests/}Subversion
+ link}})
+
+* {Actors}
+
+ This section specifies the configuration of one or more actors to be instantiated in the Orca container.
+
+ An actor is defined by the following information:
+
+ * {{{#Type}Type}}
+
+ * {{{#Identity}Identity}}
+
+ * {{{#Resource_Policy}Resource Policy}}
+
+ * {{{#Inventory}Inventory}} (site authority only)
+
+ * {{{#Resource_Pools}Resource Pools}} (site authority only)
+
+ []
+
+ <<Note:>> Not all of the above information must be specified for every
+ actor. Many configuration elements have standard defaults. 
+
+ The rest of this section describes each element in details.
+ 
+** {Type}
+
+ The actor type specifies the role a given Orca actor can perform.
+ Actors in Orca can perform one of the following roles:
+
+ * Service manager (guest) - consumer of resource
+
+ * Broker - itermediary between consumers and providers of resources
+
+ * Site authority (aggregate) - provider of resources
+
+ []
+
+ At present an actor can perform only one role, although
+ programmatically it is also possible to create actors that perform
+ any combination of roles.
+
+ Each actor type corresponds to a specific java class implementing the
+ actor. The actor type is specified by the <<type>> tag and can take
+ the following values:
+
+*-----------+-------------------------+--------------------------------+
+| Role      | Type string             | Java class   
+*-----------+-------------------------+--------------------------------+
+| Guest     | <<sm>> or <<service>>   | orca.shirako.core.ServiceManager
+*-----------+-------------------------+--------------------------------+
+| Broker    | <<broker>> or <<agent>> | orca.shirako.core.Broker
+*-----------+-------------------------+--------------------------------+
+| Aggregate | <<site>> or <<authroity>>| orca.shirako.core.Authority
+*-----------+-------------------------+--------------------------------+
+
+ <<Example:>> The following snippet specifies a guest actor.
+
++----
+ <type>sm</type>
++----
+
+** {Identity}
+
+ An actor's identity consists of:
+
+ * Name - human readable name used to describe the actor (no spaces).
+ Should be unique relatively to the Orca container, but does not need
+ to be globally unique. Specified using the <<name>> tag.
+ 
++----
+ <name>service1</name>
++----
+
+
+ * GUID - a globally unique identifier. 
+
+ Each actor in Orca is identified by its GUID. The GUID field in the
+ configuration file is optional (but recommended). If now GUID is
+ specified, the system will authomatically generate one for ht eactor.
+ Note, however, that automatic GUID generation is not compatible with
+ inter-container communication, since this type of communication
+ requires that actors know their GUID (and certificates) prior to
+ instatiation.
+
+ To generate a GUID please refer to
+ {{{../getting-started/index.html#How_to_generate_a_GUID}this
+ page}}.
+
+ The actor GUID is specified by the <<guid>> tag:
+
++----
+ <guid>14094152-6F6B-4A9C-A35F-2E12AEE91540</guid>
++----
+
+ * Certificate and signing key - a public/private keypair used by the
+ actor for signing and authentication
+
+ Each actor in Orca must be associates with a public/private key pair
+ and a certificate representing the keypair. Orca by default uses
+ self-signed certificates, but it could also use certificates issued
+ by a dedicated Certificate Authority. 
+ 
+ All keys and certificates associated with a given actor are stored in
+ its keystore. The actor keystore file location is determined by the actor GUID. It is
+ located at:
+
++----
+ $ORCA_HOME/runtime/keystores/GUID.jks
++----
+
+ When Orca instantiates an actor it checks for the existence of the
+ keystore file. If the keystore file is present and it contains the
+ actor's certificate and signing key, no action would be taken. If the
+ keystore is missing or the actor's certificate is not present, Orca
+ would autogenerate a keystore and a certificate and signing key for
+ the actor. 
+
+ When using local communication, certificate files play a minor role
+ and the autogeneration capability is acceptable. However, when an
+ actor needs to communicate with an actor in another container,
+ certificate files (and GUIDs) must be pregenerated.
+
+ Please refer to
+ {{{../getting-started/index.html#How_to_generate_an_actor_certificate}this
+ page}} for information about generating actor
+ certificate files. Once the keystore and certificate for an actor
+ have been generated, please make sure that the files are copied
+ (linked) under $ORCA_HOME/runtime.
+
+
+ * Description
+
+ This is an optional tag that can be used to speficy text to be
+ associated with the actor. This text is displayed on the web portal.
+ The actor description is specified by the <<description>> tag:
+
+ [] 
+
++----
+ <description>A sample service manager</description>
++----
+
+ []
+
+** {Resource Policy}
+
+ An actor's resource policy is the "brains" of the actor. It specifies
+ how the actor interacts in the Orca ecosystem. Orca ships with a number
+ of standard policies and can easily be extended to serve a specific
+ purpose.
+
+ The configuration subsystem assumes a default policy per actor type.
+ If the configuration file does not contain a policy section, then the
+ default one would be instantiated.
+
+ The defaults for each actor type are:
+
+*--------------+------------------------------------------------+
+| Actor type   | Default policy
+*--------------+------------------------------------------------+
+| Guest		   | {{{../../orca/policy/core/ServiceManagerSimplePolicy.html}orca.policy.core.ServiceManagerSimplePolicy}}
+*--------------+------------------------------------------------+
+| Broker	   | {{{../../orca/policy/core/BrokerSimplerUnitsPolicy.html}orca.policy.core.BrokerSimplerUnitsPolicy}}
+*--------------+------------------------------------------------+
+| Aggregate	   | {{{../../orca/policy/core/AuthorityCalendarPolicy.html}orca.policy.core.AuthorityCalendarPolicy}}
+*--------------+------------------------------------------------+
+
+ An actor's policy is specified by the <<policy>> tag. Each policy
+ instance can take an optional properties list that would be passed to
+ the policy's <<<configure(Properties)>>> method. 
+ 
+ <<Note:>> To pass properties to an actor's policy, the policy class
+ must be specified, even if it is the default one.
+
++----
+ <policy class="orca.policy.core.BrokerSimplerUnitsPolicy">
+  <properties>
+   <property name="queue.type" value="fifo" />
+  </properties>
+ </policy>
++---- 
+ 
+ AuthorityCalendarPolicy requires an additional configuration element.
+ The <<control>> section specifies a <<ResourceContol>> object to be
+ instantiated inside the policy. A control section is specified inside
+ the <<controls>> section, which is part of an <<actor>> section.
+
+ A control tag can specify the following attributes:
+
+	* <<class>> - class name for the control (see
+	{{{../../orca/policy/core/AuthorityCalendarPolicy.html}orca.policy.core.AuthorityCalendarPolicy}}
+	for a list of control objects)
+ 
+	* <<type>> - resource type this control can operate on (there
+	should be a corresponding resource pool in the actor's
+	description)
+
+	<<Note:>> a control object can operate on more than one resource
+	pools/types. To specify a control that can operate over multiple
+	resource types, use the following syntax:
+
++---
+<control class="...">
+ <types>
+  <type>type1</type>
+  <type>type2</type>
+ </types>
+</control>
++---
+
+   <<Note:>> Do not use the type attribute when using the types
+   syntax.
+ 
+
+** {Inventory}
+
+ A site authority (aggregate) may need to gain control over some
+ resources at instantiation time. The <<inventory>> tag can be used to
+ accomplish this task.
+
+ <<Note:>> This feature is mostly for backwards compatibility with
+ COD and is used primarily by Node Agent-based drivers. If a Node
+ Agent is used to control an infrastructure component, this section
+ can be used to authorize the aggregate to access the corresponding
+ Node Agent service. We are currently moving away from Node
+ Agent-based drivers, so if you find yourself using this section,
+ please contact a project member. There may be an easier and better
+ supported way to accomplish your goal.
+ 
+ The <<inventory>> tag accepts a comma-separated list of inventory
+ item names. Each item name must correspond to an inventory item in
+ the container's database.
+ 
++----
+ <inventory>demo1,demo2,demo3</inventory>
++----
+
+ As a result of this configuration section, Orca would try to transfer
+ control over the Node Agent service(s) associated with inventory
+ items: demo1, demo2, and demo3.
+ 
+ <<Note:>> for this process to work, the Orca container must already
+ have control over the inventory items. 
+ 
+
+** {Resource Pools}
+
+ Each site authority (aggregate) must define at least one resource
+ pool. A resource pool is a collection of resources that the aggregate
+ can control and delegate to service managers (guests).
+
+ The format of the resource pools section is described in details
+ {{{rpools.html}here}}
+
+* {Topology}
+
+ This section specifies the interconnections between actors residing in this container. Each actor can be
+ connected to an actor within the same container, or to a remote actor. Local communication can use either
+ the local or the soap protocol, but remote communication must be based on the
+ soap protocol.
+
+ This section consists of one or more <<edge>> elements. An edge consists of a
+ <<from>> vertex and of a <<to>> vertex. A vertex specifies the identity of an
+ actor. At least one of the vertices for an edge must refer to an actor local to
+ the container. An actor is identified by:
+   
+   * its name
+   
+   * its type (sm|service|agent|broker|authority|site)
+
+   * its guid (only needed for remote actor)
+
+   * its location (only needed for remote actors)
+
+   []
+
+ When a vertex specifies a remote actor, the vertex must specify the protocol to
+ be used when communicating with the actor and the URL of the server/service
+ that represents the actor. At present only the SOAP protocol is supported and
+ the protocol attribute must be set to <soapaxis2>. The URL for an actor is
+ contructed by combining the url of the container, a prefix, and the name of the
+ actor. For example, if base URL of an Orca container is
+ http://www.example.com:8080/orca, the URL for an actor with the name <broker0>
+ would be: 
+
++---
+http://www.example.com:8080/orca/services/broker0
++---
+ 
+ The base URL for an Orca container is defined in container.properties. Please
+ refer to the documentation for <container.soapaxis2.url> in the
+ {{{properties.html}Container Properties File}}.
+ 
+
+ When using SOAP for communication, the keystore of the local actor must contain
+ the X.509 certificate of the remote actor. The ceritificate can be added
+ manually to the actor keystore or it can be specified in a certificate element
+ as a child of the vertex. The certificate must be defined
+ in Base64-encoded format. For example:
+
++---
+<certificate>
+MIICaDCCAdECBEocghEwDQYJKoZIhvcNAQEEBQAwezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5D
+MQ8wDQYDVQQHEwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNV
+BAMTJGJiMmJkNjg5LTA2YWYtNGI1ZC05OWViLTI5YWVlZjQ3NWIxYjAeFw0wOTA1MjYyMzU4MDla
+Fw0wOTA4MjQyMzU4MDlaMHsxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJOQzEPMA0GA1UEBxMGRHVy
+aGFtMQ0wCwYDVQQKEwRvcmNhMRAwDgYDVQQLEwdzaGlyYWtvMS0wKwYDVQQDEyRiYjJiZDY4OS0w
+NmFmLTRiNWQtOTllYi0yOWFlZWY0NzViMWIwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKao
+Le+HMqkIbQuqEu6dDGHFzPdPLfmwhDopwo71iL6vDdSmWKdDkPN7tA6nt+z5wTrFYiC8h0/ygC0V
+Kq8VTTxsUavi27KPKNo6hueT76TfQ3P+8fQc4JNrgkl/ChpWMbLUA8uR7dHgUFDT6YEbKCgyU3Wa
+4iDPRkdYNfOCaXuPAgMBAAEwDQYJKoZIhvcNAQEEBQADgYEAIKSAMktlbTHy6iQupoxYNo1+ynr+
+YlFGF5ZKSvL3mwxxlvdZQ2wc3SlVWL5pnfSi7Xbsj0RM0GspfOwuuyukdSPuTktk2aLo7FbXJh3z
+hWd29o+kB8O+J808PbFwT4J+OiECMW4tx5EOYlmHhL8LjzsXXWpx3skHLSaOxDTxfK4=
+</certificate>
++---
+
+ <<NOTE:>> Please make sure there is no whitespace on the left side of each line
+ of the encoded certificate.
+ 
+ Any certificate that is defined in a vertex will be added automatically to the
+ keystore of the local actor.
+ 
+
+ A sample vertex representing a remote actor looks something like this:
+
++---
+<to name="broker" type="agent" guid="ba45089a-328c-1235-a3d2-b7fac0b4fbe1">
+  <location protocol="soapaxis2" url="http://host2.example.com:8080/orca/services/broker" />
+<certificate>
+MIICaDCCAdECBEocghEwDQYJKoZIhvcNAQEEBQAwezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5D
+MQ8wDQYDVQQHEwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNV
+BAMTJGJiMmJkNjg5LTA2YWYtNGI1ZC05OWViLTI5YWVlZjQ3NWIxYjAeFw0wOTA1MjYyMzU4MDla
+Fw0wOTA4MjQyMzU4MDlaMHsxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJOQzEPMA0GA1UEBxMGRHVy
+aGFtMQ0wCwYDVQQKEwRvcmNhMRAwDgYDVQQLEwdzaGlyYWtvMS0wKwYDVQQDEyRiYjJiZDY4OS0w
+NmFmLTRiNWQtOTllYi0yOWFlZWY0NzViMWIwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKao
+Le+HMqkIbQuqEu6dDGHFzPdPLfmwhDopwo71iL6vDdSmWKdDkPN7tA6nt+z5wTrFYiC8h0/ygC0V
+Kq8VTTxsUavi27KPKNo6hueT76TfQ3P+8fQc4JNrgkl/ChpWMbLUA8uR7dHgUFDT6YEbKCgyU3Wa
+4iDPRkdYNfOCaXuPAgMBAAEwDQYJKoZIhvcNAQEEBQADgYEAIKSAMktlbTHy6iQupoxYNo1+ynr+
+YlFGF5ZKSvL3mwxxlvdZQ2wc3SlVWL5pnfSi7Xbsj0RM0GspfOwuuyukdSPuTktk2aLo7FbXJh3z
+hWd29o+kB8O+J808PbFwT4J+OiECMW4tx5EOYlmHhL8LjzsXXWpx3skHLSaOxDTxfK4=
+</certificate>
+</to>
++---
+
+ This edge represents an agent called "broker" that resides in an Orca container
+ on host2.example.com.
+
+
+ <<Important:>> When using SOAP for communication, each actor must have a know
+ GUID and certificate. Although Orca can autogenerate both the GUID and certificate
+ for an actor, SOAP communication requires that both ends know their
+ certificates, and identities, which is not possible when using autogeneration.
+
+ Here are some useful links:
+
+  * {{{../getting-started/index.html#How_to_generate_a_GUID}How to generate a
+   GUID}}
+
+  * {{{../getting-started/index.html#How_to_generate_an_actor_certificate}How to generate an actor certificate}}
+ 
+
+

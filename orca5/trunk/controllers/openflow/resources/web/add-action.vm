@@ -1,0 +1,22 @@
+#parse("/secure/common/top.vm")
+#parse("${root.getPackageRoot('e11fd4ce-a727-434c-b17d-00449328b67f')}/top.vm")
+
+<div class="title">Request Resources</div>
+<div class="titleSpacer"/>  
+
+#set ($vmsduke=$params.getInt("vmsduke", 0))
+#set ($vmsrenci=$params.getInt("vmsrenci", 0))
+#set ($start=$params.getString("start"))
+#set ($end=$params.getString("end"))
+
+
+#if ($vmsduke >= 0 && $vmsrenci >= 0 && $start && $end)
+	#set ($result = $sliceProxy.addRequest($start, $end, $vmsduke, $vmsrenci, $identity.getAuth()))
+	#printResultNoRedirect($result "An error occurred")
+	#if (!$errorFlag)
+		#printMessage("Reservation request submitted. Wait for a few seconds before the system starts processing it")
+	#end
+#else
+	#printMessage("Invalid arguments")
+#end
+

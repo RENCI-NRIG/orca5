@@ -1,0 +1,97 @@
+#parse("/secure/common/top.vm")
+#parse("${root.getPackageRoot('f7ec610c-d838-4239-87fc-869a8cbf848e')}/top.vm")
+
+<div class="title">Resource Requests</div>
+<div class="titleSpacer"/>     
+
+#set($tmp=false)
+#set($tmp=$sliceProxy.getRequests($identity.getAuth()))
+
+#set ($errorFlag=false)
+#printResultNoRedirect($tmp "An error occurred while obtaining requests list")
+#if (!$errorFlag)
+	#set($reqs=$tmp.getResult())
+#end	
+
+
+#if ($list.size($reqs) == 0)
+	#printMessage("There are no requests")
+#else
+
+<table cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td class="tableHeader-right" width="20">No.</td> 
+		<td class="tableHeader-left" width="120">Term</td> 
+		<td class="tableHeader-left" width="120"><nb>Virtual Machines</nb></td> 
+		<td class="tableHeader-left" width="120"><nb>Vlan Tags</nb></td> 
+		<td class="tableHeader-right" width="50">&nbsp;</td>
+		<td class="tableHeader-right" width="50">&nbsp;</td>
+	</tr>
+	#foreach($req in $reqs)
+    	<tr>
+    		<td valign="top">$velocityCount</td>
+    		<td valign="top">
+    			<table>
+    				<tr><td><nobr><b>Start: </b></nobr></td><td><nobr>$req.getStart()</nobr></td></tr>
+    				<tr><td><nobr><b>End: </b></nobr></td><td><nobr>$req.getEnd()</nobr></td></tr>
+    			</table>		
+    		</td>
+    		<td valign="top">
+    			<table>
+    				<tr>
+    					<td>
+    					  <a href="$uri/secure/user/reservation-view.vm?actor=$vsession.actor.getName()&slice=$vsession.slice.getID()&rid=$req.getRidDuke()"><nobr><b>Duke: </b></nobr></a>
+    					</td>
+    					<td><nobr>$req.getVmsduke()</nobr></td>
+    				</tr>
+    				<tr>
+    					<td>
+    					  <a href="$uri/secure/user/reservation-view.vm?actor=$vsession.actor.getName()&slice=$vsession.slice.getID()&rid=$req.getRidRenci()"><nobr><b>Renci</b></nobr></a>
+    					</td>
+    					<td><nobr>$req.getVmsrenci()</nobr></td>
+    				</tr>
+    				<tr>
+    					<td>
+    					  <a href="$uri/secure/user/reservation-view.vm?actor=$vsession.actor.getName()&slice=$vsession.slice.getID()&rid=$req.getRidUnc()"><nobr><b>Unc</b></nobr></a>
+    					</td>
+    					<td><nobr>$req.getVmsunc()</nobr></td>
+    				</tr>
+      			</table>		
+    		</td>
+     		<td valign="top">
+    			<table>
+    				<tr>
+    					<td>
+    					  <a href="$uri/secure/user/reservation-view.vm?actor=$vsession.actor.getName()&slice=$vsession.slice.getID()&rid=$req.getRidDukeNet()"><nobr><b>Duke: </b></nobr></a>
+    					</td>
+    					<td><nobr>$!{req.getVlanTagDuke()}</nobr></td>
+    				</tr>
+    				<tr>
+    					<td>
+    					  <a href="$uri/secure/user/reservation-view.vm?actor=$vsession.actor.getName()&slice=$vsession.slice.getID()&rid=$req.getRidNlr()"><nobr><b>NLR: </b></nobr></a>
+    					</td>
+    					<td><nobr>$!{req.getVlanTagNlr()}</nobr></td>
+    				</tr>
+    				<tr>
+    					<td>
+    					  <a href="$uri/secure/user/reservation-view.vm?actor=$vsession.actor.getName()&slice=$vsession.slice.getID()&rid=$req.getRidBen()"><nobr><b>BEN: </b></nobr></a>
+    					</td>
+    					<td><nobr>$!{req.getVlanTagBen()}</nobr></td>
+    				</tr>
+ 
+      			</table>		
+    		</td>
+    		<td valign="top" align="right"><a href="details.vm?requestId=$req.getId()">details</a></td> 
+    		<td valign="top" align="right">
+    			#if ($req.getClosed())
+    				<b>closed</b>
+    			#else
+    				<a href="close.vm?requestId=$req.getId()">close</a>
+    			#end	
+    		</td> 
+		</tr>
+	#end
+</table>
+
+#end
+

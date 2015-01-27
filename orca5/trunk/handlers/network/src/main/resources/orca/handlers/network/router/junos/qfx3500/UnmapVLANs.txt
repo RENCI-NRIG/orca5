@@ -1,0 +1,1 @@
+delete: vlans {$VLANName} vlan-id {$srcVLAN} interface {$port} mapping {$dstVLAN} swap;

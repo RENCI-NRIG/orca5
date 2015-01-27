@@ -1,0 +1,231 @@
+<definitions targetNamespace="http://orca/shirako/proxies/soapaxis2/services"
+             xmlns:tns="http://orca/shirako/proxies/soapaxis2/services"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:types="http://orca/shirako/proxies/soapaxis2/beans">
+
+	<!-- Import the type definitions -->
+	<import namespace="http://orca/shirako/proxies/soapaxis2/beans"
+	        location="types.xsd" />
+	<!-- Define the messages -->
+
+	<!-- Broker-specific -->
+	<message name="ticketRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="reservation" type="types:reservation" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="ticketResponse" />
+
+	<message name="extendTicketRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="reservation" type="types:reservation" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="extendTicketResponse" />
+
+	<message name="relinquishRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="reservation" type="types:reservation" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="relinquishResponse" />
+
+	<message name="claimRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="reservation" type="types:reservation" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="claimResponse" />
+
+	<!-- Actor common -->
+	<message name="updateLeaseRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="reservation" type="types:reservation" />
+		<part name="updateData" type="types:updateData" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="updateLeaseResponse" />
+
+	<message name="updateTicketRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="reservation" type="types:reservation" />
+		<part name="updateData" type="types:updateData" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="updateTicketResponse" />
+
+	<message name="queryRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="properties" type="types:properties" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="queryResponse" />
+
+	<message name="queryResultRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="requestID" type="xsd:string" />
+		<part name="properties" type="types:properties" />
+	</message>
+	<message name="queryResultResponse" />
+
+	<message name="failedRPCRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="requestID" type="xsd:string" />
+		<part name="requestType" type="xsd:int" /> 
+		<part name="reservationID" type="xsd:string" />
+		<part name="errorDetails" type="xsd:string" />
+	</message>
+
+	<message name="failedRPCResponse" />
+
+	<!-- port type definitions -->
+	<portType name="BrokerServicePortType">
+		<!-- Broker specific operations -->
+		<operation name="ticket">
+			<input message="tns:ticketRequest" />
+			<output message="tns:ticketResponse" />
+		</operation>
+		<operation name="extendTicket">
+			<input message="tns:extendTicketRequest" />
+			<output message="tns:extendTicketResponse" />
+		</operation>
+		<operation name="relinquish">
+			<input message="tns:relinquishRequest" />
+			<output message="tns:relinquishResponse" />
+		</operation>
+		<operation name="claim">
+			<input message="tns:claimRequest" />
+			<output message="tns:claimResponse" />
+		</operation>
+		<!-- Actor common API -->
+		<operation name="updateLease">
+			<input message="tns:updateLeaseRequest" />
+			<output message="tns:updateLeaseResponse" />
+		</operation>
+		<operation name="updateTicket">
+			<input message="tns:updateTicketRequest" />
+			<output message="tns:updateTicketResponse" />
+		</operation>
+		<operation name="query">
+			<input message="tns:queryRequest" />
+			<output message="tns:queryResponse" />
+		</operation>
+		<operation name="queryResult">
+			<input message="tns:queryResultRequest" />
+			<output message="tns:queryResultResponse" />
+		</operation>
+		<operation name="failedRPC">
+			<input message="tns:failedRPCRequest" />
+			<output message="tns:failedRPCResponse" />
+		</operation>
+	</portType>
+
+	<binding name="BrokerService" type="tns:BrokerServicePortType">
+		<soap:binding style="rpc"
+		              transport="http://schemas.xmlsoap.org/soap/http" />
+		<!-- broker specific operations -->
+		<operation name="ticket">
+			<soap:operation soapAction="ticket" />
+			<input name="ticketRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="ticketResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="extendTicket">
+			<soap:operation soapAction="extendTicket" />
+			<input name="extendTicketRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="extendTicketResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="relinquish">
+			<soap:operation soapAction="relinquish" />
+			<input name="relinquishRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="relinquishResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="claim">
+			<soap:operation soapAction="claim" />
+			<input name="claimRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="claimResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<!-- Actor common -->
+
+		<operation name="updateLease">
+			<soap:operation soapAction="updateLease" />
+			<input name="updateLeaseRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="updateLeaseResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="updateTicket">
+			<soap:operation soapAction="updateTicket" />
+			<input name="updateTicketRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="updateTicketResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="query">
+			<soap:operation soapAction="query" />
+			<input name="queryRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="queryResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="queryResult">
+			<soap:operation soapAction="queryResult" />
+			<input name="queryResultRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="queryResultResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="failedRPC">
+			<soap:operation soapAction="failedRPC" />
+			<input name="failedRPCRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="failedRPCResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+	</binding>
+
+	<service name="BrokerService">
+		<port name="BrokerService" binding="tns:BrokerService">
+			<soap:address location="http://localhost:8080/services/BrokerService" />
+		</port>
+	</service>
+
+</definitions>
+

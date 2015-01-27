@@ -1,0 +1,243 @@
+ ----
+ Orca Getting Started Guide
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Orca Getting Started Guide
+
+ This guide is intended as a reference for those working with Orca for the first time, but it is also intended to serve
+ as a cookbook with self-contained references and solutions for common cases.
+ 
+Sections
+
+ * {{{index.html#What_is_Orca}What is Orca?}}
+
+ * {{{index.html#Fair_warning}Fair warning}}
+
+ * {{{index.html#Deploying_your_own_actors}Deploying your own actors}}
+ 
+ * {{{index.html#Building_and_installing_the_source_release}Building and installing the source release}}
+
+ *{{{index.html#Launching_your_own_container}Launching your own container}}
+    
+ * {{{index.html#Running_your_own_provider_site}Running your own provider site}}
+
+ * {{{index.html#Testing_a_container_XML_configuration_file}Testing a container XML configuration file}}
+  
+ * {{{index.html#How_to_generate_a_GUID}How to generate a GUID?}}
+ 
+ * {{{index.html#How_to_generate_an_actor_certificate}How to generate an actor certificate?}} 
+ 
+ []
+
+* {What is Orca?}
+
+ Orca (Open Resource Control Architecture) is a framework for distributed lease-based resource management. 
+ In this context, the term resource means any network-accessible resource, such as, physical machine, virtual machine, 
+ storage capacity, network bandwidth, etc. 
+ Orca provides the means to control the access to and to manage distributed collections of resources.
+ The system is intended to manage networked utilities, such as computational grids, network testbeds, or commercial hosting services. 
+ It provides the means to virtualize resources to balance isolation and sharing, monitor and control resource status, 
+ match resource supply and demand, and adapt applications and services to the dynamics of a shared environment.
+ 
+ An Orca system is a collection of <<actors>> that interact using the leasing protocols.  Logically, each actor is a server with private internal state that persists in a database.  Each provider <<site>> or <<domain>> is represented by an <<authority>> actor.  Each <<guest>> environment that consumes resources is represented by an actor called a <<service manager>>.   Other actors represent brokering intermediaries.  
+
+ What does it mean to use Orca?  A typical user will interact with a shared facility through a Web portal to acquire resources (e.g., virtual machines) and launch application environments.   This documentation is mostly for people who want to build and deploy their own actors.  The target audience includes developers of the system itself, operators who want to set up an Orca facility to manage shared clusters and other resources,  and developers of guest environments that lease resources from one or more Orca sites.
+
+* {Fair warning}
+
+ Orca has lots of moving parts that can be connected and configured in different ways.  You can add your own parts, build a facility from pre-existing parts, or connect into an existing facility or network of facilities.  Fair warning: Orca is still a work in progress.  Configuration is complex and can be tricky.  Some of the parts are missing or don't fit together as expected.  Documentation is spotty.  Orca uses a lot of other open-source tools that are themselves moving targets.  These tools must be installed properly on the systems you are using.  As with all complex systems you may discover dependencies that are fragile and unexpected.  (If so, please let us know.)
+
+* {Deploying your own actors}
+
+ Most of this documentation is geared to users who want to install one or more actors in one or more containers.
+
+    * If you want to run a provider site, then you need to deploy an authority actor, give it control of some <<inventory>>, e.g., a server cluster, and connect it to one or more brokers.
+
+    * If you want to run a guest on an Orca system, then you need to deploy a service manager actor and connect it to one or more brokers and provider sites.
+
+    * If you want to experiment with resource arbitration policies, or coordinate resource allocation for multiple sites, then you need to deploy a broker actor.  
+
+    * If you want to work with a self-contained Orca system that is entirely under your control then you will deploy all three types of actors.
+
+    []
+
+ We build Orca actors in Java using the Shirako leasing toolkit.  Each actor is a Java-based server running within a JVM container.  Multiple actors may share the same container.   There is more about containers below.
+
+  Shirako handles most of the details of creating new actors: all you need to provide is one or more policy (controller) modules for each of your actors, which you can write yourself or configure off-the-shelf.    The Orca release includes some other useful pieces, including support for per-container database servers, tools for actor configuration, and a Velocity-based web portal that can run within a container or attach to other containers, and exports a Web interface to control actors in the container. 
+ 
+* {Building and installing the source release}
+
+ To create and install Orca actors you need access to the Orca jar and
+ configuration files. Since the
+ Orca build process is based on Maven, you could obtain all requred orca
+ components directly from our Maven repository, or you could build everything
+ from source. We recommend building from source, since the binary process is not
+ yet fully documented.
+
+ Throughout the documentation, the root directory of the Orca source tree
+ is referred to as $ORCA_ROOT. 
+
+ The {{{../install/index.html}Orca Installation Guide}} describes the steps
+ to build and bootstrap the project. 
+
+
+* {Launching your own container}
+
+ We often use the terms <<Orca container>> and <<Orca instance>> interchangeably
+ and/or use "Orca" as a shorthand for an Orca container.  E.g., when we say "run
+ Orca" we really mean "to launch an Orca container", the "Orca admin" is really
+ the admin of an Orca container (different containers may have different
+ admins), and so on.
+
+ Containers may be launched in any of several ways:
+  
+  [[1]] From the command line. This mode of execution is suitable for
+  experiments that do not require communication between multiple Orca
+  containers. In particular, we recommend this mode of emulation-based
+  experiments and for development and testing.
+
+  [[2]] Within a development environment such as Eclipse.  This is a variant of
+  the first option, and is generally used during development and testing.
+
+  [[3]] Within a Web application server such as Tomcat. This is the standard
+  execution mode of Orca and supports communication between multiple distributed
+  containers. This execution mode requires a separate application server to run
+  the Orca web application.
+  
+  []
+
+  Regardless of the mode of execution, an Orca container has a set of
+  configuration files and state that must be prepared before the container can
+  execute. The various execution modes represent different ways of packaging the
+  Orca functionality and may also require some additional configuration steps.
+  
+
+  The Orca {{{../container-configuration/}Container Configuration Guide}}
+  describes the configuration files and state required by an Orca container.
+
+
+  
+ The Container Configuration Guide will take you through the following:
+
+ The
+ {{{/guides/config-tool/index.html}Orca Configuration Tools}} are used configure keys etc. for actors and containers to interact, and also to enable an authority to operate on the components that it controls.
+
+  The {{{../command-line/index.html}Orca Command-line Guide}} describes how to configure and execute an Orca container from 
+  command-line scripts.
+ 
+  The {{{../portal/index.html}Orca Web Portal Guide}} describes how to configure
+  and execute an Orca container as a web application with a Web portal interface.
+
+* {Running your own provider site}
+
+ Your container may include a site authority actor to manage a resource provider site.  For example, if you are exporting a cluster or some other resources to users and guest applications, you must configure your site authority actor about the resource inventory (substrate components) that it controls and the things that it can do with them.
+  
+** {Preparing and registering inventory}
+
+ Please consult the {{{../inventory/}Inventory Guide}} for information
+ about configuring and managing inventory.
+
+ 
+** {Configuring Images}
+
+ Please consult the {{{../images/}Images Guide}} for information
+ about virtual and physical machine images.
+
+
+** {Enable/Disable emulation}
+
+
+  Please consult the {{{../emulation/}Emulation Guide}} or the
+  {{{../real/}Real Execution Guide}} for information about running under emulation or real mode.
+  
+
+* {Testing a container XML configuration file}
+
+ It is often necessary to verify the correctness of a container XML configuration {{{../container-configuration/xml.html}file}}. For example, 
+ such verification can save time when trying to deploy Orca as a web application. It is recommended that you verify your configuration files
+ prior to using them for experimentation or execution.
+ 
+ To verify a Container XML Configuration File you can use the {{{../command-line/index.html}run}} project (make sure that you have performed all necessary configuration):
+ 
++---
+ cd $ORCA_ROOT/run
+ ant test.configuration -Dconfig=<path to XML configuration file>
++--- 
+ 
+ <<Note>>: The above command will test your XML configuration file while pulling all other configuration information from the run project. 
+ If you would like to test also the other configuration files, you can find more information on 
+ {{{../command-line/test-configuration.html}this}} page.
+
+* {How to generate a GUID?}
+
+ Orca uses GUIDs extensively. For example, resource leases, leased resources, and physical machines
+ have a GUID. The system generates GUIDs automatically as needed, but sometimes,
+ you may need to create GUID
+ manually. The {{{../config-tool/}Config Tools}} provides a means to generate a
+ GUID. To generate a GUID type the following
+ in your terminal: 
+ 
++---
+ cd $ORCA_ROOT/tools/config
+ ant guid
++--- 
+ 
+ The above command will generate a GUID. The output will look something like this:
+ 
++--- 
+ant guid
+Buildfile: build.xml
+
+guid:
+     [java] 262390da-e360-446f-8c63-2394a1ea3fba
+     
+BUILD SUCCESSFUL
++---
+
+ You can then copy the GUID (<<<262390da-e360-446f-8c63-2394a1ea3fba>>>) and use it as needed.
+
+ Alternatively, you can use the <<uuid>> or the <<uuidgen>> commands to generate
+ a GUID.
+
+* {How to generate an actor certificate?}
+
+ Actors in Orca use public key certificates to identify themselves. Each Orca
+ actor is identified by a private/public keypair. Orca uses X.509 certificates
+ to represent public keys. Orca can use certificates and keys issued by any
+ authorized CA. Alternatively Orca actors can use self-signed certificates. Orca
+ can autogenerate certificates for each actor at startup and provides tools to
+ generate manually the certificate for an actor.
+
+ Certificate generation tools are documented in more details in the  {{{../config-tool/}Configuration Tools Reference}}.
+
+ To generate the certificate for an actor do the following:
+
++---
+cd $ORCA_ROOT/tools/config
+ant security.create.actor.config -Dactor=guid_of_the_actor
++---
+
+ The certificates and config files will be stored under the runtime/ directory.
+ Be sure to copy all files under $ORCA_ROOT/tools/config/runtime that contain
+ <guid_of_the_actor> in their name to the corresponding location to your
+ $ORCA_HOME/config directory.
+
+ You can dump the generated certificate in Base 64 encoded format (needed to
+ specify anctor topologies) by using the following command in the tools
+ directory:
+
+ You can export the Base64-encoded certificate by running
+
++---
+ant -emacs export64.actor.certificate -Dactor=guid_of_the_actor
++---
+
+ Copy the output and use inside the certificate element for a from or to edge.
+ See the {{{../container-configuration/xml.html}Actors XML File}} documentation
+ for more information.
+
+

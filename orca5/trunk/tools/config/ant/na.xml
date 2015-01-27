@@ -1,0 +1,108 @@
+<target name="nah.install" description="installs the nodeagent host server">
+	<for list="${machines}" param="machine" delimiter=" " parallel="false">
+		<sequential>
+			<echo message="installing the node agent host on @{machine}${domain}" />
+			<echo message="copying the archive" />
+			<myscp src="${nah.archive}" dest="${ssh.user}${at}@{machine}${domain}:nah.tgz" />
+			<echo message="prepare host" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na stop &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" fail="false" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;rm -rf ${na.home}/repository/services/*.aar ${na.home}/lib/*.jar ${na.home}/repository/modules/*.mar ; rm -rf ${na.home}/data &quot;" fail="false" />
+			<echo message="installing node agent host" />
+			<ssh host="@{machine}${domain}" command="mkdir /tmp/nah; tar xvfz nah.tgz -C /tmp/nah; cd /tmp/nah; ${bash} ./install.sh ${na.home} ${na.port}; cd ; rm -rf /tmp/nah; rm nah.tgz" />
+			<echo message="starting service" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na start &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" />
+			<echo message="installation complete" />
+		</sequential>
+	</for>
+</target>
+
+<target name="na.install" depends="na.upgrade"/>
+
+<target name="na.upgrade" description="upgrades the nodeagent service">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+			<echo message="upgrading the node agent service on @{machine}" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na stop &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" fail="false" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;rm -f /root/na/bin/pid /root/na/bin/tmppid &quot;" fail="false" />
+			<ssh host="@{machine}${domain}" command="rm -f ${na.home}/repository/services/*nodeagent*.aar" fail="false" />
+			<myscp src="${na.archive}" dest="${ssh.user}${at}@{machine}${domain}:${na.home}/repository/services" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na start &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" />
+		</sequential>
+	</for>
+</target>
+
+<target name="na.start" description="starts the node agent service">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+			<echo message="starting the node agent service on @{machine}" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na start &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" />
+		</sequential>
+	</for>
+</target>
+
+<target name="na.stop" description="stops the node agent service">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+			<echo message="stopping the node agent service on @{machine}" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na stop &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" fail="false" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;rm -f /root/na/bin/pid /root/na/bin/tmppid &quot;" fail="false" />
+		</sequential>
+	</for>
+</target>
+
+<target name="na.restart" description="restarts the node agent service">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+			<echo message="stopping the node agent service on @{machine}" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na stop &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" fail="false" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na start &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" />
+		</sequential>
+	</for>
+</target>
+
+<target name="na.status" description="displays the status of the node agent service">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+<echo message="na.port = ${na.port}" />
+			<exec executable="${bash}" outputproperty="@{machine}.na.status.out" failonerror="true">
+				<arg line="-c \&quot;nmap @{machine}${domain} -p ${na.port} | grep ${na.port}/tcp | awk '{print $2}' \&quot;" />
+			</exec>
+			<if>
+				<equals arg1="open" arg2="${@{machine}.na.status.out}" />
+				<then>
+					<echo message="Node Agent service status on @{machine}${domain}: up" />
+				</then>
+				<else>
+					<echo message="Node Agent service status on @{machine}${domain}: down" />
+				</else>
+			</if>
+		</sequential>
+	</for>
+</target>
+
+<target name="na.cleandrivers" description="deletes drivers/* and drivers.xml from every nodeagent">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+			<echo message="deleting drivers on @{machine}" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;rm /root/na/data/drivers.xml ; rm -rf /root/na/data/drivers/*  &quot;" />
+		</sequential>
+	</for>
+</target>
+
+<target name="na.time" description="synchronizes time on every nodeagent">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+			<echo message="synchronizing time on @{machine}" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;apt-get install -y ntp  &quot;" />
+		</sequential>
+	</for>
+</target>
+
+<target name="na.showtime" description="displays time on every nodeagent">
+	<for list="${machines}" param="machine" delimiter=" " parallel="true">
+		<sequential>
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot; echo -n '@{machine}: '  ; date  &quot;" />
+		</sequential>
+	</for>
+</target>
+

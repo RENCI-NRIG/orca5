@@ -1,0 +1,125 @@
+ ----
+ Standard Network Manager
+ ----
+ Aydan Yumerefendi
+ ----
+ 13 December 2007
+ ----
+
+Standard Network Manager
+
+ The standard network manager controlls a common pool of private and
+ public contiguous and non-contiguous IP addresses and subdivides them
+ among the existing virtual clusters.
+
+ The network manager assigns each allocated resource a <Service IP
+ Address>. This address is used internally by the system to access
+ allocated resources. Each leased resource has exactly one service ip
+ address.
+
+ The network manager currently requires that it is allocated one large
+ contiguous block of service IP addresses. It then subdivides its
+ initial address block into equal sized sub-blocks for each
+ virtual cluster (slice).
+
+ In addition to a service IP address, leased resources can be assigned
+ one or more IP addresses drawn from a common pool of IP addresses
+ shared among all virtual clusters. Those ip addresses do not need to
+ come from a contiguous block.
+
+* Configuration
+
+  The plugin configuration is an XML object {{{xml.html}descriptor}}.
+
+   * <<Class name:>>  orca.cod.plugins.NetworkConfigurationManager
+
+   * <<Supported parameters:>>
+
+     * NetworkConfiguration
+
++---
+<parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
++---
+
+     Specifies the IP addresses to use. This parameter is itself an
+     XML object descriptor:
+
+        * <<Class name:>>  orca.cod.plugins.NetworkConfiguration
+
+        * <<Supported properties:>>
+
+          * <<network.base>> The base of the service block
+
+          * <<network.mask>> Mask to apply to the base to give the
+            start of the block
+
+          * <<network.subnet>> Mask to use when subdividing the
+            service block
+            into sub-blocks
+
+          * <<network.min>> Offset to add to the first IP address in a
+            service sub-block
+
+          * <<network.public.ip.space>> Comma-separated list of IP
+            addresses for the common pool. This property supports
+            simple range expressions. For example, to specify all IP
+            addresses  from 192.168.1.10 to 192.168.1.100, you can
+            use 192.168.1.10-100. Note that the range applies only to
+            the last byte of the IP address.
+     
+     * DnsConfiguration
+
++---
+<parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
++---
+     Specifies the DNS configuration for virtual clusters.
+
+     <<Note:>> This is an experimental feature. It may be
+     removed/modified soon.
+
+     This parameter is an XML object descriptor:
+
+        * <<Class name:>>  orca.cod.plugins.DnsConfiguration
+
+        * <<Supported properties:>>
+
+          * <<dns.prefix>> Prefix name to use for DNS names
+
+          * <<dns.zone>> DNS zone name
+
+          * <<dns.mx>> DNS MX record
+     
+  Putting all together:
+
++---
+       <instance>
+         <className>orca.cod.plugins.NetworkConfigurationManager</className>
+	 <parameters>
+	   <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+ 	     <instance>
+	       <className>orca.cod.plugins.NetworkConfiguration</className>
+	       <properties>
+	         <property name="network.base" value="192.16.192.0" />
+		 <property name="network.mask" value="255.255.224.0" />
+                 <property name="network.subnet" value="255.255.255.0" />
+	         <property name="network.min" value="10" />
+                 <property name="network.gateway" value="" />
+               </properties>
+	     </instance>
+           </parameter>
+           <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+             <instance>
+	       <className>orca.cod.plugins.DnsConfiguration</className>
+               <properties>
+                 <property name="dns.prefix" value="default" />
+		 <property name="dns.zone" value="demo.orca.org" />
+		 <property name="dns.mx" value="10 demo.orca.org" />
+               </properties>
+	     </instance>
+          </parameter>
+	</parameters>
+      </instance>
++---      
+
+ 
+ 

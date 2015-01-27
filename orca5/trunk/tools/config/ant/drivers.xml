@@ -1,0 +1,199 @@
+<macrodef name="install.driver" description="installs a driver">
+	<attribute name="admin" description="actor identifier" />
+	<attribute name="host" description="host address" />
+	<attribute name="driver.id" description="driver identifier" />
+	<attribute name="driver.class" description="driver class" />
+	<attribute name="driver.pkg" description="driver package" />
+	<attribute name="return" description="result value" />
+	<sequential>
+		<nodeagent.install.driver location="${na.protocol}://@{host}:${na.port}${na.uri}" repository="${axis2.repository}" config="${axis2.config.dir}/@{admin}.axis2.xml" driverId="@{driver.id}" driverClass="@{driver.class}" driverPackage="@{driver.pkg}" exitCodeProperty="@{return}" />
+	</sequential>
+</macrodef>
+
+<macrodef name="upgrade.driver" description="upgrades a driver">
+	<attribute name="admin" description="actor identifier" />
+	<attribute name="host" description="host address" />
+	<attribute name="driver.id" description="driver identifier" />
+	<attribute name="driver.class" description="driver class" />
+	<attribute name="driver.pkg" description="driver package" />
+	<attribute name="return" description="result value" />
+	<sequential>
+		<nodeagent.upgrade.driver location="${na.protocol}://@{host}:${na.port}${na.uri}" repository="${axis2.repository}" config="${axis2.config.dir}/@{admin}.axis2.xml" driverId="@{driver.id}" driverClass="@{driver.class}" driverPackage="@{driver.pkg}" exitCodeProperty="@{return}" />
+	</sequential>
+</macrodef>
+
+<macrodef name="uninstall.driver" description="installs a driver">
+	<attribute name="admin" description="actor identifier" />
+	<attribute name="host" description="host address" />
+	<attribute name="driver.id" description="driver identifier" />
+	<attribute name="return" description="result value" />
+
+	<sequential>
+		<nodeagent.uninstall.driver location="${na.protocol}://@{host}:${na.port}${na.uri}" repository="${axis2.repository}" config="${axis2.config.dir}/@{admin}.axis2.xml" driverId="@{driver.id}" exitCodeProperty="@{return}" />
+	</sequential>
+</macrodef>
+
+<macrodef name="install.driver.machines" description="installs a driver on all machines in the inventory">
+	<attribute name="name" description="driver name" />
+	<attribute name="driver.id" description="driver identifier" />
+	<attribute name="driver.class" description="driver class" />
+	<attribute name="driver.pkg" description="driver package" />
+	<sequential>
+		<for list="${machines}" param="machine" delimiter=" " parallel="false">
+			<sequential>
+				<echo message="installing the @{name} driver at @{machine}" />
+				<install.driver admin="${security.admin}" host="@{machine}${domain}" driver.id="@{driver.id}" driver.class="@{driver.class}" driver.pkg="@{driver.pkg}" return="install.driver.machines.@{machine}.@{name}" />
+				<echo message="installing the @{name} driver at @{machine}...exit code: ${install.driver.machines.@{machine}.@{name}}" />
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+
+<macrodef name="upgrade.driver.machines" description="upgrades a driver on all machines in the inventory">
+	<attribute name="name" description="driver name" />
+	<attribute name="driver.id" description="driver identifier" />
+	<attribute name="driver.class" description="driver class" />
+	<attribute name="driver.pkg" description="driver package" />
+	<sequential>
+		<for list="${machines}" param="machine" delimiter=" " parallel="false">
+			<sequential>
+				<echo message="upgrading the @{name} driver at @{machine}" />
+				<upgrade.driver admin="${security.admin}" host="@{machine}${domain}" driver.id="@{driver.id}" driver.class="@{driver.class}" driver.pkg="@{driver.pkg}" return="upgrade.driver.machines.@{machine}.@{name}" />
+				<echo message="upgrade the @{name} driver at @{machine}...exit code: ${upgrade.driver.machines.@{machine}.@{name}}" />
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+
+<macrodef name="uninstall.driver.machines" description="uninstalls a driver from all machines in the inventory">
+	<attribute name="name" description="driver name" />
+	<attribute name="driver.id" description="driver identifier" />
+	<sequential>
+		<for list="${machines}" param="machine" delimiter=" " parallel="false">
+			<sequential>
+				<echo message="uninstalling the @{name} driver at @{machine}" />
+				<uninstall.driver admin="${security.admin}" host="@{machine}${domain}" driver.id="@{driver.id}" return="uninstall.driver.machines.@{machine}.@{name}" />
+				<echo message="uninstall the @{name} driver at @{machine}...exit code: ${uninstall.driver.machines.@{machine}.@{name}}" />
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+
+<macrodef name="copy.kernel.files" description="copies the kernel files to each installed VMM driver">
+	<sequential>
+		<for list="${machines}" param="machine" delimiter=" " parallel="false">
+			<sequential>
+				<echo message="copying kernel files to @{machine}" />
+				<myscp src="${kernel.dir}/*" dest="${ssh.user}${at}@{machine}${domain}:${na.home}/data/drivers/${vmm.xen.driver.id}/software" fail="false" />
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+
+<!-- VMM driver install/upgrade/uninstall -->
+
+<target name="drivers.vmm.install" description="installs the vmm driver">
+	<install.driver.machines name="VMM:Xen" driver.id="${vmm.xen.driver.id}" driver.class="${vmm.xen.driver.class}" driver.pkg="${vmm.xen.driver.pkg}" />
+	<copy.kernel.files />
+</target>
+
+<target name="drivers.vmm.upgrade" description="upgrades the vmm driver">
+	<upgrade.driver.machines name="VMM:Xen" driver.id="${vmm.xen.driver.id}" driver.class="${vmm.xen.driver.class}" driver.pkg="${vmm.xen.driver.pkg}" />
+	<copy.kernel.files />
+</target>
+
+<target name="drivers.vmm.uninstall" description="uninstalls the vmm driver">
+	<uninstall.driver.machines name="VMM:Xen" driver.id="${vmm.xen.driver.id}" />
+</target>
+
+<!-- Local disk driver install/upgrade/uninstall -->
+<target name="drivers.localdisk.install" description="installs the localdisk driver on all machines">
+	<install.driver.machines name="Local Disk" driver.id="${localdisk.driver.id}" driver.class="${localdisk.driver.class}" driver.pkg="${localdisk.driver.pkg}" />
+</target>
+
+<target name="drivers.localdisk.upgrade" description="upgrades the localdisk driver on all machines">
+	<upgrade.driver.machines name="Local Disk" driver.id="${localdisk.driver.id}" driver.class="${localdisk.driver.class}" driver.pkg="${localdisk.driver.pkg}" />
+</target>
+
+<target name="drivers.localdisk.uninstall" description="uninstalls the localdisk driver from all machines">
+	<uninstall.driver.machines name="Local Disk" driver.id="${localdisk.driver.id}" />
+</target>
+
+<!-- NFS driver install/upgrade/uninstall -->
+<target name="drivers.nfs.install" description="installs the NFS drivers on all machines">
+	<install.driver.machines name="NFS:ZFS" driver.id="${nfs.zfs.driver.id}" driver.class="${nfs.zfs.driver.class}" driver.pkg="${nfs.zfs.driver.pkg}" />
+</target>
+
+<target name="drivers.nfs.upgrade" description="upgrades the NFS/zfs driver on all machines">
+	<upgrade.driver.machines name="NFS:ZFS" driver.id="${nfs.zfs.driver.id}" driver.class="${nfs.zfs.driver.class}" driver.pkg="${nfs.zfs.driver.pkg}" />
+</target>
+
+<target name="drivers.nfs.uninstall" description="uninstalls the NFS/zfs driver from all machines">
+	<uninstall.driver.machines name="NFS:zfs" driver.id="${nfs.zfs.driver.id}" />
+</target>
+
+<!-- iSCSI drivers install/upgrade/uninstall -->
+<target name="drivers.iscsi.install" description="installs the iSCSI drivers on all machines">
+	<install.driver.machines name="iSCSI:NetApp" driver.id="${iscsi.netapp.driver.id}" driver.class="${iscsi.netapp.driver.class}" driver.pkg="${iscsi.netapp.driver.pkg}" />
+</target>
+
+<target name="drivers.iscsi.upgrade" description="upgrades the iSCSI drivers on all machines">
+	<upgrade.driver.machines name="iSCSI:NetApp" driver.id="${iscsi.netapp.driver.id}" driver.class="${iscsi.netapp.driver.class}" driver.pkg="${iscsi.netapp.driver.pkg}" />
+</target>
+
+<target name="drivers.iscsi.uninstall" description="uninstalls the iSCSI driver from all machines">
+	<uninstall.driver.machines name="iSCSI:NetApp" driver.id="${iscsi.netapp.driver.id}" />
+</target>
+
+<!-- Linux machine drivers install/upgrade/uninstall -->
+<target name="drivers.machine.linux.install" description="installs the Linux machine driver on all machines">
+	<install.driver.machines name="Machine:Linux" driver.id="${machine.linux.driver.id}" driver.class="${machine.linux.driver.class}" driver.pkg="${machine.linux.driver.pkg}" />
+</target>
+
+<target name="drivers.machine.linux.upgrade" description="upgrades the Linux machine driver on all machines">
+	<upgrade.driver.machines name="Machine:Linux" driver.id="${machine.linux.driver.id}" driver.class="${machine.linux.driver.class}" driver.pkg="${machine.linux.driver.pkg}" />
+</target>
+
+<target name="drivers.machine.linux.uninstall" description="uninstalls the Linux machine driver from all machines">
+	<uninstall.driver.machines name="Machine:Linux" driver.id="${machine.linux.driver.id}" />
+</target>
+
+<!-- Linux machine drivers install/upgrade/uninstall -->
+<target name="drivers.vlan.6509.install" description="installs the VLAN Cisco 6509 driver on all machines">
+	<install.driver.machines name="Vlan:Cisco 6509" driver.id="${vlan.6509.driver.id}" driver.class="${vlan.6509.driver.class}" driver.pkg="${vlan.6509.driver.pkg}" />
+</target>
+
+<target name="drivers.vlan.6509.upgrade" description="upgrades the VLAN Cisco 6509 driver on all machines">
+	<upgrade.driver.machines name="Vlan:Cisco 6509" driver.id="${vlan.6509.driver.id}" driver.class="${vlan.6509.driver.class}" driver.pkg="${vlan.6509.driver.pkg}" />
+</target>
+
+<target name="drivers.vlan.6509.uninstall" description="uninstalls the VLAN Cisco 6509 driver on all machines">
+	<uninstall.driver.machines name="Vlan:Cisco 6509" driver.id="${vlan.6509.driver.id}"/>	 
+</target>
+
+<!-- Linux machine drivers install/upgrade/uninstall -->
+<target name="drivers.InfineraDTN.install" description="installs the InfineraDTN on all machines">
+    <install.driver.machines name="InfineraDTN" driver.id="${InfineraDTN.driver.id}" driver.class="${InfineraDTN.driver.class}" driver.pkg="${InfineraDTN.driver.pkg}"/>
+</target>
+
+<target name="drivers.InfineraDTN.upgrade" description="upgrades the InfineraDTN on all machines">    <upgrade.driver.machines name="InfineraDTN" driver.id="${InfineraDTN.driver.id}" driver.class="${InfineraDTN.driver.class}" driver.pkg="${InfineraDTN.driver.pkg}"/>
+</target>
+
+<target name="drivers.InfineraDTN.uninstall" description="uninstalls the InfineraDTN on all machines">    <uninstall.driver.machines name="InfineraDTN" driver.id="${InfineraDTN.driver.id}" />
+</target>
+
+<!-- Linux machine drivers install/upgrade/uninstall -->
+<target name="drivers.Polatis.install" description="installs the Polatis on all machines">    <install.driver.machines name="Polatis" driver.id="${Polatis.driver.id}" driver.class="${Polatis.driver.class}" driver.pkg="${Polatis.driver.pkg}" />
+</target>
+
+<target name="drivers.Polatis.uninstall" description="uninstalls the Polatis on all machines">    <uninstall.driver.machines name="Polatis" driver.id="${Polatis.driver.id}" />
+</target>
+
+<target name="drivers.Polatis.upgrade" description="upgrades the Polatis on all machines">    <upgrade.driver.machines name="Polatis" driver.id="${Polatis.driver.id}" driver.class="${Polatis.driver.class}" driver.pkg="${Polatis.driver.pkg}" />
+</target>
+
+<target name="drivers.install" description="installs all drivers" depends="drivers.vmm.install,drivers.localdisk.install,drivers.nfs.install,drivers.iscsi.install,drivers.vlan.6509.install,drivers.InfineraDTN.install,drivers.Polatis.install" />
+
+<target name="drivers.uninstall" description="uninstalls all drivers" depends="drivers.vmm.uninstall,drivers.localdisk.uninstall,drivers.nfs.uninstall,drivers.iscsi.uninstall,drivers.vlan.6509.uninstall,drivers.InfineraDTN.uninstall,drivers.Polatis.uninstall" />
+
+<target name="drivers.upgrade" description="upgrades all drivers" depends="drivers.vmm.upgrade,drivers.localdisk.upgrade,drivers.nfs.upgrade,drivers.iscsi.upgrade,drivers.vlan.6509.upgrade,drivers.InfineraDTN.upgrade,drivers.Polatis.upgrade" />

@@ -1,0 +1,69 @@
+ ----
+ Emulation Guide
+ ----
+ Aydan Yumerefendi
+ ----
+ December 16, 2007
+ ----
+
+Emulation Guide
+
+ Orca supports execution under emulation. In emulation mode, the
+ system will not attempt to contact inventory or leased resources but
+ all other code will be executed as usual. Emulation mode can be used
+ to run long experiments at a faster rate by avoiding the actual
+ configuration of leased resources. Please consult the
+ {{{../container-configuration/properties.html}Container Properties File Guide}}
+ for information about configuring the system's
+ internal clock. 
+
+ If you are interested about real mode execution, please consult the {{{../real/}Real Mode Execution Guide}}.
+
+* Enable/Disable emulation
+
+  Execution under emulation is controlled by a property in the
+  {{{../container-configuration/properties.html}container properties file}}.
+  Open container.properties and look for the emulation property (emulation).
+  When the property is set to 'true', the system will execute under emulation. When the property is set to 'false',
+  the system will execute using real resources.
+  
+  <<Note:>> You cannot toggle the emulation flag for an already running system. Your changes will take place the
+  next time you restart Orca.
+
+* Inventory
+
+ Even when executing under emulation, the container database must
+ still contain records about the inventory the system should
+ manage. Inventory records in this case do not need to describe real
+ resources and can have arbitrary IP addresses and memory sizes. This
+ is particularly useful if an experiment requires machines with huge
+ amounts of memory.
+
+ Orca ships with sample inventory that can be used for emulation
+ purposes. You can find more information about this
+ {{{../command-line/index.html#Inventory}here}}.
+ 
+* Configuration Handlers
+
+ The behavior of the system under emulation is generally dependent on
+ the configuration handlers being used. Orca ships with several
+ configuration handlers for service managers and site authorities
+ explicitly designed for emulation purposes. You can find a list of
+ these handlers {{{../../orca/handlers/core/directory.html}here}}. If you
+ are using a different handler under emulation, consult the handler's
+ documentation to determine if the handler supports execution under
+ emulation.
+
+ 
+* Images
+
+ In general, command-line execution under emulation does not require
+ that the system be configured with information about available
+ images. However, running the web portal under emulation requires that
+ the system contain information about at least one image.
+
+ Please consult the {{{../images/}Images Guide}} for more information
+ about image management.
+
+ 
+

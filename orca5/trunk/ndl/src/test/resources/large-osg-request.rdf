@@ -1,0 +1,398 @@
+<rdf:RDF
+    xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
+    xmlns:kansei="http://geni-orca.renci.org/owl/kansei.owl#"
+    xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
+    xmlns:dtn="http://geni-orca.renci.org/owl/dtn.owl#"
+    xmlns:time="http://www.w3.org/2006/time#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:modify-schema="http://geni-orca.renci.org/owl/modify.owl#"
+    xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
+    xmlns:planetlab="http://geni-orca.renci.org/owl/planetlab.owl#"
+    xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
+    xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
+    xmlns:request-schema="http://geni-orca.renci.org/owl/request.owl#"
+    xmlns:orca="http://geni-orca.renci.org/owl/orca.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
+    xmlns:eucalyptus="http://geni-orca.renci.org/owl/eucalyptus.owl#"
+    xmlns:request="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
+    xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
+    xmlns:ec2="http://geni-orca.renci.org/owl/ec2.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#" > 
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fiuvmsite.rdf#fiuvmsite/Domain">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-Condor-Master">
+    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-Condor-Master-ip-172-16-1-100"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-OVS">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-Condor-Master"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-OVS"/>
+    <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100000000</layer:bandwidth>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-CW-RCI-ip-172-16-2-100">
+    <ip4:netmask>255.255.0.0</ip4:netmask>
+    <layer:label_ID>172.16.2.100</layer:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Term">
+    <time:hasDurationDescription rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#TermDuration"/>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#Interval"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#CW-BBN">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-CW-BBN"/>
+    <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#!/bin/bash
+#echo $Condor-Master.IP("Master") condor-master.orca &gt;&gt; /etc/hosts
+echo 172.16.1.100 condor-master.orca &gt;&gt; /etc/hosts
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.2.$ip  CW-RCI-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.3.$ip  CW-BBN-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.4.$ip  CW-FIU-$i.orca &gt;&gt; /etc/hosts
+done
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.5.$ip  CW-UH-$i.orca &gt;&gt; /etc/hosts
+done
+
+/etc/init.d/condor stop
+name=$self.Name()
+
+echo $self.Name()\.orca |  sed 's/\//-/g' &gt; /etc/hostname
+cp /etc/condor/condor_config.local.worker /etc/condor/condor_config.local
+
+echo 'CONDOR_HOST     = condor-master.orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'DEFAULT_DOMAIN_NAME = orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_ADMINISTRATOR = *' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_OWNER = *' &gt;&gt; /etc/condor/condor_config.local
+
+
+/bin/hostname -F /etc/hostname
+/etc/init.d/condor start
+
+#screen -d -m -t 172.16.1.1 ping -i 5 172.16.1.1
+#screen -d -m -t 172.16.1.100 ping -i 5 172.16.1.100
+</request-schema:postBootScript>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/bbnvmsite.rdf#bbnvmsite/Domain"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#pegasus-abinit-v1.0.8"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <layer:numCE rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</layer:numCE>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#pegasus-abinit-v1.0.8">
+    <topology:hasURL>http://geni-images.renci.org/images/pruth/abinit/pegasus-4.0-abinit-v1.0.8.xml</topology:hasURL>
+    <topology:hasGUID>53f92d8f84ffb518162b9d1eec617d0440bd9990</topology:hasGUID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-CW-FIU"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-OVS"/>
+    <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">300000000</layer:bandwidth>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-OVS">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Link0-OVS">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Link0">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Link0-OVS"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/TenGigabitEthernet/3/4/ethernet"/>
+    <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1500000000</layer:bandwidth>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#OVS">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-OVS"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-OVS"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Link0-OVS"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-OVS"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOLarge"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#deb6-ovs-neuca-v1.0.2"/>
+    <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#!/bin/bash
+
+
+# the constant should be link count plus 1
+for ((i=0;i&lt;60;i+=1));
+do
+      echo "testing for ifaces, try: $i " &gt;&gt; /tmp/bootscript.out
+      ETH_CNT=`ifconfig -a | grep eth | wc -l`
+      if [ "$ETH_CNT" = "6" ]; then
+           break
+       fi
+
+       sleep 10
+done
+
+ovs-vsctl add-br condor-br
+
+for i in `ifconfig -a | grep eth | awk '{print $1 }'`; do 
+      if [ $i != "eth0" ]; then 
+                echo Adding $i &gt;&gt; /tmp/bootscript.out; 
+                ifconfig $i up
+                ovs-vsctl add-port condor-br $i
+      fi 
+done</request-schema:postBootScript>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-OVS"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-OVS">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Label-1499">
+    <layer:label_ID>1499</layer:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Label"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-CW-BBN-ip-172-16-3-100">
+    <ip4:netmask>255.255.0.0</ip4:netmask>
+    <layer:label_ID>172.16.3.100</layer:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-CW-BBN">
+    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-CW-BBN-ip-172-16-3-100"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#">
+    <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Term"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#CW-FIU"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Link0"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#CW-BBN"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#OSG"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Condor-Master"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#OVS"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#CW-RCI"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-OVS"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-CW-RCI"/>
+    <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2000000000</layer:bandwidth>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#CW-FIU">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-CW-FIU"/>
+    <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#!/bin/bash
+
+#echo $Condor-Master.IP("Master") condor-master.orca &gt;&gt; /etc/hosts
+echo 172.16.1.100 condor-master.orca &gt;&gt; /etc/hosts
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.2.$ip  CW-RCI-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.3.$ip  CW-BBN-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.4.$ip  CW-FIU-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.5.$ip  CW-UH-$i.orca &gt;&gt; /etc/hosts
+done
+
+/etc/init.d/condor stop
+name=$self.Name()
+
+echo $self.Name()\.orca |  sed 's/\//-/g' &gt; /etc/hostname
+cp /etc/condor/condor_config.local.worker /etc/condor/condor_config.local
+
+echo 'CONDOR_HOST     = condor-master.orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'DEFAULT_DOMAIN_NAME = orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_ADMINISTRATOR = *' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_OWNER = *' &gt;&gt; /etc/condor/condor_config.local
+
+
+/bin/hostname -F /etc/hostname
+/etc/init.d/condor start
+#screen -d -m -t 172.16.1.1 ping -i 5 172.16.1.1
+#screen -d -m -t 172.16.1.100 ping -i 5 172.16.1.100
+</request-schema:postBootScript>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/fiuvmsite.rdf#fiuvmsite/Domain"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#pegasus-abinit-v1.0.8"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <layer:numCE rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</layer:numCE>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#CW-RCI">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-CW-RCI"/>
+    <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#!/bin/bash
+
+#echo $Condor-Master.IP("Master") condor-master.orca &gt;&gt; /etc/hosts
+echo 172.16.1.100 condor-master.orca &gt;&gt; /etc/hosts
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.2.$ip  CW-RCI-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.3.$ip  CW-BBN-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.4.$ip  CW-FIU-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.5.$ip  CW-UH-$i.orca &gt;&gt; /etc/hosts
+done
+
+
+/etc/init.d/condor stop
+name=$self.Name()
+
+echo $self.Name()\.orca |  sed 's/\//-/g' &gt; /etc/hostname
+cp /etc/condor/condor_config.local.worker /etc/condor/condor_config.local
+
+echo 'CONDOR_HOST     = condor-master.orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'DEFAULT_DOMAIN_NAME = orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_ADMINISTRATOR = *' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_OWNER = *' &gt;&gt; /etc/condor/condor_config.local
+
+
+/bin/hostname -F /etc/hostname
+/etc/init.d/condor start
+
+#screen -d -m -t 172.16.1.1 ping -i 5 172.16.1.1
+#screen -d -m -t 172.16.1.100 ping -i 5 172.16.1.100
+</request-schema:postBootScript>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#pegasus-abinit-v1.0.8"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <layer:numCE rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</layer:numCE>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/TenGigabitEthernet/3/4/ethernet">
+    <layer:label rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Label-1499"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#OSG">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/TenGigabitEthernet/3/4/ethernet"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-CW-FIU-ip-172-16-4-100">
+    <ip4:netmask>255.255.0.0</ip4:netmask>
+    <layer:label_ID>172.16.4.100</layer:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-CW-FIU">
+    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#FIU-CW-FIU-ip-172-16-4-100"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-CW-BBN"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-OVS"/>
+    <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">300000000</layer:bandwidth>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#TermDuration">
+    <time:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</time:days>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-CW-RCI">
+    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#RCI-CW-RCI-ip-172-16-2-100"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-Condor-Master-ip-172-16-1-100">
+    <ip4:netmask>255.255.0.0</ip4:netmask>
+    <layer:label_ID>172.16.1.100</layer:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#BBN-OVS">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Condor-Master">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#Master-Condor-Master"/>
+    <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#!/bin/bash
+
+#echo $Condor-Master.IP("Master") condor-master.orca &gt;&gt; /etc/hosts
+echo 172.16.1.100 condor-master.orca &gt;&gt; /etc/hosts
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.2.$ip  CW-RCI-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.3.$ip  CW-BBN-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.4.$ip  CW-FIU-$i.orca &gt;&gt; /etc/hosts
+done
+
+for i in {0..63}; do
+   ip=$(($i + 100))
+   echo 172.16.5.$ip  CW-UH-$i.orca &gt;&gt; /etc/hosts
+done
+
+/etc/init.d/condor stop
+#name=$self.Name()
+
+echo condor-master.orca &gt; /etc/hostname
+cp /etc/condor/condor_config.local.master /etc/condor/condor_config.local
+
+echo 'CONDOR_HOST     = condor-master.orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'DEFAULT_DOMAIN_NAME = orca' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_ADMINISTRATOR = *' &gt;&gt; /etc/condor/condor_config.local
+echo 'ALLOW_OWNER = *' &gt;&gt; /etc/condor/condor_config.local
+
+/bin/hostname -F /etc/hostname
+#/etc/init.d/condor start</request-schema:postBootScript>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#pegasus-abinit-v1.0.8"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/8108423a-bd52-475b-b71c-c1f37082a4dd#deb6-ovs-neuca-v1.0.2">
+    <topology:hasURL>http://geni-images.renci.org/images/standard/debian/deb6-ovs-neuca-v1.0.2.xml</topology:hasURL>
+    <topology:hasGUID>bc8c0c8b56413dec912bb1a8cdc3c97659ac4983</topology:hasGUID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/bbnvmsite.rdf#bbnvmsite/Domain">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+  </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,137 @@
+ ----
+ Node Agent Service
+ ----
+ Aydan Yumerefendi
+ ----
+ 15 December 2007
+ ----
+
+Node Agent Service
+
+  {{{index.html}\<\<Back to contents}}
+
+* Preliminaries  
+ 
+ All commands are relative to $ORCA_ROOT/tools/config on the
+ control node.
+
+ The control node must be empowered to execute actions as root on the target
+ nodes using passwordless ssh.
+ Each command
+ executes on a list of target machines listed in ant/user.properties.
+ See the {{{prepare.html}prepare instructions}}).
+   
+ The Node Agent service itself is built within $ORCA_ROOT/nodeagent, and
+ packaged in an aar file (Apache Axis archive).  Be sure to do a <mvn install>
+ in $ORCA_ROOT/nodeagent to be sure the archive is up to date before installing
+ it on the targets.
+
+* Node Agent host install
+
+ This command installs the Node Agent host software, but not the Node Agent
+ service itself.  It copies and unpacks a large tar archive onto the
+ target nodes.
+ 
++---
+ant nah.install
++---
+
+* Node Agent install
+
+ This command installs the Node Agent service itself (the <aar> file) and
+ starts or restarts the service.  It is the same as <na.upgrade>.
+ 
++---
+ant na.install
++---
+
+* Node Agent upgrade
+
+ This command upgrades the Node Agent service and restarts it, e.g.,
+ after building a new archive.
+ 
++---
+ant na.upgrade
++---
+
+* Node Agent status
+
+ To check the status of the Node Agent service type the following in
+ your terminal.  This command just checks to see if something is
+ listening on port 6 on each target node.
+
++--- 
+ant na.status
++---
+
+ <<Note:>> This command requires a locally installed
+ {{{http://insecure.org/nmap/}nmap}}.  If there is no nmap installed
+ it may just tell you that your Node Agents are down without checking first.
+
+
+* Node Agent start
+
+ To start the Node Agent service type the following in your terminal.
+ Note that install/upgrade starts the service automatically.
+
++--- 
+ant na.start
++---
+
+* Node Agent stop
+
+ To stop the Node Agent service type the following in your terminal.
+ Note that install/upgrade will stop and restart the service automatically.
+
++--- 
+ant na.stop
++---
+
+* Node Agent restart
+
+ To restart the Node Agent service type the following in your terminal.
+
++--- 
+ant na.restart
++---
+
+* Notes and Gotchas
+
+ These ant scripts operate on the node agent in some ways that may be
+ OS-specific.  They install a script called <na> in </etc/init.d> on 
+ each target node.  The node agent distribution itself goes in
+ </root/na>.  These paths are hard-coded in a few of the ant
+ scripts (FIXME).  They work for Debian.
+
+ The agent listens on port <na.port>, which defaults to 6.  If
+ something else listens on port 6 first then start may fail
+ silently.
+
+ The agent leaves log files under </root/na/log> on each target node.
+ Some errors are reported only in the log, so it is a good idea to look at
+ the log if you suspect a problem.  The agent fails silently if
+ it runs out of space for its log.
+
+ Some problems have resulted from failure to <mvn install> in the
+ nodeagent directory on the development machine before installing
+ the "new" service archive on the targets.
+
+ When the agent starts, the <na> script places its process ID in a file.
+ To stop it, <na> kills the process at the saved process ID.  If the
+ process ID is ever corrupted, then start and stop currently may 
+ fail silently.  That "should not happen" using these tools, but it
+ will happen if you remove </root/na> manually.  You do not
+ need to do that: <nah.install> cleans out all state in </root/na>,
+ including installed drivers and the Node Agent archive.  It
+ leaves only the log files intact.
+
+ If you suspect the pid files are out of sync for any
+ reason, it is easy
+ to find the java na process on the target node with ps,
+ and kill it manually.
+ Then <na.start> will reset the pid files.
+
+ Keeping clocks synchronized will help to avoid trouble later.
+ The undocumented command <na.time> installs ntp on all the
+ target nodes (using apt-get, which works for Debian), and
+ <na.showtime> shows the times on all the target nodes.

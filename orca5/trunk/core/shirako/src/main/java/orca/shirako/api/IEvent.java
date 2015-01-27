@@ -1,0 +1,22 @@
+package orca.shirako.api;
+
+import java.util.Properties;
+
+import orca.util.ID;
+
+/**
+ * <code>IEvent</code> defines an event interface for events raised by the core.
+ */
+public interface IEvent{
+	/**
+	 * Returns the ID of the actor that contains the object that generated
+	 * the event. Can be null for container-level events.
+	 * @return
+	 */
+	public ID getActorID();
+	/**
+	 * An optional properties list describing the event.
+	 * @return
+	 */
+	public Properties getProperties();
+}

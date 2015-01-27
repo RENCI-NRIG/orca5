@@ -1,0 +1,79 @@
+ ----
+ Managing Drivers
+ ----
+ Aydan Yumerefendi
+ ----
+ 16 December, 2007
+ ----
+
+Managing Drivers
+
+  {{{index.html}\<\<Back to contents}}
+
+ Before you can use an inventory machine/component, you must install the
+ needed resource drivers into a Node Agent running on the machine.
+ The configuration tools install
+ reference drivers that are useful in COD/Xen resource provider sites.
+
+  * {{{/orca/drivers/vmm/xen/}Xen VMM driver}}
+
+  The installation of this driver also involves copying a kernel image
+  and a  ramdisk to  each inventory machine.  While it is  possible to
+  customize  these and specify  your own  kernel version,  the current
+  version of the tools and  configuration handlers do not support this
+  feature.
+
+  <<Kernel version:>> linux 2.6.16.13
+  
+  
+  * {{{/orca/drivers/nfs/zfs/}NFS ZFS driver}}
+
+  
+  * {{{/orca/drivers/iscsi/netapp/}NetApp iSCSI driver}}
+  
+
+  <<Note:>> This driver requires additional security configuration.
+
+  []
+
+  <<Note:>> You can install additional drivers by defining your own
+  tasks in ant/drivers.xml.
+  
+* Install all drivers
+
+ To install all drivers on all inventory machines, type the following
+ in your terminal:
+
++---
+ant drivers.install
++---
+
+ <<Note:>> This command will execute under the credentials of the
+ administrator and the administrator must already have claimed control
+ over the inventory machines (see {{{asecurity.html}this}} page).
+ 
+* Upgrade all drivers
+
+ To upgrade all drivers on all inventory machines, type the following
+ in your terminal:
+
++---
+ant drivers.upgrade
++---
+
+ <<Note:>> This command will execute under the credentials of the
+ administrator and the administrator must already have claimed control
+ over the inventory machines (see {{{asecurity.html}this}} page).
+
+* Uninstall all drivers
+
+ To uninstall all drivers from all inventory machines, type the following
+ in your terminal:
+
++---
+ant drivers.uninstall
++---
+
+ <<Note:>> This command will execute under the credentials of the
+ administrator and the administrator must already have claimed control
+ over the inventory machines (see {{{asecurity.html}this}} page).

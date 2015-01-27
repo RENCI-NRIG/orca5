@@ -1,0 +1,4 @@
+This is the location of the EC2 handler for ORCA that integrates support for NEuca, Shorewall DNAT proxy and ImageProxy components. See wiki for configuration options (geni-orca.renci.org)
+
+ - ImageProxy
+ImageProxy is a SOAP service. WSDL is located under src/main/axis2/imageproxy.wsdl. If you need to regenerate the Java stubs and handlers (that go under orca.handlers.ec2.tasks.imgproxy) run 'mvn -Pant -Dtarget=imageproxy.axis2.service'

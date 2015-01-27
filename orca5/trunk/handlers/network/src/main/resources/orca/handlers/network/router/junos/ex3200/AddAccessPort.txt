@@ -1,0 +1,2 @@
+interfaces { {$AccessPorts} { unit 0 { family ethernet-switching { port-mode access; vlan { members {$VLANName}; } } } } }  
+vlans { {$VLANName} { interface { {$AccessPorts}.0; } } } 

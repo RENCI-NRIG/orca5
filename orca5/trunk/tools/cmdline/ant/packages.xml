@@ -1,0 +1,97 @@
+<macrodef name="resolve.file" description="resolves a file from the maven repository">
+	<attribute name="groupId" />
+	<attribute name="artifactId" />
+	<attribute name="classifier" />
+	<attribute name="type" />
+	<attribute name="version" />
+	<sequential>
+		<var name="key" unset="true" />
+		<property name="key" value="@{groupId}.@{artifiactId}.@{classifier}.@{type}" />
+		<artifact:dependencies pathID="${key}.path" filesetID="${key}.fileset">
+			<dependency groupId="@{groupId}" artifactId="@{artifactId}" version="@{version}" classifier="@{classifier}" type="@{type}" />
+			<remoteRepository refid="orca" />
+		</artifact:dependencies>
+		<delete dir="tmp" />
+		<mkdir dir="tmp" />
+		<!-- copy all dependencies to tmp -->
+		<copy todir="tmp">
+			<fileset refid="${key}.fileset" />
+		</copy>
+		<!-- select only the dependencies of the needed type -->
+		<fileset id="tmp" dir="tmp">
+			<include name="**/*.@{type}" />
+		</fileset>
+		<!-- convert to a path string -->
+		<var name="tmp.path.unix" unset="true" />
+		<pathconvert targetos="unix" property="tmp.path.unix" refid="tmp">
+			<map from="${basedir}/tmp/" to="" />
+		</pathconvert>
+		<!-- go through the path string and copy the matches -->
+		<for list="${tmp.path.unix}" delimiter=":" param="file">
+			<sequential>
+				<var name="file.name" unset="true" />
+				<!-- replacce / with . -->
+				<propertyregex property="file.name" input="@{file}" regexp="/" replace="." casesensitive="false" />
+				<echo message="${file.name}" />
+				<if>
+					<contains string="${file.name}" substring="@{groupId}.@{artifactId}.@{version}.@{artifactId}-@{version}-@{classifier}.@{type}" />
+					<then>
+						<copy file="tmp/@{file}" tofile="startup/@{groupId}.@{artifactId}.@{type}" />
+					</then>
+				</if>
+			</sequential>
+		</for>
+		<delete dir="tmp" />
+	</sequential>
+</macrodef>
+
+<!-- obsoleted, as below -->
+<!--
+<target name="get.packages" depends="prepare.packages" />
+-->
+
+<!-- this target has been obsoleted. now mvn clean package does this /ib 05/27/2014 -->
+<!--
+<target name="prepare.packages" depends="get.axis2repository">
+	<resolve.file groupId="orca.core" artifactId="handlers" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers" artifactId="ec2" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers" artifactId="network" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers.network" artifactId="nlr" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers.network" artifactId="oscars" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers.network" artifactId="providers" version="${orca.version}" classifier="package" type="tar.gz" />
+        <resolve.file groupId="orca.handlers" artifactId="ibm_ds" version="${orca.version}" classifier="package" type="tar.gz" />
+        <resolve.file groupId="orca.handlers" artifactId="storage_service" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.controllers" artifactId="xmlrpc" version="${orca.version}" classifier="package" type="tar.gz" />
+</target>	
+-->
+
+<!-- simply run the unpacker application. axis or mysql aren't needed -->
+<target name="prepare.packages">
+	<exec executable="chmod">
+		<arg value="+x"/>
+		<arg value="./orca/bin/orca-unwrap"/>
+	</exec>
+	<property name="unpacker-full-path" location="./orca/bin/orca-unwrap"/>
+	<exec executable="${unpacker-full-path}"/>
+</target>
+
+<artifact:dependencies pathID="axis2repository.classpath" filesetID="axis2repository.fileset" versionsId="axis2repository.versions">
+	<dependency groupId="orca.tools" artifactId="axis2repository" version="${axis2repository.version}" type="tar.gz" />
+	<remoteRepository refid="orca" />
+</artifact:dependencies>
+
+<target name="get.axis2repository" description="retrieves the axis2 repository package">
+	<delete dir="tmp" />
+	<mkdir dir="tmp" />
+
+	<copy todir="tmp">
+		<fileset refid="axis2repository.fileset" />
+	</copy>
+
+	<gunzip src="tmp/orca/tools/axis2repository/${axis2repository.version}/axis2repository-${axis2repository.version}.tar.gz"
+		dest="tmp/repo.tar" />
+
+	<untar src="tmp/repo.tar" dest="axis2repository" />
+
+	<delete dir="tmp" />
+</target>

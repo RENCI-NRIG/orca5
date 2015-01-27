@@ -1,0 +1,43 @@
+ ----
+ Follow Broker VM Resource Control
+ ----
+ Aydan Yumerefendi
+ ----
+ December 14, 2007
+ ----
+
+Follow Broker VM Resource Control 
+
+ The Follow Broker VM Resource Control can be used to allocate virtual
+ machines from a pool of Virtual Machine Monitors (VMMs). The control can
+ subdivide each VMM along multiple dimensions, e.g., memory, cpu,
+ badwidth. The control's placement policy is dictated by the placement
+ policies of all associated brokers. This control handles migration
+ and will migrate virtual machines only if a given allocation requires
+ a migration to satisfy it.
+
+
+* Control Configuration
+
+ This control supports the following configuration properties:
+
+  * <<resource.type>>
+
+  The resource type of the associated resources. This is a required
+  property and it must specify exactly one resource type: the control
+  does not support multiple resource types/pools.
+
+  Example:
+
++---
+   <instance>
+    <className>orca.cod.control.IdControlChange</className>
+     <properties>
+      <property name="resource.type" value="1" />
+     </properties>
+   </instance>
++---
+
+  For more details, please consult the
+ {{{/orca/policy/core/authoritycalendar.html}Authority Calendar
+ Policy}} documentation pages.

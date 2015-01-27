@@ -1,0 +1,91 @@
+ ----
+ Orca Guides Index
+ -----
+ The Orca Team
+ -----
+ September 5, 2007
+ -----
+
+Orca Guides Index
+
+ Welcome to the Orca Guides! On these pages you will find a collection
+ of information about different aspects of installing, managing, and
+ using Orca.  All notation used in the guides is described
+ {{{variables.html}here}}. Please let us know if you encounter any
+ problems following our instructions.
+
+ We have organized the guides in the following categories:
+
+  * {{{#Installation_and_Configuration}Installation and Configuration}}
+
+  * {{{#Running_Orca}Running Orca}}
+
+  * {{{#Developer}Developer}}
+
+  * {{{#Case_Studies}Case Studies}}
+
+  * {{{#Deprecated}Deprecated}}
+
+ The {{{https://geni-orca.renci.org/trac/wiki}Orca Trac page}} also contains
+ useful information about Orca and is updated more frequently than these pages.
+
+* {Installation and Configuration}
+
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| Name                                                                  | Description                                      
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| {{{getting-started/index.html}Getting Started}}	                | First stop for new users.                                       
+*-----------------------------------------------------------------+-----------------------------------------------------------+
+| {{{install/index.html}Installation}}                            | Initial steps to install Orca software.			
+*-----------------------------------------------------------------+-----------------------------------------------------------+
+| {{{container-configuration/index.html}Configuration}}           | How to configure Orca.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+
+
+* {Running Orca}
+
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| Name                                                                  | Description                                      
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+| {{{command-line/index.html}Command Line}}                       | How to launch a container from the command line.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| {{{portal/index.html}Web Portal Guide}}                               | How to configure the Orca Web Portal.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+
+
+* {Developer}
+
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| Name                                                                  | Description                                      
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+| {{{devel/index.html}Developer Setup Notes}}                           | Some notes for setting up a development/control node.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+| {{{query/index.html}Inter-actor Queries}}                             | Describes the interactor query channel.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+| {{{devel/substrate.html}Substrate API}}							| Describes the Orca substrate API
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+| {{{devel/port.html}Porting to Orca 2.0}}							| Describes the steps needed to port existing code to Orca 2.0.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+
+
+* {Case Studies}
+
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| Name                                                                  | Description                                      
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+| {{{williams/index.html}Case study: Orca at Williams}}                 | Cooking an Orca facility from scratch at Williams College.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+
+* {Deprecated}
+
+ The following guides are somewhat deprecated as they refer to using Orca with
+ COD and will soon be removed as we switch completely from COD.
+
+
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| Name                                                                  | Description                                      
+*-----------------------------------------------------------------------+-----------------------------------------------------------+
+| {{{inventory/index.html}Inventory Guide}}                             | How to configure and register resources for a site.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 
+| {{{images/index.html}Images Guide}}                                   | How to configure and register images for virtual and physical machines.
+*-----------------------------------------------------------------------+-----------------------------------------------------------+ 

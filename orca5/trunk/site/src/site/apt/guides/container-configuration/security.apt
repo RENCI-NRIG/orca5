@@ -1,0 +1,43 @@
+ ----
+ Security Configuration
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Security Configuration for a Container
+
+ Orca uses a number of security protocols for communication among actors in different containers, and for communication between actors and controlled substrate components (resources). These protocols require the ability to digitally sign and encrypt
+   data and communication messages, e.g., SOAP. While almost all security configuration files are generated at runtime, the initial 
+   administrative security configuration must be created by hand.
+
+ Every container configuration directory ($ORCA_HOME) includes a <runtime
+ directory> in $ORCA_HOME/runtime.  The runtime directory contains configuration
+ files describing the identities and authentication data known to the container.
+ It consists of a java keystore and axis2 configuration files.  The Orca release
+ provides {{{../config-tool/index.html}tools}} to generate these files.
+ 
+ Each actor has one or more public/private key pairs for signing and encryption
+ in the various protocols uses in the system.  If you want to run your own Orca
+ container then
+ you must first create an admin security configuration for it. The admin in Orca
+ is equivalent to the superuser in a Unix operating system.  It has ultimate
+ control over all actors running within a container, and the container-level
+ facilities that enable them to interact.
+
+ To generate the <<runtime>> folder, first make sure the config tools are
+ {{{../config-tool/prepare.html}prepared}}, then
+ {{{../config-tool/asecurity.html}generate an admin security configuration}}
+ using the config tool.
+
+ The config tool will create a new folder called <<runtime>>. This folder will
+ contain the admin security configuration files for a container.   Copy the
+ runtime folder to $ORCA_HOME/runtime in your container configuration, e.g., copy
+ or link it into either $ORCA_ROOT/tools/cmdline
+ or $ORCA_ROOT/portal/webapp depending on how you plan to launch your Orca container.
+
+ For more information please consult the
+ {{{../config-tool/index.html}Orca Configuration Tools}} pages.
+
+ <<Note:>> The security configuration tools presume that /usr/bin/keytool has a keytool matched to your installed JDK.  You can override the location of keytool in your user.properties file.

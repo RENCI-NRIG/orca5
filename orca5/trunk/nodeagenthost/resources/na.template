@@ -1,0 +1,40 @@
+#!/bin/bash
+# chkconfig: 345 15 10
+export ORCA_AXIS2_TOOLS_PID_FILE=${NA_HOME}/bin/pid
+
+case "$1" in
+ 
+    start)
+        if [ -f ${ORCA_AXIS2_TOOLS_PID_FILE} ]; then
+           echo "Node Agent service is already running"
+        else
+           echo "Starting the Node Agent service" 
+           cd ${NM_HOME}
+           ./bin/http-server.sh repository ${PORT}
+           if [ $? -eq 0 ]; then
+             echo "Node Agent service started"
+             exit 0
+           else
+             echo "An error occurred while starting the Node Agent service"
+             exit -1
+           fi
+        fi
+         ;;
+    stop)
+        if [ -f ${ORCA_AXIS2_TOOLS_PID_FILE} ]; then
+           echo "Stopping the Node Agent service"
+           kill `cat ${ORCA_AXIS2_TOOLS_PID_FILE}`
+           echo "Node Agent service stopped"           
+        else
+           echo "Node Agent service is not running"
+        fi
+        exit 0;        
+        ;;
+    *)
+        echo "Usage: /etc/init.d/na start|stop"
+        exit 1 
+        ;;
+esac
+
+exit 0
+

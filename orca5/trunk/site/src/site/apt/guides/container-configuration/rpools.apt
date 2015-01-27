@@ -1,0 +1,247 @@
+ ----
+ Resource Pools
+ ----
+ The Orca Team
+ ----
+ April 19, 2010
+ ----
+
+Resource Pools
+
+ A resource pool is a collection of resources controlled by a site authority.
+ A resource pool is the source of all resources in Orca: each resources that can
+ be allocated and delegated to a service manager or a broker originates from a
+ site authority.
+
+ A resource pool is typically described inside the {{{xml.html}Actor XML
+ Configuration File}}. We are working on updating the web application to support
+ the new format.
+
+ A single site authority can have one or more resource pools. Resource pools are
+ defined in the <<pools>> section of the XML file. 
+
+ A resource pool is described inside a <<pool>> and its description provides the following information:
+
+ * {{{#Resource_type}Resource type}}
+
+ * {{{#Initial_source_reservation}Initial source reservation}}
+
+ * {{{#Handler}Handler}}
+
+ * {{{#Inventory}Inventory}}
+
+ * {{{#Attributes}Attributes}}
+
+ * {{{#Properties}Properties}}
+
+* {Resource type}
+
+ Each resource pool is associated with a unique resource type. In an Orca
+ ecosystem there can be only one resource pool with resources from a given
+ resource type. The resource type is a string that is not meant to be human
+ readable.
+
+ The resource type is specify by the <<type>> tag:
+ 
++---
+<type>renci.vm</type>
++--- 
+
+ Each resource pool must also supply a human-readable string to represent the
+ resource pool. This information is described in the <<label>> tag:
+
++---
+<label>RENCI Virtual Machine</label>
++---
+
+ The pool can also specify an optoinal desription information that is associated
+ with the pool and displayed on the web portal. This information is defined in
+ the <<description>> tag:
+
++---
+<description>A virtual machine hosted at RENCI's Xen Cluster</description>
++---
+
+* {Initial source reservation}
+
+ Resource in Orca must originate from a reservation. The initial source
+ reservation for a resource pool is used to inject the resources in the system
+ and to enable delegation. The inital source reservation specifies:
+
+ * The number of resource units - how many units from the given resource type
+ are available to the resource pool. Defined in the <<units>> tag:
+
++---
+<units>100</units>
++---
+
+ * The reservation term - the period of validitity for the source reservation.
+ Defined by the <<start>> and <<end>> tags. The format for each is:
+ <YYYY-MM-DDTHH:MM:SS>.
+
++---
+<start>2010-01-30T00:00:00</start>
+<end>2011-01-30T00:00:00</end>
++---
+
+* {Handler}
+
+ Each resource pool is associated with a handler responsible for creating
+ unit instances from the pool. A handler is passed configuration information by
+ the site policy and uses that information to create/configure a single resource unit.
+
+ The handler for a resource pool is defined in the <<handler>> tag. The handler
+ tag accepts an optional properties list and supports the following attributes:
+
+  * <<path>> - path to the handler file. Relative to $ORCA_LOCAL/handlers
+
+  * <<packageId>> - handler package id
+
+  * <<pluginId>> - handler plugin id
+
+  packageId and pluginId are used to identify a handler supplied by an extension
+  package. If these attributes are used path should not be specified and
+  vice-versa.
+
+  []
+
+  A handler can also take an optional properties element, which can supply
+  properties that Orca would pass to the handler at invocation time.
+
++---
+<handler path="common/noop.xml">
+ <properties>
+  <property name="custom.property" value="custom.value" />
+  </properties>
+</handler>
++---
+
+* {Inventory}
+
+ If a specific inventory item must be associated with a resource pool, this
+ association can be achieved with the help of the <<inventory>> tag. The most
+ notable use for this tag is to pass information about each inventory item to
+ the policy responsible for the resource pool.
+
+ The inventory tag accepts a comma-separated list of inventory item names.
+
++---
+<inventory>demo1,demo2</inventory>
++---
+
+* {Attributes}
+
+ Each resource pool can be associated with one or more resource attributes. A
+ resource attribute describes specific aspects of the resource and are treated
+ as resource properties on the associated source reservation. For example, a
+ resource property can specify: memory, cpu speed, network bandwidth, etc.
+
+ Resource attributes are described in the <<attributes>> section. Each resource
+ attribute is described in an <<attribute>> section. An attribute section
+ consists of the following elements:
+
+ * <<key>> unique identifier for the resource attribute. The key usually is
+ prefixed by <<resource.>> and is defined in
+ <<orca.shirako.meta.ResourceProperties>>.
+
++---
+<key>resource.memory</key>
++---
+
+ * <<label>> textual representation of the attribute. Used to represent the
+ attribute in the web portal. 
+
++---
+<label>Memory</label>
++---
+
+ * <<value>> value for the attribute
+
++---
+<value>128</value>
++---
+
+ * <<unit>> unit for the value field
+
++---
+<unit>MB</unit>
++---
+
+ * <<type>> type for the value field. Supported types: <integer>, <String>
+
++---                            
+<type>integer</type>
++---
+
+ []
+
+ Full example:
+
++---
+<attributes>
+ <attribute>
+  <key>resource.memory</key>
+  <label>Memory</label>
+  <value>128</value>
+  <unit>MB</unit>
+  <type>integer</type>
+ </attribute>
+ <attribute>
+  <key>resource.cpu</key>
+  <label>CPU</label>
+  <value>1/2 of 2GHz Intel Xeon</value>
+  <type>String</type>
+ </attribute>
+</attributes>
++---
+ 
+* {Properties}
+
+ A set of optional properties can be assiciated with the resource pool using the
+ <<properties>> section. These properties are attached to the <<local>>
+ properties list of the donated Reservation/ResourceSet.
+
++---
+<properties>
+ <property name="capacity" value="50" />
+ <property name="ip.list" value="192.168.1.2/24" />
+ <property name="ip.subnet" value="255.255.255.0" />
+</properties>
++---
+
+* {Full example}
+
++---
+<pools>
+ <pool>
+  <type>vm</type>
+  <label>Virtual Machine</label>
+  <description>A virtual machine</description>
+  <units>1</units>
+  <start>2010-01-30T00:00:00</start>
+  <end>2011-01-30T00:00:00</end>
+  <handler path="common/noop.xml" />
+  <inventory>demo1</inventory>
+  <attributes>
+   <attribute>
+    <key>resource.memory</key>
+    <label>Memory</label>
+    <value>128</value>
+    <unit>MB</unit>
+    <type>integer</type>
+   </attribute>
+   <attribute>
+    <key>resource.cpu</key>
+    <label>CPU</label>
+    <value>1/2 of 2GHz Intel Xeon</value>
+    <type>String</type>
+   </attribute>
+  </attributes>
+  <properties>
+   <property name="capacity" value="2" />
+   <property name="ip.list" value="192.168.1.2/24" />
+   <property name="ip.subnet" value="255.255.255.0" />
+  </properties>
+ </pool>
+</pools>
++---

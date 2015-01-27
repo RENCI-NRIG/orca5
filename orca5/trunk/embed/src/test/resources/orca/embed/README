@@ -1,0 +1,192 @@
+This directory contains the regression test suite for ORCA network code. It also contains some preliminary coverage tests, under coverage-tests directory.
+
+Test case files are referred to by the following convention <Test Suite ID>-<Test ID>.rdf (e.g. TS1-10.rdf)
+
+TS[12345] are success cases, TS6 are failure cases
+
+
+- Test Suite 1 - Nodes and Groups
+
+1 Single node, no dataplane, default size, default image, unbounded node, unbounded reservation 
+
+2 Single node, no dataplane, m1.large, specific image, bounded to RENCI, unbounded reservation   
+
+3 Single node, no dataplane, m1.large, specific image, reservation bounded to RENCI 
+
+4 Multiple nodes, no dataplane, default size, default image, unbounded nodes, unbounded reservation 
+
+5 Multiple nodes, no dataplane, m1.large, specific image, nodes unbounded, reservation bounded to RENCI 
+
+6 Single node group, no private vlan/dataplane, default size, default image, unbounded node group, unbounded reservation
+
+7 Combination of disconnected nodes and groups, m1.large, specific images, all bounded to RENCI,  unbounded reservation
+
+8 Combination of disconnected nodes and groups, m1.large, specific images, unbounded, reservation bounded to RENCI
+
+9 Multiple nodes in a nodegroup, multi-core XO Extra large, specific image, unbounded
+
+
+- Test Suite 2 - Intra-site embedding
+
+1 Multiple nodes (5), dataplane interconnect with no IP address assignments, m1.large, specific image, bounded reservation (RENCI)
+
+2 Multiple nodes (5), dataplane interconnect with IP address assignments (172.16.1.0/24), m1.large, specific image, all nodes bound to RENCI, unbounded reservation
+
+3 Single node group, private vlan (172.16.1.10/24), m1.large, specific image, bounded to RENCI, unbounded reservation 
+
+4 Multiple node groups (3), no connections, private vlans with overlapping address space (172.16.1.10/24 in each), specific image, bounded reservation to RENCI 
+
+5 OBSOLETED. Combination of connected nodes and groups, IP addresses assigned, m1.large, reservation-level specific image, bounded reservation (RENCI)
+
+6 Combination of connected nodes and groups, IP addresses assigned, m1.large, node-level specific images, all nodes and groups bound to RENCI, unbounded reservation
+
+7 Combination of connected nodes and groups, IP addresses assigned, groups with private VLANs, m1.large, node-level specific images, all nodes and groups bound to RENCI, unbounded reservation
+
+8 Broadcast linke with user specified vlan tag, 3 vms, rcivmsite.
+
+9 Stitching between a switchport and a node.
+
+10 Dependency between node and Nodegroup connected by a link. the nodes in nodegroup depend on the node.
+
+11 Two node dumb-bell, bound to unc, specific image, ip addresses set 
+
+12 Test NEuca interface and tap creation at large scale.  Note: check for orphan tap devices on each worker after deleting the slice. 
+
+- Test Suite 3 - Inter-site topology embedding
+
+1 Multiple nodes, no dataplane, m1.large, specific image, some bounded to RENCI and  some to BBN, unbounded reservation 
+
+2 Multiple nodes, no dataplane, m1.large, specific image, nodes partially bounded to RENCI, some unbounded, unbounded reservation 
+
+3 Multiple nodes (5), dataplane interconnect with IP address assignments, m1.large, specific image, some bounded to RENCI, some to UNC, some to Duke, unbounded reservation
+
+4 Multiple node groups, no connections, private vlans with overlapping address space (172.16.1.10/24 in each), specific image, unbounded nodes, unbounded reservation
+
+5 Multiple node groups, no connections, private vlans with overlapping address space (172.16.1.10/24 in each), specific image, some bounded to RENCI, some to BBN, unbounded reservation
+
+6 Multiple node groups, no connections, private vlans (172.16.1.10/24), m1.large, specific image, some bounded to RENCI, some unbounded 
+
+7 Multiple node groups, connections between them, no private vlans, no IP address assignment, specific image, some bounded to RENCI, some to UNC, unbounded reservation
+
+8 Multiple node groups, connections between them, no private vlans, sane IP address assignments (172.16.[123].0/24) for each inter-group vlan, some bounded to RENCI, some to UNC, unbounded reservation
+
+9 Single node group, no private vlan IPs, specific image, splittable, unbound reservation
+
+10 Single node group, private VLAN with IPs, specific image, splittable, unbound reservation
+
+11 Multiple node groups, no connections, private vlans with overlapping address space (172.16.1.10/24 in each), specific image, splittable, unbounded reservation
+
+12 Router node configuration - single router node, 3 node groups, IP address assignments on each link, each group, and node bound to specific site, unbounded reservation
+
+13 Router node configuration TS3-12 with partially unbounded groups
+
+14 Router node configuration TS3-12 with splittable groups
+
+
+
+- Test Suite 4 - User-imposed dependency tracking
+
+1 Multiple nodes, dataplane, m1.large, specific image, some bounded to RENCI, some to UNC, additional user-imposed dependencies, unbounded reservation
+
+2 Multiple node groups, dataplane interconnect with IP address assignments (172.16.[123].0/24) for each inter-group vlan, bounded to RENCI and UNC with additional user-imposed dependencies, unbounded reservation
+
+3 Router node configuration TS3-12 with node group dependencies on router node
+
+
+
+- Test Suite 5 - BEN multilayered and port provisioning test cases
+
+TBD
+
+
+- Test Suite 6 - failure cases
+
+TBD
+
+- Test Suite 7 - Large application-specific slices
+
+1 OSG slice using switch port, ovs vm, and several sites.  Used for cloud bursting from RENCI OSG site into Exogeni.  Note:  should be able to ping 172.16.1.1 on OSG network.
+  
+- Test Suite 8 - Post-boot Script Templating
+
+1 Big test uses several nodes/group and echoes nearly all templatable info to a file
+
+2 Error test.  One vm. Tries to get the $self.IP of a non-existing interface
+
+3 Error test.  One vm. Tries to get the $self.MAC of a non-existing interface 
+
+4 Error test.  One vm. Tries to get the $node1.IP of a non-existing interface
+
+5 Error test.  One vm. Tries to get the $node1.MAC of a non-existing interface
+
+6 Error test.  One vm. Tries to get the group node IP of a non-existing interface
+
+7 Error test.  One vm. Tries to get the group node MAC of a non-existing interface
+ 
+8 Error test.  One vm. Tries to get the group node name of an out-of-range node in a group
+
+9 Error test.  One vm. Tries to get the group node MAC of a not-a-number node in a group
+
+10 OBSOLETED
+
+11 Error test.  One vm. Tries to get the name of a non-existing node
+
+12 Error test.  One vm. Tries to get the name of a non-existing node from a group
+
+13 Error test. Node1 with undefined ip $Node1.IP("Link1").  Link exists IP does not.
+
+14 Get MAC of Node1 with undefinded IP $Node1.MAC("Link1").  Link exists IP does not.
+ 
+15 Error test.  One vm. Node1 not a function $Node1.ShoeSize() Call nonsense function of existing node
+
+16 OBSOLETED
+
+17 OBSOLETED
+
+18 Error test. Node1 not an attribute $Node1.ShoeSize access nonsense attribute
+
+
+=============================================================================================================
+
+
+
+Multi-core testing
+
+1. TS1-3: change image types to XO large, XO Extra large, XO Medium, XO Small and check /proc/cpuinfo on the vms
+2. TS1-5: ask for x number of nodes in a nodegroup, of type "XO Extra large", such that 4*x is greater than the total number of available vms from the site
+
+Extend testing
+
+ORCA only using flukes
+
+1. TS1-3: Set reservation term to 5 minutes; extend by 15 minutes before slice expires and see if extend occured
+2. TS1-3: Set reservation term to 5 minutes; extend to time in the past; should fail
+3. TS1-3: Set reservation term to 5 minutes; extend to time before slice expiry; should fail
+
+With OMNI
+
+Test with two-node-unc.rspec [ Assuming testing at unc (else change rspec by substituting 'uncvmsite' with the site you are testing with) ]
+
+cd /home/orca/omni/gcf-2.2
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc createslice omniSlice-anirban
+
+vi two-node-unc.rspec <== set expiry date 
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc createsliver omniSlice-anirban two-node-unc.rspec
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc sliverStatus omniSlice-anirban <== check creation, expiry times, geni slice state, sliver states; should match with what you see in flukes for this slice and should match with pequod reservation states
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc listresources omniSlice-anirban <== check creation, expiry times, geni slice state, sliver states; should match with what you see in flukes for this slice and should match with pequod reservation states
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130517T20:00:00Z <== check creation, expiry times, geni slice state, sliver states etc.
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130517T19:58:00Z <== do this after slice is active and before expiry; should fail
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130519T20:00:00Z <== provide date beyond slice expiration; should fail
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130514T20:10:00Z <== provide date in the past; OMNI sends wrong date to ORCA and might renew to an arbitrary time; test using orca python scripts
+
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc deletesliver omniSlice-anirban
+
+
+Test without expiry: remove "expires=..." from two-node-unc.rspec . Assuming testing at unc (else change rspec by substituting 'uncvmsite' with the site you are testing with) 

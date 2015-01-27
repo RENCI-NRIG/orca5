@@ -1,0 +1,694 @@
+	---
+	Case Study:  Setting up a Distributed Instance of Orca
+	--- 
+	David Irwin 
+	---
+	September 8th, 2008
+
+Case Study:  Setting up a Distributed Instance of Orca in Emulation
+
+     This document describes the process of installing an Orca system composed of actor servers that communicate across a network to coordinate resource allocation.  We describe the process of setting up a system with three actors---one service manager, one broker, and one authority---on three different servers in emulation.  Setting up the system "in emulation" means that we do not actually configure resource instances (e.g., Xen VMs, storage volumes) in response to requests from service managers (or experiments).  Refer to the Williams Case Study {{{http://www.nicl.cs.duke.edu/orca/guides/williams/index.html} here}} that shows how to set up an authority that configures Xen virtual machines and binds resources to them in response to requests.
+
+  Orca defines three types of actor roles:  
+
+  [[1]] A service manager that requests resources on behalf of its application.
+  
+  [[2]] A broker that discovers, arbitrates, and provisions resources to service managers.
+
+  [[3]] An authority that assigns and configures specific resource instances to service managers.  
+
+  []
+
+  An Orca system may comprise any number of each type of actor, each running within its own administrative domain, that communicate over the network.  The reference implementation of Orca uses remote procedure calls to facilitate network communication.  In particular, the implemenation uses Axis2's reference implementation of SOAP (a Simple Open Access Protocol) that has become the de facto standard for Internet web services.  Orca's protocol defines a narrow interface (i.e., a small set of procedures) by which two actor roles communicate.  
+
+  We list these interfaces below:
+
+  [[1]] <<Service Manager --> Broker Interface>> query, ticket 
+
+  [[2]] <<Broker --> Broker>> query, ticket
+
+  [[3]] <<Broker --> Service Manager Interface>>  updateTicket, extendTicket
+
+  [[4]] <<Broker --> Broker>> updateTicket, extendTicket
+ 
+  [[5]] <<Service Manager --> Authority Interface>> redeem, extendLease, close
+
+  [[6]] <<Authority --> Service Manager Interface>> updateLease
+
+  
+  []
+ 
+	Note that in a distributed setting a broker may act like a service manager and request tickets (2, 4) for redistribution.  There is also an interface between the Authority and Broker.  However, we have never really decided if this interface should be network-accessible or if each Authority should always have its own Broker (that acts as an agent on its behalf).  In this case, the broker to broker communication (2 and 4) are all that is necessary.  This model probably makes the most sense since broker-to-broker communication must be supported in any case, it makes sense not to expose yet another set of procedures. 
+
+	Here is the basic set of instructions for setting up a networked system across three computers:
+
+ *Find two computers that can ping each other (i.e., they have public IPs or routes to/from each)
+
+ *Download and install Orca from svn on each computer.  This requires installing Maven, Java, Tomcat, MySQL, etc. on each (sorry).  We don't yet have a viable binary distribution, but the Maven setup isn't bad as long as it works.
+
+ *Modify the XML configuration file for each computer to specify the topology for the actors (i.e., which actor is connected to which other actor).  Doing this through the web portal is still experimental, so we do it once from an initial configuration file.
+
+ *Start up each Tomcat server and deploy the Orca web application.  Then issue requests from the Service Managers web portal.
+
+[]
+
+Downloading and Installing Orca
+
+	    These instructions are largely replicated in the Williams Case Study {{{http://www.nicl.cs.duke.edu/orca/guides/williams/index.htm}l here}}.  However, we will extract out the necessary instructions for doing an emulation test.  Emulation does not require the Xen infrastructure setup from that case study.  We assume that each computer is running an instance of Linux.  Any instance should do; we installed the code on Ubuntu Feisty Fawn.
+
+	Before checking out Orca's code we must install some software that Orca uses to configure itself and execute.  It is important to install the same versions of the software below as there may be subtle dependencies on features in a particular version.  Unless otherwise specified, execute all commands as user orca in the directory specified on the command line.  For example, the tilde (~) in the command prompt below indicates the orca user's home directory.  The command prompt "bash:~/trunk$" would indicate the directory trunk inside of orca's home directory.  The following set of commands install Java 1.5, Ant 1.7.0, Maven 2.0.8, and Maven Ant Tasks 2.0.8 in the software directory. 
+
++---------------+
+bash:~$ sudo apt-get install sun-java5-jdk
+bash:~$ sudo apt-get install wget
+bash:~$ mkdir software
+bash:~$ cd software
+bash:~/software$ mkdir sources
+bash:~/software$ wget http://apache.cs.utah.edu/ant/binaries/apache-ant-1.7.0-bin.tar.gz
+bash:~/software$ tar -xzf apache-ant-1.7.0-bin.tar.gz
+bash:~/software$ mv apache-ant-1.7.0-bin.tar.gz sources/.
+bash:~/software$ wget http://mirrors.isc.org/pub/apache/maven/binaries/apache-maven-2.0.8-bin.tar.gz
+bash:~/software$ tar -xzf apache-maven-2.0.8-bin.tar.gz
+bash:~/software$ mv apache-maven-2.0.8-bin.tar.gz sources/.
+bash:~/software$ wget http://apache.mirrors.tds.net/maven/binaries/maven-ant-tasks-2.0.8.jar
+bash:~/software$ cd ~
++---------------+
+
+	Next we need to setup our environment to use these tools.  We create a small script named environment in the home directory that sets the proper environment variables for these tools.  Before doing any orca-related actions we must run "source ./environment" as shown below to set these environment variables.
+
++---------------+
+bash:~$ echo "export ANT_HOME=~/software/apache-ant-1.7.0/" >> ./environment
+bash:~$ echo "export MV2_HOME=~/software/apache-maven-2.0.8/" >> ./environment
+bash:~$ echo "export PATH=\$MV2_HOME/bin:\$ANT_HOME/bin:\$PATH" >> ./environment
+bash:~$ echo "export MV2_REPO=~/.m2/repository" >> ./environment
+bash:~$ echo "export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun" >> ./environment
+bash:~$ echo "export JRE_HOME=/usr/lib/jvm/java-1.5.0-sun" >> ./environment
+bash:~$ chmod u+x ./environment
+bash:~$ source ./environment
++---------------+
+
+	We now must install {{{http://subversion.tigris.org}subversion}} (or svn) in order to check out the Orca source tree.  The first command will install subversion, and the second command will checkout the orca source tree into the trunk directory.
+
++---------------+
+bash:~$ sudo apt-get install subversion
+bash:~$ svn checkout https://svn.nicl.cs.duke.edu/svn/cereus/orca/trunk
++---------------+
+
+	We must also set Orca-specific environment variables in the environment file we created above.
+
++---------------+
+bash:~$ echo "export ORCA_ROOT=~/trunk" >> ./environment
+bash:~$ echo "export ORCA_DB_USER=orca" >> ./environment
+bash:~$ echo "export ORCA_DB_USER_PASSWORD=" >> ./environment
+bash:~$ echo "export ORCA_DB_NAME=orca" >> ./environment
+bash:~$ echo "export HOST=localhost" >> ./environment
+bash:~$ echo "export ORCA_DB_SERVER=localhost" >> ./environment
+bash:~$ echo "export ORCA_WEB=$ORCA_ROOT/portal/webapp" >> ./environment
+bash:~$ source ./environment
++---------------+
+
+	Now we are ready to build Orca for the first time.  The initial build downloads dependencies from a remote repository, so verify that you are connected to the Internet first.
+
++---------------+
+bash:~$ ping www.google.com
+PING www.l.google.com (64.233.161.99): 56 data bytes
+64 bytes from 64.233.161.99: icmp_seq=0 ttl=242 time=31.330 ms
+64 bytes from 64.233.161.99: icmp_seq=1 ttl=242 time=37.025 ms
+^C
+--- www.l.google.com ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max/stddev = 31.330/34.177/37.025/2.848 ms
+
+bash:~$ cd $ORCA_ROOT
+bash:~/trunk$ mvn install
++---------------+
+
+	The Orca master uses a {{{http://www.mysql.com} MySQL}} database to store information about users, machines, VMs, and disks.  The database allows the Orca master to restart itself in the event of a failure (e.g., power outage).  Execute the following commands to install a MySQL database and configure it for network access, which is needed for Orca to communicate with the database.
+
++---------------+
+bash:~$ sudo apt-get install mysql-server
+bash:~$ sudo cat /etc/mysql/my.cnf | sed s/bind-address/#\ bind-address/g > ./my.cnf
+bash:~$ sudo mv ./my.cnf /etc/mysql/.
+bash:~$ sudo /etc/init.d/mysql stop
+bash:~$ sudo /etc/init.d/mysql start
++---------------+
+
+	Once the MySQL database is installed and running, we must add a user for orca and grant this user privileges to the orca database, as shown below.  Note that below we leave the password empty for users connecting to the database from the localhost.  This should be secure as long as we restrict access to the master.  Next we need to create the orca database.
+
++---------------+
+bash:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 5.0.38-Ubuntu_0ubuntu1.2-log Ubuntu 7.04 distribution
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> grant all privileges on orca.* to 'orca'@'localhost' identified by '';
+mysql> quit
+Bye
+bash:~$ mysql -u orca -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 5.0.38-Ubuntu_0ubuntu1.2-log Ubuntu 7.04 distribution
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> create database orca;
+mysql> quit
+Bye
++---------------+
+
+	Now that the Orca database exists we must load the Orca database schema and some basic data, as shown below.
+
++---------------+
+bash:~$ mysql -u orca -p -h localhost < $ORCA_ROOT/schema/mysql/full.schema.sql
+Enter password:
+bash:~$ mysql -u orca -p -h localhost < $ORCA_ROOT/schema/mysql/full.data.sql
+Enter password:
++---------------+
+	
+	Everything in Orca is annoyingly secure, so we must next generate a public/private key pair for the Orca administrator, as shown below.  This will create a directory called runtime in $ORCA_ROOT/tools/config.  We will use this directory later when building the web portal.
+
++---------------+
+bash:~$ cd $ORCA_ROOT/tools/config
+bash:~$ ant security.create.admin.config
++---------------+
+
+	Orca's web portal uses Apache's {{{http://tomcat.apache.org/}Tomcat}} servlet engine.  Configuring Tomcat for Orca can be tedious since Orca requires some additional libraries.  To simplify matters, we can check out a pre-configured Tomcat from the Orca subversion repository.
+
++---------------+
+bash:~$ svn checkout https://svn.nicl.cs.duke.edu/svn/cereus/software/tomcat
++---------------+
+
+	You will need to modify the start.sh file and the stop.sh file in the tomcat directory to reflect the correct value of the environment variable $CATALINA_HOME.  We will also add $CATALINA_HOME to our environment file.
+
++---------------+
+bash:~$ cd tomcat
+bash:~/tomcat$ nano start.sh
+[change /shirako/tomcat to ~/tomcat]
+bash:~/tomcat$ nano stop.sh
+[change /shirako/tomcat to ~/tomcat]
+bash:~/tomcat$ cd ..
+bash:~$ echo "export CATALINA_HOME=~/tomcat" >> ./environment
+bash:~$ source ./environment
++---------------+
+
+	We now need to generate local configuration files that we can customize to suit our installations needs. We generate local configuration files from templates checked into the subversion repository.  Local configuration files are not under subversion control.  We then copy the runtime/ folder we generated above in tools/config, which holds the administrators public/private key pair, to Orca's run folder.  The run/ folder in Orca is directory where we can run Orca tests.  Any code that uses Orca must be able to reference the runtime folder above, which stores the administrators keys.  Below we will see that we also package the runtime folder with the web portal in a*.war file.
+
+Modifying the Default Configuration File to use SOAP
+
+  The default configuration file that ships with orca is  $ORCA_ROOT/portal/webapp/config/config.xml.  The contents of this file are below.
+
++---------------------+
+1: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+2: <configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+3:   <global>
+4:     <startTime>-1</startTime>
+5:     <cycleMillis>1000</cycleMillis>
+6:    <firstTick>0</firstTick>
+7:   <manualTicks>false</manualTicks>
+8:        <guid>583c10bfdbd326ba:-5cb5a50:114e1828ce0:-8000</guid>
+9:    <locations>
+10:      <location protocol="local" />
+11:   </locations>
+12:    <database>
+13:      <className>orca.manage.container.db.MySqlContainerManagementDatabase</className>
+14:      <properties>
+15:        <property name="db.mysql.server" value="localhost" />
+16:        <property name="db.mysql.db" value="orca" />
+17:        <property name="db.mysql.user" value="orca" />
+18:        <property name="db.mysql.password" value="" />
+19:
+20:        <property name="db.admin.first" value="Orca" />
+21:        <property name="db.admin.last" value="Admin" />
+22:        <property name="db.admin.login" value="admin" />
+23:        <property name="db.admin.password" value="admin" />
+24:        <property name="db.admin.roles" value="home,users,broker,admin" />
+25:
+26:      </properties>
+27:    </database>
+28:  </global>
+29:  <actors>
+30:    <actor>
+31:      <name>site</name>
+32:      <description>site</description>
+33:      <instance>
+34:        <className>orca.shirako.core.Authority</className>
+35:      </instance>
+36:      <mapper>
+37:        <className>orca.policy.core.AuthorityCalendarPolicy</className>
+38:        <parameters>
+39:          <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
+40:            <instance>
+41:              <className>orca.cod.control.IdControlChange</className>
+42:              <properties>
+43:                <property name="resource.type" value="1" />
+44:              </properties>
+45:            </instance>
+46:          </parameter>
+47:        </parameters>
+48:      </mapper>
+49:      <plugin>
+50:        <className>orca.cod.plugins.Site</className>
+51:        <properties>
+52:          <!-- Storage servers to be transferred to this site -->
+53:          <property name="inventory.storage" value="fetch gnathosaurus" />
+54:          <!-- Physical machines to be transferred to this site -->
+55:          <property name="inventory.machines" value="shirako034 shirako035 shirako036 shirako037 shirako038 shirako039" />
+56:
+57:          <!--    Resource pool configuration -->
+58:          <property name="resource.pools.count" value="1" />
+59:          <!--    First resource pool configuration -->
+60:          <property name="resource.pool.0" value="1" />
+61:          <property name="resource.pool.name.0" value="demo" />
+62:          <property name="resource.pool.type.0" value="1" />
+63:          <property name="resource.pool.properties.0" value="memory=1024,cpu=100,bandwidth=1000" />
+64:          <!--    Machines that belong to this pool -->
+65:          <property name="resource.pool.machines.0" value="shirako034 shirako035 shirako036 shirako037 shirako038 shirako039" />
+66:          <!--    Source ticket configuration -->
+67:          <property name="resource.pool.ticket.units.0" value="6" />                                    
+68:          <property name="resource.pool.ticket.start.0" value="0" />
+69:          <property name="resource.pool.ticket.end.0" value="10000000" />                                       
+70:          <!--    Handler configuration -->
+71:         <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
+72:          <property name="resource.pool.handler.pluginId.0" value="1" />
+73:          <property name="resource.pool.handler.properties.0" value="server.name=gnathosaurus,server.guid=583c10bfdbd326ba:-5bb4a8a:114482bd028:-8000,server.ip=172.16.0.2,server.base=sata/images/shirako/,server.control=152.3.144.204" />
+74:        </properties>
+75:        <parameters>
+76:          <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
+77:            <instance>
+78:              <className>orca.cod.plugins.NetworkConfigurationManager</className>
+79:              <parameters>
+80:                <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+81:                  <instance>
+82:                    <className>orca.cod.plugins.NetworkConfiguration</className>
+83:                    <properties>
+84:                      <property name="network.base" value="172.16.64.0" />
+85:                      <property name="network.mask" value="255.255.240.0" />
+86:                      <property name="network.subnet" value="255.255.255.0" />
+87:                      <property name="network.min" value="10" />
+88:                      <property name="network.gateway" value="" />
+89:                    </properties>
+90:                  </instance>
+91:                </parameter>
+92:                <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+93:                  <instance>
+94:                    <className>orca.cod.plugins.DnsConfiguration</className>
+95:                    <properties>
+96:                      <property name="dns.prefix" value="default" />
+97:                      <property name="dns.zone" value="cod.cs.duke.edu" />
+98:                      <property name="dns.mx" value="10 cod.cs.duke.edu" />
+99:                    </properties>
+100:                  </instance>
+101:                </parameter>
+102:              </parameters>
+103:            </instance>
+104:          </parameter>
+105:          <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+106:            <instance>
+107:              <className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
+108:              <properties>
+109:                <property name="db.mysql.server" value="localhost" />
+110:                <property name="db.mysql.db" value="orca" />
+111:                <property name="db.mysql.user" value="orca" />
+112:                <property name="db.mysql.password" value="" />
+113:              </properties>
+114:            </instance>
+115:          </parameter>
+116:          <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+117:            <instance>
+118:              <className>orca.cod.plugins.config.CodAntConfig</className>
+119:              <properties>
+120:                <property name="config.count" value="1" />
+121:                <property name="config.type.0" value="1" />
+122:                <property name="config.file.0" value="standard/handler.xml" />
+123:              </properties>
+124:            </instance>
+125:          </parameter>
+126:        </parameters>
+127:      </plugin>
+128:    </actor>
+129:    <actor>
+130:      <name>broker</name>
+131:      <description>broker</description>
+132:      <instance>
+133:        <className>orca.shirako.core.Broker</className>
+134:      </instance>
+135:      <mapper>
+136:        <className>orca.policy.core.BrokerWorstFitPolicy</className>
+137:      </mapper>
+138:      <plugin>
+139:        <className>orca.sharp.plugins.ServerPlugin</className>
+140:        <parameters>
+141:          <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+142:            <instance>
+143:              <className>orca.sharp.plugins.db.MySqlClientDatabase</className>
+144:              <properties>
+145:                <property name="db.mysql.server" value="localhost" />
+146:                <property name="db.mysql.db" value="orca" />
+147:                <property name="db.mysql.user" value="orca" />
+148:                <property name="db.mysql.password" value="" />
+149:      </properties>
+150:            </instance>
+151:          </parameter>
+152:        </parameters>
+153:      </plugin>
+154:    </actor>
+155:    <actor>
+156:      <name>service</name>
+157:      <description>Service Manager</description>
+158:      <instance>
+159:        <className>orca.shirako.core.ServiceManager</className>
+160:      </instance>
+161:      <mapper>
+162:        <className>orca.policy.core.ServiceManagerSimplePolicy</className>
+163:      </mapper>
+164:      <plugin>
+165:        <className>orca.cod.plugins.ServiceManagerCodPlugin</className>
+166:        <parameters>
+167:          <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+168:            <instance>
+169:              <className>orca.cod.plugins.db.MySqlCodDatabase</className>
+170:              <properties>
+171:                <property name="db.mysql.server" value="localhost" />
+172:                <property name="db.mysql.db" value="orca" />
+173:                <property name="db.mysql.user" value="orca" />
+174:                <property name="db.mysql.password" value="" />
+175:              </properties>
+176:            </instance>
+177:          </parameter>
+178:          <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+179:            <instance>
+180:              <className>orca.shirako.plugins.config.AntConfig</className>
+181:              <properties>
+182:                <property name="config.count" value="1" />
+183:                <property name="config.type.0" value="1" />
+184:                <property name="config.file.0" value="common/noop.xml" />
+185:              </properties>
+186:            </instance>
+187:          </parameter>
+188:        </parameters>
+189:      </plugin>
+190:    </actor>
+191:  </actors>
+192:  <topology>
+193:    <edges>
+194:      <edge>
+195:        <from name="service" type="sm" />
+196:        <to name="broker" type="agent" />
+197:      </edge>
+198:      <edge>
+199:        <from name="broker" type="agent" />
+200:        <to name="site" type="authority" />
+201:        <rset>
+202:          <type>1</type>
+203:          <units>6</units>
+204:        </rset>
+205:      </edge>
+206:    </edges>
+207:  </topology>
+208: </configuration>
++--------------------------+
+
+  Before moving on, we'll summarize the contents of config.xml.  The default config file describes an instance of Orca with three actors:  1 service manager, 1 broker, and 1 authority.  All three actors run in the context of a container.  A container is the name for the administrative entity that hosts actors and allows external administration of them.   If no actors are created in the config file, an administrator may still log into the Orca web portal and create new actors inside the container.  Lines 1-30 of the config file describe the container.  It is backed by a MySQL database and uses local procedure calls.  It has a notion of time (a -1 start time indicates that the portal should use the current system time for startup) and it has a notion of clock ticks (internal events or upcalls) every second that internally mark the passage of time.  Since Orca is based on leases, defining and keeping an accurate notion of time is important.
+
+  Lines 29-191 describe the actors in the system.  This Orca config file defines three actors for the same container that communicate via local procedure calls.  We we will divide these three actors into three different config files running on three different computers that communicate via remote procedure calls.  Lines 31-129 describe an Authority.  The authority has a set of storage servers and machines in its inventory (52-55) along with a defined policy for assigning these machines to service managers (37-47).  Lines 57-73 direct the Authority to create a resource pool from all of the inventory machines and mint a ticket for them.  This ticket will then be assigned to the broker.  The configuration of the machines requires logic for IP address assigment and domain name assignment.  The actor is also backed by its own database.  Finally, at line 116 the Config class directs the authority to a file that indicates what actions to perform when leases start and stop.  The default configuration file specifies a file that does nothing when leases start and stop; this is what defines our configuration as an emulation.
+
+  Lines 133-154 define the broker.  The broker is much simpler than the authority.  It simply has a policy to allocate tickets to service managers, and a database for a backing store.
+
+  Lines 157-190 define a service manager.  This service manager is simple.  It defines a simple adaptation policy that issues no requests (the config file is intended for a web portal where a human user manually issues requests).  It also defines a database as well as a default set of actions to perform when leases start and stop.  As with the authority, the service manager does nothing at the beginning or end of leases (hence, it is also emulated).
+
+  Lines 192-208 defines the topology of the system.  The service manager is connected to the broker.  The broker is connected to an authority, and the authority exports its inventory to the broker.  
+   
+  To alter file to use soap we simply change two lines in the file.  Change line 10 to be:
+
++----------------+
+  <location protocol="soapaxis2" url="http://localhost:8080/orca" />      
++-----------------+
+
+  Then add a new line underneath line 196 to read:
+
++----------------+
+<location protocol="soapaxis2" url="http://localhost:8080/orca/services/broker" />
++----------------+
+ 
+  The following changes force the service manager to use SOAP to communicate with the broker/authority, even though they are still on the localhost.   We simply rebuild and redeploy the web application:  go to portal/webapp, run mvn clean; mvn package; mvn install, and copy target/orca.war to Tomcat's webapp directory (remember to stop Tomcat first and remove any old Orca webapp *.war and directory).  
+
+  To run a true distributed instance we need to split our config file into two separate config files:  one for the service manager and one for the broker/authority.  We show the service manager config file below:
+
++---------------------+
+1: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+2: <configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+3:   <global>
+4:     <startTime>-1</startTime>
+5:     <cycleMillis>1000</cycleMillis>
+6:    <firstTick>0</firstTick>
+7:   <manualTicks>false</manualTicks>
+8:        <guid>583c10bfdbd326ba:-5cb5a50:114e1828ce0:-8000</guid>
+9:    <locations>
+10:  <location protocol="soapaxis2" url="http://localhost:8080/orca" />      
+11:   </locations>
+12:    <database>
+13:      <className>orca.manage.container.db.MySqlContainerManagementDatabase</className>
+14:      <properties>
+15:        <property name="db.mysql.server" value="localhost" />
+16:        <property name="db.mysql.db" value="orca" />
+17:        <property name="db.mysql.user" value="orca" />
+18:        <property name="db.mysql.password" value="" />
+19:
+20:        <property name="db.admin.first" value="Orca" />
+21:        <property name="db.admin.last" value="Admin" />
+22:        <property name="db.admin.login" value="admin" />
+23:        <property name="db.admin.password" value="admin" />
+24:        <property name="db.admin.roles" value="home,users,broker,admin" />
+25:
+26:      </properties>
+27:    </database>
+28:  </global>
+29:  <actors>
+30:      <description>Service Manager</description>
+31:      <instance>
+32:        <className>orca.shirako.core.ServiceManager</className>
+33:      </instance>
+34:      <mapper>
+35:        <className>orca.policy.core.ServiceManagerSimplePolicy</className>
+36:      </mapper>
+37:      <plugin>
+38:        <className>orca.cod.plugins.ServiceManagerCodPlugin</className>
+39:        <parameters>
+40:          <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+41:            <instance>
+42:              <className>orca.cod.plugins.db.MySqlCodDatabase</className>
+43:              <properties>
+44:                <property name="db.mysql.server" value="localhost" />
+45:                <property name="db.mysql.db" value="orca" />
+46:                <property name="db.mysql.user" value="orca" />
+47:                <property name="db.mysql.password" value="" />
+48:              </properties>
+49:            </instance>
+50:          </parameter>
+51:          <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+52:            <instance>
+53:              <className>orca.shirako.plugins.config.AntConfig</className>
+54:              <properties>
+55:                <property name="config.count" value="1" />
+56:                <property name="config.type.0" value="1" />
+57:                <property name="config.file.0" value="common/noop.xml" />
+58:              </properties>
+59:            </instance>
+60:          </parameter>
+61:        </parameters>
+62:      </plugin>
+63:    </actor>
+64:  </actors>
+65:  <topology>
+66:    <edges>
+67:      <edge>
+68:        <from name="service" type="sm" />
+69:        <to name="broker" type="agent" />
+70:	          <location protocol="soapaxis2" url="http://localhost:8080/orca/services/broker" />
+71:      </edge>
+72:    </edges>
+73:  </topology>
+74: </configuration>
++--------------------------+
+
+  
+
+  The broker/authority config file is similar:
+
++---------------------+
+1: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+2: <configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+3:   <global>
+4:     <startTime>-1</startTime>
+5:     <cycleMillis>1000</cycleMillis>
+6:    <firstTick>0</firstTick>
+7:   <manualTicks>false</manualTicks>
+8:        <guid>583c10bfdbd326ba:-5cb5a50:114e1828ce0:-8000</guid>
+9:    <locations>
+10:  <location protocol="soapaxis2" url="http://localhost:8080/orca" />      
+11:   </locations>
+12:    <database>
+13:      <className>orca.manage.container.db.MySqlContainerManagementDatabase</className>
+14:      <properties>
+15:        <property name="db.mysql.server" value="localhost" />
+16:        <property name="db.mysql.db" value="orca" />
+17:        <property name="db.mysql.user" value="orca" />
+18:        <property name="db.mysql.password" value="" />
+19:
+20:        <property name="db.admin.first" value="Orca" />
+21:        <property name="db.admin.last" value="Admin" />
+22:        <property name="db.admin.login" value="admin" />
+23:        <property name="db.admin.password" value="admin" />
+24:        <property name="db.admin.roles" value="home,users,broker,admin" />
+25:
+26:      </properties>
+27:    </database>
+28:  </global>
+29:  <actors>
+30:    <actor>
+31:      <name>site</name>
+32:      <description>site</description>
+33:      <instance>
+34:        <className>orca.shirako.core.Authority</className>
+35:      </instance>
+36:      <mapper>
+37:        <className>orca.policy.core.AuthorityCalendarPolicy</className>
+38:        <parameters>
+39:          <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
+40:            <instance>
+41:              <className>orca.cod.control.IdControlChange</className>
+42:              <properties>
+43:                <property name="resource.type" value="1" />
+44:              </properties>
+45:            </instance>
+46:          </parameter>
+47:        </parameters>
+48:      </mapper>
+49:      <plugin>
+50:        <className>orca.cod.plugins.Site</className>
+51:        <properties>
+52:          <!-- Storage servers to be transferred to this site -->
+53:          <property name="inventory.storage" value="fetch gnathosaurus" />
+54:          <!-- Physical machines to be transferred to this site -->
+55:          <property name="inventory.machines" value="shirako034 shirako035 shirako036 shirako037 shirako038 shirako039" />
+56:
+57:          <!--    Resource pool configuration -->
+58:          <property name="resource.pools.count" value="1" />
+59:          <!--    First resource pool configuration -->
+60:          <property name="resource.pool.0" value="1" />
+61:          <property name="resource.pool.name.0" value="demo" />
+62:          <property name="resource.pool.type.0" value="1" />
+63:          <property name="resource.pool.properties.0" value="memory=1024,cpu=100,bandwidth=1000" />
+64:          <!--    Machines that belong to this pool -->
+65:          <property name="resource.pool.machines.0" value="shirako034 shirako035 shirako036 shirako037 shirako038 shirako039" />
+66:          <!--    Source ticket configuration -->
+67:          <property name="resource.pool.ticket.units.0" value="6" />                                    
+68:          <property name="resource.pool.ticket.start.0" value="0" />
+69:          <property name="resource.pool.ticket.end.0" value="10000000" />                                       
+70:          <!--    Handler configuration -->
+71:         <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
+72:          <property name="resource.pool.handler.pluginId.0" value="1" />
+73:          <property name="resource.pool.handler.properties.0" value="server.name=gnathosaurus,server.guid=583c10bfdbd326ba:-5bb4a8a:114482bd028:-8000,server.ip=172.16.0.2,server.base=sata/images/shirako/,server.control=152.3.144.204" />
+74:        </properties>
+75:        <parameters>
+76:          <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
+77:            <instance>
+78:              <className>orca.cod.plugins.NetworkConfigurationManager</className>
+79:              <parameters>
+80:                <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+81:                  <instance>
+82:                    <className>orca.cod.plugins.NetworkConfiguration</className>
+83:                    <properties>
+84:                      <property name="network.base" value="172.16.64.0" />
+85:                      <property name="network.mask" value="255.255.240.0" />
+86:                      <property name="network.subnet" value="255.255.255.0" />
+87:                      <property name="network.min" value="10" />
+88:                      <property name="network.gateway" value="" />
+89:                    </properties>
+90:                  </instance>
+91:                </parameter>
+92:                <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+93:                  <instance>
+94:                    <className>orca.cod.plugins.DnsConfiguration</className>
+95:                    <properties>
+96:                      <property name="dns.prefix" value="default" />
+97:                      <property name="dns.zone" value="cod.cs.duke.edu" />
+98:                      <property name="dns.mx" value="10 cod.cs.duke.edu" />
+99:                    </properties>
+100:                  </instance>
+101:                </parameter>
+102:              </parameters>
+103:            </instance>
+104:          </parameter>
+105:          <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+106:            <instance>
+107:              <className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
+108:              <properties>
+109:                <property name="db.mysql.server" value="localhost" />
+110:                <property name="db.mysql.db" value="orca" />
+111:                <property name="db.mysql.user" value="orca" />
+112:                <property name="db.mysql.password" value="" />
+113:              </properties>
+114:            </instance>
+115:          </parameter>
+116:          <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+117:            <instance>
+118:              <className>orca.cod.plugins.config.CodAntConfig</className>
+119:              <properties>
+120:                <property name="config.count" value="1" />
+121:                <property name="config.type.0" value="1" />
+122:                <property name="config.file.0" value="standard/handler.xml" />
+123:              </properties>
+124:            </instance>
+125:          </parameter>
+126:        </parameters>
+127:      </plugin>
+128:    </actor>
+129:    <actor>
+130:      <name>broker</name>
+131:      <description>broker</description>
+132:      <instance>
+133:        <className>orca.shirako.core.Broker</className>
+134:      </instance>
+135:      <mapper>
+136:        <className>orca.policy.core.BrokerWorstFitPolicy</className>
+137:      </mapper>
+138:      <plugin>
+139:        <className>orca.sharp.plugins.ServerPlugin</className>
+140:        <parameters>
+141:          <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+142:            <instance>
+143:              <className>orca.sharp.plugins.db.MySqlClientDatabase</className>
+144:              <properties>
+145:                <property name="db.mysql.server" value="localhost" />
+146:                <property name="db.mysql.db" value="orca" />
+147:                <property name="db.mysql.user" value="orca" />
+148:                <property name="db.mysql.password" value="" />
+149:      </properties>
+150:            </instance>
+151:          </parameter>
+152:        </parameters>
+153:      </plugin>
+154:    </actor>
+155:  </actors>
+156:  <topology>
+157:    <edges>
+158:      <edge>
+159:        <from name="broker" type="agent" />
+160:        <to name="site" type="authority" />
+161:        <rset>
+162:          <type>1</type>
+163:          <units>6</units>
+164:        </rset>
+165:      </edge>
+166:    </edges>
+167:  </topology>
+168: </configuration>
++--------------------------+
+
+  Once you build the web application with these two config files and deploy the webapp, login and issue a request from the service manager.  If you look in $CATALINA_HOME/logs/log and search for OrcaLoggingHandler you will a see the actual SOAP XML exchanged on the wire.
+

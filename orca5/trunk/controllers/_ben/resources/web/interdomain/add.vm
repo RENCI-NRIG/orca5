@@ -1,0 +1,242 @@
+#parse("/secure/common/top.vm")
+#parse("${root.getPackageRoot('f7ec610c-d838-4239-87fc-869a8cbf848e')}/top.vm")
+
+<div class="title">Request Resources</div>
+<div class="titleSpacer"/>  
+
+#parse("/secure/common/calendar.vm")
+#parse("/secure/common/validate.vm")
+        
+
+<!-- push logger to the bottom, logger and yuidomcollapse css definitions -->
+<style type="text/css">
+#logger
+{
+vertical-align: bottom;
+position:absolute;
+left:0px;
+}
+
+.tooltip {
+        background-color:#ffffff;
+        font-weight:bold;
+        border:2px #006699 solid;
+}
+
+.hide{
+	position:absolute;
+	top:-20000px;
+	overflow:hidden;
+	zoom:1;
+}
+.open{
+	border:1px solid #ccc;
+	border-color:#fff #999 #ccc #999;
+	border-left:none;
+	border-right:none;
+	background:url(gfx.jpg) top left repeat-x #fff;
+	background-position:0 -150px;
+}
+
+</style>
+
+<!-- loading javascripts and csss -->
+
+<!-- Combo-handled YUI CSS files: --> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/fonts/fonts-min.css&2.8.0r4/build/datatable/assets/skins/sam/datatable.css&2.8.0r4/build/logger/assets/skins/sam/logger.css&2.8.0r4/build/button/assets/skins/sam/button.css&2.8.0r4/build/assets/skins/sam/skin.css"> 
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/reset-fonts-grids/reset-fonts-grids.css&2.8.0r4/build/resize/assets/skins/sam/resize.css&2.8.0r4/build/layout/assets/skins/sam/layout.css"> 
+
+
+<!-- Combo-handled YUI JS files: -->
+<script type="text/javascript"
+src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-min.js&2.8.0r4/build/event/event-min.js&2.8.0r4/build/dom/dom-min.js&2.8.0r4/build/dragdrop/dragdrop-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/datatable/datatable-min.js&2.8.0r4/build/button/button-min.js&2.8.0r4/build/logger/logger-min.js&2.8.0r4/build/utilities/utilities.js&2.8.0r4/build/container/container-min.js&2.8.0r4/build/resize/resize-min.js&2.8.0r4/build/layout/layout-min.js&2.8.0r4/build/animation/animation-min.js&2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/animation/animation-min.js">
+</script>
+
+
+<!-- UNCOMMENT THE APPROPRIATE GOOGLE MAPS KEY -->
+
+<!-- localhost GOOGLE MAPS API key -->
+<!--
+<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=ABQIAAAA_aKXoBUJiLeZ5UmdVbJ5ghT2yXp_ZAY8_ufC3CFXhHIE1NvwkxR8FKnSXSFIbfcM8nZtxHdkFoVL2A" type="text/javascript"></script>
+-->
+<!-- geni-test.renci.org  GOOGLE MAPS API key -->
+<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=ABQIAAAAXQ6XJfPKALFVg_W6zxKU9BQVWmLr5v76JSJ9dtsjgizusj7lnhQfFMVhLGDRedbVeIy1jPf4n-Y8Gw" type="text/javascript"></script>
+
+<!-- geni.renci.org  GOOGLE MAPS API key -->
+<!--
+<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=ABQIAAAA_aKXoBUJiLeZ5UmdVbJ5ghRB3BDbNyYmqkpUWf3n5g5V5IFhQBStf7hHXOb0jkg8aLD5iwc-_j8T5g" type="text/javascript"></script>
+-->
+
+<!-- geni-ben.renci.org  GOOGLE MAPS API key -->
+<!--
+<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=ABQIAAAA_aKXoBUJiLeZ5UmdVbJ5ghQ9uWONTjYq2TLhPrBte2bJvGZdZxTUJl5uk_vluL4A22LhaFTgSH4CWA" type="text/javascript"></script>
+-->
+
+<script src="$uri$pluginRootFolder/interdomain/js/util.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/uri.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/term.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/match.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/rdfparser.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/identity.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/query.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/sources.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/remote.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/log.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/rdf/sparql.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/static-ndl.js" type="text/javascript">
+</script>
+<script src="$uri$pluginRootFolder/interdomain/js/orca.js" type="text/javascript">
+</script>
+
+<!-- yuidomcollapse -->
+<script type="text/javascript" src="$uri$pluginRootFolder/interdomain/js/yuidomcollapse.js"></script>
+<script type="text/javascript" src="$uri$pluginRootFolder/interdomain/js/yuidomcollapse-fancy.js"></script>
+<script type="text/javascript" src="$uri$pluginRootFolder/interdomain/js/yuidomcollapse-css.js"></script>
+
+<form name="myform" method="post" action="add-action.vm" tmt:validate="true">
+
+<!-- collapsible entry form -->
+
+<h2 class="trigger"><b>Click</b> to input NDL-OWL request directly</h2>
+<div>
+<textarea name="ndldirect" rows="20" cols="80">
+Cut-and-paste NDL-OWL here.
+</textarea>
+
+<span id="submitTAbutton" class="yui-button yui-push-button">
+  <span class="first-child">
+        <input type="button" id="button2" value="<b>Submit Request</b>"/>
+  </span>
+</span>
+
+</div>
+
+<!-- collapsible gui -->
+<!-- start of GUI panel -->
+<h2 class="trigger"><b>Click</b> to select resources from the map</h2>
+<div id="gui-panel">
+<div id="layout" style="width: 800px; height: 500px;">
+
+<div id="top1">
+<!--
+<div id="logger" style="width: 800px; margin-left: auto; margin-right: auto;"></div>
+-->
+</div>
+
+<!-- GOOGLE MAP and logger -->
+<div id="center1">
+<div id="map_canvas"
+  style="width: 450px; height: 450px; margin-left: auto; margin-right: auto;">
+</div>
+
+<div id="left1">
+
+<input type="hidden" name="ndl" value="">
+
+<table>
+<tr>
+<td><b>Lease Start:</b></td><td><input type="text" name="start" value="$root.getTime("0")" id="start" tmt:required="true" tmt:message="Please enter a valid start date (MM/DD/YYYY hh:mm)"/></td>
+</tr>
+<tr>
+<td><b>Lease End:</b></td><td><input type="text" name="end" value="$root.getTime("1440")" id="end" tmt:required="true" tmt:message="Please enter a valid end date (MM/DD/YYYY hh:mm)"/></td>
+</tr>
+<tr>
+<td><b>Bandwidth (bps):</b></td><td><input type="text" name="bandwidth" value="100000000" id="bandwidth" tmt:required="true" tmt:message="Please enter a valid bandwidth"/></td>
+</tr>
+</table>
+<div id="result0" style="position:absolute; top:80px;"></div>
+<div id="result1"></div>
+<div id="result2"></div>
+<div id="result3"></div>
+
+</div>
+
+<!-- CONTROLS -->
+
+<div id="bottom1">
+
+<span id="startbutton" class="yui-button yui-push-button">
+    <span class="first-child">
+        <input type="button" id="button1" value="<b>Query NDL-OWL Store</b>"/>
+    </span>
+</span>
+  
+<span id="cancelbutton" class="yui-button yui-push-button">
+  <span class="first-child">
+        <input type="button" id="button2" value="<b>Cancel Selection</b>"/>
+  </span>
+</span>
+
+<span id="checkbutton" class="yui-button yui-push-button">
+  <span class="first-child">
+        <input type="button" id="button2" value="<b>Check Request</b>"/>
+  </span>
+</span>  
+
+<span id="submitbutton" class="yui-button yui-push-button">
+  <span class="first-child">
+        <input type="button" id="button2" value="<b>Submit Request</b>"/>
+  </span>
+</span>
+
+</div>
+  
+</div>
+
+</div>
+
+
+</div>
+</form>
+
+        <script type="text/javascript">
+        function setStart(cal)
+        {
+            var date = cal.date;
+            var time = date.getTime();
+            var field = document.getElementById("start");
+            var date2 = new Date(time);
+            field.value = date2.print("%m/%d/%Y %H:%M");
+        }
+        
+        function setEnd(cal)
+        {
+            var date = cal.date;
+            var time = date.getTime();
+            var field = document.getElementById("end");
+            var date2 = new Date(time);
+            field.value = date2.print("%m/%d/%Y %H:%M");
+        }
+        
+        Calendar.setup({
+            inputField     :    "start",         // id of the input field
+            ifFormat       :    "%m/%d/%Y %H:%M", // format of the input field
+            showsTime      :    true,
+            timeFormat     :    "24",
+            onUpdate       :    setStart
+            });
+        
+        Calendar.setup({
+            inputField     :    "end",         // id of the input field
+            ifFormat       :    "%m/%d/%Y %H:%M", // format of the input field
+            showsTime      :    true,
+            timeFormat     :    "24",
+            onUpdate       :    setEnd
+            });
+        </script>
+
+<script type="text/javascript">
+myload();
+</script>

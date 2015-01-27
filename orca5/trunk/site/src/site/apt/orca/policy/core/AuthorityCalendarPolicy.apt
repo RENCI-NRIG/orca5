@@ -1,0 +1,42 @@
+ ----
+ AuthorityCalendarPolicy
+ ----
+ The Orca Team
+ ----
+ April 19, 2010
+ ----
+
+
+AuthorityCalendarPolicy
+
+ <<class:>> orca.policy.core.AuthorityCalendarPolicy
+ 
+ {{{../}\<\< Back to Policies}}
+
+ This is a generic, calendar-based site authority policy. The policy provides
+ the common plumbing for dealing with multiple resource pools and reservations
+ and isolates the logic of handling a specific resource pool to
+ <<ResourceControl>> objects. A ResourceControl object is responsible for
+ allocating resources from a give resource type (resource pool).
+
+ Orca ships with a number of companion ResourceControl objects that can handle a
+ variety of substrates.
+
+
+* ResourceControl implementations:
+
+
+*-----+-----------------------+-----------------------+
+| No: | Name	              | Description
+*-----+-----------------------+-----------------------+
+|   1 | {{{UnitsControl.html}UnitsControl}}		  | General-purpose, unit-based control
+*-----+-----------------------+-----------------------+
+|   2 | {{{VlanControl.html}VlanControl}}			  | Control for managing VLANs
+*-----+-----------------------+-----------------------+
+|   3 | {{{VMControl.html}VMControl}}			  | Control for managing VMs (complex)
+*-----+-----------------------+-----------------------+
+|   4 | {{{SimpleVMControl.html}SimpleVMControl}}		  | Control for managing VMs (simple, Eucalyptus)
+*-----+-----------------------+-----------------------+
+|   5 | {{{BenNdlControl.html}BenNdlControl}}		  | Control for allocation in BEN using NDL
+*-----+-----------------------+-----------------------+
+

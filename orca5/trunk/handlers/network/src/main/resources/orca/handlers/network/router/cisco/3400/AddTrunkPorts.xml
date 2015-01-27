@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/AddTrunkPorts"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/AddTrunkPorts AddTrunkPorts.xsd">
+	<action name="AddTrunkPorts" parameter="TrunkPorts">
+		<exchange>
+			<send>config t</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>interface range {$TrunkPorts}</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>switchport</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>switchport trunk encapsulation dot1q</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>switchport trunk allowed vlan add {$VLANTagName}</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>switchport mode trunk</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>mls qos vlan-based</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>no shut</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>end</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+	</action>
+</script>

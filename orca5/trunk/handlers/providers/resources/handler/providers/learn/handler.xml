@@ -1,0 +1,197 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../../common/core.xml">
+<!ENTITY paths SYSTEM "../../common/paths.xml">
+<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
+<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
+]>
+
+<project name="learn" basedir=".">
+
+	&paths;
+	&core;
+	&drivertasks;
+	&bentasks;
+
+	<!-- <property file="test.properties" /> -->
+
+    <property file="../ben.properties" /> 
+    <!-- Uncomment for handler testing
+    <property file="learn.test.properties" />
+    -->
+
+    <target name="join" depends="resolve.configuration,ben.load.tasks">
+        <tstamp prefix="start">
+                <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
+
+        <echo message="LEARN HANDLER: JOIN on ${start.TIME}" />
+		<if>
+			<isset property="learn.credentials" />
+			<then>
+				<property file="${learn.credentials}" />
+			</then>
+			<else>
+				<echo message="LEARN credentials properties are not set!" />
+			</else>
+		</if>
+        <var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+		        <echo message="Enabling LEARN vlan=${unit.vlan.tag} on ${learn.router} QoS=${unit.vlan.qos.rate}/${unit.vlan.qos.burst.size}: ${config.interface.ports}" />
+				<atomic.sequence.start.macro
+					device="LEARN" />
+				<create.vlan 
+					router="${learn.router}"
+					router.type="Cisco3400"
+			   		vlan.tag="${unit.vlan.tag}"
+					vlan.qos.rate="${unit.vlan.qos.rate}"
+					vlan.qos.burst.size="${unit.vlan.qos.burst.size}"
+			    	router.user="${router.user}"
+			    	router.password="${router.password}"
+					router.default.prompt="${router.default.prompt}"
+			    	router.admin.password="${router.admin.password}" />
+		        <add.trunk.ports 
+		            router="${learn.router}"
+				    router.type="Cisco3400"
+		            vlan.tag="${unit.vlan.tag}"
+				    ports="${config.interface.ports}"
+		            router.user="${router.user}"
+		            router.password="${router.password}"
+				    router.default.prompt="${router.default.prompt}"
+		            router.admin.password="${router.admin.password}" />
+		        <if>
+		            <equals arg1="0" arg2="${code}" />
+		            <then>
+						<for list="learnNet"
+	                    	param="site"
+	                        delimiter=" "
+	                        parallel="false">
+	                    	<sequential>
+							    <if>
+							        <and>
+							            <isset property="@{site}.unit.vlan.tag" />
+							            <isset property="@{site}.edge.interface" />
+							        </and>
+									<then>
+					                	<echo message="mapping LEARN and @{site} vlans: ${unit.vlan.tag} ${@{site}.unit.vlan.tag} on ${learn.router}: ${@{site}.edge.interface}" />
+					                	<map.vlans 
+						                     router="${learn.router}"
+								     		 router.type="Cisco3400"
+						                     src.vlan.tag="${@{site}.unit.vlan.tag}"
+						                     dst.vlan.tag="${unit.vlan.tag}"
+						                     port="${@{site}.edge.interface}"
+						                     router.user="${router.user}"
+						                     router.password="${router.password}"
+								     		 router.default.prompt="${router.default.prompt}"
+						                     router.admin.password="${router.admin.password}" />
+									</then>
+								</if>
+							</sequential>
+						</for>
+		            </then>
+		        </if>
+				<atomic.sequence.stop.macro
+					device="LEARN" />
+    			<property name="shirako.target.code" value="${code}" />
+			</else>
+		</if>
+        <!-- hairpin -->
+        <var name="shirako.save.unit.vlan.url" unset="true" />
+        <if>
+                <isset property="unit.vlan.url" />
+                <then>
+                        <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+                </then>
+        </if>
+
+        <echo message="learn join exit code: ${shirako.target.code}" />
+    </target>
+
+    <target name="leave" depends="resolve.configuration,ben.load.tasks">
+        <tstamp prefix="start">
+                <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
+
+        <echo message="LEARN HANDLER: TEARDOWN on ${start.TIME}" />
+		<if>
+			<isset property="learn.credentials" />
+			<then>
+				<property file="${learn.credentials}" />
+			</then>
+			<else>
+				<echo message="LEARN credentials properties are not set!" />
+			</else>
+		</if>
+        <var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<atomic.sequence.start.macro
+					device="LEARN" />
+				<for list="learnNet"
+			    	param="site"
+			        delimiter=" "
+			        parallel="false">
+			    	<sequential>
+					    <if>
+					        <and>
+					            <isset property="@{site}.unit.vlan.tag" />
+					            <isset property="@{site}.edge.interface" />
+					        </and>
+							<then>
+				        		<echo message="Unmapping LEARN and @{site} vlans: ${unit.vlan.tag} ${@{site}.unit.vlan.tag} on ${learn.router}: ${@{site}.edge.interface}" />
+						        <unmap.vlans 
+				                     router="${learn.router}"
+						     		 router.type="Cisco3400"
+				                     src.vlan.tag="${@{site}.unit.vlan.tag}"
+				                     dst.vlan.tag="${unit.vlan.tag}"
+				                     port="${@{site}.edge.interface}"
+				                     router.user="${router.user}"
+				                     router.password="${router.password}"
+						     		 router.default.prompt="${router.default.prompt}"
+				                     router.admin.password="${router.admin.password}" />
+							</then>
+						</if>
+					</sequential>
+				</for>
+		        <echo message="Disabling LEARN vlan ${unit.vlan.tag} on ${learn.router}: ${config.interface.ports}" />
+		        <remove.trunk.ports
+                      router="${learn.router}"
+		      		  router.type="Cisco3400"
+                      vlan.tag="${unit.vlan.tag}"
+                      ports="${config.interface.ports}"
+                      router.user="${router.user}"
+                      router.password="${router.password}"
+		      		  router.default.prompt="${router.default.prompt}"
+                      router.admin.password="${router.admin.password}" />
+			    <delete.vlan 
+			    	router="${learn.router}"
+					router.type="Cisco3400"
+			        vlan.tag="${unit.vlan.tag}"
+					vlan.with.qos="${unit.vlan.with.qos}"
+			        router.user="${router.user}"
+			        router.password="${router.password}"
+					router.default.prompt="${router.default.prompt}"
+			        router.admin.password="${router.admin.password}" />
+				<atomic.sequence.stop.macro
+					device="LEARN" />
+		        <property name="shirako.target.code" value="${code}" />
+			</else>
+		</if>
+        <echo message="LEARN leave exit code: ${shirako.target.code}" />
+    </target>
+
+    <target name="modify" depends="resolve.configuration,ben.load.tasks">
+        <echo message="LEARN HANDLER: MODIFY" />
+        <property name="shirako.target.code" value="0" />
+    </target>
+</project>

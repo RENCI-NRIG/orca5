@@ -1,0 +1,57 @@
+ ----
+ Projects List
+ -----
+ The Orca Team
+ -----
+ September 5, 2007
+ -----
+
+Projects List
+
+ The Orca family consists of a number of projects. This page provides a comprehensive list of them. 
+ Some of the projects consist of one or more subprojects. Please visit the project's page for information about
+ its subproject.
+ 
+ Many of the project have no or little documentation, but we are working on addressing this problem.
+ 
+ 
+*---------------------------------------------+-----------------------------------------------------------+
+| Name                                        | Description                                      
+*---------------------------------------------+-----------------------------------------------------------+
+| {{{automat/index.html}Automat}}	      | Umbrella project for the Autonomic Computing Testbed.
+*---------------------------------------------+-----------------------------------------------------------+
+| {{{boot/index.html}Boot}}	      | Provides tools to processes Orca container configuration files.
+*---------------------------------------------+-----------------------------------------------------------+
+| {{{container/index.html}Container}}	      | Defines the API for managing application containers. 
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{cod/index.html}Cluster on Demand}}	      | Provides a site authority implementation.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{drivers/index.html}Drivers}}	      | Offers a collection of resource drivers to be used by site authorities.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{log/index.html}Log}}	      | The Log family of projects deals with collecting and analyzing events. 
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{handlers/index.html}Handlers}}	      | The Handlers family of projects provides a collection of configuration handlers.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{manage/index.html}Manage}}	      | Provides the basic management framework and offers a number of tools to manage machines, storage servers, etc.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{nodeagent/index.html}Node Agent}}	      | The Node Agent is a multi-purpose web service.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{nodeagenthost/index.html}Node Agent Host}}	      | The Node Agent Host is a hosting standalone server for the Node Agent service.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{policy/index.html}Policy}}	      | Provides a collection of policies for service managers, brokers, and site authorities.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{portal/index.html}Portal}}	      | Provides the Orca web portal core and a collection of extensions.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{run/index.html}Run}}	      | Provides a harness for running Orca experiments.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{security/index.html}Security}}	      | A library for performing authentication and authorization. 
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{sharp/index.html}SHARP}}	      | Implementation of SHARP tickets and accountability protocols.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{shirako/index.html}Shirako}}	      | Shirako leasing core.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{tools/index.html}Tools}}	      | Offers a collection of build and management tools.
+*---------------------------------------------+-----------------------------------------------------------*
+| {{{util/index.html}Util}}	      | A general-purpose library of useful utilities.
+*---------------------------------------------+-----------------------------------------------------------*
+ 

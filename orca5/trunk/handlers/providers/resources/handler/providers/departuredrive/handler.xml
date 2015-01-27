@@ -1,0 +1,162 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../../common/core.xml">
+<!ENTITY paths SYSTEM "../../common/paths.xml">
+<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
+<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
+<!ENTITY ddtasks SYSTEM "dd.tasks.xml">
+]>
+
+<project name="departuredrive" basedir=".">
+
+	&paths;
+	&core;
+	&drivertasks;
+	&bentasks;
+	&ddtasks;
+
+	<!-- <property file="test.properties" /> -->
+
+    <property file="../ben.properties" /> 
+	
+	<!--
+    <property file="../../../dd.test.properties" />
+    -->
+	
+    <target name="join" depends="resolve.configuration,ben.load.tasks">
+        <tstamp prefix="start">
+                <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
+
+        <echo message="Departure Drive HANDLER: JOIN on ${start.TIME}" />
+		<if>
+			<isset property="dd.credentials" />
+			<then>
+				<property file="${dd.credentials}" />
+			</then>
+			<else>
+				<echo message="Departure Drive credentials properties are not set!" />
+			</else>
+		</if>
+        <var name="code" value="0" />
+		<atomic.sequence.start.macro
+			device="DEPARTURE DRIVE" />
+		<trycatch property="returnmsg">
+			<try>
+				<for list="${unit.device.num}" param="deviter" delimiter="," parallel="false" >
+					<sequential>
+						<if>
+							<equals arg1="${unit.device.@{deviter}}" arg2="DD"/>
+							<then>
+								<!-- plumbing vlans -->
+								<DDIterateJoin iter="${unit.action.num.DD}"/>
+							</then>
+							<else>
+								<if>
+									<equals arg1="${unit.device.@{deviter}}" arg2="Exchange" />
+									<then>
+										<!--  multipoint and vlan translation -->
+										<ExchangeIterateJoin iter="${unit.action.num.Exchange}"/>
+									</then>
+									<else>
+										<echo message="DD Handler: Unknown device ${unit.device.@{deviter}}, exiting" />
+										<fail message="DD Handler: Unknown device ${unit.device.@{deviter}}, exiting" />
+									</else>
+								</if>
+							</else>
+						</if>
+					</sequential>
+				</for>
+			</try>
+			<catch>
+				<fail message="${returnmsg}"/>
+			</catch>
+			<finally>
+				<atomic.sequence.stop.macro
+					device="DEPARTURE DRIVE" />
+			</finally>
+		</trycatch>
+		<property name="shirako.target.code" value="0" />
+		<!-- hairpin -->
+    	<var name="shirako.save.unit.vlan.url" unset="true" />
+    	<if>
+            <isset property="unit.vlan.url" />
+            <then>
+                    <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+            </then>
+    	</if>
+        <!-- hairpin -->
+        <var name="shirako.save.unit.vlan.url" unset="true" />
+        <if>
+                <isset property="unit.vlan.url" />
+                <then>
+                        <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+                </then>
+        </if>
+
+        <echo message="Departure Drive join exit code: ${shirako.target.code}" />
+    </target>
+
+	<!-- LEAVE -->
+    <target name="leave" depends="resolve.configuration,ben.load.tasks">
+        <tstamp prefix="start">
+                <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
+
+        <echo message="Departure Drive HANDLER: TEARDOWN on ${start.TIME}" />
+		<if>
+			<isset property="dd.credentials" />
+			<then>
+				<property file="${dd.credentials}" />
+			</then>
+			<else>
+				<echo message="Departure Drive credentials properties are not set!" />
+			</else>
+		</if>
+        <var name="code" value="0" />
+		<atomic.sequence.start.macro
+			device="DEPARTURE DRIVE" />
+		<trycatch property="returnmsg">
+			<try>
+				<for list="${unit.device.num}" param="deviter" delimiter="," parallel="false" >
+					<sequential>
+						<if>
+							<equals arg1="${unit.device.@{deviter}}" arg2="DD"/>
+							<then>
+								<!-- unplumbing vlans iteratively -->
+								<DDIterateLeave iter="${unit.action.num.DD}" />
+							</then>
+							<else>
+								<if>
+									<equals arg1="${unit.device.@{deviter}}" arg2="Exchange" />
+									<then>
+										<!--  multipoint and vlan translation -->
+										<ExchangeIterateLeave iter="${unit.action.num.Exchange}"/>
+									</then>
+									<else>
+										<echo message="DD Handler: Unknown device ${unit.device.@{deviter}}, exiting" />
+										<fail message="DD Handler: Unknown device ${unit.device.@{deviter}}, exiting" />
+									</else>
+								</if>
+							</else>
+						</if>
+					</sequential>
+				</for>
+			</try>
+			<catch>
+				<fail message="${returnmsg}"/>
+			</catch>
+			<finally>
+				<atomic.sequence.stop.macro
+					device="DEPARTURE DRIVE" />
+			</finally>
+		</trycatch>
+		<property name="shirako.target.code" value="0" />
+        <echo message="Departure Drive leave exit code: ${shirako.target.code}" />
+    </target>
+
+	<!-- MODIFY -->
+    <target name="modify" depends="resolve.configuration,ben.load.tasks">
+        <echo message="Departure Drive HANDLER: MODIFY" />
+        <property name="shirako.target.code" value="0" />
+    </target>
+</project>

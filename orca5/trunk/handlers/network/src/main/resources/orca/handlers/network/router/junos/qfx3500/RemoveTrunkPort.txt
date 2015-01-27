@@ -1,0 +1,2 @@
+delete: interfaces {$TrunkPorts} unit 0 family ethernet-switching vlan members {$VLANName};   
+delete: vlans {$VLANName} interface {$TrunkPorts}.0;

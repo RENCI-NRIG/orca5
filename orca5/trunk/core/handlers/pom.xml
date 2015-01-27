@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>orca.core</groupId>
+	<artifactId>handlers</artifactId>
+	<packaging>pom</packaging>
+	<name>Orca Common Handlers Library</name>
+	<parent>
+		<groupId>orca</groupId>
+		<artifactId>core</artifactId>
+		<version>5.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
+				<artifactId>maven-antrun-extended-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>package</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<delete dir="target/package" />
+								<mkdir dir="target/package" />
+								<mkdir dir="target/package/lib" />
+								<copy todir="target/package/lib">
+									<fileset dir="target">
+										<include name="*.jar" />
+										<exclude name="*test*.jar" />
+										<exclude name="*-sources.jar" />                
+									</fileset>
+								</copy>
+								<mkdir dir="target/package/handlers" />
+								<copy todir="target/package/handlers">
+									<fileset dir="resources/handlers" />
+								</copy>
+								<copy file="resources/scripts/install.sh" todir="target/package" />
+
+								<mkdir dir="target/package/web" />
+								<copy todir="target/package/web">
+									<fileset dir="resources/web">
+										<include name="**/*" />
+									</fileset>
+								</copy>
+
+								<copy file="resources/package.xml" todir="target/package" />
+
+								<tar tarfile="target/orca.handlers.common.tar" basedir="target/package" />
+								<gzip zipfile="target/orca.handlers.common.tar.gz" src="target/orca.handlers.common.tar" />
+								<delete file="target/orca.handlers.common.tar" />
+								<delete dir="tmp" />
+								<!-- attach the tar.gz file to the artifacts set -->
+								<attachArtifact file="target/orca.handlers.common.tar.gz" classifier="package" type="tar.gz" />
+						</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+			</executions>        
+			</plugin>      
+		</plugins>
+	</build>    
+</project>

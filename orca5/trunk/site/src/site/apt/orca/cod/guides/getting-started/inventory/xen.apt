@@ -1,0 +1,29 @@
+ ------
+ How to Prepare a Xen VMM
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+How to Prepare a Xen VMM
+
+* {Xen installation} 
+
+ Before a machine can be registered with the system, Xen 3.0 or above
+ must be installed. Orca does not impose any requirements on the Xen
+ installation. Once Xen is installed, the Orca configuration tools can
+ be used to customize the machine and prepare it for use by the
+ system. The customization process involves the following steps:
+
+  * {{{/guides/config-tool/nodeagent.html}Installing the Node Agent service}}
+
+  * {{{/guides/config-tool/asecurity.html}Generating security configuration}}
+  
+
+  * {{{/guides/config-tool/security.html}Exchanging security configuration}}
+
+  
+  * {{{/guides/config-tool/drivers.html}Installing required drivers}}
+
+ 

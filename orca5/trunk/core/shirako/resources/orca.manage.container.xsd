@@ -1,0 +1,303 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.nicl.duke.edu/orca/manage/services/container"
+	xmlns="http://www.nicl.duke.edu/orca/manage/services/container"
+	xmlns:beans="http://www.nicl.duke.edu/orca/manage/beans" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	jxb:version="1.0" elementFormDefault="qualified">
+
+	<xsd:import namespace="http://www.nicl.duke.edu/orca/manage/beans"
+		schemaLocation="orca.manage.beans.xsd" />
+
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jxb:schemaBindings>
+				<jxb:package name="orca.manage.proxies.soap.beans.container" />
+			</jxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<xsd:element name="GetManagementObjectRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng"
+					minOccurs="1" maxOccurs="1" />
+				<xsd:element name="managementObjectID" type="xsd:string"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetManagementObjectResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng"
+					minOccurs="1" maxOccurs="1" />
+				<xsd:element name="proxyClass" type="xsd:string"
+					minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetCertificateRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="actorGuid" type="xsd:string"
+					minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetCertificateResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng"
+					minOccurs="1" maxOccurs="1" />
+				<xsd:element name="certificate" type="beans:certificateMng"
+					minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetUsersRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetUsersResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="result" type="beans:userMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetUserRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng"
+					minOccurs="1" maxOccurs="1" />
+				<xsd:element name="userLogin" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetUserResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="user" type="beans:userMng" minOccurs="0"
+					maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="SetUserPasswordRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="login" type="xsd:string" />
+				<xsd:element name="password" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="SetUserPasswordResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="LoginRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="login" type="xsd:string" />
+				<xsd:element name="password" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="LoginResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="token" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="LogoutRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="LogoutResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetActorsRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="actorType" type="xsd:int" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetActorsResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="actors" type="beans:actorMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetActorsFromDatabaseRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetActorsFromDatabaseResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="actors" type="beans:actorMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetProxiesRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="protocol" type="xsd:string" />
+				<xsd:element name="actorType" type="xsd:int" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetProxiesResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="proxies" type="beans:proxyMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetPackagesRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetPackagesResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="packages" type="beans:packageMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+
+	<xsd:element name="GetPluginsRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="pluginType" type="xsd:int" />
+				<xsd:element name="actorType" type="xsd:int" />
+				<xsd:element name="packageId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetPluginsResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="plugins" type="beans:pluginMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetPluginRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="packageId" type="xsd:string" />
+				<xsd:element name="pluginId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetPluginResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="plugin" type="beans:pluginMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetInventoryRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetInventoryResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="inventory" type="beans:unitMng" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetUnitRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="unitId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetUnitResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="unit" type="beans:unitMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>
+	

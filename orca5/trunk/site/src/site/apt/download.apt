@@ -1,0 +1,23 @@
+ ------
+ Current Release
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+
+Current Release
+
+ The current release of Orca is 1.0.0.beta2. Currently we offer only
+ source code installation. Future release will also provide binaries
+ for convenience. The source code can be obtained either through the
+ public subversion repository or by downloading the provided archive.
+
+ Please consult the {{{guides/getting-started/index.html}Getting
+ Started Guide}} for installation and usage instructions.
+ 
+ {{{https://svn.nicl.cs.duke.edu/svn/cereus/orca/release/1.0.0.beta2/}Orca
+ 1.0.0.beta2 subversion repository}}.
+
+ {{{../download/orca-1.0.0.beta2.tar.gz}Orca 1.0.0.beta2.tar.gz}}

@@ -1,0 +1,150 @@
+ ----
+ Configuring Orca
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Configuring Orca
+
+ An Orca container is an instance of Orca that runs within a single Java
+ Virtual Machine (JVM). This guide describes the basic components of a container
+ and the configuration files and state they require.
+
+ * {{{#Relevant_Guides}Relevant Guides}}
+
+ * {{{#Anatomy_of_a_container}Anatomy of a container}}
+
+ * {{{#Configuration_samples}Configuration samples}}
+
+ * {{{#Configuration_tools}Configuration tools}}
+
+ * {{{#Emulation_and_real_execution}Emulation and real execution}}
+
+* {Relevant Guides}
+
+*----------------------+------------------------+
+| Name                 | Description 
+*----------------------+------------------------+
+| {{{config-files.html}Configuration Files}} | Lists Orca's configuration files
+*----------------------+------------------------+
+| {{{xml.html}Configuring Actors}}| Actor XML configuration file reference
+*----------------------+------------------------------+
+| {{{../config-tool/index.html}Configuration tools}} | Configuration tools for containers and inventory.
+*----------------------+---------------------------------+
+| {{{../emulation/}Emulation}}| Execution under emulation
+*----------------------+---------------------------------+
+| {{{../real/}Real Mode}}| Execution with real resources
+*----------------------+-----------------------+
+| {{{https://geni-orca.renci.org/trac/wiki/Eucalyptus-1.5.2-Setup}Orca and Eucalyptus}}| Using Orca with Eucalyptus
+*----------------------+-----------------------+
+
+
+
+
+* {Anatomy of a container}
+
+ An Orca container consists of the following components:
+
+  [[1]] A database server to store persistent state.
+
+  Each Orca container requires access to a database server, so that it can store
+  information about the actors inside the container and the resources that they
+  control. Please refer to
+  {{{../install/index.html#Installing_the_database}this}} page for more
+  information about creating and populating an Orca database.
+
+  [[2]] A number of configuration files to describe important continer settings.
+
+  Several files specify the behavior and settings of an Orca container. Please
+  refer to {{{config-files.html}this}} page for information about the various
+  container configuration files.
+
+  [[3]] One or more actors running inside the container (broker/site
+  authority/guest)
+
+  An actor is the source of activity within an Orca container. There are
+  multiple ways to create an actor:
+
+   * Programmatically at runtime
+
+   * From a configuration file
+
+   * Using the web portal.
+
+	[]
+
+	Please refer to {{{xml.html}this}} page for information about creating actors using a
+	configuration file.
+	  
+  [[4]] An admin identity responsible for managing the container.
+
+  The admin user is the initial owner of all container resources and it would
+  delegate them to the respective site providers as needed.
+
+  
+  [[5]] Some physical inventory.
+
+  When running a site provider inside an Orca container, the container needs to
+  be configured with an inventory of resources that the provider is going to
+  distribute. 
+
+* {Configuration samples}
+
+ Orca ships with a number of sample configuration files to get you started.
+ 
+  * Container properties files:
+
+    * $ORCA_ROOT/tools/cmdline/config/container.properties
+
+    * $ORCA_ROOT/webapp/config/container.properties
+
+  * Actor XML files
+    
+    * $ORCA_ROOT/tools/cmdline/tests/emulation.xml
+
+    * $ORCA_ROOT/webapp/actor_configs/config.xml
+
+* {Emulation and real execution}
+
+ The first decision you must make before running an Orca container is whether
+ you want to run under emulation or you would like to execute with real
+ resources. This choice determines the amount of configuration and preparation
+ that you will need to perform before you can instantiate the Orca container.
+ 
+ Execution under emulation exercises all Orca components with the exception that
+ the system does not try to contact the inventory resources and does not use
+ real resources to back the leases that it processes. This mode of execution is
+ ideal for testing and experimentation when the fact that real resources are not
+ used to satisfy a request is not important. When running under this mode, you
+ still need to register some inventory into the database, but you do not need to
+ configure the inventory. Please refer to {{{../emulation/}this}} page for more
+ information about emulation.
+
+ Under real execution, the system contacts the real inventory resources and uses
+ real resources to back each lease that it issues. This process requires that
+ the inventory used by the container is:
+ 
+  [[1]] Defined in the database
+
+  [[2]] Reachable over the network
+
+  [[3]] Running all required software
+
+  [[4]] Configured to be accessible by the Orca container's admin (see
+  {{{#Anatomy_of_a_container}Anatomy of a container}} for more information about
+  the admin user).
+
+  []
+
+  Please refer to {{{../real/}this}} page for more information about execution
+  with real resources.
+
+* {Configuration tools}
+
+ We provide a collection of tools to simplify some of the configuration and
+ setup steps. Please refer to the {{{../config-tool/}Configuration Tools}} reference for
+ more information.
+
+

@@ -1,0 +1,46 @@
+ ----
+ Configuration Tools Reference
+ ----
+ Aydan Yumerefendi
+ ----
+ December 15, 2007
+ ----
+
+Configuration Tools Reference
+
+ The configuration tools are a collection of Ant intended to simplify the Orca
+ configuration and inventory preparation tasks. The tools are located under
+ $ORCA_ROOT/tools/config.
+ 
+Sections
+
+  * {{{prepare.html}Preparing the tools}}
+
+  Describes how to prepare the tools and to update them if new versions of your
+  drivers and/or nodeagent exist.
+
+  * {{{asecurity.html}Generating security configuration}}
+
+  Describes how to generate the security configuration files for an actor of the
+  Orca admin.
+
+  * {{{nodeagent.html}Node Agent service installation}}
+
+  Describes how to automate the installation  and upgrade of the Node Agent service.
+
+  * {{{security.html}Securing the Node Agent service}}
+
+  Describes how to secure the nodeagent service.
+
+  * {{{drivers.html}Installing drivers}}
+
+  Describes how to install/uninstall/and upgrade drivers.
+
+  * {{{misc.html}Miscellaneous}}
+
+  Provides a reference for the various helper functions offered by the
+  configuration tools.
+
+  
+  
+ 

@@ -1,0 +1,5 @@
+<macrodef name="xm.dom0.mem.machine" description="sets the memory size for xen dom0 vm">
+  <sequential>
+    
+  </sequential>
+</macrodef>

@@ -1,0 +1,232 @@
+
+    public static ICallbackProxy createSoapCallback(IActor actor, String location) throws Exception
+    {
+        String url = location + "/services/" + actor.getName();
+        ActorRegistry.registerEndPoint(actor.getName(), IProxy.ProxyTypeSoap, url);
+        return new SoapReturn(url, actor.getIdentity(), actor.getLogger());
+    }
+
+    public static void registerSoapProxy(IActor actor, String location) throws Exception
+    {
+        Proxy proxy = null;
+        String url = location + "/services/" + actor.getName();
+        if (actor instanceof IAuthorityProxy) {
+            proxy = new SoapAuthorityProxy(url, actor.getIdentity(), actor.getLogger());
+        } else {
+            if (actor instanceof IBrokerProxy) {
+                proxy = new SoapBrokerProxy(url, actor.getIdentity(), actor.getLogger());
+            } else {
+                return;
+            }
+        }
+        ActorRegistry.registerProxy(proxy);
+    }
+
+    public static void registerCallbacks(IActor actor) throws Exception
+    {
+        // register the local callback by default:
+        ICallbackProxy callback = new LocalReturn(actor);
+        ActorRegistry.registerCallback(callback);
+
+        Iterator iter = ContainerManagerImpl.getLocations().entrySet().iterator();
+        while (iter.hasNext()) {
+            callback = null;
+            Map.Entry entry = (Map.Entry) iter.next();
+            String protocol = (String) entry.getKey();
+            String location = (String) entry.getValue();
+
+            if (protocol.equals(IProxy.ProxyTypeSoap)) {
+                callback = createSoapCallback(actor, location);
+            }
+
+            if (callback != null) {
+                ActorRegistry.registerCallback(callback);
+            }
+        }
+    }
+
+    public static void registerProxies(IActor actor) throws Exception
+    {
+        createLocalProxy(actor);
+
+        Iterator iter = ContainerManagerImpl.getLocations().entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String protocol = (String) entry.getKey();
+            String location = (String) entry.getValue();
+
+            if (protocol.equals(IProxy.ProxyTypeSoap)) {
+                registerSoapProxy(actor, location);
+            }
+        }
+    }
+
+    
+    
+    public long getFirstTick() throws Exception
+    {
+        long now = System.currentTimeMillis();
+        long firstTick = -1;
+
+        Iterator iter = toInitialize.values().iterator();
+        while (iter.hasNext()) {
+            IActor a = ((IActor) iter.next());
+            if (firstTick == -1) {
+                firstTick = config.getGlobal().getFirstTick();
+                if (firstTick == -1) {
+                    firstTick = a.getActorClock().cycle(now);
+                    if (firstTick < 0) {
+                        firstTick = 0;
+                    }
+                }
+            }
+            return firstTick;
+        }
+        return 0;
+    }
+    
+    
+        /**
+     * Performs final actor initialization
+     * @throws Exception
+     */
+    protected void persistActors() throws Exception
+    {
+        Iterator iter = toInitialize.values().iterator();
+
+        while (iter.hasNext()) {
+            IActor a = ((IActor) iter.next());
+            ContainerManager.getInstance().getDatabase().addActor(a);
+        }
+    }
+
+        protected void createSlices() throws Exception
+    {
+        Iterator iter = toInitialize.values().iterator();
+
+        while (iter.hasNext()) {
+            IActor a = ((IActor) iter.next());
+            if (a instanceof ServiceManager) {
+                CodSlice slice = new CodSlice(a.getName());
+                a.registerSlice(slice);
+            }
+        }
+
+    }
+
+        private void registerActor(IActor actor) throws Exception
+    {
+        ActorRegistry.registerActor(actor);
+
+        registerCallbacks(actor);
+        registerProxies(actor);
+    }
+    
+    
+        /**
+     * Creates and registers a remote proxy to the specified actor
+     * @param to
+     * @return
+     * @throws Exception
+     */
+    private IProxy registerRemoteProxy(Vertex to) throws Exception
+    {
+        /*
+         * Initially, no actor is talking directly to an Authority. We need to
+         * create only Agent proxies
+         */
+        Location loc = to.getLocation();
+        IProxy proxy = ActorRegistry.getProxy(loc.getProtocol(), to.getName());
+
+        if (proxy == null) {
+            String actorType = to.getType();
+            AuthToken authToken = new AuthToken(to.getName());
+            if (actorType.equals(AGENT)) {
+                proxy = new SoapBrokerProxy(loc.getUrl(), authToken, new LoggingTool(authToken.getName()));
+                ((SoapProxy) proxy).initialize();
+                ActorRegistry.registerProxy(proxy);
+                logger.info("Registered a WSAgentProxy for " + proxy.getName());
+            }
+        }
+
+        return proxy;
+    }
+    
+        /**
+     * Registers proxies for all recovered actors
+     * @throws Exception
+     */
+    private void registerProxies() throws Exception
+    {
+        IActor[] actors = ActorRegistry.getActors();
+        if (actors != null) {
+            // local callbacks and proxies
+            for (int i = 0; i < actors.length; i++) {
+                ICallbackProxy callback = new LocalReturn(actors[i]);
+                ActorRegistry.registerCallback(callback);
+                Proxy p = ContainerInitializer.createLocalProxy(actors[i]);
+                if (p != null) {
+                    ActorRegistry.registerProxy(p);
+                }
+            }
+            // other supported protocols
+            Iterator iter = locations.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                String protocol = (String) entry.getKey();
+                String url = (String) entry.getValue();
+                for (int i = 0; i < actors.length; i++) {
+                    // SOAP proxies
+                    if (protocol.equals(IProxy.ProxyTypeSoap)) {
+                        ContainerInitializer.registerSoapProxy(actors[i], url);
+                        ICallbackProxy cb = ContainerInitializer.createSoapCallback(actors[i], url);
+                        ActorRegistry.registerCallback(cb);
+                    }
+                }
+            }
+        }
+    }
+    
+    
+       /**
+     * Deploys the SOAP service for the specified actor
+     * @param actor
+     * @throws Exception
+     */
+    protected void deploy(IActor actor) throws Exception
+    {
+        if (ContainerManager.getLocation(IProxy.ProxyTypeSoap) != null) {
+            File folder = prepareFolder();
+            String file = ContainerManager.getInstance().createDeploymentWSDD(actor.getName(), folder);
+            ContainerManager.getInstance().deployService(file);
+        }
+    }
+
+    protected void undeploy(IActor actor) throws Exception
+    {
+        if (ContainerManager.getLocation(IProxy.ProxyTypeSoap) != null) {
+            File folder = prepareFolder();
+            String file = ContainerManager.getInstance().createUndeploymentWSDD(actor.getName(), folder);
+            ContainerManager.getInstance().deployService(file);
+        }
+    }
+
+    /**
+     * Prepares a folder to hold SOAP service deployment files
+     * @return
+     */
+    protected File prepareFolder()
+    {
+        File folder;
+        folder = new File(ContainerManager.getRootDirectory() + "/wsdd");
+
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        if (LoggingTool.logInfo()) {
+            logger.info("Created wsdd folder: " + folder.getAbsolutePath());
+        }
+        return folder;
+    }
+    

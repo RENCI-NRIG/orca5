@@ -1,0 +1,22 @@
+ ----
+ Welcome
+ -----
+ Aydan Yumerefendi
+ -----
+ December 14, 2007
+ -----
+
+ The Orca Configuration Tools provides a collection of
+ ant scripts and
+ utilities to manage security bindings and configure
+ inventory for control by site authority actors.
+
+ Please consult the {{{guides/}documentation pages}} for information
+ about using the tools.
+
+ 
+
+ 
+ 
+ 
+ 

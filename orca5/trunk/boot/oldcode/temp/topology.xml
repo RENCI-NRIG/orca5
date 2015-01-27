@@ -1,0 +1,17 @@
+<!--
+    This file describes the actor topology.
+    Each link defines a relationship between two actors.
+
+    The end points of a link trust each other's public keys. In real life,
+    these keys are established using some out-of-band mechanisms. In our case,
+    we pre-populate the keys and ensure that actors know about them.
+    
+    The directionality of links depends on the nature of the actors.
+    SM->Agent
+    Agent<->Agent
+    Agent->Authority
+-->
+<topology>
+  <link from="actor name" to="actor name" />
+  <link from="actor name" to="actor name" />
+</topology>

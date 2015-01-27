@@ -1,0 +1,30 @@
+ ----
+ Configuration Tools Reference
+ ----
+ Aydan Yumerefendi
+ ----
+ December 15, 2007
+ ----
+
+Configuration Tools Reference
+
+ The configuration tools are driven from a collection of Ant
+ tasks and located in $ORCA_HOME/tools/config.
+
+Sections
+
+  * {{{prepare.html}Preparing the tools}}
+
+  * {{{asecurity.html}Generating security configuration}}
+
+  * {{{nodeagent.html}Node Agent service installation}}
+
+  * {{{security.html}Securing the Node Agent service}}
+
+  * {{{drivers.html}Installing drivers}}
+
+  * {{{misc.html}Miscellaneous}}
+
+  
+  
+ 

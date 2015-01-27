@@ -1,0 +1,50 @@
+ssl-keystore password is oscars
+OSCARS keystore password is password
+Test IDC is https://idcdev0.internet2.edu:8443/axis2/services/OSCARS/
+
+pathsetup:
+--
+timer-automatic, means circuit will be automatically setup at the start time in the reservation, no more messages are required from client.
+you could also use  signal-xml which requires that the start time has arrived AND a createPath message is received.
+everybody currently uses timer-automatic i believe.
+--
+
+vlans:
+--
+yes all circuits will be torn down at the circuit end time.  You can do a modify reservation to extend the time, but that is the only parameter that can be modified.
+if you use vlan any, the IDC will select vlan (s)  and you will see it, along with the other circuit details, via querying the reservation.
+in addition, if you use vlan any, and vlan translation is needed, the IDC will also do take care of that.
+for multidomain circuits everything is the same, except the destination urn will be in another domain. 
+
+yes, if you ask for vlan any, there may be situations where the same vlan cannot be used at both ends.   often this happens because there will be a small block of 10-20 vlans that Regional Network A may have mapped thru from their ION connection point and Regional Network B has also has a range of 10-20 vlans but they are different.  so the IDC will translate in that situation.   or some vlans may just be in service for other circuits at the moment.
+there could also be multiple translations along the end to end path for multi domain circuits.  The IDC will try to use the same vlan at both ends and all the way thru, if possible, and only revert to translation when it is needed.
+often people will pick a specific vlan for their local end, and then say vlan any for the remote end, since they will know less about what is going on there.
+--
+
+topology:
+--
+These can all be found in the Testbed Topology Service, viewable here:
+http://patdev2.internet2.edu/TopologyViewer/  
+key in ion.internet2.edu
+should be able to use any "link id"  urn as a source or destination
+here are two good ones for testing:
+Port which connects to MAX:
+urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=xe-0/0/3:link=*
+
+Port which  connects to ProtoGENI in SALT:
+urn:ogf:network:domain=ion.internet2.edu:node=rtr.salt:port=ge-7/1/2:link=*
+--
+
+details of state transitions:
+http://www.ogf.org/documents/GFD.170.pdf
+
+--
+
+Passwords:
+default for ssl-keystore.jks should be "oscars", and "password" for OSCARS.jks
+
+--
+
+Certificate import:
+--
+With DOE grids on MAC, the private key ends up in the Mac KeyChain . You can download the short pem of the certificate and import it into the keychain so it will merge with the private key that should be there. Using Portecle import the .p12 exported cert with private key into OSCARS keystore (remember that if you simply import the cert, it becomes a trusted cert and the private key is missing). The other thing to remember is that the password on the exported cert from KeyChain must match the keystore password of OSCARS.jks

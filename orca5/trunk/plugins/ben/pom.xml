@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>orca.plugins</groupId>
+	<artifactId>ben</artifactId>
+	<packaging>jar</packaging>
+	<version>5.0-SNAPSHOT</version>
+	<name>Orca BEN Plugins</name>
+	<parent>
+		<groupId>orca</groupId>
+		<artifactId>plugins</artifactId>
+		<version>5.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
+				<artifactId>maven-antrun-extended-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>package</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<echo message="${maven.dependency.orca.embed.jar.path}" />
+								<property name="orca.embed.version" value="${project.version}" />
+								<delete dir="target/package" />
+								<mkdir dir="target/package" />
+								<!-- all jar dependencies come here -->
+								<mkdir dir="target/package/lib" />
+								<copy todir="target/package/lib">
+									<fileset dir="target">
+										<include name="*.jar" />
+										<exclude name="*test*.jar" />
+										<exclude name="*-sources.jar" />                
+									</fileset>
+								</copy>
+								<copy file="${maven.dependency.orca.embed.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.org.apache.jena.jena-core.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.org.apache.jena.jena-arq.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.org.apache.jena.jena-iri.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.edu.washington.sig.gleen.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.com.ibm.icu.icu4j.jar.path}" todir="target/package/lib" flatten="true" />
+								<!-- all handlers come here -->
+								<mkdir dir="target/package/handlers" />
+								<copy todir="target/package/handlers">
+									<fileset dir="resources/handlers">
+										<exclude name="**/*.swp" />
+									</fileset>
+								</copy>
+								<!-- all scripts but install.sh come here -->
+								<mkdir dir="target/package/scripts" />
+								<copy todir="target/package/scripts">
+									<fileset dir="resources/scripts">
+										<exclude name="install.sh" />
+									</fileset>
+								</copy>
+								<copy file="resources/scripts/install.sh" todir="target/package" />
+								<!-- all web content comes here -->
+								<mkdir dir="target/package/web" />
+								<copy todir="target/package/web">
+									<fileset dir="resources/web">
+										<include name="**/*" />
+									</fileset>
+								</copy>
+								<!-- ssh keys -->
+								<mkdir dir="target/package/keys" />
+								<copy todir="target/package/keys">
+									<fileset dir="resources/keys">
+										<include name="**/*" />
+									</fileset>
+								</copy>
+								<!-- add the package descriptor -->
+								<copy file="resources/package.xml" todir="target/package" />
+								<!-- prepare the package -->
+								<tar tarfile="target/orca.plugins.ben.tar" basedir="target/package" />
+								<gzip zipfile="target/orca.plugins.ben.tar.gz" src="target/orca.plugins.ben.tar" />
+								<delete file="target/orca.plugins.ben.tar" />
+								<delete dir="tmp" />
+								<!-- attach the package as an artifact -->
+								<attachArtifact file="target/orca.plugins.ben.tar.gz" classifier="package" type="tar.gz" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>        
+			</plugin>      
+		</plugins>
+	</build>    
+
+	<dependencies>
+		<dependency>
+			<groupId>orca.core</groupId>
+			<artifactId>policy</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>			
+		</dependency>
+		<dependency>
+			<groupId>orca.core</groupId>
+			<artifactId>shirako</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>			
+		</dependency>
+		<dependency>
+			<groupId>orca</groupId>
+			<artifactId>embed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>orca.core</groupId>
+			<artifactId>shirako</artifactId>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>orca.core</groupId>
+			<artifactId>policy</artifactId>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
+

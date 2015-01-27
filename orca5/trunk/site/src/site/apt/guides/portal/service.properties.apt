@@ -1,0 +1,89 @@
+ ----
+ Web Portal Properties File
+ -----
+ The Orca Team
+ -----
+ September 5, 2007
+ -----
+
+Web Portal Properties File
+
+ The Orca web portal stores some of its configuration into a properties file. This information is
+ separate from the Orca container configuration, since the web portal is designed to function separately
+ from the container.
+
+ The portal configuration file is called <<service.properties>> and is
+ located in $ORCA_ROOT/portal/webapp/local.  Please refer to the
+ {{{index.html}Portal Installation Guide}} if you cannot locate this
+ file.
+
+ The portal properties file is organized into several logical sections:
+
+  * {{{#Core interfaces}Core interfaces}}
+  
+  * {{{#Database settings}Database settings}}
+
+  * {{{#Miscellaneous}Miscellaneous}}
+
+
+* {Core interfaces}
+
+ This section describes the classes implementing key portal interfaces.
+ The currently supported properties in this section are:
+
+  * <<portal.root.plugin.class>> The class implementing the top-level portal plugin.
+
+  <Recommended value:> orca.manage.extensions.standard.portal.CodRootPortalPlugin
+
+  []
+  
+ A sample of this section looks like this:
+ 
++---  
+#############################################
+# Implementations of key interfaces         #
+#############################################
+
+# Class to use for the root portal plugin
+portal.root.plugin.class=orca.manage.extensions.standard.portal.CodRootPortalPlugin
++---
+ 
+* {Database settings}
+
+ The web portal requires access to a backend database. At present, this database is shared with the Orca
+ container. As a result, the database connection settings in this section must match the database
+ connection settings in container.properties.
+
+ The currently supported properties in this section are:
+
+  * <<portal.database.class>> Class implementing the portal database.
+
+  <Recommended value:>  orca.manage.extensions.standard.portal.db.MySqlStandardPortalDatabase
+
+  * <<db.mysql.server>> Location of the database server.
+
+  * <<db.mysql.db>> Database name.
+
+  * <<db.mysql.user>> User name to use when connecting to the database server.
+
+  * <<db.mysql.password>> Password to use when connecting to the database server.
+  []
+  
+ A sample of this section looks like this:
+
++---
+#############################################
+# Database configuration                                                                                #
+#############################################
+
+# Class to use for the portal database
+portal.database.class=orca.manage.extensions.standard.portal.db.MySqlStandardPortalDatabase
+# Database server location
+db.mysql.server=localhost
+# Database name
+db.mysql.db=orca
+# Database user
+db.mysql.user=orca
+# Database user password
+db.mysql.password=
++---

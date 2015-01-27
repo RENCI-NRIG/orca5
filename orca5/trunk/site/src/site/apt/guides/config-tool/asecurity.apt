@@ -1,0 +1,73 @@
+ ----
+ Generating Security Configuration
+ ----
+ Aydan Yumerefendi
+ ----
+ 15 December, 2007
+ ----
+
+Generating a Security Configuration
+
+  {{{index.html}\<\<Back to contents}}
+
+ The configuration tools provide the means to generate the security
+ configuration for an Orca container.  The security configuration resides
+ in the container's <runtime> directory (see the
+ {{{../container-configuration/config-files.html}configuration files}}
+ referece).  It includes a keystore with
+ keys for the container administrator and for Orca actors (service
+ managers, brokers, and site authorities) inhabiting the container.
+
+ Once you have created the settings for a given actor or for the admin, you will
+ need to copy the corresponding files to the corresponding directories under
+ $ORCA_HOME/runtime. The easiest approach is to make $ORCA_HOME/runtime be a
+ link to $ORCA_ROOT/tools/config/runtime.
+
+ All commands are relative to $ORCA_ROOT/tools/config. 
+ 
+ 
+* Admin security configuration
+
+ To generate the admin security configuration type the following in
+ your terminal:
+
++---
+ant security.create.admin.config
++---
+
+ This will create a folder in the current directory called
+ <runtime>.   Various other tools operate on the keystore in the runtime
+ folder.  Later you will place the runtime folder in $ROOT_DIR/runtime in your container configuration, e.g., copy or link the resulting <runtime> folder to either $ORCA_ROOT/run
+ or $ORCA_ROOT/portal/webapp depending on how you plan to launch your Orca container.
+
+ <<Note:>> The config tool fails if a runtime folder already exists in the current directory: remove it or move it of the way if you run config more than once.  Note that
+ if you remove it you discard all security keys stored in the admin keystore.
+
+ <<Note:>> Keys generated in this step are later shared with other nodes, who may reject
+ those keys if the node clocks are not reasonably synchronized.  More on that can be
+ found on the {{{security.html}Node Agent security}} page.
+ 
+ 
+* Actor security configuration
+
+ You can use the configuration tools to generate the security
+ configuration for an actor. Note that this is not required, since
+ Orca will generate new security configuration for each actor that
+ does not have one.
+ 
+ To generate the security configuration for a given actor type the
+ following in your terminal:
+
++---
+ant security.create.actor.config -Dactor=ACTOR_GUID
++---
+
+ Where ACTOR_GUID is the guid of the actor.
+
+ This will create a folder in the current directory called <runtime>
+ (if it does not already exist). The directory will contain the
+ security configuration files for the specified actor.
+
+ <<Note:>> see notes in previous section.
+
+ 

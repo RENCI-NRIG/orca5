@@ -1,0 +1,98 @@
+ ------
+ How to Register Physical Machines?
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+How to Register Physical Machines
+
+ Before a physical machine can be used by COD, the machine must be added to the known inventory. COD manages
+ its inventory into a centralized database. This database is under the control of the center administrator.
+ 
+ There are two ways to add a machine to the inventory:
+ 
+  * {{{#Web portal approach}Add using the web portal}}
+ 
+  In this approach, the web portal is used to add inventory items one by one. To use this approach, the web portal
+  must be configured and operational.
+
+  * {{{#Database approach}Add directly to the database}}
+  
+  In this approach, the inventory is described in a custom SQL file, which is executed directly against the database.
+  This approach allows for bulk loading of multiple physical machines. This approach can be used even if the
+  web portal has not yet been configured.
+  
+* {Web portal approach}
+ 
+ This is the preferred approach to register physical machines. To use this approach, the web portal must be installed
+ and operational. Please consult the {{{/orca/guides/install/index.html}Orca Installation Guide}} for information
+ about installing and configuring the web portal.
+ 
+ <<TODO: add screenshot and explanation. It is unclear where this should be: part of the web portal documentation maybe>>
+  
+* {Database approach}
+
+ Before we can add physical machines to the inventory, we must get familiar with the 
+ database schema for a machine record. The table below describes the attributes
+ of a machine record:
+ 
+*-------*-------------------+--------------+------+-----+---------+----------------+
+| Index | Field             | Type         | Null | Key | Default | Description    |
+*-------+-------------------+--------------+------+-----+---------+----------------+
+| 1     | mch_id            | int(11)      | NO   | PRI | NULL    | The primary key. Autoincremented.
+| 2     | mch_name          | varchar(255) | NO   | UNI | NULL    | Name used to identify the machine. Must be unique.
+| 3     | mch_host_name     | varchar(255) | NO   | \   | NULL    | Current host name. For now must equal the machine name.
+| 4     | mch_nid           | varchar(255) | YES  | \   | NULL    | GUID for the machine
+| 5     | mch_ip            | varchar(255) | NO   | \   | NULL    | Current IP address
+| 6     | mch_ram           | int(11)      | NO   | \   | NULL    | RAM
+| 7     | mch_available     | tinyint(1)   | YES  | \   | NULL    | Availability status. 1 - available, 0 - unavailable
+| 8     | mch_mt_id         | int(11)      | YES  | \   | 2       | Machine type. See next table.
+| 9     | mch_act_id        | int(11)      | YES  | MUL | NULL    | Site in control of the machine.
+| 10    | shirakoproperties | text         | YES  | \   | NULL    | For internal use.
+*-------+-------------------+--------------+------+-----+---------+----------------+
+
+ Field #8 (mch_mt_id) defines the type of the physical machine. It must be set to one of the following:
+
+
+*-------+---------------+
+| mt_id | mt_name       |
+*-------+---------------+
+|     1 | Trampoline    | 
+|     2 | Xen Server    | 
+|     3 | VMWare Server | 
+|     4 | Other         | 
+*-------+---------------+
+
+ <<Note:>> The current version supports only machines of type 2 (Xen Server).
+ 
+ For each physical machine you must generate a globally unique identifier (GUID). 
+ COD does not impose any restrictions on the format of the identifier. You can use either standard GUID generators
+ or you can use the one {{{/orca/guides/getting-started/index.html#How to generate a GUID?}supplied}} with Orca.
+ 
+ Here is an example SQL code to register two machines:
+
++---
+USE orca;
+
+INSERT INTO Machines(mch_name, mch_host_name, mch_nid, mch_ip, mch_ram, mch_available)
+VALUES
+('demo001','demo001', '583c10bfdbd326ba:-69de3b5c:114d6677bf2:-8000','192.168.0.10', 2048, 1),
+('demo002','demo002', '583c10bfdbd326ba:5bb71374:114d6687a2b:-8000','192.168.0.11', 2048, 1);
++---
+ 
+ Note that the database name will depend on your installation. Please consult the 
+ {{{/orca/guides/install/index.html}Orca Installation Guide}} for more details.
+   
+ You can execute the above code in MySQL's command line client or can save it to a file. 
+ Once you have created the inventory file, you can load it in the server using the following command:
+ 
++----  
+mysql -u $ORCA_DB_USER -p -h $ORCA_DB_SERVER < inventory_file
+[enter password]
++---     
+
+ If you are not familiar with the variable names used above, 
+ you can find an explanation {{{/orca/guides/variables.html}here}}.
+  

@@ -1,0 +1,3 @@
+<antlib>
+  <taskdef resource="orca/handlers/network/oscars/oscars.tasks"/>
+</antlib>

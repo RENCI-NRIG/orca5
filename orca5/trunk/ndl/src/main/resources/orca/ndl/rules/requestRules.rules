@@ -1,0 +1,69 @@
+#
+# This file describes prolog rules used for validating NDL requests
+#
+
+# node validation
+[validateNode: (?v rb:validation on()) -> 
+	[ (?Z rb:violation error('Node Validation', 'Node must have an image', ?X)) 
+		<- (?R rdf:type req:Reservation), (?R col:element ?X), 
+		(?X rdf:type comp:ComputeElement) noValue(?X, dom:hasResourceType, comp:BareMetalCE) 
+		noValue(?X, comp:diskImage) ] ] 
+
+# can't have link by itself/must have incident interfaces
+[validateLink: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Link Validation', 'A link must have one or more interfaces', ?X))
+		<- (?X rdf:type topo:Link), noValue(?X, topo:hasInterface) ] ]
+
+# no loops
+[selfLink: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Connection Validation', 'Connection cannot loop on itself', ?Y))
+	 <- (?X rdf:type comp:ComputeElement), (?X  topo:hasInterface ?I1), (?X topo:hasInterface ?I2), 
+	 (?Y rdf:type  topo:NetworkConnection), (?Y topo:hasInterface ?I1), (?Y topo:hasInterface ?I2), notEqual(?I1, ?I2) ] ]
+	 
+# interface sanity - interface must be between
+# link-like and node-like things
+[saneInterface1: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 1', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type topo:Link), (?B rdf:type topo:Link), notEqual(?A, ?B) ] ]
+		
+[saneInterface2: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 2', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type topo:Device), (?B rdf:type topo:Device), notEqual(?A, ?B) ] ]
+		
+[saneInterface3: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 3', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type comp:ComputeElement), (?B rdf:type comp:ComputeElement), notEqual(?A, ?B) ] ]
+		
+[saneInterface4: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 4', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type comp:ComputeElement), (?B rdf:type topo:Device), notEqual(?A, ?B) ] ]
+
+# multi-domain broadcast link domains can't be repeated
+[saneBcastLink1: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Broadcast link Validation', 'Domains in inter-domain broadcast link cannot be repeated', ?X))
+		<- (?X rdf:type topo:BroadcastConnection), (?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), notEqual(?I1, ?I2),
+		(?A topo:hasInterface ?I1), (?B topo:hasInterface ?I2), (?A rdf:type comp:ComputeElement), (?B rdf:type comp:ComputeElement),
+		notEqual(?A, ?B), (?A req:inDomain ?D1), (?B req:inDomain ?D2), equal(?D1, ?D2), 
+		(?X topo:hasInterface ?I3), notEqual(?I1, ?I3), notEqual(?I2, ?I3), (?C topo:hasInterface ?I3), (?C rdf:type comp:ComputeElement),
+		(?C req:inDomain ?D3), notEqual(?D3, ?D1) ] ]
+
+# nodes on any links can't be repeated (Link -> PPTSegment -> Connection -> NetworkConnection or Link->BroadcastSegment->BroadcastConnection) 
+[validateLink1: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Node Interface Validation', 'Nodes can\'t be multiconnected to links', ?X, ?Y))
+		<- (?X rdf:type topo:Link), (?Y rdf:type comp:ComputeElement), (?X topo:hasInterface ?I1), (?Y topo:hasInterface ?I1),
+		(?X topo:hasInterface ?I2), (?Y topo:hasInterface ?I2), notEqual(?I1, ?I2) ] ]  
+		 
+# Stitchport interface can't have IP address
+
+[validateStitchPort1: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Stitchport cannot have an IP address assigned', 'Stitchport cannot have an IP address assigned', ?X))
+		<- (?X req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), 
+		(?X topo:hasInterface ?Y), (?Y ip4:localIPAddress ?Z) ] ]
+		
+# validating e.g. that network connections can only have 2 or more interfaces
+# currently isn't possible due to OWL inability to put cardinality restrictions
+# on non-simple (e.g. transitive) properties, like hasInterface.

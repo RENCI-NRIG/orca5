@@ -1,0 +1,12 @@
+<target name="copy.axis2.tools">
+  <for list="${machines}" param="machine" delimiter=" " parallel="false">
+    <sequential>
+      <echo message="copying axis2.tools jar to @{machine}" />
+      <ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na stop &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" fail="false" />
+      <ssh host="@{machine}${domain}" command="${bash} -c &quot;cd na/lib; rm axis2-1.0b3-SNAPSHOT.jar; &quot;" fail="false" />
+
+      <myscp src="axis2.jar" dest="${ssh.user}${at}@{machine}${domain}:na/lib/axis2-1.0b3-SNAPSHOT.jar" />
+      <ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na start &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" />
+    </sequential>
+  </for>
+</target>

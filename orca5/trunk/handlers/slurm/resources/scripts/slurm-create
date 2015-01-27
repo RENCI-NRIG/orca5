@@ -1,0 +1,39 @@
+#!/usr/bin/env python                                                                                                        
+import os
+import sys
+import logging as LOG
+import logging.handlers
+import traceback
+
+sys.path.append(os.environ['SLURM_MANAGE_HOME'])
+
+try:
+    sys.path.append(os.environ['SLURM_MANAGE_HOME'])
+    from slurm_common import *
+except:
+    print 'Error in slurm-create: cannot import slurm_common.py'
+    sys.exit(1)
+
+try:
+    LOG.basicConfig(level=LOG.DEBUG, filename='/tmp/foo')
+    # DO the WORK
+    data_stdout=SLURM_MANAGE.create_allocation(os.environ['SLURM_OWNER'],
+    				               os.environ['SLURM_TYPE'],
+    				               os.environ['SLURM_RESERVATION'])
+
+    if str(data_stdout) == 'FALSE' :
+	print 'FALSE'
+	sys.exit(1)
+
+    #data_stdout = "salloc: Granted job allocation 27394\n"
+    #print "data_stdout:" + str(data_stdout)
+    tokens = data_stdout.split(" ")
+    allocation_id = tokens[-1].rstrip()
+    print allocation_id
+    #print 'OK'
+
+except Exception as e:
+    print 'FALSE'
+    sys.exit(1)
+
+sys.exit(0)

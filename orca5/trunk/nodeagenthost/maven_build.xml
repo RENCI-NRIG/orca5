@@ -1,0 +1,168 @@
+<!DOCTYPE project [
+<!ENTITY deps SYSTEM "ant/deps-maven.xml">
+]>
+<project name="orca.manage.extensions.standard"
+	default="help"
+	basedir="."
+	xmlns:artifact="urn:maven-artifact-ant">
+
+	&deps;
+
+	<property name="host.package" value="target/nah.tar.gz" />
+
+	<target name="help">
+		<echo>
+			Build file options:
+			clean: cleans the build
+			package: creates the nodeagenthost package
+		</echo>
+	</target>
+
+	<target name="clean">
+		<delete dir="target" />
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="target" />
+		<delete dir="${tmp.dir}" />
+		<mkdir dir="${tmp.dir}" />
+		<!-- get all dependencies in one directory -->
+		<copy todir="${tmp.dir}">
+			<fileset refid="maven.project.dependencies" />
+		</copy>
+	</target>
+
+	<target name="tar" depends="prepare">
+		<mkdir dir="target/package" />    
+		<copy todir="target/package">
+			<fileset dir="resources" />
+		</copy>
+
+		<copy todir="target/package/nodeagent/lib">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.jar" />
+				<exclude name="**/*.mar" />
+				<exclude name="**/*.pom" />
+				<exclude name="**/*ant-maven*" />
+				<exclude name="orca/drivers/core/**/*" />
+				<exclude name="orca/nodeagent/**/*" />
+			</fileset>
+			<fileset dir="target">
+				<include name="orca.nodeagenthost-*.jar"/>
+				<exclude name="*tests.jar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/package/nodeagent/repository/modules">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.mar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/package/nodeagent/repository/services">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.aar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<tar tarfile="target/nah.tar" basedir="target/package" />
+		<gzip zipfile="${host.package}" src="target/nah.tar" />
+		<delete file="target/nah.tar" />
+
+	</target>
+
+	<target name="deb" depends="prepare">
+		<mkdir dir="target/deb" />
+		<copy todir="target/deb/opt/orca/nodeagent/">
+			<fileset dir="resources/nodeagent" />
+		</copy>
+
+		<copy todir="target/deb/opt/orca/nodeagent/lib">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.jar" />
+				<exclude name="**/*.mar" />
+				<exclude name="**/*.pom" />
+				<exclude name="**/*ant-maven*" />
+			</fileset>
+			<fileset dir="target">
+				<include name="orca.nodeagenthost-*.jar"/>
+				<exclude name="*tests.jar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/deb/opt/orca/nodeagent/repository/modules">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.mar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/deb/opt/orca/nodeagent/repository/services">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.aar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/deb/etc/init.d">
+			<fileset dir="init.d">
+			</fileset>
+		</copy>
+		<copy todir="target/deb/DEBIAN">
+			<fileset dir="pkg/apt" />
+		</copy>
+		<exec executable="/bin/bash">
+			<arg line="-C 'makedeb.sh'" />
+		</exec>
+	</target>
+
+	<target name="rpm" depends="prepare">
+		<mkdir dir="target/rpm" />
+		<copy todir="target/rpm/opt/orca/nodeagent/">
+			<fileset dir="resources/nodeagent" />
+		</copy>
+
+		<copy todir="target/rpm/opt/orca/nodeagent/lib">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.jar" />
+				<exclude name="**/*.mar" />
+				<exclude name="**/*.pom" />
+				<exclude name="**/*ant-maven*" />
+			</fileset>
+			<fileset dir="target">
+				<include name="orca.nodeagenthost-*.jar"/>
+				<exclude name="*tests.jar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/rpm/opt/orca/nodeagent/repository/modules">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.mar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/rpm/opt/orca/nodeagent/repository/services">
+			<fileset dir="${tmp.dir}">
+				<include name="**/*.aar" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<copy todir="target/rpm/etc/init.d">
+			<fileset dir="init.d">
+			</fileset>
+		</copy>
+		<exec executable="/bin/bash">
+			<arg line="-C 'makerpm.sh'" />
+		</exec>
+	</target>
+
+	<target name="package" depends="prepare,tar,deb,rpm" />    
+
+</project>

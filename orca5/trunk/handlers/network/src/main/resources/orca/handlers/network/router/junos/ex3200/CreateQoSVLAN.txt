@@ -1,0 +1,26 @@
+firewall policer {$QoSPolicyName}-policer {
+    if-exceeding {
+        bandwidth-limit {$QoSRate};
+        burst-size-limit {$QoSBurstSize};
+    }
+    then discard;
+}
+
+firewall family ethernet-switching {
+    filter {$QoSPolicyName}-filter  {
+        term {$QoSPolicyName}-term {
+            then {
+                policer {$QoSPolicyName}-policer;
+            }
+        }
+    }
+}
+
+vlans { {$VLANName} { 
+	vlan-id {$VLANTagName}; 
+	filter {
+		input {$QoSPolicyName}-filter;
+		} 
+	} 
+}
+

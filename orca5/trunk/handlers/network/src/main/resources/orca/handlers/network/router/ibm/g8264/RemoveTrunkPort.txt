@@ -1,0 +1,2 @@
+interface port {$TrunkPorts}
+switchport trunk allowed vlan remove {$VLANTagName}

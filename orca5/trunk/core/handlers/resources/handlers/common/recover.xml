@@ -1,0 +1,28 @@
+<project name="noop" basedir=".">
+
+    <target name="join">
+        <sleep seconds="10" />   
+        <property name="shirako.target.code" value="0" />
+    </target>
+ 
+    <target name="leave">
+        <sleep seconds="10" />      
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="recover">
+        <sleep seconds="10" />      
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="probe">
+        <sleep seconds="10" />      
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="modify">
+        <sleep seconds="10" />      
+        <property name="shirako.target.code" value="0" />
+    </target>
+    
+</project>

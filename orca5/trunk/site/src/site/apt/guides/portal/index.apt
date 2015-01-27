@@ -1,0 +1,273 @@
+ ----
+ Web Portal Guide
+ -----
+ The Orca Team
+ -----
+ September 5, 2007
+ -----
+
+Web Portal Guide
+
+ Orca can be executed from the command line or deployed inside a Tomcat server as a web application. 
+ In this guide we describe the steps necessary to run Orca as a web application.
+ For instructions about running Orca from the command line, please refer to the 
+ {{{../command-line/index.html}Command Line Guide}}.
+ 
+
+Sections
+
+ * {{{index.html#Prerequisites}Prerequisites}}
+ 
+ * {{{index.html#Directory Layout}Directory Layout}}
+
+ * {{{index.html#Customization}Customization}}
+
+ * {{{index.html#Configuration files}Configuration files}}
+ 
+ * {{{index.html#Configuring inventory}Configuring inventory}}
+
+ * {{{index.html#Configuring images}Configuring images}}
+
+ * {{{index.html#Building the web application}Building the web application}}
+
+ * {{{index.html#Deploying the web application}Deploying the web application}}
+
+ * {{{index.html#Logging in}Logging in}}
+
+ []
+ 
+
+* {Prerequisites}
+
+ To run Orca as a web application you need the following:
+ 
+ * A database server (see the {{{../install/index.html}Orca Installation Guide}} for details).
+ 
+ * A Tomcat web server. Tomcat 5.5. is currently supported. Older versions may or may not work. 
+ You can find instructions about installing and configuring Tomcat {{{tomcat.html}here}}.
+ 
+ 
+* {Directory Layout}
+  
+ The Orca web portal files are located under $ORCA_ROOT/portal/webapp. We will refer to this directory
+ as $ORCA_WEB. The directory has the following structure:
+  
+ * pom.xml - Maven POM file describing the dependencies required by the web portal.
+ 
+ * ant - Contains a collection of ant xml and properties files.
+ 
+ * axis2repository - An axis2 client repository.  
+ 
+ * config - Contains template configuration files.
+  
+ * src - Contains the portal code and web pages.
+ 
+ * startup - Orca startup folder. Contains extension packages that must be installed when Orca starts.
+ 
+ []
+ 
+* {Customization}
+ 
+ Before using this project you need to customize it. There are several levels of customization:
+ 
+ * Customize the build process
+ 
+ This level of customization involves overriding properties set in <<ant/build.properties>> and <<ant/tests.properties>>. 
+ To override a property defined in build.properties, create <<ant/user.properties>> and put your values. 
+ Do not edit build.properties unless
+ you want those edits to be committed to the repository. user.properties should not be added to version control.
+ 
+ Similarly, to override a property defined in tests.properties, create <<ant/user.tests.properties>> and put your values in it.
+  
+ * Customize the Orca system
+ 
+ This level customization involves modifying Orca configuration files so that they reflect the properties of your installation.
+ 
+ [] 
+ 
+ The build
+ process will always fetch the latest version of the Standard
+ Management package, the Standard Image Manager package, and the core
+ and standard handler packages.  If you require other packages to be
+ added to the web application, you can do so by copying their archives
+ to the startup folder.
+
+ The next step you must perform is to create the admin security configuration. This step is described 
+ {{{../container-configuration/security.html}here}}. Once you have created the admin security configuration
+ copy the resulting runtime folder so that it resides under $ORCA_ROOT/webapp.
+ 
+ If you did not change the database defaults during the database configuration 
+ {{{../install/index.html#Database Configuration}steps}}, you are now ready to create the web application. If you, however, modified
+ the defaults, you will need to make some changes to the configuration files
+ 
+* {Configuration files}
+
+ <<FIXME:  Rebalance with container config guide.>>
+ 
+
+ 
+ The Orca web application configuration files are stored under $ORCA_WEB/local. There are four groups of configuration files. 
+ All files marked in bold require some customization.
+ 
+ * Container Configuration Files - These files are used to configure the Orca container. 
+ 
+ 
+	 ** <<config.xml>>
+	 
+	 This is the  container XML configuration file to use when the system boots. This file describes some essential parameters of the Orca system, e.g, 
+	 timing and database information. In addition, the file can be used to instruct Orca to create one or more actors. The supplied file contains only database
+	 and timing information and does not describe any actors. For more information about the format of this file and 
+	 how to use it please refer to the {{{../container-configuration/xml.html}Container XML Configuration Guide}}. If you modified the default database
+	 parameters you must edit this file.
+	 
+	 Orca supplies two sample container XML configuration files. These files can be used only when running the portal under emulation.
+	  
+	  *** config.minimal.xml - This is a minimal container XML configuration file. This file configures the container database and timing information, 
+	  but does not define any actors.
+	  
+	  *** config.full.xml - This is a complete container XML configuration file. In addition to the parameters specified in config.minimal.xml, this file
+	  defines three actors: one from each type. The actors are connected: the service manager to the broker, and the broker to the site authority.
+	  
+	 
+	 <<Note>>: The supplied config.xml has contents equivalent to $ORCA_WEB/local/config.full.xml.
+	 
+	 ** <<container.properties>>
+	 
+	 This is the container properties file. This file is used to
+	 supply configuration information to be accessible by Orca
+	 during boot time. Unlike the container XML file, the
+	 container properties file provides information, essential for
+	 the early initialization stages of the system. This file can
+	 also be used to expose any (name,value) pair to code running
+	 within Orca. If you are running under emulation,
+	 container.properties requires no customization. More information about
+         this file can be found {{{../container-configuration/properties.html}here}}.
+
+         
+ 
+ * Portal Configuration Files  - These files are used to configure the Orca Web Portal.
+ 
+	 ** <<context.xml>>
+	 
+	 This is the web application context file. The file is used to configure the authentication method used by the Orca
+	 web application. The Orca web portal supports form-based and {{{https://webauth.duke.edu/}WebAuth-based}}
+	 authentication. If you plan to use form-based authentication and you did not change the database default parameters,
+	 there is no need to modify this file. You can find information about customizing context.xml in the 
+	 {{{auth.html}Configuring Portal Authentication Guide}}.
+
+	 ** server-config.wsdd
+	 
+	 This is the Axis server-side configuration file. This file requires no modifications.
+	 	 
+	 ** <<service.properties>>
+	 
+	 This is the main portal configuration file. It is used to
+	 specify the database connection used by the portal. The file
+	 also contains some security-related parameters.  You can find
+	 more details about this configuration file
+	 {{{service.properties.html}here}}.
+	 
+	 ** vservlet.properties
+	 
+	 This is the Vservlet configuration file. This file requires no modifications.
+	 
+	 ** web.xml
+	 
+	 This is the web application configuration file. It is used to configure the application-specific context inside the web server. This file
+	 requires no modifications.
+	  
+
+ * Extensions Configuration Files - These files are used to configure optional Orca extensions. The table bellow lists each configuration file
+ and the corresponding extension. Please follow the links to obtain information about customizing a specific configuration file.
+ 
+ 
+ 
+*---------------------------------------+--------------------------------------------------------------------+
+| <<Configuration File Name>> 	    	|<<Module Name>>                                                     | 
+*-------------------------------------- +--------------------------------------------------------------------+
+|{{{../../tools/images/standard/configuration.html}imagemanager.properties}}| {{{../../tools/images/standard/index.html}Standard Image Manager}} | 
+*---------------------------------------+--------------------------------------------------------------------+ 
+Extension Modules' Configuration Files
+
+ 
+ * Miscellaneous Configuration Files
+ 
+	 ** log4j.properties - Log4j configuration file. Does not require modification.
+	 	 
+	 ** shirako.jocl - Connection pooling configuration file. Does not require modification.
+ 
+ []
+
+* {Configuring inventory}
+
+ Please consult the {{{../inventory/}Inventory Guide}} for information
+ about configuring and registering inventory.
+
+
+* {Configuring images}
+ 
+ Please consult the {{{../images/}Images Guide}} for information about
+ installing and registering virtual and physical machine images.
+ 
+* {Building the web application}
+
+ Once all customization phases are complete, you are ready to build the Orca web application. To do this type the following in your terminal
+ 
++---
+ cd $ORCA_ROOT/webapp
+ mvn package
++---
+ 
+ The above command will create the Orca web application archive (orca.war). The archive will be located at: 
+ $ORCA_ROOT/portal/webapp/target/orca.war
+
+ 
+* {Deploying the web application}
+
+ Before deploying the web application, make sure you have a running Tomcat web server and that the web application has been built.
+ There are two ways to deploy the web application:
+ 
+ * Manual
+ 
+ Copy $ORCA_ROOT/portal/webapp/target/orca.war to your web server's webapps directory. If your web server's address is http://orcawebserver,
+ you can access the Orca Web Portal at http://orcawebserver/orca.
+ 
+ * Automated
+ 
+ You can deploy the web application using Tomcat's Admin servlet. This method requires that you configure Tomcat with a user authorized to
+ deploy web applications. You can find more details about installing and configuring Tomcat {{{tomcat.html}here}}.
+ 
+ Once you have configured Tomcat, you must customize ant/build.properties to match your setup. Interaction with the Tomcat server is controlled
+ by the following properties:
+ 
+ 	* target.server - address (ip or dns name) of the Tomcat server
+ 
+ 	* target.port=8080 - port number Tomcat is running on
+	
+	* username - user name to use when interacting with Tomcat
+	
+	* password - password to use when interacting with Tomcat
+	
+ These properties are define in ant/build.properties. If you wish to override them, please define your values in ant/user.properties.
+ 
+ If you have completed the web server and build configuration, start the web server and type the following in your terminal:
+ 
++---
+cd $ORCA_ROOT/webapp
+ant deploy
++---
+
+* {Logging in}
+
+ If the web portal has been successfully deployed to Tomcat, you are ready to use the system. To access the web portal, one must have a property authorized
+ user account. The first login to the system must be done by the administrative user. The container XML configuration files supplied with the 
+ web portal installation define the administrative user's credentials to be:
+
+  * user name: admin
+  
+  * password: login 
+
+ <<Note:>> you can customize the password by editing
+ $ORCA_ROOT/config/cotanier.properties and rebuilding the webapp. See the
+ {{{../container-configuration/properties.html#Database_settings}Container Properties File}} reference for
+ details.

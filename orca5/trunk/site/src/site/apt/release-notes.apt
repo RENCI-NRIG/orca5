@@ -1,0 +1,60 @@
+ ------
+ Release Notes
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+
+Release Notes
+
+* {2.0}
+
+
+* {1.2}
+
+ * Consolidated the Container Manager hierarchy
+   
+   * The Orca conainer is now implemented by the  OrcaContainer class.
+
+   * Added a Globals class to help with accessing the container, the
+     configuration, and the main logger.
+
+ * Simplified container managerment
+  
+  * Reduced number of configuration files
+
+  * Moved database settings from the actor's XML file into container.properties.
+    However, still a few other places remain that duplicate the database
+    settings.
+
+ * Proper usage of log4j for logging (no more LoggingTool) 
+   
+   * Logging settings are controller from container.properties
+
+   * Log file names are now predictable
+
+   * <<NOTE:>> code that uses LoggingTool would have to be updated to use org.apache.log4j.Logger
+	
+ * Node Agent APT package
+
+ * Node Agent RPM package
+
+ * Webapp APT package
+
+ * Bug fixes
+
+ * Documentation and website improvements (a work in progress)
+
+* {1.1-alpha}
+
+ * Moved the Orca project from Duke to RENCI
+
+ * New Drivers and policies for dealing with network resources
+
+ * New Simplified broker ans site policies
+
+ * Sample driver and a driver template to simplify driver development
+
+ * Numerous bug fixes

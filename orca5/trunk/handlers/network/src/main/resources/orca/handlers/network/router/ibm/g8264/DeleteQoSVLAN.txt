@@ -1,0 +1,4 @@
+no access-control vmap {$VMAP}
+exit
+no vlan {$VLANTagName}
+exit

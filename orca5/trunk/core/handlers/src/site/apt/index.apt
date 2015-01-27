@@ -1,0 +1,23 @@
+ ----
+ Welcome
+ -----
+ Aydan Yumerefendi
+ -----
+ December 14, 2007
+ -----
+
+Welcome!
+
+ The {{{index.html}Common Handlers Library}} provides a collection of handlers and
+ utility files to simplify the development of more complex
+ handlers. For example, the library provides a set of common
+ properties and mechanisms to resolve classes and files from within a
+ handler. This library can be used to implement both authority and
+ service manager handlers. The handlers supplied by this library are
+ intended to be used for emulation purposes.
+
+ If you are looking for a specific handler, please visit the handler
+ directory {{{directory.html}page}}.
+ 
+ 
+ 

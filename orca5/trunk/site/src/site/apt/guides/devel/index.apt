@@ -1,0 +1,497 @@
+ ----
+ Orca Development Notes
+ -----
+ The Orca Team
+ -----
+ December 29, 2007
+ -----
+
+Overview
+ 
+ Orca has lots of moving parts.  Most of the code is in Java, but we
+ also use Velocity for the Web portal and various scripting tools
+ (mostly ant) for configuration actions for specific resource types
+ and guests.  We use Maven to manage subprojects, documentation,
+ dependencies, and builds.
+
+ Most Orca developers use Eclipse as a development environment.
+ Getting things set up to do development work on Orca can be a bit tricky.
+ These notes give an outline of how to set up an Orca development
+ environment under Ubuntu Linux.  Since Java-based systems (e.g.,
+ Orca, Eclipse, Ant, Maven...) are nominally OS-independent, it is not
+ so different to use other systems.
+
+ It is common in our team to develop on Mac systems and run Ubuntu
+ under VMware Fusion.  These notes are a snapshot of one person's
+ experience getting that set up at one point in time (December 2007).
+
+ There are also some notes on the structure of the source code.
+
+Sections
+
+ * {{{index.html#Ubuntu under VMware}Ubuntu under VMware}}
+
+ * {{{index.html#Basic tools}Basic tools}}
+
+ * {{{index.html#Java, Ant and Maven}Java, Ant and Maven}}
+
+ * {{{index.html#Eclipse}Eclipse}}
+
+ * {{{index.html#Orca}Orca}}
+
+ * {{{index.html#Overview of the Orca source code}Overview of the Orca source code}}
+
+ []
+ 
+{Ubuntu under VMware}
+
+ Get a 32-bit iso image from ubuntu.com.  I used a PC image rather
+ than a server image.  There is a preconfigured Ubuntu appliance
+ under VMware Marketplace, but it did not work for me.
+
+ Hide your iso image in your personal install directory.  I found
+ that I needed to keep the iso image around after installing it or
+ the VM would flake out.  But you can keep it out of sight.
+
+ Make a new VM in VMware.  Set up its disk.  You need a pretty big
+ disk: I used 24G, and let it allocate on demand, but divide it
+ into 2G chunks.
+
+ Point your VM at your iso image and boot it.  When it boots, run
+ the installer on the desktop.  Reboot.
+
+ You will use the Ubuntu/Debian package manager (e.g., apt-get)
+ for most of the software tools you need.  For some software (e.g.,
+ Apache project software and Eclipse) it is better to just download
+ the clean distros from the supplier's website and unpack it.  But
+ first prime your package manager.
+
++-------------------------------+
+sudo apt-get update
+sudo apt-get upgrade
++-------------------------------+
+
+ One thing that sucks about Ubuntu (like Leopard, Vista, etc.)  is
+ that it spends a lot of time indexing your files, particularly when
+ you're loading up a fresh install.  VMware Fusion is not quite prime
+ time, and a VM that thrashes the disk is not pretty.  I had lots of
+ perceived instability and reboots until I figured this out.  Peace of
+ mind was restored after I decided to kill -9 trackerd and set
+ System->Preferences->Indexing to turn all indexing off.
+
+*VMware tools for Ubuntu
+
+ Your first mission is to get VMware tools installed.  VMware will
+ squeak at you until you get this done.  But you will need some
+ developer tools to do it.
+
+ Now, in the VMware menu, select "install vmware tools".  All that
+ does is push the Ubuntu iso image off your desktop and replace it
+ with a VMware DVD icon: it is the moral equivalent of ejecting your
+ "virtual" Ubuntu DVD and replacing it with a VMware DVD.  You still
+ have to install the tools.
+
+ Sequencing here can be tricky, and some "classic" instructions on the
+ Web told me things that weren't true.  What worked for me was just to
+ bring the package manager up to date first, using the commands above,
+ and then just untar the vmware tools distro into /tmp and run the
+ build script.  Info on how to do this was buried in some pdf on the
+ VMware web site.  But I just did the following as root (sudo bash
+ first, and say yes to everything, i.e., use all defaults):
+
++-------------------------------+
+cd /tmp
+tar zxpf /media/cdrom/VM***.tar.gz
+cd /tmp/vmware-tools-distrib
+./vmware-install.pl
++-------------------------------+
+
+ After this is done you should have your ubuntu iso image back, i.e.,
+ VMware ejects itself and puts your Ubuntu DVD back in the virtual drive.
+
+{Basic tools}
+
+ You need to install an SSL-capable subversion client.
+
++-------------------------------+
+sudo apt-get install subversion 
++-------------------------------+
+
+ Also, some of us cannot live without Emacs.
+
++-------------------------------+
+sudo apt-get install emacs
++-------------------------------+
+
+ There might be a better emacs out there, but that worked for me.
+
+ Assuming you are using bash (the default shell on Ubuntu), you will
+ want to put some commands in your .profile to pop into your editor
+ when you do a subversion commit.  I just use vi for that since I
+ typically use the svn -m option for the commit message anyway.
+
++-------------------------------+
+export VISUAL=vi
++-------------------------------+
+
+ For good measure since you will need it later:
+
++-------------------------------+
+sudo apt-get install nmap
++-------------------------------+
+
+
+{Java, Ant and Maven}
+
+ You will now install the basic software you need to develop with
+ Orca.  Install this software as root (sudo bash).
+
+ It is common here to install software in one place which for various
+ reasons we commonly call /shirako/software.  The directions below
+ assume that.
+
+*Java
+
+ Ubuntu comes with Java installed, but it doesn't work.  This seems to
+ be common for Linux or at least Debian Linux.  I think it is some
+ kind of plot against Java.
+
+ Get Java from Sun.  At time of this writing Java 1.6 is incompatible
+ with some software component we depend on, so we use Java 1.5, which
+ I had to download from a "previous versions" page.  It is easy,
+ although their pages are hard to navigate unless you are a Java
+ sophisticate, and the version numbers are used inconsistently.  It is
+ common in Java-land to drop the leading "1." from the version number.
+ What I downloaded was J2SE/JDK 5.0 update 14.
+
+ I took the .bin self-extracting archive.  It is a shell script.  Copy
+ it to your install directory, chmod +x, and execute it.
+
+ The JDK comes with a program called <keytool>.  Ubuntu already has some
+ keytool it got from somewhere: /usr/bin/keytool is a symbolic link to
+ /etc/alternatives/keytool, which links to something else.  The
+ Orca configuration tools will look for keytool in /usr/bin/keytool.
+ Make sure they get the keytool from your JDK.  For my system, one way to do
+ that was to link /etc/alternatives/keytool to the keytool in my JDK:
+
++-------------------------------+
+sudo mv /etc/alternatives/keytool /etc/alternatives/keytool-orig
+sudo ln -s /shirako/software/jdk1.5.0_14/bin/keytool /etc/alternatives/keytool
++-------------------------------+
+
+
+*Ant and Maven
+
+ Get Ant and Maven from the Apache project pages for these projects.
+ Just untar them into some reasonable place.  For me, that was:
+
++-------------------------------+
+ANT_HOME=/shirako/software/apache-ant-1.7.0
+MV2_HOME=/shirako/software/apache-maven-2.0.8
++-------------------------------+
+
+ Maven supplies a set of ant tasks to invoke maven from ant.
+ Pull down the jar file manually from the Maven web site
+ and drop it in $ANT_HOME/lib.  I found the tasks described at
+ {{{http://maven.apache.org/ant-tasks.html}http://maven.apache.org/ant-tasks.html}}.
+
+*Update your path for Java, Ant, and Maven
+
+ Add Java, Ant, and Maven to your .profile (assuming bash).  E.g.:
+
++-------------------------------+
+export JAVA_HOME=/shirako/software/jdk1.5.0_14
+export ANT_HOME=/shirako/software/apache-ant-1.7.0
+export MV2_HOME=/shirako/software/apache-maven-2.0.8
+
+export PATH=${JAVA_HOME}/bin:${ANT_HOME}/bin:${MV2_HOME}/bin:${PATH}
++-------------------------------+
+
+*Maven configuration: identity and keys
+
+ Maven has a user configuration file (.m2/settings.xml).  Eclipse may
+ complain later if there is nothing in there.  You can put something
+ in there about the Maven servers you work with and the identities you
+ use to work with them.
+
+ For example, suppose your user ID is <myuid> and you have generated a
+ standard ssh keypair in the default location with no passphrase.
+ Duke users of the Orca Maven repository must have their keys
+ installed in their home directory on a secure machine.  You could get
+ your passwordless keypair by running this command on a trusted lab
+ machine:
+
++-------------------------------+
+ssh-keygen -t dsa -C "myuid@cs.duke.edu"
+(When it prompts for a passphrase, just hit return.)
++-------------------------------+
+
+ Then your Maven settings.xml might look something like this:
+
+--------------------------------+
+<settings xmlns="http://maven.apache.org/POM/4.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                     http://maven.apache.org/xsd/settings-1.0.0.xsd">
+ <servers>
+   <server>
+     <id>orca</id>
+     <username>myuid</username>
+     <privateKey>/home/homexxx/myuid/.ssh/id_dsa</privateKey> 
+   </server>
+   <server>
+     <id>orca.deploy</id>
+     <username>myuid</username>
+     <privateKey>/home/homexxx/myuid/.ssh/id_dsa</privateKey> 
+    </server>
+ </servers>
+
+</settings>
+--------------------------------+
+
+{Eclipse}
+
+ Install Eclipse from {{{http://wwweclipse.org}eclipse.org}}.  I took
+ the "Eclipse IDE for java developers", which at this time is called
+ <eclipse-java-europa-fall2-linux-gtk.tar.gz>.  Copy it to your
+ install directory (e.g., </shirako/software>, then as root:
+
++--------------------------------+
+tar zxpf ecl*gz
++--------------------------------+
+
+ It is also recommended to touch some args in the initialization
+ file <*/eclipse/eclipse.ini> so that eclipse does not hobble itself:
+
+--------------------------------+
+-XX:MaxPermSize=512m
+-Xms40m
+-Xmx1024m
+-Dosgi.bundlefile.limit=100
+--------------------------------+
+
+ To run eclipse, just execute the executable <eclipse>
+ found within the eclipse install directory.
+
+*Install Eclipse plugins
+
+ With eclipse running with your user identity,
+ the first order of business is to install the eclipse
+ plugins for subversion (subclipse) and Maven.
+The Eclipse folks have tried to make it easy to install
+plugins, and we have to appreciate that they tried even if it
+is still a hassle.
+
+ You install an eclipse plugin through the eclipse menus:
+ <<help->software updates->find and install->new features->new remote site>>.
+ Then you enter the name and URL of the plugin you want in a dialog box.
+You have to know the name and the URL.  You can get them from the
+web sites for the plugins you want.
+
+ At present, there is one big gotcha for installing these eclipse
+ plugins.  Some plugins may have various dependencies, and
+ Eclipse plugin installs don't know how to fetch their dependencies
+like a real package manager.  Also, some of the plugins have optional
+components to integrate with each other.  That adds more
+dependencies, and it is not immediately obvious how to deselect the
+optional components it is complaining about.
+
+ As a result, when you try to install a plugin, Eclipse may complain
+ about things that don't matter, and it takes a few more clicks to
+ calm it down.  You have to click on a little arrow to expand the
+component list for the plugin and deselect the offending optional
+components.
+
+ Also, the first time I installed these plugins it did not "take".
+ I have developed the habit of restarting Eclipse after installing
+every plugin.
+
+**Subclipse
+
+ The latest URL for Subclipse is prominently posted on
+ {{{http://www.subclipse.tigris.org}subclipse.tigris.org}}.  Currently
+ it is: <http://subclipse.tigris.org/update_1.2.x>.  Subclipse has an
+ optional component that needs "Buckminster core".  I just deselected
+ it.  Don't forget to restart Eclipse!
+
+**Maven Integration for Eclipse
+
+ This plugin can be found at <http://m2eclipse.codehaus.org/update/>.
+ It has an optional integration component that wanted "subclipse core
+ 1.3.5", which is a higher version number than the current release of
+ subclipse.  Whatever.  I just deselected it.
+
+{Orca}
+
+ Now you're ready for Orca.  First use subversion from the command
+ line to check out a working copy of the Orca repository in your home
+ directory.  I took the whole trunk.  You will need a developer
+ account to do this, but you can access the releases anonymously, as
+ described elsewhere.
+
++-------------------------------+
+svn co https://svn.nicl.cs.duke.edu/svn/cereus/orca/trunk
++-------------------------------+
+
+ Build manually the first time.  Go the trunk top level and say:
+
++-------------------------------+
+mvn install
++-------------------------------+
+
+ That will take awhile since it will automatically fetch many other
+ jars and various components that you need to build and use Orca.
+
+ To work with Orca under Eclipse, we check out each Maven project in
+ the Orca pool as a separate project under Eclipse.  Also, we create
+ these Eclipse Java projects from the existing directories in your
+ checked out copy of the repository, so that Eclipse uses them in
+ place and does not make a copy.
+
+ When you create a project, Eclipse will try to build it and it will
+ choke because it does not recognize it as a Maven project.  You have
+ to right-click on the project name and say <<enable dependency
+ management>> in the Maven menu.  Then the Maven plugin takes over and
+ it should know how to build everything. 
+
+ In general, the major components of Orca (<shirako>, <cod>, etc.)
+ are separate Maven projects.  This can be determined by looking at the
+ <pom.xml> in the top-level directory.  We create separate Java projects
+ within Eclipse as needed to work on these major components.
+
+ Unfortunately, the Eclipse Maven plugin is still a bit buggy at the
+ time of this writing.  For example, the plugin does not always
+ identify source directories correctly for a project.  This can
+ generally be resolved by right-clicking on the project and selecting
+ <<update source directories>>; it is also possible to identify the
+ source directories manually.  A second problem is that the plugin
+ does not work well when many Maven projects are active simultaneously
+ in an Eclipse instance.
+
+ Other guides discuss various aspects of configuring and running
+ Orca systems.
+
+{Overview of the Orca source code}
+
+ First, a few notes on repository organization, which is a bit
+ complicated, especially if you are navigating it from a command line.
+
+ Of course there are a number of versions of the source code ---
+ branches, tagged releases, the main trunk, and so on.
+ Pick a branch and focus on that.  Things just got simpler.
+
+ Look at the directories within your branch.  Here are a few things to know:
+
+  * The directory structure is a bit deep and complicated to browse by
+    hand.  It has multiple Java packages built with ant, and it is set
+    up for use with Maven and Eclipse.  We also use a unit testing
+    tool, and there is test code associated with many of the
+    components.  All of these tools place demands on the directory
+    structure that clutter to the tree.  Sorry.
+
+  * It is hard to understand the entire body of code, but that is not
+    necessary.  What is important is to understand how the major
+    pieces fit together.
+
+  * The Orca project consists of four major components: the shirako
+    core leasing toolkit (<shirako>), the COD plugins for the toolkit
+    (<cod>), a Web console/portal interface (<portal>), and a node
+    agent that runs within each node managed by COD (<nodeagent>).
+
+  * There are some other secondary modules.  The module <sharp>
+    contains some additional signing and checking code for network
+    communication.  The module <boot> has configuration code to
+    configure a running Shirako/COD system from the various pieces.
+
+  * There is also code for a large and growing set of plugins for
+    Shirako/COD.  These include controllers, views, drivers, and
+    handlers.  Some of these are associated with adaptive guest
+    applications built to run within dynamic virtual clusters on
+    Shirako/COD systems.  Some are associated with particular back-end
+    tools, like Xen (<./drivers/vmm>).  Controllers are policy modules
+    that run within the major Shirako actors.  Views are Web portal
+    plugins to observe and manipulate the actions of specific
+    controllers, and are packaged with the controllers.  Drivers are
+    Java modules that run under the node agent on the nodes that the
+    Shirako/COD actors are controlling.  Handlers are sets of scripted
+    actions that are upcalled to respond to specific events, e.g., the
+    key events on the guest (SM) are "a node has started" or "a node
+    is about to be shut down".
+
+  * The majority of the code is in Java.  The Web portal and
+    controller views are written in the Velocity template language.
+    Most COD-related handlers are written as ant scripts.
+
+  * Within each module named <module> (e.g., <shirako> or
+    <drivers/vmm> or <controllers/jaws>), the Java code is in
+    <./module/src/main/java/orca/module>.  Don't ask why it is 5+
+    levels deep.  That happened when we simplified the project with
+    Maven.
+
+*Shirako
+
+ Let's look at the shirako code in
+ <./shirako/src/main/java/orca/shirako>.  It has about 40K+ lines of
+ code.  The heavy lifting is done in the 15K lines of "kernel".
+ That's what we really think of as the Shirako core.
+
+ The <core> subdirectory really contains just the external interfaces
+ to the core, e.g.  the external and policy interfaces to the main
+ Shirako actors (e.g., initialize, tick, invoke, event upcalls), for
+ another 4K lines.
+
+ There's also a set of interface classes in <api> that defines all the
+ plugin upcall interfaces and programmatic downcall interfaces, which
+ are good for another 5K lines.  The various plugins contain classes
+ that implement and/or invoke these interfaces.
+
+ Various utility and interface classes contain another 10K lines or
+ so.  There are also some proxies for network communication, and some
+ plugins for database backends (e.g., LDAP, MySQL) and the ant handler
+ interface (<plugins/config>).
+
+*COD
+
+ Let's look at COD in <./cod/src/main/java/orca/cod>.
+
+ COD itself is a plugin to Shirako.  More accurately COD is a set of
+ plugins that work together.  That makes its structure a bit messy and
+ ragged.
+
+ ShirakoPlugin is the primary upcall interface from the leasing core
+ into COD.  The interface to it is defined in
+ <shirako/api/IShirakoPlugin.java>.  The implementation of this
+ interface is in CodBasePlugin extends ShirakoPlugin, which is in
+ <cod/plugins/CodBasePlugin.java>.  There is a subclass of
+ CodBasePlugin called Site.java.  These classes represent the root of
+ a COD site, and the primary invocation path into a COD site to
+ install, manipulate, and recover its resource inventory and
+ disposition of resources.
+
+ The basic upcalls for a ShirakoPlugin are to create and destroy a
+ slice, rebuild the plugin state after a failure, and restart
+ configuration actions after a failure.  When the core upcalls
+ ShirakoPlugin to create a slice, it gets back a Slice object whose
+ interface is defined in <shirako/api/ISlice.java>.  Each slice has a
+ set of reservations (leases) each controlling some resource set.
+ There are reservation factory interfaces and classes that the core
+ uses to create a reservation (lease) within a particular slice.
+ There are separate factory and reservation interfaces and classes for
+ each of the three actor roles.
+
+ The COD-specific interfaces for slices and reservations are in
+ <cod/api>.  For some reason the actual COD-specific implementations
+ of these interfaces are considered to be part of the Shirako kernel
+ package, but are in the COD part of the source tree, in a strange
+ place called <./cod/src/main/java/orca/shirako/kernel>.  These
+ interfaces and classes contain the rest of the upcall path from the
+ Shirako leasing core into the COD plugin.
+
+ In the case of COD, the "slice" is a virtual cluster, and the
+ resource sets are sets of nodes.  So the main classes in COD are for
+ nodes (Node.java) and sets of nodes (NodeSet.java and
+ NodeGroup.java).  There are a few utility classes, e.g., for
+ manipulating blocks of IP addresses.
+
+
+  

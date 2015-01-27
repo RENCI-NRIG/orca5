@@ -1,0 +1,129 @@
+#parse("/secure/common/top.vm")
+#parse("${root.getPackageRoot('f7ec610c-d838-4239-87fc-869a8cbf848e')}/top.vm")
+
+<div class="title">Request Details</div>
+<div class="titleSpacer"/>     
+
+
+#set($tmp=false)
+#set($tmp=$sliceProxy.getRequests($params.getString("requestId"), $identity.getAuth()))
+
+#set ($errorFlag=false)
+#printResultNoRedirect($tmp "An error occurred while obtaining request details")
+#if (!$errorFlag)
+	#set($reqs=$tmp.getResult())
+#end	
+
+
+#if ($list.size($reqs) == 0)
+	#printMessage("There are no requests")
+#else
+	#set($req=$list.get($reqs, 0))
+    <table border="0" cellpadding="0" cellspacing="0" class="formtable"> 
+    	<tr>
+        	<td class="formtablename" width="150">Request ID</td>
+            <td class="formtablecont">$req.getId()</td>
+        </tr>
+        <tr>
+		 	<td class="formtablename" width="150">Lease Start</td>
+            <td class="formtablecont">$req.getStart()</td>
+        </tr>
+         <tr>
+		 	<td class="formtablename" width="150">Lease End</td>
+            <td class="formtablecont">$req.getEnd()</td>
+        </tr>
+        <tr>
+		 	<td class="formtablename" width="150">Vitual Machines (DUKE)</td>
+            <td class="formtablecont">$req.getVmsDuke()</td>
+        </tr> 
+    	#if ($req.getVmsDuke() > 0) 
+    	<tr>
+    		<td class="formtablename" width="150">&nbsp;</td>
+    		<td class="formtablecont">
+			#set ($tmp=false)
+			#set ($tmp = $actorProxy.getReservationUnits($req.getRidDuke(), $identity.getAuth()))
+			#set($nodes=$tmp.getResult())
+			#if ($root.getSize($nodes) == 0)
+				#printMessage("No units")
+			#else
+           		<table cellpadding="0" cellspacing="0" border="0" class="datatable" style="padding-left: 0px">
+	                <tr>
+    					<td>
+                			<table cellpadding="0" cellspacing="0" border="0" class="data" style="padding-left: 0px">
+                				<tr>
+                					<td class="tableHeader" width="20">No</td>
+                					<td class="tableHeader-left" width="150">Properties</td>
+                				</tr>
+                				#foreach ($node in $nodes)
+                					#set($p=false)
+									#set($p=$root.convertFromMng($node.getProperties()))
+                					#if ($velocityCount %2 == 0)
+                						<tr class="tableAlt">
+                					#else
+                						<tr>
+                					#end
+            						<td class="right-cell" valign="top" width="20">$velocityCount</td>
+            						<td class="left-cell">
+            						#foreach ($x in $p.keys()) 
+            							<nobr>$x=$p.getProperty($x)</norb><br>
+            						#end
+            						</td>
+            					</tr>
+                            	#end
+    						</table>
+						</td>
+					</tr>
+		    	</table> 
+            #end 
+			</td>
+		</tr>
+		#end
+        <tr>
+		 	<td class="formtablename" width="150">Vitual Machines (RENCI)</td>
+            <td class="formtablecont">$req.getVmsRenci()</td>
+        </tr> 
+		#if ($req.getVmsRenci() > 0)
+    	<tr>
+    		<td class="formtablename" width="150">&nbsp;</td>
+    		<td class="formtablecont">
+			#set ($tmp=false)
+			#set ($tmp = $actorProxy.getReservationUnits($req.getRidRenci(), $identity.getAuth()))
+			#set($nodes=$tmp.getResult())
+			#if ($root.getSize($nodes) == 0)
+				#printMessage("No units")
+			#else
+           		<table cellpadding="0" cellspacing="0" border="0" class="datatable" style="padding-left: 0px">
+	                <tr>
+    					<td>
+                			<table cellpadding="0" cellspacing="0" border="0" class="data" style="padding-left: 0px">
+                				<tr>
+                					<td class="tableHeader" width="20">No</td>
+                					<td class="tableHeader-left" width="150">Properties</td>
+                				</tr>
+                				#foreach ($node in $nodes)
+                					#set($p=false)
+									#set($p=$root.convertFromMng($node.getProperties()))
+                					#if ($velocityCount %2 == 0)
+                						<tr class="tableAlt">
+                					#else
+                						<tr>
+                					#end
+            						<td class="right-cell" valign="top" width="20">$velocityCount</td>
+            						<td class="left-cell">
+            						#foreach ($x in $p.keys()) 
+            							<nobr>$x=$p.getProperty($x)</norb><br>
+            						#end
+            						</td>
+            					</tr>
+                            	#end
+    						</table>
+						</td>
+					</tr>
+		    	</table> 
+            #end 
+			</td>
+		</tr>
+		#end
+</table>
+#end
+

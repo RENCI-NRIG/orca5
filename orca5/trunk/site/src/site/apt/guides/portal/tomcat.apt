@@ -1,0 +1,149 @@
+ ---
+ Tomcat Installation and Configuration
+ ---
+ The Orca Team
+ ---
+ September 6, 2007
+ ---
+
+Tomcat Installation and Configuration
+
+ This document requires the steps necessary to install and configure a Tomcat server to be used by Orca.
+
+* Obtaining Tomcat
+
+ Running the Orca portal requires an instance of a {{{http://tomcat.apache.org/}Tomcat}} server.
+ You can download the server from Tomcat's web site or you can check it out from the Orca repository.
+
++---
+ svn co https://svn.nicl.cs.duke.edu/svn/cereus/software/tomcat
++---
+
+ If you choose to use the original Tomcat version, that you will need to make some modifications to it.
+ The repository version has already been configured and requires only minimal modifications.
+
+ 
+* Installing required libraries
+
+ Orca requires that several libraries be present in the web server. If using a stock version of the Tomcat,
+ here are the libraries that you will need to install.
+
+ * Custom class loader
+
+ Orca requires a custom class loader, which enables it to load and unload dynamically classes. This loader
+ consists of two jar files, which must be placed in specific locations of the web server.
+
+  * The common jar must be placed under <<common/lib>>. This jar can be obtained from
+  {{{http://www.nicl.cs.duke.edu/maven/orca/tomcat/common}http://www.nicl.cs.duke.edu/maven/orca/tomcat/common}}.
+
+  Please navigate to the folder representing the latest version and place the contained jar into
+  <<common/lib>>.
+
+  * The server jar must be placed under <<server/lib>>. This jar can be obtained from
+  {{{http://www.nicl.cs.duke.edu/maven/orca/tomcat/server}http://www.nicl.cs.duke.edu/maven/orca/tomcat/server/}}.
+
+  Please navigate to the folder representing the latest version and place the contained jar into
+  <<server/lib>>.
+
+ * Duke WebAuth authentication
+
+  This step is optional and is required only when using {{{https://webauth.duke.edu/}WebAuth}} authentication
+  within Duke. Please copy into <<server/lib>> the latest jars from the following locations:
+  {{{http://www.nicl.cs.duke.edu/maven/webauth/main}http://www.nicl.cs.duke.edu/maven/webauth/main}} and 
+  {{{http://www.nicl.cs.duke.edu/maven/webauth/tomcat}http://www.nicl.cs.duke.edu/maven/webauth/tomcat}}.
+
+  WebAuth requires several native libraries to execute. We currently supply precompiled libraries
+  for Debian Linux and Intel-based Mac OS X. You can download these libraries from
+  {{{http://www.nicl.cs.duke.edu/orca/download/webauth/lib}here}}. The contents of these archives must
+  be placed under <</usr/lib>> or <</usr/local/lib>>. To make sure that Tomcat will look in the correct
+  location for the native libraries, Tomcat must be started with the following environment variables set:
+
+   * <Debian/Linux> - <<LD_LIBRARY_PATH>>
+
+   You can set this variable (using BASH shell) as follows:
+
++---
+ export LD_LIBRARY_PATH=/usr/local/lib
++---
+
+   * <Mac OS X>  - <<DYLD_LIBRARY_PATH>>
+
+   You can set this variable (using BASH shell) as follows:
+   
++---
+ export DYLD_LIBRARY_PATH=/usr/local/lib:/opt/local/lib
++---
+  If you are using Tomcat from Orca's subversion repository, then you may need to edit the <<start.sh>> script in the
+  Tomcat's root directory.
+       
+  []
+  
+ To install WebAuth on other platforms you will need to
+ perform your own compilation. Please consult the WebAuth {{{https://webauth.duke.edu/}web site}} for
+ more details. 
+
+ 
+* Enabling remote administration
+
+ If you want to be able to deploy the Orca web application remotely, you must configure Tomcat with a user
+ name and a password authorized to manage the server. For this purpose you must ensure that the Tomcat
+ configuration file (<<conf/server.xml>>) contains the following line:
+
++---
+ <Resource name="UserDatabase" auth="Container"
+           type="org.apache.catalina.UserDatabase"
+           description="User database that can be updated and saved"
+           factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+           pathname="conf/tomcat-users.xml" />
++--
+
+ The above entry will configure Tomcat to use the file
+ <<conf/tomcat-users.xml>> for its user database.  To enable remote
+ administration you must define a role called <<manager>> and add the
+ desired user, specifying that it holds the <<manager>> role:
+
++---
+   <role rolename="manager"/>
+   <user username="myuser" password="mypass" roles="manager"/>     
++---
+
+* Miscellaneous
+
+ If you are using Tomcat from the Orca subversion repository you may need to edit <<start.sh>> and <<stop.sh>>.
+ These files are located in the Tomcat root directory. Make sure that the value of <<CATALINA_HOME>> points
+ to the correct location of your Tomcat installation. Also verify that <<LD_LIBRARY_PATH>> or <<DYLD_LIBRARY_PATH>>
+ point to the correct library locations.
+
+ <<Note:>> If your profile does not define JAVA_HOME, you may need to define and export JAVA_HOME inside
+ start.sh and stop.sh. JAVA_HOME should point to the root directory of your JRE 1.5.
+ 
+ Once you are done with all configuration steps, you can start the web server by typing:
+
++---
+ cd CATALINA_HOME
+ ./start.sh
++---
+
+ To stop the web server type the following:
+
++---
+ cd CATALINA_HOME
+ ./stop.sh
++---
+
+ <<Note:>> Stopping the web server is an asynchronous operation.
+
+ <<Note:>> The web server logs are stored under <<logs>>. The web server redirects all messages to standard out
+ and standard error to <<logs/catalina.out>>.
+
+ <<Note:>> Orca's log file will reside under <<logs/log>>. We are still having some problems with multiple
+ log4j.properties being avaialble on the classpath, so some logging output may end in
+ <<CATALINA_HOME/na.log>>. 
+
+ 
+ 
+
+
+ 
+
+ 

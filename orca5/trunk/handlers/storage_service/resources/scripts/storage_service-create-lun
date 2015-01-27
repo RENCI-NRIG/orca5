@@ -1,0 +1,96 @@
+#!/usr/bin/python
+
+import os
+import sys
+import logging as LOG
+import logging.handlers
+import traceback
+import xmlrpclib
+from subprocess import Popen
+
+try:
+    # OPEN THE LOG
+    LOG.basicConfig(level=LOG.DEBUG, filename='/dev/null')
+
+    if not os.path.exists(os.environ['STORAGE_SERVICE_LOG_DIR']):
+        os.makedirs(os.environ['STORAGE_SERVICE_LOG_DIR'])
+
+    handler = LOG.handlers.RotatingFileHandler(os.environ['STORAGE_SERVICE_LOG_DIR'] + '/' +
+                                               os.environ['STORAGE_SERVICE_LOG_FILE'],
+                                               backupCount=10, maxBytes=50000000)
+
+    if os.environ['STORAGE_SERVICE_LOG_LEVEL'].lower() == 'debug':
+        handler.setLevel(logging.DEBUG)
+    elif os.environ['STORAGE_SERVICE_LOG_LEVEL'].lower() == 'error':
+        handler.setLevel(logging.ERROR)
+    elif os.environ['STORAGE_SERVICE_LOG_LEVEL'].lower() == 'info':
+        handler.setLevel(logging.INFO)
+    else:
+        handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter('%(asctime)s -- storage_service-create-lun %(process)d %(levelname)s : %(message)s')
+    handler.setFormatter(formatter)
+
+    LOG.getLogger('').addHandler(handler)
+
+    LOG.info('Starting Logger')
+
+except Exception as e:
+    print 'Error in storage_service-create-lun: Cannot open log file'
+    print type(e)
+    print e.args
+    print e
+    sys.exit(1)
+
+sys.path.append(os.environ['STORAGE_SERVICE_DIR'] + "/scripts")
+try:
+    sys.path.append(os.environ['STORAGE_SERVICE_DIR'] + "/scripts")
+    from storage_service_common import *
+except Exception as e:
+    LOG.error("Error in storage_service-create-lun: cannot import storage_service_common.py")
+    LOG.error(str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    sys.exit(1)
+
+# log the environment
+
+for i in os.environ:
+    LOG.debug(str(i) + ": " + str(os.environ[i]))
+
+try:
+    # DO THE WORK
+    LOG.info("storage_service-create-lun: " + str(sys.argv))
+
+    target_iqn = os.environ['UNIT_INITIATOR_IQN_PREFIX'] + os.environ['UNIT_LUN_GUID']
+
+    #build initiator IQN list
+    initiator_iqn_list = []
+    vm_guids = os.environ['UNIT_VM_GUID'].split(',')
+    for vm_guid in vm_guids:
+        initiator_iqn_list.append(os.environ['UNIT_INITIATOR_IQN_PREFIX'] + vm_guid)
+    initiator_iqn_list_str = ",".join(initiator_iqn_list)
+
+    t = TimeoutSafeTransport()
+    t.set_connection_timeout(float(os.environ['STORAGE_SERVICE_CONNECTION_TIMEOUT']))
+    t.set_read_timeout(float(os.environ['STORAGE_SERVICE_REQUEST_TIMEOUT']))
+    storage_service = xmlrpclib.Server('https://' +
+                                       os.environ['STORAGE_SERVICE_USERNAME'] + ':' +
+                                       os.environ['STORAGE_SERVICE_PASSWORD'] + '@' +
+                                       os.environ['STORAGE_SERVICE_IP'] + ':8000/RPC2',
+                                       transport=t)
+    
+    iscsi_target = storage_service.create(os.environ['UNIT_TARGET_CHAP_USER'],
+                                          os.environ['UNIT_TARGET_CHAP_PASSWORD'],
+                                          target_iqn,
+                                          os.environ['UNIT_TARGET_LUN'],
+                                          os.environ['UNIT_TARGET_CAPACITY']+'GB',
+                                          initiator_iqn_list_str)
+
+    LOG.info("RESULT: " + iscsi_target[0] + str(iscsi_target[1]))
+
+    print 'OK'
+
+except Exception as e:
+    LOG.error("storage_service-create-lun: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    sys.exit(1)
+
+sys.exit(0)

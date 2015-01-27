@@ -1,0 +1,19 @@
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
+                  id="7E30F906-99C3-4919-A1F6-EBD1681D9B33">
+  <name>Storage Device Handler Library</name>
+  <description>Provides handlers to control storage devices</description>
+  <plugins>
+               <plugin id="1" type="10" actorType="3">
+                        <name>storage_service</name>
+                        <description>Provides support for managing storage via a generic XMLRPC service</description>
+                        <configurationProperties>
+                                <!-- Name of the handler file (relative to /ROOT/handlers) -->
+                                <property>
+                                        <name>handler.file</name>
+                                        <value>storage/storage_service/handler.xml</value>
+                                </property>
+                        </configurationProperties>
+                </plugin>
+  </plugins>
+</extensionPackage>
+

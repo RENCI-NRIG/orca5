@@ -1,0 +1,25 @@
+<!--
+	This file defines core tasks for use by configuration handlers.
+-->
+
+<target name="resolve.configuration" depends="load.tasks" description="resolves the axis2 configuration parameters">
+	<!-- Axis2 configuration with signatures -->
+	<var name="axis2.config.secure" value="${axis2.configs.dir}/${actor.id}.axis2.xml" />
+	<!-- Axis2 configuration without signatures -->
+	<var name="axis2.config.notsecure" value="${axis2.configs.dir}/${actor.id}.nosign.axis2.xml" />
+	<!-- Choose the default configuraion for the current execution" -->
+	<if>
+		<equals arg1="true" arg2="${secure.communication}" />
+		<then>
+			<var name="axis2.config" value="${axis2.config.secure}" />
+		</then>
+		<else>
+			<var name="axis2.config" value="${axis2.config.notsecure}" />
+		</else>
+	</if>
+</target>
+
+<target name="test.classpath" depends="set.classpath" description="prints the current classpath">
+	<property name="a" refid="run.classpath" />
+	<echo message="classpath: ${a}" />
+</target>

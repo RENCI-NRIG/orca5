@@ -1,0 +1,398 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.nicl.duke.edu/orca/manage/services/actor"
+	xmlns="http://www.nicl.duke.edu/orca/manage/services/actor"
+	xmlns:beans="http://www.nicl.duke.edu/orca/manage/beans" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	jxb:version="1.0" elementFormDefault="qualified">
+
+	<xsd:import namespace="http://www.nicl.duke.edu/orca/manage/beans"
+		schemaLocation="orca.manage.beans.xsd" />
+
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jxb:schemaBindings>
+				<jxb:package name="orca.manage.proxies.soap.beans.actor" />
+			</jxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<xsd:element name="GetCertificateRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="alias" type="xsd:string" minOccurs="0"
+					maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetCertificateResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng"
+					minOccurs="1" maxOccurs="1" />
+				<xsd:element name="certificate" type="beans:certificateMng"
+					minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="RegisterCertificateRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="alias" type="xsd:string" />
+				<xsd:element name="certificate" type="beans:certificateMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="RegisterCertificateResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="UnregisterCertificateRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="alias" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="UnregisterCertificateResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetSlicesRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetSlicesResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="slices" type="beans:sliceMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetSliceRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="sliceId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetSliceResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="slice" type="beans:sliceMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="RemoveSliceRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="sliceId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="RemoveSliceResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="AddSliceRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="slice" type="beans:sliceMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="AddSliceResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="sliceId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="UpdateSliceRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="slice" type="beans:sliceMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="UpdateSliceResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<!-- Reservations -->
+
+	<xsd:element name="GetReservationsRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="sliceId" type="xsd:string" minOccurs="0"
+					maxOccurs="1" />
+				<xsd:element name="reservationState" type="xsd:int" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetReservationsResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="reservations" type="beans:reservationMng"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetReservationRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="reservationId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetReservationResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="reservation" type="beans:reservationMng"
+					minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CloseReservationRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="reservationId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CloseReservationResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CloseSliceReservationsRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="sliceId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CloseSliceReservationsResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="RemoveReservationRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="reservationId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="RemoveReservationResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="UpdateReservationRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="reservation" type="beans:reservationMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="UpdateReservationResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="GetActorNameRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetActorNameResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="name" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CreateEventSubscriptionRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CreateEventSubscriptionResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="subscriptionId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="DeleteEventSubscriptionRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="subscriptionId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="DeleteEventSubscriptionResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="DrainEventsRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="subscriptionId" type="xsd:string" />
+				<xsd:element name="timeout" type="xsd:int" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="DrainEventsResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="events" type="beans:eventMng" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetReservationStateRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="reservationId" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetReservationStateResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="reservationState" type="beans:reservationStateMng" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetReservationsStateRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="guid" type="xsd:string" />
+				<xsd:element name="auth" type="beans:authTokenMng" />
+				<xsd:element name="reservationId" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="GetReservationsStateResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="status" type="beans:resultMng" />
+				<xsd:element name="reservationState" type="beans:reservationStateMng" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

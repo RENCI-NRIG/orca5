@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request UID="" PWD="" targetAddr="" ctag="" port="" xmlns="http://geni-orca.renci.org/DeletePatchRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/DeletePatchRequest DeletePatchRequest.xsd ">
+  <script>PolatisLog_on</script>
+  <script>PolatisDeletePatch</script>
+  <script>PolatisLog_off</script>
+</request>

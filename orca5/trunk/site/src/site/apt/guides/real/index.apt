@@ -1,0 +1,65 @@
+ ----
+ Real Mode Execution Guide
+ ----
+ Aydan Yumerefendi
+ ----
+ December 16, 2007
+ ----
+
+Real Mode Execution Guide
+
+
+ Under real mode, Orca can be used to manage a collection of inventory
+ by creating/destroying/modifying physical and virtual machines. Orca
+ also supports execution under emulation. For information about
+ emulation, please consult the {{{../emulation/}Emulation Guide}}.
+
+* Enable/Disable Real Mode
+
+  Real mode execution is controller by a property in the
+  {{{../container-configuration/properties.html}container properties file}}.
+  Open container.properties and look for the emulation property (emulation).
+  When the property is set to 'true', the system will execute under emulation. When the property is set to 'false',
+  the system will execute in real mode.
+  
+  <<Note:>> You cannot toggle the emulation flag for an already running system. Your changes will take place the
+  next time you restart Orca.
+
+* Inventory
+
+ Execution under emulation requires that the container database
+ contain records ONLY about valid inventory machines/storage
+ servers. Please do not mix emulation mode inventory with real mode
+ inventory, as this may cause some confising errors.
+
+ Real mode inventory records should contain real IP addresses. Any
+ resource pools created under real mode, should specify resource
+ dimensions that are actually present on all inventory in the resource
+ pool. For example, a resource pool that specifies VMMs with 1GB of
+ RAM should only contains VMMs that have at least 1GB of RAM available
+ for new virtual machines.
+
+ For more information about resource pools consult the
+ {{{/orca/cod/guides/getting-started/index.html}COD Getting Started Guide}} and the
+ {{{/orca/cod/guides/siteplugin/index.html}COD Site Plugin}} documentation.
+ 
+ The {{{../inventory/}Inventory Guide}} contains more information about
+ configuring and registering inventory.
+
+ 
+* Configuration Handlers
+
+ Do not use emulation-only handlers when running in real mode.
+ 
+* Images
+
+ Real mode execution requires that the system be configured with
+ information about at least one virtual machine image.  Please consult
+ the {{{../images/}Images Guide}} for more information about image
+ management.
+
+
+
+
+ 
+

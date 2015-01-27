@@ -1,0 +1,22 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+
+ <service name="FilterTestService" provider="java:RPC">
+   <parameter name="wsdlTargetNamespace" value="http://issg.cs.duke.edu/sharp/wsdl"/>
+   <parameter name="wsdlServiceElement" value="FilterService"/>
+   <parameter name="wsdlServicePort" value="FilterService"/>
+   <parameter name="wsdlPortType" value="FilterServicePortType"/>
+   <parameter name="className" value="orca.shirako.soap.services.FilterTestService"/>
+   <parameter name="allowedMethods" value="*"/>
+
+   <requestFlow>
+     <handler type="RequestSecurityFilter"/>
+   </requestFlow>
+
+   <responseFlow>
+     <handler type="ResponseSecurityFilter"/>
+   </responseFlow>
+  </service>
+
+</deployment>

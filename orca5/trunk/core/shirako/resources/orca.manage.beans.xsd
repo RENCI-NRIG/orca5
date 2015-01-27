@@ -1,0 +1,763 @@
+<!-- This file defines the basic types used by the management sub-system -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.nicl.duke.edu/orca/manage/beans" xmlns="http://www.nicl.duke.edu/orca/manage/beans"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="1.0"
+	elementFormDefault="qualified">
+
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jxb:schemaBindings>
+				<jxb:package name="orca.manage.beans" />
+			</jxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+
+	<!-- Describes the outcome of an operation -->
+	<xsd:complexType name="resultMng">
+		<xsd:all>
+			<xsd:element name="code" type="xsd:int" />
+			<xsd:element name="message" type="xsd:string" minOccurs="0" />
+			<xsd:element name="details" type="xsd:string" minOccurs="0" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<!-- Describes the outcome of an operation that returns a boolean result -->
+	<xsd:complexType name="resultBooleanMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="xsd:boolean" default="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes the outcome of an operation that returns a byte array result -->
+	<xsd:complexType name="resultBytesMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="xsd:base64Binary"
+				minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes the outcome of an operation that returns a string result -->
+	<xsd:complexType name="resultStringMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultStringsMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="xsd:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a manager object proxy protocol -->
+	<xsd:complexType name="protocolProxyMng">
+		<xsd:sequence>
+			<xsd:element name="protocol" type="xsd:string" />
+			<xsd:element name="proxyClass" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes an array of manager object proxy protocols -->
+	<xsd:complexType name="protocolProxiesMng">
+		<xsd:sequence>
+			<xsd:element name="protocol" type="protocolProxyMng"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a portal plugin descriptor -->
+	<xsd:complexType name="portalPluginDescriptorMng">
+		<xsd:all>
+			<xsd:element name="type" type="xsd:int" />
+			<xsd:element name="tabName" type="xsd:string" minOccurs="0" />
+			<xsd:element name="actorName" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="sliceName" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="rootClassName" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="configurationProperties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="packageId" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="pluginId" type="xsd:string" minOccurs="0" />
+			<xsd:element name="key" type="xsd:string" minOccurs="0" />
+			<xsd:element name="managerKey" type="xsd:string"
+				minOccurs="0" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<!-- Describes an auth token -->
+	<xsd:complexType name="authTokenMng">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="guid" type="xsd:string" minOccurs="0" />
+			<xsd:element name="loginToken" type="xsd:string"
+				minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a properties list -->
+	<xsd:complexType name="propertiesMng">
+		<xsd:sequence>
+			<xsd:element name="property" type="propertyMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a property -->
+	<xsd:complexType name="propertyMng">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="value" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a string array -->
+	<xsd:complexType name="listMng">
+		<xsd:sequence>
+			<xsd:element name="item" type="xsd:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="clientMng">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="guid" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultClientMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="clientMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a resource pool metadata -->
+	<xsd:complexType name="poolInfoMng">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="type" type="xsd:string" />
+			<xsd:element name="properties" type="propertiesMng" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultPoolInfoMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="poolInfoMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a slice -->
+	<xsd:complexType name="sliceMng">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="owner" type="authTokenMng" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="localProperties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="configurationProperties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="requestProperties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="resourceProperties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="resourceType" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="clientSlice" type="xsd:boolean" />
+			<xsd:element name="brokerClientSlice" type="xsd:boolean"
+				default="false" />
+			<xsd:element name="sliceID" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultSliceMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="sliceMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Describes a user -->
+	<xsd:complexType name="userMng">
+		<xsd:sequence>
+			<xsd:element name="login" type="xsd:string" />
+			<xsd:element name="first" type="xsd:string" />
+			<xsd:element name="last" type="xsd:string" />
+			<xsd:element name="roles" type="listMng" />
+			<xsd:element name="actors" type="listMng" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultUserMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="userMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+
+
+
+	<!-- Describes an XML configuration file -->
+	<xsd:complexType name="xmlConfigMng">
+		<xsd:sequence>
+			<xsd:element name="key" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="path" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultXmlConfigMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="xmlConfigMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="reservationPredecessorMng">
+		<xsd:sequence>
+			<xsd:element name="reservationID" type="xsd:string" />
+			<xsd:element name="filter" type="propertiesMng" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="reservationMng">
+		<xsd:sequence>
+			<xsd:element name="reservationID" type="xsd:string" />
+			<xsd:element name="sliceID" type="xsd:string" minOccurs="0" />
+			<xsd:element name="start" type="xsd:long" />
+			<xsd:element name="end" type="xsd:long" />
+			<xsd:element name="resourceType" type="xsd:string" />
+			<xsd:element name="units" type="xsd:int" />
+			<xsd:element name="state" type="xsd:int" />
+			<xsd:element name="pendingState" type="xsd:int" />
+			<xsd:element name="localProperties" type="propertiesMng" minOccurs="0" />
+			<xsd:element name="configurationProperties" type="propertiesMng" minOccurs="0" />
+			<xsd:element name="requestProperties" type="propertiesMng" minOccurs="0" />
+			<xsd:element name="resourceProperties" type="propertiesMng" minOccurs="0" />
+			<xsd:element name="notices" type="xsd:string" />									
+<!--  
+	These might be useful, but let's skip them for now
+			<xsd:element name="requestedStart" type="xsd:long" default="0"/>
+			<xsd:element name="requestedEnd" type="xsd:long" default="0" />
+			<xsd:element name="requestedUnits" type="xsd:int" default="0"/>
+			<xsd:element name="requestedType" type="xsd:string" minOccurs="0" />
+			<xsd:element name="requestedProperties" type="propertiesMng" minOccurs="0" />
+			<xsd:element name="approvedStart" type="xsd:long" default="0" />
+			<xsd:element name="approvedEnd" type="xsd:long" default="0" />
+			<xsd:element name="approvedUnits" type="xsd:int" default="0"/>			
+			<xsd:element name="approvedType" type="xsd:string" minOccurs="0" />
+			<xsd:element name="approvedResourceProperties" type="propertiesMng" minOccurs="0" />
+-->
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ticketReservationMng">
+		<xsd:complexContent>
+			<xsd:extension base="reservationMng">
+				<xsd:sequence>
+					<xsd:element name="broker" type="xsd:string" />			
+					<xsd:element name="ticketProperties" type="propertiesMng" minOccurs="0" />
+					<xsd:element name="renewable" type="xsd:boolean" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="leaseReservationMng">
+		<xsd:complexContent>
+			<xsd:extension base="ticketReservationMng">
+				<xsd:sequence>
+					<xsd:element name="authority" type="xsd:string" />
+					<xsd:element name="joinState" type="xsd:int" />
+					<xsd:element name="leasedUnits" type="xsd:int" />
+					<xsd:element name="redeemPredecessors" type="reservationPredecessorMng" minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="resultReservationMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="reservationMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a node -->
+	<xsd:complexType name="nodeMng">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="ID" type="xsd:string" />
+			<xsd:element name="state" type="xsd:int" />
+			<xsd:element name="ip" type="xsd:string" />
+			<xsd:element name="publicIP" type="xsd:string" minOccurs="0" />
+			<xsd:element name="donated" type="xsd:boolean" default="false" />
+			<xsd:element name="available" type="xsd:boolean" default="false" />
+			<xsd:element name="type" type="xsd:int" />
+			<xsd:element name="sliceName" type="xsd:string" />
+			<xsd:element name="sliceGuid" type="xsd:string" />
+			<xsd:element name="reservationGuid" type="xsd:string" />
+			<xsd:element name="realHost" type="xsd:string" minOccurs="0" />
+			<xsd:element name="vlanTag" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultNodeMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="nodeMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a machine -->
+	<xsd:complexType name="machineMng">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="state" type="xsd:int" />
+			<xsd:element name="pending" type="xsd:int" />
+			<xsd:element name="macs" type="xsd:string" />
+			<xsd:element name="memory" type="xsd:int" />
+			<xsd:element name="currentIP" type="xsd:string" />
+			<xsd:element name="currentHostName" type="xsd:string" />
+			<xsd:element name="dhcpHWAddress" type="xsd:string" />
+			<xsd:element name="dhcpStatements" type="xsd:string" />
+			<xsd:element name="dhcpOption" type="xsd:string" />
+			<xsd:element name="site" type="xsd:string" />
+			<xsd:element name="poolName" type="xsd:string" minOccurs="0" />
+			<xsd:element name="poolID" type="xsd:string" minOccurs="0" />
+			<xsd:element name="poolResourceType" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="available" type="xsd:boolean" />
+			<xsd:element name="nodeID" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultMachineMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="machineMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a storage server -->
+	<xsd:complexType name="storageServerMng">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="ip" type="xsd:string" />
+			<xsd:element name="type" type="xsd:int" />
+			<xsd:element name="guid" type="xsd:string" />
+			<xsd:element name="controlServer" type="xsd:string" />
+			<xsd:element name="base" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultStorageServerMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="storageServerMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a storage server type record -->
+	<xsd:complexType name="storageServerTypeMng">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="id" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultStorageServerTypeMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="storageServerTypeMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes an actor -->
+	<xsd:complexType name="actorMng">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="type" type="xsd:int" />
+			<xsd:element name="owner" type="authTokenMng" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="policyClass" type="xsd:string" />
+			<xsd:element name="eventHandler" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="loadSource" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="actorClass" type="xsd:string" />
+			<xsd:element name="online" type="xsd:boolean" />
+			<xsd:element name="managementClass" type="xsd:string"
+				minOccurs="0" />
+			<!-- Actor guid -->
+			<xsd:element name="ID" type="xsd:string" />
+			<!-- Policy guid -->
+			<xsd:element name="policyGuid" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultActorMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="actorMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a minimal actor descriptor -->
+	<xsd:complexType name="actorDescriptorMng">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="ID" type="xsd:string" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultActorDescriptorMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="actorDescriptorMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a proxy -->
+	<xsd:complexType name="proxyMng">
+		<xsd:sequence>
+			<xsd:element name="protocol" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="guid" type="xsd:string" />
+			<xsd:element name="type" type="xsd:string" />
+			<xsd:element name="url" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultProxyMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="proxyMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes an extension package -->
+	<xsd:complexType name="packageMng">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultPackageMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="packageMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a plugin -->
+	<xsd:complexType name="pluginMng">
+		<xsd:all>
+			<xsd:element name="className" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="configurationProperties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="configurationTemplate" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="description" type="xsd:string"
+				minOccurs="0" />
+			<xsd:element name="factory" type="xsd:boolean" default="false" />
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="packageId" type="xsd:string" />
+			<xsd:element name="type" type="xsd:int" />
+			<xsd:element name="portalLevel" type="xsd:int" />
+			<xsd:element name="actorType" type="xsd:int" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultPluginMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="pluginMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Provides information necessary to create an actor -->
+	<xsd:complexType name="actorCreateMng">
+		<xsd:all>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="siteName" type="xsd:string" minOccurs="0" />
+			<xsd:element name="type" type="xsd:int" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="actorPlugin" type="pluginCreateMng" />
+			<xsd:element name="controllerPlugin" type="pluginCreateMng"
+				minOccurs="0" />
+			<xsd:element name="policyPlugin" type="pluginCreateMng"
+				minOccurs="0" />
+
+			<xsd:element name="applicationPlugins" type="pluginsMng" />
+
+			<xsd:element name="managerPlugins" type="pluginsMng" />
+
+			<xsd:element name="portalPlugins" type="pluginsMng" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="pluginsMng">
+		<xsd:sequence>
+			<xsd:element name="plugins" type="pluginCreateMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="pluginCreateMng">
+		<xsd:all>
+			<xsd:element name="packageId" type="xsd:string" />
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="configurationProperties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="configurationString" type="xsd:string"
+				minOccurs="0" />
+
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="termMng">
+		<xsd:sequence>
+			<xsd:element name="startTime" type="xsd:long" />
+			<xsd:element name="endTime" type="xsd:long" />
+			<xsd:element name="ticketTime" type="xsd:long" />
+			<xsd:element name="newStartTime" type="xsd:long" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="configMappingMng">
+		<xsd:sequence>
+			<xsd:element name="key" type="xsd:string" />
+			<xsd:element name="file" type="xsd:string" />
+			<xsd:element name="properties" type="propertiesMng" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Controllers -->
+	<xsd:complexType name="controllerMng">
+		<xsd:sequence>
+			<xsd:element name="guid" type="xsd:string" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="className" type="xsd:string" />
+			<xsd:element name="running" type="xsd:boolean" default="true" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultControlerMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="controllerMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+	<!-- Broker Policy inventory -->
+	<xsd:complexType name="logicalMachineMng">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string" />
+			<xsd:element name="totalCPU" type="xsd:long" />
+			<xsd:element name="totalMemory" type="xsd:long" />
+			<xsd:element name="totalBandwidth" type="xsd:long" />
+			<xsd:element name="totalStorage" type="xsd:long" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="logicalMachineCalendarMng">
+		<xsd:sequence>
+			<xsd:element name="cpu" type="resourceCalendarMng" />
+			<xsd:element name="memory" type="resourceCalendarMng" />
+			<xsd:element name="bandwidth" type="resourceCalendarMng" />
+			<xsd:element name="disk" type="resourceCalendarMng" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resourceCalendarMng">
+		<xsd:sequence>
+			<xsd:element name="entry" type="resourceCalendarEntryMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resourceCalendarEntryMng">
+		<xsd:sequence>
+			<xsd:element name="start" type="xsd:long" />
+			<xsd:element name="end" type="xsd:long" />
+			<xsd:element name="units" type="xsd:long" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Authority Policy-related beans -->
+	<xsd:complexType name="authorityBasePolicyControlMng">
+		<xsd:sequence>
+			<xsd:element name="key" type="xsd:string" />
+			<xsd:element name="className" type="xsd:string" />
+			<xsd:element name="guid" type="xsd:string" />
+			<xsd:element name="poolName" type="xsd:string" />
+			<xsd:element name="poolGuid" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultAuthorityBasePolicyControlMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="authorityBasePolicyControlMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="IdControlInventoryItemMng">
+		<xsd:sequence>
+			<xsd:element name="nodeID" type="xsd:string" />
+			<xsd:element name="nodeName" type="xsd:string" />
+			<xsd:element name="available" type="xsd:boolean" />
+			<xsd:element name="free" type="xsd:long" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="IdControlInventoryMng">
+		<xsd:sequence>
+			<!-- Column names: names for each resource dimension -->
+			<xsd:element name="names" type="xsd:string" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xsd:element name="inventory" type="IdControlInventoryItemMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultIdControlInventoryMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="IdControlInventoryMng" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Describes a unit -->
+	<xsd:complexType name="unitMng">
+		<xsd:sequence>
+			<xsd:element name="properties" type="propertiesMng"
+				minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultUnitMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="unitMng" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="certificateMng">
+		<xsd:sequence>
+			<xsd:element name="contents" type="xsd:base64Binary" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="resultCertificateMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="certificateMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="eventMng" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="properties" type="propertiesMng"
+				minOccurs="0" />
+			<xsd:element name="actorId" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="reservationStateMng">
+		<xsd:sequence>
+			<xsd:element name="state" type="xsd:int" />
+			<xsd:element name="pending" type="xsd:int" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="LeaseReservationStateMng">
+		<xsd:complexContent>
+			<xsd:extension base="reservationStateMng">
+				<xsd:sequence>
+					<xsd:element name="joining" type="xsd:int" minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="genericEventMng">
+		<xsd:complexContent>
+			<xsd:extension base="eventMng">
+				<xsd:sequence />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="reservationStateTransitionEventMng">
+		<xsd:complexContent>
+			<xsd:extension base="eventMng">
+				<xsd:sequence>
+					<xsd:element name="reservationId" type="xsd:string"
+						minOccurs="0" />
+					<xsd:element name="sliceId" type="xsd:string"
+						minOccurs="0" />
+					<xsd:element name="state" type="reservationStateMng" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<!-- Describes the outcome of an operation -->
+	<xsd:complexType name="resultReservationStateMng">
+		<xsd:sequence>
+			<xsd:element name="status" type="resultMng" />
+			<xsd:element name="result" type="reservationStateMng"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- <xsd:complexType name="eventMng"> <xsd:sequence> <xsd:element name="eventType" 
+		type="xsd:int" /> <xsd:element name="properties" type="propertiesMng" minOccurs="0"/> 
+		<xsd:element name="actorId" type="xsd:string" minOccurs="0"/> <xsd:element 
+		name="reservationId" type="xsd:string" minOccurs="0" /> <xsd:element name="sliceId" 
+		type="xsd:string" minOccurs="0" /> <xsd:element name="unitId" type="xsd:string" 
+		minOccurs="0" /> </xsd:sequence> </xsd:complexType> <xsd:complexType name="resultEventMng"> 
+		<xsd:sequence> <xsd:element name="status" type="resultMng" /> <xsd:element 
+		name="result" type="eventMng" minOccurs="0" maxOccurs="unbounded" /> </xsd:sequence> 
+		</xsd:complexType> -->
+
+</xsd:schema>
+

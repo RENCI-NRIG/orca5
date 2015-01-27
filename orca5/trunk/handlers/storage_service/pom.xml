@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>orca.handlers</groupId>
+	<artifactId>storage_service</artifactId>
+	<packaging>jar</packaging>
+	<version>5.0-SNAPSHOT</version>
+	<name>Orca Storage Service Handler Library</name>
+	<parent>
+		<groupId>orca</groupId>
+		<artifactId>handlers</artifactId>
+		<version>5.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>orca.core</groupId>
+			<artifactId>shirako</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
+				<artifactId>maven-antrun-extended-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>package</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<property name="path" refid="maven.plugin.classpath" />
+								<echo message="path is: ${path}" />
+
+								<taskdef resource="net/sf/antcontrib/antlib.xml" />
+								<property name="name.prefix" value="orca.handlers.storage_service" />
+								<property name="run.classpath" refid="maven.runtime.classpath" />
+								<echo message="${run.classpath}" />
+
+								<delete dir="target/package" />
+								<mkdir dir="target/package" />
+								<mkdir dir="target/package/lib" />
+								<copy todir="target/package/lib">
+									<fileset dir="target">
+										<include name="*.jar" />
+										<exclude name="*test*.jar" />
+										<exclude name="*-sources.jar" />
+									</fileset>
+								</copy>
+							
+								<mkdir dir="target/package/scripts" />
+								<copy todir="target/package/scripts">
+									<fileset dir="resources/scripts">
+									</fileset>
+								</copy>
+								<mkdir dir="target/package/handlers" />
+								<copy todir="target/package/handlers">
+									<fileset dir="resources/handlers" />
+								</copy>
+
+
+								<copy file="resources/scripts/install.sh" todir="target/package" />
+
+								<copy file="resources/package.xml" todir="target/package" />
+
+								<tar tarfile="target/${name.prefix}.tar" basedir="target/package" />
+								<gzip zipfile="target/${name.prefix}.tar.gz" src="target/${name.prefix}.tar" />
+								<delete file="target/${name.prefix}.tar" />
+
+								<attachArtifact file="target/${name.prefix}.tar.gz" classifier="package" type="tar.gz" />
+
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+

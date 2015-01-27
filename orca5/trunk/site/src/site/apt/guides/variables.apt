@@ -1,0 +1,41 @@
+ ----
+ Variable Names Used in the Guides
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Variables Used in the Guides
+
+ {{{index.html}\<\< Back to Guides}}
+
+
+ This document lists the names and meaning of variables used throughout the documentation pages.
+ 
+  * <<ORCA_ROOT>> - folder containing the top-level Orca code tree.
+ 
+  * <<ORCA_HOME>> - The root directory of an Orca installation. The
+  majority of Orca's configuration files are resolved relative to it.
+  ORCA_HOME can have different meaning depending on whether Orca is
+  being run from the command line or from inside Tomcat. The
+  resolution process for ORCA_HOME is described
+  {{{container-configuration/config-files.html#ORCA_HOME}here}}.
+
+  * <<ORCA_LOCAL>> - While ORCA_HOME specifies global configuration
+  state for an Orca installation, ORCA_LOCAL refers to a directory
+  that can store configuration state local to the Orca web
+  application. ORCA_LOCAL is described in more details 
+  {{{container-configuration/config-files.html#ORCA_LOCAL}here}}.
+  
+ 
+  * <<ORCA_DB_USER>> - User name to use when connecting to a container's database.
+ 
+  * <<ORCA_DB_USER_PASSWORD>> - Password to use when connecting to a container's database.
+ 
+  * <<ORCA_DB_NAME>> - Database name.   
+ 
+  * <<ORCA_DB_SERVER>> - Location of the database server.
+
+ []
+ 

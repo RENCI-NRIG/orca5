@@ -1,0 +1,331 @@
+ ----
+ Actors XML File (Compatibility mode)
+ ----
+ The Orca Team
+ ----
+ April 19, 2010
+ ----
+
+Actors XML File (Compatibility mode)
+ 
+ This page describes the original syntax of the actor's XML
+ configuration file. This syntax has been deprecated but it is still
+ supported. Please refer to the {{{xml.html}Actors XML File}} page for the
+ recommended way for specifying actors in Orca.
+
+
+* {Actors}
+
+ The major difference between the legacy and the
+ {{{xml.html}current}} configuration files is in the actors subsection.
+
+ The actor section contains one or more <<actor>> elements. Each actor element specifies the configuration
+ of a single actor. The goal of most actor subelements is to specify the Java object that must be
+ instantiated for a particular purpose, e.g., policy class, Shirako Plugin, etc. This is achieved using a
+ recursive XML <object descriptors>. The structure of object descriptors is as follows:
+ 
+   * They start with a <<className>> element. The class name specifies the Java class that must
+   be instantiated.
+
+   Example:
+   
++---
+<className>orca.policy.core.AuthorityCalendarPolicy</className>
++---
+
+   * An optional <<properties>> section can define one or more
+   <<property>> elements, which represent (name, value) pairs to be
+   passed to the instantiated object. For this process to work, the
+   instantiated object must implement a method with the following
+   signature:
+
++---
+void configure(java.util.Properties properties) throws Exception;
++---
+   
+   Example:
+
++---
+<properties>
+ <property name="propertyName" value="property value" />
+ <property name="anotherPropertyName" value="another property value" /> 
+</properties>
++---
+
+  * An optional <<parameters>> section can describe one or more <typed> <<parameter>>-s
+  to be passed to the object. Those parameters are passed by invoking methods on the object.
+  The schema for the parameter element is:
+
+
++---  
+<xsd:complexType name="parameter">
+  <xsd:all>
+    <xsd:element name="value" type="xsd:string" minOccurs="0" />
+    <xsd:element name="instance" type="instance" minOccurs="0" />
+  </xsd:all>
+  <xsd:attribute name="name" type="xsd:string" use="required" />
+  <xsd:attribute name="type" type="xsd:string" default="String" />
+  <xsd:attribute name="base" type="xsd:string" use="optional" />
+</xsd:complexType>
++---
+
+  Here is how parameter elements are interpreted by the system:
+
+    * The <<name>> attribute specifies the name of the method that will be invoked to
+    set this parameter. If the value of the attribute is <X>, the actual method that will be
+    invoked is <setX>.
+
+    * The <<value>> attribute specifies the string representation of the value of the parameter when
+    the parameter is a simple type (string, integer, long, boolean).
+    
+    * The <<type>> attribute specifies the type of the parameter. The currently supported types are:
+    
+      * <<string>> The value of the <<value>> attribute is treated as a java.lang.String.
+      
+      * <<integer>> The value of the <<value>> attribute is treated as a java.lang.Integer.
+
+      * <<long>> The value of the <<value>> attribute is treated as a java.lang.Long.
+
+      * <<boolean>> The value of the <<value>> attribute is treated as a java.lang.Boolean.
+
+      * <<instance>> The value attribute is ignored and the instance element should represent
+      an object that must be dynamically instantiated. This object is recursively specified
+      using the same object descriptor format.
+
+      []
+      
+    * The <<base>> attribute specifies the type of the argument of the method that will be invoked
+    to set the parameter. This attribute is optional, if not specified the base is derived from the
+    value of the parameter.
+
+    []
+
+  Example:
+  
++---
+   <className>orca.cod.plugins.Site</className>
+   <properties>
+     <property name="inventory.storage" value="fetch gnathosaurus" />
+     <property name="inventory.machines" value="demo001 demo002 demo003" />
+     <property name="resource.pools.count" value="1" />
+     <property name="resource.pool.0" value="1" />
+     <property name="resource.pool.name.0" value="demo" />
+     <property name="resource.pool.type.0" value="1" />
+     <property name="resource.pool.properties.0" value="memory=2048,cpu=100,bandwidth=1000" />
+     <property name="resource.pool.machines.0" value="demo001 demo002 demo003 demo004" />
+     <property name="resource.pool.ticket.units.0" value="4" />					
+     <property name="resource.pool.ticket.start.0" value="0" />
+     <property name="resource.pool.ticket.end.0" value="10000000" />					
+     <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
+     <property name="resource.pool.handler.pluginId.0" value="1" />
+     <property name="resource.pool.handler.properties.0" value="server.name=gnathosaurus,server.guid=583c10bfdbd326ba:-5bb4a8a:114482bd028:-8000,server.ip=172.16.0.2,server.base=sata/images/shirako/,server.control=152.3.144.204" />
+   </properties>
+   <parameters>
+     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
+       <instance>
+         <className>orca.cod.plugins.NetworkConfigurationManager</className>
+	 <parameters>
+	   <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+ 	     <instance>
+	       <className>orca.cod.plugins.NetworkConfiguration</className>
+	       <properties>
+	         <property name="network.base" value="192.16.192.0" />
+		 <property name="network.mask" value="255.255.224.0" />
+                 <property name="network.subnet" value="255.255.255.0" />
+	         <property name="network.min" value="10" />
+                 <property name="network.gateway" value="" />
+               </properties>
+	     </instance>
+           </parameter>
+           <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+             <instance>
+	       <className>orca.cod.plugins.DnsConfiguration</className>
+               <properties>
+                 <property name="dns.prefix" value="default" />
+		 <property name="dns.zone" value="demo.orca.org" />
+		 <property name="dns.mx" value="10 demo.orca.org" />
+               </properties>
+	     </instance>
+          </parameter>
+	</parameters>
+      </instance>
+    </parameter>
+  </parameters>
++---
+
+  []
+
+  The actor element consists of the the following subelements:
+
+   * <<name>> Specifies the name of the actor. Names should contain no spaces and should be globally unique.
+
+   Example:
+
++---
+<name>site</name>
++---
+
+   * <<guid>> Specifies the action GUID. Optional. If omitted, Orca would
+     generate a GUID for the actor.
+
+     <<Note:>> Please always specify actor GUID-s. The GUID of an actor is used
+     for identifying the actor when using SOAP communication.
+
+   Example:
+
++---
+<guid>392a07ed-418c-4235-b4d2-c4fac0b4fbe0</guid>
++---
+
+   * <<description>> Specifies an optional short description for the actor the actor.
+
+   Example:
+
++---
+<description>Some actor description.</description>
++---
+
+   * <<instance>> An object descriptor for the actor. While the whole object can be described recursively
+   in this subelement, certain elements must be specified in the following subelements (mapper, plugin).
+
+   Example:
+
++---
+<instance>
+ <className>orca.shirako.core.Authority</className>
+</instance>
++---
+
+   * <<mapper>> An object descriptor for the actor policy.
+   Please consult {{{/orca/policy/core/list.html}this}} page for a list of the policies
+   in the core polcies package.
+
+   Example:
+
++---   
+ <mapper>
+   <className>orca.policy.core.AuthorityCalendarPolicy</className>
+   <parameters>
+     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
+       <instance>
+	 <className>orca.cod.control.IdControlChange</className>
+	 <properties>
+	   <property name="resource.type" value="1" />
+	 </properties>
+       </instance>
+     </parameter>
+   </parameters>
+ </mapper>
++---
+
+   * <<plugin>> An object descriptor for the actor Shirako plugin. Please consult {{{plugin.html}this}}
+   page for a description of actor-specific Shirako plugins.
+
+   Note: Each actor must have a Shirako plugin!
+   
+   Example: See actor configuration example that follows.
+
+   []
+
+ Putting all together, the configuration fo a single actor looks like this:
+ 
++---
+<actor>
+ <name>site</name>
+ <description>site</description>
+ <instance>
+   <className>orca.shirako.core.Authority</className>
+ </instance>
+ <mapper>
+   <className>orca.policy.core.AuthorityCalendarPolicy</className>
+   <parameters>
+     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
+       <instance>
+	 <className>orca.cod.control.IdControlChange</className>
+	 <properties>
+	   <property name="resource.type" value="1" />
+	 </properties>
+       </instance>
+     </parameter>
+   </parameters>
+ </mapper>
+ <plugin>
+   <className>orca.cod.plugins.Site</className>
+   <properties>
+     <!-- Storage servers to be transferred to this site -->
+     <property name="inventory.storage" value="fetch gnathosaurus" />
+     <!-- Physical machines to be transferred to this site -->
+     <property name="inventory.machines" value="demo001 demo002 demo003" />
+     <!-- Resource pool configuration -->
+     <property name="resource.pools.count" value="1" />
+     <!-- First resource pool configuration -->
+     <property name="resource.pool.0" value="1" />
+     <property name="resource.pool.name.0" value="demo" />
+     <property name="resource.pool.type.0" value="1" />
+     <property name="resource.pool.properties.0" value="memory=2048,cpu=100,bandwidth=1000" />
+     <property name="resource.pool.machines.0" value="demo001 demo002 demo003 demo004" />
+     <!-- Source ticket configuration -->
+     <property name="resource.pool.ticket.units.0" value="4" />					
+     <property name="resource.pool.ticket.start.0" value="0" />
+     <property name="resource.pool.ticket.end.0" value="10000000" />					
+     <!-- Handler configuration -->
+     <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
+     <property name="resource.pool.handler.pluginId.0" value="1" />
+     <property name="resource.pool.handler.properties.0" value="server.name=gnathosaurus,server.guid=583c10bfdbd326ba:-5bb4a8a:114482bd028:-8000,server.ip=172.16.0.2,server.base=sata/images/shirako/,server.control=152.3.144.204" />
+   </properties>
+   <parameters>
+     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
+       <instance>
+         <className>orca.cod.plugins.NetworkConfigurationManager</className>
+	 <parameters>
+	   <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+ 	     <instance>
+	       <className>orca.cod.plugins.NetworkConfiguration</className>
+	       <properties>
+	         <property name="network.base" value="192.16.192.0" />
+		 <property name="network.mask" value="255.255.224.0" />
+                 <property name="network.subnet" value="255.255.255.0" />
+	         <property name="network.min" value="10" />
+                 <property name="network.gateway" value="" />
+               </properties>
+	     </instance>
+           </parameter>
+           <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+             <instance>
+	       <className>orca.cod.plugins.DnsConfiguration</className>
+               <properties>
+                 <property name="dns.prefix" value="default" />
+		 <property name="dns.zone" value="demo.orca.org" />
+		 <property name="dns.mx" value="10 demo.orca.org" />
+               </properties>
+	     </instance>
+          </parameter>
+	</parameters>
+      </instance>
+    </parameter>
+    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+      <instance>
+	<className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
+	<properties>
+	  <property name="db.mysql.server" value="localhost" />
+	  <property name="db.mysql.db" value="orca" />
+	  <property name="db.mysql.user" value="orca" />
+	  <property name="db.mysql.password" value="" />
+        </properties>
+      </instance>
+    </parameter>
+    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+      <instance>
+	<className>orca.cod.plugins.config.CodAntConfig</className>
+      </instance>
+    </parameter>
+  </parameters>
+ </plugin>
+</actor>
++---
+ 
+ 
+ <<Note:>> The documentation of this section is incomplete. We are working on providing more information. Please
+ check back later.
+
+

@@ -1,0 +1,24 @@
+ ----
+ Service Manager Emulation Handler
+ ----
+ Aydan Yumerefendi
+ ----
+ December 14, 2007
+ ----
+
+Service Manager Emulation Handler
+
+ 
+ This handler supplies empty impementations for all handler
+ methods. The handler is intended for emulation use by service managers.
+
+  * <<PackageId:>> 583c10bfdbd326ba:6cfc1a6b:11644881e09:-8000
+
+  * <<PluginId:>> 1
+ 
+  * <<Path:>> common/noop.xml
+
+  * <<Properties:>> This handler does not require any configuration properties.
+
+ 
+

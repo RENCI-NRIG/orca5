@@ -1,0 +1,21 @@
+<project name="noop" basedir=".">
+  <taskdef name="setargs" classname="orca.shirako.plugins.config.SetArgumentsTask" />
+  <target name="merge.properties">
+    <setargs outputProperty="unit.all" />
+    <echo message="${unit.all}" />
+  </target>
+  <target name="join" depends="merge.properties">
+    <property name="shirako.target.code" value="0" />
+  </target>
+  <target name="leave"  depends="merge.properties">
+    <property name="shirako.target.code" value="0" />
+  </target>
+  
+  <target name="recover"  depends="merge.properties">
+    <property name="shirako.target.code" value="0" />
+  </target>
+  
+  <target name="probe"  depends="merge.properties">
+    <property name="shirako.target.code" value="0" />
+  </target>
+</project>

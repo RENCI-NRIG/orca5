@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request srcVLAN="" dstVLAN="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/AddTrunkPortsRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/AddTrunkPortsRequest AddTrunkPortsRequest.xsd ">
+  <script>Log_on</script>
+  <script>AddTrunkPorts</script>
+  <script>Log_off</script>
+</request>

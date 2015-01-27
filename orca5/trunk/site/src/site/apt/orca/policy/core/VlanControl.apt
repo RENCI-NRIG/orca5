@@ -1,0 +1,34 @@
+ ----
+ VlanControl
+ ----
+ The Orca Team
+ ----
+ April 19, 2010
+ ----
+
+
+VlanControl
+
+ <<class:>> orca.policy.core.VlanControl
+ 
+ {{{AuthorityCalendarPolicy.html}\<\< Back to AuthorityCalendarPolicy}}
+
+ A control for managing the allocation of VLANs. The control maintains a
+ contiguous range of VLAN tags and manages the allocation and deallocation of
+ tags from the available pool.
+
+* Configuration Properties
+
+ The following properties must be associated with the resource pool (See 
+ {{{../../../guides/container-configuration/rpools.html#Properties}this page}} for
+ details).
+
+
+ * <<vlan.tag.start>> starting VLAN tag (inclusive)
+
+ * <<vlan.tag.end>> ending VLAN tag (inclusive)
+
+ 
+
+
+

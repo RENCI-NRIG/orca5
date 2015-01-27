@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source ${EUCA_KEY_DIR}/novarc
+KEY=${EUCA_KEY_DIR}/${EC2_SSH_KEY}
+SSH_OPTS="-q -o PreferredAuthentications=publickey -o HostbasedAuthentication=no -o PasswordAuthentication=no -o StrictHostKeyChecking=no"
+
+machine=$1
+user_login=$2
+user_key=$3
+
+if [ "$user_login" != "root" ]; then
+	# create account and add to sudoers
+	ssh $SSH_OPTS -i $KEY root@${machine} "useradd -m $user_login"
+	ssh $SSH_OPTS -i $KEY root@${machine} "echo '${user_login} ALL=(ALL)  ALL' >> /etc/sudoers"
+	USERHOMEPREFIX=`ssh $SSH_OPTS -i $KEY root@${machine} "useradd -D | grep HOME | awk '{ split(\\$0, a, \"=\"); print a[2]}'"`
+	# take a guess
+	if [ -z "${USERHOMEPREFIX}" ]; then
+		USERHOMEPREFIX="/home"
+	fi
+	ssh $SSH_OPTS -i $KEY root@${machine} "echo ${user_key} >> ${USERHOMEPREFIX}/${user_login}/.ssh/authorized_keys"
+else
+	# root is simple
+	ssh $SSH_OPTS -i $KEY root@${machine} "echo ${user_key} >> .ssh/authorized_keys"
+fi

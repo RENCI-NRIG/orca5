@@ -1,0 +1,70 @@
+<!--
+This file contains definitions of tasks used by the openflow package
+-->
+
+<target name="openflow.load.tasks" depends="load.tasks">
+    <taskdef resource="orca/handlers/network/network.xml"  classpathref="run.classpath" loaderref="run.classpath.loader" />
+    <property resource="orca/handlers/network/network.properties" classpathref="run.classpath" />
+</target>
+
+<macrodef name="create.slice" description="create an OpenFlow slice">
+        <attribute name="user" description="FlowVisor user" />
+        <attribute name="password" description="FlowVisor user" />
+        <attribute name="deviceAddress" description="FlowVisor user" />
+        <attribute name="port" description="FlowVisor user" />
+        <attribute name="slice.name" description="FlowVisor user" />
+        <attribute name="slice.passwd" description="FlowVisor user" />
+        <attribute name="slice.ctrlUrl" description="FlowVisor user" />
+        <attribute name="slice.email" description="FlowVisor user" />
+        <sequential>
+                <network.openflow.slice.create deviceInstance="${network.device.openflow}"
+                        user="@{user}"
+                        password="@{password}"
+                        deviceAddress="@{deviceAddress}"
+                        port="@{port}"
+                        name="@{slice.name}"
+                        passwd="@{slice.passwd}"
+                        ctrlUrl="@{slice.ctrlUrl}"
+                        email="@{slice.email}"
+                />
+        </sequential>
+</macrodef>
+
+<macrodef name="delete.slice" description="delete an OpenFlow slice">
+        <attribute name="user" description="FlowVisor user" />
+        <attribute name="password" description="FlowVisor user" />
+        <attribute name="deviceAddress" description="FlowVisor user" />
+        <attribute name="port" description="FlowVisor user" />
+        <attribute name="slice.name" description="FlowVisor user" />
+        <sequential>
+                <network.openflow.slice.delete deviceInstance="${network.device.openflow}"
+                        user="@{user}"
+                        password="@{password}"
+                        deviceAddress="@{deviceAddress}"
+                        port="@{port}"
+                        name="@{slice.name}"
+                />
+        </sequential>
+</macrodef>
+
+<macrodef name="add.flowspace" description="Add a flowspace">
+        <attribute name="user" description="FlowVisor user" />
+        <attribute name="password" description="FlowVisor user" />
+        <attribute name="deviceAddress" description="FlowVisor user" />
+        <attribute name="port" description="FlowVisor user" />
+        <attribute name="slice.name" description="FlowVisor user" />
+        <attribute name="flowspace.src.ip" description="FlowSpace src ip" />
+        <attribute name="flowspace.dst.ip" description="FlowSpace dst ip" />
+        <sequential>
+                <network.openflow.slice.flowspace.add deviceInstance="${network.device.openflow}"
+                        user="@{user}"
+                        password="@{password}"
+                        deviceAddress="@{deviceAddress}"
+                        port="@{port}"
+                        name="@{slice.name}"
+                        srcIP="@{flowspace.src.ip}"
+                        dstIP="@{flowspace.dst.ip}"
+                />
+        </sequential>
+</macrodef>
+

@@ -1,0 +1,47 @@
+<module name="orcaauth" class="orca.tools.authmodule.OrcaAuthenticationModule">
+	<InFlow>
+		<handler name="InFlowOrcaAuthenticationHandler"
+		         class="orca.tools.authmodule.OrcaAuthenticationHandler">
+			<order phase="authenticationPhase" />
+		</handler>
+		<handler name="InFlowOrcaLogHandler"
+		         class="orca.tools.authmodule.OrcaLoggingHandler">
+			<order phase="loggingPhase" />
+		</handler>
+	</InFlow>
+
+	<OutFlow>
+		<handler name="OutFlowOrcaAuthenticationHandler"
+		         class="orca.tools.authmodule.OrcaAuthenticationHandler">
+			<order phase="authenticationPhase" />
+		</handler>
+
+		<handler name="OutFlowOrcaLogHandler"
+		         class="orca.tools.authmodule.OrcaLoggingHandler">
+			<order phase="loggingPhase" />
+		</handler>
+	</OutFlow>
+
+	<OutFaultFlow>
+		<handler name="FaultOutFlowOrcaAuthenticationHandler"
+		         class="orca.tools.authmodule.OrcaAuthenticationHandler">
+			<order phase="authenticationPhase" />
+		</handler>
+
+		<handler name="FaultOutFlowOrcaLogHandler"
+		         class="orca.tools.authmodule.OrcaLoggingHandler">
+			<order phase="loggingPhase" />
+		</handler>
+	</OutFaultFlow>
+
+	<InFaultFlow>
+		<handler name="FaultInFlowOrcaAuthenticationHandler"
+		         class="orca.tools.authmodule.OrcaAuthenticationHandler">
+			<order phase="authenticationPhase" />
+		</handler>
+		<handler name="FaultInFlowOrcaLogHandler"
+		         class="orca.tools.authmodule.OrcaLoggingHandler">
+			<order phase="loggingPhase" />
+		</handler>
+	</InFaultFlow>
+</module>

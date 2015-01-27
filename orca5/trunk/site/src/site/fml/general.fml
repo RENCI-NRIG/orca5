@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<faqs title="Frequently Asked Questions">
+  <part id="about">
+    <faq id="getting help">
+      <question>Orca doesn't work, how do I get help?</question>
+      <answer>
+        <p>
+        You are on your own for now..
+        </p>
+      </answer>
+    </faq>
+  </part>
+</faqs>
