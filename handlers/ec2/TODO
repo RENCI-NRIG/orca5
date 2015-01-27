@@ -1,0 +1,32 @@
+- We need to absorb the instance id and the ip address of the created
+machine and set these on the node object. Maybe we can expose the node
+object to the ANT task and then it can modify the node object
+directly? (probably a bad idea).
+
+One option here is to add the following functionality:
+  - xml handlers can specify an optional list of node properties to
+  override
+    <property name="override.1" value="unit.net.ip=new ip" />
+
+  - once the script is done, CodBasePlugin processes the overwrite
+    list and updates the node properties.
+
+The leave task fails. Most likely because the property is not
+preserved.
+
+ [java] com.amazon.aes.webservices.client.Jec2SoapFaultException: SOAP Fault[code=Server, str='ERROR!
+     [java] SERVICE: Can't find registered object: ${shirako.save.ec2.instanceid} in VmInstances
+     [java] MESSAGE: VmControl
+     [java] CAUSE: TerminateInstancesType']
+     [java] 	at com.amazon.aes.webservices.client.Jec2.UnwrapException(Jec2.java:277)
+     [java] 	at com.amazon.aes.webservices.client.Jec2.terminateInstances(Jec2.java:900)
+     [java] 	at ec2.tasks.EC2TeardownTask.execute(EC2TeardownTask.java:35)
+     [java] 	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:288)
+     [java] 	at sun.reflect.GeneratedMethodAccessor22.invoke(Unknown Source)
+     [java] 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+     [java] 	at java.lang.reflect.Method.invoke(Method.java:585)
+     [java] 	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:105)
+     [java] 	at org.apache.tools.ant.Task.perform(Task.java:348)
+     [java] 	at net.sf.antcontrib.process.Limit$1.run(Limit.java:249)
+
+    

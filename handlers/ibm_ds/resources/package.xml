@@ -1,0 +1,19 @@
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
+                  id="59a4d85f-4fa9-4b99-b525-1bde7dc2884c">
+  <name>Storage Device Handler Library</name>
+  <description>Provides handlers to control storage devices</description>
+  <plugins>
+               <plugin id="1" type="10" actorType="3">
+                        <name>IBM_DS</name>
+                        <description>Provides support for managing storage on IBM_DS iSCSI device</description>
+                        <configurationProperties>
+                                <!-- Name of the handler file (relative to /ROOT/handlers) -->
+                                <property>
+                                        <name>handler.file</name>
+                                        <value>storage/ibm_ds/handler.xml</value>
+                                </property>
+                        </configurationProperties>
+                </plugin>
+  </plugins>
+</extensionPackage>
+

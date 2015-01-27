@@ -1,0 +1,42 @@
+ ------
+ Orca Handlers Directory
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+Orca Handlers Directory
+
+ This page is a directory of the currently supported handlers in Orca. We also
+ list all Ant tasks that can be used to build customized handlers.
+
+
+* {Handlers}
+
+ The path of the handler corresponds to the path it would be found in an Orca
+ installation. The path is relative to $ORCA_LOCAL/handlers.
+
+ Handlers marked with an askterisks(*) are not officially supported.
+
+*-----+---------------------------------+-----------------------+
+| No: | Path							| Description
+*-----+---------------------------------+-----------------------+
+| 1	  | common/noop.xml					| Default null handler 
+*-----+---------------------------------+-----------------------+
+| 2   | standard/vlan/handler.xml		| Sample VLAN handler 
+*-----+---------------------------------+-----------------------+
+| 3*  | standard/xen/zfs/handler.xml	| COD-based VM allocation handler using XEN and ZFS
+*-----+---------------------------------+-----------------------+
+| 4*  | standard/xen/lvm/handler.xml	| COD-based VM allocation handler using XEN and LVM
+*-----+---------------------------------+-----------------------+
+| 5   | ec2/handler.xml				| EC2/Eucalyptus handler 
+*-----+---------------------------------+-----------------------+
+| 6   | network/nlr/handler.xml		| NLR handler
+*-----+---------------------------------+-----------------------+
+
+
+
+* {Ant Tasks}
+
+

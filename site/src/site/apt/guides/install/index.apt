@@ -1,0 +1,576 @@
+ ----
+ Orca Installation Guide
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Orca Installation Guide
+ 
+ 
+ Orca actors are components that are written in Java using the Shirako toolkit.
+ They run within JVM containers.  Actors may run within JVM containers launched from
+ the command line, or within a Web application server such as Tomcat, or
+ within a development environment such as Eclipse.  Install/configure is
+ slightly different in each case. 
+
+ To create and install Orca actors, you must build the sources from the Orca
+ repository, as described here. The sources are self-contained and the build
+ process will retrieve any necessary dependencies from the Orca Maven
+ repository.
+
+ <<Note:>> This guide presumes that you have a full-featured Java
+ development environment set up.  If not, you might want to start with the
+ {{{../devel/index.html}developer notes}}.
+
+Sections
+
+   * {{{index.html#Prerequisites_for_obtaining_and_building_the_project}Prerequisites for obtaining and building the project}}
+ 
+   * {{{index.html#Repository_location}Repository location}}
+ 
+   * {{{index.html#Checking_out_the_project}Checking out the project}}
+ 
+   * {{{index.html#Building_the_project}Building the project}}
+   
+   * {{{index.html#Installing_the_database}Installing the database}}
+  
+   * {{{index.html#Preparing_the_source_tree_for_usage}Preparing the source tree
+    for usage}} 
+  
+   * {{{index.html#Testing_your_installation}Testing your installation}}
+
+   * {{{index.html#Running_your_own_container}Running your own container}}
+
+* {Prerequisites for obtaining and building the project}
+
+ Our current implementation and the build process require that the build be
+ performed on a Linux/Unix machine. In particular, we have built Orca
+ successfully on the following platforms:
+
+   * Ubuntu Linux
+
+   * Centos Linux
+
+   * MacOS
+	
+	[]
+ 
+ The source should build and run on most Linux/Unix platforms, although
+ anthything other than Ubuntu, Centos, and MacOS has not been tested.
+ Windows is currently not supported, since some of our build and runtime
+ components use bash scripting.
+ 
+ Before you can obtain Orca's sources and build the project you will need to 
+ have the following software installed on the build machine:
+ 
+ * {{{http://java.sun.com/}Java Developer Kit(JDK)}} 1.5 or above.
+
+ <<Note:>> The build process would produce Java 1.5 jar files.
+ 
+ * {{{http://ant.apache.org/}Apache Ant}} 1.7 or above
+
+ * {{{http://maven.apache.org/}Apache Maven}} 2.2.0 or above
+
+ * {{{http://maven.apache.org/}Maven Tasks for Ant}} 2.0.7 or above
+ 
+ * {{{http://subversion.tigris.org/}Subversion}} client with SSL support 1.5 or above
+ 
+ []
+ For details about the installation of any of the above systems please refer to their respective web sites.
+ 
+* {Repository location}
+
+ The root of the Orca repository can be found at:
+
++-----------------------
+ https://geni-orca.renci.org/svn/orca/
++----------------------- 
+ 
+ There are many individual projects in the Orca repository. Each Orca release is a combination of several projects. An Orca release is defined in the <<build-all>> project which can be found under:
+
++-----------------------
+ https://geni-orca.renci.org/svn/orca/build-all
++----------------------- 
+
+ The build-all directory contains three sub-directories:
+
+ 	* trunk/ - contains the current development version of Orca.
+
+	* tags/  - contains folders that represents a particular release. For
+	example, the Orca 1.2 release can be found under
+
++-----------------------
+ https://geni-orca.renci.org/svn/orca/build-all/tags/1.2
++----------------------- 
+	
+	Please consult the {{{../../release.html}Orca Release}} page for a list of all available
+	releases.
+	
+	* branches/ - contains a folder for each service stream for a given release and some prototype code.
+ 	
+ 	[]
+ 
+ The Orca repository can be accessed anymously in read-only mode.
+ Contributions to the repository require an account. Please contact
+ 'geni-orca' at 'renci.org' for more information.
+ 
+* {Checking out the project}
+
+ To describe the process of checking out the code from the Orca repository
+ we assume that you want to access a specific release. Please refer to
+ the {{{../../release.html}release page}} for a list of the current
+ releases. 
+
+ 
+ [[1]] Create a work directory and change to it. We will use $ORCA_ROOT to
+ indicate the root directory of the source tree. Please substutue with a
+ name of your choice.
+
++----------------------
+ mkdir $ORCA_ROOT
+ cd $ORCA_ROOT
++----------------------
+
+
+ [[2]] Obtain the version of the build-all project that corresponds to your
+ release. To form the URL for the particular release you need, append the release
+ number to the following path:
+ 
++----------------------
+https://geni-orca.renci.org/svn/orca/build-all/tags/ 
++----------------------
+
+  For example, the path for the 1.2 release would be:
+
++----------------------
+https://geni-orca.renci.org/svn/orca/build-all/tags/1.2 
++----------------------
+
+  Assuming that your current directory is $ORCA_ROOT, obtain the source for
+  release $VERSION using the following command:
+
++----------------------
+ svn co https://geni-orca.renci.org/svn/orca/build-all/tags/$VERSION build-all
++----------------------
+
+  <<Note:>> The destination directory part is required and it must be
+  <<build-all>>.
+
+ 
+ Regardless of which source release you are using, you should now have a
+ folder inside $ORCA_ROOT called build-all. 
+
+ [[3]] Make a soft link to the build.xml file.
+
++----
+  ln -s build-all/build.xml build.xml
++----
+ 
+ [[4]] Fetch all source files
+
++----
+  ant get.all
++----
+
+  After this command completes, you should have a number of new folders in
+  $ORCA_ROOT. You are now ready to build.
+
+* {Building the project}
+
+ Before you move on, please make sure that all
+ {{{#Prerequisites_for_obtaining_and_building_the_project}prerequisites}}
+ have been installed successfully. In particular, make sure you are using
+ Sun's JDK and its supporting tools, e.g., keytool. You should have
+ JAVA_HOME defined and pointing to your java's root directory.
+ $JAVA_HOME/bin, should also be on your path, before any other versions of
+ java you may have.
+ 
+ <<Important>>: the first time you build the project you must be connected
+ to the Internet. The build process will attempt to download any necessary
+ dependencies during the first invocation. Failure to
+ obtain a dependency will prevent the build from completing. 
+ 
+
+ [[1]] If this is the first time you are building Orca, you will need to
+ register the certificate of our web server, so that Maven would download
+ the necessary dependencies from our repository. If you have already
+ performed this step, move on to the next one.
+ 
+ The web server certificate must be installed in the keystore of your java
+ installation. To do this, we require that you set JAVA_HOME to point to the
+ root of your java installation. Note also that $JAVA_HOME/bin must be on
+ the path. Please do not use Open JDK, since it has issues with its keytool
+ implementation.
+
+ Our scripts assume that your installation's keystore is under: $JAVA_HOME/lib/security/cacerts.
+
+ Note: Mac users, your JAVA_HOME should be set to something like this: 
+ 
++----
+/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
++----
+
+ If you do not require sudo to modify your installation's keystore use the following command:
+
++----
+ant get.certificate
++----
+
+ If this fails with permission denied errors, your user id does not have
+ permission to modify the keystore. If you are a member of the sudo-ers
+ group you may want to try the following:
+
++----
+ant get.certificate.sudo
++----
+
+ Enter your password when prompted.
+
+ <<Note:>> If you do not have permissions to modify the keystore you may
+ want to install your own JDK copy and use it instead.
+
+ <<Note:>> Our script to install a certificate in your java keystore uses the
+ default java keystore password. If you have changed your default keystore
+ password, you will need to edit build-all/getcertificate.sh to make it use your
+ password instead. 
+
+ [[2]] Before you can build you need to prepare the source tree using the
+ following command:
+ 
+ 
++----
+ant prepare.build
++----
+
+ This command will create some files and links needed by the build process.
+ It needs to performed only once. 
+ 
+ [[3]] You are now ready to build. Please use the following command inside
+ $ORCA_ROOT.
+
++----
+mvn install
++----
+
+ The above command will build the whole project, downloading any necessary
+ dependencies, and will install the resulting files in your local Maven
+ repository (Usually located under ${HOME}/.m2/). If any errors occur during the
+ build, please retry the above commands. Intermittent network connectivity can
+ cause the build process to fail. If the problem persists, please record the
+ output and contact a project member. 
+ 
+ You now have the Orca project compiled and installed in your local Maven repository.
+
+* {Running a container}
+
+ If you plan to launch your own container, you need to decide where you will run
+ it.  The container is a server: in general, the container will persist and
+ receive invocations on a public IP address, and it will store state in a local
+ database. You can launch a container directly within your $ORCA_ROOT using
+ command-line scripts. Or you can run it on a remote machine, e.g., under a Web
+ application server. Wherever you run the container it will need the right tools installed.
+
+* {Installing the database}
+ 
+ Each Orca container requires access to a database server. At present Orca
+ supports only MySQL version 5.0 or above. 
+  
+ Before you proceed further, you must ensure that you have access to a database
+ server. If you do not have access to a database server you must install one and
+ be empowered to administer it. Please consult the MySQL web site for details
+ about installation.  
+ 
+ <<Warning:>> While it is possible to run an Orca container on a machine different from the
+ machine running the database server, doing so requires configuration file
+ changes. This process is undocumented, so our current recommendation is
+ to have the Orca container and mysql database reside on the same host.
+ 
+ Note: On a Debian/Ubuntu machine MySQL can be installed by typing the following:
+ 
++---
+ sudo apt-get install mysql-server
++--- 
+
+ If you want to run the database server on a separate machine from the container
+ that uses it, make sure that the server is configured to accept incoming
+ network connections. By default MySQL is installed with network access
+ disabled. To enable network access edit /etc/mysql/my.cnf on the 
+ machine where the server is installed. Search the file for 'bind-address'. If
+ your machine has a fixed ip address, set bind-address to it, otherwise comment
+ bind-address and MySQL will accept connections from all network interfaces
+ connected to your machine. You will need to restart the server after changing
+ the configuration file:
+
++---
+ /etc/init.d/mysql stop
+ /etc/init.d/mysql start
++--- 
+ 
+ To enable Orca to access the database server, you need to create a database
+ user identity and a database. 
+ 
+ We provide a bash script file to automate the creation of the Orca user and
+ database. The script is located under
+ $ORCA_ROOT/core/schema/mysql/install_db.sh.
+
+ The script takes the following arguments:
+
++---
+ Usage:	[-u mysql_admin_user] [-p mysql_admin_password]
+        [-d orca_db_name] [-U orca_user] [-P orca_password]
++---
+
+ Each of these arguments has a default value. When using the default, you do not
+ need to specify the parameter explicitly:
+  
+  * mysql_admin_user is the identify of the admin user. The default is root. 
+
+  * mysq_admin_password is the password of mysql's admin user. The default is no
+  password.
+ 
+  * orca_db_name is the name for the orca database. The default is orca.
+
+  * orca_user is the name for the Orca mysql user. The default is orca.
+
+  * orca_password is the Orca mysql user's password. The default is no password.
+
+ <<Note:>> The script would allow connections to the database from any machine.
+ If you want to restrict the connectivity to your databse server you will have
+ to edit the script and replace '%' with your desired settings <<BEFORE>> you
+ run the script.
+ 
+ <<Warning:>> While it is possible to use custom values for orca_db_name,
+ orca_user, and orca_password, doing so would require changes to the
+ configuration files that Orca ships with. This process is undocumented, so our
+ recommendation is to use the default values for these parameters. 
+
+ To invoke the script using the default values for all parameters navigate to
+ its containing directory and execute it:
+  
++---
+cd $ORCA_ROOT/core/schema/mysql
+./install_db.sh
++---
+
+ A successful execution would produce an output that looks like this:
+
++---
+./install_db.sh 
+Checking if mysql can be accessed: user=root using password: false
+Acessing mysql succeeded
+Creating database: orca and database user: orca
+Database and user created successfully
+Creating schema
+Database schema created successfully
+Populating database
+Database populated successfully
++---
+
+ If your mysql installation has a password invoking with the default settings
+ would produce an output that looks like this:
+ 
++---
+/install_db.sh 
+Checking if mysql can be accessed: user=root using password: false
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+Could not access MYSQL. Please invoke this script with the right arguments
++--- 
+
+* {Preparing the source tree for usage}
+ 
+ Before you can start using Orca, you will need to prepare the source tree for
+ usage. To do this, use the following commands:
+
++---
+cd $ORCA_ROOT
+ant prepare.use
++---
+
+* {Testing your installation}
+
+ To make sure everything is working fine you can run one of our basic tests.
+ Before you can run the test you will need to load some sample inventory into
+ your database. 
+
+ We provide a sample inventory file located in
+ $ORCA_ROOT/core/schema/mysql/demo.inventory.sql. You can load the file using
+ the install_db.sh script passing an addition argument: <<-s>>. 
+
++---
+cd $ORCA_ROOT/core/schema/mysql
+./install_db.sh -s
++---
+
+ <<Note:>> see {{{#Installing_the_database}Installing the database}} for more
+ information about install_db.sh.
+
+ <<Note:>> executing this command removes all your previous inventory from the
+ database.
+
+ After successfully loading the demo inventory, you are ready to test Orca. Orca
+ ships with a basic environment that allows to instantiate an Orca container
+ from the command line. We have provided a basic test that uses this
+ functionality to exercise most major components of Orca and verify the
+ installation. In particular, the test is going to perform the following:
+
+  [[1]] Instantiate one broker, one site authority, and one guest. The site's
+  resources are virtual machines and the site delegates control of the
+  allocation of the virtual machines to the broker.
+
+  [[2]] The guest requests two virtual machines and uses them for the
+  duration of the lease. The guest extends its lease for one more term and
+  continues to use the resources. 
+
+  [[3]] The test succeeds if the guest manages to extend succeessfully its
+  lease.
+
+  <<Note:>> While the test does exercise the major code components of Orca, it
+  does not actually allocate any virtual machines. Physical allocation requires
+  that the Orca container be configured with real resources.
+  []
+
+ To run the test, execute the following:
+
++---
+cd $ORCA_ROOT/tools/cmdline
+ant test.unit.reservation.emulation
++---
+
+  A successful execution would produce an output similar to this one (some debug
+  output has been removed).
+  
++--- 
+ant test.unit.reservation.emulation
+Buildfile: build.xml
+
+test.unit.reservation.emulation:
+     [echo] running reservation unit test (emulation mode)...
+     [echo] configuration file: tests/emulation.xml
+     [echo] lease length: 30
+     [echo] units:2
+     [java] Properties: {NodePrivateIP=192.168.201.30, unit.nodeID=77b83242-8fa7-4309-afc7-c210db887a58, unit.boot.nic=eth0, NodeDnsClass=IN, unit.saveRestore=0, host.dns.hostName=demo003, unit.dns.mxRecord=10 demo.orca.org, unit.resourceType=1, unit.dns.zoneName=demo.orca.org, unit.vmm.computons=1, NodeReservationID=fa1de0a8-c5ef-43a1-8e50-b8146f0005f3, unit.resource.bandwidth.weight=100, NodePendingModify=false, unit.dns.hostName=node192_168_201_30, unit.vmm.memory=0, NodePrivateGateway=192.168.201.1, host.net.ip=192.168.0.12, CodSliceHostNamePrefix=unit, unit.machineType=0, NodeSequence=1, AuthorityCodSliceDnsMXRecord=10 demo.orca.org, new.unit.saveRestore=0, unit.slice=unit, unit.net.gateway=192.168.201.1, NodePrivateNetmask=255.255.0.0, unit.net.mask=255.255.0.0, unit.hostNodeID=583c10bfdbd326ba:de47c07:114d668fcf3:-8000, AuthorityCodSliceDnsZoneName=demo.orca.org, unit.net.ip=192.168.201.30, unit.resource.memory=128, unit.resource.cpu.weight=25, unit.nodeState=2, AuthorityCodSliceDnsClass=IN, MachineAvailable=1, unit.net.macs=AA:00:c0:a8:c9:1e, NodeLogicalId=bef11061-8b40-4325-ad26-d073effe9256, unit.slice.id=756d8b43-2a97-4920-ae5f-2ae2942cb392, unit.machineName=service-unit-77b83242-8fa7-4309-afc7-c210db887a58}
+     [java] Properties: {NodePrivateIP=192.168.201.31, unit.nodeID=939cf401-52c9-4d44-b280-cd64925456e3, unit.boot.nic=eth0, NodeDnsClass=IN, unit.saveRestore=0, host.dns.hostName=demo001, unit.dns.mxRecord=10 demo.orca.org, unit.resourceType=1, unit.dns.zoneName=demo.orca.org, unit.vmm.computons=1, NodeReservationID=fa1de0a8-c5ef-43a1-8e50-b8146f0005f3, unit.resource.bandwidth.weight=100, NodePendingModify=false, unit.dns.hostName=node192_168_201_31, unit.vmm.memory=0, NodePrivateGateway=192.168.201.1, host.net.ip=192.168.0.10, CodSliceHostNamePrefix=unit, unit.machineType=0, NodeSequence=1, AuthorityCodSliceDnsMXRecord=10 demo.orca.org, new.unit.saveRestore=0, unit.slice=unit, unit.net.gateway=192.168.201.1, NodePrivateNetmask=255.255.0.0, unit.net.mask=255.255.0.0, unit.hostNodeID=583c10bfdbd326ba:-69de3b5c:114d6677bf2:-8000, AuthorityCodSliceDnsZoneName=demo.orca.org, unit.net.ip=192.168.201.31, unit.resource.memory=128, unit.resource.cpu.weight=25, unit.nodeState=2, AuthorityCodSliceDnsClass=IN, MachineAvailable=1, unit.net.macs=AA:00:c0:a8:c9:1f, NodeLogicalId=13f2e1fe-bc5e-4627-b35b-29bb7156efb0, unit.slice.id=756d8b43-2a97-4920-ae5f-2ae2942cb392, unit.machineName=service-unit-939cf401-52c9-4d44-b280-cd64925456e3}
+     [java] 
+     [java] set.classpath.check-condition:
+     [java] 
+     [java] set.classpath-if:
+     [java] set.classpath.check-condition:
+     [java] 
+     [java] set.classpath-if:
+     [java] 
+     [java] set.classpath-else:
+     [java] 
+     [java] 
+     [java] set.classpath-else:
+     [java] 
+     [java] set.classpath:
+     [java] set.classpath:
+     [java] 
+     [java] load.tasks:
+     [java] 
+     [java] resolve.configuration:
+     [java] 
+     [java] standard.load.tasks:
+     [java] 
+     [java] 
+     [java] load.tasks:
+     [java] 
+     [java] resolve.configuration:
+     [java] 
+     [java] standard.load.tasks:
+     [java] 
+     [java] resolve.configuration2:
+     [java]      [echo] nfs.service.location: http://10.10.0.1:6//axis2/services/NodeAgentService
+     [java] 
+     [java] join:
+     [java]      [echo] running under emulation...exiting
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 0 seconds
+     [java] 
+     [java] resolve.configuration2:
+     [java]      [echo] nfs.service.location: http://10.10.0.1:6//axis2/services/NodeAgentService
+     [java] 
+     [java] join:
+     [java]      [echo] running under emulation...exiting
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 0 seconds
+     [java] join:
+     [java] join:
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 10 seconds
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 10 seconds
+     [java] leave:
+     [java] leave:
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 10 seconds
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 10 seconds
+     [java] Properties: {NodePrivateIP=192.168.201.30, unit.nodeID=77b83242-8fa7-4309-afc7-c210db887a58, unit.boot.nic=eth0, NodeDnsClass=IN, unit.saveRestore=0, host.dns.hostName=demo003, unit.dns.mxRecord=10 demo.orca.org, unit.resourceType=1, unit.dns.zoneName=demo.orca.org, unit.vmm.computons=1, NodeReservationID=fa1de0a8-c5ef-43a1-8e50-b8146f0005f3, unit.resource.bandwidth.weight=100, NodePendingModify=false, unit.dns.hostName=node192_168_201_30, unit.vmm.memory=0, NodePrivateGateway=192.168.201.1, host.net.ip=192.168.0.12, CodSliceHostNamePrefix=unit, unit.machineType=0, NodeSequence=2, AuthorityCodSliceDnsMXRecord=10 demo.orca.org, new.unit.saveRestore=0, unit.slice=unit, unit.net.gateway=192.168.201.1, NodePrivateNetmask=255.255.0.0, unit.net.mask=255.255.0.0, unit.hostNodeID=583c10bfdbd326ba:de47c07:114d668fcf3:-8000, AuthorityCodSliceDnsZoneName=demo.orca.org, unit.net.ip=192.168.201.30, unit.resource.memory=128, unit.resource.cpu.weight=25, unit.nodeState=5, AuthorityCodSliceDnsClass=IN, MachineAvailable=1, unit.net.macs=AA:00:c0:a8:c9:1e, NodeLogicalId=bef11061-8b40-4325-ad26-d073effe9256, unit.slice.id=756d8b43-2a97-4920-ae5f-2ae2942cb392, unit.machineName=service-unit-77b83242-8fa7-4309-afc7-c210db887a58}
+     [java] set.classpath.check-condition:
+     [java] 
+     [java] set.classpath-if:
+     [java] 
+     [java] set.classpath-else:
+     [java] Properties: {NodePrivateIP=192.168.201.31, unit.nodeID=939cf401-52c9-4d44-b280-cd64925456e3, unit.boot.nic=eth0, NodeDnsClass=IN, unit.saveRestore=0, host.dns.hostName=demo001, unit.dns.mxRecord=10 demo.orca.org, unit.resourceType=1, unit.dns.zoneName=demo.orca.org, unit.vmm.computons=1, NodeReservationID=fa1de0a8-c5ef-43a1-8e50-b8146f0005f3, unit.resource.bandwidth.weight=100, NodePendingModify=false, unit.dns.hostName=node192_168_201_31, unit.vmm.memory=0, NodePrivateGateway=192.168.201.1, host.net.ip=192.168.0.10, CodSliceHostNamePrefix=unit, unit.machineType=0, NodeSequence=2, AuthorityCodSliceDnsMXRecord=10 demo.orca.org, new.unit.saveRestore=0, unit.slice=unit, unit.net.gateway=192.168.201.1, NodePrivateNetmask=255.255.0.0, unit.net.mask=255.255.0.0, unit.hostNodeID=583c10bfdbd326ba:-69de3b5c:114d6677bf2:-8000, AuthorityCodSliceDnsZoneName=demo.orca.org, unit.net.ip=192.168.201.31, unit.resource.memory=128, unit.resource.cpu.weight=25, unit.nodeState=5, AuthorityCodSliceDnsClass=IN, MachineAvailable=1, unit.net.macs=AA:00:c0:a8:c9:1f, NodeLogicalId=13f2e1fe-bc5e-4627-b35b-29bb7156efb0, unit.slice.id=756d8b43-2a97-4920-ae5f-2ae2942cb392, unit.machineName=service-unit-939cf401-52c9-4d44-b280-cd64925456e3}
+     [java] set.classpath:
+     [java] set.classpath.check-condition:
+     [java] 
+     [java] set.classpath-if:
+     [java] 
+     [java] set.classpath-else:
+     [java] 
+     [java] 
+     [java] load.tasks:
+     [java] 
+     [java] resolve.configuration:
+     [java] 
+     [java] standard.load.tasks:
+     [java] 
+     [java] set.classpath:
+     [java] 
+     [java] load.tasks:
+     [java] 
+     [java] resolve.configuration:
+     [java] 
+     [java] standard.load.tasks:
+     [java] 
+     [java] resolve.configuration2:
+     [java]      [echo] nfs.service.location: http://10.10.0.1:6//axis2/services/NodeAgentService
+     [java] 
+     [java] leave:
+     [java]      [echo] running under emulation...exiting
+     [java]      [echo] leave exit code: 0
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 0 seconds
+     [java] 
+     [java] resolve.configuration2:
+     [java]      [echo] nfs.service.location: http://10.10.0.1:6//axis2/services/NodeAgentService
+     [java] 
+     [java] leave:
+     [java]      [echo] running under emulation...exiting
+     [java]      [echo] leave exit code: 0
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 0 seconds
+     [java] Test successful
+
+BUILD SUCCESSFUL
+Total time: 1 minute 13 seconds
++---
+
+* {Running your own container}
+
+ Now that you have completed successfully the basic installation steps you need
+ to get familiar with the different ways of running and configuring an orca
+ container. You can start
+ {{{../getting-started/index.html#Launching_your_own_container}here}}.

@@ -1,0 +1,53 @@
+<!--
+    This file contains classpath definitions necessary for resolving classes/tasks. 
+-->
+
+<target name="set.classpath" depends="set.classpath-if,set.classpath-else" />
+
+<target name="set.classpath.check-condition">
+  <condition property="test.mode">
+    <isset property="ext.classpath" />
+  </condition>
+</target>
+
+<target name="set.classpath-if" depends="set.classpath.check-condition" if="test.mode">
+  <property file="${basedir}/test.properties" />
+  <!-- import local build properties : custom -->
+  <property file="${basedir}/user.properties" />
+  <!-- import local build properties -->
+  <property file="${basedir}/build.properties" />
+  <!-- import global build properties (custom)-->
+  <property file="${root.dir}/handlers/common/user.properties" />
+  <!-- import global build properties -->
+  <property file="${root.dir}/handlers/common/build.properties" />
+  <!-- take the external class path -->
+  <path id="run.classpath" path="${ext.classpath}">
+    <fileset dir="${root.dir}/packages/pkg">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement location="${root.dir}" />
+    <pathelement location="${orca.home}" />
+   </path>
+</target>
+
+<target name="set.classpath-else" depends="set.classpath.check-condition" unless="test.mode">
+  <!-- import local build properties : custom -->
+  <property file="${basedir}/user.properties" />
+  <!-- import local build properties -->
+  <property file="${basedir}/build.properties" />
+  <!-- import global build properties (custom)-->
+  <property file="${root.dir}/handlers/common/user.properties" />
+  <!-- import global build properties -->
+  <property file="${root.dir}/handlers/common/build.properties" />
+  <!-- construct the classpath -->
+  <path id="run.classpath">
+    <fileset dir="${libs.dir}">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement location="${root.dir}" />
+    <pathelement location="${orca.home}" />
+  </path>
+  <!-- antcontrib -->
+  <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+</target>
+

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+    <actors>
+        <actor>
+            <type>site</type>
+            <name>ben-vlan-site</name>
+			<guid>c48e2cb1-e00e-4ed2-918b-8fe4368c8c02</guid>
+            <description>BEN VLAN site authority</description>
+            <pools>
+                <pool>
+                    <type>ben.vlan</type>
+                    <label>BEN VLAN</label>
+                    <description>A VLAN over BEN</description>
+                    <units>100</units>
+                    <start>2010-01-30T00:00:00</start>
+                    <end>2013-01-30T00:00:00</end>
+					<handler path="common/noopd.xml">
+						<properties>
+							<!-- space-separated list of routers -->
+							<property name="routers" value="192.168.201.8 192.168.202.7" />
+							<!-- location of the service/control hosts for each router -->
+							<property name="192.168.201.8.service.ip" value="192.168.201.12" />
+							<property name="192.168.202.7.service.ip" value="192.168.202.12" />
+							<!-- user name to use when connecting to the routers -->
+							<property name="router.user" value="" />
+							<!-- password to use when connecting to the routers -->
+							<property name="router.password" value="" />
+							<!-- administrative password to use when connecting to the routers -->
+							<property name="router.admin.password" value="" />
+						</properties>
+					</handler>
+                    <properties>
+                    	<property name="vlan.range.num" value="1" />
+                        <property name="vlan.tag.start1" value="1" />
+                        <property name="vlan.tag.end1" value="101" />
+                    </properties>
+                </pool>
+            </pools>
+            <controls>
+                <control type="ben.vlan" class="orca.policy.core.VlanControl" />
+            </controls>
+        </actor>
+        <actor>
+            <type>broker</type>
+            <name>ben-vlan-broker</name>
+			<guid>ebeb5bf1-4751-410a-94bf-0075297c162d</guid>
+            <description>BEN VLAN broker</description>
+        </actor>
+        <actor>
+            <type>service</type>
+            <name>service</name>
+			<guid>46AEA103-1185-4E69-8AFA-53194582F5A9</guid>
+            <description>Service Manager</description>
+        </actor>
+    </actors>
+    <topology>
+        <edges>
+            <edge>
+                <from name="service" type="service" />
+                <to name="ben-vlan-broker" type="broker" />
+            </edge>
+            <edge>
+                <from name="ben-vlan-broker" type="broker" />
+                <to name="ben-vlan-site" type="site" />
+                <rset>
+                    <type>ben.vlan</type>
+                    <units>100</units>
+                </rset>
+            </edge>
+        </edges>
+    </topology>
+</configuration>

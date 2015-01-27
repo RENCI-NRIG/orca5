@@ -1,0 +1,281 @@
+ ----
+ Substrate API
+ ----
+ The Orca Team
+ ----
+ 21 April 2010
+ ----
+
+Substrate API
+
+  This document describes the Orca substrate API. Its intended audience is
+  developers interested in integrating new substrates and or writing resource
+  policies and controllers.
+
+* Overview
+
+ We use the term substrate to refer to a concrete, network-accessible resource,
+ e.g., a computer cluster, storage capacity, network links, etc, that can be
+ partitioned dynamically and assigned on demand. Substrates expose specific
+ programming interfaces and usually require customization before they can be
+ used with a control framework like Orca. 
+
+ The Orca framework is designed to be substrate-independent, i.e., the core of
+ the framework does not rely on specific substrates or make assumptions about
+ substrate capabilities. Substrate independence ensures that the
+ control framework is generic, but it also requires some integration steps when
+ adding a new substrate.
+ 
+ 
+ Orca ships with support for several substrates:
+ 
+  * An Eucalyptus cluster/Amazon EC2 - allows allocating virtual machines from
+  an {{{http://www.eucalyptus.com/}Eucalyptus}} cluster or from
+  {{{http://aws.amazon.com/ec2/}Amazon EC2}}
+
+  * The BEN testbed - allows allocating network paths over
+  {{{https://ben.renci.org/}BEN}}
+
+  * {{{http://www.nlr.net/}National Lambda Rail}} - allows dynamically
+  provisioning point-to-point links over NLR
+
+  []
+  
+
+ The rest of this document is intended to provide sufficient information to
+ enable the integration of a new substrate in Orca.
+
+* Substrate API Basics
+
+ To integrate a substrate with Orca, the substrate must provide the means to
+ allocate and free a single unit of resource. A unit is the basic quantity of a
+ resource allocated from a substrate. The definition of a resource unit
+ depends on the substrate. For example, in the case of an Eucalyptus cluster, a single unit
+ is a Virtual Machine with specific resources, while in the case of BEN, a
+ single unit is a VLAN. 
+ 
+ The substrate defines the notion of a unit and must be able to allocate at
+ least one unit. Allocation is substrate-specific, but it generally involves
+ issuing a sequence of commands to the substrate. Commands are issued over a
+ communication channel provided by the substrate, such as: RPC (SOAP, XMLRPC,
+ RMI, etc.) or command line. We refer to the action of bringing a resource unit
+ into service as <<transferIn>>.
+
+ As a resource unit is being used, some of its attribute may need to be
+ adjusted. For example, a virtual machine may require more memory or may need to
+ be migrated to a different host. We refer to the act of adjusting the
+ attributes of an existing resource unit as <<modify>>.
+
+ Units are included in leases, which are contracts for specific period of time.
+ When a lease expires all units that it contains are released back to the
+ substrate. Releasing a unit may involve simply disallowing access to it by its
+ current owner, ot it may involve destroying it completely, e.g., in the case of
+ a Virtual Machine. We refer to the act of bringing a resource unit out of
+ services as <<transferOut>>.
+
+ Each substrate must implement transferIn and transferOut so that it
+ can be used with Orca. modify is, generally, optional since not every substrate
+ supports changing the resource unit properties.
+ 
+
+ Relevant Orca interfaces: ISubstrate and IAuthoritySubstrate. 
+
+ Relevant Orca classes: Substrate and AuthoritySubstrate.
+
+* Configuration Subsystem
+
+ Each of the basic substrate API calls eventually invokes Orca's configuration
+ subsystem. The configuration subsystem is responsible for issuing the required
+ commands to the substrate. Orca's configuration subsystem is currently based on
+ ANT (other implementations are possible, but not provided). ANT-based
+ configuration requires that substrates provide <handler> files, responsible for
+ implementing the resource unit lifecycle: transferIn, modify, and transferOut.
+
+ An ANT handler file provides the following targets:
+
+  * join - responsible for creating the resource unit (services the transferIn
+  API call)
+
+  * modify - responsible for modifying the attributes of the resource unit
+  (optional, services the modify API call)
+
+  * leave - responsible for decomissioning the unit (services the transferOut
+  API call)
+
+  []
+
+ Each of the targets is often implemented by invoking one or more custom ANT
+ tasks, responsible for interacting with the substrate. Orca ships with a number
+ of custom ant tasks for controlling some network devices, file systems, and
+ Virtual Machine Monitors. New substrates often involve writing new ANT tasks
+ and/or combining existing tasks to implement a handler for the substrate.
+
+ Relevant Orca handlers: EC2 handler in $ORCA_ROOT/handlers/ec2
+
+* Resource Policy
+
+ Being able to create and destroy a unit is essential for integrating a new
+ substrate, but full integration, generally, involves making policy choices
+ about how a specific request for resources from the substrate should be
+ satisfied.
+
+ Policy decisions in Orca a separated between substrate owners (aggregates)
+ and brokers. Aggregates delegate the right to <allocate> resources from the
+ substrate to a broker. Allocating involves deciding who gets to use the
+ resources, how much and for how long. Aggregates, typically, reserve the right
+ to determine which elements of their substrate should be <assigned> to a specific
+ client request.
+
+ Integrating a substrate does not usually require a custom broker policy. Orca
+ ships with several broker policies, which should serve a wide range of
+ substrates and can easily be extended to meet a specific requirement.
+ Integrating a substrate may require an aggregate policy, as the details of
+ assignment can be very different from one substrate to another.
+
+ Writing aggregate policies in Orca is easy.
+ ({{{../../orca/policy/core/AuthorityCalendarPolicy.html}AuthorityCalendarPolicy}})
+ is generic and isolates substrate-specific logic into ResourceControl objects.
+ A ResourceControl object is responsible for
+ managing resources from a specific resource type (substrate). The
+ ResourceControl object for a given type is responsible for making placement
+ decisions for the substrate and keeping track of the availability of resources
+ in the substrate. Once the ResourceControl approves an assignment, Orca would
+ automatically invoke the handler associated with the resource type.
+
+* Representing Units
+
+ Every resource unit in Orca is represented by the <<Unit>> class. A Unit
+ defines some basic attributes, e.g., 
+ unique identifier, containing reservation, owning actor, etc.. In addition to
+ the basic attributes, each Unit contains a properties list. The properties list
+ contains properties relevant for the Unit. Properties are added to the Unit's
+ properties list by the aggregate's policy. 
+
+ Some important properties have been standardized and defined in the
+ UnitProperties class. As Orca expands to support more substrates, new propery
+ names would be added to it. If a property is not present in the UnitProperties
+ class, it can always be defined somewhere else. The convention for properties
+ associated with a Unit
+ object, is that they should start with the prefix <<unit.>>. 
+
+ Every Unit property is available to handlers during execution. Before invoking
+ a handler, Orca compiles a properties list with properties from the Unit, its
+ containing reservation and slice, and makes that properties list available to the
+ handler. Handlers can then use the passed in properties to complete their task.
+ Since policy objects can directly manipulate every Unit's properties list, a
+ policy object can use that mechanism to pass information to its associated
+ handler. For example, the policy can allocate an IP address to be used by a
+ virtual machine and the handler can configure the virtual machine with the
+ passed in IP address.
+
+ All units within a given reservation make up a set, which Orca represents using
+ an implementation of the IConcreteSet interface. Prior to the new substrate
+ API, Orca had two implementations of the IConcreteSet interface:
+ 
+  * Ticket - represents a ticket passed from a broker
+  
+  * NodeGroup - represents units in a lease passed back from an aggregate
+   
+   []
+   
+ The NodeGroup class, however, is based on COD and makes too many assumptions
+ about the nature of the substrate. To simplify substrate representation and
+ integration, the new substrate API introduces a third
+ implementation of the IConcreteSet interface that is substrate independent and
+ works with the new Unit class: <<UnitSet>>.
+ 
+ A UnitSet implements the plumbing required to integrate groups of units into
+ Orca. It is substrate independent and is the recommended IConcreteSet
+ implementation to use. For compatibility reasons NodeGroup still exists in
+ Orca, however, two Orca actors that interact with each other (a site and a
+ service manager) must use the same IConcreteSet implementation. That is, both
+ actors must either use NodeGroup or UnitsSet. Mixing both implementations is
+ not supported.
+ 
+
+* {UnitSet and Policies and Controllers}
+
+ The introduction of the new IConcreteSet implementation required changes to
+ code that deals with leases: sites allocating resources, and service managers
+ dealing with allocated resources. As part of the Orca 2.0 release, each
+ affected policy/controller has been updated. For backwards compatibility the
+ release preserves the original NodeGroup based code and introduces parallel
+ implementations in the <<orca.policy.core>> namespace.
+
+* Inventory
+
+ Orca prior to version 2.0 relied significantly on COD and because of that
+ required that a substrate's inventory be described in the container database.
+ Starting with Orca 2.0 a substrate is no longer required to define its inventory
+ in the container database. A substrate can choose how to represent its
+ inventory and whether it would be necessary to store it in the database. For
+ example, the EC2 substrate does not maintain any inventory in the container
+ database, while substrates based on the
+ {{{../../orca/policy/core/VMControl.html}VMControl}} ResourceControl keep track
+ of individual VMMs and require that they be described in the container
+ database.
+
+ On the level of the ResourceControl object implementing the substrate's policy
+ this distinction comes down to what donate method the control wants to use:
+   
+   * donate(IClientReservation) - operates with a logical view of the substate's
+   resources, i.e., how many and what attributes, but not which specific
+   resources make up the substrate. For example, the Eucalyptus substrate uses
+   the  {{{../../orca/policy/core/SimpleVMControl.html}SimpleVMControl}}
+   resource control which uses Eucalyptus as a service and only wants to know
+   about how many Virtual Machines it can create.
+
+   * donate(ResourceSet) - operates with a physical view of the substrate's
+   resources, i.e., the ResourceSet contains  UnitSet object that contains a
+   Unit object for every distinct element of the substrate. The
+   {{{../../orca/policy/core/VMControl.html}VMControl}} resource control class
+   is an example in this category. For this type of ResourceControl to work, the
+   resource pool the control operates on must explicitly define its inventory
+   using the inventory identifying each inventory item that should be part of
+   the resource pool. Please consult the
+   {{{../container-configuration/rpools.html}Resource Pools Guide}} for more
+   information.
+ 
+   []
+
+ If a substrate chooses to store its inventory in the container database using
+ the Inventory table. The Inventory table has the following fields:
+ 
+  * inv_id - inventory id, autogenerated by mysql
+
+  * inv_name - unique name identifying the inventory item. This name is used to
+  refer to the item in configuration files
+
+  * inv_ip - optional IP address of the inventory item
+
+  * inv_control - ip address of Node Agent responsible for controlling the item
+  (optional)
+
+  * inv_uid - inventory guid
+
+  * inv_type - reserved, must be set to 1
+
+  * inv_state - reserved, must be set to 2
+  
+  []
+
+ Inventory items are owned by the Orca container. An inventory item can be
+ transferred to an aggregate during actor
+ instantiation. This transfer process authorizes the actor to operate on the
+ inventory item. An actor in control of an inventory item can assign it to a
+ resource pool. Inventory items inside a resource pool are donated to the
+ resource pool's ResourceControl object.
+
+
+* New Web Portal
+
+ The new substrate API required changes to the Orca Web Portal. To preserve
+ backwards compatibility Orca 2.0 introduced a new Orca Web Portal project
+ (webapp2). The old webapp project is still supported but it should only be used
+ for backwards compatibility with COD-based code. All code based on the new
+ substrate API should use the webapp2 project.
+
+ The setup and configuration of the webapp2 project is identical to that of the
+ webapp project.
+
+

@@ -1,0 +1,2 @@
+interfaces { {$TrunkPorts} { unit 0 { family ethernet-switching { port-mode trunk; vlan { members {$VLANName}; } } } } } 
+vlans { {$VLANName} { interface { {$TrunkPorts}.0; } } }

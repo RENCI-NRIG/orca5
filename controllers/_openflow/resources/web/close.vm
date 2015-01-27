@@ -1,0 +1,19 @@
+#parse("/secure/common/top.vm")
+#parse("${root.getPackageRoot('f7ec610c-d838-4239-87fc-869a8cbf848e')}/top.vm")
+
+<div class="title">Close Request</div>
+<div class="titleSpacer"/>     
+
+#set($rid=$params.getString("requestId"))
+
+#set ($errorFlag=false)
+
+#if ($rid) 	
+	#set($tmp=false)
+	#set($tmp=$sliceProxy.closeRequest($rid, $identity.getAuth()))
+	#printResultNoRedirect($tmp "An error occurred while closing request")
+#end
+
+#if (!$errorFlag)
+	$response.sendRedirect("main.vm");
+#end	

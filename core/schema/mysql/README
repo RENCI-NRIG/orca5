@@ -1,0 +1,6 @@
+This directory contains the schema files for Orca when using mysql
+as a backend.
+
+Please run export.sh every time the schema file changes. In general,
+schema changes should be accompanied with conversion scripts to ensure
+that existing installations can be upgraded to the new version.

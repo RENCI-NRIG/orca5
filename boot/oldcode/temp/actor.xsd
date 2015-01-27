@@ -1,0 +1,40 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://issg.cs.duke.edu/sharp/boot" 
+    xmlns="http://issg.cs.duke.edu/sharp/soap/boot">
+
+    <xsd:import namespace="http://issg.cs.duke.edu/sharp/boot" 
+        schemaLocation="types.xsd" /> 
+
+    <xsd:element name="config">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="global" type="global" />
+                <xsd:element name="authorities">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="authority" type="authority" 
+                                maxOccurs="unbounded" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="agents">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="agent" type="agent" 
+                                maxOccurs="unbounded" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="sms">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="sm" type="sm" 
+                                   maxOccurs="unbounded" />
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:element name="topology" type="topology" />                
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

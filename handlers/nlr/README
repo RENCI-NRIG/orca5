@@ -1,0 +1,19 @@
+1. You must have a file named /tmp/NLRSherpa.properties with
+NLRSherpa.login
+NLRSherpa.password
+NLRSherpa.wg 
+properties in it for testing. Otherwise credentials are stored in a property file under $ORCA_HOME
+
+2. Some tasks are for testing only (e.g. reserveAnyVlanId - it gets the first available vlan id and reserves it, printing the id as an exit code).
+
+3. Execute tasks as $> ant -f test.xml <task name>
+
+4. Use ant -f test.xml -projecthelp to list tasks
+
+5. To test VLAN provisioning live the following sequence should be followed:
+  ant -f test.xml reserveAnyVlanId
+  <the NLRSherpa.reservedVlan property will be the ID of the vlan reserved in the previous step, in this
+  case it is 211>
+  ant -f test.xml -DNLRSherpa.vlan_id=211 provisionVlan 
+  ant -f test.xml -DNLRSherpa.vlan_id=211 removeVlan
+

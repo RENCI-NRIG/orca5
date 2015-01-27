@@ -1,0 +1,18 @@
+ ----
+ Images Guide
+ ----
+ Aydan Yumerefendi
+ ----
+ December 16, 2007
+ ----
+
+Images Guide 
+
+ Orca provides the means for clients to specify the image for each
+ virtual/physical machine that the system creates.  Clients and servers use an
+ instance of an <Image Manager> component to implement this
+ functionality. Orca ships with a standard image manager implementation
+ and supports custom image managers as well. 
+ 
+ <<Note:>> Image-related documentation is incomplete. Please check
+ back later for more information.

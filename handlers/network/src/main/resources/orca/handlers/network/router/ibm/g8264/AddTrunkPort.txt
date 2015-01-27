@@ -1,0 +1,4 @@
+interface port {$TrunkPorts}
+switchport mode trunk
+switchport trunk allowed vlan add {$VLANTagName}
+exit

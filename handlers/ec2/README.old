@@ -1,0 +1,90 @@
+This directory contains a Shirako setup/teardown handler 
+for creating machine's hosted by Amazon's Elastic Compute Cloud.
+
+To use this handler you must have an EC2 account with an
+X.509 certificate and private key.  The current keys for 
+the Shirako team's account are checked into the keys/ 
+directory.  You must have also already registered an ssh
+keypair with Amazon.  The name of the keypair we have registered 
+for Shirako is "gsg-keypair" indicated by the ssh.keyname
+property below.  You also must have already allowed access to
+ort 22 in the default security group; this handler creates new
+machines in the default security group.  The private key for the 
+Shirako team to connect as root via ssh is in the keys directory as
+id_rsa-amazon-key.
+
+The handler will create a machine from any registered image on S3.
+The image.id property specifies the Amazon id for the registered image
+to use.  The handler will append the contents of the unit.keys.user property to
+/root/.ssh/authorized_keys to add a user-specific public key to the image using
+ssh to contact the remote machine once it is up.
+
+Note that to execute the ant handler you must have the jar files in the lib/ and
+dist/ directory in your CLASSPATH.  The dist/ directory has the ec2-tasks.jar that 
+contains the custom ant tasks for creating and terminating ec2 machines.  The lib/
+directory has the classes required by the custom ec2 ant tasks.  Beware that some of these files may overlap 
+with jars in the main Shirako trunk.  EC2 requires specific versions of the jars.
+I had trouble getting the Ant classloading to work correctly because of the presence of *.properties files in some of the jar files
+needed by the custom ec2 ant task.
+
+Sample properties are below.
+
+key.location=keys/pk-CWMLNN7XGF74ED6674QNMN6TXDZW4BTH.pem
+cert.location=keys/cert-CWMLNN7XGF74ED6674QNMN6TXDZW4BTH.pem
+image.id=ami-20b65349
+ssh.location=ssh
+ssh.keyname=gsg-keypair
+ssh.keylocation=keys/id_rsa-amazon-key
+unit.keys.user=sample
+
+ExecutionResult.java and ScriptExecutor.java are only necessary for
+standalone tests.  Test.java is a standalone test with a main function.
+The Ant tasks are EC2SetupTask.java and EC2TeardownTask.java.
+
+Please make sure that if you turn on EC2 machines that you also
+terminate them.  The current rates for EC2 machines are $0.10/hour
+of usage.  Ask Jeff Chase for the user login and password.
+
+The libs required by the ec2.xml ant build file are located in the libs/
+directory.  Many of the SOAP libraries conflict with libraries already in use 
+with Shirako.
+
+Already in Shirako:
+
+activation
+axis
+commons-codec
+commons-discovery
+commons-httpclient
+commons-logging
+jaxb-api
+jaxb-impl
+jaxb-xjc
+log4j
+relaxngDataType
+xalan
+xmlsec
+xsdlib
+
+Not already in Shirako:
+
+fastinfoset
+ec2-java-client
+jaxb-libs
+jaxrpc-api
+jaxrpc-impl
+jaxrpc-spi
+mailapi
+opensaml-1.1
+saaj-api
+saaj-impl
+wss4j
+
+When I tried replacing just the jars not found in Shirako a class not found exception occured for jaxb-impl.jar.  These
+two jars are of different versions.  I copied in all of the ec2 jars, this may break the soap.  Need a new class loader for
+ant that can pick up *.properties resources.
+
+As a result of the jar conflicts I also wrote small java programs with a main class that can also be invoked in their own JVM 
+from ant.  These classes are EC2Setup and EC2Teardown and EC2SetProperties.  The third program returns either the dns name or 
+ip address on standard out (depending on an input parameter) of the machine given the instance id of the machine.  The 
+ec2.xml file uses these stand alone programs while the ec2-tasks.xml file uses the ant tasks.

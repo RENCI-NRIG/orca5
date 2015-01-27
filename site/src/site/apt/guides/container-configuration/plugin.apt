@@ -1,0 +1,73 @@
+ ----
+ Shirako Plugins
+ ----
+ Aydan Yumerefendi
+ ----
+ 13 December 2007
+ ----
+
+ 
+Shirako Plugins
+
+ While the {{{/orca/shirako}Shirako}} leasing core provides the basic
+ resource leasing abstractions, a Shirako-based system may need to
+ integrate and implement additional functionality, not directly
+ supported by the core. To this end, the leasing code provides a
+ common extension point called <Shirako Plugins>.
+
+ A Shirako Plugin implements the <IShirakoPlugin> interface and
+ provides the means to "inject" new functionality into the system. For
+ example, {{{/orca/cod}COD}} supplies a site authority and a service
+ manager Shirako plugins. These plugins make it possible to integrate the allocation
+ of physical and virtual machines into the leasing framework.
+
+ This pages lists the available Shirako plugins in the system. For
+ more details about a particular plugin, please refer to the
+ corresponding documentation pages.
+
+ All Shirako Plugin classes derive from the base plugin
+ implementation {{{baseplugin.html}ShirakoPlugin}}. Please refer to
+ its documentation pages for basic configuration instructions that
+ pertain to all Shirako Plugins.
+
+ 
+ The plugins on this page are organized in the following categories:
+
+  * {{{#Site Authority Plugins}Site authority plugins}}
+  
+  * {{{#Broker Plugins}Broker plugins}}
+
+  * {{{#Service Manager Plugins}Service manager plugins}}
+ 
+
+* {Site Authority Plugins}
+
+ The following site authority plugins are currently supported by the
+ system:
+
+  * {{{/orca/cod/guides/siteplugin}COD Site}}
+
+  The COD Site plugin provides some of the basic building blocks
+  required to allocate physical and/or virtual machines.
+
+* {Broker Plugins}
+
+  The following broker plugins are currently supported by the system:
+
+  * {{{/orca/sharp/guides/serverplugin}SHARP Server}}
+
+  The SHARP Server plugin provides the basic building blocks for the
+  {{{/orca/sharp}SHARP}} accountability mechanisms.
+  
+
+* {Service Manager Plugins}
+
+  The following service manager plugins are currently supported by the
+  system:
+
+  * {{{/orca/cod/guides/smplugin}COD Service Manager}}
+
+  The COD Service Manager plugin provides some of the basic building
+  blocks required to work with allocated virtual and/or physical
+  machines.
+  

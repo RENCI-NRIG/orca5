@@ -1,0 +1,129 @@
+<rdf:RDF
+    xmlns:kansei="http://geni-orca.renci.org/owl/kansei.owl#"
+    xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
+    xmlns:app-color="http://geni-orca.renci.org/owl/app-color.owl#"
+    xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
+    xmlns:dtn="http://geni-orca.renci.org/owl/dtn.owl#"
+    xmlns:time="http://www.w3.org/2006/time#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
+    xmlns:modify-schema="http://geni-orca.renci.org/owl/modify.owl#"
+    xmlns:planetlab="http://geni-orca.renci.org/owl/planetlab.owl#"
+    xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
+    xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
+    xmlns:request-schema="http://geni-orca.renci.org/owl/request.owl#"
+    xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
+    xmlns:orca="http://geni-orca.renci.org/owl/orca.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:eucalyptus="http://geni-orca.renci.org/owl/eucalyptus.owl#"
+    xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
+    xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ec2="http://geni-orca.renci.org/owl/ec2.owl#"
+    xmlns:request="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#"
+    xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#ColorNode0">
+    <app-color:hasColorLabel>ColorNode0</app-color:hasColorLabel>
+    <app-color:hasColorBlob>This is a text blob.</app-color:hasColorBlob>
+    <app-color:hasColorAttribute rdf:nodeID="A0"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#Color"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#">
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Node1"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Node0"/>
+    <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Term"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Node1">
+    <app-color:fromColorDependency rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#ColorLink0"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1-Node1"/>
+    <app-color:hasColor rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#ColorNode1"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#OpenDaylight"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOLarge"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1-Node1"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1-Node0"/>
+    <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000000</layer:bandwidth>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A1">
+    <app-color:hasColorValue>val11</app-color:hasColorValue>
+    <app-color:hasColorKey>key11</app-color:hasColorKey>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#ColorAttribute"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A2">
+    <app-color:hasColorValue>val12</app-color:hasColorValue>
+    <app-color:hasColorKey>key12</app-color:hasColorKey>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#ColorAttribute"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#ColorNode1">
+    <app-color:hasColorXMLCompressedBlob>H4sIAAAAAAAAALMpSUw3VEgsKSmyVSpLzFGy4+K0AQoZ2RXn56YCBUpTbfTBfC4wbWgHADRvni0x
+AAAA</app-color:hasColorXMLCompressedBlob>
+    <app-color:hasColorAttribute rdf:nodeID="A1"/>
+    <app-color:hasColorAttribute rdf:nodeID="A2"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#Color"/>
+    <app-color:hasColorLabel>ColorNode1</app-color:hasColorLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#OpenDaylight">
+    <topology:hasURL>http://geni-images.renci.org/images/cisco-demos/opendaylight-1.0.0.xml</topology:hasURL>
+    <topology:hasGUID>9b1001c38f203522b1a3cec15b675243b567cc71</topology:hasGUID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A3">
+    <app-color:hasColorValue>val22</app-color:hasColorValue>
+    <app-color:hasColorKey>key22</app-color:hasColorKey>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#ColorAttribute"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A4">
+    <app-color:hasColorValue>val21</app-color:hasColorValue>
+    <app-color:hasColorKey>key21</app-color:hasColorKey>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#ColorAttribute"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Node0">
+    <app-color:toColorDependency rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#ColorLink0"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1-Node0"/>
+    <app-color:hasColor rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#ColorNode0"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#OpenDaylight"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOLarge"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A0">
+    <app-color:hasColorValue>val01</app-color:hasColorValue>
+    <app-color:hasColorKey>key01</app-color:hasColorKey>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#ColorAttribute"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A5">
+    <app-color:hasColorValue>val23</app-color:hasColorValue>
+    <app-color:hasColorKey>key23</app-color:hasColorKey>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#ColorAttribute"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1-Node1">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Link1-Node0">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#TermDuration">
+    <time:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</time:days>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#Term">
+    <time:hasDurationDescription rdf:resource="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#TermDuration"/>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#Interval"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/226aeb19-fc28-448e-8919-8f4bca787df0#ColorLink0">
+    <app-color:hasColorBlob>This is another text blob.</app-color:hasColorBlob>
+    <app-color:hasColorAttribute rdf:nodeID="A3"/>
+    <app-color:hasColorAttribute rdf:nodeID="A4"/>
+    <app-color:hasColorAttribute rdf:nodeID="A5"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/app-color.owl#Color"/>
+    <app-color:hasColorLabel>ColorLink0</app-color:hasColorLabel>
+  </rdf:Description>
+</rdf:RDF>

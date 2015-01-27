@@ -1,0 +1,453 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY owl2 "http://geni-orca.renci.org/owl/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ip4 "http://geni-orca.renci.org/owl/ip4.owl#" >
+    <!ENTITY geni "http://geni-orca.renci.org/owl/geni.owl#" >
+    <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY ethernet "http://geni-orca.renci.org/owl/ethernet.owl#" >
+    <!ENTITY topology "http://geni-orca.renci.org/owl/topology.owl#" >
+    <!ENTITY collections "http://geni-orca.renci.org/owl/collections.owl#" >
+]>
+
+
+<rdf:RDF xmlns="&owl2;openflow.owl#"
+     xml:base="&owl2;openflow.owl"
+     xmlns:ip4="&owl2;ip4.owl#"
+     xmlns:layer="&owl2;layer.owl#"
+     xmlns:owl2="http://geni-orca.renci.org/owl/"
+     xmlns:geni="&owl2;geni.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:ethernet="&owl2;ethernet.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:topology="&owl2;topology.owl#"
+     xmlns:collections="&owl2;collections.owl#">
+    <owl:Ontology rdf:about="&owl2;openflow.owl">
+        <rdfs:isDefinedBy>RENCI
+UNC-Chapel Hill
+Jan. 26 2012
+ibaldin@renci.org</rdfs:isDefinedBy>
+        <rdfs:comment>Openflow ontology definitions for multiple OpenFlow standards</rdfs:comment>
+        <owl:imports rdf:resource="&owl2;ethernet.owl"/>
+        <owl:imports rdf:resource="&owl2;geni.owl"/>
+        <owl:imports rdf:resource="&owl2;ip4.owl"/>
+        <owl:imports rdf:resource="&owl2;layer.owl"/>
+        <owl:versionIRI rdf:resource="&owl2;openflow.owl"/>
+        <owl:imports rdf:resource="&owl2;topology.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#action -->
+
+    <owl:ObjectProperty rdf:about="&owl2;openflow.owl#action">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:comment>Property linking Flow to Action</rdfs:comment>
+        <rdfs:domain rdf:resource="&owl2;layer.owl#Flow"/>
+        <rdfs:range rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#controller -->
+
+    <owl:ObjectProperty rdf:about="&owl2;openflow.owl#controller">
+        <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
+        <rdfs:range rdf:resource="&owl2;openflow.owl#OFController"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#forwardPort -->
+
+    <owl:ObjectProperty rdf:about="&owl2;openflow.owl#forwardPort">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:comment>Target of the forward action in OpenFlow</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#label"/>
+        <rdfs:domain rdf:resource="&owl2;openflow.owl#FORWARD"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#modifyField -->
+
+    <owl:ObjectProperty rdf:about="&owl2;openflow.owl#modifyField">
+        <rdfs:domain rdf:resource="&owl2;MODIFY-FIELD"/>
+        <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#label"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#openflowCapable -->
+
+    <owl:ObjectProperty rdf:about="&owl2;openflow.owl#openflowCapable">
+        <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
+        <rdfs:range rdf:resource="&owl2;openflow.owl#OpenFlowVersion"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#hasCtrlPassword -->
+
+    <owl:DatatypeProperty rdf:about="&owl2;openflow.owl#hasCtrlPassword">
+        <rdfs:domain rdf:resource="&owl2;geni.owl#Slice"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#hasSlicePassword -->
+
+    <owl:DatatypeProperty rdf:about="&owl2;openflow.owl#hasSlicePassword">
+        <rdfs:domain rdf:resource="&owl2;geni.owl#Slice"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#hasUsername -->
+
+    <owl:DatatypeProperty rdf:about="&owl2;openflow.owl#hasUsername">
+        <rdfs:domain rdf:resource="&owl2;geni.owl#Slice"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/DROP -->
+
+    <owl:Class rdf:about="&owl2;DROP">
+        <rdfs:subClassOf rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ENQUEUE -->
+
+    <owl:Class rdf:about="&owl2;ENQUEUE">
+        <rdfs:subClassOf rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/MODIFY-FIELD -->
+
+    <owl:Class rdf:about="&owl2;MODIFY-FIELD">
+        <rdfs:subClassOf rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#Action -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#Action">
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#ActiveEntries -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#ActiveEntries">
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Counter"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#FORWARD -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#FORWARD">
+        <rdfs:subClassOf rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#FlowVisor -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#FlowVisor">
+        <rdfs:subClassOf rdf:resource="&owl2;openflow.owl#OFController"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#Flowspace -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#Flowspace">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&owl2;collections.owl#element"/>
+                <owl:someValuesFrom rdf:resource="&owl2;layer.owl#Flow"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#NOX -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#NOX">
+        <rdfs:subClassOf rdf:resource="&owl2;openflow.owl#OFController"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OFController -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#OFController">
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OFSlice -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#OFSlice">
+        <rdfs:subClassOf rdf:resource="&owl2;geni.owl#Slice"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OpenFlow1.0-SwitchingMatrix -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#OpenFlow1.0-SwitchingMatrix">
+        <rdfs:subClassOf rdf:resource="&owl2;topology.owl#SwitchMatrix"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&owl2;layer.owl#switchingCapability"/>
+                <owl:onClass rdf:resource="&owl2;ethernet.owl#EthernetNetworkElement"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&owl2;layer.owl#switchingCapability"/>
+                <owl:onClass rdf:resource="&owl2;ip4.owl#IPNetworkElement"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OpenFlowVersion -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#OpenFlowVersion">
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#PacketLookups -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#PacketLookups">
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Counter"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#PacketMatches -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#PacketMatches">
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Counter"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#VirtualPort -->
+
+    <owl:Class rdf:about="&owl2;openflow.owl#VirtualPort">
+        <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Label"/>
+        <rdfs:comment>OpenFlow-defined virtual ports for forwarding packets</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#ALL -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#ALL">
+        <rdf:type rdf:resource="&owl2;openflow.owl#VirtualPort"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#CONTROLLER -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#CONTROLLER">
+        <rdf:type rdf:resource="&owl2;openflow.owl#VirtualPort"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#DROP -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#DROP">
+        <rdf:type rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#ENQUEUE -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#ENQUEUE">
+        <rdf:type rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#FLOOD -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#FLOOD">
+        <rdf:type rdf:resource="&owl2;openflow.owl#VirtualPort"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#FORWARD -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#FORWARD">
+        <rdf:type rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#IN-PORT -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#IN-PORT">
+        <rdf:type rdf:resource="&owl2;openflow.owl#VirtualPort"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#LOCAL -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#LOCAL">
+        <rdf:type rdf:resource="&owl2;openflow.owl#VirtualPort"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#MODIFY-FIELD -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#MODIFY-FIELD">
+        <rdf:type rdf:resource="&owl2;openflow.owl#Action"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#NORMAL -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#NORMAL">
+        <rdf:type rdf:resource="&owl2;openflow.owl#VirtualPort"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.0 -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#OpenFlow-1.0">
+        <rdf:type rdf:resource="&owl2;openflow.owl#OpenFlowVersion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.1 -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#OpenFlow-1.1">
+        <rdf:type rdf:resource="&owl2;openflow.owl#OpenFlowVersion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.2 -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#OpenFlow-1.2">
+        <rdf:type rdf:resource="&owl2;openflow.owl#OpenFlowVersion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#TABLE -->
+
+    <owl:NamedIndividual rdf:about="&owl2;openflow.owl#TABLE">
+        <rdf:type rdf:resource="&owl2;openflow.owl#VirtualPort"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.2.3.22702) http://owlapi.sourceforge.net -->
+

@@ -1,0 +1,72 @@
+ ----
+ Porting to Orca 2.0
+ ----
+ The Orca Team
+ ----
+ April 22, 2010
+ ----
+
+Porting to Orca 2.0
+
+ Existing code based on COD (orca.cod.* namespace) would still work in Orca 2.0.
+ However, COD is on its way to deprecation and future releases are likely not to
+ include support for it. All existing code that is intended to be used with
+ future releases should be ported to the new code base. This document describes
+ the porting process.
+
+* Point of Reference
+
+ The BEN controller package (orca/controllers/ben) has been updated to use the new API.
+ In particular, the InterdomainController can serve as a reference of how to
+ write a controller that conforms the the new code base.
+
+* When is the Port Complete?
+
+ The basic test is to see if your code still depends on anything from the
+ orca.cod.* namespace. If it does, then your job is not done yet. If not, then
+ you are halfway there. If the code compiles, you are almost there. Some
+ additional testing to ensure that the code still works would complete the
+ process.
+
+* Porting Process
+
+ What needs to be updated? Any code that resides inside the orca.cod namespace
+ should be replaced with the corresponding code that does not reside in
+ orca.cod. This often means:
+  
+  * Any use of Node and NodeGroup should be replaced with Unit and UnitSet. See
+  {{{substrate.html}The Substrate API Guide}}.
+
+  * If you are using orca.cod.control.ResourceControl, switch to using
+  orca.policy.core.ResourceControl.
+
+  * If you are using a ResourceControl based on
+   orca.cod.control.ResourceControl, switch to using the corresponding one from
+   orca.policy.core.
+
+  * Replace uses of CodServiceManagerReservationFactory with
+  ServiceManagerReservationFactory.
+
+  * Replace ICodClientReservation with IServiceManagerReservation
+
+  * Replace calls to the helper methods in CodReservation with a call that
+  explicitly sets the property the COD-based method used to set. Please consult
+  InterDomainController for reference. The getReservations method is of
+  particular interest.
+
+  * Update your handlers, if needed.
+
+  Properties passed to handlers may have changed slightly. Since our
+  documentation in this area is particularly lacking, we describe a process that
+  can help with this step: You may want to put a
+  breakpoint in Substrate.getConfigurationProperties and examine the constructed
+  properties list. Once you've identified the names of the properties you are
+  interested in, you can update your handler to reflect the new naming.
+
+ * Update your actor configuration files using the
+ {{{../container-configuration/xml.html#Actors}new format}}. 
+
+* Problems?
+
+ If you have a question and need assistance please send an email to the geni-orca users mailing list.
+

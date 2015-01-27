@@ -1,0 +1,169 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../common/paths.xml">
+]>
+<project name="storage_service" basedir=".">
+
+  &paths;
+  &core;
+  &drivertasks;	
+
+
+
+  <!-- Join operation -->
+  <target name="join" depends="resolve.configuration">
+    <tstamp prefix="start">
+      <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
+    </tstamp>
+    <echo message="STORAGE SERVICE HANDLER: JOIN on ${start.TIME}" />
+
+    <!--<property file="test.properties" />-->
+    <if>
+      <isset property="storage_service.site.properties" />
+      <then>
+        <property file="${storage_service.site.properties}" />
+      </then>
+    </if>
+
+
+    <!-- Echo statments for log and emulation mode -->
+    <echo message="STORAGE_SERVICE_DIR=${storage_service.dir}" />
+    <echo message="STORAGE_SERVICE_LOG_DIR=${storage_service.log.dir}" />
+    <echo message="STORAGE_SERVICE_LOG_FILE=${storage_service.log.file}" />
+    <echo message="STORAGE_SERVICE_LOG_LEVEL=${storage_service.log.level}" />
+    <echo message="STORAGE_SERVICE_CONNECTION_TIMEOUT=${storage_service.connection.timeout}" />
+    <echo message="STORAGE_SERVICE_REQUEST_TIMEOUT=${storage_service.request.timeout}" />
+
+    <echo message="STORAGE_SERVICE_IP=${storage_service.ip}" />
+    <echo message="STORAGE_SERVICE_USERNAME=${storage_service.username}" />
+    <echo message="STORAGE_SERVICE_PASSWORD=${storage_service.password}" />
+  
+    <echo message="UNIT_INITIATOR_IQN_PREFIX=${unit.initiator.iqn_prefix}" />
+    <echo message="UNIT_TARGET_CHAP_USER=${unit.target.chap_user}" />
+    <echo message="UNIT_TARGET_CHAP_PASSWORD=${unit.target.chap_password}" />
+    <echo message="UNIT_TARGET_CAPACITY=${unit.target.capacity}" />
+    <echo message="UNIT_TARGET_LUN=${unit.target.lun}" />
+
+    <echo message="UNIT_VM_GUID=${unit.vm.guid}" />
+    <echo message="UNIT_LUN_GUID=${unit.lun.guid}" />
+
+
+    <!-- If in emulation then exit without doing anything -->
+    <if>
+      <equals arg1="${emulation}" arg2="true" />
+      <then>
+        <echo message="Emulation mode...exiting" />
+        <property name="shirako.target.code" value="0" />
+      </then>
+    <else>
+
+
+    <!-- Log some properites for debuging -->
+    <echo message="creating LUN ...(may take some time)" />
+    <var name="create.lun.output" unset="true" />
+    <var name="code" unset="true" />
+    
+    <exec executable="${storage_service.scripts}/storage_service-create-lun"
+          resultproperty="code" outputproperty="create.lun.output">
+      <env key="STORAGE_SERVICE_DIR" value="${storage_service.dir}" />
+      <env key="STORAGE_SERVICE_LOG_DIR" value="${storage_service.log.dir}" />
+      <env key="STORAGE_SERVICE_LOG_FILE" value="${storage_service.log.file}" />
+      <env key="STORAGE_SERVICE_LOG_LEVEL" value="${storage_service.log.level}" />
+      <env key="STORAGE_SERVICE_CONNECTION_TIMEOUT" value="${storage_service.connection.timeout}" />
+      <env key="STORAGE_SERVICE_REQUEST_TIMEOUT" value="${storage_service.request.timeout}" />
+
+      <env key="STORAGE_SERVICE_IP" value="${storage_service.ip}" />
+      <env key="STORAGE_SERVICE_USERNAME" value="${storage_service.username}" />
+      <env key="STORAGE_SERVICE_PASSWORD" value="${storage_service.password}" />
+
+      <env key="UNIT_INITIATOR_IQN_PREFIX" value="${unit.initiator.iqn_prefix}" />
+      <env key="UNIT_TARGET_CHAP_USER" value="${unit.target.chap_user}" />
+      <env key="UNIT_TARGET_CHAP_PASSWORD" value="${unit.target.chap_password}" />
+      <env key="UNIT_TARGET_CAPACITY" value="${unit.target.capacity}" />
+      <env key="UNIT_TARGET_LUN" value="${unit.target.lun}" />
+
+      <env key="UNIT_VM_GUID" value="${unit.vm.guid}" />
+      <env key="UNIT_LUN_GUID" value="${unit.lun.guid}" />
+    </exec>
+    <echo message="after create lun: exit code ${code}, ${create.lun.output}" />
+
+    <property name="shirako.target.code" value="${code}" />
+  </else></if> <!-- end of else for emulation -->
+  <echo message="join exit code: ${shirako.target.code}" />
+  </target>
+  
+  <!-- Modify operation is not supported -->
+  <target name="modify" />
+
+
+  <!-- Leave operation -->
+  <target name="leave" depends="resolve.configuration">
+    <tstamp prefix="start">
+      <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+    </tstamp>
+    
+    <echo message="STORAGE SERVICE HANDLER: LEAVE on ${start.TIME}" />
+
+    <!--<property file="test.properties" />-->
+    <if>
+      <isset property="storage_service.site.properties" />
+      <then>
+        <property file="${storage_service.site.properties}" />
+      </then>
+    </if>
+
+
+    <!-- Echo statments for log and emulation mode -->
+    <echo message="STORAGE_SERVICE_DIR=${storage_service.dir}" />
+    <echo message="STORAGE_SERVICE_LOG_DIR=${storage_service.log.dir}" />
+    <echo message="STORAGE_SERVICE_LOG_FILE=${storage_service.log.file}" />
+    <echo message="STORAGE_SERVICE_LOG_LEVEL=${storage_service.log.level}" />
+    <echo message="STORAGE_SERVICE_CONNECTION_TIMEOUT=${storage_service.connection.timeout}" />
+    <echo message="STORAGE_SERVICE_REQUEST_TIMEOUT=${storage_service.request.timeout}" />
+
+    <echo message="STORAGE_SERVICE_IP=${storage_service.ip}" />
+    <echo message="STORAGE_SERVICE_USERNAME=${storage_service.username}" />
+    <echo message="STORAGE_SERVICE_PASSWORD=${storage_service.password}" />
+  
+    <echo message="UNIT_LUN_GUID=${unit.lun.guid}" />
+
+
+    <!-- If in emulation then exit without doing anything -->
+    <if>
+      <equals arg1="${emulation}" arg2="true" />
+      <then>
+        <echo message="Emulation mode...exiting" />
+        <property name="shirako.target.code" value="0" />
+      </then>
+      <else>
+
+
+	<echo message="deleting LUN ...(may take some time)" />
+        <var name="delete.lun.output" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
+	
+        <echo message="before delete lun" />
+        <exec executable="${storage_service.scripts}/storage_service-delete-lun"
+              resultproperty="code" outputproperty="delete.lun.output">
+          <env key="STORAGE_SERVICE_DIR" value="${storage_service.dir}" />
+          <env key="STORAGE_SERVICE_LOG_DIR" value="${storage_service.log.dir}" />
+          <env key="STORAGE_SERVICE_LOG_FILE" value="${storage_service.log.file}" />
+          <env key="STORAGE_SERVICE_LOG_LEVEL" value="${storage_service.log.level}" />
+          <env key="STORAGE_SERVICE_CONNECTION_TIMEOUT" value="${storage_service.connection.timeout}" />
+          <env key="STORAGE_SERVICE_REQUEST_TIMEOUT" value="${storage_service.request.timeout}" />
+          
+          <env key="STORAGE_SERVICE_IP" value="${storage_service.ip}" />
+          <env key="STORAGE_SERVICE_USERNAME" value="${storage_service.username}" />
+          <env key="STORAGE_SERVICE_PASSWORD" value="${storage_service.password}" />
+          
+          <env key="UNIT_LUN_GUID" value="${unit.lun.guid}" />
+        </exec>
+        <echo message="after delete lun: exit code ${code}, ${delete.lun.output}" />
+
+        <property name="shirako.target.code" value="${code}" />
+      </else> </if> <!-- end of else for emulation -->
+    <echo message="leave exit code: ${shirako.target.code}" />
+  </target>
+</project>

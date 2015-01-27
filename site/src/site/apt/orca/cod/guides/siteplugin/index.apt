@@ -1,0 +1,272 @@
+ ------
+ COD Site Plugin
+ ------
+ Aydan Yumerefendi
+ ------
+ 13 December 2007
+ ------
+
+COD Site Plugin
+
+ The COD Site Plugin, refered to as Site, is the main extension to the
+ {{{/orca/shirako}Shirako}} leasing core provided by
+ Cluster-On-Demand. This plugin should be used by actors acting in the
+ site authority role.
+
+ The COD Site Plugin extends the
+ {{{/orca/sharp/guides/serverplugin/}SHARP Server Plugin}} and provides
+ the following additional services:
+
+ * Configuration of inventory and resource pools
+
+ Each site authority has an <inventory> of physical machines and storage
+ servers, which are used to satisfy requests for leased
+ resources. Sites organize their inventory into one or more <resource
+ pools>. Inventory resources within a resource pool are considered
+ interchangeable and are controlled by a single policy.
+
+ 
+ * Nework configuration for allocated resources
+
+ The COD site plugin provides services to set the networking
+ configuration of newly allocated resources.
+
+
+* Plugin configuration
+
+  The plugin configuration is an XML object {{{xml.html}descriptor}}.
+
+   * <<Class name:>>  orca.cod.plugins.Site
+
+   * <<Supported parameters:>>
+
+     * NetworkManager
+
++---
+<parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
++---
+      Specifies the network manager implementation to use. See this
+      page for a {{{network.html}list}} of the available network managers.
+
+      Full Example:
+
+      
++---
+     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
+       <instance>
+         <className>orca.cod.plugins.NetworkConfigurationManager</className>
+	 <parameters>
+	   <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+ 	     <instance>
+	       <className>orca.cod.plugins.NetworkConfiguration</className>
+	       <properties>
+	         <property name="network.base" value="192.16.192.0" />
+		 <property name="network.mask" value="255.255.224.0" />
+                 <property name="network.subnet" value="255.255.255.0" />
+	         <property name="network.min" value="10" />
+                 <property name="network.gateway" value="" />
+               </properties>
+	     </instance>
+           </parameter>
+           <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+             <instance>
+	       <className>orca.cod.plugins.DnsConfiguration</className>
+               <properties>
+                 <property name="dns.prefix" value="default" />
+		 <property name="dns.zone" value="demo.orca.org" />
+		 <property name="dns.mx" value="10 demo.orca.org" />
+               </properties>
+	     </instance>
+          </parameter>
+	</parameters>
+      </instance>
+    </parameter>
++---     
+
+    * Config
+
+    COD provides an extension of the base AntConfig implementation. It
+    uses the same configuration format (see
+    {{{/orca/guides/container-configuration/baseplugin.html}Shirako Base Plugin}}).
+
+    <<Class name:>> orca.cod.plugins.config.CodAntConfig
+ 
+    []
+
+    In addition to the above parameters, the COD Site plugin supports
+    the following properties:
+
+     * <<inventory.storage>> Space-separated list of storage servers to make accessible by the
+     actor at boot time. The names must match the storage server names
+     in the center database.
+
+     * <<inventory.machines>> Space-separated list of physical
+     machines (VMMs) to transfer control to the actor at boot
+     time. The names must match the names of machines in the center
+     database.
+
+     * <<resource.pools.count>> Number of resource pools to
+       create. The following properties describe a given resource
+       pool. All indexes start from 0.
+
+     * <<resource.pool.name.X>> Name for the X-th resource pool
+
+     * <<resource.pool.type.X>> Resource type for the X-th resource
+     pool. Each resource pool must have a unique resource type.
+
+     * <<resource.pool.properties.X>> Comma-separated list of resource
+     properties and their values for the X-th
+     resource pool. Any property can go in here, but the currently
+     suported properties by the broker and site policies are:
+
+        * memory - memory size in MB
+
+        * cpu - total number of CPU units. For now this should always
+        be set to 100
+
+        * bandwidth - total network bandwidth capacity in Mbits/s
+
+        * storage - total available local disk storage in MB
+
+     Not all of the above properties are required.
+
+     * <<resource.pool.machines.X>> Space-separated names of machines to
+     transfer into the X-th pool. All machines must already be under the
+     control of the actor.
+
+     * <<resource.pool.ticket.units.X>> Number of units for the X-th
+     pool's source ticket.
+
+     * <<resource.pool.ticket.start.X>> Start time for the X-th pool's
+     source ticket (in cycles)
+
+     * <<resource.pool.ticket.end.X>> End time for the X-th pool's
+     source ticket (in cycles)
+
+     * <<resource.pool.handler.packageId.X>> Package ID for the
+     handler for the X-th resource pool
+
+     * <<resource.pool.handler.pluginId.X>> Plugin ID for the
+     handler for the X-th resource pool.
+
+     * <<resource.pool.handler.properties.X>> Comma-separated properties to be passed
+       to the handler of the X-th resource pool. 
+     []
+     
+     For a list of the available handlers please consult this
+     {{{/orca/handlers/categories.html}page}}. You may also jump
+     directly to the
+     {{{/orca/handlers/standard/directory.html}Standard Handlers Directory}}.
+     
+
+     <<Note:>> Please note that at present there is no property to
+     specify the policy/Resource Control associated with a given resource
+     pool, i.e., the logic that controls how incoming lease requests
+     are mapped onto the pool's inventory. This omission is both
+     accidendal and deliberate: it allows users to specify their own
+     associations between policies and resource pools.
+
+     The current approach to associating a policy with a resource pool
+     is the following:
+
+      * The site is configured to use the
+      {{{/orca/policy/core/authoritycalendar.html}Authority Calendar
+      Policy}}
+
+      * The policy configuration is used to associate a Resource
+        Control with a resource pool by passing the <<pool resource
+        type>> as an argument to the Resource Control. For this
+        approach to work the Resource Control class must support
+        receiving the resource type from the configuration file. See
+        the {{{/orca/policy/core/authoritycalendar.html}Authority
+        Calendar Policy}} page for more details.
+
+        In theory, it is possible to use this approach to associate a
+        single resource control with multiple resource pools. The
+        control, however, will have to be written to handle correctly
+        the differences between the resource pools.
+
+        The default resource control
+        ({{{../../controls/idcontrolchange.html}Follow Broker VM Resource Control}})
+        does not support multiple pools: it can only manage a single
+        resource pool.
+     
+     
+ Full example:
+
+ 
++---
+ <plugin>
+   <className>orca.cod.plugins.Site</className>
+   <properties>
+     <!-- Storage servers to be transferred to this site -->
+     <property name="inventory.storage" value="fetch gnathosaurus" />
+     <!-- Physical machines to be transferred to this site -->
+     <property name="inventory.machines" value="demo001 demo002 demo003" />
+     <!-- Resource pool configuration -->
+     <property name="resource.pools.count" value="1" />
+     <!-- First resource pool configuration -->
+     <property name="resource.pool.name.0" value="demo" />
+     <property name="resource.pool.type.0" value="1" />
+     <property name="resource.pool.properties.0" value="memory=2048,cpu=100,bandwidth=1000" />
+     <property name="resource.pool.machines.0" value="demo001 demo002 demo003 demo004" />
+     <!-- Source ticket configuration -->
+     <property name="resource.pool.ticket.units.0" value="4" />					
+     <property name="resource.pool.ticket.start.0" value="0" />
+     <property name="resource.pool.ticket.end.0" value="10000000" />					
+     <!-- Handler configuration -->
+     <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
+     <property name="resource.pool.handler.pluginId.0" value="1" />
+     <property name="resource.pool.handler.properties.0" value="server.name=gnathosaurus,server.guid=583c10bfdbd326ba:-5bb4a8a:114482bd028:-8000,server.ip=172.16.0.2,server.base=sata/images/shirako/,server.control=152.3.144.204" />
+   </properties>
+   <parameters>
+     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
+       <instance>
+         <className>orca.cod.plugins.NetworkConfigurationManager</className>
+	 <parameters>
+	   <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+ 	     <instance>
+	       <className>orca.cod.plugins.NetworkConfiguration</className>
+	       <properties>
+	         <property name="network.base" value="192.16.192.0" />
+		 <property name="network.mask" value="255.255.224.0" />
+                 <property name="network.subnet" value="255.255.255.0" />
+	         <property name="network.min" value="10" />
+                 <property name="network.gateway" value="" />
+               </properties>
+	     </instance>
+           </parameter>
+           <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+             <instance>
+	       <className>orca.cod.plugins.DnsConfiguration</className>
+               <properties>
+                 <property name="dns.prefix" value="default" />
+		 <property name="dns.zone" value="demo.orca.org" />
+		 <property name="dns.mx" value="10 demo.orca.org" />
+               </properties>
+	     </instance>
+          </parameter>
+	</parameters>
+      </instance>
+    </parameter>
+    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+      <instance>
+	<className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
+	<properties>
+	  <property name="db.mysql.server" value="localhost" />
+	  <property name="db.mysql.db" value="orca" />
+	  <property name="db.mysql.user" value="orca" />
+	  <property name="db.mysql.password" value="" />
+        </properties>
+      </instance>
+    </parameter>
+    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+      <instance>
+	<className>orca.cod.plugins.config.CodAntConfig</className>
+      </instance>
+    </parameter>
+  </parameters>
+ </plugin>
++---
+
+

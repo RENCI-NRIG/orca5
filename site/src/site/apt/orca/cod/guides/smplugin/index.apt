@@ -1,0 +1,45 @@
+ ------
+ COD Service Manager Plugin
+ ------
+ Aydan Yumerefendi
+ ------
+ 13 December 2007
+ ------
+
+COD Service Manager Plugin
+
+ The COD Service Manager Plugin enables actors acting in the service
+ manager role to work with allocated virtual and/or physical machines.
+
+ 
+
++---
+ <plugin>
+  <className>orca.cod.plugins.ServiceManagerCodPlugin</className>
+  <parameters>
+   <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+    <instance>
+     <className>orca.cod.plugins.db.MySqlCodDatabase</className>
+     <properties>
+      <property name="db.mysql.server" value="localhost" />
+      <property name="db.mysql.db" value="orca" />
+      <property name="db.mysql.user" value="orca" />
+      <property name="db.mysql.password" value="" />
+     </properties>
+    </instance>
+   </parameter>
+   <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+    <instance>
+     <className>orca.shirako.plugins.config.AntConfig</className>
+     <properties>
+      <property name="config.count" value="1" />
+      <property name="config.type.0" value="1" />
+      <property name="config.file.0" value="handlers/common/noop.xml" />
+     </properties>
+    </instance>
+   </parameter>
+  </parameters>
+</plugin>
++---
+
+ 

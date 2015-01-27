@@ -1,0 +1,25 @@
+										------
+										Orca Manual
+										------
+										The Orca Team
+										------
+										1 September 2007
+										------
+
+Introduction
+
+ This set of pages are intended to serve as a guide to installing, configuring, and running Orca.
+ Since Orca is a complex collection of many components, the documentation process is expected to take some time.
+ Please accept our apologies in advance.
+  
+ The manual is logically organized in the following categories:
+ 
+ * {{{admin/index.html}Administrator}} - contains information about installing, configuring, and administering Orca
+ 
+ * {{{user/index.html}User}} - contains information about using Orca
+ 
+ * {{{developer/index.html}Developer}} - contains information about extending and improving Orca. 
+ 
+ []
+ 
+ If you are new to Orca, a good way to get introduced to the system is by reading the {{{../guides/getting-started/index.html}Getting Started Guide}}.

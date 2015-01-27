@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<project name="geni-orca" default="help" basedir=".">
+	<property file="${basedir}/build/user.properties" />
+	<property file="${basedir}/build/build.properties" />
+	<property environment="env" />
+
+	<target name="help">
+		<echo>
+			${project.name} helper script.
+
+			get.certificate      - Installs the ceritificate of the GENI-ORCA maven repository in the current java keystore. 
+			get.certificate.sudo - Installs the ceritificate of the GENI-ORCA maven repository in the current java keystore (uses sudo). 
+			prepare.build        - Prepares the source for building
+			build                - Builds the source tree (== mvn install)
+			prepare.use          - Prepares the source tree for usage
+		</echo>
+	</target>
+
+	<!-- This property is used by hudson to force maven to use a custom local repository -->
+	<property name="redirect.maven" value="" />
+
+	<target name="remove.all" />
+
+	<target name="build">
+		<exec executable="${build.cmd}" dir="." failonerror="true">
+			<arg line="${redirect.maven} install"/>
+		</exec>
+	</target>
+
+
+	<target name="prepare.use">
+		<exec executable="${use.cmd}" dir="." failonerror="true" />
+	</target>
+
+
+	<target name="install.dependencies">
+		<exec executable="${build.cmd}" dir="tools/dependencies" failonerror="true">
+			<arg line="${redirect.maven} install"/>
+		</exec>
+	</target>
+
+	<target name="install.build.tools">
+		<exec executable="${build.cmd}" dir="tools/build" failonerror="true">
+			<arg line="${redirect.maven} install"/>
+		</exec>
+	</target>
+
+	<target name="install.master.pom">
+		<exec executable="${build.cmd}" dir="tools/pom" failonerror="true">
+			<arg line="${redirect.maven} install"/>
+		</exec>
+	</target>
+
+	<target name="get.certificate">
+		<exec executable="${getcert.cmd}" dir="." failonerror="true">
+		</exec>
+	</target>
+
+	<target name="get.certificate.sudo">
+		<exec executable="sudo" dir="." failonerror="true">
+			<arg line="bash -c &quot; export JAVA_HOME=${env.JAVA_HOME} ; ${getcert.cmd} &quot;" />
+		</exec>
+	</target>
+
+
+	<target name="prepare.build" depends="prepare.webapp">
+		<antcall target="install.build.tools" />
+		<!--
+		<antcall target="install.master.pom" />
+		<antcall target="install.dependencies" />
+		-->
+	</target>
+
+	<target name="prepare.webapp" />
+
+</project>

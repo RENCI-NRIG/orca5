@@ -1,0 +1,95 @@
+ ----
+ Miscellaneous Tasks
+ ----
+ Aydan Yumerefendi
+ ----
+ 16 December, 2007
+ ----
+
+Miscellaneous Tasks
+
+ {{{index.html}\<\<Back to contents}}
+
+ This page describes some additional tasks provided by the
+ configuration tool.
+
+  * {{{#Show_all_keys_in_the_admin_keystore}Show all keys in the admin
+    keystore}}
+    
+  * {{{#Show_all_keys_in_an_actors_keystore}Show all keys in an
+    actor's keystore}}
+
+  * {{{#Remove_a_key_from_the_admin_keystore}Remove a key from the admin keystore}}
+
+
+  * {{{#Export_an_actors_certificate}Export an actor's certificate}}
+
+  * {{{#Export_the_admins_certificate}Export the admin's certificate}}
+  
+  * {{{Export_an_actors_certificate_in_base64_encoding}Export an actor's certificate in base64 encoding}} 
+  
+  * {{{#Generate_a_GUID}Generate a new GUID}}
+  
+  
+  
+    
+* {Show all keys in the admin keystore}
+
++---
+ant show.keys
++---
+
+* {Show all keys in an actor's keystore}
+
++---
+ant show.actor.keys -Dactor=ACTOR_GUID
++---
+
+ Where ACTOR_GUID is the actor's GUID.
+
+* {Remove a key from the admin keystore}
+
++---
+ant remove.key -Dkey.alias=KEY_ALIAS
++---
+
+ Where KEY_ALIAS is the alias of the key to be removed.
+
+* {Export an actor's certificate}
+
++---
+ant export.actor.certificate -Dactor=ACTOR_GUID -Dcert.file=PATH_TO_CERT_FILE
++---
+
+ Where ACTOR_GUID is the actor's guid and PATH_TO_CERT_FILE is the location
+ where the certificate file must be stored.
+
+* {Export the admin's certificate}
+
++---
+ant export.actor.certificate -Dactor=admin -Dcert.file=PATH_TO_CERT_FILE
++---
+
+ Where PATH_TO_CERT_FILE is the location where the certificate file
+ must be stored.
+
+
+* {Export an actor's certificate in base64 encoding}
+
+ Once you have create the security configuration of an an actor, the generated actor certificate can be exported
+ in BASE64 encoded form (to be used in a container XML file) by using the following:
+ 
++---
+ant -emacs export64.actor.certificate -Dactor=guid_of_the_actor
++---
+ 
+* {Generate a GUID}
+
+ To generate a new GUID use the following:
+ 
++---
+ant guid
++---
+
+ 
+ 

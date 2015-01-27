@@ -1,0 +1,19 @@
+ ----
+ Network Managers
+ ----
+ Aydan Yumerefendi
+ ----
+ 13 December 2007
+ ----
+
+Network Managers
+
+ A network manager is responsible for allocating networking
+ configuration for a newly allocated resource (physical or virtual
+ machine).
+
+ The currently supported network managers are:
+
+  * {{{network_standard.html}Standard Network Manager}}
+
+ 

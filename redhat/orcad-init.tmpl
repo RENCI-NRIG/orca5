@@ -1,0 +1,96 @@
+#!/bin/sh
+#
+# ORCAd init
+#
+# chkconfig:   - 99 01
+# description: A front-end init script that starts orcad with the right
+#              environment variables set.
+
+# Required-Start: $remote_fs $network $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Stop: 0 1 6
+# Short-Description: ORCAd init
+# Description: A front-end init script that starts orcad with the right
+#              environment variables set.
+### END INIT INFO
+
+. /etc/rc.d/init.d/functions
+
+prog=@@SYSCONFIG@@
+exec="/opt/orca/bin/orcad"
+
+[ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
+
+start() {
+    echo "-17" > /proc/self/oom_adj
+    [ -x $exec ] || exit 5
+    [ -n "$ORCA_HOME" ] || exit 6
+    [ -n "$ORCA_SERVER_PORT" ] || exit 7
+    echo -n $"Starting $prog: "
+    export PATH=/usr/java/latest/bin:$PATH
+    export ORCA_HOME
+    export ORCA_SERVER_PORT
+    [ -d ${ORCA_HOME}/packages ] && rm -rf ${ORCA_HOME}/packages
+    [ -d ${ORCA_HOME}/handlers ] && rm -rf ${ORCA_HOME}/handlers
+    [ -d ${ORCA_HOME}/scripts ] && rm -rf ${ORCA_HOME}/scripts
+    $exec start
+    retval=$?
+    return $retval
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    export ORCA_HOME
+    export ORCA_SERVER_PORT
+    $exec stop
+    retval=$?
+    return $retval
+}
+
+restart() {
+    stop
+    start
+}
+
+clean_restart() {
+    stop
+    [ -e ${ORCA_HOME}/state_recovery.lock ] && rm ${ORCA_HOME}/state_recovery.lock
+    [ -d ${ORCA_HOME}/modelState ] && rm -rf ${ORCA_HOME}/modelState/*
+    start
+}
+
+reload() {
+    restart
+}
+
+force_reload() {
+    clean_restart
+}
+
+case "$1" in
+    start)
+        $1
+        ;;
+    stop)
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    clean-restart)
+        clean_restart
+        ;;
+    reload)
+        $1
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    condrestart|try-restart)
+        restart
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart|clean-restart|condrestart|try-restart|reload|force-reload}"
+        exit 2
+esac
+exit $?

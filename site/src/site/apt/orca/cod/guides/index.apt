@@ -1,0 +1,27 @@
+ ------
+ Welcome
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+Guides
+
+ Welcome to the COD Guides!
+
+ On thises pages you will find information about configuring and managing a Cluster on Demand installation.
+ This web site is currently under development: some guides may have errors and/or be incomplete. Please let us
+ know if you discover a problem.
+
+*--------------------------------------------------------+-----------------------------------------------------------+
+| Name                                                   | Description                                      
+*--------------------------------------------------------+-----------------------------------------------------------+
+| {{{getting-started/index.html}Getting Started Guide}}	 | First stop for new users.
+*------------------------------------------------------- +-----------------------------------------------------------+
+| {{{siteplugin/index.html}COD Site Plugin Guide}}	 | COD Site plugin configuration.
+*------------------------------------------------------- +-----------------------------------------------------------+
+| {{{smplugin/index.html}COD Service Manager Plugin Guide}}| COD service manager plugin configuration.
+*------------------------------------------------------- +-----------------------------------------------------------+
+| {{{../controls/}COD Resource Controls}} | COD Resource Controls reference.
+*------------------------------------------------------- +-----------------------------------------------------------+

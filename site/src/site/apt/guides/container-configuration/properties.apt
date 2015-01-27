@@ -1,0 +1,402 @@
+ ----
+ Container Configuration Properties File
+ -----
+ The Orca Team
+ -----
+ December 9, 2007 [Aydan] Added description for all sections. 
+ -----
+
+Container Properties File
+ 
+ Each Orca container loads some of its configuration from a 
+ properties file, which we refer to as the <Container Properties
+ File>. The default location of this properties file is
+ $ORCA_HOME/config/container.properties. It is also possible to use a
+ configuration file from a different location. Please see
+ {{{config-files.html}this}} page for a definition of ORCA_HOME.
+
+ A Container Properties File contains a collection of properties,
+ which are used to bootstrap an Orca container. This configuration
+ file is used to specify actor-independent
+ configuration. That is, no actors can be created using the container.properties
+ file. 
+ 
+ Actor-specific configuration can be performed programmatically, or with the
+ help of an {{{xml.html}XML file}}.
+ 
+ The Container Properties File is logically organized in
+ sections. Each section is responsible for configuring a specific
+ aspect of the system.
+
+ * {{{#Container_identity}Container identity}}
+
+ * {{{#Database_settings}Database settings}}
+
+ * {{{#Extension_plugins}Extension plugins}}
+ 
+ * {{{#Administrator_user_configuration}Administrator user configuration}}
+ 
+ * {{{#Emulation}Emulation}}
+ 
+ * {{{#Node_Agent}Node Agent}}
+
+ * {{{#Time_settings}Time settings}}
+
+ * {{{#Core_interfaces}Core interfaces}}
+
+ []
+
+* {Container identity}
+
+ This section specifies the identify of the Orca container. It consists of the
+ following properties:
+
+  * <<container.guid>> the guid of the Orca container. If omitted, Orca will
+  generate the ID itself. You can find information how to generate a guid
+  {{{../getting-started/index.html#How_to_generate_a_GUID}here}}.
+
+
+  * <<container.soapaxis2.url>> the URL to use for SOAP access. This url will be
+  used to construct URLs for web services running inside the Orca container. The
+  URL should look something like this: http://[ip or
+  hostname]:port/webapp-prefix. For example, if Orca would be running on a host
+  foor.bar.com or port 8080 under the default webapp context (orca), the url would
+  be: http://foor.bar.com:8080/orca.
+
+  <<Note:>> If this property is not specified interactor SOAP-based
+  communication will be disabled.
+
+  <<Note:>> This property only has effect when the Orca container is running
+  inside an application server.
+
+  []
+
+  A sample for this configuration section looks like this:
+
++---
+##############################################
+# Container identity 
+#############################################
+
+# Container guid: uniquely identifies this Orca container.
+# If omitted, Orca will generate the ID itself.
+# To generate an id yourself use the uuid command or visit
+# the following web page: http://www.famkruithof.net/uuid/uuidgen
+container.guid=114824fa-b3ad-11de-8875-000c29b1c193
+# URL for SOAP access. 
+# Please replace localhost with the IP or DNS name of your machine.
+# The port number depends on the settings of your web server. The
+# default Orca installation uses: 8080.
+protocols.soapaxis2.url=http://localhost:8080/orca 
++---
+ 
+* {Database settings}
+
+ This section describes how to access the container's database. It consists of
+ the following properties:
+
+ * <<admin.container.database.class>> the class implementing the container
+ database. The default value is
+ <orca.shirako.container.db.MySqlShirakoContainerDatabase> and one would
+ rarely need to change it.
+
+ * <<admin.container.database.mysql.server>> the server hosting the database
+  server.
+
+  <<Note:>> While it is possible to run the database server on a separate host,
+  the current release has not documented all steps required to support this
+  separation, so we recommend running the database server and the Orca container
+  on the same host.
+
+ * <<admin.container.database.mysql.port>> the port used by the databse server.
+ The default value is: 3306.
+
+ * <<admin.container.database.mysql.db>> the name of the container database.
+ Default is: orca.
+
+ * <<admin.container.database.mysql.user>> database server user name to use when
+ accessing the database. Default is: orca.
+
+ * <<admin.container.database.mysql.password>> database server user password.
+ Default is: no password, i.e., admin.container.database.mysql.password=
+
+ []
+
+ When bootstrapping the system for the fist time, it would ensure that the database is in a
+ pristine state, so that stale old configuration does not affect the new
+ container. As a result, the container would erase any use information added to
+ the database before the container starts. This means that the record for the
+ admin user must be created <<after>> the container has booted for the first
+ time. To simplify management, the container can be configured to
+ create a record for the admin user when as it boots for the first time. This
+ behavior is controlled by the following properties:
+
+
+  * <<admin.container.database.admin.first>> the first name of the admin user
+  
+  * <<admin.container.database.admin.last>> the last name of the admin user
+
+  * <<admin.container.database.admin.login>> the login name for the admin user.
+  Must be set to: admin
+
+  * <<admin.container.database.admin.password>> the password for the admin user.
+
+  * <<admin.container.database.admin.roles>> the roles held by the admin user.
+  Must be set to: "home,users,broker,admin".
+
+  []
+
+ A sample for this configuration section would look like this: 
+
++---
+##############################################
+# Database settings 
+#############################################
+
+# This section specifies the database to be used by this Orca container.
+
+# The class implementing the container database
+admin.container.database.class=orca.shirako.container.db.MySqlShirakoContainerDatabase
+# server hosting the database server
+admin.container.database.mysql.server=localhost
+# port number (default is 3306)
+admin.container.database.mysql.port=3306
+# database name
+admin.container.database.mysql.db=orca
+# database server user name
+admin.container.database.mysql.user=orca
+# database server password
+admin.container.database.mysql.password=
+# first name of the admin user
+admin.container.database.admin.first=Orca
+# family name of the admin user
+admin.container.database.admin.last=Admin
+# login name of the admin user
+admin.container.database.admin.login=admin
+# password of the admin user
+admin.container.database.admin.password=login
+# roles held by the admin user
+admin.container.database.admin.roles="home,users,broker,admin"
++---
+
+* {Extension plugins}
+
+ This section specifies configuration plugins to be instantiated at boot time.
+ All properties in this section must start with the prefix <admin.plugin.>, followed by the number
+ of the plugin. For example, the first plugin to instantiate will be <admin.plugin.1>, and the tenth:
+ <admin.plugin.10>.
+
+ The value of each property identifies the plugin. Each plugin's identity consists of two parts: the identifier
+ of the package containing the plugin, and the local plugin identifier within that package. Both identifiers
+ must be separated by a comma (",").
+ 
+ A sample of this configuration section looks like this:
+ 
++---
+##############################################
+# Extension plugins
+#############################################
+
+# Start the image manager plugin
+admin.plugin.1=583c10bfdbd326ba:64e961eb:114471e3f46:-8000,1
++---
+
+* {Administrator user configuration}
+
+ This section specifies some security settings for the administrator user.
+ The currently supported properties in this section are:
+
+  * <<admin.name>> Name of the administrator user. Must be set to: admin
+
+  <<Note:>> The admin name is still hardcoded in some of the configuration tools, so please do not
+  change the default value for this property.
+
+  * <<admin.keystore.password>> Password for the administrator's keystore.
+
+  Must be set to: clientkeystorepass
+
+  <<Note:>> The keystore password is still hardcoded in some of the configuration tools, so please do not
+  change the default value for this property.
+
+ A sample of this configuration section looks like this:
+
++---
+#####################################################################
+# Administrator user configuration.
+#####################################################################
+
+# Identifier for the admin name
+admin.name=admin
+# Admin keystore password. Do not change! Custom passwords are not supported in the current version.
+admin.keystore.password=clientkeystorepass
++---
+
+* {Emulation}
+
+ This section controls the emulation behavior of the system. The currently supported properties
+ in this section are:
+
+  * <<emulation>> Controls whether the system executes in emulation or in real mode.
+
+  <Possible values:> <<true>> (emulation is enabled), <<false>> (emulation is disabled, running in real mode).
+
+ A sample of this configuration section looks like this:
+  
++---
+#####################################################################
+# Emulation settings
+#####################################################################
+
+# Emulation flag. true - running under emulation, false - not running under emulation
+emulation=true
++---
+
+* {Node Agent}
+
+ This section specifies settings for communicating with instances of the
+ Node Agent service. The currently supported properties in this section
+ are:
+
+  * <<na.port>> Port number of the Node Agent service.
+
+  <Recommended value:> 6
+
+  * <<na.protocol>> Protocol used to communicate with the Node Agent service.
+
+  <Recommended value:> http
+
+  * <<na.uri>> URI of the node Agent Service.
+
+  <Recommended value:> /axis2/services/NodeAgentService
+
+  * <<secure.communication>> Controls whether WS Secure Communication must be used when interacting
+  with the Node Agent service.
+
+  <Possible values>: <<true>> (communication is signed and encrypted), <<false>> (communication is sent in
+  plain-text).
+
+  []
+
+ In addition to nodeagent-specific settings this section also specifies Axis2
+ client-side configuration settings to be used by all axis2-based SOAP
+ communication in the container.
+ 
+  * <<axis2.repository>> Path to the axis2 client-side repository. Relative paths are resolved relative
+  to $ORCA_LOCAL.
+
+  <Recommended value:> axis2repository
+
+ A sample of this configuration section looks like this:
+ 
++--- 
+##############################################
+# Node agent service settings
+#############################################
+
+# Node agent service port number
+na.port=6
+# Node agent service protocol
+na.protocol=http
+# Node agent service URI
+na.uri=/axis2/services/NodeAgentService
+# Controls if NodeAgent operations are using secure communication. true|false
+secure.communication=true
+# Axis2 repository location
+axis2.repository=axis2repository
++---
+
+
+* {Time settings}
+
+ This section controls the internal container clock.
+
+ * <<time.startTime>> beginnig of time (in unix time). The default -1, which
+ translates into the current time when the container starts for the first time.
+
+ * <<time.cycleMillis>> length of an internal tick (in milliseconds)
+
+ * <<time.firstTick>> the number of the first tick
+
+ * <<time.manual>> controls if the time advances manually (true) or
+   automatically (false).
+
+[]
+
+ A sample of this configuration section looks like this:
+
++---
+##############################################
+# Time settings 
+#############################################
+
+# This section controls settings, which are generally useful 
+# when running Orca under emulation. These settings allow you to 
+# control Orca's notion of time.
+
+# Beginning of time (in unix time). 
+# The default is -1, which translates into using the current time as
+# the beginning of time for the container's internal clock.
+time.startTime=-1
+# Internal tick length (in milliseconds)
+time.cycleMillis=1000
+# The number of the first tick
+time.firstTick=0
+# This property controls if time advances automatically (false) or
+# manually (true)
+time.manual=false
++---
+
+* {Core interfaces}
+
+ This section specifies the class names for key system interfaces. At
+ boot time, the system will instantiate the specified classes and use
+ the resulting objects to perform key system tasks. One would rarely need to
+ override the defaults.
+ 
+ 
+ The currently supported properties in this section are:
+
+  * <<container.manager.class>> IContainerManager implementation to use for the Container Manager.
+
+    <Recommended value:> orca.shirako.container.OrcaContainer
+
+  * <<admin.container.manager.object.class>> implementation for the container manager object
+
+    <Recommended value:> orca.manage.extensions.standard.container.CodContainerManagerObject
+  
+  * <<admin.configuration.loader.class>> IConfigurationLoader implementation to use for loading actor-specific configuration.
+
+  <Recommended value:> orca.boot.ConfigurationLoader
+
+  * <<admin.management.defaults.installer.class>> IManagementDefaultsInstaller implementation to use for assigning the default management features for a new actor.
+
+  <Recommended value:> orca.manage.extensions.standard.StandardManagementDefaultsInstaller
+ 
+  * <<ticket.factory.class>> the ticket factory implementation
+
+  <Recommended value:> orca.shirako.common.delegation.SharpResourceTicketFactory
+ 
+  * <<certificate.policy.class>> the certificate resolution policy to use.
+  
+  <Recommended value:> orca.manage.extensions.standard.SharpRemoteCallCertificatePolicy
+
+  []
+
+ A sample of this configuration section looks like this:
+ 
++---
+##############################################
+# Core interfaces
+#############################################
+
+# IContainerManager implementation to use
+container.manager.class=orca.manage.container.Manager
+# IConfigurationLoader implementation to use
+admin.configuration.loader.class=orca.boot.ConfigurationLoader
+# Implementation of IManagementDefaultsInstaller to use
+admin.management.defaults.installer.class=orca.manage.extensions.standard.StandardManagementDefaultsInstaller
+# Implementation for the container manager object
+admin.container.manager.object.class=orca.manage.extensions.standard.container.CodContainerManagerObject
++---
+
+

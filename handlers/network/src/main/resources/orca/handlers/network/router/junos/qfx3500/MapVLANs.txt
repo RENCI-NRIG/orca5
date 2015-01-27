@@ -1,0 +1,13 @@
+vlans { {$VLANName} {
+	vlan-id {$srcVLAN}; 
+	interface  {
+		{$port}.0 {
+			mapping { 
+				{$dstVLAN} { 
+					swap; 
+					} 
+				}
+			}
+		}
+	} 
+}

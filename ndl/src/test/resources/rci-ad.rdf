@@ -1,0 +1,148 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:j.0="http://geni-orca.renci.org/owl/compute.owl#"
+    xmlns:j.2="http://geni-orca.renci.org/owl/ethernet.owl#"
+    xmlns:j.1="http://geni-orca.renci.org/owl/layer.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:j.4="http://geni-orca.renci.org/owl/collections.owl#"
+    xmlns:j.3="http://geni-orca.renci.org/owl/domain.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:j.5="http://geni-orca.renci.org/owl/topology.owl#" > 
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/TenGigabitEthernet/1/ethernet">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#ConnectionPoint"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#LayerNetworkElement"/>
+    <rdf:type rdf:nodeID="A0"/>
+    <j.1:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Item"/>
+    <j.1:metric rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</j.1:metric>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <j.1:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</j.1:bandwidth>
+    <j.5:connectedTo rdf:resource="http://geni-orca.renci.org/owl/rciNet.rdf#RciNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
+    <j.5:linkTo rdf:resource="http://geni-orca.renci.org/owl/rciNet.rdf#RciNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
+    <j.5:hostInterfaceName>eth2</j.5:hostInterfaceName>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <rdfs:label>41-50</rdfs:label>
+    <j.5:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni"/>
+    <j.1:feature rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+    <rdf:type rdf:nodeID="A1"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdf:type rdf:nodeID="A2"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:SeeAlso>http://geni-orca.renci.org/owl/rcivmsite.rdf</rdfs:SeeAlso>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+    <j.5:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/vm"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/SwitchingMatrix">
+    <j.1:switchingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#SwitchingMatrix"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/TenGigabitEthernet/2/ethernet">
+    <j.5:connectedTo rdf:resource="http://geni-orca.renci.org/owl/rciNet.rdf#RciNet/IBM/G8052/TenGigabitEthernet/1/2/ethernet"/>
+    <j.1:metric rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</j.1:metric>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#ConnectionPoint"/>
+    <j.5:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/BareMetal"/>
+    <j.1:feature rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+    <j.1:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+    <rdf:type rdf:nodeID="A0"/>
+    <j.5:hostInterfaceName>eth2</j.5:hostInterfaceName>
+    <rdfs:SeeAlso>http://geni-orca.renci.org/owl/rcivmsite.rdf</rdfs:SeeAlso>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <j.5:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/vm"/>
+    <j.1:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</j.1:bandwidth>
+    <j.5:linkTo rdf:resource="http://geni-orca.renci.org/owl/rciNet.rdf#RciNet/IBM/G8052/TenGigabitEthernet/1/2/ethernet"/>
+    <rdf:type rdf:nodeID="A1"/>
+    <rdfs:label>41-50</rdfs:label>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#LayerNetworkElement"/>
+    <rdf:type rdf:nodeID="A2"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Item"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/availableVMLabelSet">
+    <j.0:hasUnitServer rdf:resource="http://geni-orca.renci.org/owl/orca.owl#ORCAUnitServer"/>
+    <j.3:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <j.4:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">36</j.4:size>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/NetworkService/1">
+    <j.1:labelSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/availableVLANSet"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#Service"/>
+    <rdf:type rdf:nodeID="A3"/>
+    <rdf:type rdf:nodeID="A4"/>
+    <j.3:hasServiceElement rdf:resource="http://geni-orca.renci.org/owl/domain.owl#Node"/>
+    <j.1:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Item"/>
+    <j.3:hasAccessMethod rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ORCAActor"/>
+    <j.1:availableLabelSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/availableVMLabelSet"/>
+    <rdf:type rdf:nodeID="A5"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdf:type rdf:nodeID="A6"/>
+    <j.0:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/BareMetal/availableBareMetalLabelSet"/>
+    <j.2:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/staticVLANSet"/>
+    <j.1:labelSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/BareMetal/availableBareMetalLabelSet"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#NetworkService"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <j.2:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/availableVLANSet"/>
+    <rdf:type rdf:nodeID="A2"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#LayerNetworkElement"/>
+    <j.1:labelSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/staticVLANSet"/>
+    <rdf:type rdf:nodeID="A7"/>
+    <j.1:labelSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/availableVMLabelSet"/>
+    <j.3:hasTopology rdf:resource="http://geni-orca.renci.org/owl/domain.owl#Node"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+    <j.0:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/availableVMLabelSet"/>
+    <j.3:hasServiceElement rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ORCAActor"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdf:type rdf:nodeID="A1"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#ConnectionPoint"/>
+    <rdf:type rdf:nodeID="A0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VM">
+    <rdf:type rdf:nodeID="A0"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ServiceElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <owl:equivalentClass rdf:nodeID="A8"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#Service"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <j.3:resourceTypeRank rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</j.3:resourceTypeRank>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:subClassOf rdf:nodeID="A0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/vm">
+    <j.5:hasInterface rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/TenGigabitEthernet/2/ethernet"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+    <j.3:hasService rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/NetworkService/1"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+    <rdf:type rdf:nodeID="A9"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+    <j.5:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/SwitchingMatrix"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <j.1:isLabelProducer rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:isLabelProducer>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Collection"/>
+    <j.5:hasInterface rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#Rci/ExoGeni/TenGigabitEthernet/1/ethernet"/>
+    <rdf:type rdf:nodeID="A0"/>
+    <rdfs:label xml:lang="en">http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain/vm</rdfs:label>
+    <j.4:element rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#RCi/ExoGeni/PoP"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+</rdf:RDF>

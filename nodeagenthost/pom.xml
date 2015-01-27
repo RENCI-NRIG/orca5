@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>orca</groupId>
+	<artifactId>nodeagenthost</artifactId>
+	<packaging>jar</packaging>
+	<version>3.0-SNAPSHOT</version>
+	<name>Orca Node Agent Host</name>
+	<parent>
+		<groupId>orca</groupId>
+		<artifactId>orca</artifactId>
+		<version>3.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	
+	<properties>
+		<orca.nodeagent.version>${project.version}</orca.nodeagent.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>orca.dependencies</groupId>
+			<artifactId>axis2</artifactId>
+			<version>1.0</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcprov-jdk15</artifactId>
+			<version>133</version>
+		</dependency>
+		<dependency>
+			<groupId>orca.dependencies</groupId>
+			<artifactId>ant-contrib</artifactId>
+			<version>1.0</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>orca</groupId>
+			<artifactId>nodeagent</artifactId>
+			<version>${orca.nodeagent.version}</version>
+			<type>aar</type>
+			<classifier>package</classifier>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.4</version>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>package</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+								<dependencyfilesets/>
+
+								<property name="compile.classpath" refid="maven.compile.classpath" />
+								<property name="run.classpath" refid="maven.runtime.classpath" />
+								<property name="test.classpath" refid="maven.test.classpath" />
+								<property name="plugin.classpath" refid="maven.plugin.classpath" />
+
+								<property name="maven.project.build.directory" value="${project.build.directory}" />
+								<property name="maven.project.build.sourceDirectory" value="${project.build.sourceDirectory}" />
+								<property name="maven.project.build.testSourceDirectory" value="${project.build.testSourceDirectory}" />
+								<property name="maven.project.build.outputDirectory" value="${project.build.outputDirectory}" />
+								<property name="maven.project.build.testOutputDirectory" value="${project.build.testOutputDirectory}" />
+								<property name="maven.project.version" value="${project.version}" />
+
+								<!-- always build the tar version -->
+								<ant antfile="${basedir}/maven_build.xml" inheritRefs="true">
+									<target name="tar" />
+								</ant>
+								<attachartifact file="target/nah.tar.gz" type="tar.gz" classifier="package" />
+
+								<!-- check if we should build the deb package -->
+								<if>
+									<isset property="build.deb" />
+									<then>
+										<ant antfile="${basedir}/maven_build.xml" inheritRefs="true">
+											<target name="deb" />
+										</ant>
+										<attachartifact file="target/nah.deb" type="deb" classifier="package" />
+									</then>
+								</if>
+
+								<!-- check if we should build the rpm package -->
+								<if>
+									<isset property="build.rpm" />
+									<then>
+										<ant antfile="${basedir}/maven_build.xml" inheritRefs="true">
+											<target name="rpm" />
+										</ant>
+										<attachartifact file="target/nah.rpm" type="rpm" classifier="package" />
+									</then>
+								</if>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>  
+</project>

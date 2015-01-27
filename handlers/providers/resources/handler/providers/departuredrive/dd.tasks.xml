@@ -1,0 +1,350 @@
+<!--  departure drive/NLR tasks -->
+
+<macrodef name="DDJoin" description="DD Join: Create a VLAN">
+	<attribute name="iter" description="action iterator"/>
+	<attribute name="tag" description="vlan tag"/>
+	<attribute name="bw" description="vlan bw"/>
+	<attribute name="burst" description="burst size"/>
+	<attribute name="ports" description="vlan ports"/>
+	<sequential>
+		<echo message="DD join action @{iter} on router ${DD.router}: vlan=@{tag} bw=@{bw}/@{burst} ports=@{ports}"  />
+		<var name="myprop" unset="true"/>
+		<trycatch property="failmsg">
+			<try>
+	    		<if>
+	      			<equals arg1="${emulation}" arg2="true" />
+	      			<then>
+	      				<!--  fail on demand for debugging -->
+						<if>
+							<equals arg1="@{tag}" arg2="fail"/>
+							<then>
+								<echo message="Failing action @{iter}"/>
+								<fail message="Failed on action @{iter}"/>
+							</then>
+						</if>
+						<echo message="running under emulation...exiting" />
+					</then>
+					<else>
+						<!--  do real stuff here -->
+						<create.vlan 
+							router="${DD.router}"
+							router.type="${DD.router.type}"
+							vlan.tag="@{tag}"
+							vlan.qos.rate="@{bw}"
+							vlan.qos.burst.size="@{burst}"
+							router.user="${DD.router.user}"
+							router.password="${DD.router.password}"
+							router.default.prompt="${DD.router.default.prompt}"
+							router.admin.password="${DD.router.admin.password}" />
+							
+						<add.trunk.ports 
+							router="${DD.router}"
+							router.type="${DD.router.type}"
+							vlan.tag="@{tag}"
+							ports="@{ports}"
+							router.user="${DD.router.user}"
+							router.password="${DD.router.password}"
+							router.default.prompt="${DD.router.default.prompt}"
+							router.admin.password="${DD.router.admin.password}" />
+					</else>
+				</if>
+			</try>
+			<catch>
+				<!--  undo all DD joins in reverse order, then fail -->
+				<ReverseIter val="@{iter}" return="reviter"/>
+				<DDIterateLeave iter="${reviter}"/>
+				<fail message="${failmsg}"/>
+			</catch>
+		</trycatch>
+	</sequential>
+</macrodef>
+
+<macrodef name="ExchangeJoin" description="Exchange join: create a vlan and perform VLAN mapping">
+	<attribute name="iter" description="action iterator"/>
+	<attribute name="taga" description="vlan tag"/>
+	<attribute name="tagb" description="vlan tag"/>
+	<attribute name="bw" description="vlan bw"/>
+	<attribute name="burst" description="burst size"/>
+	<attribute name="mapport" description="map port"/>
+	<sequential>
+		<echo message="Exchange join action @{iter} on router ${Exchange.router}: Create VLAN @{taga} with bw=@{bw}/@{burst} and map to vlan2=@{tagb} on port=@{mapport}" />
+		<trycatch property="failmsg">
+			<try>
+				<if>
+			  		<equals arg1="${emulation}" arg2="true" />
+			  		<then>
+			  			<!--  fail on demand for debugging -->
+						<if>
+							<equals arg1="@{taga}" arg2="fail"/>
+							<then>
+								<echo message="Failing action @{iter}"/>
+								<fail message="Failed on action @{iter}"/>
+							</then>
+						</if>
+						<echo message="running under emulation...exiting" />
+					</then>
+					<else>
+						<create.vlan 
+							router="${Exchange.router}"
+							router.type="${Exchange.router.type}"
+							vlan.tag="@{taga}"
+							vlan.qos.rate="@{bw}"
+							vlan.qos.burst.size="@{burst}"
+							router.user="${Exchange.router.user}"
+							router.password="${Exchange.router.password}"
+							router.default.prompt="${Exchange.router.default.prompt}"
+							router.admin.password="${Exchange.router.admin.password}" />
+						<!--  Note that on QFX the mapping port are access, but the 
+						trunk add/delete operations are no-op, so this works. Not clear
+						how this should be done on other switches. /ib 09/09/2013 -->
+						<add.trunk.ports 
+							router="${Exchange.router}"
+							router.type="${Exchange.router.type}"
+							vlan.tag="@{taga}"
+							ports="@{mapport}"
+							router.user="${Exchange.router.user}"
+							router.password="${Exchange.router.password}"
+							router.default.prompt="${Exchange.router.default.prompt}"
+							router.admin.password="${Exchange.router.admin.password}" />
+						<map.vlans router="${Exchange.router}"
+							router.type="${Exchange.router.type}"
+							src.vlan.tag="@{taga}"
+							dst.vlan.tag="@{tagb}"
+							port="@{mapport}"
+							router.user="${Exchange.router.user}"
+							router.password="${Exchange.router.password}"
+							router.default.prompt="${Exchange.router.default.prompt}"
+							router.admin.password="${Exchange.router.admin.password}" />
+					</else>
+				</if>
+			</try>
+			<catch>
+				<!--  undo all exchanges, then dd operations, then fail -->
+				<ReverseIter val="@{iter}" return="reviter"/>
+				<ExchangeIterateLeave iter="${reviter}" />
+				<DDIterateLeave iter="${unit.action.num.DD}"/>
+				<fail message="${failmsg}"/>
+			</catch>
+		</trycatch>	
+	</sequential>
+</macrodef>
+
+<macrodef name="DDLeave" description="Delete a VLAN">
+	<attribute name="iter" description="action iterator"/>
+	<attribute name="tag" description="vlan tag"/>
+	<attribute name="ports" description="vlan ports"/>
+	<sequential>
+		<echo message="DD leave action @{iter} on router ${DD.router}: vlan=@{tag} ports=@{ports}"  />
+		<if>
+	  		<equals arg1="${emulation}" arg2="true" />
+	  		<then>
+				<echo message="running under emulation...exiting" />
+			</then>
+			<else>
+				<remove.trunk.ports
+					router="${DD.router}"
+					router.type="${DD.router.type}"
+					vlan.tag="@{tag}"
+					ports="@{ports}"
+					router.user="${DD.router.user}"
+					router.password="${DD.router.password}"
+					router.default.prompt="${DD.router.default.prompt}"
+					router.admin.password="${DD.router.admin.password}" />
+					
+				<delete.vlan 
+					router="${DD.router}"
+					router.type="${DD.router.type}"
+					vlan.tag="@{tag}"
+					vlan.with.qos="true"
+					router.user="${DD.router.user}"
+					router.password="${DD.router.password}"
+					router.default.prompt="${DD.router.default.prompt}"
+					router.admin.password="${DD.router.admin.password}" />
+			</else>
+		</if>
+	</sequential>
+</macrodef>
+
+<macrodef name="ExchangeLeave" description="Unmap a vlan">
+	<attribute name="iter" description="action iterator"/>
+	<attribute name="taga" description="vlan tag"/>
+	<attribute name="tagb" description="vlan tag"/>
+	<attribute name="mapport" description="map port"/>
+	<sequential>
+		<echo message="Exchange leave action @{iter} on router ${Exchange.router}: vlan1=@{taga} vlan2=@{tagb} on port=@{mapport}" />
+		<if>
+	  		<equals arg1="${emulation}" arg2="true" />
+	  		<then>
+				<echo message="running under emulation...exiting" />
+			</then>
+			<else>
+				<unmap.vlans 
+					router="${Exchange.router}"
+					router.type="${Exchange.router.type}"
+					src.vlan.tag="@{taga}"
+					dst.vlan.tag="@{tagb}"
+					port="@{mapport}"
+					router.user="${Exchange.router.user}"
+					router.password="${Exchange.router.password}"
+					router.default.prompt="${Exchange.router.default.prompt}"
+					router.admin.password="${Exchange.router.admin.password}" />
+				<!--  Note that on QFX the mapping port are access, but the 
+				trunk add/delete operations are no-op, so this works. Not clear
+				how this should be done on other switches. /ib 09/09/2013 -->
+				<remove.trunk.ports
+					router="${Exchange.router}"
+					router.type="${Exchange.router.type}"
+					vlan.tag="@{taga}"
+					ports="@{mapport}"
+					router.user="${Exchange.router.user}"
+					router.password="${Exchange.router.password}"
+					router.default.prompt="${Exchange.router.default.prompt}"
+					router.admin.password="${Exchange.router.admin.password}" />
+				<delete.vlan 
+					router="${Exchange.router}"
+					router.type="${Exchange.router.type}"
+					vlan.tag="@{taga}"
+					vlan.with.qos="true"
+					router.user="${Exchange.router.user}"
+					router.password="${Exchange.router.password}"
+					router.default.prompt="${Exchange.router.default.prompt}"
+					router.admin.password="${Exchange.router.admin.password}" />
+			</else>
+		</if>
+	</sequential>
+</macrodef>
+
+	
+<!-- iterate in some order over DD join actions -->
+<macrodef name="DDIterateJoin" description="Perform iteration on DD joins">
+	<attribute name="iter" description="iterator"/>
+	<sequential>
+		<echo message="DDJoin actions @{iter}"/>
+		<for list="@{iter}" param="actioniter" delimiter="," parallel="false">
+			<sequential>
+				<if>
+					<or>
+						<not><isset property="unit.vlan.tag.@{actioniter}.DD"/></not>
+						<not><isset property="unit.bandwidth.@{actioniter}.DD"/></not>
+						<not><isset property="unit.bandwidth.burst.@{actioniter}.DD"/></not>
+						<not><isset property="DD.action.@{actioniter}.ports"/></not>
+					</or>
+					<then>
+						<fail message="Incorrect parameters specified for action @{actioniter} DD"/>
+					</then>
+				</if>
+				<echo message="Provisioning DD action @{actioniter}" />
+				<DDJoin iter="@{actioniter}" 
+					tag="${unit.vlan.tag.@{actioniter}.DD}" 
+					bw="${unit.bandwidth.@{actioniter}.DD}"
+					burst="${unit.bandwidth.burst.@{actioniter}.DD}"
+					ports="${DD.action.@{actioniter}.ports}"/>
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+
+	<!-- iterate in some order over DD leave actions -->
+<macrodef name="DDIterateLeave" description="Perform iteration on DD leaves">
+	<attribute name="iter" description="iterator"/>
+	<sequential>
+		<echo message="DDLeave actions @{iter}"/>
+		<for list="@{iter}" param="actioniter" delimiter="," parallel="false">
+			<sequential>
+				<if>
+					<or>
+						<not><isset property="unit.vlan.tag.@{actioniter}.DD"/></not>
+						<not><isset property="DD.action.@{actioniter}.ports"/></not>
+					</or>
+					<then>
+						<fail message="Incorrect parameters specified for action @{actioniter} DD"/>
+					</then>
+				</if>
+				<echo message="DeProvisioning DD action @{actioniter}" />
+				<DDLeave iter="@{actioniter}" 
+					tag="${unit.vlan.tag.@{actioniter}.DD}" 
+					ports="${DD.action.@{actioniter}.ports}"/>
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+	
+	<!-- iterate in some order over Exchange join actions -->
+<macrodef name="ExchangeIterateJoin">
+	<attribute name="iter" description="iterator"/>
+	<sequential>
+		<echo message="ExchangeJoin actions @{iter}" />
+		<for list="@{iter}" param="actioniter" delimiter="," parallel="false">
+			<sequential>
+				<if>
+					<or>
+						<not><isset property="unit.vlan.tag.@{actioniter}.Exchange"/></not>
+						<not><isset property="unit.vlan.tag.swap.@{actioniter}.Exchange"/></not>
+						<not><isset property="unit.bandwidth.@{actioniter}.Exchange"/></not>
+						<not><isset property="unit.bandwidth.burst.@{actioniter}.Exchange"/></not>
+						<not><isset property="Exchange.action.@{actioniter}.ports" /></not>
+					</or>
+					<then>
+						<fail message="Incorrect parameters specified for action @{actioniter} Exchange"/>
+					</then>
+				</if>
+				<echo message="Provisioning Exchange action @{actioniter}" />
+				<ExchangeJoin iter="@{actioniter}" 
+					taga="${unit.vlan.tag.@{actioniter}.Exchange}"
+					tagb="${unit.vlan.tag.swap.@{actioniter}.Exchange}"
+					bw="${unit.bandwidth.@{actioniter}.Exchange}"
+					burst="${unit.bandwidth.burst.@{actioniter}.Exchange}"
+					mapport="${Exchange.action.@{actioniter}.ports}"/>
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+	
+	<!-- iterate in some order over Exchange leave actions -->
+<macrodef name="ExchangeIterateLeave">
+	<attribute name="iter" description="iterator"/>
+	<sequential>
+		<echo message="ExchangeLeave actions @{iter}" />
+		<for list="@{iter}" param="actioniter" delimiter="," parallel="false">
+			<sequential>
+				<if>
+					<or>
+						<not><isset property="unit.vlan.tag.@{actioniter}.Exchange"/></not>
+						<not><isset property="unit.vlan.tag.swap.@{actioniter}.Exchange"/></not>
+						<not><isset property="Exchange.action.@{actioniter}.ports" /></not>
+					</or>
+					<then>
+						<fail message="Incorrect parameters specified for action @{actioniter} Exchange"/>
+					</then>
+				</if>
+				<echo message="DeProvisioning Exchange action @{actioniter}" />
+				<ExchangeLeave iter="@{actioniter}" 
+					taga="${unit.vlan.tag.@{actioniter}.Exchange}"
+					tagb="${unit.vlan.tag.swap.@{actioniter}.Exchange}"
+					mapport="${Exchange.action.@{actioniter}.ports}"/>
+			</sequential>
+		</for>
+	</sequential>
+</macrodef>
+
+<macrodef name="ReverseIter">
+	<attribute name="val"/>
+	<attribute name="return"/>
+	<sequential>
+		<var name="tmp" unset="true"/>
+		<for begin="@{val}" end="1" step="-1" param="iter">
+			<sequential>
+				<if>
+					<isset property="tmp"/>
+					<then>
+						<var name="tmp" value="${tmp},@{iter}"/>
+					</then>
+					<else>
+						<var name="tmp" value="@{iter}"/>
+					</else>
+				</if>
+			</sequential>
+		</for>
+		<property name="@{return}" value="${tmp}"/>
+	</sequential>
+</macrodef>

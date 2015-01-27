@@ -1,0 +1,20 @@
+ ------
+ Cluster On Demand
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+Cluster on Demand
+
+ Cluster on Demand (COD) is a site authority implementation 
+ based on the Shirako leasing toolkit. COD is a manager for
+ a dynamic data center. With COD in charge, the data center can be automatically partitioned 
+ into virtual data centers, which are
+ then leased to users and application services. Partitioning is dynamic and may change over time.  
+ 
+ COD is intended to cover all core management tasks within a data center: provisioning infrastructure
+ servers, dynamically creating and destroying virtual and physical machines, managing storage, backup, 
+ utilization, placement, and maintenance. 
+ 

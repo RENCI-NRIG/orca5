@@ -1,0 +1,2482 @@
+<rdf:RDF
+    xmlns:j.0="http://geni-orca.renci.org/owl/storage.owl#"
+    xmlns:j.1="http://geni-orca.renci.org/owl/compute.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:j.2="http://www.w3.org/2006/time#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:j.3="http://geni-orca.renci.org/owl/layer.owl#"
+    xmlns:j.4="http://geni-orca.renci.org/owl/geni.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:j.5="http://www.w3.org/2006/time.owl#"
+    xmlns:j.6="http://geni-orca.renci.org/owl/request.owl#"
+    xmlns:j.7="http://geni-orca.renci.org/owl/ip4.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:j.8="http://geni-orca.renci.org/owl/domain.owl#"
+    xmlns:j.9="http://geni-orca.renci.org/owl/collections.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:j.10="http://geni-orca.renci.org/owl/topology.owl#" > 
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#cpuFamily">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A0">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Xen"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#os"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OS"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Term">
+    <j.2:hasBeginning rdf:resource="http://www.w3.org/2006/time.owl#8b362609-7fcf-46ab-971c-6f8692e95450"/>
+    <j.2:hasDurationDescription rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#TermDuration"/>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#Interval"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#serverSize">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#">
+    <j.4:hasSliceGeniState rdf:resource="http://geni-orca.renci.org/owl/geni.owl#ready"/>
+    <j.10:hasDN>EMAILADDRESS=yxin@renci.org, CN=yufengxin, OU=Yufeng Xin, O=BEN@RENCI, L=Chapel Hill, ST=NC, C=US</j.10:hasDN>
+    <j.10:hasGUID>17376b52-1a31-4d02-9c76-5d3d79fc7563</j.10:hasGUID>
+    <j.10:hasName>test3</j.10:hasName>
+    <j.9:element rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0"/>
+    <j.9:element rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0"/>
+    <j.9:element rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1"/>
+    <j.6:hasTerm rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Term"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A4">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A5"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A6">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/layer.owl#hasCastType"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/layer.owl#CastType"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A7">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuModel"/>
+    <owl:hasValue>Nehalem</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#ConnectionPoint">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1/Service">
+    <j.8:hasAccessMethod rdf:resource="http://geni-orca.renci.org/owl/domain.owl#SSH"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#SSH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#labelSet">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A8">
+    <rdf:first rdf:nodeID="A9"/>
+    <rdf:rest rdf:nodeID="A10"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#d710Storage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A11"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Storage"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/storage.owl#StorageInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#connectedTo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#BroadcastPhysicalLink">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#BroadcastSegment"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#CastType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCE-d710">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A12"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCE"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <j.1:vmm rdf:resource="http://geni-orca.renci.org/owl/compute.owl#KVM"/>
+    <j.1:vmm rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OpenVZ"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A13">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/topology.owl#hasName"/>
+    <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A14">
+    <rdf:first rdf:nodeID="A2"/>
+    <rdf:rest rdf:nodeID="A15"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#x86">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture"/>
+    <rdfs:comment>32-bit x86</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A16">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A17"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#splittable">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment>Declare a NetworkElement (connection or server cloud or other) splittable. Default is 'false' - connections and clouds are not splittable. Must be explicitly declared as 'true'.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A18">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/layer.owl#hasCastType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Unicast"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A19">
+    <rdf:first rdf:nodeID="A20"/>
+    <rdf:rest rdf:nodeID="A21"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0/Service">
+    <j.8:hasAccessMethod rdf:resource="http://geni-orca.renci.org/owl/domain.owl#SSH"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#SSH"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#clockFrequency">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAM"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#metric"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#CPU">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent"/>
+    <rdfs:subClassOf rdf:nodeID="A22"/>
+    <rdfs:comment>Parent class of various CPU types</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#RedHat-6">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Linux"/>
+    <j.1:osDistribution>RHEL</j.1:osDistribution>
+    <j.1:osVersion>6</j.1:osVersion>
+    <j.1:vendor rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RedHatInc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#CopperLink">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#PhysicalLink"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A23">
+    <rdf:first rdf:nodeID="A24"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VServerCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A25"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A26">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#x86-64"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Windows">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OS"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#NetworkElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:subClassOf rdf:nodeID="A27"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#Device">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdfs:subClassOf rdf:nodeID="A28"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2C1XLarge">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A29"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2ComputeElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A27">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/topology.owl#hasInterface"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A5">
+    <rdf:first rdf:nodeID="A16"/>
+    <rdf:rest rdf:nodeID="A30"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#FiberLink">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#PhysicalLink"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A20">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuFamily"/>
+    <owl:hasValue>Xeon</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:comment>Topology definitions for NDL-OWL</rdfs:comment>
+    <rdfs:isDefinedBy>RENCI UNC Chapel Hill
+yxin@renci.org</rdfs:isDefinedBy>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/collections.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/layer.owl"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A24">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#storage"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#d710Storage"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#d710RAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A31"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A32">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A14"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A33">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#x86"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A34">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#KVM"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A35">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/layer.owl#hasCastType"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/layer.owl#CastType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/planetlab.owl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:isDefinedBy>RENCI
+UNC-Chapel Hill
+Sep. 8 2011
+ibaldin@renci.org</rdfs:isDefinedBy>
+    <rdfs:comment>PlanetLab compute element definitions</rdfs:comment>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/compute.owl"/>
+    <owl:versionIRI rdf:resource="http://geni-orca.renci.org/owl/planetlab-v1.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/storage.owl"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0/IP">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A36">
+    <rdf:first rdf:nodeID="A37"/>
+    <rdf:rest rdf:nodeID="A19"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#NamedIndividual">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#PPTSegment">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A18"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Link"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A38">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ramType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#PC133-SDRAM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#os">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OS"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+    <rdfs:domain rdf:nodeID="A39"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#usedVMLabelSet">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#usedLabelSet"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A40">
+    <rdf:first rdf:nodeID="A41"/>
+    <rdf:rest rdf:nodeID="A42"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A43">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VServer"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A44">
+    <rdf:first rdf:nodeID="A45"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#GenericRam">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMType"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A46">
+    <rdf:first rdf:nodeID="A47"/>
+    <rdf:rest rdf:nodeID="A48"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2006/time#Interval">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1">
+    <j.10:hasInterface rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node1"/>
+    <j.6:inDomain rdf:resource="http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain"/>
+    <j.10:hasInterface rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1/IP/1"/>
+    <j.6:hasReservationState rdf:resource="http://geni-orca.renci.org/owl/request.owl#Active"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <j.1:specificCE rdf:resource="http://geni-orca.renci.org/owl/eucalyptus.owl#EucaC1Medium"/>
+    <j.6:message>Reservation 3d573fab-9d94-4190-87c8-1963eede9500 (Slice test3) is in state [Active,None]
+</j.6:message>
+    <j.10:hasURL>http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain/vm</j.10:hasURL>
+    <j.8:hasService rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1/Service"/>
+    <j.8:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A49">
+    <rdf:first rdf:nodeID="A50"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A51">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ram"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#d710RAM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/ontologies/2011/8/planetlab.owl#PlanetLabCluster">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A52"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A53">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuFamily"/>
+    <owl:hasValue>Xeon</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A54">
+    <rdf:first rdf:nodeID="A55"/>
+    <rdf:rest rdf:nodeID="A56"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A57">
+    <rdf:first rdf:nodeID="A58"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A59">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#os"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OS"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A60">
+    <rdf:first rdf:nodeID="A61"/>
+    <rdf:rest rdf:nodeID="A62"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#proxiedPort">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#unsignedShort"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A63">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A64"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A29">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A65"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#linkConnection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/collections.owl#ListItem"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Connection"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A66">
+    <rdf:first rdf:nodeID="A43"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENICluster">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A67"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#vmLabel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#label"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A68">
+    <rdf:first rdf:nodeID="A51"/>
+    <rdf:rest rdf:nodeID="A23"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A50">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>12GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Debian">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#StaticInterface">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A48">
+    <rdf:first rdf:nodeID="A53"/>
+    <rdf:rest rdf:nodeID="A69"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A52">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#virtualize"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VServerCE"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A70">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ram"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#pc3000RAM"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A71">
+    <rdf:first rdf:nodeID="A72"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A55">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Pentium3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#memory">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAM"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#versionIRI">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A73">
+    <rdf:first rdf:nodeID="A74"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A75">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>266MHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A76">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2x86-64CPUCore"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A77">
+    <rdf:first rdf:nodeID="A78"/>
+    <rdf:rest rdf:nodeID="A40"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1/IP/1">
+    <owl:sameAs rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node1"/>
+    <j.3:label_ID>172.16.100.2/24</j.3:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A79">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageVolume"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/storage.owl#SATA250G"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A62">
+    <rdf:first rdf:nodeID="A70"/>
+    <rdf:rest rdf:nodeID="A80"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A72">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUCores"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A12">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A81"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#BroadcastSegment">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A82"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Link"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A41">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUs"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#AMD">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A80">
+    <rdf:first rdf:nodeID="A83"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A84">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>400MHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2x86CPUCore">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A85"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#interfaceOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <owl:inverseOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#hasInterface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#vmm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A65">
+    <rdf:first rdf:nodeID="A76"/>
+    <rdf:rest rdf:nodeID="A86"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A87">
+    <rdf:first rdf:nodeID="A88"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A11">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A89"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#label">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#linkTo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#connectedTo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#managementIP">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#KVMCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A90"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A21">
+    <rdf:first rdf:nodeID="A7"/>
+    <rdf:rest rdf:nodeID="A71"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A83">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#storage"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#pc3000Storage"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A91">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/collections.owl#element"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A92">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A93"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/collections.owl#element">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#numCPUs">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#metric"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A94">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>1.7GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ramType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A95">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>1.2GHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A96">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#numVolumes"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A97">
+    <rdf:first rdf:nodeID="A96"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/domain.owl#ResourceType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A98">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#computeElementType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RackedServer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#inRequestNetworkConnection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A99">
+    <rdf:first rdf:nodeID="A100"/>
+    <rdf:rest rdf:nodeID="A77"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A101">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A102"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A103">
+    <rdf:first rdf:nodeID="A104"/>
+    <rdf:rest rdf:nodeID="A105"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A106">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A107"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A108">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#GenericX86-64"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A109">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#storage"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#pc850Storage"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A110">
+    <rdf:first rdf:nodeID="A94"/>
+    <rdf:rest rdf:nodeID="A111"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl">
+    <rdfs:isDefinedBy>RENCI
+UNC-Chapel Hill
+2009-2011
+yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
+    <owl:versionIRI rdf:resource="http://geni-orca.renci.org/owl/compute-v2.owl"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/collections.owl"/>
+    <rdfs:comment>Compute element ontology</rdfs:comment>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/layer.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/location.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/topology.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/domain.owl"/>
+    <dc:contributor>Yufeng Xin, Ilia Baldine</dc:contributor>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#hasInstanceID">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Atmel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A112">
+    <rdf:first rdf:nodeID="A95"/>
+    <rdf:rest rdf:nodeID="A113"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#cpuModel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A89">
+    <rdf:first rdf:nodeID="A79"/>
+    <rdf:rest rdf:nodeID="A97"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Windows7">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Windows"/>
+    <j.1:osVersion>7</j.1:osVersion>
+    <j.1:osDistribution>Windows</j.1:osDistribution>
+    <j.1:vendor rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Microsoft"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A114">
+    <rdf:first rdf:nodeID="A98"/>
+    <rdf:rest rdf:nodeID="A115"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#outputInterfaceOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#interfaceOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A78">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>7.5GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/collections.owl#Item">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#ReservationState">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ServiceElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A116">
+    <rdf:first rdf:nodeID="A108"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A117">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUs"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A118">
+    <rdf:first rdf:nodeID="A119"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#OpenVZCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A120"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A121">
+    <rdf:first rdf:nodeID="A109"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A122">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageCapacity"/>
+    <owl:hasValue>160GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A123">
+    <rdf:first rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+    <rdf:rest rdf:nodeID="A124"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A56">
+    <rdf:first rdf:nodeID="A125"/>
+    <rdf:rest rdf:nodeID="A121"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#MacOS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OS"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A126">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vendor"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#AMD"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/compute.owl"/>
+    <owl:imports rdf:resource="http://www.w3.org/2006/time"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#OpenVZ">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node0-ip-172-16-100-1">
+    <j.7:netmask>255.255.255.0</j.7:netmask>
+    <j.3:label_ID>172.16.100.1</j.3:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A127">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#QuadNehalem"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A128">
+    <rdf:first rdf:nodeID="A129"/>
+    <rdf:rest rdf:nodeID="A99"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasDN">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#DDR2-1066">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A130"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DDR2Ram"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#DDR2Ram">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMType"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A131">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ramType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DDR2-400"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VM-in-Server">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#AdaptationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VMM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A132">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#GenericX86"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A105">
+    <rdf:first rdf:nodeID="A117"/>
+    <rdf:rest rdf:nodeID="A44"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#ConnectionDirection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A119">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>512MB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#pc3000RAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A133">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Xen"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#d710RAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A134">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A123"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A111">
+    <rdf:first rdf:nodeID="A122"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A125">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ram"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#pc850RAM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#IA-64">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:comment>Server-class 64-bit x64 from Intel</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1/IP">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A135">
+    <rdf:first rdf:nodeID="A126"/>
+    <rdf:rest rdf:nodeID="A112"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#pc850RAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/collections.owl#ListItem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#endingTime">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A115">
+    <rdf:first rdf:nodeID="A127"/>
+    <rdf:rest rdf:nodeID="A68"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasInterface">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A100">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Xen"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2M1XLarge">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A136"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2ComputeElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ESX">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A137">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A138"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A139">
+    <rdf:first rdf:nodeID="A132"/>
+    <rdf:rest rdf:nodeID="A116"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A45">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageCapacity"/>
+    <owl:hasValue>160GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#ActiveTicketed">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A64">
+    <rdf:first rdf:nodeID="A38"/>
+    <rdf:rest rdf:nodeID="A118"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#startingTime">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCE-pc3000">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A32"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCE"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/collections.owl#Set">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A25">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VServer"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A88">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUCores"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasEmail">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A120">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OpenVZ"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#Connection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#PPTSegment"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A140">
+    <rdf:first rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/exogeni.owl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:comment>ExoGENI compute element ontology</rdfs:comment>
+    <rdfs:isDefinedBy>RENCI
+UNC-Chapel Hill
+2009-2012
+ibaldin@renci.org, yxin@renci.org</rdfs:isDefinedBy>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/compute.owl"/>
+    <owl:versionIRI rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/storage.owl"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#hasRequestGroupURL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#computeElementType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment>A blade, a mote, a server, a laptop?</rdfs:comment>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementType"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node1-ip-172-16-100-2">
+    <j.7:netmask>255.255.255.0</j.7:netmask>
+    <j.3:label_ID>172.16.100.2</j.3:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A136">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A141"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Xeon3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A142"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#Layer">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#Failed">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Xen">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A143">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A128"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#Link">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A35"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#message">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Pentium3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A144"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A145">
+    <rdf:first rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdf:rest rdf:nodeID="A140"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A146">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2x86-64CPUCore"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A147">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#virtualize"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#KVMCE"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A138">
+    <rdf:first rdf:nodeID="A131"/>
+    <rdf:rest rdf:nodeID="A148"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A90">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#KVM"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A149">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#numVolumes"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasAccessMethod">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/domain.owl#AccessMethod"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A129">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2x86-64CPUCore"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A144">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#x86"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#SwitchMatrix">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#SubNetwork"/>
+    <rdfs:subClassOf rdf:nodeID="A6"/>
+    <rdfs:subClassOf rdf:nodeID="A150"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A151">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuFamily"/>
+    <owl:hasValue>Opteron</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A141">
+    <rdf:first rdf:nodeID="A146"/>
+    <rdf:rest rdf:nodeID="A8"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A15">
+    <rdf:first rdf:nodeID="A152"/>
+    <rdf:rest rdf:nodeID="A60"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#pc850RAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A63"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#SubNetwork">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#No_state">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hostInterfaceName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A107">
+    <rdf:first rdf:nodeID="A153"/>
+    <rdf:rest rdf:nodeID="A154"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A39">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A145"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#vendor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A155">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#computeElementType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RackedServer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#Ticket">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A102">
+    <rdf:first rdf:nodeID="A156"/>
+    <rdf:rest rdf:nodeID="A157"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#osVersion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OS"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Microsoft">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#PhysicalLink">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#PPTSegment"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A158">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>133MHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#RackedServer">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A113">
+    <rdf:first rdf:nodeID="A151"/>
+    <rdf:rest rdf:nodeID="A87"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2M1Large">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A143"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2ComputeElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Laptop">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A9">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Xen"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#ReconfigurableInterface">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A61">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Xeon3"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A150">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/layer.owl#switchingCapability"/>
+    <owl:onClass rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Layer"/>
+    <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#CPUInstance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A153">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#virtualize"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#BareMetalCE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2x86-64CPUCore">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A159"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A104">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>1.7GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A160">
+    <rdf:first rdf:nodeID="A155"/>
+    <rdf:rest rdf:nodeID="A66"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#XenCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A133"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A156">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageVolume"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/storage.owl#IDE40G"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A161">
+    <rdf:first rdf:nodeID="A162"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#connectionDirection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/layer.owl#ConnectionDirection"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#Radio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#BroadcastPhysicalLink"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#Interface">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Item"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#ConnectionPoint"/>
+    <rdfs:subClassOf rdf:nodeID="A163"/>
+    <rdfs:subClassOf rdf:nodeID="A164"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A165">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>1.2GHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A47">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>3.0GHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#AdaptationProperty">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A152">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#computeElementType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RackedServer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#availableVMLabelSet">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#availableLabelSet"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2C1Medium">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A166"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2ComputeElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A167">
+    <rdf:first rdf:nodeID="A168"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A169">
+    <rdf:first rdf:nodeID="A170"/>
+    <rdf:rest rdf:nodeID="A110"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A171">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/topology.owl#connectionDirection"/>
+    <owl:onClass rdf:resource="http://geni-orca.renci.org/owl/layer.owl#ConnectionDirection"/>
+    <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#x86-64">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:comment>64-bit x86</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#Manifest">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A172">
+    <rdf:first rdf:nodeID="A173"/>
+    <rdf:rest rdf:nodeID="A46"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ServerCloud">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#hasServerSize">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/collections.owl#List"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Connection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#CentOSFoundation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A174">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A175"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A176">
+    <rdf:first rdf:nodeID="A177"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A124">
+    <rdf:first rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdf:rest rdf:nodeID="A178"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A168">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OpenVZ"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#CloseWait">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#Active">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A28">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/topology.owl#hasSwitchMatrix"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/topology.owl#SwitchMatrix"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#feature">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A17">
+    <rdf:first rdf:nodeID="A34"/>
+    <rdf:rest rdf:nodeID="A179"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#GenericX86">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A33"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A173">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vendor"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Intel"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasOutputInterface">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#hasInterface"/>
+    <owl:inverseOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#outputInterfaceOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#AccessGroup">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A180">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#x86-64"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A177">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OpenVZ"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node0">
+    <j.7:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node0-ip-172-16-100-1"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <j.3:label_ID>172.16.100.1/24</j.3:label_ID>
+    <owl:sameAs rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#inDomain">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#Label">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A30">
+    <rdf:first rdf:nodeID="A181"/>
+    <rdf:rest rdf:nodeID="A54"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A82">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/layer.owl#hasCastType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Broadcast"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VirtualBox">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/geni.owl#ready">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/geni.owl#SliceGeniState"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ram">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMInstance"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Blade">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementType"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A182">
+    <rdf:first rdf:nodeID="A183"/>
+    <rdf:rest rdf:nodeID="A176"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#TermDuration">
+    <j.2:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</j.2:days>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2ComputeElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#CentOS-5.5">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Linux"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <j.1:osVersion>5.5</j.1:osVersion>
+    <j.1:osDistribution>CentOS</j.1:osDistribution>
+    <j.1:vendor rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CentOSFoundation"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A184">
+    <rdf:first rdf:nodeID="A185"/>
+    <rdf:rest rdf:nodeID="A172"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#switchedTo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#connectedTo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#AppleInc">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#storage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Storage"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A175">
+    <rdf:first rdf:nodeID="A180"/>
+    <rdf:rest rdf:nodeID="A186"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node1">
+    <j.7:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node1-ip-172-16-100-2"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    <j.3:label_ID>172.16.100.2/24</j.3:label_ID>
+    <owl:sameAs rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/domain.owl#resourceTypeRank">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A187">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/collections.owl#element"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A181">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#computeElementType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RackedServer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#workerNodeID">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A58">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#virtualize"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENI-M4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ComputeElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A159">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A188"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/ontologies/2011/8/planetlab.owl#PlanetLabCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A189"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A185">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#x86-64"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#cpu">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A164">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/layer.owl#labelSet"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#PC133-SDRAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A158"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#SDRAM"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ComputeElementType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hostName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A190">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUCores"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A191">
+    <rdf:first rdf:nodeID="A192"/>
+    <rdf:rest rdf:nodeID="A57"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A193">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>7GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#QuadNehalem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#hasUnitServer">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Storage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent"/>
+    <rdfs:comment>See storage.owl for details</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#postBootScript">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#GenericX86-64">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A26"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUInstance"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#DDR2-400">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A84"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DDR2Ram"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#Feature">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A142">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A184"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A163">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/layer.owl#label"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Label"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A192">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#virtualize"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#KVMCE"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A194">
+    <rdf:first rdf:nodeID="A195"/>
+    <rdf:rest rdf:nodeID="A196"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A170">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Xen"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCE-pc850">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A4"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCE"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A197">
+    <rdf:first rdf:nodeID="A193"/>
+    <rdf:rest rdf:nodeID="A198"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0/IP/1">
+    <owl:sameAs rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node0"/>
+    <j.3:label_ID>172.16.100.1/24</j.3:label_ID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Vendor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A195">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuFamily"/>
+    <owl:hasValue>Opteron</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A199">
+    <rdf:first rdf:nodeID="A200"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A179">
+    <rdf:first rdf:nodeID="A201"/>
+    <rdf:rest rdf:nodeID="A167"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A67">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A191"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#availableLabelSet">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/storage.owl#storageCapacity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#manifest">
+    <j.9:element rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1"/>
+    <j.9:element rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0"/>
+    <j.9:element rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0"/>
+    <j.10:hasDN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMAILADDRESS=yxin@renci.org, CN=yufengxin, OU=Yufeng Xin, O=BEN@RENCI, L=Chapel Hill, ST=NC, C=US</j.10:hasDN>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Manifest"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A188">
+    <rdf:first rdf:nodeID="A202"/>
+    <rdf:rest rdf:nodeID="A135"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#RAMType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Testbed">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#Closed">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#Copper">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#BroadcastPhysicalLink"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A202">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#x86-64"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#carryReservation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Link"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#switchingCapability">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A200">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OpenVZ"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A203">
+    <rdf:first rdf:nodeID="A165"/>
+    <rdf:rest rdf:nodeID="A194"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A201">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#None"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#metric">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:comment>Individual performance metrics</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#DDR1066">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A204"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DDRRam"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A196">
+    <rdf:first rdf:nodeID="A190"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#availablePortLabelSet">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#availableLabelSet"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A86">
+    <rdf:first rdf:nodeID="A0"/>
+    <rdf:rest rdf:nodeID="A197"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#Trail">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#PPTSegment"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A157">
+    <rdf:first rdf:nodeID="A149"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A166">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A205"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A162">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageCapacity"/>
+    <owl:hasValue>1690GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#diskImage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCluster">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A106"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasServiceElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A69">
+    <rdf:first rdf:nodeID="A206"/>
+    <rdf:rest rdf:nodeID="A207"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#pc850Storage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A101"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Storage"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/storage.owl#StorageInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A208">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A209"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#hasHost">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#dependOn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A210">
+    <rdf:first rdf:nodeID="A211"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A212">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#x86"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#numHop">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkTransportElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A74">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#numVolumes"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VMWare">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <j.10:hasInterface rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0/IP/1"/>
+    <j.6:hasReservationState rdf:resource="http://geni-orca.renci.org/owl/request.owl#Active"/>
+    <j.1:specificCE rdf:resource="http://geni-orca.renci.org/owl/eucalyptus.owl#EucaM1Large"/>
+    <j.10:hasInterface rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0-Node0"/>
+    <j.10:hasURL>http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain/vm</j.10:hasURL>
+    <j.8:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+    <j.6:message>Reservation ae5ee2f2-a939-435b-b7df-b736ab082c6a (Slice test3) is in state [Active,None]
+</j.6:message>
+    <j.8:hasService rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0/Service"/>
+    <j.6:inDomain rdf:resource="http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#metric"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdfs:domain rdf:nodeID="A134"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A213">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2x86CPUCore"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:comment>Protogeni Compute Element ontology</rdfs:comment>
+    <rdfs:isDefinedBy>RENCI
+UNC-Chapel Hill
+2009-2011
+yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/compute.owl"/>
+    <owl:versionIRI rdf:resource="http://geni-orca.renci.org/owl/protogeni-v1.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/storage.owl"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A214">
+    <rdf:first rdf:nodeID="A215"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#DiskImage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent"/>
+    <rdfs:subClassOf rdf:nodeID="A13"/>
+    <rdfs:subClassOf rdf:nodeID="A1"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A206">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuModel"/>
+    <owl:hasValue>Xeon</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A31">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A216"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#UbuntuFoundation">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A42">
+    <rdf:first rdf:nodeID="A217"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#ProtoGeniCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#pc3000RAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A137"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#hasReservationState">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/domain.owl#hasServiceElement"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A85">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A218"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Link0">
+    <j.10:hasInterface rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node1/IP/1"/>
+    <j.6:message>Reservation 3d4bf21f-6a2d-4a7c-8fc1-0cb4eb66103d (Slice test3) is in state [Active,None]
+</j.6:message>
+    <j.10:hasURL>http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain/vlan</j.10:hasURL>
+    <rdfs:label>1016</rdfs:label>
+    <j.3:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000000</j.3:bandwidth>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#LinkConnection"/>
+    <j.6:hasReservationState rdf:resource="http://geni-orca.renci.org/owl/request.owl#Active"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+    <j.6:inDomain rdf:resource="http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain"/>
+    <j.3:bandwidth>10000000</j.3:bandwidth>
+    <j.3:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <j.10:hasInterface rdf:resource="http://geni-orca.renci.org/owl/54871ffe-0039-4684-9e0c-dca46de0f12c#Node0/IP/1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#managementPort">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#unsignedShort"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A215">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageCapacity"/>
+    <owl:hasValue>1690GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A207">
+    <rdf:first rdf:nodeID="A219"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A205">
+    <rdf:first rdf:nodeID="A213"/>
+    <rdf:rest rdf:nodeID="A220"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#OS">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A221">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUs"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2006/time.owl#8b362609-7fcf-46ab-971c-6f8692e95450">
+    <j.2:inXSDDateTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2012-08-02T14:54:44.718-04:00</j.2:inXSDDateTime>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time.owl#Instant"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A209">
+    <rdf:first rdf:nodeID="A222"/>
+    <rdf:rest rdf:nodeID="A169"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#RAMInstance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#SubnetworkConnection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/collections.owl#ListItem"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Connection"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A154">
+    <rdf:first rdf:nodeID="A147"/>
+    <rdf:rest rdf:nodeID="A210"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#SDRAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMType"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A223">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vendor"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#AMD"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#DDRRam">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMType"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A224">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageVolume"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/storage.owl#SCSI146G"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A225">
+    <rdf:first rdf:nodeID="A226"/>
+    <rdf:rest rdf:nodeID="A214"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#Nascent">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#ReservationState"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A219">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUCores"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A198">
+    <rdf:first rdf:nodeID="A221"/>
+    <rdf:rest rdf:nodeID="A161"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A227">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Xen"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A222">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpu"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2x86CPUCore"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A218">
+    <rdf:first rdf:nodeID="A212"/>
+    <rdf:rest rdf:nodeID="A228"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A211">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#virtualize"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OpenVZCE"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A229">
+    <rdf:first rdf:nodeID="A230"/>
+    <rdf:rest rdf:nodeID="A199"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#CrossConnect">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#SubnetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:isDefinedBy>RENCI
+UNC Chapel Hill
+ibaldin@renci.org, yxin@renci.org</rdfs:isDefinedBy>
+    <rdfs:comment>Amazon EC2 compute resource definitions</rdfs:comment>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/compute.owl"/>
+    <owl:imports rdf:resource="http://geni-orca.renci.org/owl/storage.owl"/>
+    <owl:versionIRI rdf:resource="http://geni-orca.renci.org/owl/ec2-v1.owl"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ARM6">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#QuadNehalem24">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A174"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/domain.owl#ServiceElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A231">
+    <rdf:first rdf:nodeID="A224"/>
+    <rdf:rest rdf:nodeID="A73"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#BareMetalCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A232"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <j.8:resourceTypeRank rdf:datatype="http://www.w3.org/2001/XMLSchema#int">9</j.8:resourceTypeRank>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A22">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture"/>
+    <owl:someValuesFrom rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A220">
+    <rdf:first rdf:nodeID="A227"/>
+    <rdf:rest rdf:nodeID="A103"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A233">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="A139"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A226">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#numCPUs"/>
+    <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A234">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vendor"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Intel"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#numCPUCores">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#metric"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Ubuntu-10.04">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Linux"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <j.1:osVersion>10.04</j.1:osVersion>
+    <j.1:osDistribution>Ubuntu</j.1:osDistribution>
+    <j.1:vendor rdf:resource="http://geni-orca.renci.org/owl/compute.owl#UbuntuFoundation"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#virtualize">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A3">
+    <rdf:first rdf:nodeID="A235"/>
+    <rdf:rest rdf:nodeID="A182"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A59"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <j.8:resourceTypeRank rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</j.8:resourceTypeRank>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#DDR266">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A75"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DDRRam"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#hasTerm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2006/time#Interval"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#LabelSet">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A230">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#None"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A204">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>1066MHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A148">
+    <rdf:first rdf:nodeID="A236"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Port">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Label"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A10">
+    <rdf:first rdf:nodeID="A237"/>
+    <rdf:rest rdf:nodeID="A225"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#None">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A189">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A238"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#KVM">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A186">
+    <rdf:first rdf:nodeID="A234"/>
+    <rdf:rest rdf:nodeID="A36"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A37">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>2.4GHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A235">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#KVM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ec2.owl#EC2M1Small">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A208"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/ec2.owl#EC2ComputeElement"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ResourceType"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Thing">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#MemoryLabel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Label"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasSwitchMatrix">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/topology.owl#SwitchMatrix"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Linux">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#OS"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A228">
+    <rdf:first rdf:nodeID="A223"/>
+    <rdf:rest rdf:nodeID="A203"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#Reservation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+    <rdfs:subClassOf rdf:nodeID="A91"/>
+    <rdfs:subClassOf rdf:nodeID="A171"/>
+    <rdfs:subClassOf rdf:nodeID="A187"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#Intel">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A239">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:intersectionOf rdf:nodeID="A231"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A93">
+    <rdf:first rdf:nodeID="A240"/>
+    <rdf:rest rdf:nodeID="A229"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A130">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#clockFrequency"/>
+    <owl:hasValue>1066MHz</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#RedHatInc">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Vendor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasInputInterface">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#hasInterface"/>
+    <owl:inverseOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#inputInterfaceOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasURN">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A217">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/storage.owl#storageCapacity"/>
+    <owl:hasValue>850GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#BroadcastConnection">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#BroadcastSegment"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/protogeni.owl#pc3000Storage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:equivalentClass rdf:nodeID="A239"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#Storage"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/storage.owl#StorageInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A178">
+    <rdf:first rdf:resource="http://geni-orca.renci.org/owl/compute.owl#RAM"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#inputInterfaceOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#interfaceOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A241">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ramType"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DDR2-1066"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#osDistribution">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/elements/1.1/contributor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A237">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>15GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/request.owl#groupName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:comment>For node group dependency</rdfs:comment>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#LayerNetworkElement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#specificCE">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment>Allows specify what specific CE this is e.g. in a request - a ComputeElement &lt;ceInstance specificCE EucaC1Medium&gt;</rdfs:comment>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENI-M4">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#BareMetalCE"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/collections.owl#List">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A240">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#KVM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment>x86, x86-64 or other</rdfs:comment>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPU"/>
+    <rdfs:range rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture"/>
+    <rdfs:domain rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/layer.owl#feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#RAM">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent"/>
+    <rdfs:comment>Parent class of various RAMs</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A238">
+    <rdf:first rdf:nodeID="A233"/>
+    <rdf:rest rdf:nodeID="A160"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A216">
+    <rdf:first rdf:nodeID="A241"/>
+    <rdf:rest rdf:nodeID="A49"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A232">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#None"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#usedLabelSet">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasGUID">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/domain.owl#AccessMethod">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#gmplsConnectedTo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://geni-orca.renci.org/owl/topology.owl#connectedTo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#ARM2">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A183">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#vmm"/>
+    <owl:hasValue rdf:resource="http://geni-orca.renci.org/owl/compute.owl#None"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasURL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/compute.owl#VServer">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VMM"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A236">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://geni-orca.renci.org/owl/compute.owl#memoryCapacity"/>
+    <owl:hasValue>2GB</owl:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A81">
+    <rdf:first rdf:nodeID="A92"/>
+    <rdf:rest rdf:nodeID="A114"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/layer.owl#hasCastType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+</rdf:RDF>

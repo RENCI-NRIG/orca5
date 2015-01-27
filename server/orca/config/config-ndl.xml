@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+	<actors>
+		<actor>
+			<type>service</type>
+			<name>test-test-topology-embedding-SM</name>
+			<guid>38615670-64f2-46ae-b2e5-88bb1ae86400</guid>
+			<description>A Test SM for inter/intra-site topology embedding</description>
+		</actor>
+		<actor>
+			<type>broker</type>
+			<name>test-ndl-broker</name>
+			<guid>7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd</guid>
+			<description>NDL enabled broker hosted at RENCI</description>
+			<policy class="orca.policy.core.BrokerSimplerUnitsPolicy">
+				<properties>
+					<property name="queue.type" value="fifo" />
+				</properties>
+			</policy>
+		</actor>
+		<actor>
+			<type>site</type>
+			<name>test-bbnvm-site</name>
+			<guid>af054653-54e9-4a14-aae3-6daa191b2471</guid>
+			<description>BBN OS site authority</description>
+			<pools>
+				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
+					<type>bbnvmsite.baremetalce</type>
+					<label>XCAT Bare Metal (BBN)</label>
+					<description>A Bare Metal machine</description>
+					<units>1</units>
+					<start>2010-01-30T00:00:00</start>
+					<end>2031-01-30T00:00:00</end>
+					<handler path="common/noopd.xml">
+						<properties>
+							<property name="xcat.site.properties" value="/opt/orca/config/xcat.site.properties" />
+						</properties>
+					</handler>
+					<properties>
+						<!-- site NDL description -->
+						<property name="substrate.file" value="/opt/orca/ndl/bbnvmsite.rdf" />
+					</properties>
+				</pool>
+				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
+					<type>bbnvmsite.vm</type>
+					<label>OpenStack Virtual Machine (BBN)</label>
+					<description>A virtual machine</description>
+					<units>36</units>
+					<start>2010-01-30T00:00:00</start>
+					<end>2031-01-30T00:00:00</end>
+					<handler path="common/noopd.xml">
+						<properties>
+							<property name="ec2.keys" value="/opt/orca/ec2" />
+							<property name="ec2.site.properties" value="/opt/orca/config/ec2.site.properties" />
+						</properties>
+					</handler>
+					<properties>
+						<!-- site NDL description -->
+						<property name="substrate.file" value="/opt/orca/ndl/bbnvmsite.rdf" />
+					</properties>
+				</pool>
+				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
+					<type>bbnvmsite.vlan</type>
+					<label>BBN OS internal vlan</label>
+					<description>BBN OS vlan</description>
+					<units>1000</units>
+					<start>2010-01-30T00:00:00</start>
+					<end>2031-01-30T00:00:00</end>
+					<handler path="common/noopd.xml">
+						<properties>
+							<property name="eucanet.credentials" value="/opt/orca/config/eucanet.cred.properties" />
+							<property name="euca.site" value="bbn" />
+						</properties>
+					</handler>
+					<attributes>
+						<attribute>
+							<key>resource.class.invfortype</key>
+							<type>Class</type>
+							<value>orca.plugins.ben.broker.NDLVlanInventory</value>
+						</attribute>
+					</attributes>
+					<properties>
+						<!-- site NDL description -->
+						<property name="substrate.file" value="/opt/orca/ndl/bbnvmsite.rdf" />
+					</properties>
+				</pool>
+
+			</pools>
+			<controls>
+				<control type="bbnvmsite.baremetalce" class="orca.policy.core.SimpleVMControl" />
+				<control type="bbnvmsite.vm" class="orca.policy.core.SimpleVMControl" />
+				<control type="bbnvmsite.vlan" class="orca.policy.core.VlanControl" />
+			</controls>
+		</actor>
+		<actor>
+			<type>site</type>
+			<name>test-bbnnet-site</name>
+			<guid>071990c0-1bf6-4e0a-8b35-fe643a854149</guid>
+			<description>BBN NET authority</description>
+			<pools>
+				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
+					<type>bbnNet.vlan</type>
+					<label>BBN NET VLAN</label>
+					<description>A VLAN over BBN NET</description>
+					<units>10</units>
+					<start>2010-01-30T00:00:00</start>
+					<end>2031-01-30T00:00:00</end>
+					<handler path="common/noopd.xml">
+						<properties>
+							<property name="eucanet.credentials" value="/opt/orca/config/eucanet.cred.properties" />
+							<property name="euca.site" value="bbn" />
+						</properties>
+					</handler>
+					<attributes>
+						<attribute>
+							<key>resource.class.invfortype</key>
+							<type>Class</type>
+							<value>orca.plugins.ben.broker.NDLVlanInventory</value>
+						</attribute>
+					</attributes>
+					<properties>
+						<!-- site ndl file -->
+						<property name="substrate.file" value="/opt/orca/ndl/bbnNet.rdf" />
+					</properties>
+				</pool>
+			</pools>
+			<controls>
+				<control type="bbnNet.vlan" class="orca.policy.core.VlanControl" />
+			</controls>
+		</actor>
+	</actors>
+
+	<topology>
+		<edges>
+			<edge>
+				<from name="test-test-topology-embedding-SM" guid="38615670-64f2-46ae-b2e5-88bb1ae86400" type="service" />
+				<to name="test-ndl-broker" guid="7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd" type="broker" />
+			</edge>
+			<edge>	
+				<from name="test-ndl-broker" guid="7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd" type="broker" />
+				<to name="test-bbnvm-site" guid="af054653-54e9-4a14-aae3-6daa191b2471" type="site" />
+				<rset>
+					<type>bbnvmsite.baremetalce</type>
+					<units>1</units>
+				</rset>
+				<rset>
+					<type>bbnvmsite.vm</type>
+					<units>18</units>
+				</rset>
+				<rset>
+					<type>bbnvmsite.vlan</type>
+					<units>500</units>
+				</rset>
+			</edge>
+			<edge>
+				<from name="test-ndl-broker" guid="7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd" type="broker" />
+				<to name="test-bbnnet-site" guid="071990c0-1bf6-4e0a-8b35-fe643a854149" type="site" />
+				<rset>
+					<type>bbnNet.vlan</type>
+					<units>10</units>
+				</rset>
+			</edge>
+		</edges>
+	</topology>
+
+</configuration>

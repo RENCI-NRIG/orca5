@@ -1,0 +1,30 @@
+This package defines a class loader to be used by the Shirako web
+application when it is installed inside a Tomcat application
+server. This class loader allows the system to add and upgrade new
+libraries dynamically without restarting the application.
+
+Using the class loader requires several steps:
+
+1. Copy shirako.tomcat.server*.jar to CATALINA_HOME/server/lib
+2. Copy shirako.tomcat.common*.jar to CATALINA_HOME/common/lib
+3. Add the following line to Shirako's context.xml file:
+   <Loader loaderClass="shirako.util.tomcat.ShirakoWebappClassLoader"/>
+4. To enable jar files to be resolved dynamically at runtime, create
+an instance of ShirakoURLClassLoader. Obtain the context class loader
+(Thread.currentThread().getContenxtClassLoader()), typecast it to
+IShirakoClassLoader, and register the loader you created.
+
+5. Disable jar files to be resolved dynamically at runtime, obtain the
+   context class laoder, and unregister the class loader for you jar
+   files.
+
+6. To upgrade jar files: unregister the corresponding ShirakoURLClassLoaded, create a new loader,
+   and register it.
+
+   
+
+   
+   
+
+   
+

@@ -1,0 +1,3 @@
+<antlib>
+  <taskdef resource="orca/handlers/ec2/ec2.tasks"/>
+</antlib>

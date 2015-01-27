@@ -1,0 +1,39 @@
+ ----
+ VMControl
+ ----
+ The Orca Team
+ ----
+ April 19, 2010
+ ----
+
+
+VMControl
+
+ <<class:>> orca.policy.core.VMControl
+ 
+ {{{AuthorityCalendarPolicy.html}\<\< Back to AuthorityCalendarPolicy}}
+
+
+ A control for managing virtual machines (VMs) alocation. The control keeps
+ track of each VMM host and selects hosts on which to create VMs. This control
+ requires detailed inventory: it needs to know about every VMM hosts that is
+ under its control. The control treats each VMM host as a single-dimentional
+ container that consists of a fixed number of units (configured via a property).
+
+ <<See also:>> {{{SimpleVMControl.html}SimpleVMControl}}
+
+* Configuration Properties
+
+  * capacity - number of VMs per VMM host
+
+  * ip.list - a comma-separated list of ip addresses to use. Supports / notation
+  (e.g., 1.2.3.4/24) and range notation (e.g., 1.2.3.4-100). If specified, each
+  allocated VM will also be assigned an IP address from that list.
+
+  * ip.subnet - subnet mask for IP address asignment
+
+  * ip.gateway - gateway ip address
+
+  * data.subnet - subnet mask for data plane
+
+

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+	<actors>
+		<actor>
+			<type>site</type>
+			<name>duke-vm-site</name>
+			<guid>9b12d036-23e7-11df-b3a3-000c29b1c193</guid>
+			<pools>
+				<pool>
+					<type>duke.vm</type>
+					<label>Eucalyptus Virtual Machine (DUKE)</label>
+					<description>A virtual machine</description>
+					<units>10</units>
+					<start>2010-01-30T00:00:00</start>
+					<end>2011-01-30T00:00:00</end>
+					<handler path="ec2/handler.xml" />
+					<attributes>
+						<attribute>
+							<key>resource.memory</key>
+							<label>Memory</label>
+							<value>128</value>
+							<unit>MB</unit>
+							<type>integer</type>
+						</attribute>
+						<attribute>
+							<key>resource.cpu</key>
+							<label>CPU</label>
+							<value>1/2 of 2GHz Intel Xeon</value>
+							<type>String</type>
+						</attribute>
+					</attributes>
+					<properties>
+						<property name="ip.list" value="192.168.206.3/24" />
+						<property name="ip.subnet" value="255.255.255.0" />
+						<property name="ip.gateway" value="192.168.206.1" />
+						<property name="data.subnet" value="255.255.0.0" />
+					</properties>
+				</pool>
+			</pools>
+			<controls>
+				<control type="duke.vm" class="orca.policy.core.SimpleVMControl" />
+			</controls>
+		</actor>
+	</actors>
+	<topology>
+		<edges>
+			<edge>
+				<from name="broker" guid="acaa0b8e-23e7-11df-b278-000c29b1c193" type="broker">
+					<location protocol="soapaxis2" url="http://geni-test.renci.org:8080/orca/services/broker" />
+<certificate>
+MIICbTCCAdagAwIBAgIES4mPjjANBgkqhkiG9w0BAQUFADB7MQswCQYDVQQGEwJVUzELMAkGA1UE
+CBMCTkMxDzANBgNVBAcTBkR1cmhhbTENMAsGA1UEChMEb3JjYTEQMA4GA1UECxMHc2hpcmFrbzEt
+MCsGA1UEAxMkYWNhYTBiOGUtMjNlNy0xMWRmLWIyNzgtMDAwYzI5YjFjMTkzMB4XDTEwMDIyNzIx
+MzMwMloXDTIwMDIyNTIxMzMwMlowezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5DMQ8wDQYDVQQH
+EwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNVBAMTJGFjYWEw
+YjhlLTIzZTctMTFkZi1iMjc4LTAwMGMyOWIxYzE5MzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkC
+gYEAlWEqiVWyq11CVyIxyRGMo6eI3QUbywyyLm6PFi+CidjFRHIfOKDONOgGMGvH/MICJh5YZuRs
+PEbbCP5yacvOzVVReQAKxG6wwttsKQbDFcPKZeNhiaWVZVRXamCNNaqbWw76GSAGy4lIMh2Qa1ik
+141XKMH8WX1HCeShCvtOEOkCAwEAATANBgkqhkiG9w0BAQUFAAOBgQCS4xK2IUBQlsu/+QSZWkRI
+AQeX+ZdJEjYMrMy1wHlnDPAuHSuwoP01sGNNvR9zRu+r3OY7Gx795vhiQqvsvzqLTlUL+Ve66BAz
+LJ9Iq8xrv7OOj3QeDyahdjPuWBeSs15t/TexfzlpzK2OXBpTAxia2Br3dx0yyKm7lNlKtRfz6g==
+</certificate>
+				</from>
+				<to name="duke-vm-site" type="site" />
+				<rset>
+					<type>duke.vm</type>
+					<units>10</units>
+				</rset>
+			</edge>
+		</edges>
+	</topology>
+</configuration>

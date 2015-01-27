@@ -1,0 +1,2 @@
+ec2.generate.neuca.inf=orca.handlers.ec2.tasks.NEucaGenerateInfFileTask
+ec2.image.proxy.register=orca.handlers.ec2.tasks.imgproxy.ImgProxyRegisterTask

@@ -1,0 +1,230 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../../common/core.xml">
+<!ENTITY paths SYSTEM "../../common/paths.xml">
+<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
+<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
+]>
+
+<project name="unified.euca.net" basedir=".">
+
+	&paths;
+	&core;
+	&drivertasks;
+	&bentasks;
+
+	<!-- <property file="test.properties" /> -->
+	<property file="../ben.properties" />
+	<!-- Uncomment for handler testing
+	<property file="unified.euca.net.test.properties" />
+	-->
+
+	<target name="join" depends="resolve.configuration,ben.load.tasks">
+		<if>
+			<not>
+				<isset property="euca.site" />
+			</not>
+			<then>
+				<echo message="Property euca.site must be set for unified euca net handler" />
+			</then>
+		</if>
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="Unified Eucalyptus Network Handler for ${euca.site}: JOIN on ${start.TIME}" />
+		<if>
+			<isset property="eucanet.credentials" />
+			<then>
+				<property file="${eucanet.credentials}" />
+			</then>
+			<else>
+				<echo message="Euca-net credentials properties are not set!" />
+			</else>
+		</if>
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<!-- hairpin -->
+				<var name="shirako.save.unit.vlan.url" unset="true" />
+				<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<!-- enable EUCA tag on all Euca interfaaces -->
+				<sequential>
+					<propertycopy property="euca.router" from="${euca.site}.euca.router" />
+					<propertycopy property="euca.router.type" from="${euca.site}.euca.router.type" />
+					<echo message="creating VLAN ${unit.vlan.url} with tag ${unit.vlan.tag}, rate ${unit.vlan.qos.rate} on router ${euca.router}" />
+					<!-- atomize this sequence -->
+					<atomic.sequence.start.macro
+						device="${euca.router}" />
+					<create.vlan 
+		    			router="${euca.router}"
+					router.type="${euca.router.type}"
+		       		 	vlan.tag="${unit.vlan.tag}"
+					vlan.qos.rate="${unit.vlan.qos.rate}"
+					vlan.qos.burst.size="${unit.vlan.qos.burst.size}"
+		       		 	router.user="${router.user}"
+		       		 	router.password="${router.password}"
+		       		 	router.default.prompt="${router.default.prompt}"
+		       		 	router.admin.password="${router.admin.password}" />
+					<add.trunk.ports 
+					router="${euca.router}"
+					router.type="${euca.router.type}"
+					vlan.tag="${unit.vlan.tag}"
+					ports="${config.interface.ports}"
+					router.user="${router.user}"
+			    		router.password="${router.password}"
+		       		 	router.default.prompt="${router.default.prompt}"
+			    		router.admin.password="${router.admin.password}" />
+					<atomic.sequence.stop.macro
+						device="${euca.router}" />
+				</sequential>
+ 				<echo message="use.neuca.quantum: ${use.neuca.quantum}" />
+				<if>
+					<equals arg1="${use.neuca.quantum}" arg2="true" />
+					<then>
+ 						<echo message="Starting Add Quantum Network"/> 
+						<var name="create.network.output" unset="true" />
+						<var name="code" unset="true" />
+						<var name="message" unset="true" />
+						<echo message="Running: ${provider.scripts}/neuca-quantum-create-net" />
+						<echo message="PROVIDER_DIR = ${provider.dir}" />
+                                                <echo message="PROVIDER_LOG_DIR ${provider.log.dir}" />
+                                                <echo message="PROVIDER_LOG_FILE ${provider.log.file}" />
+                                                <echo message="PROVIDER_LOG_LEVEL ${provider.log.level}" />
+                                                <echo message="QUANTUM_TENANT_ID ${quantum.tenant.id}" />
+                                                <echo message="QUANTUM_NET_TYPE ipv4" />
+                                                <echo message="QUANTUM_NET_NETWORK ${unit.quantum.netname}" />
+                                                <echo message="QUANTUM_NET_VLAN ${unit.vlan.tag}" />
+                                                <echo message="QUANTUM_MAX_RATE ${unit.vlan.qos.rate}" />
+                                                <echo message="QUANTUM_BURST_RATE ${unit.vlan.qos.burst.size}" />
+						<exec executable="${provider.scripts}/neuca-quantum-create-net" resultproperty="code" outputproperty="create.network.output" >
+							<env key="PROVIDER_DIR" value="${provider.dir}" />
+							<env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
+							<env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
+							<env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
+							<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
+							<env key="QUANTUM_NET_TYPE" value="ipv4" />
+							<env key="QUANTUM_NET_NETWORK" value="${unit.quantum.netname}" />
+							<env key="QUANTUM_NET_VLAN" value="${unit.vlan.tag}" />
+							<env key="QUANTUM_MAX_RATE" value="${unit.vlan.qos.rate}" />
+							<env key="QUANTUM_BURST_RATE" value="${unit.vlan.qos.burst.size}" />
+						</exec>
+						<echo message="Finished: ${provider.scripts}/neuca-quantum-create-net" />
+						<echo message="exit code ${code}, ${create.network.output}" />
+						<if>
+							<not>
+								<equals arg1="${code}" arg2="0" />
+							</not>
+							<then>
+								<echo message="unable to create quantum network: exit code ${code}, ${create.network.output}" />
+								<property name="message" value="unable to create instance: exit code ${code}, ${create.network.output}" />
+							</then>
+							<else>
+								<var name="shirako.save.unit.quantum.net.uuid" unset="true" />
+								<property name="shirako.save.unit.quantum.net.uuid" value="${create.network.output}" />
+							</else>
+						</if>
+						<echo message="shirako.save.unit.quantum.net.uuid = ${shirako.save.unit.quantum.net.uuid}, create.network.output = ${create.network.output}" />
+						<echo message="Done Add Quantum Network"/>
+					</then>
+				</if>	
+				<!-- hairpin the url property so the user sees it too -->
+				<var name="shirako.save.unit.vlan.url" unset="true" />
+				<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+				<property name="shirako.target.code" value="${code}" />
+			</else>
+		</if>
+		<echo message="join exit code: ${shirako.target.code}" />
+	</target>
+
+	<target name="leave" depends="resolve.configuration,ben.load.tasks">
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="Unified Eucalyptus Network Handler for ${euca.site}: LEAVE on ${start.TIME}" />
+		<if>
+			<isset property="eucanet.credentials" />
+			<then>
+				<property file="${eucanet.credentials}" />
+			</then>
+			<else>
+				<echo message="Euca-net credentials properties are not set!" />
+			</else>
+		</if>
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<sequential>
+					<propertycopy property="euca.router" from="${euca.site}.euca.router" />
+					<propertycopy property="euca.router.type" from="${euca.site}.euca.router.type" />
+					<!-- atomize this sequence -->
+					<atomic.sequence.start.macro
+					device="${euca.router}" />
+					<remove.trunk.ports
+					router="${euca.router}"
+					router.type="${euca.router.type}"
+					vlan.tag="${unit.vlan.tag}"
+					ports="${config.interface.ports}"
+					router.user="${router.user}"
+					router.password="${router.password}"
+		       		 	router.default.prompt="${router.default.prompt}"
+					router.admin.password="${router.admin.password}" />
+					<delete.vlan 
+		    			router="${euca.router}"
+					router.type="${euca.router.type}"
+		        		vlan.tag="${unit.vlan.tag}"
+					vlan.with.qos="${unit.vlan.with.qos}"
+		        		router.user="${router.user}"
+		        		router.password="${router.password}"
+		       		 	router.default.prompt="${router.default.prompt}"
+		        		router.admin.password="${router.admin.password}" />
+					<atomic.sequence.stop.macro
+						device="${euca.router}" />
+				</sequential>
+				<echo message="About to call neuca-quantum-delete-net" />
+				<if>
+					<equals arg1="${use.neuca.quantum}" arg2="true" />
+					<then>
+						<var name="create.network.output" unset="true" />
+						<var name="code" unset="true" />
+						<var name="message" unset="true" />
+						<exec executable="${provider.scripts}/neuca-quantum-delete-net" resultproperty="code" outputproperty="create.network.output" >
+							<env key="PROVIDER_DIR" value="${provider.dir}" />
+							<env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
+							<env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
+							<env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
+							<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
+							<env key="QUANTUM_NET_UUID" value="${unit.quantum.net.uuid}" />
+						</exec>
+						<echo message="exit code ${code}, ${create.network.output}" />
+						<if>
+							<not>
+								<equals arg1="${code}" arg2="0" />
+							</not>
+							<then>
+								<echo message="unable to create quantum network: exit code ${code}, ${create.instance.output}" />
+								<property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
+							</then>
+						</if>
+					</then>
+				</if>
+
+			</else>
+		</if>
+		<property name="shirako.target.code" value="${code}" />
+		<echo message="leave exit code: ${shirako.target.code}" />
+	</target>
+
+	<target name="modify" depends="resolve.configuration,ben.load.tasks">
+		<echo message="Unified Eucalyptus Network Handler for ${euca.site}: MODIFY" />
+		<property name="shirako.target.code" value="0" />
+	</target>
+</project>

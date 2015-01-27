@@ -1,0 +1,13 @@
+To test ORCA run:
+
+$ mvn clean package
+$ cd orca
+$ sh bin/orca
+
+Note that mysql should be running. Check orca/config/container.properties to make sure the database coordinates are correct.
+
+set environment variables (or java properties)
+ORCA_HOME
+ORCA_SERVER_PORT
+
+before starting

@@ -1,0 +1,39 @@
+ ----
+ SimpleVMControl
+ ----
+ The Orca Team
+ ----
+ April 19, 2010
+ ----
+
+
+SimpleVMControl
+
+ <<class:>> orca.policy.core.SimpleVMControl
+ 
+ {{{AuthorityCalendarPolicy.html}\<\< Back to AuthorityCalendarPolicy}}
+
+ A control fro managing virtual machine (VM) allocation. Unlike
+ {{{VMControl.html}VMControl}} this control does not keep track of each VMM
+ host. Instead it assumes that there exists a service for allocating VMs,
+ responsible for the selection of hosts for each VM. The control maintains a
+ count of available VMs and defers to the external service for 
+ placement choices.
+
+ This policy is used to integrate {{{http://www.eucalyptus.com/}Eucalyptus}} as
+ a substrate in Orca. The same policy can be used to integrate
+ {{{http://aws.amazon.com/ec2/}Amazon EC2}}.
+
+* {Configuration Properties}
+
+  * ip.list - a comma-separated list of ip addresses to use. Supports / notation
+  (e.g., 1.2.3.4/24) and range notation (e.g., 1.2.3.4-100). If specified, each
+  allocated VM will also be assigned an IP address from that list.
+
+  * ip.subnet - subnet mask for IP address asignment
+
+  * ip.gateway - gateway ip address
+
+  * data.subnet - subnet mask for data plane
+
+ 

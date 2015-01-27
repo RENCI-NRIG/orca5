@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/UnmapVLANS"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/UnmapVLANS UnmapVLANS.xsd">
+	<action name="UnmapVLANS">
+		<exchange>
+			<send>config t</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>interface {$port}</send>
+			<expect timeout="3000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>no switchport vlan mapping {$srcVLAN} {$dstVLAN}</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>end</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+	</action>
+</script>

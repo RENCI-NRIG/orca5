@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<project name="nlrsherpa" basedir=".">
+	
+    <target name="join">
+    	<!-- 
+    	input parameters are credentials, nodeA/interfaceA, nodeZ/interfaceZ, bandwidth 
+    	-->
+    	<!-- 
+    	output parameter is property NLRSherpa.reservedVlan - indicates the reserved vlan 
+    	-->
+        <echo message="NLR HANDLER: JOIN" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+			</then>
+			<else>
+		        <sequential>
+				        <NLRSherpa.ProvisionAnyVlan 
+				              	login="${NLRSherpa.login}"
+				              	password="${NLRSherpa.password}"
+				              	wg="${NLRSherpa.wg}"
+				              	nodeA="${NLRSherpa.nodeA}"
+				              	intA="${NLRSherpa.intA}"
+				              	nodeZ="${NLRSherpa.nodeZ}"
+				              	intZ="${NLRSherpa.intZ}"
+				              	bandwidth="${NLRSherpa.bandwidth}"
+				              	vlanStatusProperty="NLRSherpa.vlanStatus"
+				        		reservedVlanProperty="NLRSherpa.reservedVlan"
+				              	exitCodeProperty="NLRSherpa.provisionVlanCode" />
+						<var name="code" value="${NLRSherpa.provisionVlanCode}"/>
+						<echo message="Vlan ${NLRSherpa.reservedVlan} provisioned with status ${NLRSherpa.vlanStatus}"/>
+				</sequential>
+			</else>
+		</if>
+        <property name="shirako.target.code" value="${code}" />
+    </target>
+
+    <target name="leave">
+    	<!-- input parameter is property NLRSherpa.vlan_id + credentials -->
+        <echo message="NLR HANDLER: LEAVE" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+			</then>
+			<else>
+				<sequential>
+		     	   <NLRSherpa.RemoveVlan
+		     	       login="${NLRSherpa.login}"
+		      	       password="${NLRSherpa.password}"
+		      	       wg="${NLRSherpa.wg}"
+		      	       vlanId="${NLRSherpa.vlan_id}"
+		       	       exitCodeProperty="NLRSherpa.removeVlanCode" />
+					<var name="code" value="${NLRSherpa.removeVlanCode}"/>
+					<echo message="Removed vlan ${NLRSherpa.vlan_id} with exit code ${NLRSherpa.removeVlanCode}"/>
+				</sequential>
+			</else>
+		</if>
+        <property name="shirako.target.code" value="${code}" />
+    </target>
+
+    <target name="modify">
+        <echo message="NLR HANDLER: MODIFY" />
+        <property name="shirako.target.code" value="0" />
+    </target>
+</project>

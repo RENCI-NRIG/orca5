@@ -1,0 +1,197 @@
+ ------
+ What is Orca?
+ ------
+ Jeff Chase
+ ------
+ 31 December 2007
+ ------
+
+What is Orca?
+
+ Open Resource Control Architecture is an extensible architecture for
+ on-demand networked computing infrastructure.  It may be viewed as a
+ service-oriented <resource control plane> for an <Internet operating
+ system>.  Its purpose is to manage the hosting of diverse computing
+ environments (<guests>) on a common pool of networked hardware
+ resources such as virtualized clusters, storage, and network
+ elements.  Examples of guests include network application services,
+ virtual machines for personal computing, managed virtual clusters for
+ large-scale computation, or other networked systems.  The hardware
+ resources may be owned and administered by multiple infrastructure
+ providers, who control the terms of their use.
+
+ Orca is based on a foundational abstraction of <resource leasing>.  A
+ resource lease is a contract between a resource provider and a
+ resource consumer (guest).  The contract
+ grants the consumer access to some resource
+ for a specified period of time, with additional contract terms
+ defining the nature of the resource and its configuration.  Orca resource
+ consumers use open leasing protocols and programmatic interfaces
+ to negotiate contracts and
+ acquire and coordinate the underlying resources, optionally assisted
+ by brokering intermediaries.
+
+* Orca software
+
+ The Orca project has developed open-source software to construct
+ controller servers for resource providers and guests, and to combine
+ these servers into on-demand virtual computing environments.  It
+ involves a set of roles, protocols, and interfaces control plane
+ linking providers and consumers of infrastructure resources,
+ including virtual computing clusters and also other on-demand
+ resources such as storage, network tunnels, and even software
+ licenses.  The system is based on a service-oriented framework that
+ reflects the dynamic trust relationships and factoring of policy
+ control across the various stakeholders.
+
+ Orca project software includes the <Shirako> leasing core, the
+ <Automat> control portal and related components, a new implementation
+ of the <SHARP> framework for accountable lease contracts and
+ brokering, and Cluster-on-Demand (<COD>), a back-end resource manager
+ for shared clusters.  The software distribution includes driver
+ modules to interface the system to various virtualization
+ technologies (e.g., Xen) and guest environments (e.g., cluster/grid
+ middleware).  It also includes a few plug-in policy modules for
+ automated resource management and adaptation, which is a primary
+ focus of our ongoing research and development.
+
+* How does Orca relate to cluster managers and grid middleware?
+
+ Various middleware systems exist to manage shared computational
+ infrastructure.  Examples include batch schedulers, cycle scavengers,
+ and grid computing systems.  These systems include scheduling
+ functions for jobs and workflows, access control and arbitration for
+ shared resources, and (in some cases) automated staging or
+ programming platforms for distributed computing.
+
+ These systems are called <middleware> because they layer the new
+ functions above the node operating system software selected by the
+ resource providers; the new functions reside between the node
+ operating systems and the application.  Orca represents a different
+ kind of resource management software that controls resources assigned
+ to operating systems, using virtualization hooks or network
+ management interfaces (e.g., remote server booting) as the underlying
+ resource control mechanism.  In essence, the assigned resources
+ constitute a "container" inhabited by the guest environment, which
+ may define its own guest operating systems to run on servers within
+ its isolated container.  Because Orca and virtualization facilities
+ control resources "underneath" the guest operating systems, we
+ sometimes call this new software layer <underware> to distinguish it
+ from middleware, which runs above the node operating systems.
+
+ The Orca controller servers themselves run outside of the managed
+ resources on their own operating systems.  Some of our colleagues
+ have broadened use of the term "middleware" to include any resource
+ management service.  But we think it is important to distinguish the
+ two approaches.  The choice to virtualize physical resources (e.g.,
+ using dynamic provisioning of physical or virtual machines) rather
+ than software environments (using grid middleware) is a fundamental
+ departure from the existing practice of grid computing.
+ 
+ Middleware and underware are complementary.  A premise of Orca is
+ that virtualization makes it possible to address the goals of the
+ previous generation of systems in a more general way, and to build in
+ support for important features including advance reservations,
+ quality of service, customized software stacks, and policy-based
+ sharing of hardware resources among diverse guest environments.  It
+ is possible to provide on-demand access to virtualized resources by
+ extending grid interfaces, or to host complete grid environments
+ within dynamic resource containers leased through Orca systems, as we
+ demonstrated at Supercomputing in 2006.  This combination creates new
+ opportunities to address longstanding problems in a new way-by
+ complementing ongoing development within grid environments with new
+ approaches and capabilities outside of them, at the level of the
+ dynamic provisioning and instantiation of software environments.
+ There is great potential to expand capabilities while preserving the
+ investment in existing middleware systems.
+
+* How does Orca relate to PlanetLab and GENI?
+
+ Some of the capabilities of Orca are related to those provided by
+ PlanetLab, the software that manages a widely used network testbed. 
+ SHARP, a predecessor to Orca, was conceived as a general resource
+ management architecture for PlanetLab, and was first deployed on
+ the PlanetLab testbed.  
+
+ Orca is a set of roles and protocols implemented in a software
+ toolkit for building resource sharing systems, of which the PlanetLab
+ system is one possible structure.  The PlanetLab deployment is a
+ centrally controlled infrastructure with support for best-effort
+ coallocation of virtual servers running a fixed OS configuration.
+ PlanetLab emphasizes best-effort open access over admission control;
+ there is no basis to negotiate resources for predictable service
+ quality or isolation.
+
+ Applications built for PlanetLab using the Plush system may be
+ deployed directly on networked Orca clusters.  The PlanetLab service
+ itself can run within an Orca-hosted container.  We have deployed a
+ proof-of-concept using versions of the PlanetLab kernel modified to
+ run on Xen virtual machines.  However, the deployed PlanetLab testbed
+ does not support interfaces for dynamically contributed resources.
+
+ The PlanetLab structure is realizable using the Orca framework, and
+ other structures are realizable as well.  One goal of our work is to
+ advance the foundations for networked resource sharing systems that
+ can grow and evolve to support a range of resources, management
+ policies, service models, and relationships among resource providers
+ and consumers.  Shirako defines one model for how the PlanetLab
+ experience can extend to a wider range of resource types, federated
+ resource providers, clusters, and more powerful approaches to
+ resource virtualization and isolation.  The approach is one possible
+ direction to meet the goals of NSF's GENI effort.
+
+* Orca project vision
+
+ The Orca project is the cornerstone of our research on managing
+ networked cyberinfrastructure as a shared utility in which hardware
+ resources are provisioned or sold according to demand, much as
+ electricity is today.  This vision rests on several key premises:
+
+  * An effective environment for dependable computing will combine
+    stateless client devices with a distributed service backbone (data
+    storage, Web services, interaction, computation) whose functions
+    are made scalable and reliable through geographic dispersion and
+    replication.
+
+  * These services are hosted on a server backbone infrastructure
+    residing in data centers and other edge sites throughout the
+    Internet; the edge resources (CPU, storage, memory, etc.) may be
+    shared, like the network itself.
+
+  * Flexible service architectures and dynamic resource sharing will
+    enable a fluid mapping of service functions and data onto the
+    infrastructure, so one may instantiate services or other guests
+    wherever suitable resources
+    are available and demand exists.
+
+  * Critical services must sense-and-respond to adapt automatically to
+    changes in traffic demands or resource conditions, while holding
+    human administrative burdens constant.  Orca is a context for
+    exploring autonomic resource management and diagnosis/repair
+    in virtual data centers and federated networked systems.
+
+  * The server network and the hosted services constitute a critical
+    public infrastructure requiring open, flexible, secure, robust,
+    and decentralized control.  The control architecture must resolve
+    the ``tussle'' of contending demands, changing priorities, and
+    rapidly advancing technology, all within the framework of a
+    self-sustaining system.  Any such system is inherently economic.
+    Orca can serve as a foundation for an Internet resource economy.
+
+*Orca history and funding
+
+ IBM has been an important partner since the inception of the project,
+ and has supported many elements of our work in on-demand computing,
+ virtual data centers, and autonomic computing.
+
+ We are grateful for support from the US National Science Foundation, which
+ has provided the majority of our funding:
+  * CNS-0509408 Virtual Playgrounds: Making Virtual Distributed Computing Real
+  * ANI 03-30658 A Grid Service for Dynamic Virtual Clusters
+  * CNS-0720829 Foundations of a Programmable Hosting Center
+
+ Open Resource Control Architecture is not related to the well-known Orca
+ programming language and system from Dr. Henri Bal and his collaborators
+ at VU University Amsterdam.  We have appropriated the name Orca with
+ Dr. Bal's permission, because it works for us.
+

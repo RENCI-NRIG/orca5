@@ -1,0 +1,117 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../../common/paths.xml">
+<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
+]>
+
+<project name="dukenet" basedir=".">
+
+	&paths;
+	&core;
+	&drivertasks;
+	&bentasks;
+
+	<!-- <property file="test.properties" /> -->
+	<property file="../ben.properties" />
+
+	<target name="join" depends="resolve.configuration,ben.load.tasks">
+		<echo message="DUKE NET HANDLER: SETUP" />
+		<!-- enable DUKE.NET tag on all VM interfaaces -->
+                <sequential>
+                	<create.vlan 
+                                router="${router}"
+                                router.type="Cisco6509"
+                                vlan.tag="${unit.vlan.tag}"
+                                vlan.qos.rate="${unit.vlan.qos.rate}"
+                                vlan.qos.burst.size="${unit.vlan.qos.burst.size}"
+                                router.user="${router.user}"
+                                router.password="${router.password}"
+                                router.admin.password="${router.admin.password}" />
+                        <add.trunk.ports 
+                                router="${router}"
+                                router.type="Cisco6509"
+                                vlan.tag="${unit.vlan.tag}"
+                                ports="${dukenet.6509.action.ports}"
+                                router.user="${router.user}"
+                                router.password="${router.password}"
+                                router.admin.password="${router.admin.password}" />
+		</sequential>
+<!-- old way
+		<enable.vlan 
+			service.location="${service.location}"
+			router="${router}"
+			vlan.tag="${unit.net.vlan}"
+			ports="${router.ports.vms};${router.ports.nlr}"
+			router.user="${router.user}"
+			router.password="${router.password}"
+			router.admin.password="${router.admin.password}"
+			/>
+-->
+		<!-- map the DUKE.NET tag to the NLR tag -->
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>	
+				<map.vlans 
+					router="${router}"
+                                        router.type="Cisco6509"
+					port="${router.ports.nlr}"
+					src.vlan.tag="${dukenet.net.vlan}"
+					dst.vlan.tag="${unit.net.vlan}"
+					router.user="${router.user}"
+					router.password="${router.password}"
+					router.admin.password="${router.admin.password}"
+					/>
+			</then>
+		</if>
+
+		<property name="shirako.target.code" value="${code}" />
+		<echo message="join exit code: ${shirako.target.code}" />
+	</target>
+
+	<target name="leave" depends="resolve.configuration,ben.load.tasks">
+		<echo message="DUKE NET HANDLER: TEARDOWN" />
+		<unmap.vlans 
+			router="${router}"
+			router.type="Cisco6509"
+			src.vlan.tag="${dukenet.net.vlan}"
+			dst.vlan.tag="${unit.net.vlan}"
+			port="${router.ports.nlr}"
+			router.user="${router.user}"
+			router.password="${router.password}"
+			router.admin.password="${router.admin.password}"
+			/>
+
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>	
+               			<sequential>
+                        		<remove.trunk.ports
+                                		router="${router}"
+                                		router.type="Cisco6509"
+                               		 	vlan.tag="${unit.vlan.tag}"
+                               		 	ports="${dukenet.6509.action.ports}"
+                                		router.user="${router.user}"
+                                		router.password="${router.password}"
+                                		router.admin.password="${router.admin.password}" />
+                        		<delete.vlan 
+                                		router="${router}"
+                                		router.type="Cisco6509"
+                                		vlan.tag="${unit.vlan.tag}"
+                                		vlan.with.qos="${unit.vlan.with.qos}"
+                                		router.user="${router.user}"
+                                		router.password="${router.password}"
+                                		router.admin.password="${router.admin.password}" />
+              			</sequential>
+			</then>
+		</if>
+
+		<property name="shirako.target.code" value="${code}" />
+		<echo message="leave exit code: ${shirako.target.code}" />
+	</target>
+
+	<target name="modify" depends="resolve.configuration,ben.load.tasks">
+		<echo message="DUKE NET HANDLER: MODIFY" />
+		<property name="shirako.target.code" value="0" />
+	</target>
+</project>

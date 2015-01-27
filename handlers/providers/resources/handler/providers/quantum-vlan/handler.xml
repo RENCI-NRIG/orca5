@@ -1,0 +1,435 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../../common/core.xml">
+<!ENTITY paths SYSTEM "../../common/paths.xml">
+<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
+<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
+]>
+
+<!-- This handler supports configuring Quantum 
+as well as flowvisor-emulated and native VLAN provisioning
+in a *hybrid* or OF only rack switch /ib -->
+<project name="quantum-vlan" basedir=".">
+
+	&paths;
+	&core;
+	&drivertasks;
+	&bentasks;
+
+	<!-- Uncomment for handler testing
+	<property file="quantum-vlan.test.properties" />
+	-->
+
+	<!-- 
+		Controller must supply
+			unit.openflow.slice.ctrl.url - [optional] User OF Controller URL
+			unit.openflow.slice.email - [optional] User OF slice email
+			unit.openflow.slice.pass - [optional] User OF slice password
+			
+			unit.quantum.netname - [mandatory] - dataplane, of or storage
+			unit.vlan.tag [mandatory]
+			unit.vlan.url [mandatory]
+			unit.vlan.qos.rate [mandatory]
+			unit.vlan.qos.burst.size [mandatory]
+			config.interface.ports [mandatory]
+			
+		What comes from static properties in quantum-vlan.properties
+			flowvisor.url
+			flowvisor.user
+			flowvisor.passwd
+			fvctrl.start.port
+			fvctrl.end.port
+			fvctrl.host
+			fvctrl.type ('floodlight' or 'nox')
+			nox.core.exec (if nox)
+			floodlight.jar (if floodlight)
+			
+			router.vlan.type ('hybrid' or 'openflow')
+			router.type (cisco6509, g8264 etc)
+			router.device (IP address)
+			router.user
+			router.password
+			router.default.prompt (cisco only)
+			router.admin.password (cisco only)
+		
+		Also quantum properties
+
+			# quantum logging 
+			provider.log.level=debug
+			provider.log.file=handler-vlan.log
+			provider.log.dir=/var/log/orca
+
+			# use quantum true/false
+			use.neuca.quantum=true
+
+			#tenant that uses orca
+			quantum.tenant.id=geni-orca
+	-->
+	<target name="join" depends="resolve.configuration,ben.load.tasks">
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="Quantum VLAN Handler: JOIN on ${start.TIME}" />
+		<if>
+			<isset property="quantum-vlan.properties" />
+			<then>
+				<property file="${quantum-vlan.properties}" />
+			</then>
+			<else>
+				<echo message="Flowvisor or switch credentials properties are not set: quantum-vlan.properties absent!" />
+			</else>
+		</if>
+		<if>
+			<and>
+				<not>
+					<equals arg1="${router.vlan.type}" arg2="openflow" />
+				</not>
+				<not>
+					<equals arg1="${router.vlan.type}" arg2="hybrid" />
+				</not>
+			</and>
+			<then>
+				<fail message="Unknown router vlan type in configuration: ${router.vlan.type} (only openflow and hybrid are allowed)" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<!-- hairpin -->
+				<var name="shirako.save.unit.vlan.url" unset="true" />
+				<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<if>
+					<or>
+						<!-- controller is asking for openflow vlan with user controller -->
+						<isset property="unit.openflow.slice.ctrl.url" />
+						<and>
+							<!-- controller is asking for native vlan, but switch only supports openflow (not hybrid) -->
+							<not>
+								<isset property="unit.openflow.slice.ctrl.url" />
+							</not>
+							<equals arg1="${router.vlan.type}" arg2="openflow" />
+						</and>
+					</or>
+					<then>
+						<!-- atomize this sequence (need to start early because otherwise NOX's start in parallel) -->
+						<atomic.sequence.start.macro
+							device="${flowvisor.url}" />
+						<!-- create a slice and add a vlan flowspace to it -->
+						<var name="ctrl.url" unset="true" />
+						<if>
+							<isset property="unit.openflow.slice.ctrl.url" />
+							<!-- user provided a controller -->
+							<then>
+								<property name="ctrl.url" value="${unit.openflow.slice.ctrl.url}" />
+								<if>
+									<not>
+										<isset property="unit.openflow.slice.email" />
+									</not>
+									<then>
+										<echo message="Slice email not specified, setting to default exogeni-ops@renci.org" />
+										<property name="unit.openflow.slice.email" value="exogeni-ops@renci.org" />
+									</then>
+								</if>
+								<if>
+									<not>
+										<isset property="unit.openflow.slice.pass" />
+									</not>
+									<then>
+										<echo message="Slice password not specified, setting to default 'slicepass'" />
+										<property name="unit.openflow.slice.pass" value="slicepass" />
+									</then>
+								</if>
+							</then>
+							<else>
+								<!-- start our own controller -->
+								<var name="unit.openflow.slice.email" unset="true" />
+								<var name="unit.openflow.slice.pass" unset="true" />
+								<property name="unit.openflow.slice.email" value="exogeni-ops@renci.org" />
+								<exec executable="${provider.scripts}/genpasswd.sh" resultproperty="code" outputproperty="unit.openflow.slice.pass" />
+								<if>
+									<not>
+										<equals arg1="${code}" arg2="0" />
+									</not>
+									<then>
+										<property name="message" value="unable to generate random slice password for flowvisor, using default" />
+										<var name="unit.openflow.slice.pass" unset="true" />
+										<property name="unit.openflow.slice.pass" value="defaultpass" />
+									</then>
+								</if>
+								<var name="code" unset="true" />
+								<var name="message" unset="true" />
+								<if>
+									<equals arg1="${fvctrl.type}" arg2="nox" />
+									<then>
+										<echo message="Starting NOX controller in ${nox.core.exec}" />
+										<exec executable="${provider.scripts}/start_nox.sh" resultproperty="code" outputproperty="ctrl.url">
+											<env key="NOXHOST" value="${fvctrl.host}" />
+											<env key="FVVLAN" value="${unit.vlan.tag}" />
+											<env key="NOX_FIRST_PORT" value="${fvctrl.first.port}" />
+											<env key="NOX_LAST_PORT" value="${fvctrl.last.port}" />
+											<env key="NOXEXEC" value="${nox.core.exec}" />
+										</exec>
+									</then>
+									<else>
+										<if>
+											<equals arg1="${fvctrl.type}" arg2="floodlight" />
+											<then>
+												<echo message="Starting Floodlight controller from ${floodlight.jar}" />
+												<exec executable="${provider.scripts}/start_floodlight.sh" resultproperty="code" outputproperty="ctrl.url">
+													<env key="FLHOST" value="${fvctrl.host}" />
+													<env key="FVVLAN" value="${unit.vlan.tag}" />
+													<env key="FL_FIRST_PORT" value="${fvctrl.first.port}" />
+													<env key="FL_LAST_PORT" value="${fvctrl.last.port}" />
+													<env key="FLEXEC" value="${floodlight.jar}" />
+												</exec>
+											</then>
+										</if>
+									</else>
+								</if>
+
+								<if>
+									<not>
+										<equals arg1="${code}" arg2="0" />
+									</not>
+									<then>
+										<echo message="Unable to start OF Controller due to: ${ctrl.url}" />
+										<property name="message" value="Unable to start OF Controller due to: ${ctrl.url}" />
+										<var name="ctrl.url" unset="true" />
+									</then>
+								</if>
+							</else>
+						</if>
+						<if>
+							<isset property="ctrl.url" />
+							<then>
+								<var name="code" unset="true" />
+								<var name="message" unset="true" />
+								<echo message="creating VLAN ${unit.vlan.url} with tag ${unit.vlan.tag}, on FlowVisor ${flowvisor.url} with controller ${ctrl.url}" />
+								<create.openflow.slice
+									url="${flowvisor.url}"
+									router.user="${flowvisor.user}"
+									router.password="${flowvisor.passwd}"
+									slice.name="orca-${unit.vlan.tag}"
+									slice.email="${unit.openflow.slice.email}"
+									slice.pass="${unit.openflow.slice.pass}"
+									slice.ctrl.url="${ctrl.url}" />
+								<add.openflow.vlan.flowspace
+									url="${flowvisor.url}"
+									router.user="${flowvisor.user}"
+									router.password="${flowvisor.passwd}"
+									slice.name="orca-${unit.vlan.tag}"
+									vlan.tag="${unit.vlan.tag}"
+									ports="${config.interface.ports}" />
+							</then>
+							<else>
+								<echo message="controller URL property not set, flowvisor slice will not be created" />
+							</else>
+						</if>
+						<atomic.sequence.stop.macro
+							device="${flowvisor.url}" />
+						<var name="shirako.save.unit.vlan.type" unset="true" />
+						<property name="shirako.save.unit.vlan.type" value="openflow" />
+					</then>
+					<else>
+						<!-- native vlan setup -->
+						<echo message="Performing native vlan provisioning on ${router.device} of type ${router.type}"/>
+						<atomic.sequence.start.macro device="${router.device}" />
+							<create.vlan 
+								router="${router.device}"
+								router.type="${router.type}"
+		 						vlan.tag="${unit.vlan.tag}"
+								vlan.qos.rate="0"
+								vlan.qos.burst.size="0"
+		 						router.user="${router.user}"
+		 						router.password="${router.password}"
+		 						router.default.prompt="${router.default.prompt}"
+		 						router.admin.password="${router.admin.password}" />
+							<add.trunk.ports 
+								router="${router.device}"
+								router.type="${router.type}"
+								vlan.tag="${unit.vlan.tag}"
+								ports="${config.interface.ports}"
+								router.user="${router.user}"
+								router.password="${router.password}"
+		 						router.default.prompt="${router.default.prompt}"
+								router.admin.password="${router.admin.password}" />
+						<atomic.sequence.stop.macro device="${router.device}" />
+						<var name="shirako.save.unit.vlan.type" unset="true" />
+						<property name="shirako.save.unit.vlan.type" value="native" />
+					</else>
+				</if>
+				<!-- Quantum setup -->
+				<echo message="About to create quantum network, use.neuca.quantum = ${use.neuca.quantum}" />
+				<if>
+					<equals arg1="${use.neuca.quantum}" arg2="true" />
+					<then>
+						<echo message="Using quantum network" />
+						<var name="create.network.output" unset="true" />
+						<var name="code" unset="true" />
+						<var name="message" unset="true" />
+						<echo message="PROVIDER_DIR =${provider.dir}" />
+						<echo message="PROVIDER_LOG_DIR= ${provider.log.dir}" />
+						<echo message="PROVIDER_LOG_FILE= ${provider.log.file}" />
+						<echo message="PROVIDER_LOG_LEVEL= ${provider.log.level}" />
+						<echo message="QUANTUM_TENANT_ID = ${quantum.tenant.id}" />
+						<echo message="QUANTUM_NET_TYPE = ipv4" />
+						<echo message="QUANTUM_NET_NETWORK= ${unit.quantum.netname}" />
+						<echo message="QUANTUM_NET_VLAN= ${unit.vlan.tag}" />
+						<echo message="QUANTUM_MAX_RATE= ${unit.vlan.qos.rate}" />
+						<echo message="QUANTUM_BURST_RATE= ${unit.vlan.qos.burst.size}" />
+						<exec executable="${provider.scripts}/neuca-quantum-create-net" resultproperty="code" outputproperty="create.network.output">
+							<env key="PROVIDER_DIR" value="${provider.dir}" />
+							<env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
+							<env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
+							<env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
+							<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
+							<env key="QUANTUM_NET_TYPE" value="ipv4" />
+							<env key="QUANTUM_NET_NETWORK" value="${unit.quantum.netname}" />
+							<env key="QUANTUM_NET_VLAN" value="${unit.vlan.tag}" />
+							<env key="QUANTUM_MAX_RATE" value="${unit.vlan.qos.rate}" />
+							<env key="QUANTUM_BURST_RATE" value="${unit.vlan.qos.burst.size}" />
+						</exec>
+						<echo message="exit code ${code}, ${create.network.output}" />
+						<if>
+							<not>
+								<equals arg1="${code}" arg2="0" />
+							</not>
+							<then>
+								<echo message="unable to create quantum network: exit code ${code}, ${create.network.output}" />
+								<property name="message" value="unable to create instance: exit code ${code}, ${create.network.output}" />
+							</then>
+							<else>
+								<var name="shirako.save.unit.quantum.net.uuid" unset="true" />
+								<property name="shirako.save.unit.quantum.net.uuid" value="${create.network.output}" />
+							</else>
+						</if>
+						<echo message="shirako.save.unit.quantum.net.uuid = ${shirako.save.unit.quantum.net.uuid}, create.network.output = ${create.network.output}" />
+					</then>
+				</if>
+				<!-- hairpin the url property so the user sees it too -->
+				<var name="shirako.save.unit.vlan.url" unset="true" />
+				<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+				<property name="shirako.target.code" value="${code}" />
+				<property name="shirako.target.code.message" value="${message}" />
+			</else>
+		</if>
+		<echo message="join exit code: ${shirako.target.code} with message: ${shirako.target.code.message}, vlan type ${shirako.save.unit.vlan.type}" />
+	</target>
+
+	<!-- 
+		Controller must supply
+			unit.vlan.tag [mandatory]
+			unit.vlan.type [mandatory, set by join to 'native' or 'openflow']
+			config.interface.ports [mandatory] if 'native' vlan
+			
+		What comes from static properties in quantum-vlan.properties
+			flowvisor.url
+			flowvisor.user
+			flowvisor.passwd
+			fvctrl.type
+			
+			router.device
+	-->
+	<target name="leave" depends="resolve.configuration,ben.load.tasks">
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="Quantum VLAN Handler: LEAVE on ${start.TIME}" />
+		<if>
+			<isset property="quantum-vlan.properties" />
+			<then>
+				<property file="${quantum-vlan.properties}" />
+			</then>
+			<else>
+				<echo message="Flowvisor credentials properties are not set!" />
+			</else>
+		</if>
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<if>
+					<equals arg1="${unit.vlan.type}" arg2="openflow"/>
+					<then>
+						<echo message="Deleting openflow vlan ${unit.vlan.tag}" />
+						<delete.openflow.slice
+							url="${flowvisor.url}"
+							router.user="${flowvisor.user}"
+							router.password="${flowvisor.passwd}"
+							slice.name="orca-${unit.vlan.tag}" />
+						<var name="code" unset="true" />
+						<echo message="Stopping OpenFlow controller ${fvctrl.type}" />
+						<exec executable="${provider.scripts}/stop_${fvctrl.type}.sh" resultproperty="code">
+							<env key="FVVLAN" value="${unit.vlan.tag}" />
+						</exec>
+					</then>
+					<else>
+						<echo message="Deleting native vlan ${unit.vlan.tag} from ${router.device}" />
+						<atomic.sequence.start.macro device="${router.device}" />
+							<remove.trunk.ports
+								router="${router.device}"
+								router.type="${router.type}"
+								vlan.tag="${unit.vlan.tag}"
+								ports="${config.interface.ports}"
+								router.user="${router.user}"
+								router.password="${router.password}"
+		 						router.default.prompt="${router.default.prompt}"
+								router.admin.password="${router.admin.password}" />
+							<delete.vlan 
+								router="${router.device}"
+								router.type="${router.type}"
+								vlan.tag="${unit.vlan.tag}"
+								vlan.with.qos="true"
+								router.user="${router.user}"
+								router.password="${router.password}"
+		 						router.default.prompt="${router.default.prompt}"
+								router.admin.password="${router.admin.password}" />
+						<atomic.sequence.stop.macro device="${router.device}" />					
+					</else>
+				</if>
+				<echo message="About to call neuca-quantum-delete-net, use.neuca.quantum = ${use.neuca.quantum}" />
+				<if>
+					<equals arg1="${use.neuca.quantum}" arg2="true" />
+					<then>
+						<var name="create.network.output" unset="true" />
+						<var name="code" unset="true" />
+						<var name="message" unset="true" />
+						<exec executable="${provider.scripts}/neuca-quantum-delete-net" resultproperty="code" outputproperty="create.network.output">
+							<env key="PROVIDER_DIR" value="${provider.dir}" />
+							<env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
+							<env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
+							<env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
+							<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
+							<env key="QUANTUM_NET_UUID" value="${unit.quantum.net.uuid}" />
+						</exec>
+						<echo message="exit code ${code}, ${create.network.output}" />
+						<if>
+							<not>
+								<equals arg1="${code}" arg2="0" />
+							</not>
+							<then>
+								<echo message="unable to create quantum network: exit code ${code}, ${create.instance.output}" />
+								<property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
+							</then>
+						</if>
+					</then>
+				</if>
+			</else>
+		</if>
+		<property name="shirako.target.code" value="${code}" />
+		<echo message="leave exit code: ${shirako.target.code}" />
+	</target>
+
+	<target name="modify" depends="resolve.configuration,ben.load.tasks">
+		<echo message="Flowvisor Handler: MODIFY" />
+		<property name="shirako.target.code" value="0" />
+	</target>
+</project>

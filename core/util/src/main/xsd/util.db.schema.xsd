@@ -1,0 +1,77 @@
+<!--
+	Schema for data mapping files.	
+-->
+<xsd:schema 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://issg.cs.duke.edu/cod/plugins/beans"
+    xmlns="http://issg.cs.duke.edu/cod/plugins/beans"
+    elementFormDefault="qualified">
+
+    <!-- The main structure of the XML mapping file -->
+    <xsd:element name="mapping">
+        <xsd:complexType>
+            <xsd:sequence>
+				<xsd:element name="configuration" type="configuration" maxOccurs="1" minOccurs="0" />
+				<xsd:element name="ldap" type="ldap" maxOccurs="1" minOccurs="0" />
+				<xsd:element name="mysql" type="mysql" maxOccurs="1" minOccurs="0" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+	<xsd:complexType name="configuration">
+		<xsd:sequence>
+			<xsd:element name="map" type="map" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ldap">
+		<xsd:sequence>
+			<xsd:element name="entry" type="entry" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="entry">
+		<xsd:sequence>
+			<xsd:element name="objectClasses" type="objectClasses" />
+			<xsd:element name="attributes" type="attributes" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="objectClasses">
+		<xsd:sequence>
+			<xsd:element name="objectClass" type="objectClass" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="objectClass">
+		<xsd:attribute name="name" />
+	</xsd:complexType>
+
+	<xsd:complexType name="attributes">
+		<xsd:sequence>
+			<xsd:element name="map" type="map" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+    <xsd:complexType name="map">
+        <xsd:attribute name="from" type="xsd:string" use="required" />
+        <xsd:attribute name="to" type="xsd:string" use="required" />
+        <xsd:attribute name="ignore" type="xsd:boolean" use="optional" default="false" />
+		<xsd:attribute name="requiredFrom" type="xsd:boolean" use="optional" default="false" />
+		<xsd:attribute name="requiredTo" type="xsd:boolean" use="optional" default="false" />
+		<xsd:attribute name="ignoreFrom" type="xsd:boolean" use="optional" default="false" />
+		<xsd:attribute name="ignoreTo" type="xsd:boolean" use="optional" default="false" />
+    </xsd:complexType>
+    
+    <xsd:complexType name="mysql">
+    	<xsd:sequence>
+			<xsd:element name="entry" type="mysqlentry" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="mysqlentry">
+		<xsd:sequence>
+			<xsd:element name="attributes" type="attributes" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+	</xsd:complexType>
+ </xsd:schema>

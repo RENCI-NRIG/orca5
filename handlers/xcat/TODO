@@ -1,0 +1,7 @@
+Windows bare metal images (if found to be possible) may need disablement of
+the SSH check. We may need to see if we can check for an available RDP port.
+Is there a means to check in RDP for a "valid" response?
+Check VCL xcat handler for means of credential injection.
+
+Perhaps come up with a means of cleaning up "stale" instances - namely, instances that
+belong to slices that no longer exist (are slice names globally unique enough to make this work)?

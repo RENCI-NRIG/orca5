@@ -1,0 +1,4 @@
+interface port {$AccessPorts}
+switchport mode access
+switchport access vlan {$VLANTagName}
+exit

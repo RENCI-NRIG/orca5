@@ -1,0 +1,6 @@
+<!--
+    This file contains definitions of global tasks to be used by all handlers.
+-->
+
+<target name="load.tasks" depends="set.classpath">
+</target>

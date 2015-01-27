@@ -1,0 +1,22 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://orca/drivers"
+    xmlns="http://orca/drivers"
+    elementFormDefault="qualified">
+
+    <xsd:element name="drivers">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="driver" type="driver" maxOccurs="unbounded" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+ 
+        <xsd:complexType name="driver">
+            <xsd:all>
+                <xsd:element name="id" type="xsd:string" />
+                <xsd:element name="className" type="xsd:string" />
+                <xsd:element name="path" type="xsd:string" minOccurs="0" />
+            </xsd:all>
+        </xsd:complexType>
+
+</xsd:schema>

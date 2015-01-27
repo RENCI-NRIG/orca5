@@ -1,0 +1,219 @@
+ ----
+ Web Portal Authentication
+ -----
+ The Orca Team
+ -----
+ September 5, 2007
+ -----
+
+Web Portal Authentication
+
+ This document describes how to configure authentication for the Orca web portal.
+ The Orca web portal supports several authentication schemes:
+
+  * {{{#Forms authentication}Forms authentication}}
+
+  * {{{#WebAuth authentication}WebAuth authentication}}
+
+  []
+
+* {Forms authentication}
+
+ To enable forms authentication you must edit the portal web application's <<context.xml>> file.
+ When building the web application, this file will be located under $ORCA_ROOT/portal/webapp/local.
+ Please refer to the {{{index.html}Portal Installation Guide}} if you cannot locate this file.
+
+
+ Inside context.xml you will find a section that looks like this:
+ 
++---
+ <Realm
+        className="org.apache.catalina.realm.JDBCRealm"
+        debug="99"
+        driverName="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://localhost:3306/orca"
+        connectionName="orca"
+        connectionPassword=""
+        userTable="Users"
+        userNameCol="usr_name"
+        userCredCol="usr_password"
+        userRoleTable="UserRoles"
+        roleNameCol="role_name"
+        />
++---
+
+ Make sure that this section is not commented, and that any other Realm sections are commented.
+ To configure the authentication settings to match your environment you may need to modify the following:
+
+  * <<connectionURL>> This is the JDBC URL to your MySQL server and the database.
+
+  * <<connectionName>> This is the user name used to connect to the server.
+
+  * <<connectionPassword>> This is the password used to connect to the server.
+  
+ Once you have made your modifications you will have to rebuild and redeploy the web application.
+
+ <<Note:>> Make sure that you modify the file located under $ORCA_ROOT/portal/webapp/local. During the
+ build process this file will be copied to a temporary build directory, where it will be overwritten on every
+ build. The template is stored under $ORCA_ROOT/portal/webapp/local and for you changes to be effective, you
+ must modify it.
+
+* {WebAuth authentication}
+ 
+ The Orca supports Duke's single sign-on web authentication system, {{{https://webauth.duke.edu/}WebAuth}}.
+ When using WebAuth for authentication, care must be taken to make sure that an Orca user login is the same
+ as the Duke ID of the corresponding principal. Failure to do so will prevent authentication from completing.
+
+ The containing Tomcat server must contain several Java libraries and the physical server must also
+ contain a number of native libraries. The steps required to install these libraries are described
+ {{{tomcat.html}here}}.
+
+ Once you have installed all required libraries, you need to configure WebAuth. To this end you need to create
+ a file called <<webauth.xml>> and place it inside server/classes.
+
+ A sample webauth.xml file looks like this:
+
++---
+<?xml version="1.0"?>
+<!DOCTYPE webauthconf [
+<!ELEMENT webauthconf ( service, host, returnto, redirectwith, returnvia, lifetime, server, authmechs )>
+<!ELEMENT service EMPTY >
+<!ATTLIST service name CDATA #REQUIRED >
+<!ELEMENT host EMPTY >
+<!ATTLIST host name CDATA #REQUIRED >
+<!ELEMENT returnto EMPTY >
+<!ATTLIST returnto location CDATA #REQUIRED >
+<!ELEMENT redirectwith EMPTY >
+<!ATTLIST redirectwith template CDATA #REQUIRED >
+<!ELEMENT returnvia EMPTY >
+<!ATTLIST returnvia argument CDATA #REQUIRED >
+<!ELEMENT lifetime EMPTY >
+<!ATTLIST lifetime seconds CDATA #REQUIRED >
+<!ELEMENT server EMPTY >
+<!ATTLIST server location CDATA #REQUIRED >
+<!ELEMENT authmechs ( authmech )* >
+<!ELEMENT authmech ( conf, secret ) >
+<!ATTLIST authmech mech ID #REQUIRED >
+<!ELEMENT conf EMPTY >
+<!ATTLIST conf location CDATA #REQUIRED >
+<!ELEMENT secret EMPTY >
+<!ATTLIST secret location CDATA #REQUIRED >
+]>
+
+<!--
+    Webauth configuration file for a cod deployment
+    Note: all paths should be absolute!
+-->
+
+<webauthconf>
+  <service name="cod"/>
+  <host name="cod.cs.duke.edu"/>
+  <!-- returnto seems not to have any impact -->
+  <returnto location="http://www.cs.duke.edu/~chase"/>
+  <lifetime seconds="600"/>
+  <server location="https://webauth.duke.edu/cgi-bin/webauth"/>
+  <redirectwith template="CATALINA_HOME/conf/webauth/webauth.html"/>
+  <returnvia argument="cookie"/>
+  <authmechs>
+    <authmech mech="1">
+      <conf location="CATALINA_HOME/conf/webauth/krb5.conf"/>
+      <secret location="CATALINA_HOME/conf/webauth/shirako.keytab"/>
+    </authmech>
+  </authmechs>
+</webauthconf>
++---
+
+ Please replace all instances of <<CATALINA_HOME>> in the above example with the path (absolute)
+ to your Tomcat installation.
+ 
+ Next, create a directory <<conf/webauth>> and copy the contents of the following file into
+ <<conf/webauth/webauth.html>>.
+
+ 
++---
+Status:  302 Found
+Location:  <%req>
+Content-type:  text/html
+Pragma:  no-cache
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+      <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+      <title>Go forth and authenticate.</title>
+ </head>
+ <body>
+   <h1>Go forth and authenticate.</h1>
+   Go to <a href="<%req>"><%req></a> and authenticate!
+   <hr>
+ </body>
+</html>
++---
+ 
+ You will need to place the following into <<conf/webauth/krb5.conf>>.
+
++---
+[libdefaults]
+	ticket_lifetime = 600
+	default_realm = ACPUB.DUKE.EDU
+	default_tkt_enctypes = des-cbc-crc
+	default_tgs_enctypes = des-cbc-crc
+
+[realms]
+	ACPUB.DUKE.EDU = {
+		kdc = kaserv1.acpub.duke.edu:88
+		kdc = kaserv2.acpub.duke.edu:88
+		kdc = kaserv3.acpub.duke.edu:88
+		admin_server = kaserv1.acpub.duke.edu:749
+		default_domain = duke.edu
+	}
+
+[domain_realm]
+	.duke.edu = ACPUB.DUKE.EDU
+	.oit.duke.edu = ACPUB.DUKE.EDU
+
+[logging]
+	kdc = FILE:/tmp/krb5kdc.log
+	admin_server = FILE:/tmp/kadmin.log
+	default = FILE:/tmp/krb5lib.log
+
++---
+
+
+ Next, you will need to place your server's secret into <<conf/webauth/shirako.keytab>>.
+ If you do not have your own secret you will have to contact OIT to obtain one. When using your
+ own secret file, you will also need to update the service and host section of <<webauth.xml>>.
+
+ <<Note:>> We already have one secret file allocated from OIT. You can find this file on NFS at:
+
++---
+ /usr/research/proj/sharp/webauth/shirako.keytab
++---
+
+ You must be a memeber of <issg> to access this file. 
+
+ The service and host section when using this secret file should look like this:
+
++---
+  <service name="cod"/>
+  <host name="cod.cs.duke.edu"/>
++---
+
+ Finally, you will need to turn on WebAuth authentication for the web
+ application. To enable WebAuth authentication you must edit the portal
+ web application's <<context.xml>> file.  When building the web
+ application, this file will be located under
+ $ORCA_ROOT/portal/webapp/local.  Please refer to the {{{index.html}Portal
+ Installation Guide}} if you cannot locate this file.
+
+ Inside context.xml you will find a section that looks like this:
+
+
++---
+ <Valve className="edu.duke.oit.tomcat.WebAuthAuthentication"/>
+ <Realm className="edu.duke.oit.tomcat.EveryRoleRealm" />
++---
+
+ Make sure that this section is not commented, and that any other
+ Realm sections are commented.

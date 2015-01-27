@@ -1,0 +1,57 @@
+This directory contains help scripts to build Orca.
+
+To get an initial build follow the following instructions
+
+0. Create a working directory
+   
+   mkdir ORCA_HOME
+
+1. Checkout the build files
+
+   cd ORCA_HOME
+   svn co https://geni-orca.renci.org/svn/orca/build-all/trunk build-all
+
+2. Link build.xml
+
+   ln -s build-all/build.xml build.xml
+
+3. Fetch the sources
+
+   ant get.all 
+
+
+4. Install the geni-orca repository certificate (only if you have never done this before)
+
+   ant get.certificate
+
+Note: you need to have JAVA_HOME set to invoke this command. If you require administrative privileges
+to add a certificate to your java keystore, try the following:
+
+   ant get.certificate.sudo
+
+If this fails, please take a look at build-all/getcertificate.sh and try to modify it to fit your environment.
+
+5. Prepare the tree
+   
+   ant prepare.build
+
+
+6. Build the whole tree
+
+   mvn install
+
+After the first build, you can build all projects (or individual projects)
+directly. Simply go to the directory that contains the project
+you want to rebuild and type:
+
+   mvn install
+
+
+Before you can work with the source tree, you need to perform several
+preparation steps: e.g., generate a security configuration and add a number of
+symbolic links. The ant build file provides a task to automate this process.
+
+   ant prepare.use
+
+
+

@@ -1,0 +1,65 @@
+ ------
+ Orca Policies Directory
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+Orca Policies Directory
+
+ This page is a directory of the currently supported policies in Orca. Policies
+ are organized by actor type. Please click on the policy name for more
+ information about a specific policy.
+
+ * {{{#Guest_Policies}Guest Policies}}
+
+ * {{{#Broker_Policies}Broker Policies}}
+
+ * {{{#Aggregate_Policies}Aggregate Policies}}
+
+ []
+
+* {Guest Policies}
+
+ A guest policy is used by a guest to control the lifecycle of its reservations.
+ In general, all guests should be served well by the default guest policy
+ ({{{core/ServiceManagerSimplePolicy.html}ServiceManagerSimplePolicy}}). Policy extensions in guests are typically provided by
+ {{{../controllers/}Controllers}}.
+
+*--------+--------------------------------------------+-----------------------------------------+
+| Number | Policy name                               | Description
+*--------+--------------------------------------------+-----------------------------------------+
+|      1 |{{{core/ServiceManagerSimplePolicy.html}ServiceManagerSimplePolicy}}| Basic policy for guests
+*--------+--------------------------------------------+-----------------------------------------+
+
+* {Broker Policies}
+
+ A broker policy is used by Orca actors performing the role of a broker. A
+ broker policy is responsible for obtaining inventory from other
+ brokers/aggregates and for delegating resources controlled by the broker to
+ other brokers and guests. A broker policy delegates resources by issuing a
+ ticket (a promise for resources) to the requestor.
+
+*--------+--------------------------------------------+-----------------------------------------+
+| Number | Policy name                               | Description
+*--------+--------------------------------------------+-----------------------------------------+
+|      1 |{{{core/BrokerSimplerUnitsPolicy.html}BrokerSimplerUnitsPolicy}}|Basic policy for guests based on unit counts
+*--------+--------------------------------------------+-----------------------------------------+
+
+* {Aggregate Policies}
+
+ An aggregate policy is used by Orca actors performing the role of an aggregate.
+ An aggregate policy is responsible for managing one or more resource pools and
+ assigning resources from that pool to guests that present a valid ticket issued
+ by a broker. An aggregate policy is also responsible for delegating resources
+ to brokers. An aggregate policy assigns resources to guests in the form of a
+ lease.
+
+*--------+--------------------------------------------+-----------------------------------------+
+| Number | Policy name                               | Description
+*--------+--------------------------------------------+-----------------------------------------+
+|      1 |{{{core/AuthorityCalendarPolicy.html}AuthorityCalendarPolicy}}|Basic policy for aggregates based on an internal calendar
+*--------+--------------------------------------------+-----------------------------------------+
+
+

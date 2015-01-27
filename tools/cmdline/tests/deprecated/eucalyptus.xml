@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+	<global>
+		<startTime>-1</startTime>
+		<cycleMillis>1000</cycleMillis>
+		<firstTick>0</firstTick>
+		<manualTicks>false</manualTicks>
+		<containerGuid>583c10bfdbd326ba:41946007:114e182f09d:-8000</containerGuid>
+		<locations>
+			<location protocol="local" />
+		</locations>
+		<database>
+			<className>orca.manage.container.db.MySqlContainerManagementDatabase</className>
+			<properties>
+				<property name="db.mysql.server" value="localhost" />
+				<property name="db.mysql.db" value="orca" />
+				<property name="db.mysql.user" value="orca" />
+				<property name="db.mysql.password" value="" />
+			</properties>
+		</database>
+	</global>
+	<actors>
+		<actor>
+			<name>site</name>
+			<description>site</description>
+			<instance>
+				<className>orca.shirako.core.Authority</className>
+			</instance>
+			<mapper>
+				<className>orca.policy.core.AuthorityCalendarPolicy</className>
+				<parameters>
+					<parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
+						<instance>
+							<className>orca.cod.control.IdControlChange</className>
+							<properties>
+								<property name="resource.type" value="1" />
+							</properties>
+						</instance>
+					</parameter>
+				</parameters>
+			</mapper>
+			<plugin>
+				<className>orca.cod.plugins.SiteBase</className>
+				<properties>
+					<!-- Resource pool configuration -->
+					<property name="resource.pools.count" value="1" />
+					<!-- First resource pool configuration -->
+					<!-- Resource pool id -->
+					<property name="resource.pool.0" value="1" />
+					<!-- Resource pool name -->
+					<property name="resource.pool.name.0" value="demo" />
+					<!-- Resource pool type -->
+					<property name="resource.pool.type.0" value="1" />
+					<!-- Resource pool properties -->
+					<property name="resource.pool.properties.0" value="memory=2048,cpu=100,bandwidth=1000,computons=2" />
+                    <!-- Source ticket configuration -->
+                    <!-- Number of units (physical machines) -->
+					<property name="resource.pool.ticket.units.0" value="2" />
+					<!-- Start time -->					
+					<property name="resource.pool.ticket.start.0" value="0" />
+					<!-- End time -->
+					<property name="resource.pool.ticket.end.0" value="10000000" />					
+					<!-- Handler configuration -->
+					<property name="resource.pool.handler.packageId.0" value="87DBB2BE-7977-4463-A0CB-F6043735DEF9" />
+					<property name="resource.pool.handler.pluginId.0" value="1" />
+					<!-- Add handler properties here -->
+					<property name="resource.pool.handler.properties.0" value="" />
+				</properties>
+				<parameters>
+					<parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+						<instance>
+							<className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
+							<properties>
+								<property name="db.mysql.server" value="localhost" />
+								<property name="db.mysql.db" value="orca" />
+								<property name="db.mysql.user" value="orca" />
+								<property name="db.mysql.password" value="" />
+							</properties>
+						</instance>
+					</parameter>
+					<parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+						<instance>
+							<className>orca.cod.plugins.config.CodAntConfig</className>
+						</instance>
+					</parameter>
+				</parameters>
+			</plugin>
+		</actor>
+		<actor>
+			<name>broker</name>
+			<description>broker</description>
+			<instance>
+				<className>orca.shirako.core.Broker</className>
+			</instance>
+			<mapper>
+				<className>orca.policy.core.BrokerWorstFitPolicy</className>
+			</mapper>
+			<plugin>
+				<className>orca.shirako.plugins.ShirakoPlugin</className>
+				<parameters>
+					<parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+						<instance>
+							<className>orca.shirako.plugins.db.MySqlClientDatabase</className>
+							<properties>
+								<property name="db.mysql.server" value="localhost" />
+								<property name="db.mysql.db" value="orca" />
+								<property name="db.mysql.user" value="orca" />
+								<property name="db.mysql.password" value="" />
+							</properties>
+						</instance>
+					</parameter>
+				</parameters>
+			</plugin>
+		</actor>
+		<actor>
+			<name>service</name>
+			<description>Service Manager</description>
+			<instance>
+				<className>orca.shirako.core.ServiceManager</className>
+			</instance>
+			<mapper>
+				<className>orca.policy.core.ServiceManagerSimplePolicy</className>
+			</mapper>
+			<plugin>
+				<className>orca.cod.plugins.ServiceManagerCodPlugin</className>
+				<parameters>
+					<parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
+						<instance>
+							<className>orca.cod.plugins.db.MySqlCodDatabase</className>
+							<properties>
+								<property name="db.mysql.server" value="localhost" />
+								<property name="db.mysql.db" value="orca" />
+								<property name="db.mysql.user" value="orca" />
+								<property name="db.mysql.password" value="" />
+							</properties>
+						</instance>
+					</parameter>
+					<parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
+						<instance>
+							<className>orca.shirako.plugins.config.AntConfig</className>
+							<properties>
+								<property name="config.count" value="1" />
+								<property name="config.type.0" value="1" />
+								<property name="config.file.0" value="handlers/common/noop.xml" />
+							</properties>
+						</instance>
+					</parameter>
+				</parameters>
+			</plugin>
+		</actor>
+	</actors>
+	<topology>
+		<edges>
+			<edge>
+				<from name="service" type="sm" />
+				<to name="broker" type="agent" />
+			</edge>
+			<edge>
+				<from name="broker" type="agent" />
+				<to name="site" type="authority" />
+				<rset>
+					<type>1</type>
+					<units>4</units>
+				</rset>
+			</edge>
+		</edges>
+	</topology>
+</configuration>

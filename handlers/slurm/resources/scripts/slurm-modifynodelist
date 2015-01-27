@@ -1,0 +1,27 @@
+#!/usr/bin/env python                                                                                                        
+import os
+import sys
+import logging as LOG
+import logging.handlers
+import traceback
+
+sys.path.append(os.environ['SLURM_MANAGE_HOME'])
+
+try:
+    sys.path.append(os.environ['SLURM_MANAGE_HOME'])
+    from slurm_common import *
+except:
+    print 'Error in slurm-delete: cannot import slurm_common.py'
+    sys.exit(1)
+
+try:
+    # DO the WORK
+    SLURM_MANAGE.modifynodelist_allocation(os.environ['SLURM_ALLOCATIONID'],
+				   os.environ['SLURM_MODIFYNODELIST'])
+
+    print 'OK'
+
+except Exception as e:
+    sys.exit(1)
+
+sys.exit(0)

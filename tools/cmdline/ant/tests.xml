@@ -1,0 +1,340 @@
+<target name="test.handler.prepare" description="prepare the local environemnt for testing handlers">
+	<antcall target="prepare.packages" />
+<!--
+	<antcall target="test.configuration">
+		<param name="config" value="tests/vm.xml" />
+	</antcall>
+-->
+</target>
+
+<target name="test.handler" description="tests a resource handler">
+	<property environment="env"/>
+	<if>
+		<and>
+			<isset property="handler" />
+			<isset property="target" />
+		</and>
+		<then>
+			<!-- Compute the handler name and the handler basedir" -->
+			<basename property="handler.name" file="${handler}" />
+			<propertyregex property="handler.basedir"
+				input="${handler}"
+				regexp="${handler.name}$"
+				replace=""
+				casesensitive="false" />
+
+			<echo message="handler.basedir is ${handler.basedir}" />
+			<ant antfile="${handler.name}" inheritAll="true" dir="${handler.basedir}" target="${target}">
+				<property name="ext.classpath" refid="run.classpath" />
+				<property name="root.dir" value="${basedir}" />
+				<property name="orca.home" value="${orca.home}" />
+			</ant>
+		</then>
+		<else>
+			<echo message="usage: -Dhandler=&lt;path to handler&gt; -Dtarget=&lt;target name&gt;" />
+		</else>
+	</if>
+</target>
+
+<target name="test.configuration" description="tests if a configuration file can be loaded">
+	<if>
+		<isset property="config" />
+		<then>
+			<delete file="super.properties" />
+			<delete dir="logs" />
+			<echo message="Running configuration test..." />
+			<java classname="orca.tests.core.LoadConfigurationTest" Fork="Yes" failonerror="true">
+				<classpath refid="run.classpath" />
+				<arg value="${config}" />
+			</java>
+			<echo message="Test complete. Please inspect log file for errors." />
+		</then>
+		<else>
+			<echo message="usage: -Dconfig=&lt;path to config file&gt;" />
+		</else>
+	</if>
+</target>
+
+
+<target name="test.vm">
+	<if>
+		<not>
+			<isset property="config" />
+		</not>
+		<then>
+			<property name="config" value="tests/vm.xml" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="leaseLength" />
+		</not>
+		<then>
+			<property name="leaseLength" value="300" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="units" />
+		</not>
+		<then>
+			<property name="units" value="1" />
+		</then>
+	</if>
+
+	<delete dir="logs" />
+	<echo message="running vm test..." />
+	<echo message="configuration file: ${config}" />
+	<echo message="lease length: ${leaseLength}" />
+	<echo message="units: ${units}" />
+	<java classname="orca.tests.unit.main.VMTest" Fork="Yes" failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+		<arg value="leaseLength=${leaseLength}" />
+		<arg value="units=${units}" />
+	</java>
+</target>
+
+<target name="test.queue">
+	<if>
+		<not>
+			<isset property="config" />
+		</not>
+		<then>
+			<property name="config" value="tests/vm-single.xml" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="leaseLength" />
+		</not>
+		<then>
+			<property name="leaseLength" value="30" />
+		</then>
+	</if>
+
+	<delete dir="logs" />
+	<echo message="running queue test..." />
+	<echo message="configuration file: ${config}" />
+	<echo message="lease length: ${leaseLength}" />
+	<java classname="orca.tests.unit.main.VMQueueTest" Fork="Yes" failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+		<arg value="leaseLength=${leaseLength}" />
+	</java>
+</target>
+
+<target name="test.vlan">
+	<if>
+		<not>
+			<isset property="config" />
+		</not>
+		<then>
+			<property name="config" value="tests/vlan.xml" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="leaseLength" />
+		</not>
+		<then>
+			<property name="leaseLength" value="30" />
+		</then>
+	</if>
+
+	<delete dir="logs" />
+	<echo message="running vlan test..." />
+	<echo message="configuration file: ${config}" />
+	<echo message="lease length: ${leaseLength}" />
+	<java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+		<arg value="leaseLength=${leaseLength}" />
+	</java>
+</target>
+
+<target name="test.pred.redeem">
+	<if>
+		<not>
+			<isset property="config" />
+		</not>
+		<then>
+			<property name="config" value="tests/vm.xml" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="leaseLength" />
+		</not>
+		<then>
+			<property name="leaseLength" value="30" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="units" />
+		</not>
+		<then>
+			<property name="units" value="1" />
+		</then>
+	</if>
+
+	<delete dir="logs" />
+	<echo message="running redeem predecessor test..." />
+	<echo message="configuration file: ${config}" />
+	<echo message="lease length: ${leaseLength}" />
+	<echo message="units: ${units}" />
+	<java classname="orca.tests.unit.main.RedeemPredecessorTest" Fork="Yes" failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+		<arg value="leaseLength=${leaseLength}" />
+		<arg value="units=${units}" /><target name="test.vlan">
+			<if>
+				<not>
+					<isset property="config" />
+				</not>
+				<then>
+					<property name="config" value="tests/vlan.xml" />
+				</then>
+			</if>
+
+			<if>
+				<not>
+					<isset property="leaseLength" />
+				</not>
+				<then>
+					<property name="leaseLength" value="30" />
+				</then>
+			</if>
+
+			<delete dir="logs" />
+			<echo message="running vlan test..." />
+			<echo message="configuration file: ${config}" />
+			<echo message="lease length: ${leaseLength}" />
+			<java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true">
+				<classpath refid="run.classpath" />
+				<arg value="${config}" />
+				<arg value="do.not.recover=true" />
+				<arg value="leaseLength=${leaseLength}" />
+			</java>
+		</target>
+	</java>
+</target>
+
+<target name="test.euca">
+	<if>
+		<not>
+			<isset property="config" />
+		</not>
+		<then>
+			<property name="config" value="tests/euca.xml" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="leaseLength" />
+		</not>
+		<then>
+			<property name="leaseLength" value="300" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="units" />
+		</not>
+		<then>
+			<property name="units" value="1" />
+		</then>
+	</if>
+
+	<delete dir="logs" />
+	<echo message="running EUCA test..." />
+	<echo message="configuration file: ${config}" />
+	<echo message="lease length: ${leaseLength}" />
+	<echo message="units: ${units}" />
+	<java classname="orca.tests.unit.main.EucaTest" Fork="Yes" failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+		<arg value="leaseLength=${leaseLength}" />
+		<arg value="units=${units}" />
+		<arg value="ssh.key=keys/test-key.pub" />
+	</java>
+</target>
+
+<target name="test.ben.interdomain" description="runs the interdomain controller test">
+	<if>
+		<not>
+			<isset property="config" />
+		</not>
+		<then>
+			<property name="config" value="../../controllers/ben/resources/config/gec7.xml" />
+		</then>
+	</if>
+
+	<if>
+		<not>
+			<isset property="ttl" />
+		</not>
+		<then>
+			<property name="ttl" value="600000" />
+		</then>
+	</if>
+
+	<delete dir="logs" />
+	<echo message="running ben interdomain controller test..." />
+	<echo message="configuration file: ${config}" />
+	<java classname="orca.controllers.ben.interdomain.InterDomainControllerTest" Fork="Yes"  failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+		<arg value="time.to.live=${ttl}" />
+	</java>
+</target>
+
+<target name="test.openflow.controller" description="runs the OpenFlow controller test">
+	<if>
+		<not>
+			<isset property="config" />
+		</not>
+		<then>
+			<property name="config" value="tests/openflow.xml" />
+		</then>
+	</if>
+	<delete dir="logs" />
+	<echo message="running OpenFlow controller test..." />
+	<echo message="configuration file: ${config}" />
+	<java classname="orca.controllers.openflow.OpenFlowControllerTest" Fork="Yes"  failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+	</java>
+</target>
+
+<!-- test.openflow.policy: openflow-policy.xml, OpenFlowTest -->
+<target name="test.openflow.policy" description="runs OpenFlow Policy test...">
+	<property name="config" value="tests/openflow-policy.xml" />
+	<property name="leaseLength" value="30" />
+	<delete dir="logs" />
+	<echo message="running OpenFlow Policy test..." />
+	<echo message="configuration file: ${config}" />
+	<echo message="lease length: ${leaseLength}" />
+	<java classname="orca.tests.unit.main.OpenFlowTest" Fork="Yes" failonerror="true">
+		<classpath refid="run.classpath" />
+		<arg value="${config}" />
+		<arg value="do.not.recover=true" />
+		<arg value="leaseLength=${leaseLength}" />
+	</java>
+</target>

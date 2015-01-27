@@ -1,0 +1,12 @@
+access-control vmap {$VMAP} meter committed-rate {$QoSRate}
+access-control vmap {$VMAP} meter maximum-burst-size {$QoSBurstSize}
+access-control vmap {$VMAP} meter action drop
+access-control vmap {$VMAP} meter enable
+access-control vmap {$VMAP} action permit
+access-control vmap {$VMAP} ethernet ethernet-type any
+exit
+
+vlan {$VLANTagName}
+name {$VLANName}
+vmap {$VMAP} serverports
+exit

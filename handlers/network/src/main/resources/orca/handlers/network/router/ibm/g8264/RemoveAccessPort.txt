@@ -1,0 +1,2 @@
+interface port {$AccessPorts}
+switchport access vlan 1

@@ -1,0 +1,19 @@
+ ----
+ UnitsControl
+ ----
+ The Orca Team
+ ----
+ April 19, 2010
+ ----
+
+
+UnitsControl
+
+ <<class:>> orca.policy.core.UnitsControl
+ 
+ {{{AuthorityCalendarPolicy.html}\<\< Back to AuthorityCalendarPolicy}}
+
+
+ Maintains a count of available units and allocates resources based on the
+ count. This is a very simple, general-purpose control that can be used to
+ allocate a variety of resource types. 

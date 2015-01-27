@@ -1,0 +1,98 @@
+#!/usr/bin/env python                                                                                                                                                                                  
+import os
+import sys
+import logging as LOG
+import logging.handlers
+import traceback
+
+from lockfile import FileLock
+
+sys.path.append(os.environ['IBM_DS_DIR'] + "/scripts")
+
+try:
+    sys.path.append(os.environ['IBM_DS_DIR'] + "/scripts")
+    from ibm_ds_common import *
+except:
+    print 'Error in ibm_ds-create-lun: cannot import ibm_ds_common.py'
+    sys.exit(1)
+
+try:
+    #OPEN THE LOG                                             
+    LOG.basicConfig(level=LOG.DEBUG, filename='/dev/null')
+
+    if not os.path.exists(os.environ['IBM_DS_LOG_DIR']):
+        os.makedirs(os.environ['IBM_DS_LOG_DIR'])
+
+    handler = LOG.handlers.RotatingFileHandler(os.environ['IBM_DS_LOG_DIR'] + '/' + os.environ['IBM_DS_LOG_FILE'], backupCount=10, maxBytes=50000000)
+
+    if os.environ['IBM_DS_LOG_LEVEL'].lower() == 'debug':
+        handler.setLevel(logging.DEBUG)
+    elif os.environ['IBM_DS_LOG_LEVEL'].lower() == 'error':
+        handler.setLevel(logging.ERROR)
+    elif os.environ['IBM_DS_LOG_LEVEL'].lower() == 'info':
+        handler.setLevel(logging.INFO)
+    else:
+        handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter('%(asctime)s -- ibm_ds-create-lun %(process)d %(levelname)s : %(message)s')
+    handler.setFormatter(formatter)
+
+    LOG.getLogger('').addHandler(handler)
+
+    LOG.info('Starting Logger')
+
+except Exception as e:
+    print 'Error in ibm_ds-create-lun: Cannot open log file'
+    print type(e)
+    print e.args
+    print e
+    sys.exit(1)
+
+#log the environment                                                                                                                                                                                   
+for i in os.environ:
+    LOG.debug(str(i) + ": " + str(os.environ[i]) )
+
+try:
+    LOG.debug("ibm_ds-create-lun: lockfile = " + str(os.environ['IBM_DS_LOCKFILE']))
+    lock = FileLock(os.environ['IBM_DS_LOCKFILE'])
+except Exception as e:
+    LOG.error("ibm_ds-create-lun: Could not create FileLock. " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    sys.exit(1)
+
+try:
+    #DO THE WORKD
+    LOG.info("ibm_ds-create-lun: " + str(sys.argv))
+
+    #build host list
+    hosts=[]
+    
+    vm_guids = os.environ['UNIT_VM_GUID'].split(',')
+    for vm_guid in vm_guids:
+        host = { 'label': 'H-' + vm_guid[:28] ,
+                 'initiator_label': 'I-' + vm_guid[:28] ,
+                 'initiator_iqn': os.environ['UNIT_INITIATOR_IQN_PREFIX'] + vm_guid,
+                 'chap_user': os.environ['UNIT_TARGET_CHAP_USER'] ,
+                 'chap_password': os.environ['UNIT_TARGET_CHAP_PASSWORD'] }
+        hosts.append(host)
+
+    with lock:         
+        IBM_DS.create_lun(os.environ['IBM_DS_POOL'],
+                          os.environ['IBM_DS_RAID_LEVEL'],
+                          os.environ['IBM_DS_OWNER'],
+                          os.environ['IBM_DS_IP'],
+                          os.environ['IBM_DS_PASSWORD'],
+                          os.environ['UNIT_LUN_GUID'],                   #usually lun guid. will be tructated to 30 chars
+                          os.environ['UNIT_TARGET_LUN'],
+                          os.environ['UNIT_TARGET_CAPACITY'] + ' GB',    #assume capacity is in GB
+                          os.environ['UNIT_TARGET_SEGMENT_SIZE'],
+                          str(os.environ['UNIT_SLICE_GUID']),      #target_group_label, usually "exogeni_vms". will be tructated to 30 chars 
+                          hosts)
+
+  
+    print 'OK'
+
+except Exception as e:
+    LOG.error("ibm_ds-create-lun: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    sys.exit(1)
+
+sys.exit(0)

@@ -1,0 +1,35 @@
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
+                  id="583c10bfdbd326ba:6cfc1a6b:11644881e09:-8000">
+  <name>Common Configuration Handler Library</name>
+  <description>Provides core configuration handlers and configuration files</description>
+
+  <plugins>
+
+    <!-- Service manager emulation handler -->
+    <plugin id="1" type="10" actorType="1">
+      <name>Service Manager Emulation Handler</name>
+      <description>Service manager handler to be used for emulation</description>
+      <configurationProperties>
+        <!-- Name of the handler file (relative to /ROOT/handlers) -->
+        <property>
+          <name>handler.file</name>
+          <value>common/noop.xml</value>
+        </property>
+      </configurationProperties>
+    </plugin>
+
+    <!-- Site emulation handler -->
+    <plugin id="2" type="10" actorType="3">
+      <name>Site Emulation Handler</name>
+      <description>Site handler to be used for emulation</description>
+      <configurationProperties>
+        <!-- Name of the handler file (relative to /ROOT/handlers) -->
+        <property>
+          <name>handler.file</name>
+          <value>common/noop.xml</value>
+        </property>
+      </configurationProperties>
+    </plugin>
+
+  </plugins>  
+</extensionPackage>

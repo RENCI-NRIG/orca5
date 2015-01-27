@@ -1,0 +1,49 @@
+ ------
+ Index
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+Welcome!
+
+ Welcome to the Orca project. Our web site is currently under
+ development. To get started with Orca please follow the instructions in
+ the {{{guides/getting-started/index.html}Getting Started Guide}}.
+
+ Open Resource Control Architecture (ORCA) is an extensible architecture
+ for on-demand networked computing infrastructure. It may be viewed as a
+ service-oriented <resource control plane> for an <Internet
+ operating system>. Its purpose is to manage the hosting of diverse
+ computing environments (<guests>) on a common pool of networked
+ hardware resources such as virtualized clusters, storage, and network
+ elements. {{{about.html}More information}} about Orca is
+ available at this site.
+ 
+ Orca is a resource control plane organized around <resource leasing>
+ as a foundational abstraction. The architecture of Orca does not impose
+ any particular structure on the shared resources, which means that it is
+ possible to instantiate any experimental configuration for purposes of
+ testing and deployment. The Orca framework is one possible way to realize
+ the goals of NSF's {{{http://www.geni.net}GENI project}}. Orca is
+ compatible with much of the experimental GENI architecture. Some concepts
+ and entities in GENI map directly on to corresponding concepts and
+ entities within Orca.
+ 
+ Both GENI and Orca are built on top of a substrate of physical
+ resources. The GENI Management Core (GMC) corresponds to the Site
+ authority and Broker actors in the Orca system. In both cases, user
+ services run on hosted resources mediated by a management layer.
+
+ It is common today to manage sharing of networked resources through
+ "middleware" such as grid computing software and job managers for
+ networked clusters.  The architectural choice to virtualize at the
+ infrastructure level is a fundamentally new direction that is
+ complementary to the wide range of existing middleware approaches.  The
+ value proposition is that it offers safe and effective sharing at a lower
+ level of abstraction.  For example, a user can obtain an on-demand private
+ machine instance rather than the service of queuing their job to run on
+ someone else's machine.  In this example, the "raw" machine abstraction
+ offers users on-demand access and control over personal, customized
+ computing environments.

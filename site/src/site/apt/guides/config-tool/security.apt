@@ -1,0 +1,125 @@
+ ----
+ Node Agent Service Security
+ ----
+ Aydan Yumerefendi
+ ----
+ 15 December 2007
+ ----
+
+Node Agent Service Security
+
+   {{{index.html}\<\<Back to contents}}
+
+ Communication with the Node Agent service uses WS-Security to sign
+ and encrypt each message. The Node Agent service also uses an access
+ control scheme to restrict access only to properly authorized callers.
+ For example, each site authority actor is an authorized
+ owner/controller for its inventory nodes.
+ The Configuration Tools provide the means
+ to configure the security settings of a Node Agent service and to manage
+ the access control permissions of a given caller.
+ 
+* Prerequisites
+ 
+ All commands are relative to $ORCA_ROOT/tools/config on a
+ control node. Each command
+ executes actions as root on a specified list of target machines.  See the
+ {{{prepare.html}prepare instructions}} and the {{{nodeagent.html}Node Agent page}}.
+
+ The admin security configuration must exist: see
+ the {{{asecurity.html}security configuration}} page.
+ These tools operate on the runtime keystore in the
+ folder <runtime> in ORCA_ROOT/tools/config/, which
+ was generated with the security configuration.
+
+ The runtime keystore contains the keypair that the
+ authority actor uses to operate on its inventory
+ nodes/components.  (Note: that keypair is distinct from the
+ ssh keypair that the control node uses to operate on
+ the target inventory nodes.)
+ 
+ <<Note:>> Before trying these commands, make sure the scripts resolve <keytool> to the
+ keytool that came with your Java JDK on the control node.  See the
+ {{{/orca/guides/devel/index.html}Developer Notes}}.
+
+ <<Note:>> Excessive clock drift may cause some security-related
+ operations to fail (see below).
+
+
+* Initialize Node Agent security configuration
+
+ The Node Agent service uses a secure binding protocol
+ (KeyMaster) to set up a secure channel between the owner/controller
+ and the target node.   This protocol relies
+ on secrets and secure tokens shared among the owner and the target.
+ For inventory nodes, the owner/controller is the site authority actor.
+
+ The preferred way to pass a secure tokens to a machine is to use the kernel
+ boot arguments.  That way requires additional steps to
+ prepare and install the target nodes. The alternative approach
+ is to place a file containing the shared secrets onto
+ each target node.  The scripts described here do that.
+ They run on the
+ control node, which is root-empowered on the target nodes
+ using the preinstalled ssh key pair.  This enables easy use of
+ the KeyMaster protocol to bind a site authority as the owner/controller
+ of its inventory resources.
+
+ To initialize the security configuration for all Node Agents
+ and to authorize the owner to operate the machines, type the
+ following in your terminal:
+
++---
+ant security.prepare
+ant security.setup
++---
+
+ The <security.prepare> command generates and installs the KeyMaster files for each
+ target machine, using the owner (admin) key in the runtime keystore.
+
+ The <security.setup> command
+ runs the KeyMaster binding protocol to mutually authenticate the target
+ and the owner, using information in the KeyMaster files.
+ During this process each Node Agent service generates
+ its asymmetric keypair.  The public key for each Node Agent service
+ is registered in the runtime keystore.  The admin key in the
+ runtime keystore is authorized to invoke each Node Agent.
+
+ <<Note:>> Since this command generates security certificates
+ dynamically, accurate time synchronization is critical.
+ Clock drift may cause the verification of security certificates to fail.
+ Unfortunately, when timing
+ errors occur, Axis/Rampart does not specify why the certificate
+ was rejected. Instead you will see a long useless stack trace. If this
+ occurs, clock drift is a likely cause.  Be sure the clocks on 
+ the target nodes are synchronized with the control node.
+
+
+*  Retrieve the public keys for all Node Agent services
+
+ For containers with multiple site authority actors, it
+ may be necessary to retrieve the public keys for a set of target nodes and store
+ them in the keystore of a specific actor.  Use the following command:
+
++---
+security.get.service.key -Dactor=ACTOR_GUID
++---
+
+  Where ACTOR_GUID is the GUID of the actor.
+
+  <<Note:>> The actor keystore and security configuration must be
+ present in the <runtime> folder.
+
+* Authorize an actor to operate on the set of target nodes.
+
+ To authorize an actor to operate on the target Node Agent servers type the
+ following in your terminal:
+
++---
+ant security.register.actor.key -Dalias=ACTOR_GUID -Dcertificate=PATH_TO_ACTOR_CERTIFICATE
++---
+
+  Where ACTOR_GUID is the actor guid and PATH_TO_ACTOR_CERTIFICATE is
+  the location of the actor's public key certificate file. For
+  instructions about extracting the public key certificate from a
+  keystore, please consult {{{misc.html}this}} page.

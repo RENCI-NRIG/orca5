@@ -1,0 +1,95 @@
+it seems that the control is not invoked on teardown. For Ben with NDL, however, we need to 
+invoke the control to tell us what links we need to sever.
+
+
+Configuration:
+	- add a VM site authority at RENCI --> DONE
+    - nlr tags: (861 - 870) --> DONE
+
+NLR site policy: start with a single tag, but in handlers treat is as a tuple --> DONE
+
+allocate all VLANs by the same broker --> DONE
+
+
+Handlers:
+
+06/09/2009: there are now placeholders for all handlers in the ben
+controller package and demo2.xml uses the handlers supplied by the
+controller package.
+
+ - handler for DUKE NET -> simple, just goes and enables the vlan tag on all vm interfaces
+	- allso allocates a vlan
+	- enable(DUKE_NET_TAG, ALL DUKE_VMM_PORTS)
+	- enable(NLR_DUKE_TAG, 10G port)
+	- map(DUKE_NET_TAG, DUKE_VMM_PORTS, NLR_DUKE_TAG, 10Gport)
+
+ - handler for NLR -> NULL. must edit demo2.xml to set it. currently it
+   uses the old ben.vlan handler --> DONE
+ 
+- handler for BEN -> 
+      enable NRL_TAG_RENCI at renci 6509
+      
+      for site in renci unc; do
+      	  need to setup Polatis
+      	    setup Polatis
+      	  need to setup DTN?
+      	    setup DTN
+      	 setup 6509 (enable vlan tag)
+			enable ben tag on vmm ports
+		
+ OPTIONAL: join handlers for VMs -> set the ip address on the second interface
+
+- move the ben vlan handler for the first demo into the controller package
+
+Policies:
+   
+  BROKERS:
+    - all network allocation -> BrokerSimplerUnitsPolicy (no need for
+      changes)
+  SITES:
+    - DUKE NET VLAN control should do the tric -> we need a VLAN tag
+      (VlanControl) --> DONE
+       
+  - NLR policy -> must be based off the VLAN policy but needs changes
+  	(tuple instead of single tag). Also must change the configuration file
+  	to specify available tuples.
+
+  	FOR NOW: we decided to use a single vlan tag instead of tuples. In
+  	this case we do not need a new control (VlanControl is just fine)
+
+  - BEN policy ->
+   - ndl files to initialize (vlan tags hardcoded)
+
+06/09/2009: added BenNDLControl as a copy of VLAN control
+            got yufeng's code to compile and run tests
+            need to figure out how best to integrate yufeng's code into
+            the control.
+
+
+06/10/2009 - looking at yufeng's code
+  - RequestMapping seems to be a request for resources
+  - NetworkHandler seems to be the class responsible for allocation
+  - NetworkConnection seems to be the class that represents the connection
+     - it has a linked list that seems to contain device objects
+  - Device extends Domain extends NetworkElement
+      - model, resource, uri, name, atLayer, rank
+      - switching matrix (list)
+      - action list 
+
+
+Web interface:
+  - glue the interface to the level of the first demo
+  - add enhancements as time permits
+  
+  
+Once all of this is working:
+  - split the configuration files (one per container, must decide how many containers):
+     
+     - duke net + duke vm
+     - clearing house -> all brokers
+     - all others go into one container
+
+     so the demo will have three containers.
+     
+     
+

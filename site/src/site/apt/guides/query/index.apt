@@ -1,0 +1,137 @@
+Interactor Queries
+
+ The Orca interactor query channel allows two Orca actors to interact by means of a generic
+ request/response mechanism. The query channel leverages the existing interactor
+ communication mechanism, but is orthogonal to the lease protocol (ticket,
+ redeem, etc.). The query mechanism is intedend to support lease management
+ decisions in a generic way that can be customized to fit a specific need.
+ 
+ An actor can issue a query to any actor, with which it has an
+ established communication channel. A query is a collection of key/value pairs,
+ i.e., a properties list. Orca delivers the query's properties list to the
+ destination actor and routes it to the actor's policy. The policy receives a
+ notification about each incoming query. The policy can examine the properties
+ list and can decide if it represents a valid query that it can respond to. If
+ the query is valid, the policy performs all actions necessary to answer the
+ query. The policy responds back by constructing a
+ properties list and filling the list with key/value pairs representing the
+ response.
+
+ Note that the query mechanism is synchronous. You can implement an
+ asynchronous response channel by having the remote actor respond immediately
+ with a properties list that acknowledges the receipt of the request. When the
+ response is ready, the destination actor can issue a query request to the
+ requesting actor, thus completing the initial request.
+
+ Orca does not specify a schema for the key/value pairs exchanged in a query
+ request. However, some of the policies that ship with Orca support queries and
+ define their own schema. 
+
+
+{orca.policy.core.BrokerCalendarPolicy}
+
+ This is the based class for all broker policies currently shipped with Orca.
+ This class supports the following queries:
+
+
+  * query.discovertypes
+
+  This query is used by an Orca actor to discover the resource types and their
+  properties offered by a given broker (the broker must be running a policy that
+  derives from BrokerCalendarPolicy). 
+
+  When the broker policy receives a query that contains this property, it
+  responds back with a properties list that looks something like this:
+
++---
+type.name.0="small-vm"
+type.description.0="memory=100,cpu=50"
+type.name.1="large-vm"
+type.description.1="memory=500,cpu=100"
+type.count=2
++---
+
+  <<NOTE:>> Each policy may choose to implement its own query protocol. Since
+  queries are a protocol that involves two actors, you would need to provide an
+  implementation for each actor: you would need to write to code issue a query,
+  to respond to it, and to process the response of a query.
+
+  <<NOTE:>> While the most common pattern is to have service managers query
+  brokers, the query channel allows any two actors to query each other, as long
+  as they have a proxy that allows them to communicate.
+
+{How to issue a query?}
+
+ Here is an example of issuing a query and processing the response:
+
++---
+// obtain a broker proxy
+IBrokerProxy b = sm.getBroker("my-broker");
+
+// prepare the request
+Properties myProps = new Properties();
+myProps.setProperty(BrokerCalendarPolicy.PropertyDiscoverTypes, "");
+
+// issue the request
+Properties returnProps = b.query(myProps, sm.getIdentity());
+if (returnProps != null) {
+	// obtain the number of resource types
+	int count = PropList.getIntegerProperty(returnProps, BrokerCalendarPolicy.PropertyTypeCount);
+    // process each pool
+    for (int i = 0; i < count; i++) {
+    	// resource type
+    	String type = returnProps.getProperty(BrokerCalendarPolicy.PropertyTypeNamePrefix + i));
+		// resource properties
+        Properties p = PropList.getPropertiesProperty(returnProps, BrokerCalendarPolicy.PropertyTypeDescriptionPrefix + i);
+        // do something with it
+        ...
+	}
+}
++---
+
+ Here is the broker policy's handler for this query:
+
++---
+    public Properties query(final Properties properties)
+    {
+        Properties p = new Properties();
+
+        if ((properties != null) && properties.containsKey(PropertyDiscoverTypes)) {
+            ReservationSet holdings = calendar.getHoldings();
+            int count = 0;
+            Iterator<IReservation> iter = holdings.iterator();
+
+            while (iter.hasNext()) {
+                try {
+                    IClientReservation r = (IClientReservation) iter.next();
+                    ResourceSet ticket = r.getResources();
+
+                    if (ticket != null) {
+                        ResourceData rdata = ticket.getResourceData();
+
+                        if (rdata != null) {
+                            Properties resourceProperties = rdata.getResourceProperties();
+
+                            if (resourceProperties != null) {
+                                p.setProperty(PropertyTypeNamePrefix + count,
+                                              ticket.getType().getType());
+                                PropList.setProperty(p,
+                                                     PropertyTypeDescriptionPrefix + count,
+                                                     properties);
+                                count++;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("query", e);
+                }
+            }
+
+            PropList.setProperty(p, PropertyTypeCount, count);
+        }
+
+        return p;
+    }
++---
+
+ 

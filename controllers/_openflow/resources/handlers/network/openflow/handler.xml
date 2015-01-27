@@ -1,0 +1,54 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../../common/paths.xml">
+<!ENTITY openflowtasks SYSTEM "openflow.tasks.xml">
+]>
+
+<project name="openflow" basedir=".">
+
+	&paths;
+	&core;    
+	&drivertasks;
+	&openflowtasks;
+
+	<!--<property file="test.properties" />-->
+
+	<target name="join" depends="resolve.configuration,openflow.load.tasks">
+                <!-- get the credentials from a file, if needed -->
+                <echo message="[OpenFlow Handler] Join... Slice ID: ${unit.of.slice}" />
+
+                <create.slice
+                  user="${flowvisor.user}"
+                  password="${flowvisor.passwd}"
+                  deviceAddress="${flowvisor.host}"
+                  port="${flowvisor.port}"
+                  slice.name="${flowvisor.slice.name}"
+                  slice.passwd="${flowvisor.slice.passwd}"
+                  slice.ctrlUrl="${flowvisor.slice.controller}"
+                  slice.email="${flowvisor.slice.email}"
+                />
+                <!--<add.flowspace
+                  user="${flowvisor.user}"
+                  password="${flowvisor.passwd}"
+                  deviceAddress="${flowvisor.host}"
+                  port="${flowvisor.port}"
+                  slice.name="${flowvisor.slice.name}"
+                  flowspace.src.ip="${flowvisor.slice.flowspace.src.ip}"
+                  flowspace.dst.ip="${flowvisor.slice.flowspace.dst.ip}"
+                />-->
+        </target>
+
+
+	<target name="leave" depends="resolve.configuration,openflow.load.tasks">
+		<echo message="[OpenFlow Handler] Leave...Slice ID: ${unit.of.slice}" />
+
+		<delete.slice
+                  user="${flowvisor.user}"
+                  password="${flowvisor.passwd}"
+                  deviceAddress="${flowvisor.host}"
+                  port="${flowvisor.port}"
+                  slice.name="${flowvisor.slice.name}"
+                />
+	</target>
+</project>

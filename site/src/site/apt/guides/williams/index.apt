@@ -1,0 +1,1375 @@
+	---
+	Case Study:  Installing Orca at Williams College
+	--- 
+	David Irwin and Jeannie Albrecht
+	---
+	March 3rd, 2008
+
+Case Study:  Installing Orca at Williams College
+
+	This document describes the process of installing Orca in the
+{{{http://www.williams.edu}Williams College}} {{{http://www.cs.williams.edu}Computer Science Department}}.  Much of the information
+in this document is replicated in the other Orca installation
+documents, written (thankfully) by Aydan Yumerefendi.  However, this
+document differs from others in three respects.  
+
+  [[1]] We describe a "from-scratch" installation that starts with a set
+of new machines with blank disks.
+
+  [[2]] While Orca accommodates different machine software
+configurations, this document focuses on setting up Orca using one
+particular configuration: {{{http://www.xensource.com}Xen virtual machines}} (VMs) with disk images
+hosted on each machine's local disk using Linux's {{{http://en.wikipedia.org/wiki/Logical_Volume_Manager_(Linux)}Logical Volume
+Manager}} (LVM).  Importantly, since our use of LVM is not
+supported by Orca's current release "out-of-the-box", we include a
+description of how to adapt Orca's configuration to suit our needs.
+  
+  [[3]] Orca can take over as much or as little of a machine room's management as desired.  For instance, Orca software configurations exist that integrate with DHCP, name, and file servers using LDAP to assign IP addresses, assign DNS names, and automount pre-existing file volumes, respectively.  An Orca configuration may also use DHCP and Intel's PreXecution Environment (PXE) to network boot a minimal operating system and re-image machine disks with user-specified OSes.  This document describes a simple configuration that (i) does not integrate with these common system administration management tools and (ii) does not allow users to control physical server re-imaging.   Instead, we describe a simple configuration using only VMs that interacts with pre-existing machine management practices in the Williams CS Department.  Networking issues such as VM IP address assignment, MAC address assignment, and routing are of particular importance in our scenario, where Orca controls only a subset of machines on a Local-Area-Network (LAN) in an operational machine room.  Since the LAN is shared with software executing on machines not under Orca's control, Orca's operation must be sure to not impact network communication for these pre-existing machines.
+
+  []
+
+	The goal of this document is to describe a simple Orca
+configuration that coordinates machine management in the Williams
+College Computer Science Department.  As a result, this document will
+not attempt to explain or demonstrate the full power and flexibility of Orca's software.
+The result of the installation is an easy-to-use web portal that
+end-users or administrators access to create/destroy VMs and disk
+images, bind/unbind machine resources (CPU, memory, bandwidth) to VMs,
+and manage VM lifetime.
+
+   	We characterize our intended usage model as "quick-in/quick-out": this configuration of Orca is best-suited for users that need machines quickly for simple tasks over short durations, such as for student projects and labs.  For example, we do not (for now) preserve disk
+images after a VM's lease has expired, nor do we backup or make
+guarantees about the contents of a VM's disk.  Before installing Orca, it is important to consider the requirements of your own machine room.
+
+
+  *This Orca configuration is not suitable for long-term storage of valuable state, VM's
+that host persistent client services (e.g.,
+web/mail/name/password/directory/file/database servers), or VM's with software that
+requires a significant time investment for initial setup.  
+
+  *This Orca configuration is suitable for users, such as students, with
+short-term computing needs: administrators may configure user machines
+quickly without investing (i) the money to buy new hardware or (ii)
+the time to configure new software/OS.  In particular, administrators need not worry about maintaining user accounts on a set of shared machines, each running its own operating system. Instead, each user gets their own set of VMs, where they are empowered with root access.
+
+  []
+
+Hardware Setup
+
+	 Our hardware consists of {{{http://www.dell.com/content/products/productdetails.aspx/pedge_sc440?c=us&cs=04&l=en&s=bsd}Dell PowerEdge SC440 servers}}, each with a
+2.40Ghz Dual Core Intel Xeon 3060 processor, 4 gigabytes of memory,
+and a 500 gigabyte disk.  We provide the output of Linux's lspci
+command below to serve as a more comprehensive description of the
+hardware.
+
++---------------------------------------------------------------+
+00:00.0 Host bridge: Intel Corporation E7230/3000/3010 Memory Controller Hub
+00:01.0 PCI bridge: Intel Corporation E7230/3000/3010 PCI Express Root Port
+00:1c.0 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 1 (rev 01)
+00:1c.4 PCI bridge: Intel Corporation 82801GR/GH/GHM (ICH7 Family) PCI Express Port 5 (rev 01)
+00:1c.5 PCI bridge: Intel Corporation 82801GR/GH/GHM (ICH7 Family) PCI Express Port 6 (rev 01)
+00:1d.0 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #1 (rev 01)
+00:1d.1 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #2 (rev 01)
+00:1d.2 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #3 (rev 01)
+00:1d.3 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #4 (rev 01)
+00:1d.7 USB Controller: Intel Corporation 82801G (ICH7 Family) USB2 EHCI Controller (rev 01)
+00:1e.0 PCI bridge: Intel Corporation 82801 PCI Bridge (rev e1)
+00:1f.0 ISA bridge: Intel Corporation 82801GB/GR (ICH7 Family) LPC Interface Bridge (rev 01)
+00:1f.1 IDE interface: Intel Corporation 82801G (ICH7 Family) IDE Controller (rev 01)
+00:1f.2 IDE interface: Intel Corporation 82801GB/GR/GH (ICH7 Family) Serial ATA Storage Controller IDE (rev 01)
+00:1f.3 SMBus: Intel Corporation 82801G (ICH7 Family) SMBus Controller (rev 01)
+04:00.0 Ethernet controller: Broadcom Corporation NetXtreme BCM5754 Gigabit Ethernet PCI Express (rev 02)
+05:02.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL-8169 Gigabit Ethernet (rev 10)
+05:07.0 VGA compatible controller: ATI Technologies Inc ES1000 (rev 02)
++---------------------------------------------------------------+
+
+	Orca is able to manage machines with different hardware configurations.  However, this document focuses on a configuration where machines are homogeneous.
+
+Initial Operating System Installation
+
+       We first install Ubuntu Feisty Fawn (v7.0.4) on each server.
+We chose Ubuntu simply because of its reputation for being simple to
+install on a wide range of hardware.  Other flavors of Linux will also
+work, but our Ubuntu-specific directions below will have to be
+modified appropriately.  Unfortunately, we do not point out these modifications in this document, so you will have to be a Linux and Xen guru to use another Linux flavor.  The installation/live CD for Ubuntu Feisty
+Fawn (v7.0.4) is available {{{http://releases.ubuntu.com/7.04/}here}}. We used the server install CD.  Ubuntu installs and runs on most hardware easily, so it is highly likely that you will be able to successfully install this configuration of Orca using these directions even if you do not have Dell PowerEdge SC440 servers.
+
+      At some point during the installation process the Ubuntu
+installer will prompt for information about partitioning the
+disk.  We will use Linux LVM on one partition of the local disk to
+create {{{http://en.wikipedia.org/wiki/Copy-on-write} copy-on-write}} (COW) snapshots of a template VM disk image.  To accommodate the creation of COW images, we created 3 partitions on the physical disk: one 40 gigabyte partition to serve as root disk for the standard Ubuntu installation (sda1), one 460 gigabyte partition to serve as an LVM repository of logical disks (sda5), and a 512
+megabyte swap partition (sda6).  Note that if your disk already has physical partitions you may be able to resize them (depending on how full they are) to fit this configuration.  To do this, you can use the program gparted on the Ubuntu installation/live CD.  At a minimum, you need one disk partition for a root disk, one (large) disk partition for storing VM disk images, and a swap partition.
+
+    The Ubuntu install process will also prompt for an
+initial user account name/password.  We created the user orca.  You may
+also create the user orca and assign its password by issuing the commands below as a pre-existing user with {{{http://en.wikipedia.org/wiki/Sudo}sudo}} privileges.
+
++----------+
+bash:~$ sudo adduser orca
+bash:~$ sudo passwd orca
++----------+
+
+	If you created the user orca from the commands above, you will also need to give the user orca sudo privileges.  Shown below is a command to give orca sudo privileges to all commands.  At a minimum, the orca user will need sudo for all commands outlined in this document.
+
++----------+
+bash:~$ sudo bash
+bash:~# echo "orca ALL=(ALL) ALL" >> /etc/sudoers
+bash:~# exit
++----------+
+
+	Once the installation completes remove the Ubuntu installation/live CD from the CD/DVD-ROM drive and restart the server.  Once the server is finished booting enter the orca username and password at the login prompt.  We assume that the server has a connection to the Internet (e.g., a public IP address and a gateway).  Assuming a connection to the Internet, open a terminal and execute the commands below.  The first two commands bring your Ubuntu installation up-to-date.  The third command installs {{{http://en.wikipedia.org/wiki/Secure_Shell}ssh}} so you can log into the machine remotely.
+ 
++------------+
+bash:~$ sudo apt-get update
+bash:~$ sudo apt-get dist-upgrade
+bash:~$ sudo apt-get install ssh 
++------------+
+
+Classifying Machines
+
+	We will use a single machine to host Orca's web portal and control VMs hosted on the other machines. We call the web portal host the Orca master (or just the master). The remaining machines will run Xen and host user VMs and disk images.  We call each of these machines inventory machines.  Orca runs servers on the master and on each inventory machine.  In the next section, we outline the steps for installing Orca's software for the master.  We then describe the process of priming an inventory machine to use Xen and then installing Orca's software for an inventory machine.  For simplicity, we will assume the installation consists of a master (with DNS name eph.cs.williams.edu) and only two inventory machines (with DNS names eph1.cs.williams.edu and eph2.cs.williams.edu).
+
+Installing the Master
+	  
+	Before checking out Orca's code we must install some software that Orca uses to configure itself and execute.  It is important to install the same versions of the software below as there may be subtle dependencies on features in a particular version.  Unless otherwise specified, execute all commands as user orca in the directory specified on the command line.  For example, the tilde (~) in the command prompt below indicates the orca user's home directory.  The command prompt "bash:~/trunk$" would indicate the directory trunk inside of orca's home directory.  The following set of commands install Java 1.5, Ant 1.7.0, Maven 2.0.8, and Maven Ant Tasks 2.0.8 in the software directory. 
+
++---------------+
+bash:~$ sudo apt-get install sun-java5-jdk
+bash:~$ sudo apt-get install wget
+bash:~$ mkdir software
+bash:~$ cd software
+bash:~/software$ mkdir sources
+bash:~/software$ wget http://apache.cs.utah.edu/ant/binaries/apache-ant-1.7.0-bin.tar.gz
+bash:~/software$ tar -xzf apache-ant-1.7.0-bin.tar.gz
+bash:~/software$ mv apache-ant-1.7.0-bin.tar.gz sources/.
+bash:~/software$ wget http://mirrors.isc.org/pub/apache/maven/binaries/apache-maven-2.0.8-bin.tar.gz
+bash:~/software$ tar -xzf apache-maven-2.0.8-bin.tar.gz
+bash:~/software$ mv apache-maven-2.0.8-bin.tar.gz sources/.
+bash:~/software$ wget http://apache.mirrors.tds.net/maven/binaries/maven-ant-tasks-2.0.8.jar
+bash:~/software$ cd ~
++---------------+
+
+	Next we need to setup our environment to use these tools.  We create a small script named environment in the home directory that sets the proper environment variables for these tools.  Before doing any orca-related actions we must run "source ./environment" as shown below to set these environment variables.
+
++---------------+
+bash:~$ echo "export ANT_HOME=~/software/apache-ant-1.7.0/" >> ./environment
+bash:~$ echo "export MV2_HOME=~/software/apache-maven-2.0.8/" >> ./environment
+bash:~$ echo "export PATH=\$MV2_HOME/bin:\$ANT_HOME/bin:\$PATH" >> ./environment
+bash:~$ echo "export MV2_REPO=~/.m2/repository" >> ./environment
+bash:~$ echo "export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun" >> ./environment
+bash:~$ echo "export JRE_HOME=/usr/lib/jvm/java-1.5.0-sun" >> ./environment
+bash:~$ chmod u+x ./environment
+bash:~$ source ./environment
++---------------+
+
+	We now must install {{{http://subversion.tigris.org}subversion}} (or svn) in order to check out the Orca source tree.  The first command will install subversion, and the second command will checkout the orca source tree into the trunk directory.
+
++---------------+
+bash:~$ sudo apt-get install subversion
+bash:~$ svn checkout https://svn.nicl.cs.duke.edu/svn/cereus/orca/trunk
++---------------+
+
+	We must also set Orca-specific environment variables in the environment file we created above.
+
++---------------+
+bash:~$ echo "export ORCA_ROOT=~/trunk" >> ./environment
+bash:~$ echo "export ORCA_DB_USER=orca" >> ./environment
+bash:~$ echo "export ORCA_DB_USER_PASSWORD=" >> ./environment
+bash:~$ echo "export ORCA_DB_NAME=orca" >> ./environment
+bash:~$ echo "export HOST=localhost" >> ./environment
+bash:~$ echo "export ORCA_DB_SERVER=localhost" >> ./environment
+bash:~$ echo "export ORCA_WEB=$ORCA_ROOT/portal/webapp" >> ./environment
+bash:~$ source ./environment
++---------------+
+
+	Now we are ready to build Orca for the first time.  The initial build downloads dependencies from a remote repository, so verify that you are connected to the Internet first.
+
++---------------+
+bash:~$ ping www.google.com
+PING www.l.google.com (64.233.161.99): 56 data bytes
+64 bytes from 64.233.161.99: icmp_seq=0 ttl=242 time=31.330 ms
+64 bytes from 64.233.161.99: icmp_seq=1 ttl=242 time=37.025 ms
+^C
+--- www.l.google.com ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max/stddev = 31.330/34.177/37.025/2.848 ms
+
+bash:~$ cd $ORCA_ROOT
+bash:~/trunk$ mvn install
++---------------+
+
+	The Orca master uses a {{{http://www.mysql.com} MySQL}} database to store information about users, machines, VMs, and disks.  The database allows the Orca master to restart itself in the event of a failure (e.g., power outage).  Execute the following commands to install a MySQL database and configure it for network access, which is needed for Orca to communicate with the database.
+
++---------------+
+bash:~$ sudo apt-get install mysql-server
+bash:~$ sudo cat /etc/mysql/my.cnf | sed s/bind-address/#\ bind-address/g > ./my.cnf
+bash:~$ sudo mv ./my.cnf /etc/mysql/.
+bash:~$ sudo /etc/init.d/mysql stop
+bash:~$ sudo /etc/init.d/mysql start
++---------------+
+
+	Once the MySQL database is installed and running, we must add a user for orca and grant this user privileges to the orca database, as shown below.  Note that below we leave the password empty for users connecting to the database from the localhost.  This should be secure as long as we restrict access to the master.  Next we need to create the orca database.
+
++---------------+
+bash:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 5.0.38-Ubuntu_0ubuntu1.2-log Ubuntu 7.04 distribution
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> grant all privileges on orca.* to 'orca'@'localhost' identified by '';
+mysql> quit
+Bye
+bash:~$ mysql -u orca -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 5.0.38-Ubuntu_0ubuntu1.2-log Ubuntu 7.04 distribution
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> create database orca;
+mysql> quit
+Bye
++---------------+
+
+	Now that the Orca database exists we must load the Orca database schema and some basic data, as shown below.
+
++---------------+
+bash:~$ mysql -u orca -p -h localhost < $ORCA_ROOT/schema/mysql/full.schema.sql
+Enter password:
+bash:~$ mysql -u orca -p -h localhost < $ORCA_ROOT/schema/mysql/full.data.sql
+Enter password:
++---------------+
+	
+	Everything in Orca is annoyingly secure, so we must next generate a public/private key pair for the Orca administrator, as shown below.  This will create a directory called runtime in $ORCA_ROOT/tools/config.  We will use this directory later when building the web portal.
+
++---------------+
+bash:~$ cd $ORCA_ROOT/tools/config
+bash:~$ ant security.create.admin.config
++---------------+
+
+	Orca's web portal uses Apache's {{{http://tomcat.apache.org/}Tomcat}} servlet engine.  Configuring Tomcat for Orca can be tedious since Orca requires some additional libraries.  To simplify matters, we can check out a pre-configured Tomcat from the Orca subversion repository.
+
++---------------+
+bash:~$ svn checkout https://svn.nicl.cs.duke.edu/svn/cereus/software/tomcat
++---------------+
+
+	You will need to modify the start.sh file and the stop.sh file in the tomcat directory to reflect the correct value of the environment variable $CATALINA_HOME.  We will also add $CATALINA_HOME to our environment file.
+
++---------------+
+bash:~$ cd tomcat
+bash:~/tomcat$ nano start.sh
+[change /shirako/tomcat to ~/tomcat]
+bash:~/tomcat$ nano stop.sh
+[change /shirako/tomcat to ~/tomcat]
+bash:~/tomcat$ cd ..
+bash:~$ echo "export CATALINA_HOME=~/tomcat" >> ./environment
+bash:~$ source ./environment
++---------------+
+
+	We now need to generate local configuration files that we can customize to suit our installations needs. We generate local configuration files from templates checked into the subversion repository.  Local configuration files are not under subversion control.  We then copy the runtime/ folder we generated above in tools/config, which holds the administrators public/private key pair, to Orca's run folder.  The run/ folder in Orca is directory where we can run Orca tests.  Any code that uses Orca must be able to reference the runtime folder above, which stores the administrators keys.  Below we will see that we also package the runtime folder with the web portal in a*.war file.
+
++---------------+
+bash:~$ cd $ORCA_ROOT/run
+bash:~/trunk$ ant copy.local
+bash:~/trunk$ cp -r tools/config/runtime run/.
++---------------+
+
+	We now need to customize a configuration file to setup Orca's web portal.  The file is located in $ORCA_WEB/local/ and is named config.xml.  This file is used by Orca to bootstrap the web portal with basic information about how newly created VM's will be configured.  You can do the bootstrapping through the web portal, itself, but for this configuration we bootstrap from an XML configuration file.
+
+	Below we provide a diff of our custom config.xml file with the original config.xml checked into the subversion repository, which is stored at $ORCA_WEB/config/config.xml.  This diff gives a good overview of the changes we required in the original file.  We describe the changes in detail below.  For completeness we also provide the contents of our config.xml and the original config.xml.  
+
+	To understand the output of diff, each set of changes relative to the original file (../config/config.xml) begins with a set of line numbers (e.g., 52,53c52,55) that indicate the relevent line numbers in the modified file (config.xml) and the original file (../config/config.xml).  The set of lines immediately below the line numbers (each starting with a less-than sign) show the new lines in the modified file (config.xml).  Each set of lines below the three dashes (---) (each starting with a greater-than sign) represent the old lines in the original file (../config/config.xml).  
+
++---------------+
+bash:~/trunk$ cd $ORCA_WEB/local
+bash:~/trunk/portal/webapp/local$ diff config.xml ../config/config.xml
+52,53c52,55
+<         <!-- Physical machines to be transferred to this site -->
+<         <property name="inventory.machines" value="eph1 eph2" />
+---
+>         <!-- Storage servers to be transferred to this site -->
+>         <property name="inventory.storage" value="fetch gnathosaurus" />
+>         <!-- Physical machines to be transferred to this site -->
+>         <property name="inventory.machines" value="shirako034 shirako035 shirako036 shirako037 shirako038 shirako039" />
+59c61
+<         <property name="resource.pool.name.0" value="WilliamsCS" />
+---
+>         <property name="resource.pool.name.0" value="demo" />
+61c63
+<         <property name="resource.pool.properties.0" value="memory=3800,cpu=100,bandwidth=1000" />
+---
+>         <property name="resource.pool.properties.0" value="memory=1024,cpu=100,bandwidth=1000" />
+63c65
+<         <property name="resource.pool.machines.0" value="sysnet1 sysnet2" />
+---
+>         <property name="resource.pool.machines.0" value="shirako034 shirako035 shirako036 shirako037 shirako038 shirako039" />
+65,70c67,73
+<         <property name="resource.pool.ticket.units.0" value="2" />                                    
+<         <property name="resource.pool.ticket.start.0" value="0" />
+<         <property name="resource.pool.ticket.end.0" value="10000000" />                                       
+<         <!--    Handler configuration -->
+<         <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
+<         <property name="resource.pool.handler.pluginId.0" value="2" />
+---
+>         <property name="resource.pool.ticket.units.0" value="6" />
+>         <property name="resource.pool.ticket.start.0" value="0" />
+>         <property name="resource.pool.ticket.end.0" value="10000000" />
+>         <!--    Handler configuration -->
+>         <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
+>         <property name="resource.pool.handler.pluginId.0" value="1" />
+>         <property name="resource.pool.handler.properties.0" value="server.name=gnathosaurus,server.guid=583c10bfdbd326ba:-5bb4a8a:114482bd028:-8000,server.ip=172.16.0.2,server.base=sata/images/shirako/,server.control=152.3.144.204" />
+84,85c87,88
+<                       <property name="network.min" value="20" />
+<                       <property name="network.gateway" value="172.16.64.1"/>
+---
+>                       <property name="network.min" value="10" />
+>                       <property name="network.gateway" value="" />
+94,95c97,98
+<                       <property name="dns.zone" value="cs.williams.edu" />
+<                       <property name="dns.mx" value="10 cs.williams.edu" />
+---
+>                       <property name="dns.zone" value="cod.cs.duke.edu" />
+>                       <property name="dns.mx" value="10 cod.cs.duke.edu" />
+200c203
+<           <units>2</units>
+---
+>           <units>6</units>
+bash:~/trunk/portal/webapp/local$ cat config.xml
+bash:~/trunk/portal/webapp/local$ cat ../config/config.xml
++---------------+
+
+  We make 8 sets of changes to the original configuration file.  
+
+  [[1]] The first change, at line 52 of the original file removes the 2 lines specifying the storage servers, since we will not be using any storage servers to host VM disk images.  Instead, we will use VM disk images hosted on each local disk using LVM.  The name of our inventory machines will be eph1 and eph2, as oppposed to shirako33, shirako34, etc.  
+
+  [[2]] The next change, at line 61 in the original file, changes the name of the resource pool from "demo" to "WilliamsCS".  
+
+  [[3]] The change at line 63 specifies the resource properties of our machines, which have 3800 megabytes of available memory and 100 shares of overall CPU and bandwidth.    
+
+  [[4]] At line 65 in the original file, we change the resource pool to include our inventory machines (eph1 and eph2), instead of shirako33, shirako34, etc.  
+
+  [[5]] At line 67 in the original file, we alter the units in the ticket to reflect the number of machines in our new resource pool, which is 2.  Additionally, we will alter the handler that is used to configure new machines.  We describe how to write this new handler and register it with pluginId 2 below.  The new handler does not need the line describing the storage servers.
+
+  [[6]] At line 87 in the original file, we specify that Orca should start using IP addresses beginning at 172.16.64.20, as opposed to 172.16.64.0.  We also specify that each VM created will use the gateway 172.16.64.1.  Later in the guide we will setup a machine with IP address 172.16.64.1 as a NAT to route traffic out to the Internet.
+
+  [[7]] At line 97 in the original file, we specify the DNS zone name for Williams College's CS Department, as opposed to Duke University's CS Department.
+
+  [[8]] Finally, at line 203 in the original file, we specify that we wish to make 2 machines available (i.e., export a ticket) from our resource pool to users, as opposed to 6.
+
+  []
+
+
+Writing a Custom Handler for VMs that use LVM for disk images
+
+    Before building and running the web portal we must write a handler the Orca master will use to create VMs using LVM snapshots.  We will register the new handler as pluginId 2, since we specified this in our Orca configuration file above.  In Orca, handler events are executed by the Orca master to setup, modify, and teardown each resource (in this case a single VM and its disk).  Orca allows new handlers to be written and plugged-in (relatively) easily.  Each handler is an Ant XML build file with three targets: setup, modify, and teardown.  You can read more about Ant {{{http://ant.apache.org/}here}}. For a VM, the setup target creates the VM and its root disk image and binds resources to it, the modify target migrates the VM if necessary and alters its resource allotment, and the teardown target destroys the VM and its root disk image and frees any resources bound to it.
+
+  We start by creating a new directory for a Xen handler in the standard handler package.  The Xen handler that ships with Orca assumes that VM disk images are stored on a storage server running OpenSolaris using the ZFS file system.  Each disk image is mounted as an NFS root by the VM.  Since this ZFS handler, with the exception of using a storage server and ZFS, is similar to what we want to do, we start by copying the contents of the zfs directory to a new williams directory that will store our Xen+LVM handler.
+
++---------------+
+bash:~/trunk/portal/webapps/local$ cd $ORCA_ROOT/handlers/standard/resources/handlers/standard/xen/
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen$ mkdir williams
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen$ cp zfs/* williams/*
++---------------+
+
+  We start by modifying the file disk.xml that contains the directives for creating VM disk images.  We will need to re-write this file to create disk images by snapshotting a template disk image on the local machine.  The contents of the new disk.xml file are shown below.
+
++---------------+
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen$ cd williams/
+[modify disk.xml to use LVM to create VM root disk images] 
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen/williams$ cat disk.xml
+<!--
+    This file contains targets for operating on LVM disks.
+-->
+
+<macrodef name="create.local.root.disk" description="creates a local LVM root disk">
+  <sequential>
+    <echo message="Creating local root disk using LVM: ${axis2.repository} ${axis2.config}" />
+    <localdisk.create.disk 
+        location="${vmm.service.location}" 
+        repository="${axis2.repository}" 
+        config="${axis2.config}" 
+        driverId="${localdisk.driver}"
+        exitCodeProperty="exit.local.create.root.disk"
+        pathProperty="exit.create.localdisk"> 
+      <localdisk.disk name="${unit.dns.hostName}"
+                      size="${storage.size}"
+                      base="${template.img}"
+                      basevg="/${volume.group}"
+                      cow="${snapshot.boolean}"
+                      vg="${volume.group}"
+                      lvm="true"/>
+    </localdisk.create.disk>
+    <var name="code" value="${exit.local.create.root.disk}" />
+  </sequential>   
+</macrodef>
+
+<macrodef name="remove.local.root.disk" description="removes a local LVM root disk">
+  <sequential>
+    <echo message="Creating local root disk using LVM: location ${axis2.repository} ${axis2.config}" />
+    <localdisk.remove.disk
+        location="${vmm.service.location}" 
+        repository="${axis2.repository}" 
+        config="${axis2.config}" 
+        driverId="${localdisk.driver}"
+        exitCodeProperty="exit.local.create.root.disk">                     
+      <localdisk.disk lvm="true"
+                      name="${unit.dns.hostName}"
+                      vg="${volume.group}"/>
+    </localdisk.remove.disk> 
+    <var name="code" value="${exit.local.remove.root.disk}" />
+  </sequential>
+</macrodef>
++------------------+
+
+  The important functions occur in <localdisk.create.disk> and <localdisk.remove.disk>.  Both of these actions are custom Ant tasks that interact with a <driver> executing inside of a node agent on an inventory machine.  We will discuss drivers and node agents below.  In short, the node agent is a server running on each inventory machine that listens for driver invocations; each driver exposes an API that the Orca master invokes.  In most cases, each driver is associated with a type of resource (e.g., CPU, memory, disk) and a partitioning technology for that resource (e.g., LVM for disks and Xen for CPU and memory).  The Orca master communicates with the driver to partition a resource.
+
+  The standard Orca release includes a node agent driver for using LVM.  However, it does not include a handler for the Orca master to use this driver.  Writing new drivers for different types of resources is outside the scope of this case study.  The function of the LVM driver is pretty simple.  The <localdisk.create.disk> Ant task executes the <localdisk> driver installed in the node agent at <vmm.service.location>.  The <localdisk> driver creates a new LVM virtual block device with the name <unit.dns.hostName> in the volume group <volume.group> of size <storage.size> by snapshotting an existing virtual block device named <template.img> in the volume group <volume.group>.The <localdisk> driver destroys a virtual block device in a similar manner.
+  
+  The Ant properties in the handler above are supplied for each invocation by either the Orca master, at runtime before invoking a handler target, or in the Ant build.properties file packaged with the handler.  The properties specified at compile time in the build.properties file represent default values that may be over-ridden at runtime by the Orca master.  Note that we use <unit.dns.hostName> as the name of the new virtual block device:  we do this because the Orca master guarantees that the hostname for each VM will be unique.  We use the VM's hostname and not a globally unique identifier (guid), which uniquely identifies the VM, because LVM does not accept some characters that are present in guids, such as colons.  Ensuring unique names for the virtual block devices prevents conflicts between multiple parallel handler target invocations.
+
+  Now we need to add some default properties in the build.properties file of our handler, as shown below in a diff of our Xen+LVM handler's build.properties file with the build.properties file of the ZFS handler.  While we are at it we will also modify some properties of the VMs we will be creating.  
+
++------------------+
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen/williams$ diff build.properties ../zfs/build.properties
+33c33
+< unit.os.kernel=xen0-linux-2.6.19.7
+---
+> unit.os.kernel=vmlinuz-2.6.16.13-xenU
+35c35
+< unit.os.ramdisk.image=initrd.img-2.6.19.7
+---
+> unit.os.ramdisk.image=rd-2.6.16.13-xenU
+40c40
+< # Storage-related properties
+---
+> # Default Values
+43,56c43,45
+< # Name of LVM volume group
+< volume.group=xenvg
+< # Name of the LVM template disk image
+< template.img=template.cs.williams.edu-disk
+< # Snapshot flag
+< snapshot.boolean=true
+< # Default size of storage partition in MB
+< storage.size=10000
+< # Name of VM device
+< vm.device=hda1
+< #Prepend value in driver
+< snapshot.prefix=localdisk
+< #Path to the new snapshot of the template
+< snapshot.path=/dev/${volume.group}/${snapshot.prefix}
+---
+> # Default image.
+> # NOTE: This must be changed if you do not have this image installed!!!
+> image.guid=583c10bfdbd326ba:30e6954a:114487a957b:-8000
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen/williams$ nano build.properties
++-----------------+
+
+	As shown in the diff output, modify the unit.os.kernel property to be xen0-linux-2.6.19.7, since this is the name of the kernel we wil install below.  Note that this kernel will act as both a dom0 kernel and a domU kernel.  Next, add a unit.os.ramdisk.image property as shown above since our VMs will use an initial ramdisk for booting.  Finally add a set of properties that specify the LVM volume group to use (xenvg), the name of the template disk image to snapshot (template.cs.williams.edu-disk), the boolean flag to indicate snapshotting (true), the default size of each VM's disk (10 gigabytes), the name of the block device inside of the virtual machine (hda1), and path prefix for newly creating virtual block devices.  Delete the lines referencing the image.guid property that is specific to the ZFS handler.
+
+	Now we need to modify the top-level handler.xml file.  Below we simply show what the new handler.xml file should look like.  It is slightly modified from the ZFS version.  The important aspect to note is the creation of the local disk before the creation of the VM during <setup>, and the destruction of the VM before the destruction of the local disk during <teardown>.
+
++------------------+
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen/williams$ cat handler.xml
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../../../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml">
+<!ENTITY disk SYSTEM "disk.xml">
+<!ENTITY post SYSTEM "post.xml">
+<!ENTITY paths SYSTEM "../../../common/paths.xml">
+<!ENTITY standardtasks SYSTEM "../../standard.tasks.xml"> 
+<!ENTITY vm SYSTEM "vm.xml">
+]>
+<project name="williams" basedir=".">
+
+  &paths;
+  &core;    
+  &drivertasks;
+  &disk;
+  &post;
+  &standardtasks; 
+  &vm;
+
+        <target name="join" depends="resolve.configuration,standard.load.tasks">
+                <if>
+                        <equals arg1="${emulation}" arg2="true" />
+                        <then>
+                                <echo message="running under emulation...exiting" />
+                                <var name="code" value="0" />
+                        </then>
+                        <else>
+                                <limit maxwait="${operation.timeout}" failonerror="true">
+                                <create.local.root.disk />
+                                <if>
+                                     <equals arg1="0" arg2="${code}" />
+                                     <then>
+                                            <create.vm.local />
+                                              <if>
+                                                  <equals arg1="0" arg2="${code}" />
+                                                  <then>
+                                                        <post.set.public.key />
+                                                  </then>
+                                              </if>
+                                     </then>
+                                </if>
+                                </limit>
+                        </else>
+                </if>
+                <property name="shirako.target.code" value="${code}" />
+        </target>
+
+        <target name="leave" depends="resolve.configuration,standard.load.tasks">
+                <if>
+                        <equals arg1="${emulation}" arg2="true" />
+                        <then>
+                                <echo message="running under emulation...exiting" />
+                                <var name="code" value="0" />
+                        </then>
+                        <else>
+                               <limit maxwait="${operation.timeout}" failonerror="true">
+                                <remove.vm />
+                                        <if>
+                                                <equals arg1="0" arg2="${code}" />
+                                                <then>
+                                                        <remove.local.root.disk />
+                                                </then>
+                                        </if>
+                                </limit>
+                        </else>
+                </if>
+                <property name="shirako.target.code" value="${code}" />
+                <echo message="leave exit code: ${shirako.target.code}" />
+        </target>
+
+        <target name="modify" depends="resolve.configuration,standard.load.tasks">
+                <if>
+                        <equals arg1="${emulation}" arg2="true" />
+                        <then>
+                                <echo message="running under emulation...exiting" />
+                                <var name="code" value="0" />
+                        </then>
+                        <else>
+                                <limit maxwait="${operation.timeout}" failonerror="true">
+                                        <if>
+                                                <equals arg1="${host.net.ip}" arg2="${new.host.net.ip}" />
+                                                <then>
+                                                        <echo message="source and destination are the same. no migration" />
+                                                        <change.shares.vm />
+                                                </then>
+                                                <else>
+                                                        <prepare.migrate.vm />
+                                                        <if>
+                                                                <equals arg1="0" arg2="${code}" />
+                                                                <then>
+                                                                        <migrate.vm />
+                                                                        <if>
+                                                                                <equals arg1="0" arg2="${code}" />
+                                                                                <then>
+                                                                                        <set.shares.vm />
+                                                                                </then>
+                                                                        </if>
+                                                                </then>
+                                                        </if>
+                                                </else>
+                                        </if>
+                                </limit>
+                        </else>
+                </if>
+                <property name="shirako.target.code" value="${code}" />
+                <echo message="modify exit code: ${shirako.target.code}" />
+        </target>
+</project>
++------------------+
+
+  We now need to modify the vm.xml file to instruct the driver for a VMM to use the virtual block device we created as the root disk.  Below we provide the output of the new vm.xml file.  Note the <disk.vbd> configuration inside of the <vm.create> Ant task.  This specifies that the newly created VM should use the virtual block device previously created.
+
++------------------+
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen/williams$ cat vm.xml
+<!--
+    This file contains targets for operating on virtual machines.
+-->    
+<macrodef name="create.vm.local" description="creates a vm with a local root disk">
+  <sequential>
+    <var name="exit.create.vm" unset="true" />
+    <echo message="creating storage (${unit.net.ip}) on ${vmm.service.location}" />
+    <echo message="creating vm  (${unit.net.ip}) on ${vmm.service.location}" />
+    <vm.create
+        repository="${axis2.repository}"
+        config="${axis2.config}"        
+        location="${vmm.service.location}"
+        driverId="${vmm.driver.xen}"
+        exitCodeProperty="exit.create.vm"
+        timeout="${operation.timeout}"
+        builder="${xen.builder}">
+        <machine hostName="${unit.dns.hostName}" machineName="${unit.machineName}" nodeId="${unit.nodeID}">
+        <shares cpuShare="${unit.resource.cpu.weight}" memory="${unit.resource.memory}" networkBandwidth="0" />
+        <disk.vbd device="${vm.device}" path="${snapshot.path}-${unit.dns.hostName}" mode="w" type="lvm" root="true"/>
+        <network mac="${unit.net.macs}" ip="${unit.net.ip}" subnet="255.255.0.0" interface="${unit.boot.nic}" gateway="${unit.net.gateway}" />
+      </machine>
+      <kernel kernelImage="${unit.os.kernel}" 
+              ramdiskImage="${unit.os.ramdisk.image}"
+              ramdiskSize="8192"/>
+    </vm.create>
+    <echo message="Create vm exit code: ${exit.create.vm}" />
+    <var name="code" value="${exit.create.vm}" />
+  </sequential>
+</macrodef>
+
+<macrodef name="remove.vm" description="removes a vm">
+  <sequential>
+    <echo message="removing vm (${unit.net.ip}) on ${vmm.service.location}" />
+    <vm.remove
+        repository="${axis2.repository}"
+        config="${axis2.config}"        
+        location="${vmm.service.location}"
+        driverId="${vmm.driver.xen}"
+        exitCodeProperty="exit.remove.vm"
+        timeout="${operation.timeout}"
+        hostName="${unit.dns.hostName}"
+        machineName="${unit.machineName}"
+        ip="${unit.net.ip}"
+        nodeId="${unit.nodeID}"/>
+    <echo message="VM destruction --> exit code: ${exit.remove.vm}" />
+    <var name="code" value="${exit.remove.vm}" />
+  </sequential>
+</macrodef>
+
+<macrodef name="migrate.vm" description="migrates the vm">
+  <sequential>
+    <var name="exit.migrate.vm" unset="true" />
+    <echo message="Migrating (${unit.net.ip}) from ${host.net.ip} to ${new.host.net.ip}" />
+    <vm.migrate
+        repository="${axis2.repository}"
+        config="${axis2.config}"        
+        location="${vmm.service.location}"
+        driverId="${vmm.driver.xen}"
+        exitCodeProperty="exit.migrate.vm"
+        timeout="${operation.timeout}"
+        machineName="${unit.machineName}"
+        destination="${new.host.net.ip}"
+        live="true"
+        ip="${unit.net.ip}"
+        nodeId="${unit.nodeID}" />
+    <echo message="Migration exit code: ${exit.migrate.vm}" />
+    <var name="code" value="${exit.migrate.vm}" />
+  </sequential>
+</macrodef>
+
+<macrodef name="change.shares.vm" description="changes the shares of the vm">
+  <sequential>
+    <var name="exit.change.shares.vm" unset="true" />
+    <echo message="Changing shares memory:${new.unit.resource.memory} "/>
+    <vm.changeshares
+        repository="${axis2.repository}"
+        config="${axis2.config}"        
+        location="${vmm.service.location}"
+        driverId="${vmm.driver.xen}"
+        exitCodeProperty="exit.change.shares.vm"
+        timeout="${operation.timeout}"
+        machineName="${unit.machineName}"
+        ip="${unit.net.ip}"
+        nodeId="${unit.nodeID}">
+      <shares
+          cpuShare="${new.unit.resource.cpu.weight}"
+          memory="${new.unit.resource.memory}"
+          networkBandwidth="${new.unit.resource.bandwidth.weight}" />
+    </vm.changeshares>  
+    <echo message="Change shares exit code: ${exit.change.shares.vm}" />
+    <var name="code" value="${exit.change.shares.vm}" />
+  </sequential>
+</macrodef>
+
+<macrodef name="set.shares.vm" description="sets the shares of a migrated vm">
+  <sequential>
+    <var name="exit.set.shares.vm" unset="true" />
+    <echo message="Setting resource shares ${new.vmm.service.location}" />
+    <vm.setshares
+        repository="${axis2.repository}"
+        config="${axis2.config}"        
+        location="${new.vmm.service.location}"
+        driverId="${vmm.driver.xen}"
+        exitCodeProperty="exit.set.shares.vm"
+        timeout="${operation.timeout}"
+        machineName="${unit.machineName}"
+        ip="${unit.net.ip}"
+        nodeId="${unit.nodeID}">
+      <shares
+          cpuShare="${new.unit.resource.cpu.weight}"
+          memory="${new.unit.resource.memory}"
+          networkBandwidth="${new.unit.resource.bandwidth.weight}" />
+    </vm.setshares>
+    <echo message="Set shares exit code: ${exit.set.shares.vm}" />
+  <var name="code" value="${exit.set.shares.vm}" />
+  </sequential>
+</macrodef>
+
+<!--
+    Migration is instigated by the source node agent and does not contact the destination node agent.
+    As a result, the destination VMM may not have the correct CPU shares configured. The VMM driver configures
+    CPU shares during its initialization, but initialization takes place only when the driver is first accessed.
+    Also, the driver will no set the domain
+-->
+<macrodef name="prepare.migrate.vm" description="prepares the destination host for migration">
+  <sequential>
+    <var name="exit.prepare.migrate.vm" unset="true" />
+    <echo message="Preparing destination for migration" />
+    <vm.empty
+        repository="${axis2.repository}"
+        config="${axis2.config}"        
+        location="${new.vmm.service.location}"
+        driverId="${vmm.driver.xen}"
+        exitCodeProperty="exit.prepare.migrate.vm"
+        timeout="${operation.timeout}" />
+    <echo message="Prepare destination exit code: ${exit.prepare.migrate.vm}" />
+    <var name="code" value="${exit.prepare.migrate.vm}" />
+  </sequential>
+</macrodef>
++------------------+
+
+  We now need to modify the post.xml to ensure that each VM has a user-specified public key installed on it that enables secure remote access by a user.  Here the handler uses <ssh> to execute a simple script that authorizes the user public key.  Remote access by the Orca master is enabled by an authorized public key hard-wired into the template disk image.
+
++------------------+
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen/williams$ cat post.xml
+<macrodef name="post.set.public.key" description="sets the user public key">
+  <sequential>
+    <if>
+      <isset property="unit.keys.user" />
+      <then>
+        <exec executable="ssh">
+                <arg value="root@${unit.net.ip}"/>
+                <arg value="/root/na/data/drivers/0e18bd60-a1b0-11db-b606-0800200c9a66/add.key.sh root ${unit.keys.user}"/>
+        </exec>
+      </then>
+    </if>
+  </sequential>
+</macrodef>
++------------------+
+
+  Once we have finished modifying build.properties, post.xml, vm.xml, and handler.xml inside of the new williams directory we are ready to add some meta-data that registers our handler with pluginId 2.
+
++------------------+
+bash:~/trunk/handlers/standard/resources/handlers/standard/xen/williams$ cd ../../../..
+bash:~/trunk/handlers/standard/resources$ nano package.xml
+
+[Add the text below beneath the Xen+ZFS root disk meta-data]
+
+<!-- Xen + LVM root disk for use at Williams College -->
+    <plugin id="2" type="10" actorType="3">
+      <name>Standard Xen/File Handler</name>
+      <description>Provides support for Xen virtual machines with LVM root disks.</description>
+      <configurationTemplate>xen/williams/config.vm</configurationTemplate>
+      <configurationProperties>
+        <!-- Name of the handler file (relative to /ROOT/handlers) -->
+        <property>
+          <name>handler.file</name>
+          <value>standard/xen/williams/handler.xml</value>
+        </property>
+      </configurationProperties>
+    </plugin>
++-------------------+
+
+	Each handler also has a view associated with it inside of the web portal.  A view is velocity web page that allows a user to configure the handler through the web portal.  Since we will not use this feature, we wrote a simple view.
+
++-------------------+
+bash:~/trunk/handlers/standard/resources$ cd web/xen/
+bash:~/trunk/handlers/standard/resources$ mkdir williams
+bash:~/trunk/handlers/standard/resources$ nano config.vm
+
+[Add the text below to config.vm]
+
+<table border="0" cellpadding="0" cellspacing="0" class="formtable"> 
+        <tr><td style="padding-bottom: 5px;color:#CC3300;" colspan="2"><b>Xen/Zfs Handler Configuration</b></td></tr>
+        <tr>
+                <td colspan="2">
+                        <p>
+                                This handler is inteded to be used with Xen Virtual Machine Monitors and template root disk stored as a 
+virtual block device using LVM on the local file system of the VMM. The handler will snapshot a template image and customize it for each new virtual machine.
+                        </p>
+                </td>
+        </tr>
+
+</table>
++-------------------+
+
+   Now we are almost done.  All that is left is to re-package the handlers and install them in our local Maven repository so that they are fetched when we build and package the web portal.
+
++-------------------+
+bash:~/trunk/handlers/standard/resources$ cd ..
+bash:~/trunk/handlers/standard$ mvn clean; mvn package; mvn install
+bash:~/trunk/handlers/standard$ cd ..
+bash:~/trunk/handlers$ mvn clean; mvn package; mvn install
++-------------------+
+
+Building and Packaging the Web Portal
+
+	Once we have written our new LVM handler we are ready to build a web archive file (or <war> file) for the web portal that can be deployed in Tomcat.  Before building the web portal we copy the keys for the Orca administrator to the $ORCA_WEB directory, as shown below.  We then execute mvn package to create the orca.war file and copy the file to the Tomcat webapps directory. 
+
++------------------+
+bash:~/trunk/handlers$ cd $ORCA_WEB
+bash:~/trunk/portal/webapp$ cp -r ../../run/runtime .
+bash:~/trunk/portal/webapp$ mvn clean; mvn package
+bash:~/trunk/portal/webapp$ cp target/orca.war $CATALINA_HOME/webapps/.
++------------------+
+
+       Next time Tomcat is started the web portal will be accessible from a web browser at the URL http://localhost:8080/orca.  However, we still are not quite ready to start up the web portal.  The next section describes how to manually add an entry for each inventory machine to the MySQL database.
+
+Adding Inventory Machines to the MySQL Database
+
+       We will add two inventory machines, eph1 and eph2, to our database.  Before adding these machines we need to generate globally unique identifiers (GUIDs) for them.  Orca uses globally unique identifers to ensure names are unique.  Orca includes a tool to generate GUIDs, as shown below.
+
++------------------+
+bash:~/trunk/handlers$ cd $ORCA_ROOT/run
+bash:~/trunk/run$ ant guid
+Buildfile: build.xml
+
+guid:
+     [java] <eph1 guid>
+
+BUILD SUCCESSFUL
+Total time: 3 seconds
+bash:~/trunk/run$ ant guid
+Buildfile: build.xml
+
+guid:
+     [java] <eph2 guid>
+
+BUILD SUCCESSFUL
+Total time: 3 seconds
++------------------+
+
+
+	Now that we have generated a GUID for each inventory machine, we are ready to add the inventory machines to Orca's database.  Open a new file named inventory_file, add your inventory, and then load the values into the MySQL database. Each inventory machine, for now, is characterized by a machine name, a hostname, a GUID, an IP address, an amount of memory, and a boolean flag that specifies its availability.  In the future, we may add other attributes such as disks and their sizes and CPU types and speeds.
+
++-------------------+
+bash:~/trunk/run$ nano inventory_file
+
+[Add the text below to the file and close]
+      
+USE orca;
+
+INSERT INTO Machines(mch_name, mch_host_name, mch_nid, mch_ip, mch_ram, mch_available)
+VALUES
+('eph1','eph1', <eph1 guid> , 152.3.5.55, 3800, 1);
+('eph2','eph2', <eph2 guid> ,152.3.5.56, 3800, 1);
+
+bash:~/trunk/run$ mysql -u orca -p -h localhost < ./inventory_file
+bash:~/trunk/run$ rm ./inventory_file
++--------------------+
+
+	We are now done configuring the Orca master!  We must now configure each inventory machine with LVM and Xen so the Orca master can create virtual block devices and instantiate virtual machines.
+
+Configuring Xen and LVM on each Inventory Machine
+
+	We must perform a few configuration steps on each inventory machine.  We summarize the steps below.
+
+   [[1]] Install Xen.  We must compile a Xen domU kernel that supports kernel-level IP autoconfiguration so the Orca master can set the IP address of each VM it creates on the kernel command line.  There are many ways to give a booting VM an IP address:  the most common way is DHCP.  Orca configuration's exist that dynamically add IP addresses for newly created VMs to a DHCP server.  However, for this configuration we chose to limit Orca's reliance on and interaction with an external DHCP server.  
+
+   <I think specifying the VM IP address on the kernel command line will preserve the IP address across reboots.  That is, if we reboot a VM, Xen will boot the VM with the original kernel command line we specified.  However, I have not verified this.  If this is not the case we will have to modify the handler we created above to modify the /etc/network/interfaces file in Ubuntu Edgy to set the IP address when the machine reboots.  If we do this, kernel-level IP autoconfiguration is not necessary.  Setting IP addresses on newly created VMs is difficult.  The most general way is to use a DHCP server that Orca configures dynamically.  We do not want to do this because it introduces more infrastructure setup.  Another way is to modify the file system of every disk image we create in an OS-specific way to set the IP address correctly when the VM boots.  This is the least general way since it requires a slightly different handler action for each specific OS.  We have chosen to compromise and set the VM IP address on the kernel command line.  This should work with any flavor of Linux that uses a kernel with kernel-level IP autoconfiguration turned on.>
+
+  [[2]] Install LVM and create the xenvg volume group.
+
+  [[3]] Create a template image and store it as an LVM virtual block device.
+
+  [[4]] Add an IP address on interface eth0:0 for the inventory machine to communicate over the control subnet.
+
+ []
+
+  We describe each step in detail below.  Ubuntu has tools that make a few of the steps pretty easy!
+
+*Step 1: Install Xen
+
+  First, log into an inventory machine.  Then execute the following commands to install Xen and configure a custom Xen kernel.
+
++-----------------+
+bash:~/trunk/run$ ssh orca@eph1.cs.williams.edu
+orca@eph1.cs.william.edu's password:
+
+orca@eph1:~$ sudo bash
+Password:
+orca@eph1:/home/orca# apt-get install sun-java5-jdk
+orca@eph1:/home/orca# apt-get install ubuntu-xen-server
+orca@eph1:/home/orca# cd /root
+orca@eph1:/root# wget http://archive.ubuntu.com/ubuntu/pool/universe/x/xen-source/xen-source_2.6.19.orig.tar.gz
+orca@eph1:/root# wget http://archive.ubuntu.com/ubuntu/pool/universe/x/xen-source/xen-source_2.6.19-2ubuntu7.1.diff.gz
+orca@eph1:/root# tar -xzf xen-source_2.6.19.orig.tar.gz
+orca@eph1:/root# gunzip xen-source_2.6.19-2ubuntu7.1.diff.gz
+orca@eph1:/root# cd xen-source-2.6.19/source
+orca@eph1:/root/xen-source-2.6.19/source# tar -xzf linux-2.6.19.tar.gz
+orca@eph1:/root/xen-source-2.6.19/source# cd linux-2.6.19
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 --dry-run < ../../../xen-source_2.6.19-2ubuntu7.1.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < ../../../xen-source_2.6.19-2ubuntu7.1.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# cat debian/patches/00list
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/patch-2.6.19.7.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/xen3-base_arch.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/xen3-base_kconfig.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/xen3-base_include.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/xen3-base_drivers_xen.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/xen3-base_common.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/xen-2.6.19.1.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/xen-2.6.19.2.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/make_4gb_seg_fixup_less_verbose.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# patch -p1 < debian/patches/CVE-2007-4573.diff
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# cp /boot/config-2.6.19-4-server .config
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# apt-get install libncurses5-dev
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# make menuconfig
+
+[Select kernel options below to turn on]
+
+Networking --> Networking options --> IP: kernel level autoconfiguration (*)
+Networking --> Networking options --> IP: kernel level autoconfiguration --> IP: DHCP support (NEW) (*)
+
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# apt-get install kernel-package
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# make-kpkg kernel_image
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# dpkg --install ../linux-xen0-2.6.19.7_2.6.19-2ubuntu7.1_i386.deb 
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# mkinitramfs -o /boot/initrd.img-2.6.19.7 2.6.19.7
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# nano /boot/grub/menu.lst
+
+[Edit grub's menu.lst file with the entry below as the default (first) boot entry]
+
+title           Xen 3.0-i386-pae / Ubuntu, kernel 2.6.19.7
+root            (hd0,0)
+kernel          /boot/xen-3.0-i386-pae.gz dom0_mem=256M
+module          /boot/xen0-linux-2.6.19.7 root=/dev/sda1 ro console=tty0
+module          /boot/initrd.img-2.6.19.7
+quiet
+savedefault
+
+
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# nano /etc/xen/xend-config.sxp
+
+[Edit the Xen configuration file as described below]
+
+Comment out the line with "(network-script network-dummy)".  Add a # at the beginning of the line.
+Uncomment the lines with "(network-script network-bridge)" and "(vif-script vif-bridge)".  Remove the # at the beginning of the lines.
+
+orca@eph1:/root/xen-source-2.6.19/source/linux-2.6.19# /sbin/reboot
++---------------------+
+
+	Now that we have installed Xen, reboot the machine.  The machine should boot the Xen hypervisor and Linux kernel we just built.  Once the machine reboots login, open a terminal, and execute the commands below to verify that Xen is installed.  The output of uname -a should show eph1 running kernel 2.6.19.7.  Next we run Xen's xm list command to show the current VMs.  The output should show that Domain-0 is running and has 256 megabytes of memory allocated to it.  Now that Xen works, the next step is to install LVM.  
+
++---------------------+
+orca@eph1:~$ uname -a
+Linux eph1 2.6.19.7 #1 SMP Sun Feb 17 14:41:34 EST 2008 i686 GNU/Linux
+orca@eph1:~$ sudo xm list
+Password:
+Name                                      ID Mem(MiB) VCPUs State   Time(s)
+Domain-0                                   0      256     2 r-----    973.5
+orca@eph1:~$
++---------------------+
+
+*Step 2: Install LVM
+
+	Installing LVM is pretty easy.  Simply run the commands below to install LVM and create the xenvg volume group.  Once LVM is installed we can create a template VM disk image.
+
++---------------------+
+orca@eph1:~$ sudo bash
+orca@eph1:/home/orca# apt-get install lvm2
+orca@eph1:/home/orca# echo "dm-mod" >> /etc/modules
+orca@eph1:/home/orca# echo "dm-snapshot" >> /etc/modules
+orca@eph1:/home/orca# echo "loop max_loop=64" >> /etc/modules
+orca@eph1:/home/orca# pvcreate /dev/sda5
+orca@eph1:/home/orca# vgcreate xenvg /dev/sda5
++---------------------+
+
+*Step 3: Creating a Template VM Disk Image
+
+	Ubuntu comes with a nice tool to create template disk images.  The tool allows us to create a template for different flavors of Linux including Gentoo, Ubuntu Edgy, Debian Etch, Fedora, etc.  We will simply create a single template image of Ubuntu's Edgy distribution.  The template image will use Linux's ext3 file system and run the kernel and ramdisk we just built.  Note that the kernel we built in step 1 is able to run as a dom0 kernel or a domU kernel.
+
++---------------------+
+orca@eph1:/home/orca# xen-create-image --fs ext3 --image full --initrd /boot/initrd.img-2.6.19.7 --kernel /boot/xen0-linux-2.6.19.7 --memory 256 --size 10Gb --ide --arch=i386 --dist=edgy --debootstrap --mirror=http://de.archive.ubuntu.com/ubuntu/ --lvm xenvg --hostname template.cs.williams.edu --swap 256Mb
++---------------------+
+
+	The command takes a while to run.  It will create a template image inside of the LVM virtual block device /dev/xenvg/template.cs.williams.edu-disk.  Before starting our first VM we will modify this template image slightly, as shown below.  Note that the tool copies the contents of /etc/resolv.conf on the Domain-0 machine, which stores the DNS server for the machine, to the new template image.  As a result, the new template should be able to resolve DNS names if it is has a route to the DNS server.
+
++---------------------+
+orca@eph1:/home/orca# mount -t ext3 /dev/xenvg/template.cs.williams.edu-disk /mnt
+orca@eph1:/home/orca# cd /mnt
+orca@eph1:/mnt# rm etc/hostname
+orca@eph1:/mnt# touch etc/hostname
+orca@eph1:/mnt# nano etc/network/interfaces 
+
+[Delete the entry for eth0]
+
+orca@eph1:/mnt# nano etc/fstab
+
+[Delete the swap entry]
+
+orca@eph1:/mnt# lvremove -f /dev/xenvg/template.cs.williams.edu-swap
+orca@eph1:/mnt# umount /mnt
++---------------------+
+
+
+*Step 4:  Add the inventory machine to the control subnet
+
+	Each newly created VM will be given a single IP address from the 172.16.0.0 subnet block.  Since Williams has limited public IP address space we will not assign any newly created VM a public IP address.  If you have some public IPs, Orca is able to allocate a sparse (i.e., non-contiguous) public IP addresses to VMs.  However, Orca always assigns a private IP address from a contiguous block to a VM since there will always be contiguous private IP address space available.  Assigning a public IP address is considered a "post-install" action.  The authority would specify this post-install action in the post.xml handler file above (after authorizing a user's public key).  Since public IP address space is a scarce resource, Orca is also general enough to actually lease each public IP as a logical resource, just as it leases physical machine resources, to each user's VM.  Leasing public IP's allows Orca to implement policies for arbitrating and scheduling public IP use across multiple users, just as it arbitrates and schedules the use of machine resources.  However, leasing public IP's is outside the scope of this document.
+
+  To access VMs, users will need to first log into a computer on the LAN that has an IP address on the control subnet.  VMs will be able route traffic to the Internet using NAT.   For the purposes of this document we assume users log into eph (i.e., the Orca master) to connect to their VMs.  We also show to configure eph as a NAT box for routing VM traffic out to the Internet.
+
++---------------------+
+orca@eph1:/mnt# ifconfig eth0:0 172.16.64.2 netmask 255.255.0.0
+orca@eph1:/mnt# ifconfig eth0:0 172.16.64.2 netmask 255.255.0.0
+orca@eph1:/mnt# nano /etc/init.d/set-private-ip
+
+[Add text below to new file]
+
+#!/bin/sh -e
+
+case "$1" in
+start)
+        ifconfig eth0:0 172.16.64.2 netmask 255.255.0.0
+        ;;
+
+stop)
+        ;;
+
+force-reload|restart)
+        ifconfig eth0:0 172.16.64.2 netmask 255.255.0.0
+        ;;
+
+esac
+
+exit 0
+
+orca@eph1:/mnt# chmod +x /etc/init.d/set-private-ip
+orca@eph1:/mnt# update-rc.d set-private-ip defaults
+ Adding system startup for /etc/init.d/set-private-ip ...
+   /etc/rc0.d/K20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc1.d/K20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc6.d/K20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc2.d/S20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc3.d/S20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc4.d/S20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc5.d/S20set-private-ip -> ../init.d/set-private-ip
+
+orca@eph1:/mnt#
++---------------------+
+
+	We perform the same actions on eph2.cs.williams.edu, but with IP address 172.16.64.3.  To setup eph (the Orca master) as a NAT box, execute the following commands on eph. We will also need to give eph (the Orca master) an IP address on the control subnet.
+
++---------------------+
+bash:~$ sudo bash
+bash:~# echo 1 > /proc/sys/net/ipv4/ip_forward
+bash:~# /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+bash:~# echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+bash:~# iptables-save > /etc/iptables.rules
+bash:~# nano /etc/network/interfaces
+
+[Add the text below at the end of the entry for eth0]
+
+pre-up iptables-restore < /etc/iptables.rules
+
+bash:~# ifconfig eth0:0 172.16.64.1 netmask 255.255.0.0
+bash:~# nano /etc/init.d/set-private-ip
+
+[Add text below to new file]
+
+#!/bin/sh -e
+
+case "$1" in
+start)
+        ifconfig eth0:0 172.16.64.1 netmask 255.255.0.0
+        ;;
+
+stop)
+        ;;
+
+force-reload|restart)
+        ifconfig eth0:0 172.16.64.1 netmask 255.255.0.0
+        ;;
+
+esac
+
+exit 0
+
+bash:~# chmod +x /etc/init.d/set-private-ip
+bash:~# update-rc.d set-private-ip defaults
+ Adding system startup for /etc/init.d/set-private-ip ...
+   /etc/rc0.d/K20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc1.d/K20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc6.d/K20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc2.d/S20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc3.d/S20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc4.d/S20set-private-ip -> ../init.d/set-private-ip
+   /etc/rc5.d/S20set-private-ip -> ../init.d/set-private-ip
+bash:~# exit
+bash:~$
++---------------------+
+
+	In addition to setting up these IP addresses, at Williams we also have to "pre-approve" any MAC addresses for machines connected to the network.  If a MAC address is not "pre-approved" then the machine will not be able to send packets on the LAN.  It is useful to understand how Orca generates MAC addresses for each VM it creates.  The MAC address is created by manipulating the private (i.e., 172.16.*.*) IP address Orca gives to the VM, as follows.  Let the IP address be of the form x.y.w.z where x, y, w, and z are decimal numbers (e.g., such as x=172, y=16, w=64, and z=10 for 172.16.64.10).
+Convert x, y, w, and z to the hexadecimal numbers x_16, y_16, w_16, and z_16, respectively (e.g., such as x_16=AC, y_16=10, w_16=40, and z_16=0A).   The corresponding MAC address that Orca will assign the VM is AA:00:x_16:y_16:w_16:z_16.  All MAC addresses lead off with AA:00, and the 4 remaining two-digit hexadecimal numbers are generated from the 4
+decimal numbers in the IP address.
+
+       In the example, 172.16.64.10 would have a MAC address of AA:00:AC:10:40:0A, since 172 base 10 == AC base 16, 16 base 10 == 10base 16, 64 base 10 == 40 base 16, and 10 base 10 == 0A base 16.  Since the config.xml file we edited above assigns IP addresses sequentially, starting with 172.16.64.20, we provided the system administrator at Williams College an list of 96 MAC addresses that correspond to IP addresses in the range 172.16.64.0-->172.16.64.96.  We can now create up to 96 VMs and have their networking work correctly.  We configure Orca to start assigning IP addresses at 172.16.64.20 so we can reserve IP addresses in the range 172.16.64.0-->172.16.64.19 for our own personal use (if the need arises).  I am not sure if Orca will previously used IP addresses so I cannot say if the system will support a deployment that has less than 96 concurrently running VMs (in this case we can create/destroy VMs as much as we want as long as there are less than 96 running), or if it can only support a deployment that creates 96 VMs (in this case we can create 96 VMs, but if we destroy one and create another, the last VM created will be assigned a non-approved IP address of 172.16.64.97).  
+	
+	Please note that this is not a general solution for the long term, just a short-term fix to get Orca up and running. Also note that Orca does support the creation of multiple VM clusters that reside on different subnets with routes only to and from VMs in the cluster's assigned subnet.  We will be using a single subnet block (i.e., IPs in 172.16.64.*) for this deployment with routes to/from the control subnet (i.e., netmask 255.255.0.0).  The Domain-0 machines will be given IP addresses on the control subnet, in the range 172.16.64.1-172.16.64.2, and will have routes to and from the VMs in this subnet.  That is it for networking right now.  Below is the list of MAC addresses we gave to our system administrator, in case you want to use them, and do not want to generate them yourself.
+
++---------------------+
+AA:00:AC:10:40:00
+AA:00:AC:10:40:01
+AA:00:AC:10:40:02
+AA:00:AC:10:40:03
+AA:00:AC:10:40:04
+AA:00:AC:10:40:05
+AA:00:AC:10:40:06
+AA:00:AC:10:40:07
+AA:00:AC:10:40:08
+AA:00:AC:10:40:09
+AA:00:AC:10:40:0A
+AA:00:AC:10:40:0B
+AA:00:AC:10:40:0C
+AA:00:AC:10:40:0D
+AA:00:AC:10:40:0E
+AA:00:AC:10:40:0F
+AA:00:AC:10:40:10
+AA:00:AC:10:40:11
+AA:00:AC:10:40:12
+AA:00:AC:10:40:13
+AA:00:AC:10:40:14
+AA:00:AC:10:40:15
+AA:00:AC:10:40:16
+AA:00:AC:10:40:17
+AA:00:AC:10:40:18
+AA:00:AC:10:40:19
+AA:00:AC:10:40:1A
+AA:00:AC:10:40:1B
+AA:00:AC:10:40:1C
+AA:00:AC:10:40:1D
+AA:00:AC:10:40:1E
+AA:00:AC:10:40:1F
+AA:00:AC:10:40:20
+AA:00:AC:10:40:21
+AA:00:AC:10:40:22
+AA:00:AC:10:40:23
+AA:00:AC:10:40:24
+AA:00:AC:10:40:25
+AA:00:AC:10:40:26
+AA:00:AC:10:40:27
+AA:00:AC:10:40:28
+AA:00:AC:10:40:29
+AA:00:AC:10:40:2A
+AA:00:AC:10:40:2B
+AA:00:AC:10:40:2C
+AA:00:AC:10:40:2D
+AA:00:AC:10:40:2E
+AA:00:AC:10:40:2F
+AA:00:AC:10:40:30
+AA:00:AC:10:40:31
+AA:00:AC:10:40:32
+AA:00:AC:10:40:33
+AA:00:AC:10:40:34
+AA:00:AC:10:40:35
+AA:00:AC:10:40:36
+AA:00:AC:10:40:37
+AA:00:AC:10:40:38
+AA:00:AC:10:40:39
+AA:00:AC:10:40:3A
+AA:00:AC:10:40:3B
+AA:00:AC:10:40:3C
+AA:00:AC:10:40:3D
+AA:00:AC:10:40:3E
+AA:00:AC:10:40:3F
+AA:00:AC:10:40:40
+AA:00:AC:10:40:41
+AA:00:AC:10:40:42
+AA:00:AC:10:40:43
+AA:00:AC:10:40:44
+AA:00:AC:10:40:45
+AA:00:AC:10:40:46
+AA:00:AC:10:40:47
+AA:00:AC:10:40:48
+AA:00:AC:10:40:49
+AA:00:AC:10:40:4A
+AA:00:AC:10:40:4B
+AA:00:AC:10:40:4C
+AA:00:AC:10:40:4D
+AA:00:AC:10:40:4E
+AA:00:AC:10:40:4F
+AA:00:AC:10:40:50
+AA:00:AC:10:40:51
+AA:00:AC:10:40:52
+AA:00:AC:10:40:53
+AA:00:AC:10:40:54
+AA:00:AC:10:40:55
+AA:00:AC:10:40:56
+AA:00:AC:10:40:57
+AA:00:AC:10:40:58
+AA:00:AC:10:40:59
+AA:00:AC:10:40:5A
+AA:00:AC:10:40:5B
+AA:00:AC:10:40:5C
+AA:00:AC:10:40:5D
+AA:00:AC:10:40:5E
+AA:00:AC:10:40:5F
+AA:00:AC:10:40:60
+AA:00:AC:10:40:61
+AA:00:AC:10:40:62
+AA:00:AC:10:40:63
+AA:00:AC:10:40:64
+AA:00:AC:10:40:65
+AA:00:AC:10:40:66
+AA:00:AC:10:40:67
+AA:00:AC:10:40:68
+AA:00:AC:10:40:69
+AA:00:AC:10:40:6A
+AA:00:AC:10:40:6B
+AA:00:AC:10:40:6C
+AA:00:AC:10:40:6D
+AA:00:AC:10:40:6E
+AA:00:AC:10:40:6F
++------------------+
+
+	While we are working on eph (the Orca master), we can use some tools Orca provides to install the Node Agent and some drivers.
+
+Installing the Node Agent and Drivers on Inventory Machines
+	
+	Orca ships with a set of tools that make the process of installing and securing the node agent relatively easy.  The process consists of 4 steps, summarized below.
+
+  [[1]] Install the node agent on each inventory machine.
+
+  [[2]] Secure the node agents.
+
+  [[3]] Install drivers in each node agent.
+
+  [[4]] Copy our Xen kernel and ramdisk so the node agent can reference them.
+
+  [[5]] Copy a public key into each VM image so the node agent can communicate with the VMs it creates to verify that they boot correctly.
+
+ []
+
+*Step 1:  Install the node agent on each inventory machine.
+
+
+  We first need to prepare the tools for use by executing the following commands in $ORCA_ROOT/tools/config, as shown below.
+
++---------------+
+bash:~$ cd $ORCA_ROOT/tools/config
+bash:~/trunk/tools/config$ ant copy.local
+bash:~/trunk/tools/config$ ant get.packages
++---------------+
+
+  Now we need to create a public/private ssh keypair.  We will copy the public key we create to the /root/.ssh directory of each inventory machine and save it as a file named authorized_keys.  This will allow the Orca configuration tools to ssh into each inventory machine as root to install the node agent.  Here we enter an empty passphrase so we do not have to enter the passphrase for each action we take.
+
++---------------+
+bash:~/trunk/tools/config$ ssh-keygen -t dsa
+Generating public/private dsa key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_dsa): [press enter]
+Enter passphrase (empty for no passphrase): [press enter]
+Enter same passphrase again: [press enter]
+Your identification has been saved in /home/orca/.ssh/id_dsa.
+Your public key has been saved in /home/orca/.ssh/id_dsa.pub.
+The key fingerprint is:
+cb:51:62:07:92:3g:61:5f:62:20:06:7e:6a:b7:95:d7 ubuntu@ubuntu
+bash:~/trunk/tools/config$ scp /home/orca/.ssh/id_dsa.pub root@eph1.cs.williams.edu:.ssh/authorized_keys
+bash:~/trunk/tools/config$ scp /home/orca/.ssh/id_dsa.pub root@eph2.cs.williams.edu:.ssh/authorized_keys
++---------------+
+
+     Now we have to create the file ant/user.properties and change a few properties in the file to specify the private key we just created and the name our inventory machines.
+
++---------------+
+bash:~/trunk/tools/config$ cp ant/build.properties ant/user.properties
+bash:~/trunk/tools/config$ nano ant/user.properties
+
+[Set the properties below]
+
+ssh.key=/home/orca/.ssh/id_dsa
+domain=cs.williams.edu
+machines=eph1 eph2
++---------------+
+
+  We now install the node agent on each inventory machine.  Make sure that the master and each inventory machine have synchronized 
+clocks otherwise you will get an error saying that the certificate is invalid.  I REPEAT: make sure the master and the inventory
+machines have synchronized clocks!  If you need to reinstall or upgrade the drivers after making a change to the code, you must
+do mvn clean; mvn package; mvn install for the drivers and then run ant get.packages in the tools/config directory so they are 
+picked up by the tools
+
++---------------+
+bash:~/trunk/tools/config$ ant nah.install
+bash:~/trunk/tools/config$ ant na.install
+bash:~/trunk/tools/config$ ant na.start
+bash:~/trunk/tools/config$ sudo apt-get install nmap
+bash:~/trunk/tools/config$ ant na.status
++---------------+
+
+*Step 2:  Securing the Node Agent
+
+   Now we need to create a security configuration for the authority that will control the machines at Williams. Remember from above that we already created a security configuration for an Orca administrator. An Orca master may be configured that divides inventory machines between multiple authorities, but it always contains only a single administrator.  In the command below we assume the actor's GUID is 73608549a74df574\:-1ff1e2b5\:117e5b50c43\:-7ffd.  <I do not remember how I was able to find the authority's GUID to perform these steps.  I will update this case study when I recall this.>
+
++---------------+
+bash:~/trunk/tools/config$ ant security.create.actor.config -Dactor=73608549a74df574\:-1ff1e2b5\:117e5b50c43\:-7ffd
++---------------+
+
+  We now use the security configurations we created above to secure the node agents we just installed.
+
++---------------+
+bash:~/trunk/tools/config$ ant security.prepare
+bash:~/trunk/tools/config$ ant security.setup
+bash:~/trunk/tools/config$ ant security.get.service.keys -Dactor=73608549a74df574\:-1ff1e2b5\:117e5b50c43\:-7ffd
+bash:~/trunk/tools/config$ ant export.actor.certificate -Dactor=73608549a74df574\:-1ff1e2b5\:117e5b50c43\:-7ffd -Dcert.file=./certificate
+bash:~/trunk/tools/config$ ant security.register.actor.key -Dalias=73608549a74df574\:-1ff1e2b5\:117e5b50c43\:-7ffd -Dcertificate=./certificate
+bash:~/trunk/tools/config$ rm ./certificate
++---------------+
+
+*Step 3:  Install the drivers.
+
+  Next we install the drivers on each node agent.
+
++--------------+
+bash:~/trunk/tools/config$ ant drivers.install
++--------------+
+
+*Step 4: Copy new Xen kernel and ramdisk into node agent driver. 
+
+  The next 2 steps must be executed on each inventory machine.  In this case, eph1.cs.williams.edu and eph2.cs.williams.edu.  In this step we copy the kernel and ramdisk we created to a location where the node agent can access them.
+
++--------------+
+orca@eph1:~$ sudo bash
+orca@eph1:/home/orca# cp /boot/xen0-linux-2.6.19.7 /root/na/data/drivers/c7e47334-42d2-11Db-8af6-b622a1ef5492/software/.
+orca@eph1:/home/orca# cp /boot/initrd.img-2.6.19.7 /root/na/data/drivers/c7e47334-42d2-11Db-8af6-b622a1ef5492/software/.
++--------------+
+
+*Step 5:  Copy a public key into the image.
+
+  Copy a public key into the file /root/.ssh/authorized_keys so the inventory machine can communicate with each VM.  You should still have the template image mounted from the previous step.  We will now authorize an ssh public key to enable privileged access to any new VM.
+
++---------------------+
+orca@eph1:/home/orca# mount -t ext3 /dev/xenvg/template.cs.williams.edu-disk /mnt
+orca@eph1:/home/orca# cp /root/na/data/drivers/c7e47334-42d2-11Db-8af6-b622a1ef5492/keys/newroot_dsa.pub /mnt/root/.ssh/authorized_keys
+orca@eph1:/home/orca# umount /mnt
++---------------------+
+
+Starting the Web Portal
+
+  Ok.  We are ready to start the web portal and test our Orca configuration.  Switch back to the Orca master eph.cs.williams.edu and execute the following commands.
+
++---------------------+
+bash:~$ cd tomcat
+bash:~/tomcat$ ./start.sh
+Using CATALINA_BASE:   /home/orca/tomcat
+Using CATALINA_HOME:   /home/orca/tomcat
+Using CATALINA_TMPDIR: /home/orca/tomcat/temp
+Using JRE_HOME:       /usr/lib/jvm/java-1.5.0-sun
++---------------------+
+
+   The command above starts the Tomcat servlet engine running on the default port 8080.  You may visit the web portal by going to http://localhost:8080/orca.
+
+   Some important things to note about the web portal. First, two files in the directory ~/tomcat/logs are important.  The file catalina.out shows the standard output of Tomcat.  All handler configuration events write their status to standard out.  If a VM action fails in some way check this file.  The file simply named log is the Orca log file.  This file is somewhat complex, but if something appears to not work this is the first place to look.
+
+   When Tomcat is started the orca.war file that we placed in the webapps directory is expanded automatically.  If you look in the webapps directory you will now see a directory called orca.  If you want to reset the orca web portal simply run ./stop.sh and delete this directory. 
+
+   The next time you start Tomcat the orca.war file will re-expand and the MySQL database will purge any data from the previous deployment.  However, you must clean any state left on the inventory machines yourself (e.g., LVM disks and VMs).  The Orca web portal has buttons that will automatically destroy all VMs on the inventory machines, but the actions to clear all machines of LVM disks are not available on the web portal yet.
+
+Using the Web Portal to Manage VMs
+
+  Now that the web portal is running we can log in and see what Orca has to offer.  The default user name for the administrator is admin and the default password is empty.  Once you log in you will see 4 tabs:  user, broker, site, and admin.  To see if Orca started correctly, click on the site tab.  Inside of the site tab on the left side there is an option to view Machines.  Click to view machines.  If Orca started correctly you should see entries for eph1 and eph2.  Each entry should say that the machine is active.
+
+ If the entries are active, click on the user tab.  Before we create any VMs we must upload a public key so that we will be able to access any VMs we create.  Click on Add Public Key at the bottom left side of the screen.  Enter a name for the public key you will upload and copy the contents of a public key generated by ssh-keygen (i.e., such as id_dsa.pub from above) into the text box provided.  Click the Add button.
+
+  Now that the public key is uploaded we can request VMs to be created.  Click on the Create Reservation link on the left side of the screen.  Inside of this menu we have a number of options to choose from for our machine including lease length, number of VMs (i.e., units), broker, CPU share, memory allotment, a public key, disk image, etc.  Since this configuration of Orca is simple we have only one possible broker, one type of machine (a Xen virtual machine on a Dell PowerEdge SC440), one possible VM image (Ubuntu Edgy), one public key, etc.  
+
+  The only degrees of freedom we have are in choosing the lease length, number of VMs in a lease, CPU share, and memory allotment.  Note that in this configuration all leases will be automatically renewed until the user destroys the VM.  For now, select to create a single VM with the default CPU share, memory allotment, lease length, etc.  Click the button to request the reservation.
+
+  To check on the status of your reservation click on the View Reservations link.  Once the VMs in the reservation are ready the status of the Reservation will change to Active.  At this point you can click on the manage link for the reservation and view the VMs (and their IP addresses) in the reservation.  You can now log into each VM using the private key associated with the public key you uploaded.

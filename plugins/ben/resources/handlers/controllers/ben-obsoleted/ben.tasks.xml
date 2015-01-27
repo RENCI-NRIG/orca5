@@ -1,0 +1,424 @@
+<!--
+This file contains definitions of tasks used by the ben package
+-->
+
+
+<target name="ben.load.tasks" depends="load.tasks">
+	<!-- iSCSI driver -->
+	<taskdef resource="orca/drivers/iscsi/iscsi.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/iscsi/iscsi.properties" classpathref="run.classpath" />
+	<!-- NFS driver -->
+	<taskdef resource="orca/drivers/nfs/nfs.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/nfs/nfs.properties" classpathref="run.classpath" />
+	<!-- VMM driver -->
+	<taskdef resource="orca/drivers/vmm/vmm.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/vmm/vmm.properties" classpathref="run.classpath" />
+	<!-- Local disk driver -->
+	<taskdef resource="orca/drivers/localdisk/localdisk.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/localdisk/localdisk.properties" classpathref="run.classpath" />
+	<!-- Machine driver -->
+	<taskdef resource="orca/drivers/machine/machine.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/machine/machine.properties" classpathref="run.classpath" />
+	<!-- Image manager tasks -->
+	<taskdef resource="orca/tools/images/standard/tasks/standard.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<!-- VLAN driver -->
+	<taskdef  resource="orca/drivers/network/Cisco6509/Cisco6509.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/network/Cisco6509/Cisco6509.properties" classpathref="run.classpath" />
+	<!-- Polatis driver -->
+	<taskdef  resource="orca/drivers/network/Polatis/Polatis.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/network/Polatis/Polatis.properties" classpathref="run.classpath" />
+	<!-- Infinera DTN driver -->
+	<taskdef  resource="orca/drivers/network/InfineraDTN/InfineraDTN.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	<property resource="orca/drivers/network/InfineraDTN/InfineraDTN.properties" classpathref="run.classpath" />
+</target>
+
+<macrodef name="enable.vlan" description="enables the specified vlan">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="router" description="router address" />
+	<attribute name="vlan.tag" description="vlan tag to enable" />
+	<attribute name="ports" description="comma-separated list of ports to enable" />
+	<attribute name="router.user" description="user name for the router" />
+	<attribute name="router.password" />
+	<attribute name="router.admin.password" />
+	<sequential>
+		<echo message="enabling vlan @{vlan.tag} on router @{router}, ports=@{ports}" />
+		<echo message="router.user: @{router.user}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.Cisco6509.CreateVLAN 
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${vlan.6509.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{router}"
+						UID="@{router.user}"
+						PWD="@{router.password}"
+						adminPWD="@{router.admin.password}"
+						tagNm="@{vlan.tag}"
+						vlanNm="orca vlan @{vlan.tag}"
+						ports="@{ports}"
+						/>
+				</limit>
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="vlan @{vlan.tag} created successfully on router @{router}" />
+			</then>
+			<else>
+				<echo message="vlan @{vlan.tag} creation on @{router} failed. code=${code}" />
+			</else>
+		</if>
+	</sequential>
+</macrodef>
+
+
+<macrodef name="disable.vlan" description="disables the specified vlan">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="router" description="router address" />
+	<attribute name="vlan.tag" description="vlan tag to disable" />
+	<attribute name="ports" description="comma-separated list of ports to disable" default="" />
+	<attribute name="router.user" description="user name for the router" />
+	<attribute name="router.password" />
+	<attribute name="router.admin.password" />
+	<sequential>
+		<echo message="disabling vlan @{vlan.tag} on router @{router}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.Cisco6509.DeleteVLAN 
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${vlan.6509.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{router}"
+						UID="@{router.user}"
+						PWD="@{router.password}"
+						adminPWD="@{router.admin.password}"
+						tagNm="@{vlan.tag}"
+						ports="@{ports}" 
+						/>
+				</limit>
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="vlan @{vlan.tag} deleted successfully on router @{router}" />
+			</then>
+			<else>
+				<echo message="vlan @{vlan.tag} deletion on @{router} failed. code=${code}" />
+			</else>
+		</if>
+
+	</sequential>
+</macrodef>
+
+<macrodef name="map.vlans" description="maps the specified vlans">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="router" description="router address" />
+	<attribute name="port" description="port for mapping" />
+	<attribute name="src.vlan.tag" description="source vlan tag" />
+	<attribute name="dst.vlan.tag" description="destination vlan tag" />
+	<attribute name="router.user" description="user name for the router" />
+	<attribute name="router.password" />
+	<attribute name="router.admin.password" />
+	<sequential>
+		<echo message="mapping vlan tags @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.Cisco6509.MapVLANS 
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${vlan.6509.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{router}"
+						UID="@{router.user}"
+						PWD="@{router.password}"
+						adminPWD="@{router.admin.password}"
+						srcVLAN="@{src.vlan.tag}"
+						dstVLAN="@{dst.vlan.tag}"
+						port="@{port}"
+						/>
+				</limit>
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="successfully mapped @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
+			</then>
+			<else>
+				<echo message="failed to map @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}. code=${code}" />
+			</else>
+		</if>
+
+	</sequential>
+</macrodef>
+
+<macrodef name="unmap.vlans" description="unmaps the specified vlans">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="router" description="router address" />
+	<attribute name="src.vlan.tag" description="source vlan tag" />
+	<attribute name="dst.vlan.tag" description="destination vlan tag" />
+	<attribute name="port" description="port" />
+	<attribute name="router.user" description="user name for the router" />
+	<attribute name="router.password" />
+	<attribute name="router.admin.password" />
+	<sequential>
+		<echo message="unmapping vlan tags @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.Cisco6509.UnmapVLANS 
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${vlan.6509.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{router}"
+						UID="@{router.user}"
+						PWD="@{router.password}"
+						adminPWD="@{router.admin.password}"
+						srcVLAN="@{src.vlan.tag}"
+						dstVLAN="@{dst.vlan.tag}"
+						port="@{port}"
+						/>
+				</limit>
+
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="successfully unmapped @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
+			</then>
+			<else>
+				<echo message="failed to unmap @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}. code=${code}" />
+			</else>
+		</if>
+	</sequential>
+</macrodef>
+
+<macrodef name="polatis.connect" description="creates a unidirectional crossconnect on polatis">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="polatis" description="polatis address" />
+	<attribute name="src.port" description="input port" />
+	<attribute name="dst.port" description="destination port" />
+	<attribute name="user" description="user name to use" />
+	<attribute name="password"  />
+
+	<sequential>
+		<echo message="creating crossconnect on @{polatis}: @{src.port}:@{dst.port}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.Polatis.CreatePatch
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${polatis.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{polatis}"
+						UID="@{user}"
+						PWD="@{password}"
+						inputPort="@{src.port}"
+						outputPort="@{dst.port}" 
+						ctag="1" />
+				</limit>
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="crossconnect @{src.port}:@{dst.port} created successfully on polatis: @{polatis}" />
+			</then>
+			<else>
+				<echo message="crossconnect @{src.port}:@{dst.port} failed on polatis: @{polatis}" />
+			</else>
+		</if>
+
+	</sequential>
+</macrodef>
+
+<macrodef name="polatis.disconnect" description="idsconnects a unidirectional crossconnect on polatis">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="polatis" description="polatis address" />
+	<attribute name="port" description="port" />
+	<attribute name="user" description="user name to use" />
+	<attribute name="password"  />
+
+	<sequential>
+		<echo message="disconnecting crossconnect on @{polatis}: port=@{port}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.Polatis.DeletePatch
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${polatis.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{polatis}"
+						UID="@{user}"
+						PWD="@{password}"
+						port="@{port}"
+						ctag="1" />
+				</limit>
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="port @{port} successfully disconnected on polatis: @{polatis}" />
+			</then>
+			<else>
+				<echo message="port @{port} failed to disonnect on polatis: @{polatis}" />
+			</else>
+		</if>
+	</sequential>
+</macrodef>
+
+<macrodef name="dtn.connect" description="creates a crossconnect on dtn">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="dtn" description="dtn address" />
+	<attribute name="src.port" description="input port" />
+	<attribute name="dst.port" description="destination port" />
+	<attribute name="user" description="user name to use" />
+	<attribute name="password"  />
+
+	<sequential>
+		<echo message="creating crossconnect on @{dtn}: @{src.port}:@{dst.port}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.InfineraDTN.CreateCRS
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${dtn.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{dtn}"
+						UID="@{user}"
+						PWD="@{password}"
+						srcPort="@{src.port}"
+						dstPort="@{dst.port}" 
+						payloadType="${dtn.payloadType}"
+						/>
+				</limit>
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="crossconnect @{src.port}:@{dst.port} created successfully on DTN: @{dtn}" />
+			</then>
+			<else>
+				<echo message="crossconnect @{src.port}:@{dst.port} failed on DTN: @{dtn}" />
+			</else>
+		</if>
+	</sequential>
+</macrodef>
+
+<macrodef name="dtn.disconnect" description="disconnects a previously created crossconnect on dtn">
+	<attribute name="service.location" description="nodeagent url" />
+	<attribute name="dtn" description="dtn address" />
+	<attribute name="src.port" description="input port" />
+	<attribute name="dst.port" description="destination port" />
+	<attribute name="user" description="user name to use" />
+	<attribute name="password"  />
+
+	<sequential>
+		<echo message="destroying crossconnect on @{dtn}: @{src.port}:@{dst.port}" />
+		<var name="code" value="0" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...nothing to do" />
+				<var name="code" value="0" />
+			</then>
+			<else>
+				<limit maxwait="${operation.timeout}" failonerror="true">
+					<var name="code" unset="true" />
+					<network.InfineraDTN.DeleteCRS
+						location="@{service.location}"
+						repository="${axis2.repository}"
+						config="${axis2.config}"
+						driverId="${dtn.driver.id}"
+						exitCodeProperty="code" 
+						deviceAddress="@{dtn}"
+						UID="@{user}"
+						PWD="@{password}"
+						srcPort="@{src.port}"
+						dstPort="@{dst.port}"
+						/>
+				</limit>
+			</else>
+		</if>
+		<if>
+			<equals arg1="0" arg2="${code}" />
+			<then>
+				<echo message="crossconnect @{src.port}:@{dst.port} deleted successfully on DTN: @{dtn}" />
+			</then>
+			<else>
+				<echo message="deleting crossconnect @{src.port}:@{dst.port} failed on DTN: @{dtn}" />
+			</else>
+		</if>
+	</sequential>
+</macrodef>
+

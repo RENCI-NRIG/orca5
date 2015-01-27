@@ -1,0 +1,72 @@
+ ----
+ Standard Image Manager Configuration
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Standard Image Manager Configuration
+
+ The Standard Image Manager is responsible for maintaining a collection of images that can be installed on
+ virtual or physical machines. The image manager stores information about available images into a database.
+ At present, for simplicity, this database is shared with the Orca container database.
+
+ The Standard Image Manager uses a properties file store its
+ configuration.  The properties file is called
+ <<imagemanager.properties>> and is located in
+ $ORCA_ROOT/portal/webapp/local.  Please refer to the
+ {{{index.html}Portal Installation Guide}} if you cannot locate this
+ file.
+
+ The Standard Image Manager configuration file consists of the following sections:
+
+  * {{{#Database settings}Database settings}}
+
+  []
+  
+* {Database settings} 
+
+ This section contains the database settings for the image manager.
+ The currently supported properties in this section are:
+
+  * <<imagemanager.db.class>> Class implementing the database interface.
+
+    <Recommended value:> orca.tools.images.standard.MySqlStandardImageManagerDatabase
+
+  * <<db.mysql.server>> Location of the database server.
+
+  * <<db.mysql.port>> Server port number. Default is 3306.
+  
+  * <<db.mysql.db>> Database name.
+
+  * <<db.mysql.user>> User name to use when connecting to the database server.
+
+  * <<db.mysql.password>> Password to use when connecting to the database server.
+
+  * <<db.mysql.pool>> Connection pool name.
+  
+  []
+
+  A sample of this section looks like this:
+  
++---
+########################################
+# Database settings                    #
+########################################
+
+# Class implementing the database interface
+imagemanager.db.class=orca.tools.images.standard.MySqlStandardImageManagerDatabase
+# Database server location
+db.mysql.server=localhost
+# Database server port (optional, default is 3306)
+db.mysql.port=3306
+# Database name
+db.mysql.db=orca
+# Database user name
+db.mysql.user=orca
+# Database user password
+db.mysql.password=
+# Database connection pool name 
+db.mysql.pool=imager
++---

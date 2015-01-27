@@ -1,0 +1,250 @@
+<macrodef name="security.create" description="creates the security configuration for a given actor">
+	<attribute name="actor" description="actor identifier" />
+	<sequential>
+		<java classname="orca.tools.axis2.SecurityConfigurationTool" fork="true" failonerror="true">
+			<classpath refid="run.classpath" />
+			<arg line="create ${root.dir} @{actor}" />
+		</java>
+	</sequential>
+</macrodef>
+
+<macrodef name="security.kiss" description="registers the admin key with the node agent service">
+	<attribute name="host" description="host address" />
+	<attribute name="admin" description="admin actor identifier" />
+	<attribute name="store.password" description="keystore password" />
+	<attribute name="key.alias" description="key alias" />
+	<attribute name="key.password" description="key password" />
+	<attribute name="serverkey.alias" description="server key alias" />
+	<sequential>
+		<nodeagent.register.authority repository="${axis2.repository}" config="${axis2.config.dir}/@{admin}.nosign.axis2.xml" location="${na.protocol}://@{host}:${na.port}${na.uri}" keystore="${keystores.dir}/@{admin}.jks" keystorePassword="@{store.password}" key="@{key.alias}" keyPassword="@{key.password}" serverKey="@{serverkey.alias}" exitCodeProperty="security.kiss.@{host}" />
+		<echo message="exitCode: ${security.kiss.@{host}}" />
+	</sequential>
+</macrodef>
+
+
+<macrodef name="get.fingerprint" description="returns the MD5 fingerprint for the given key">
+	<attribute name="admin" description="admin actor identifier" />
+	<attribute name="key.alias" description="key alias" />
+	<attribute name="store.password" description="keystore password" />
+	<attribute name="key.password" description="key password" />
+	<attribute name="fingerprint" description="property to store the result" />
+	<sequential>
+		<exec executable="${bash}" failonerror="true" outputproperty="@{fingerprint}">
+			<arg line="-c &quot;${keytool} -list -alias @{key.alias} -keystore ${keystores.dir}/@{admin}.jks -storepass @{store.password} | grep MD5 | awk '{print $4}' &quot;" />
+		</exec>
+	</sequential>
+</macrodef>
+
+<macrodef name="keys.list" description="lists all keys in the keystore">
+	<attribute name="admin" description="admin actor identifier" />
+	<attribute name="store.password" description="keystore password" />
+	<sequential>
+		<exec executable="${bash}" failonerror="true">
+			<arg line="-c &quot;${keytool} -list -v -keystore ${keystores.dir}/@{admin}.jks -storepass @{store.password} &quot;" />
+		</exec>
+	</sequential>
+</macrodef>
+
+<macrodef name="key.remove" description="removes the specified key from the keystore">
+	<attribute name="admin" description="admin actor identifier" />
+	<attribute name="store.password" description="keystore password" />
+	<attribute name="key.alias" description="key alias" />
+	<sequential>
+		<exec executable="${bash}" failonerror="true">
+			<arg line="-c &quot;${keytool} -delete -alias @{key.alias} -keystore ${keystores.dir}/@{admin}.jks -storepass @{store.password} &quot;" />
+		</exec>
+	</sequential>
+</macrodef>
+
+<macrodef name="key.export.certificate" description="exports the certificate for the given key">
+	<attribute name="actor" description="actor identifier" />
+	<attribute name="store.password" description="keystore password" />
+	<attribute name="key.alias" description="key alias" />
+	<attribute name="file" description="file to store the result" />
+	<sequential>
+		<exec executable="${bash}" failonerror="true">
+			<arg line="-c &quot;${keytool} -export -alias @{key.alias} -keystore ${keystores.dir}/@{actor}.jks -storepass @{store.password} -file @{file}&quot;" />
+		</exec>
+	</sequential>
+</macrodef>
+
+<macrodef name="export64.certificate" description="exports the specified certificate in base64">
+	<attribute name="actor" description="actor identifier" />
+	<attribute name="store.password" description="keystore password" />
+	<sequential>
+		<java classname="orca.util.KeystoreManager" fork="true" failonerror="true">
+			<classpath refid="run.classpath" />
+			<arg line="-export64 ${keystores.dir}/@{actor}.jks  @{store.password}" />
+		</java>
+	</sequential>
+</macrodef>
+
+
+<macrodef name="prepare.cmdline" description="prepares the cmdline file for a given actor and machine">
+	<attribute name="fingerprint" description="admin key fingerprint" />
+	<attribute name="token" description="node token" />
+	<attribute name="machine" description="machine" />
+	<sequential>
+		<exec executable="${bash}" failonerror="true">
+			<arg line="-c &quot; echo AUTH_HASH=@{fingerprint} NODE_TOKEN=@{token} &gt; /tmp/${cmdline.file}-@{machine} &quot;" />
+		</exec>
+	</sequential>
+</macrodef>
+
+<macrodef name="reg.actor.key" description="registers the key for an actor with a node agent">
+	<attribute name="host" description="host address" />
+	<attribute name="key.alias" description="key alias" />
+	<attribute name="certificate.location" description="path to the certificate file" />
+	<attribute name="return" description="property for the return code" />
+	<sequential>
+		<nodeagent.register.key repository="${axis2.repository}" config="${axis2.config.dir}/${security.admin}.axis2.xml" location="${na.protocol}://@{host}:${na.port}${na.uri}" keyAlias="@{key.alias}" certificateFile="@{certificate.location}" exitCodeProperty="@{return}" />
+	</sequential>
+</macrodef>
+
+<macrodef name="get.service.key" description="obtains the service public key">
+	<attribute name="host" description="host address" />
+	<attribute name="actor" description="actor id" />
+	<attribute name="return.code" description="property for the return code" />
+	<attribute name="return.key" description="property for the public key certificate (base64 encoded)" />
+	<sequential>
+		<nodeagent.get.key repository="${axis2.repository}" config="${axis2.config.dir}/@{actor}.nosign.axis2.xml" location="${na.protocol}://@{host}:${na.port}${na.uri}" certificateProperty="@{return.key}" exitCodeProperty="@{return.code}" />
+	</sequential>
+</macrodef>
+
+<macrodef name="add.key" description="installs a key (certificate) in the actor keystore">
+	<attribute name="actor" description="actor identifier" />
+	<attribute name="password" description="keystore password" />
+	<attribute name="certificate" description="base64 encoded certificate" />
+	<attribute name="alias" description="alias to store the certificate under" />
+	<attribute name="return" description="property for the return code" />
+	<sequential>
+		<nodeagent.add.key keystore="${keystores.dir}/@{actor}.jks" password="@{password}" alias="@{alias}" certificate="@{certificate}" exitCodeProperty="@{return}" />
+	</sequential>
+</macrodef>
+
+
+<macrodef name="register.cmdline" description="prepares the cmdline file for a given actor and machine">
+	<attribute name="fingerprint" description="admin key fingerprint" />
+	<attribute name="token" description="node token" />
+	<attribute name="machine" description="machine" />
+	<sequential>
+		<exec executable="${bash}" failonerror="true">
+			<arg line="-c &quot; echo AUTH_HASH=@{fingerprint} NODE_TOKEN=@{token} &gt; /tmp/${cmdline.file}-@{machine} &quot;" />
+		</exec>
+	</sequential>
+</macrodef>
+
+<target name="show.keys" description="shows all keys in the admin keystore">
+	<keys.list admin="admin" store.password="${admin.store.password}" />
+</target>
+
+<target name="show.actor.keys" description="shows all keys in the admin keystore">
+	<keys.list admin="${actor}" store.password="${store.password}" />
+</target>
+
+<target name="remove.key" description="removes the given key from the admin keystore">
+	<key.remove admin="admin" store.password="${admin.store.password}" key.alias="${key.alias}" />
+</target>
+
+<target name="export.actor.certificate" description="exports the certificate for the given key from the given actor's keystore">
+	<key.export.certificate actor="${actor}" store.password="${store.password}" key.alias="${key.alias}" file="${cert.file}" />
+</target>
+
+<target name="export64.actor.certificate" description="exports the certificate of the specified actor in base64 format">
+	<export64.certificate actor="${actor}" store.password="${store.password}" />
+</target>
+
+<target name="security.get.service.keys" description="obtains the service keys for all machines and registers them with the given actor keystore">
+	<if>
+		<and>
+			<isset property="actor" />
+		</and>
+		<then>
+			<for list="${machines}" param="machine" delimiter=" " parallel="false">
+				<sequential>
+					<echo message="obtaining service key for @{machine}" />
+					<var name="code" unset="true" />
+					<var name="key" unset="true" />
+					<get.service.key host="@{machine}${domain}" actor="${actor}" return.code="code" return.key="key" />
+					<echo message="code: ${code}, key: ${key}" />
+					<echo message="adding key to actor keystore" />
+					<var name="code2" unset="true" />
+					<add.key actor="${actor}" password="${store.password}" certificate="${key}" alias="@{machine}${domain}" return="code2" />
+					<echo message="code: ${code2}" />
+				</sequential>
+			</for>
+		</then>
+		<else>
+			<echo message="must specify actor" />
+		</else>
+	</if>
+</target>
+
+<target name="security.create.admin.config" description="creates the admin security configuration">
+	<security.create actor="${security.admin}" />
+</target>
+
+<target name="security.create.actor.config" description="creates the security configuration for a given actor">
+	<security.create actor="${actor}" />
+</target>
+
+<target name="security.unauth" description="unregisters all security keys from the node agent service">
+	<for list="${machines}" param="machine" delimiter=" " parallel="false">
+		<sequential>
+			<echo message="unregistering all keys from the node agent service on @{machine}" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na stop &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" fail="false" />
+			<ssh host="@{machine}${domain}" command="rm -f ${na.home}/data/server.jks" fail="false" />
+			<ssh host="@{machine}${domain}" command="${bash} -c &quot;/etc/init.d/na start &lt;/dev/null 1&gt;&amp;/dev/null &amp; &quot;" />
+		</sequential>
+	</for>
+</target>
+
+<target name="security.register.actor.key" description="registers the actor key with all node agents">
+	<echo message="alias: ${alias}, certificate ${certificate}" />
+	<if>
+		<and>
+			<isset property="alias" />
+			<isset property="certificate" />
+		</and>
+		<then>
+			<for list="${machines}" param="machine" delimiter=" " parallel="false">
+				<sequential>
+					<echo message="registering certificate on @{machine}" />
+					<reg.actor.key host="@{machine}${domain}" key.alias="${alias}" certificate.location="${certificate}" return="security.register.actor.key.@{machine}" />
+					<echo message="registering certificate on @{machine}...exit code: ${security.register.actor.key.@{machine}}" />
+				</sequential>
+			</for>
+		</then>
+		<else>
+			<echo message="usage -Dalias=&lt;key alias&gt; -Dcertificate=&lt;certificate file&gt;" />
+		</else>
+	</if>
+</target>
+
+<target name="copy.cmdline" description="copies the cmdline file to all machines">
+	<sequential>
+		<echo message="obtaining admin key fingerprint..." />
+		<get.fingerprint admin="admin" store.password="${admin.store.password}" key.alias="${admin.key.alias}" key.password="${admin.key.password}" fingerprint="admin.key.fingerprint" />
+		<echo message="admin key fingerprint: ${admin.key.fingerprint}" />
+		<for list="${machines}" param="machine" delimiter=" " parallel="false">
+			<sequential>
+				<echo message="generating cmdline file for @{machine}" />
+				<prepare.cmdline fingerprint="${admin.key.fingerprint}" token="1234567890" machine="@{machine}" />
+				<echo message="copying cmdline file for @{machine}" />
+				<myscp src="/tmp/${cmdline.file}-@{machine}" dest="${ssh.user}@@@{machine}${domain}:${na.home}/${cmdline.file}" />
+
+			</sequential>
+		</for>
+	</sequential>
+</target>
+
+<target name="security.prepare" description="generates and copies the cmdline file" depends="security.unauth,copy.cmdline" />
+
+<target name="security.setup" description="registers the admin key with the node agent services">
+	<for list="${machines}" param="machine" delimiter=" " parallel="false">
+		<sequential>
+			<echo message="registering authority key for for @{machine}" />
+			<security.kiss host="@{machine}${domain}" admin="admin" store.password="${admin.store.password}" key.alias="${admin.key.alias}" key.password="${admin.key.password}" serverkey.alias="@{machine}${domain}" />
+		</sequential>
+	</for>
+</target>

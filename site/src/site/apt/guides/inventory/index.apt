@@ -1,0 +1,86 @@
+ ----
+ Inventory Guide
+ ----
+ Aydan Yumerefendi
+ ----
+ December 16, 2007
+ ----
+
+Inventory Guide
+
+ Orca uses {{{../../orca/cod/}Cluster on Demand}} (COD) as a backend
+ resource manager. Since COD is designed as an extension of the
+ Shirako leasing core, Orca can support a range of
+ resource managers, if needed. This guide focuses on inventory
+ management as defined by COD. Please refer to
+ {{{/orca/cod/guides/getting-started/index.html#Basic%20Terminology}this}} page for
+ definitions of some of the terms used in this guide.
+
+
+* Ownership model
+
+ In the current COD model, the data center owns all
+ inventory. Inventory is described in a central database, which is
+ managed by the center administrator. The center administrator is
+ responsible for creating one or more sites and transferring inventory
+ to each site. Inventory can be transfered from the center to a site
+ and vice versa. New inventory items can only be registered by the
+ center administrator. Once an inventory item is added to the center
+ database, it can be transferred to a site.
+
+* Inventory Types
+
+ COD supports a range of inventory types.
+ {{{/orca/cod/guides/getting-started/index.html#Configuring%20inventory}This}}
+ page lists all inventory types supported by the system. This page
+ also provides detailed information about the steps to configure and
+ register each inventory type. Here we summarize the configuration and
+ registration process.
+
+ The steps required to start managing an inventory item are:
+
+  * Install the inventory item
+
+  * Determine what host will be responsible for the management of the inventory item. This can be either:
+
+   * The item itself
+
+   This option is suitable for inventory items that allow the installation of custom software on them, e.g., a
+   virtual machine monitor.
+
+   * A separate configuration server
+   
+   This options is suitable for inventory items that do not allow the
+   installation of custom software on them, e.g., a NetApp filer.
+
+   []
+
+  * Once the management host is determined, an instance of the
+   {{{/orca/nodeagent}Node Agent}} service must be installed on the
+   management host. Sometimes the management host requires additional
+   permissions to access the managed inventory item, e.g., NetApp
+   filers use host-based authentication, which requires that the filer
+   be configured with the address of the management host.
+
+   You can find more information about installing the Node Agent service
+   {{{/guides/config-tool/nodeagent.html}here}}
+   
+  * After the Node Agent service is installed, the center admin must
+  establish control of the service.  More information about this
+  authentication/authorization step can be found
+  {{{/guides/config-tool/security.html}here}}
+
+  * Once the center admin can security connect to the Node Agent service, any required
+  {{{/orca/drivers/}drivers}} must be {{{/guides/config-tool/drivers.html}installed}}.
+  
+  * Finally, a record in the center database about the inventory item
+  must be added.
+  {{{/orca/cod/guides/getting-started/index.html#Configuring%20inventory}This}}
+  page contains detailed information about this step.
+
+* Configuration Tools
+
+ The
+ {{{../config-tool/}Orca Configuraton Tools}} can be used to perform some of the tasks
+ described in the previous section.
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+/etc/init.d/orca-nodeagent stop
+rm -f /opt/orca/nodeagent/bin/*pid
+rm -f /opt/orca/nodeagent/log/*
+update-rc.d -f orca-nodeagent remove > /dev/null
+

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://imageproxy.orca" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://imageproxy.orca">
+    <wsdl:documentation>IMAGEPROXY</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://imageproxy.orca">
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Exception">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="Exception" nillable="true" type="ns:Exception"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="RegisterImage">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="url" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="signature" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="RegisterImageResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="RegisterImageRequest">
+        <wsdl:part name="parameters" element="ns:RegisterImage"/>
+    </wsdl:message>
+    <wsdl:message name="RegisterImageResponse">
+        <wsdl:part name="parameters" element="ns:RegisterImageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Exception">
+        <wsdl:part name="parameters" element="ns:Exception"/>
+    </wsdl:message>
+    <wsdl:portType name="IMAGEPROXYPortType">
+        <wsdl:operation name="RegisterImage">
+            <wsdl:input message="ns:RegisterImageRequest" wsaw:Action="urn:RegisterImage"/>
+            <wsdl:output message="ns:RegisterImageResponse" wsaw:Action="urn:RegisterImageResponse"/>
+            <wsdl:fault message="ns:Exception" name="Exception" wsaw:Action="urn:RegisterImageException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="IMAGEPROXYSoap11Binding" type="ns:IMAGEPROXYPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="RegisterImage">
+            <soap:operation soapAction="urn:RegisterImage" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="IMAGEPROXYSoap12Binding" type="ns:IMAGEPROXYPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="RegisterImage">
+            <soap12:operation soapAction="urn:RegisterImage" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap12:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="IMAGEPROXYHttpBinding" type="ns:IMAGEPROXYPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="RegisterImage">
+            <http:operation location="IMAGEPROXY/RegisterImage"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="RegisterImage"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="RegisterImage"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="IMAGEPROXY">
+        <wsdl:port name="IMAGEPROXYHttpSoap11Endpoint" binding="ns:IMAGEPROXYSoap11Binding">
+            <soap:address location="http://geni-test.renci.org:11080/axis2/services/IMAGEPROXY.IMAGEPROXYHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="IMAGEPROXYHttpSoap12Endpoint" binding="ns:IMAGEPROXYSoap12Binding">
+            <soap12:address location="http://geni-test.renci.org:11080/axis2/services/IMAGEPROXY.IMAGEPROXYHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="IMAGEPROXYHttpEndpoint" binding="ns:IMAGEPROXYHttpBinding">
+            <http:address location="http://geni-test.renci.org:11080/axis2/services/IMAGEPROXY.IMAGEPROXYHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

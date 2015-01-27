@@ -1,0 +1,32 @@
+ ----
+ COD Resource Controls
+ ----
+ Aydan Yumerefendi
+ ----
+ December 14, 2007
+ ----
+
+COD Resource Controls
+
+ This page lists the resource controls supplied by COD. For more
+ details about resource controls, please consult the
+ {{{/orca/policy/core/authoritycalendar.html}Authority
+        Calendar Policy}} documentation pages.
+
+        
+   * {{{idcontrolchange.html}Follow Broker VM Resource Control}}
+   
+   Handles the allocation of virtual machines following the placement
+   policies of all associated brokers.
+
+   * Energy-efficient VM Resource Control
+
+   Handles the allocation of virtual machines following a local
+   best-fit strategy to minimize the number of active virtual machine
+   monitors. Placement is done independently of the placement policies
+   of all associated brokers.
+
+   <<Note:>> This control is currently not available. 
+
+   
+ 

@@ -1,0 +1,62 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../common/paths.xml">
+]>
+<project name="noop" basedir=".">
+	
+	&paths;
+	&core;
+	&drivertasks;
+	
+    <taskdef name="setargs"
+             classname="orca.shirako.plugins.config.SetArgumentsTask" />
+    <target name="merge.properties">
+        <setargs outputProperty="unit.all" />
+    </target>
+
+    <target name="join" depends="merge.properties,resolve.configuration">
+	<!--
+        <echo message="${unit.all}" />
+	-->
+    	
+		<!-- hairpin the hostname url property so the sm sees it too -->
+    	<if>
+    		<isset property="unit.hostname.url" />
+    		<then>
+    			<var name="shirako.save.unit.hostname.url" unset="true" />
+    			<echo message="pivoting host url ${unit.hostname.url}" />
+    		  	<property name="shirako.save.unit.hostname.url" value="${unit.hostname.url}" />
+    		</then>
+    	</if>
+
+    	<if>
+    		<isset property="unit.vlan.url" />
+    		<then>
+    			<!-- hairpin the vlan url property so the sm sees it too -->
+    			<var name="shirako.save.unit.vlan.url" unset="true" />
+    			<echo message="pivoting vlan url ${unit.vlan.url}" />
+    		  	<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+    		</then>
+    	</if>
+    	
+        <property name="shirako.target.code" value="1" />
+    	<property name="shirako.target.code.message" value="This handler is designed to always fail on join" />
+    </target>
+
+    <target name="leave">
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="modify">
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="recover">
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="probe">
+        <property name="shirako.target.code" value="0" />
+    </target>
+</project>

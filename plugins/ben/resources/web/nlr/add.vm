@@ -1,0 +1,93 @@
+#parse("/secure/common/top.vm")
+#parse("${root.getPackageRoot('f7ec610c-d838-4239-87fc-869a8cbf848e')}/top.vm")
+
+<div class="title">Request Resources</div>
+<div class="titleSpacer"/>  
+
+#parse("/secure/common/calendar.vm")
+#parse("/secure/common/validate.vm")
+        
+<form name="myform" method="post" action="add-action.vm" tmt:validate="true">
+	<table border="0" cellpadding="0" cellspacing="0" class="formtable"> 
+    	<tr>
+        	<td class="formtablename" width="150">Virtual Machines from DUKE</td> 
+        	<td class="formtablecont">
+        		<input type="text" name="vmsduke" id="vmsduke" value="1" tmt:pattern="positiveinteger" tmt:minnumber="1" tmt:maxnumber="10" tmt:filters="numbersonly" tmt:message="Please enter a valid number of virtual machines (DUKE)"/> 
+        	</td>
+		</tr>
+    	<tr>
+        	<td class="formtablename" width="150">Virtual Machines from RENCI</td> 
+        	<td class="formtablecont">
+        		<input type="text" name="vmsrenci" id="vmsrenci" value="1" tmt:pattern="positiveinteger" tmt:minnumber="1" tmt:maxnumber="10" tmt:filters="numbersonly" tmt:message="Please enter a valid number of virtual machines (RENCI)"/> 
+        	</td>
+		</tr>
+    	<tr>
+        	<td class="formtablename" width="150">Virtual Machines from UNC</td> 
+        	<td class="formtablecont">
+        		<input type="text" name="vmsunc" id="vmsunc" value="1" tmt:pattern="positiveinteger" tmt:minnumber="1" tmt:maxnumber="10" tmt:filters="numbersonly" tmt:message="Please enter a valid number of virtual machines (UNC)"/> 
+        	</td>
+		</tr>
+     	<tr>
+			<td class="formtablename" width="200">NDL<span class="required">*</span></td>
+			<td class="formtablecont">
+    			<textarea name="ndl" tmt:required="true" tmt:message="Please enter your network topology NDL" rows="20" cols="80"></textarea>
+        	</td>
+        </tr>
+ 		<tr>
+        	<td class="formtablename">Lease Start <span class="required">*</span></td>
+            <td class="formtablecont">
+            	<input type="text" name="start" value="$root.getTime("0")" id="start" tmt:required="true" tmt:message="Please enter a valid start date (MM/DD/YYYY hh:mm)">
+            </td>
+        </tr>
+        <tr>
+            <td class="formtablename">Lease End <span class="required">*</span></td>
+            <td class="formtablecont">
+        		<input type="text" name="end" value="$root.getTime("1440")" id="end" tmt:required="true" tmt:message="Please enter a valid end date (MM/DD/YYYY hh:mm)">
+            </td>
+        </tr>
+		<tr>
+        	<td class="formtablename">&nbsp;</td>
+        	<td class="formtablecont">
+        		<input type="submit" value="Request Resources">
+        		&nbsp;<input type="button" value="Cancel" onclick="window.location='main.vm'">
+            </td>
+        </tr>       
+	</table>
+</form>
+
+        <script type="text/javascript">
+        function setStart(cal)
+        {
+            var date = cal.date;
+            var time = date.getTime();
+            var field = document.getElementById("start");
+            var date2 = new Date(time);
+            field.value = date2.print("%m/%d/%Y %H:%M");
+        }
+        
+        function setEnd(cal)
+        {
+            var date = cal.date;
+            var time = date.getTime();
+            var field = document.getElementById("end");
+            var date2 = new Date(time);
+            field.value = date2.print("%m/%d/%Y %H:%M");
+        }
+        
+        Calendar.setup({
+            inputField     :    "start",         // id of the input field
+            ifFormat       :    "%m/%d/%Y %H:%M", // format of the input field
+            showsTime      :    true,
+            timeFormat     :    "24",
+            onUpdate       :    setStart
+            });
+        
+        Calendar.setup({
+            inputField     :    "end",         // id of the input field
+            ifFormat       :    "%m/%d/%Y %H:%M", // format of the input field
+            showsTime      :    true,
+            timeFormat     :    "24",
+            onUpdate       :    setEnd
+            });
+        </script>
+

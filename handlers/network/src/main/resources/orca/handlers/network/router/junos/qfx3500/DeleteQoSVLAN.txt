@@ -1,0 +1,3 @@
+delete: vlans {$VLANName};
+delete: firewall family ethernet-switching filter {$QoSPolicyName}-filter;
+delete: firewall policer {$QoSPolicyName}-policer;

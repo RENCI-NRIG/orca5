@@ -1,0 +1,44 @@
+<!-- Ldap driver -->
+<!--
+<taskdef resource="orca/cod/drivers/ldap/ldap.xml"
+         classpathref="compile.classpath"
+         loaderref="compile.classpath.loader" />
+-->
+<!-- iSCSI driver -->
+<!--
+<taskdef resource="orca/drivers/iscsi/iscsi.xml"
+         classpathref="compile.classpath"
+         loaderref="compile.classpath.loader" />
+<property resource="orca/drivers/iscsi/iscsi.properties"
+          classpathref="compile.classpath" />
+-->
+<!-- NFS driver -->
+<!--
+<taskdef resource="orca/drivers/nfs/nfs.xml"
+         classpathref="compile.classpath"
+         loaderref="compile.classpath.loader" />
+<property resource="orca/drivers/nfs/nfs.properties"
+          classpathref="compile.classpath" />
+-->
+<!-- VMM driver -->
+<!--
+<taskdef resource="orca/drivers/vmm/vmm.xml"
+         classpathref="compile.classpath"
+         loaderref="compile.classpath.loader" />
+<property resource="orca/drivers/vmm/vmm.properties"
+          classpathref="compile.classpath" />
+-->
+<!-- Local disk driver -->
+<!--
+<taskdef resource="orca/drivers/localdisk/localdisk.xml"
+         classpathref="compile.classpath"
+         loaderref="compile.classpath.loader" />
+<property resource="orca/drivers/localdisk/localdisk.properties"
+          classpathref="compile.classpath" />
+-->
+<!-- Node agent service tasks" -->
+<!--
+<taskdef resource="orca/nodeagent/client/nodeagent.xml"
+         classpathref="compile.classpath"
+         loaderref="compile.classpath.loader" />
+-->

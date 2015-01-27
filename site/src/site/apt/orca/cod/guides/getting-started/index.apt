@@ -1,0 +1,256 @@
+ ----
+ Getting Started Guide
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Getting Started Guide
+
+ This guide provides a brief introduction to Cluster on Demand (COD). Here you can find information about configuring 
+ and managing your COD installation. COD is part of {{{/orca/index.html}Orca}} and currently cannot be used as a standalone
+ system. Please consult Orca's guides and manuals if you require more information. 
+ 
+Sections
+
+ * {{{index.html#What is COD?}What is COD?}}
+ 
+ * {{{index.html#Basic Terminology}Basic Terminology}} 
+
+ * {{{index.html#Installation}Installation}} 
+ 
+ * {{{index.html#Inventory}Inventory}} 
+ 
+ * {{{index.html#Configuring inventory}Configuring inventory}} 
+ 
+ * {{{index.html#How to enable a user to control a site}How to enable a user to control a site}}
+ 
+ * {{{index.html#Transferring inventory to a site}Transferring inventory to a site}}
+ 
+ * {{{index.html#Creating a resource pool}Creating a resource pool}}
+ 
+ * {{{index.html#Transferring machines into a resource pool}Transferring machines into a resource pool}}
+ 
+ * {{{index.html#Creating a source ticket}Creating a source ticket}}
+ 
+ * {{{index.html#Exporting resources to a broker}Exporting resources to a broker}}
+ 
+ * {{{index.html#Making machines available/unavailable}Making machines available/unavailable}}
+ 
+ * {{{index.html#Ejecting a machine from a resource pool}Ejecting a machine from a resource pool}}
+ 
+* {What is COD?}
+
+ COD is a resource manager for a {{{/orca/sharp/index.html}SHARP}} site authority implemented
+ using the {{{/orca/shirako/index.html}Shirako}} resource leasing framework. COD is intended to manage a dynamic data center
+ as a utility, which can be partitioned into multiple measured and metered virtual clusters. The system is intended to automate
+ many of the administrative data center operations. As no two data centers are alike, COD is highly extensible and can easily 
+ incorporate new resource types and technologies. Administrative actions in COD are driven by pluggable policy modules, which can
+ express a range of choices and decisions required to manage a dynamic data center.
+ 
+ 
+* {Basic Terminology}
+ 
+ Throughout this and other COD guides we make use of a number of terms. Here is a list of them.
+ 
+ * <<Resource>> - a compute server, a storage server, network links, memory, CPU cycles, etc.
+ 
+ * <<Data center>> - an organization that controls resources, which can be allocated to end users or application services.
+ We will often use the shorter term <center>. Data centers are partitioned into one or more sites.
+ 
+ * <<Site>> - a site authority as defined by the {{{/orca/sharp/index.html}SHARP}} resource leasing model. A site controls 
+ a subset of the inventory of a data center.
+ 
+ * <<Infrastructure>> - any hardware and software within the control of the data center.
+ 
+ * <<Inventory>> - any partitionable hardware and software within the control of the data center that can be used
+ to satisfy user and application requests.
+    
+ * <<Policy>> - any logic required to decide how to map a new request onto the existing inventory. We will refer to this process
+ as <assignment>. Note that the process of deciding how much resources to give and for how long (<allocation>) is generally 
+ outside of the site authority's policy and is typically 
+ implemented in a separate policy module, potentially under the control of a different entity.
+ 
+ * <<Driver>> - a software component that provides functions to control and manage a specific type 
+ of hardware of software resource.
+ 
+ * <<Node Agent>> - a web service used to host drivers. For more information please refer to the Node Agent Project's 
+ {{{/orca/nodeagent/index.html}site}}. 
+ 
+ * <<Resource Handler>> - a pluggable software component responsible for creating, modifying, and destroying leased resources. 
+ 
+* {Installation}
+
+ COD is installed as a component of Orca and cannot be used in standalone mode. Please consult the 
+ {{{/orca/guides/install/index.html}Orca Installation Guide}} for more details.
+
+* {Inventory}
+
+ In the current COD model, the center owns all inventory. Inventory is described in a central database, which is managed by
+ the center administrator. The center administrator is responsible for creating 
+ one or more sites and transferring inventory to each site. Inventory can be transfered from the center to a site and vice versa.
+ New inventory items can only be registered by the center administrator. Once an inventory item is added to the center database, 
+ it can be transferred to a site.
+   
+* {Configuring inventory}
+
+ Before you can use COD you need to configure some inventory. 
+ At the very least, you will need to register each inventory item with the center database. 
+ Ideally, COD would take care of provisioning and installing required software for inventory machines, e.g., 
+ installing a Xen Virtual Machine Monitor on a physical machine. However, the current version of the system requires that 
+ inventory servers are pre-installed with all required software. At the time of this writing any changes to inventory servers
+ must be performed outside of the system. Future versions of COD will address this limitation and will provide tools to image
+ inventory servers.
+
+ The current version supports the following inventory server types:
+ 
+ * <<Physical machine>>
+ 
+ This is any general-purpose computer, which may or may not have specific software and operating system installed on it.
+ The table below lists all currently supported machine types. Please check each type's documentation pages for 
+ installation instructions. 
+ 
+*---------------------------------+----------------------------+
+| Type                            | Description
+*---------------------------------+----------------------------+
+| {{{inventory/xen.html}Xen VMM}} | Xen Virtual Machine Monitor
+*---------------------------------+----------------------------+
+
+ Each physical machine to be used by COD must be registered with the system. Registration involves creating a record in the
+ center database. You can find instructions about this process {{{inventory/add-machine.html}here}}.
+
+ * <<Storage server>>
+ 
+ This is any general-purpose computing device which is used to store and manage data. Storage serves export their data
+ via a number of protocols, e.g., NFS, iSCSI, SMB. COD uses storage servers to allocate storage for leased virtual/physical machines.
+ The table below lists all currently supported storage servers and technologies. 
+ 
+*---------------------------------+-----------+----------------+
+| Type                            | Protocols |Description
+*---------------------------------+-----------+---------------+
+| {{{inventory/netapp.html}Network Appliance Filer}} | iSCSI | Network Appliance Filer.
+*----------------------------------------------------+---------------------------+
+| {{{inventory/zfs.html}ZFS Server}} | NFS | Storage server running ZFS.
+*----------------------------------------------------+---------------------------+
+
+ Each storage server to be used by COD must be registered with the system. Registration involves creating a record in the
+ center database. You can find instructions about this process {{{inventory/add-storage.html}here}}.
+ 
+* {Creating a site}
+
+ Each COD data center must be partitioned into one or more sites. A site can be created using a configuration file or with the help of the web portal.
+ Here we describe how to create a site using the web portal. Information about creating a site using a configuration file will be supplied at a later time.
+ 
+ Before you can proceed further, you must make sure that the web portal has been installed and configured correctly 
+ (see the {{{/orca/guides/install/index.html}Orca Installation Guide}}).
+ 
+ To create a site you will need to specify a block of network addresses that the site can use when allocating virtual machines. At present, the system
+ requires that the IP addresses come from a contiguous block. A site's network configuration is specified as:
+ 
+  * <<base>> - The base. For example: 192.168.0.0
+  
+  * <<mask>> - Mask to be applied to the base to determine the starting IP address. For example: 255.255.0.0. Using this mask with a base of 192.168.0.0 results
+  in a contiguous network address block of size 65025 starting at 192.168.0.0.
+  
+  * <<subnet>> - Specifies the mask to use when subdividing the total address block into sub-blocks for each virtual cluster. For example, using a subnet mask of
+  255.255.255.0 and the values for mask and base from above, enables the site to manage at a given time up to 255 virtual clusters each with up to 255 virtual
+  machines. The first virtual cluster will be assigned 192.168.0.0/24.
+  
+  * <<min>> - Specifies an offset to be applied to each virtual cluster's address space. For example, using an offset of 0 and the values from the previous 
+  examples, the first IP address for the first virtual cluster will be 192.168.0.0. If we choose an offset of 5, the first address then becomes
+  192.168.0.5
+  	
+  []
+  
+  Here are the steps to create a site:
+  
+  [[1]] Login to the web portal as an administrator.
+  
+  [[2]] Click on the admin tab.
+  
+  [[3]] Click on "Create Actor" from the left menu.
+  
+  [[4]] Select "site" from the drop down list.
+  
+  [[5]] Specify a name and a description for the site. The name should not contain spaces and should be unique within your system, i.e., no other site, broker, 
+  or service manager should exist with the given name.
+  
+  [[6]] Select "Cluster-on-demand site" from the Actor Instance drop down list.
+  
+  [[7]] Select "Generic site authority controller" from the Controller drop down list.
+  
+  [[8]] Enter the network configuration.
+  
+  [[9]] Click the "Create" button.
+  
+  If the site has been created successfully, you will be redirected to a web page listing all actors in the Orca container.
+
+  <<TODO: add a screenshot>>
+  
+* {How to enable a user to control a site}
+
+ <<TODO:>>
+  
+* {Transferring inventory to a site}
+
+ Once a site has been created, it must be assigned some inventory. As described earlier, all inventory within a data center is within the control of the 
+ center administrator.'
+ 
+ Here are the steps to transfer physical machines to a site:
+ 
+ <<TODO: describe the steps in details. add a screenshot>>
+ 
+ Unlike physical machines, storage servers are shared among sites. Each site has its own context within the storage server and sites must be authorized to 
+ access storage servers. 
+ 
+ Here are the steps to authorize a site to access a storage server:
+ 
+ <<TODO: describe the steps in details. add a screenshot>>
+  
+* {Creating a resource pool}
+ 
+ All resources controlled by a site must be organized into resource pools. A resource pool is the unit at which resource assignment policies are applied.
+ A resource pool is a logical grouping of resources with similar characteristics. The policy in control of a given resource pool treats all inventory items
+ within a resource pool as interchangeable. At present, a resource pool can only contain physical machines. 
+ 
+ Here are the steps to create a resource pool:
+ 
+  [[1]] Login to the web portal as a user authorized to control the site.
+  
+  [[2]] Click on the site tab.
+  
+  [[3]] Click on "Add Resource Pool" from the left menu.
+  
+  [[4]] Specify a name for the resource pool. This name will be visible to brokers and end clients.
+  
+  [[5]] Provide a description string for the CPU of machines that are part of this pool. For now, the system will assume that there is only a single CPU
+  on each machine part of the pool.
+  
+  [[6]] Specify the maximum amount of allocatable memory for machines that are part of this pool.
+  
+  [[7]] Provide a description string for the resource pool (optional).
+  
+  [[8]] Click on the "Add" button.
+    
+  If the resource pool has been created successfully, you will be redirected to the resource pool management page.
+   
+* {Transferring machines into a resource pool}
+ 
+ Once a resource pool has been created, you must transfer one or more machines to the pool. A machine can be assigned to exactly one pool.
+ Transferring machines is a two-step process. In the first step, machines are added to the pool, without notifying the policy. At this stage, it is safe to
+ remove a machine from the pool. In the second stage, machines added to the pool are "donated" to the policy in control of the pool. At this time, the policy
+ is free to use the machines to allocate incoming requests. Removing a donated machine from a resource pool is a potentially dangerous operation, since the
+ policy may be using the machine, e.g., the policy has created one or more virtual machines on the machine to be removed.
+ 
+* {Creating a source ticket}
+
+* {Exporting resources to a broker}
+
+* {Making machines available/unavailable}
+
+* {Ejecting a machine from a resource pool}
+
+ 
+ 
+ 

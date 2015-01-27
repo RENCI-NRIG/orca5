@@ -1,0 +1,99 @@
+ ----
+ Preparation
+ ----
+ Aydan Yumerefendi
+ ----
+ 15 December, 2007
+ ----
+
+Configuration Tools Preparation
+
+* Overview: Node Agent Service
+
+ The Configuration Tools are useful to manage the lifecycle of
+ the Node Agent service.
+
+ The Node Agent is a Java/Axis server that runs on a
+ node and executes configuration actions (driver actions) from a
+ remote controller, such as an actor (service manager or authority).
+ The Node Agent supports dynamic install and upgrade
+ of the driver modules.
+
+ These tools and instructions focus on use of the Node Agent to set up
+ control of inventory substrate components by a site/domain authority.
+ For example, these scripts are commonly used to manage Node
+ Agents running in domain-0 on each Xen inventory node in a COD/Xen
+ provider site.  Node agents may also run as a <component agent> for
+ other controlled substrate components. 
+
+ The node from which you run these scripts is a <control node>.
+ The control node must be empowered to execute actions as root on the target
+ nodes using passwordless ssh.
+ Each command executes on a list of target nodes where the Node Agent is
+ running (or will run).
+
+* Prerequisites
+
+ Before you can use the tools there are a few preparation steps that
+ must take place.
+
+ You must build Orca first.  Make sure you have done an up-to-date
+ <mvn install> in both the ORCA_HOME <and> in ORCA_HOME/nodeagenthost.
+
+ Then navigate to the tools directory
+ (ORCA_HOME/tools/config) and type the following in your terminal:
+
++---
+ ant copy.local
+ ant get.packages
++--- 
+
+ The first step makes a local copy of some configuration
+ template files. The second step fetches all required binaries from the local
+ repository.
+
+ <<Note:>>  If any of the binaries (drivers, node agent service, node
+ agent service host) changes, you will need to fetch the packages from
+ the repository again.  
+
+* Configuration tool properties
+
+ The configuration tool is controlled by a set of properties defined
+ in ORCA_HOME/tools/config/ant/build.properties. Since build.properties is
+ under version control, please do not modify this file unless you want
+ your changes to be committed to the repository and used by
+ everybody. Instead, create a file
+ ORCA_HOME/tools/config/ant/user.properties and specify the properties
+ you want to override. Properties defined in user.properties have
+ precedence over properties defined in build.properties.
+
+ 
+ Please consult build.properties for a description of each
+ property. Here we list only the properties that are most likely to
+ require customization:
+
+  * <<ssh.key>>
+
+    Path to the SSH private key to use when connecting to the
+    target machines. Note that this file should be readable only by
+    the owner.  The corresponding public key must be properly installed
+    on inventory nodes in the standard fashion for ssh, as described elsewhere.
+
+    <<Example.>> Generate the key pair on the control node using: <ssh-keygen -t dsa -C "mylogin@mydomain">.
+    Use an empty passphrase.  Copy the public key onto each target node (as root) to
+    /.ssh/authorized_keys.
+
+
+  * <<domain>>
+
+    Domain name for inventory machines. Must start with a
+    dot ("."). When using IP addresses, set domain to "" (empty string).
+
+  * <<machines>>
+
+    Space-separated list of machine names (without domain
+    suffix if the domain property is set), or IP addresses (if the
+    domain property is set to "").
+
+    
+    

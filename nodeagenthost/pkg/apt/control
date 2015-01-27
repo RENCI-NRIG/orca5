@@ -1,0 +1,12 @@
+Package: orca-nodeagent
+Version: <VERSION>
+Section: admin
+Priority: optional
+Architecture: all 
+Essential: no
+Depends: sun-java6-jre 
+Installed-Size: <SIZE>
+Maintainer: Geni ORCA Project [geni-orca@renci.org]
+Description: Orca Node Agent Service
+ .
+ Provides programmatic access to resources.

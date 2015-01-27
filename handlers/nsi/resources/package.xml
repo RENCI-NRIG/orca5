@@ -1,0 +1,22 @@
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
+                  id="6e82c932-4914-4076-8a38-4ab9a925f823">
+  <name>NSI Handler Library</name>
+  <description>Provides NSI handler.</description>
+  <plugins>
+
+    <!-- OSCARS/ION -->
+    <plugin id="1" type="10" actorType="3">
+      <name>NSI Handler</name>
+      <description>Provides support for NSI circuit service.</description>
+      <configurationTemplate>nsi/config.vm</configurationTemplate>
+      <configurationProperties>
+        <!-- Name of the handler file (relative to /ROOT/handlers) -->
+        <property>
+          <name>handler.file</name>
+          <value>nsi/handler.xml</value>
+        </property>
+      </configurationProperties>
+    </plugin>
+  </plugins>
+</extensionPackage>
+

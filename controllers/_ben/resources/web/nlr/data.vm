@@ -1,0 +1,98 @@
+#*
+ The section marked BEGIN - END impersonates the current user as admin so 
+ that it can get access to the management layer even without being properly authenticated.
+ This is a huge security whole but needed to support the demo.
+*#
+
+## BEGIN Ouch !!!
+## get the current user
+#set ( $imp = $server.root.getIdentity($request) )
+## make it admin !!!
+$server.root.impersonate($imp, "admin")
+
+## do some tricks to get the needed actor proxy
+#set( $role = $params.getString("role") )
+#if ($role != $vsession.role)
+    ##$vsession.clearLocal()
+    #set($vsession.role = $role)
+#end
+
+## update the session
+$vsession.update($params, $server.root, $imp) 
+      
+## set the actor portal plugin and the actor proxy 
+#if ($vsession.getActor())
+	#set ($actorPlugin = $server.root.getPortalPlugin($vsession.getActor().getID()))
+	#set ($actorProxy = $actorPlugin.getManagementProxy())
+#end
+
+#set ($actor=$vsession.actor)
+## END Ouch !!!
+
+
+#parse("/secure/common/top.vm")
+##parse("${root.getPackageRoot('f7ec610c-d838-4239-87fc-869a8cbf848e')}/top.vm")
+##more random test 
+
+#set ($slices = $actorProxy.getClientSlices($imp.getAuth()))
+
+#foreach ($slice in $slices.getResult())
+	##ignore slices for brokers
+  	#if ($slice.getName() != "vm-broker" && $slice.getName() != "vlan-broker")
+	
+##  	SliceName: $slice.getName()
+
+#if ( $vsession.getActor().getName() == 'duke-vm-site')
+    #set ($loc="duke")
+#elseif ( $vsession.getActor().getName() == 'renci-vm-site')
+    #set ($loc="renci")
+#else
+    #set ($loc="unc")
+#end
+
+MIN_DATA_START
+SLICE: $slice.getID() 
+  			#set ($rsvs=false)
+		#set($rsvs = $actorProxy.getReservations($slice.getID(), $imp.getAuth()))
+		#foreach ($rsv in $rsvs.getResult())
+			## Get Active only
+			#if ($root.getStateName($rsv) == "Active")
+##				ReservationGUID: $rsv.getReservationID()
+##				ReservationState: $root.getStateName($rsv)
+##				ReservationResourceType: $rsv.getResourceType()
+				#set ($nodes=false)
+				#set ($nodes = $actorProxy.getReservationNodes($rsv.getReservationID(), $imp.getAuth()))
+				#foreach ($node in $nodes.getResult())
+					#if ($node.getIp())
+##SLICE: $slice.getID() NodeName: $node.getName() NodeIP: $node.getIp() NodeRealHost: $node.getRealHost()
+##						NodeState: $root.getNodeState($node.getState())
+     <source>
+        <type>context</type>
+       <context>
+         <id>1</id>
+         <interface>
+           <pop>$loc</pop>
+           <device>$node.getRealHost()</device>
+           <chassis>1</chassis>
+           <slot>1</slot>
+           <pic>1</pic>
+           <port>1</port>
+         </interface>
+         <type>dom</type>
+          <dom label="$node.getName()">
+            <ip4>$node.getIp()</ip4>
+            <ip4_netmask>24</ip4_netmask>
+            <orca_name>$node.getName()</orca_name>
+           </dom>
+        </context>
+	</source>
+					#end
+					#if ($node.getVlanTag())
+<id>$node.getVlanTag()</id>
+					#end
+				#end
+MIN_DATA_END
+			#end
+		#end
+	#end
+#end

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+broker name: openflow-broker
+site actor name: openflow-site
+
+pool type: openflow
+pool property: openflow.slice.start openflow.slice.end
+control class = orca.policy.core.OpenFlowControl
+
+change names and types in topology section accordingly
+-->
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
+    <actors>
+        <actor>
+            <type>site</type>
+            <name>openflow-site</name>
+            <description>OpenFlow site authority</description>
+            <pools>
+                <pool>
+                    <type>openflow</type>
+                    <label>OpenFlow</label>
+                    <description>OpenFlow</description>
+                    <units>100</units>
+                    <start>2010-01-30T00:00:00</start>
+                    <end>2011-01-30T00:00:00</end>
+                    <handler path="network/openflow/handler.xml">
+			<properties>
+                            <property name="flowvisor.base" value="/home/ngkim/flowvisor" />
+                            <property name="flowvisor.conf.d" value="conf.d" />
+                            <property name="flowvisor.name" value="renci" />
+                            <property name="controller.host" value="210.125.84.65" />
+                            <property name="controller.port" value="2525" />
+                            <property name="allowedports.01" value="0,1,2,3 nfgist01" />
+                            <property name="allowedports.02" value="0,1,2,3 nfgist02" />
+                            <property name="allowedports.03" value="0,1 ofgist01" />
+                        </properties>
+                    </handler>
+                    <properties>
+                        <property name="openflow.slice.start" value="2" />
+                        <property name="openflow.slice.end" value="101" />
+                    </properties>
+                </pool>
+            </pools>
+            <controls>
+                <control type="openflow" class="orca.policy.core.OpenFlowControl" />
+            </controls>
+        </actor>
+        <actor>
+            <type>broker</type>
+            <name>openflow-broker</name>
+            <description>OpenFlow broker</description>
+        </actor>
+        <actor>
+            <type>service</type>
+            <name>service</name>
+            <description>Service Manager</description>
+        </actor>
+    </actors>
+    <topology>
+        <edges>
+            <edge>
+                <from name="service" type="service" />
+                <to name="openflow-broker" type="broker" />
+            </edge>
+            <edge>
+                <from name="openflow-broker" type="broker" />
+                <to name="openflow-site" type="site" />
+                <rset>
+                    <type>openflow</type>
+                    <units>100</units>
+                </rset>
+            </edge>
+        </edges>
+    </topology>
+</configuration>

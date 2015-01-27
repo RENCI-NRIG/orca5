@@ -1,0 +1,102 @@
+<definitions targetNamespace="http://www.nicl.duke.edu/orca/manage/extensions/api/services/container"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="http://www.nicl.duke.edu/orca/manage/extensions/api/services/container"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:types="http://www.nicl.duke.edu/orca/manage/extensions/api/beans">
+
+	<!-- Import the type definitions -->
+
+	<import namespace="http://www.nicl.duke.edu/orca/manage/extensions/api/beans"
+	        location="types.xsd" />
+
+	<!-- getManagerObject -->
+
+	<message name="getManagerObjectRequest">
+		<part name="key" type="xsd:string" />
+		<part name="user" type="types:authTokenMng" />
+	</message>
+	<message name="getManagerObjectResponse">
+		<part name="status" type="types:resultMng" />
+		<!-- supported protocol -->
+		<part name="protocols" type="types:protocolProxiesMng" />
+		<!-- type identifier for the management object -->
+		<part name="typeID" type="xsd:string" />
+		<!-- service url -->
+		<part name="location" type="xsd:string" />
+	</message>
+
+	<!-- getPortalPlugin -->
+	<message name="getPortalPluginRequest">
+		<part name="key" type="xsd:string" />
+	</message>
+	<message name="getPortalPluginResponse">
+		<part name="status" type="types:resultMng" />
+		<part name="result" type="types:portalPluginDescriptorMng" />
+	</message>
+
+	<!-- logout -->
+	<message name="logoutRequest">
+		<part name="user" type="types:authTokenMng" />
+	</message>
+	<message name="logoutResponse" />
+
+	<portType name="ContainerServicePortType">
+		<operation name="getManagerObject">
+			<input message="tns:getManagerObjectRequest" />
+			<output message="tns:getManagerObjectResponse" />
+		</operation>
+		<operation name="getPortalPlugin">
+			<input message="tns:getPortalPluginRequest" />
+			<output message="tns:getPortalPluginResponse" />
+		</operation>
+		<operation name="logout">
+			<input message="tns:logoutRequest" />
+			<output message="tns:logoutResponse" />
+		</operation>
+	</portType>
+
+	<binding name="ContainerService" type="tns:ContainerServicePortType">
+		<soap:binding style="rpc"
+		              transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<operation name="getManagerObject">
+			<soap:operation soapAction="getManagerObject" />
+			<input name="getManagerObjectRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="getManagerObjectResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="getPortalPlugin">
+			<soap:operation soapAction="getPortalPlugin" />
+			<input name="getPortalPluginRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="getPortalPluginResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+		<operation name="logout">
+			<soap:operation soapAction="logout" />
+			<input name="logoutRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="logoutResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+
+	</binding>
+
+	<!-- service decln -->
+	<service name="ContainerService">
+		<port name="ContainerService" binding="tns:ContainerService">
+			<soap:address location="http://localhost:8080/axis2/services/ContainerService" />
+		</port>
+	</service>
+</definitions>

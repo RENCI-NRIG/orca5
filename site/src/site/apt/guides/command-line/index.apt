@@ -1,0 +1,170 @@
+ ----
+ Command-line Execution Guide
+ -----
+ The Orca Team
+ -----
+ September 1, 2007
+ -----
+
+Command-line Execution Guide
+
+ An Orca container can be launched from command line scripts
+ or deployed inside a
+ Tomcat server as a web application. In this guide we describe the
+ steps necessary to run Orca from the command line. Many of these
+ steps are also required when running the system as a web application,
+ so start here.
+ For further instructions about running Orca as a web application, please
+ refer to the {{{../portal/index.html}Web Portal Guide}}.
+
+
+Sections
+
+ * {{{The_cmdline_project}The cmdline project}}
+
+ * {{{Customization}Customization}}
+
+ * {{{Customize_the_build_process}Customize the build process}}
+ 
+ * {{{Generate_a_container_configuration}Generate a container configuration}}
+ 
+ * {{{Customize_the_container_configuration}Customize the container configuration}}
+ 
+ * {{{Builtin_Tests}Builtin Tests}}
+
+ * {{{Inventory}Inventory}}
+
+ * {{{Emulation}Emulation}}
+
+ []
+ 
+ 
+* {The cmdline project}
+  
+ Orca comes with a sample sub-project, which has useful scripts to configure a container and launch it from the command line. 
+ The project is located at $ORCA_ROOT/tools/cmdline. 
+
+ The project contains the following files and directories:
+ 
+ * pom.xml - Maven POM file describing the dependencies required by the project.
+ 
+ * ant - Contains a collection of ant xml and properties files
+ 
+ * axis2repository - An axis2 client repository.  
+ 
+ * config - Contains template configuration files
+ 
+ * startup - Orca startup folder. Contains extension packages that must be installed when Orca starts.
+ 
+ * tests - Contains configuration files to be used by the builtin tests.
+ 
+ []
+ 
+* {Customize the build process}
+ 
+ Before using this project you may need to customize it for how you want to build/install.
+ This level of customization involves overriding properties set in <<ant/build.properties>> and <<ant/tests.properties>> in $ORCA_ROOT/tools/cmdline.  These properties include what version you are building from, the location of the maven repository, etc.  The defaults are probably OK.
+
+ To override a property defined in build.properties, create <<ant/user.properties>> and put in your new values, following the format in build.properties.  
+ Similarly, to override a property defined in tests.properties, create <<ant/user.tests.properties>> and put your values in it.
+
+ <<Please:>> Do not change build.properties itself unless
+ you know what you are doing.  Do not add your user.properties to the version repository.
+  
+* {Generate a container configuration}
+ 
+ Next we set up and/or customize a container configuration.   Before going further, you should be sure to understand the basics of
+  {{{../container-configuration/index.html}container configuration}}.  
+  If this container is to be launched from the command-line scripts, then $ORCA_ROOT/cmdline will serve as your container configuration's $ROOT_DIR.
+ 
+ Type the following in your terminal (all commands are
+ executed inside $ORCA_ROOT/cmdline):
+ 
++-----+
+ ant get.packages
++-----+
+ 
+ The first command creates the configuration's local directory called <<local>>, which contains a copy of the configuration file templates.
+ The second command fetches the required extension packages and places them in the startup folder. 
+ 
+ Note that the system currently does not check for new versions of the extension packages, once they are placed in the startup folder.
+ To get the latest versions of the default extension packages, type the following:
+ 
++---
+ ant get.packages
++--- 
+
+ The next step is to 
+ {{{../container-configuration/security.html}prepare an admin security configuration}}. Copy the <runtime> folder for your configuration to your $ROOT_DIR, i.e., to $ORCA_ROOT/run.
+ 
+ If you changed the database defaults during the database configuration 
+ {{{../install/index.html#Database Configuration}steps}} then you will need to customize the configuration files here.
+ 
+* {Customize the container configuration}
+
+ Once you have generated a container configuration, you may need to customize it to match your needs. 
+ Container configurations are discussed in detail
+ in the {{{../container-configuration/index.html}Container Configuration Guide}}.
+ 
+ <<Note>>: container.properties requires no customization if you plan to run only emulation tests.
+ 
+ 
+* {Builtin Tests}
+
+ The run project comes with a set of builtin tests that can be used to verify an Orca installation and simplify some common tasks. These tests can 
+ be invoked from the command line using ant. All provided test targets are described in <<ant/tests.xml>>. Here is a list of the current
+ builtin tests:
+ 
+
+*----------------------------------------------------------------+------------------------------------------------------------------------+
+| <<Test Name>>                                                  | <<Description>>
+*-----------------------------------------------------------------+---------+-------------------------------------------------------------+
+| {{{test-configuration.html}test.configuration}}                | Tests if a container XML configuration file can be loaded successfully 
+*----------------------------------------------------------------+------------------------------------------------------------------------+
+| {{{test-handler.html}test.handler}}                            | Invokes and tests a resource handler
+*----------------------------------------------------------------+------------------------------------------------------------------------+
+| {{{test-reset-inventory.html}test.reset.inventory}}            | Runs the reset inventory test
+*----------------------------------------------------------------+------------------------------------------------------------------------+
+| {{{test-unit-reservation.html}test.unit.reservation.emulation}}| Runs the reservation unit test using emulation
+*----------------------------------------------------------------+------------------------------------------------------------------------+
+| {{{test-unit-reservation.html}test.unit.reservation.real}}     | Runs the reservation unit test using real resources
+*----------------------------------------------------------------+------------------------------------------------------------------------+
+ 
+ 
+* {Inventory}
+ 
+ Before you can run a test you must populate your database with some inventory. Orca ships with a sample inventory that
+ can be used <<only>> for the emulation tests (see {{{index.html#Emulation}Emulation}}). To run tests with real resources you need
+ to configure your infrastructure, and  to load your own inventory.
+
+ <<Note:>> if your database contains demo inventory and you wish to run with real resources, it is recommended that you remove the demo inventory first.
+ Since, some operations in real mode attempt accessing all inventory stored in the database (initial reset/setup), the demo inventory will cause
+ network problems and is likely to result in multiple errors.
+ 
+ The demo inventory file is located under $ORCA_ROOT/schema/mysql/demo.inventory.sql. If your installation is not using the default database configuration, 
+ you
+ will need to modify this file and change the database name. Open the file in an editor. At the top of the file you will find the following line: 
+ 
++---
+ USE `orca`;
++--- 
+ 
+ Replace orca with the name of your database.
+ 
+ <<Note:>> If you are working under source control, please make a copy of the file and edit the copy.
+ 
+
+ To load the inventory file, type the following in your terminal:
+  
++----  
+ mysql -u $ORCA_DB_USER -p -h $ORCA_DB_SERVER < $ORCA_ROOT/schemas/mysql/demo.inventory.sql
+ [enter password]
++--- 
+ 
+ If you require more machines in your inventory, please consult the {{{../inventory/index.html}Inventory Guide}}.
+ 
+  
+* {Emulation}
+
+ Please consult the {{{../emulation/}Emulation Guide}} or the {{{../real/}Real Execution Guide}} for more details.
+   

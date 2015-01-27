@@ -1,0 +1,24 @@
+ ------
+ Current Release
+ ------
+ Aydan Yumerefendi
+ ------
+ 01 September 2007
+ ------
+
+Current Release
+
+ The current release of Orca is 2.0. Please consult the {{{guides/getting-started/}Getting Started Guide}} for installation and usage instructions.
+
+*-------------+---------------+-----------------------------------------------------------+
+| Version     | Release Date  | Description                                      
+*-------------+---------------+-----------------------------------------------------------+
+| 2.0         | 02/01/2010    | The current Orca release. {{{release-notes.html#2.0}Release notes}}
+*-------------+---------------+-----------------------------------------------------------+
+| 1.2         | 11/01/2009    | Last Orca release based on COD. {{{release-notes.html#1.2}Release notes}}
+*-------------+---------------+-----------------------------------------------------------+
+| 1.1-alpha   | 06/18/2009    | First Orca release since moving to RENCI. {{{release-notes.html#1.1-alpha}Release nodes}}
+*-------------+---------------+-----------------------------------------------------------+
+
+
+ 
