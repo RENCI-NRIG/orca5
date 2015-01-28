@@ -255,7 +255,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		node.setInDomain(domain_rs.getURI());
 		
 		Resource intf_rs = stitchingNode.getProperty(NdlCommons.topologyHasInterfaceProperty).getResource();
-		Resource shadow_intf_rs = requestModel.createIndividual(stitchingNode.getURI()+"/intf", NdlCommons.interfaceOntClass);
+		Resource shadow_intf_rs = requestModel.createIndividual(domain_rs.getURI()+"/intf", NdlCommons.interfaceOntClass);
 		if(layer==null)
 			layer=NdlCommons.ethernetNetworkElementClass;
 		shadow_intf_rs.addProperty(NdlCommons.atLayer, layer);
@@ -624,8 +624,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			setAssignedLabel(next);
 		}
 
-		logger.info("start:"+start.getURI()+":"+start.getName()+":"+rs1_ont+":flag="+flag+"\n");
-		logger.info("next:"+next.getURI()+":"+next.getName()+":"+rs2_ont+"\n");
+		logger.info("start:"+start.getURI()+":"+start.getStaticLabel()+";"+start.getSwappingCapability()+";"+start.getName()+":"+rs1_ont+":flag="+flag+"\n");
+		logger.info("next:"+next.getURI()+":"+":"+start.getStaticLabel()+";"+next.getSwappingCapability()+";"+next.getName()+":"+rs2_ont+"\n");
 	
 		//System.out.println("flag:"+flag+"\n");
 		return root;
@@ -828,7 +828,12 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		
 		int commonLabel = -1;
 		sBitSet.and(nBitSet);
-		commonLabel = sBitSet.nextSetBit(0);
+		//in case static label carried over
+		int start_static_label = (int) start.getStaticLabel();
+		if(start_static_label>0 && sBitSet.get(start_static_label))
+			commonLabel = start_static_label;
+		else //otherwise, use the common label
+			commonLabel = sBitSet.nextSetBit(0);
 		//int commonLabel = randomSetBit(sBitSet);
 		if(commonLabel>0){
 			for(LabelSet sSet:sSetList){

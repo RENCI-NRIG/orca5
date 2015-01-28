@@ -259,12 +259,33 @@ public class RequestParserListener implements INdlRequestModelListener {
 		if ((interfaces.size() <= 2) && !(l.hasProperty(NdlCommons.RDF_TYPE, NdlCommons.topologyBroadcastConnectionClass))) {
 			// point-to-point link
 			// the ends
-			Resource if1 = it.next();
-			Resource if2 = null;
-			if(interfaces.size()==2) 
+			Resource if1 = null,if2 = null, start_if=null;
+			NetworkElement if1Node=null,if2Node=null;
+			if(interfaces.size()==2){ 
+				if1=it.next();
 				if2 = it.next();
+				if1Node = interfaceToNode.get(if1.getURI());
+				if2Node = interfaceToNode.get(if2.getURI());
+				if(if1Node==null || if2Node==null){
+					err = new SystemNativeError();
+					err.setErrno(-1);
+					err.setMessage("Edge node error on the request: if1=" + if1 + ";if2="+if2);
+					return;
+				}
+				//always treat the stitching port as the source of a connection 
+				if(if2Node.getURI().contains(NdlCommons.stitching_domain_str)){
+					start_if = if2;
+					if2=if1;
+					if1=start_if;
+				}
+			}else{
+				err = new SystemNativeError();
+				err.setErrno(-1);
+				err.setMessage("Only one interface on the request: if1=" + if1 + ";if2="+if2);
+				return;
+			}
 			if (if1 != null) {
-				NetworkElement if1Node = interfaceToNode.get(if1.getURI());
+				if1Node = interfaceToNode.get(if1.getURI());
 				if(if1Node==null){
 					List <Resource> ce_list = this.interfaceToNode(if2,om);
 					Resource ce=null;
@@ -282,7 +303,7 @@ public class RequestParserListener implements INdlRequestModelListener {
 				ol.setNe1(if1Node);				
 			}
 			if (if2 != null) {	
-				NetworkElement if2Node = interfaceToNode.get(if2.getURI());
+				if2Node = interfaceToNode.get(if2.getURI());
 				if(if2Node==null){
 					List <Resource> ce_list = this.interfaceToNode(if2,om);
 					Resource ce=null;
