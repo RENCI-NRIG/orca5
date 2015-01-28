@@ -402,11 +402,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3712 -->
+    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3711 -->
 
-    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3712">
+    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3711">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">3712.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">3711.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -429,11 +429,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3722 -->
+    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3720 -->
 
-    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3722">
+    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3720">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">3722.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">3720.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -442,7 +442,7 @@
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">9</collections:size>
+        <collections:size rdf:datatype="&xsd;int">8</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/1"/>
         <collections:element rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/2"/>
@@ -454,7 +454,7 @@
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3712"/>
+        <layer:lowerBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3711"/>
         <layer:upperBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3716"/>
     </owl:NamedIndividual>
     
@@ -465,7 +465,7 @@
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet/2">
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3719"/>
-        <layer:upperBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3722"/>
+        <layer:upperBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3720"/>
     </owl:NamedIndividual>
     
 
@@ -474,7 +474,7 @@
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet/DD">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">5</collections:size>
+        <collections:size rdf:datatype="&xsd;int">6</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/1"/>
     </owl:NamedIndividual>
@@ -485,7 +485,7 @@
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet/N3K">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">20</collections:size>
+        <collections:size rdf:datatype="&xsd;int">2</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/2"/>
     </owl:NamedIndividual>
