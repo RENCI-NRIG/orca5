@@ -20,6 +20,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class NdlPath extends NdlCommons {
+	public static final boolean debug = false;
 	
 	Set<Resource> unattached = new HashSet<Resource>();
 	
@@ -96,11 +97,13 @@ public class NdlPath extends NdlCommons {
 		// and recursively invoke on them. Stop when reaching the end element
 		// or when no more resources share an interface
 
-		//System.out.println("Looking for " + end.getResource());
-		//System.out.println("Candidate path is ");
-		//for(PathElement pe: path) {
-		//	System.out.println("- " + pe.getResource());
-		//}
+		if (debug) {
+			System.out.println("Looking for " + end.getResource());
+			System.out.println("Candidate path is ");
+			for(PathElement pe: path) {
+				System.out.println("- " + pe.getResource());
+			}
+		}
 		
 		List<PathElement> candidates = new ArrayList<PathElement>(); 
 		PathElement last = path.get(path.size() - 1);
@@ -127,28 +130,34 @@ public class NdlPath extends NdlCommons {
 				continue;
 			// all elements of unattached have only 2 interfaces
 			List<Resource> unInt = NdlCommons.getResourceInterfaces(u);
-			//System.out.println("    Inspecting " + u + " with interfaces\n      " + unInt.get(0) + "\n      " + unInt.get(1));
+			if (debug)
+				System.out.println("    Inspecting " + u + " with interfaces\n      " + unInt.get(0) + "\n      " + unInt.get(1));
 			if (unInt.get(0).equals(last.getTail())) {
-				//System.out.println("    Attaching " + u + " via " + unInt.get(0));
+				if (debug)
+					System.out.println("    Attaching " + u + " via " + unInt.get(0));
 				PathElement pe = new PathElement(u, unInt.get(0), unInt.get(1));
 				candidates.add(pe);
 			} else 
 				if (unInt.get(1).equals(last.getTail())) {
-					//System.out.println("    Attaching " + u + " via " + unInt.get(1));
+					if (debug)
+						System.out.println("    Attaching " + u + " via " + unInt.get(1));
 					PathElement pe = new PathElement(u, unInt.get(1), unInt.get(0));
 					candidates.add(pe);
 				}
 		}
 		
 		if (candidates.size() == 0) {
-			//System.out.println("  No candidates");
+			if (debug)
+				System.out.println("  No candidates");
 			return false;
 		}
 		
-		//System.out.println("  Will try candidates");
-		//for(PathElement pe: candidates) {
-		//	System.out.println("  - " + pe.getResource());
-		//}
+		if (debug) {
+			System.out.println("  Will try candidates");
+			for(PathElement pe: candidates) {
+				System.out.println("  - " + pe.getResource());
+			}
+		}
 		
 		for(PathElement pe: candidates) {
 			List<PathElement> newPath = new ArrayList<PathElement>(path);
@@ -181,23 +190,29 @@ public class NdlPath extends NdlCommons {
 			for (Resource u: unattachedTmp) {
 				// all elements of unattached have only 2 interfaces
 				List<Resource> unInt = NdlCommons.getResourceInterfaces(u);
-				//System.out.println("    Inspecting " + u + " with interfaces\n      " + unInt.get(0) + "\n      " + unInt.get(1));
-				//System.out.println("Inspecting " + u);
+				if (debug) {
+					System.out.println("    Inspecting " + u + " with interfaces\n      " + unInt.get(0) + "\n      " + unInt.get(1));
+					System.out.println("Inspecting " + u);
+				}
 				if (unInt.get(0).equals(current.getTail())) {
-					//System.out.println("Attaching[0] " + u);
+					if (debug)
+						System.out.println("Attaching[0] " + u);
 					attached = true;
 					current = new PathElement(u, unInt.get(0), unInt.get(1));
 					path.add(current);
 					unattachedTmp.remove(u);
-					//System.out.println("    Attaching " + u + " via " + unInt.get(0));
+					if (debug)
+						System.out.println("    Attaching " + u + " via " + unInt.get(0));
 				} else 
 					if (unInt.get(1).equals(current.getTail())) {
-						//System.out.println("Attaching[1] " + u);
+						if (debug)
+							System.out.println("Attaching[1] " + u);
 						attached = true;
 						current = new PathElement(u, unInt.get(1), unInt.get(0));
 						path.add(current);
-						unattachedTmp.remove(u);	
-						//System.out.println("    Attaching " + u + " via " + unInt.get(1));
+						unattachedTmp.remove(u);
+						if (debug)
+							System.out.println("    Attaching " + u + " via " + unInt.get(1));
 					}
 				if (attached)
 					break;
@@ -247,7 +262,8 @@ public class NdlPath extends NdlCommons {
 		path.add(pathHead);
 		
 		for(Resource i: headInterfaces) {
-			//System.out.println("  Trying build a path from " + pathHead + " to " + pathTail + " using interface " + i);
+			if (debug)
+				System.out.println("  Trying build a path from " + pathHead + " to " + pathTail + " using interface " + i);
 			// change the outgoing interface and try again
 			pathHead.setTail(i);
 			if (tryPathRecursive(pathTail, path)) {
@@ -257,11 +273,13 @@ public class NdlPath extends NdlCommons {
 			path.clear();
 			path.add(pathHead);
 		}
-		//System.out.print("Assembled a path: ");
-		//for(PathElement pe: path) {
-		//	System.out.print(pe + " ");
-		//}
-		//System.out.println();
+		if (debug) {
+			System.out.print("Assembled a path: ");
+			for(PathElement pe: path) {
+				System.out.print(pe + " ");
+			}
+			System.out.println();
+		}
 		return path;
 	}
 	
@@ -337,7 +355,8 @@ public class NdlPath extends NdlCommons {
 			for (Resource root: roots) {
 				Set<Resource> endsToRemove = new HashSet<Resource>();
 				for (Resource end: ends) {
-					//System.out.println("Assembling path between root " + root + " and " + end);
+					if (debug)
+						System.out.println("Assembling path between root " + root + " and " + end);
 					List<PathElement> partPath = assemblePath(root, end);
 
 					// this is possible and OK
@@ -378,7 +397,8 @@ public class NdlPath extends NdlCommons {
 	 * @throws NdlException
 	 */
 	public void addEndElement(Resource r) throws NdlException {
-		//System.out.println("adding end node " + r);
+		if (debug)
+			System.out.println("adding end node " + r);
 		ends.add(r);
 	}
 	
@@ -394,10 +414,12 @@ public class NdlPath extends NdlCommons {
 		// be end points. Stitch nodes are accounted for separately
 		// using the addEndElement() method above
 		if (interfaces.size() == 2) {
-			//System.out.println("adding unattached node " + r);
+			if (debug)
+				System.out.println("adding unattached node " + r);
 			unattached.add(r);
 		} else {
-			//System.out.println("adding end node " + r);
+			if (debug)
+				System.out.println("adding end node with " + interfaces.size() + " interfaces " + r);
 			ends.add(r);
 		}
 	}
@@ -408,7 +430,8 @@ public class NdlPath extends NdlCommons {
 	 * @throws NdlException
 	 */
 	public void addRoot(Resource r) throws NdlException {
-		//System.out.println("adding root node " + r);
+		if (debug)
+			System.out.println("adding root node " + r);
 		roots.add(r);
 	}
 	
