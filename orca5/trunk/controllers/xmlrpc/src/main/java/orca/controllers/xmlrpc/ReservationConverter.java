@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.DatatypeConverter;
 
+import orca.controllers.OrcaController;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.workflow.ModifyReservations;
@@ -85,7 +86,9 @@ public class ReservationConverter implements LayerConstant {
 	private static final String OPENSTACK_MAC_PREFIX = "fe:16:3e:00:";
 	public static final String UNIT_URL_RES = UnitProperties.UnitURL;
 	private static final long TWO_WEEKS = (14*24*3600*1000);
-	public static final long DEFAULT_DURATION = TWO_WEEKS;
+	private static final long ONE_DAY = (24*3600*1000);
+	public static final long DEFAULT_MAX_DURATION = TWO_WEEKS;
+	public static final long DEFAULT_DURATION = ONE_DAY;
 	public static final String NO_SSH_KEY_SPECIFIED_STRING = "NO-SSH-KEY-SPECIFIED";
 	public static final String PropertyRequestNdl = "request.ndl";
 	public static final String PropertyUnitEC2InstanceType = "unit.ec2.instance.type";
@@ -110,7 +113,6 @@ public class ReservationConverter implements LayerConstant {
 	public static final String ISCSI_Initiator_Iqn_prefix = "iqn.2012-02.net.exogeni:";
 	
 	protected static String noopConfigFile = "handlers/common/noop.xml";
-	public static final String PropertyDefaultBrokerName = "controller.defaultBroker";
 
 	public Logger logger;
 
@@ -1601,7 +1603,7 @@ public class ReservationConverter implements LayerConstant {
 	}
 	
 	public void setLeaseTerm(OrcaReservationTerm term)  throws ReservationConverterException {
-		long termDuration = (24*60*60*1000); //milliseconds
+		long termDuration = DEFAULT_DURATION; //milliseconds
 		if(term!=null){
 			termDuration = ((long) term.getDurationInSeconds())*1000;
 			if (term.getStart() == null){
@@ -1612,8 +1614,8 @@ public class ReservationConverter implements LayerConstant {
 			leaseStart=term.getStart();
 		}
 
-		if(termDuration > DEFAULT_DURATION) {
-			throw new ReservationConverterException("Slice terms are limited to " + DEFAULT_DURATION/1000/3600 + " hours");
+		if(termDuration > OrcaXmlrpcHandler.MaxReservationDuration) {
+			throw new ReservationConverterException("Slice terms are limited to " + OrcaXmlrpcHandler.MaxReservationDuration/1000/3600 + " hours");
 		}
 		leaseEnd = new Date(leaseStart.getTime() + termDuration);
 	}
@@ -1899,6 +1901,26 @@ public class ReservationConverter implements LayerConstant {
 			e.printStackTrace();
 		}
     	recoverElementCollection(w.getBoundElements());
+    }
+    
+    /**
+     * Return a constant or a controller.max.duration property value (a long)
+     * @return
+     */
+    public static long getMaxDuration() {
+    	String durString = OrcaController.getProperty(OrcaXmlrpcHandler.MAX_DURATION_PROP);
+    	Long ret = 0L;
+    	if (durString != null) {
+    		try {
+    			ret = Long.parseLong(durString);
+    		} catch (NumberFormatException nfe) {
+    			;
+    		}
+    	}
+    	if (ret == 0L)
+    		return DEFAULT_MAX_DURATION;
+    	else
+    		return ret;
     }
     
 //    public static void main(String[] argv) {

@@ -278,7 +278,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 			
 			// compare slice end date to system default and pick earliest
 			Calendar systemDefaultEndCal = Calendar.getInstance();
-			systemDefaultEndCal.add(Calendar.MILLISECOND, (int)ReservationConverter.DEFAULT_DURATION);
+			systemDefaultEndCal.add(Calendar.MILLISECOND, (int)OrcaXmlrpcHandler.MaxReservationDuration);
 			Date sliceEndDate = saExpDate;
 			if (saExpDate != null) {
 				Calendar saExpDateCal = Calendar.getInstance();
@@ -535,7 +535,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 
                         // compare slice end date to system default and pick earliest
                         Calendar systemDefaultEndCal = Calendar.getInstance();
-                        systemDefaultEndCal.add(Calendar.MILLISECOND, (int)ReservationConverter.DEFAULT_DURATION);
+                        systemDefaultEndCal.add(Calendar.MILLISECOND, (int)OrcaXmlrpcHandler.MaxReservationDuration);
                         Date sliceEndDate = saExpDate;
 
                         if (saExpDate != null) {
