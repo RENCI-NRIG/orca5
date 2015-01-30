@@ -114,6 +114,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			if(element.getNe1().getInDomain().equals(element.getNe2().getInDomain())){
 				RequestReservation intra_request = generateConnectionRequest(requestModel,element,rr.getTerm(),rr.getReservationDomain(),rr.getReservation(),rr.getReservation_rs());
 				runEmbedding(element.getNe1().getInDomain(),intra_request, domainResourcePools);
+				continue;
 			}
 			
 			stitching = checkStitching(element, requestModel); //requestModel being modified here
@@ -962,7 +963,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
             }
 
             //Link connection
-            link_url = intf_start.getURI() + "-" + intf_next.getURI().split("\\#")[1];
+            link_url = intf_start.getURI() + "-" + intf_next.getURI().split("\\#")[1]+"/"+UUID.randomUUID().toString();
             link_ont = manifestModel.createIndividual(link_url, NdlCommons.topologyLinkConnectionClass);
             link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, intf_start);
             link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, intf_next);
