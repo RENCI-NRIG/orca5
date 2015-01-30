@@ -78,7 +78,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String PropertyXmlrpcControllerUrl = "xmlrpc.controller.base.url";
 	public static final String PUBSUB_PROPS_FILE_NAME = "controller.properties";
 	public static final String PUBSUB_ENABLED_PROP = "ORCA.publish.manifest";
+	public static final String MAX_DURATION_PROP = "controller.max.duration";
 
+	public static final long MaxReservationDuration = ReservationConverter.getMaxDuration();
+	
 	/**
 	 * Maps a domain to the resources available from that domain.
 	 */
@@ -88,13 +91,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	protected final XmlrpcOrcaState instance;
 	protected boolean discoveredTypes = false;
 	protected boolean verifyCredentials = true;
-	
-	// to make sure create/delete/modify calls don't come too often
-	// this is temporary and allows NDL, orca actor state and substrate
-	// state to quiesce. 
-	protected static long nextCall = 0;
-	protected final long DEFAULT_WAIT_TIME = 2000;
-	protected long waitTime;
 
 	// thread for deferred slices due to interdomain complexity
 	protected static final SliceDeferThread sdt = new SliceDeferThread();
@@ -147,15 +143,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		} catch (Exception e) {
 			verifyCredentials = true;
-		}
-		
-		try {
-			if (OrcaController.getProperty(XmlRpcController.PropertyControllerCallWaitTimeMs) != null) 
-				waitTime = Integer.parseInt(OrcaController.getProperty(XmlRpcController.PropertyControllerCallWaitTimeMs));
-			else
-				waitTime = DEFAULT_WAIT_TIME;
-		} catch (Exception e) {
-			waitTime = DEFAULT_WAIT_TIME;
 		}
 	}
 
@@ -894,7 +881,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			Calendar termEndDateCal = Calendar.getInstance();
 			termEndDateCal.setTime(termEndDate);
 			Calendar systemDefaultEndCal = Calendar.getInstance();
-			systemDefaultEndCal.add(Calendar.MILLISECOND, (int)ReservationConverter.DEFAULT_DURATION);
+			systemDefaultEndCal.add(Calendar.MILLISECOND, (int)MaxReservationDuration);
 			Calendar nowCal = Calendar.getInstance();
 			
 			if (nowCal.after(termEndDateCal)){
