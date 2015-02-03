@@ -908,6 +908,11 @@ public class NdlCommons {
 		return 0;
 	}
 
+	/**
+	 * Get storage capacity property of the resource
+	 * @param c
+	 * @return
+	 */
 	public static long getResourceStorageCapacity(Resource c) {
 		assert(c != null);
 		Statement storCap = c.getProperty(storageCapacity);
@@ -915,6 +920,62 @@ public class NdlCommons {
 			return storCap.getLong();
 		}
 		return 0;
+	}
+	
+	/**
+	 * Get hasFSParam property of the resource
+	 * @param c
+	 * @return
+	 */
+	public static String getResourceStorageFSParam(Resource c) {
+		assert(c != null);
+		Statement stor = c.getProperty(hasFSParam);
+		if (stor != null) {
+			return stor.getString();
+		}
+		return null;
+	}
+	
+	/**
+	 * Get hasFSType property of the resource
+	 * @param c
+	 * @return
+	 */
+	public static String getResourceStorageFSType(Resource c) {
+		assert(c != null);
+		Statement stor = c.getProperty(hasFSType);
+		if (stor != null) {
+			return stor.getString();
+		}
+		return null;
+	}
+	
+	/**
+	 * Get hasMntPoint property of the resource
+	 * @param c
+	 * @return
+	 */
+	public static String getResourceStorageMntPoint(Resource c) {
+		assert(c != null);
+		Statement stor = c.getProperty(hasMntPoint);
+		if (stor != null) {
+			return stor.getString();
+		}
+		return null;
+	}
+	
+	/**
+	 * Get doFormat property of the resource
+	 * @param c
+	 * @return
+	 */
+	public static Boolean getResourceStorageDoFormat(Resource c) {
+		assert(c != null);
+		Statement stor = c.getProperty(doFormat);
+		if (stor != null) {
+			return stor.getBoolean();
+		}
+		return false;
 	}
 	
 	public static long getResourceLatency(Resource c) {
