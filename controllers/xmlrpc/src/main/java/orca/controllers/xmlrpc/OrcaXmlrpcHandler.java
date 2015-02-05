@@ -89,7 +89,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	protected List<String> abstractModels;
 
 	protected final XmlrpcOrcaState instance;
-	protected boolean discoveredTypes = false;
 	protected boolean verifyCredentials = true;
 
 	// thread for deferred slices due to interdomain complexity
@@ -314,7 +313,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 				instance.addSlice(ndlSlice);
 
-				instance.sync();
+				instance.sync(sm);
 				
 				instance.getController();
 				String controller_url = OrcaController.getProperty(PropertyXmlrpcControllerUrl);
@@ -602,7 +601,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 			else {
 				//ReservationConverter orc = new ReservationConverter();
-				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(sm, instance, slice_urn);
+				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
 				orc.updateGeniStates(ndlSlice.getWorkflow().getManifestModel(), geniStates);
 				OntModel manifestModel=orc.getManifestModel(workflow.getManifestModel(),
 						workflow.getDomainInConnectionList(),
@@ -1085,7 +1084,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				logger.error("discoverTypes(): Could not process discover types response", e);
 			}
 		}
-		discoveredTypes = true;
 	}
 	
 	private String updateModel(String model_str,int total, BitSet bSet){
