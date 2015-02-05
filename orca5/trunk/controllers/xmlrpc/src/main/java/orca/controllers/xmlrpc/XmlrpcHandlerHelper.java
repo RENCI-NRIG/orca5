@@ -774,7 +774,7 @@ public class XmlrpcHandlerHelper {
 			}
 			else{
 				// don't forget the GENI state 
-				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(sm, instance, slice_urn);
+				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
 				// DEBUG
 				logger.debug("getSliceManifest(): listing reservations and states for slice " + slice_urn);
 				for(ReservationMng rmm: allRes) {

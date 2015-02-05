@@ -161,7 +161,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 				}
 				
 				String ndlMan = null;
-				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(sm, instance, slice_urn);
+				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
 				try {
 					ReservationConverter orc = ndlSlice.getOrc();
 					orc.updateGeniStates(ndlSlice.getWorkflow().getManifestModel(),
@@ -695,7 +695,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 		}
 	}
 	
-	public static GeniStates getSliceGeniState(IOrcaServiceManager sm, XmlrpcOrcaState instance, String slice_urn) {
+	public static GeniStates getSliceGeniState(XmlrpcOrcaState instance, String slice_urn) {
 		
         XmlrpcControllerSlice ndlSlice = instance.getSlice(slice_urn);
         if (ndlSlice == null) 
@@ -809,7 +809,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 					resourceList.add(en);
 				}
 				ss.put(ApiReturnFields.GENI_RESOURCES.name, resourceList);
-				ss.put(ApiReturnFields.GENI_STATUS.name, getSliceGeniState(sm, instance, slice_urn).name);
+				ss.put(ApiReturnFields.GENI_STATUS.name, getSliceGeniState(instance, slice_urn).name);
 				
 				return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, null);
 			}

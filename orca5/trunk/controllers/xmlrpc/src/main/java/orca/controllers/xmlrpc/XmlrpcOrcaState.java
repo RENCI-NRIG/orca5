@@ -88,7 +88,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	 * Passes in by reference, so it can be modified
 	 * @return
 	 */
-	public HashMap<String, BitSet> getControllerAssignedLabel() {
+	public synchronized HashMap<String, BitSet> getControllerAssignedLabel() {
 		return controllerAssignedLabel;
 	}
 	
@@ -467,12 +467,9 @@ public final class XmlrpcOrcaState implements Serializable {
      /**
       * Recover by querying the SM
       */
-     public synchronized void sync() {
+     public synchronized void sync(IOrcaServiceManager sm) {
     	 logger.info("Sync global tag for domains");
-    	 IOrcaServiceManager sm = null;
     	 try {
-    		 sm = getSM();
-
     		 logger.debug("Querying SM for active reservations");
     		 // get a list of all active-like reservations from the SM
     		 List<ReservationMng> actives = new ArrayList<ReservationMng>();
@@ -533,10 +530,7 @@ public final class XmlrpcOrcaState implements Serializable {
     	 } catch (Exception e) {
     		 logger.error("Unable to sync XmlrpcOrcaState due to: " + e);
     		 return;
-    	 } finally {
-    		 if (sm != null)
-    			 returnSM(sm);
-    	 }
+    	 } 
     	 logger.info("Sync of XmlrpcOrcaState completed successfully");
      }
 
