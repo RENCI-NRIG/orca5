@@ -244,6 +244,7 @@ public class ReservationConverter implements LayerConstant {
 			config.putAll(usersSSHProperties);
 
 			ReservationRequest resrequest = new ReservationRequest();
+			resrequest.uuid = UUID.randomUUID().toString();
 			resrequest.reservation = r;
 			resrequest.domain = domain;
 			resrequest.domain_url = device.getName();
@@ -304,6 +305,8 @@ public class ReservationConverter implements LayerConstant {
 				config.setProperty(UnitProperties.UnitTargetPrefix+".chap_password",CHAP_Password);
 
 				config.setProperty(UnitProperties.UnitSliceGuid,r.getSliceID());
+				
+				logger.debug("lun_r:hostName="+device_name+";chap="+CHAP_User);
 				
 				//set reconstraints
 				this.setRequestConstraints(request, ce);
@@ -932,6 +935,7 @@ public class ReservationConverter implements LayerConstant {
 		p.setProperty(storageTargetPrefix+".port","3260");
 		
 		p.setProperty(storageTargetPrefix+".should_attach",SUDO_YES);
+		logger.debug("setVMISCSIParam():"+storageTargetPrefix+".mount_point="+s_ce.getMntPoint()+":"+storageTargetPrefix+".chap_user="+s_ce.getCHAP_User());
 	}
 
 	public void processIPCollection(HashMap <DomainElement, LinkedList <ReservationRequest> > collection, DomainElement p_de, ReservationRequest r){
