@@ -264,7 +264,7 @@ public class ServiceManager extends Actor implements IServiceManager {
      * {@inheritDoc}
      */
     public void extendTicket(final IClientReservation reservation) throws Exception {
-        if (!recovered) {
+        if (!recovered) { 
             extendingTicket.add(reservation);
         }else {
             wrapper.extendTicket(reservation);
@@ -453,6 +453,42 @@ public class ServiceManager extends Actor implements IServiceManager {
         return ServiceManagerManagementObject.class.getName();
     }
     
+    /**
+     * For recovery, mark extending reservations renewable or the opposite
+     * and save this, then restore afterwards
+     * @param t
+     */
+    static ReservationSet savedExtendedRenewable = new ReservationSet();
+    private void saveExtendingRenewable() {
+    	 for (IReservation r: extendingTicket) {
+             try {
+                 if (r instanceof IClientReservation) {
+                	 if (!((IClientReservation) r).getRenewable()) {
+                		 ((IClientReservation) r).setRenewable(true);
+                		 savedExtendedRenewable.add(r);
+                	 }
+                 }else {
+                     logger.warn("Reservation #" + r.getReservationID() + " cannot be re-marked");
+                 }
+             } catch (Exception e) {
+                 logger.error("Could not mark ticket renewable for #" + r.getReservationID().toHashString());
+             }
+         }
+    }
+    
+    /**
+     * Restore the value of renewable field after recovery if we changed it
+     */
+    private void restoreExtendingRenewable() {
+    	for (IReservation r: savedExtendedRenewable) {
+    		try {
+    			((IClientReservation) r).setRenewable(false);
+    		} catch (Exception e) {
+    			logger.error("Could not re-mark ticket nonrenewable for #" + r.getReservationID().toHashString());
+    		}
+    	}
+    }
+    
     @Override
     protected void issueDelayed() {
         super.issueDelayed();
@@ -460,7 +496,9 @@ public class ServiceManager extends Actor implements IServiceManager {
         ticket(ticketing);
         ticketing.clear();
         
+        saveExtendingRenewable();
         extendTicket(extendingTicket);
+        restoreExtendingRenewable();
         extendingTicket.clear();
         
         redeem(redeeming);
