@@ -139,6 +139,13 @@ public interface IClientReservation extends IReservation
      */
     public void setRenewable(boolean renewable);
 
+    
+    /**
+     * Get the value of renewable flag
+     * @return
+     */
+    public boolean getRenewable();
+    
     /**
      * Caches the reservation renewal time. This information is used to
      * simplify recovery.

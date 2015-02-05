@@ -1754,6 +1754,13 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
     /**
      * {@inheritDoc}
      */
+    public boolean getRenewable() {
+    	return this.renewable;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public void setRenewTime(final long time) {
         this.renewTime = time;
     }
