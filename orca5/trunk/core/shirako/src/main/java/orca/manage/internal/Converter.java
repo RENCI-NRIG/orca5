@@ -484,6 +484,7 @@ public class Converter extends OrcaConverter {
 				((TicketReservationMng)mng).setBroker(broker.getGuid().toString());
 			}
 			((TicketReservationMng)mng).setRenewable(rc.isRenewable());
+			((TicketReservationMng)mng).setRenewTime(rc.getRenewTime());
 		}
 
 		if (r.getTerm() != null) {
