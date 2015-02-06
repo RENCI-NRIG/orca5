@@ -496,6 +496,10 @@ public class Converter extends OrcaConverter {
 				mng.setEnd(r.getRequestedTerm().getEndTime().getTime());
 			}
 		}
+		
+		if (r.getRequestedTerm() != null) {
+			mng.setRequestedEnd(r.getRequestedTerm().getEndTime().getTime());
+		}
 
 		if (attachProperties) {
 			attachProperties(mng, r);

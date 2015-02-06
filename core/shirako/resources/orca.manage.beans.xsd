@@ -242,6 +242,7 @@
 			<xsd:element name="sliceID" type="xsd:string" minOccurs="0" />
 			<xsd:element name="start" type="xsd:long" />
 			<xsd:element name="end" type="xsd:long" />
+			<xsd:element name="requestedEnd" type="xsd:long" />
 			<xsd:element name="resourceType" type="xsd:string" />
 			<xsd:element name="units" type="xsd:int" />
 			<xsd:element name="state" type="xsd:int" />
