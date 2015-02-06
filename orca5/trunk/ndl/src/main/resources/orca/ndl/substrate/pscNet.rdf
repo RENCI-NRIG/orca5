@@ -352,17 +352,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/Domain -->
-
-    <owl:NamedIndividual rdf:about="&PSCNet;Domain">
-        <rdf:type rdf:resource="&topology;NetworkDomain"/>
-        <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
-        <domain:hasService rdf:resource="&PSCNet;Domain/NetworkService/1"/>
-        <collections:element rdf:resource="&PSCNet;PoP"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/Domain/NetworkService/1 -->
 
     <owl:NamedIndividual rdf:about="&PSCNet;Domain/NetworkService/1">
@@ -624,6 +613,17 @@
         <rdf:type rdf:resource="&collections;Set"/>
         <collections:element rdf:resource="&PSCNet;IBM/G8264"/>
         <location:locatedAt rdf:resource="&pscvmsite;PSCNet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#pscNet/Domain -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pscNet.rdf#pscNet/Domain">
+        <rdf:type rdf:resource="&topology;NetworkDomain"/>
+        <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
+        <domain:hasService rdf:resource="&PSCNet;Domain/NetworkService/1"/>
+        <collections:element rdf:resource="&PSCNet;PoP"/>
     </owl:NamedIndividual>
     
 
