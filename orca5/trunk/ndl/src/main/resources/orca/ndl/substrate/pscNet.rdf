@@ -386,6 +386,8 @@
         <topology:hasInterface rdf:resource="&PSCNet;IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <topology:hasInterface rdf:resource="&PSCNet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:hasInterface rdf:resource="&PSCNet;IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
+        <topology:hasInterface rdf:resource="&PSCNet;IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&PSCNet;IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet"/>
     </owl:NamedIndividual>
     
 
