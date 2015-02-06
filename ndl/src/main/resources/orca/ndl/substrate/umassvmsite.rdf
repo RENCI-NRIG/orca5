@@ -419,34 +419,9 @@
         <rdf:type rdf:resource="&exogeni;BareMetalCluster"/>
         <rdf:type rdf:resource="&topology;Device"/>
         <topology:hasSwitchMatrix rdf:resource="&umassvmsite;UMASS/BareMetal/EthernetSwitchMatrix"/>
-        <compute:availableVMLabelSet rdf:resource="&umassvmsite;UMASS/BareMetal/availableBareMetalLabelSet"/>
         <topology:hasInterface rdf:resource="&umassvmsite;UMASS/BareMetal/TenGigabitEthernet/1/ethernet"/>
         <topology:hasInterface rdf:resource="&umassvmsite;UMASS/BareMetal/TenGigabitEthernet/2/ethernet"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni -->
-
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni">
-        <rdf:type rdf:resource="&exogeni;ExoGENICluster"/>
-        <rdf:type rdf:resource="&topology;Device"/>
-        <topology:hasSwitchMatrix rdf:resource="&umassvmsite;UMASS/ExoGeni/EthernetSwitchMatrix"/>
-        <compute:availableVMLabelSet rdf:resource="&umassvmsite;UMASS/ExoGeni/availableVMLabelSet"/>
-        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/1/ethernet"/>
-        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TengigabitEthernet/2/ethernet"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ISCSI -->
-
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ISCSI">
-        <rdf:type rdf:resource="&storage;ISCSI"/>
-        <rdf:type rdf:resource="&topology;Device"/>
-        <storage:availableLUNLabelSet rdf:resource="&umassvmsite;UMASS/ExoGeni/availableLUNLabelset"/>
-        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/3/ethernet"/>
-        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <compute:availableVMLabelSet rdf:resource="&umassvmsite;UMASS/BareMetal/availableBareMetalLabelSet"/>
     </owl:NamedIndividual>
     
 
@@ -456,17 +431,6 @@
     <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/BareMetal/EthernetSwitchMatrix">
         <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
         <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/BareMetal/availableBareMetalLabelSet -->
-
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/BareMetal/availableBareMetalLabelSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">2</collections:size>
-        <domain:hasResourceType rdf:resource="&compute;BareMetalCE"/>
-        <compute:hasUnitServer rdf:resource="&exogeni;ExoGENI-M4"/>
     </owl:NamedIndividual>
     
 
@@ -502,68 +466,26 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/EthernetSwitchMatrix -->
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/BareMetal/availableBareMetalLabelSet -->
 
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/EthernetSwitchMatrix">
-        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
-        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/PoP -->
-
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/PoP">
-        <rdf:type rdf:resource="&collections;Set"/>
-        <location:locatedAt rdf:resource="&umassvmsite;UMASS"/>
-        <collections:element rdf:resource="&umassvmsite;UMASS/BareMetal"/>
-        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/availableLUNLabelset -->
-
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/availableLUNLabelset">
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/BareMetal/availableBareMetalLabelSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <storage:storageCapacity rdf:datatype="&xsd;int">6000</storage:storageCapacity>
-        <collections:size>116</collections:size>
-        <domain:hasResourceType rdf:resource="&storage;LUN"/>
-        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni/availableLUNLabelSet/1"/>
+        <collections:size rdf:datatype="&xsd;int">2</collections:size>
+        <domain:hasResourceType rdf:resource="&compute;BareMetalCE"/>
+        <compute:hasUnitServer rdf:resource="&exogeni;ExoGENI-M4"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/availableVLANSet -->
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni -->
 
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/availableVLANSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">1000</collections:size>
-        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
-        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni/availableVLANSet/1"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/availableVMLabelSet -->
-
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/availableVMLabelSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">160</collections:size>
-        <domain:hasResourceType rdf:resource="&compute;VM"/>
-        <compute:hasUnitServer rdf:resource="&exogeni;ExoGENIUnitServer"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/staticVLANSet -->
-
-    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/staticVLANSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">1</collections:size>
-        <domain:isAllocatable rdf:datatype="&xsd;boolean">false</domain:isAllocatable>
-        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
-        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni/VLANLabel/1853"/>
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni">
+        <rdf:type rdf:resource="&exogeni;ExoGENICluster"/>
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasSwitchMatrix rdf:resource="&umassvmsite;UMASS/ExoGeni/EthernetSwitchMatrix"/>
+        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TengigabitEthernet/2/ethernet"/>
+        <compute:availableVMLabelSet rdf:resource="&umassvmsite;UMASS/ExoGeni/availableVMLabelSet"/>
     </owl:NamedIndividual>
     
 
@@ -573,6 +495,15 @@
     <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni//VLANLabel/2">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
         <layer:label_ID rdf:datatype="&xsd;float">2.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
     </owl:NamedIndividual>
     
 
@@ -591,6 +522,18 @@
     <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/LUNLabel/116">
         <rdf:type rdf:resource="&storage;LUN"/>
         <layer:label_ID rdf:datatype="&xsd;float">116.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/PoP -->
+
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/PoP">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <location:locatedAt rdf:resource="&umassvmsite;UMASS"/>
+        <collections:element rdf:resource="&umassvmsite;UMASS/BareMetal"/>
+        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni"/>
+        <collections:element rdf:resource="&umassvmsite;UMASS/ISCSI"/>
     </owl:NamedIndividual>
     
 
@@ -620,8 +563,8 @@
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <topology:interfaceOf rdf:resource="&umassvmsite;UMASS/ISCSI"/>
         <ethernet:Tagged-Ethernet rdf:resource="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <topology:interfaceOf rdf:resource="&umassvmsite;UMASS/ISCSI"/>
     </owl:NamedIndividual>
     
 
@@ -635,8 +578,8 @@
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
-        <topology:interfaceOf rdf:resource="&umassvmsite;UMASS/ISCSI"/>
         <ethernet:vlan rdf:resource="&umassvmsite;UMASS/ExoGeni/VLANLabel/1009"/>
+        <topology:interfaceOf rdf:resource="&umassvmsite;UMASS/ISCSI"/>
     </owl:NamedIndividual>
     
 
@@ -656,8 +599,8 @@
 
     <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2">
         <rdf:type rdf:resource="&ip4;IPAddress"/>
-        <ip4:netmask>255.255.255.0</ip4:netmask>
         <layer:label_ID>10.104.0.3</layer:label_ID>
+        <ip4:netmask>255.255.255.0</ip4:netmask>
     </owl:NamedIndividual>
     
 
@@ -727,12 +670,70 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/availableLUNLabelset -->
+
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/availableLUNLabelset">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <storage:storageCapacity rdf:datatype="&xsd;int">6000</storage:storageCapacity>
+        <collections:size>116</collections:size>
+        <domain:hasResourceType rdf:resource="&storage;LUN"/>
+        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni/availableLUNLabelSet/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/availableVLANSet -->
+
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/availableVLANSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">1000</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni/availableVLANSet/1"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/availableVLANSet/1 -->
 
     <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/availableVLANSet/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&umassvmsite;UMASS/ExoGeni//VLANLabel/2"/>
         <layer:upperBound rdf:resource="&umassvmsite;UMASS/ExoGeni/VLANLabel/1001"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/availableVMLabelSet -->
+
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/availableVMLabelSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">160</collections:size>
+        <domain:hasResourceType rdf:resource="&compute;VM"/>
+        <compute:hasUnitServer rdf:resource="&exogeni;ExoGENIUnitServer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ExoGeni/staticVLANSet -->
+
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ExoGeni/staticVLANSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">1</collections:size>
+        <domain:isAllocatable rdf:datatype="&xsd;boolean">false</domain:isAllocatable>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&umassvmsite;UMASS/ExoGeni/VLANLabel/1853"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/umassvmsite.rdf#UMASS/ISCSI -->
+
+    <owl:NamedIndividual rdf:about="&umassvmsite;UMASS/ISCSI">
+        <rdf:type rdf:resource="&storage;ISCSI"/>
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/3/ethernet"/>
+        <topology:hasInterface rdf:resource="&umassvmsite;UMASS/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <storage:availableLUNLabelSet rdf:resource="&umassvmsite;UMASS/ExoGeni/availableLUNLabelset"/>
     </owl:NamedIndividual>
     
 
@@ -765,5 +766,5 @@
 
 
 
-<!-- Generated by the OWL API (version 3.5.0) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
 
