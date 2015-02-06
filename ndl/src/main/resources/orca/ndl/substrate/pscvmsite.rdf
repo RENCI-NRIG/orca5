@@ -27,7 +27,6 @@
     <!ENTITY pscvmsite2 "http://geni-orca.renci.org/owl/pscvmsite.rdf#pscvmsite/" >
     <!ENTITY ExoGeni "http://geni-orca.renci.org/owl/pscvmsite.rdf#PSC/ExoGeni/" >
     <!ENTITY BareMetal2 "http://geni-orca.renci.org/owl/pscvmsite.rdf#PSC/BareMetal/" >
-    <!ENTITY TengigabitEthernet2 "http://geni-orca.renci.org/owl/pscvmsite.rdf#PSC/ExoGeni/TengigabitEthernet/2/" >
     <!ENTITY TenGigabitEthernet2 "http://geni-orca.renci.org/owl/pscvmsite.rdf#PSC/ExoGeni/TenGigabitEthernet/1/" >
     <!ENTITY TenGigabitEthernet4 "http://geni-orca.renci.org/owl/pscvmsite.rdf#PSC/BareMetal/TenGigabitEthernet/2/" >
     <!ENTITY TenGigabitEthernet5 "http://geni-orca.renci.org/owl/pscvmsite.rdf#PSC/BareMetal/TenGigabitEthernet/1/" >
@@ -50,7 +49,6 @@
      xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
      xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
-     xmlns:TengigabitEthernet2="&pscvmsite;PSC/ExoGeni/TengigabitEthernet/2/"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
      xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
@@ -373,6 +371,24 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet"/>
@@ -382,24 +398,6 @@
     <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet"/>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#pscNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pscNet.rdf#pscNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#pscNet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet -->
-
-    <owl:NamedIndividual rdf:about="&BareMetal;ethernet"/>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#pscNet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet -->
-
-    <owl:NamedIndividual rdf:about="&BareMetal3;ethernet"/>
     
 
 
@@ -445,7 +443,7 @@
         <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
-        <topology:linkTo rdf:resource="&BareMetal;ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:interfaceOf rdf:resource="&pscvmsite;PSC/BareMetal"/>
     </owl:NamedIndividual>
     
@@ -460,7 +458,7 @@
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <topology:linkTo rdf:resource="&BareMetal3;ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
         <topology:interfaceOf rdf:resource="&pscvmsite;PSC/BareMetal"/>
     </owl:NamedIndividual>
     
@@ -577,7 +575,7 @@
         <rdfs:label>41-50</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pscNet.rdf#pscNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <ethernet:vlan rdf:resource="&pscvmsite;PSC/ExoGeni/VLANLabel/1009"/>
         <topology:interfaceOf rdf:resource="&pscvmsite;PSC/ISCSI"/>
     </owl:NamedIndividual>
