@@ -274,6 +274,7 @@
 					<xsd:element name="broker" type="xsd:string" />			
 					<xsd:element name="ticketProperties" type="propertiesMng" minOccurs="0" />
 					<xsd:element name="renewable" type="xsd:boolean" />
+					<xsd:element name="renewTime" type="xsd:long" />
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
