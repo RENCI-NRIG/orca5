@@ -456,6 +456,7 @@
         <rdfs:label>9,13</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
         <topology:interfaceOf rdf:resource="&PSCNet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&PSCNet;IBM/G8264/availableVLANSet"/>
         <topology:linkTo rdf:resource="&pscvmsite;PSC/BareMetal/TenGigabitEthernet/1/ethernet"/>
@@ -471,7 +472,6 @@
         <rdfs:label>49-50</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
         <topology:interfaceOf rdf:resource="&PSCNet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&PSCNet;IBM/G8264/availableVLANSet"/>
         <topology:linkTo rdf:resource="&pscvmsite;PSC/BareMetal/TenGigabitEthernet/2/ethernet"/>
@@ -503,6 +503,7 @@
         <rdfs:label>41-48</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:interfaceOf rdf:resource="&PSCNet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&PSCNet;IBM/G8264/availableVLANSet"/>
         <topology:linkTo rdf:resource="&pscvmsite;PSC/ExoGeni/TengigabitEthernet/2/ethernet"/>
     </owl:NamedIndividual>
