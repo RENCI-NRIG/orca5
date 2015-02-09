@@ -353,26 +353,8 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Wed Jan 07 2015  Victor J. Orlikowski <vjo@cs.duke.edu>
-- Build to address tag swapping in ION. Happy New Year!
-
-*Thu Oct 30 2014  Victor J. Orlikowski <vjo@cs.duke.edu>
-- Trigger re-build to address BEN issues, 4th try.
-
-*Sun Oct 26 2014  Victor J. Orlikowski <vjo@cs.duke.edu>
-- Cleanup changelog, and trigger build using new xmpp-pubsub library
-
-*Fri Aug 15 2014 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Testing automatic cleanup of old builds
-
-*Fri Aug 15 2014 anirban <anirban@renci.org>
-- anirban start testing controller recovery 
-
-*Wed Mar 05 2014 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Build failure notifications work; do a clean build.
-
-*Fri Feb 07 2014 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Alterations to spec file for auto-build in Hudson/Jenkins
+*Mon Feb 09 2015  Victor J. Orlikowski <vjo@cs.duke.edu>
+- New production build to address storage_service issues at racks having Linux-based storage.
 
 *Mon Feb 11 2013 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Initial packaging
