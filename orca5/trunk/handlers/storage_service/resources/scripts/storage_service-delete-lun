@@ -69,9 +69,13 @@ try:
                                        os.environ['STORAGE_SERVICE_IP'] + ':8000/RPC2',
                                        transport=t)
     
-    iscsi_target = storage_service.delete(os.environ['UNIT_LUN_GUID'])
+    stdOut, rtncode = storage_service.delete(os.environ['UNIT_LUN_GUID'])
 
-    LOG.info("RESULT: " + str(iscsi_target[1]))
+    LOG.info("RESULT: " + str(rtncode))
+
+    if rtncode != 0:
+        print 'Delete LUN failed!'
+        sys.exit(1)
 
     print 'OK'
 

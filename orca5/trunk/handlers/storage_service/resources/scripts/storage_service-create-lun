@@ -78,14 +78,18 @@ try:
                                        os.environ['STORAGE_SERVICE_IP'] + ':8000/RPC2',
                                        transport=t)
     
-    iscsi_target = storage_service.create(os.environ['UNIT_TARGET_CHAP_USER'],
-                                          os.environ['UNIT_TARGET_CHAP_PASSWORD'],
-                                          target_iqn,
-                                          os.environ['UNIT_TARGET_LUN'],
-                                          os.environ['UNIT_TARGET_CAPACITY']+'GB',
-                                          initiator_iqn_list_str)
+    stdOut, rtncode = storage_service.create(os.environ['UNIT_TARGET_CHAP_USER'],
+                                             os.environ['UNIT_TARGET_CHAP_PASSWORD'],
+                                             target_iqn,
+                                             os.environ['UNIT_TARGET_LUN'],
+                                             os.environ['UNIT_TARGET_CAPACITY']+'GB',
+                                             initiator_iqn_list_str)
 
-    LOG.info("RESULT: " + iscsi_target[0] + str(iscsi_target[1]))
+    LOG.info("RESULT: " + stdOut + str(rtncode))
+
+    if rtncode != 0:
+        print 'Create LUN failed!'
+        sys.exit(1)
 
     print 'OK'
 
