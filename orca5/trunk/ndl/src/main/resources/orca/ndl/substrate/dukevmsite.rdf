@@ -7,17 +7,20 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY ben "http://geni-orca.renci.org/owl/ben.rdf#" >
+    <!ENTITY ip4 "http://geni-orca.renci.org/owl/ip4.owl#" >
     <!ENTITY geni "http://geni-orca.renci.org/owl/geni.owl#" >
     <!ENTITY wgs84_pos "http://www.w3.org/2003/01/geo/wgs84_pos#" >
     <!ENTITY orca "http://geni-orca.renci.org/owl/orca.owl#" >
     <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
     <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
     <!ENTITY layer2 "http://geni-orca.renci.org/owl/layer.owl#1" >
+    <!ENTITY storage "http://geni-orca.renci.org/owl/storage.owl#" >
     <!ENTITY compute "http://geni-orca.renci.org/owl/compute.owl#" >
     <!ENTITY exogeni "http://geni-orca.renci.org/owl/exogeni.owl#" >
     <!ENTITY layer3 "http://geni-orca.renci.org/owl/layer.owl#10" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
     <!ENTITY ethernet "http://geni-orca.renci.org/owl/ethernet.owl#" >
+    <!ENTITY openflow "http://geni-orca.renci.org/owl/openflow.owl#" >
     <!ENTITY location "http://geni-orca.renci.org/owl/location.owl#" >
     <!ENTITY topology "http://geni-orca.renci.org/owl/topology.owl#" >
     <!ENTITY collections "http://geni-orca.renci.org/owl/collections.owl#" >
@@ -71,8 +74,10 @@
      xmlns:Ge-12="&Duke3;Port/GigabitEthernet/Ge-1/2/"
      xmlns:TenGE="&Duke3;Port/Cisco/6509/TenGE/"
      xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
      xmlns:DukeVMSite="http://geni-orca.renci.org/owl/dukevmsite.rdf#DukeVMSite/"
      xmlns:dukevmsite="http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/"
+     xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
      xmlns:ben="http://geni-orca.renci.org/owl/ben.rdf#"
      xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
      xmlns:TenGigabitEthernet2="&Duke3;Euca/TenGigabitEthernet/1/"
@@ -97,8 +102,8 @@
      xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
      xmlns:gB="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Cisco/6509/GigabitEthernet/gB/1/"
      xmlns:orca="http://geni-orca.renci.org/owl/orca.owl#"
-     xmlns:gB2="http://geni-orca.renci.org/owl/dukeNet.rdf#Duke/Cisco/6509/GigabitEthernet/gB/2/"
      xmlns:Euca2="&Duke3;Euca/1/"
+     xmlns:gB2="http://geni-orca.renci.org/owl/dukeNet.rdf#Duke/Cisco/6509/GigabitEthernet/gB/2/"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:gB4="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Cisco/6509/GigabitEthernet/gB/2/"
      xmlns:gB3="&Duke3;Port/Cisco/6509/GE/gB/1/"
@@ -106,9 +111,10 @@
      xmlns:gB5="&Duke3;Port/Cisco/6509/TenGE/gB/1/"
      xmlns:gB8="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Juniper/3200/GigabitEthernet/gB/1/"
      xmlns:TenGigabitEthernet="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/TenGigabitEthernet/3/2/"
-     xmlns:gB7="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/TenGigabitEthernet/gB/1/">
+     xmlns:gB7="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/TenGigabitEthernet/gB/1/"
+     xmlns:storage="http://geni-orca.renci.org/owl/storage.owl#">
     <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/dukevmsite.rdf">
-        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/geni.owl"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/openflow.owl"/>
     </owl:Ontology>
     
 
@@ -214,6 +220,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/storage.owl#availableLUNLabelSet -->
+
+    <owl:ObjectProperty rdf:about="&storage;availableLUNLabelSet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/topology.owl#hasInterface -->
 
     <owl:ObjectProperty rdf:about="&topology;hasInterface"/>
@@ -270,6 +282,12 @@
     <!-- http://geni-orca.renci.org/owl/layer.owl#label_ID -->
 
     <owl:DatatypeProperty rdf:about="&layer;label_ID"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#storageCapacity -->
+
+    <owl:DatatypeProperty rdf:about="&storage;storageCapacity"/>
     
 
 
@@ -344,6 +362,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/exogeni.owl#BareMetalCluster -->
+
+    <owl:Class rdf:about="&exogeni;BareMetalCluster"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/exogeni.owl#ExoGENICluster -->
 
     <owl:Class rdf:about="&exogeni;ExoGENICluster"/>
@@ -365,6 +389,18 @@
     <!-- http://geni-orca.renci.org/owl/location.owl#Location -->
 
     <owl:Class rdf:about="&location;Location"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#ISCSI -->
+
+    <owl:Class rdf:about="&storage;ISCSI"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#LUN -->
+
+    <owl:Class rdf:about="&storage;LUN"/>
     
 
 
@@ -409,9 +445,98 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Juniper/3200/GigabitEthernet/gB/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/compute.owl#BareMetalCE -->
 
-    <owl:NamedIndividual rdf:about="&gB8;ethernet"/>
+    <owl:NamedIndividual rdf:about="&compute;BareMetalCE"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#VM -->
+
+    <owl:NamedIndividual rdf:about="&compute;VM"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#Node -->
+
+    <owl:NamedIndividual rdf:about="&domain;Node"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#ORCAActor -->
+
+    <owl:NamedIndividual rdf:about="&domain;ORCAActor"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#VLAN -->
+
+    <owl:NamedIndividual rdf:about="&domain;VLAN"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/2/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/BareMetal -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;BareMetal">
+        <rdf:type rdf:resource="&exogeni;BareMetalCluster"/>
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasSwitchMatrix rdf:resource="&Duke3;BareMetal/EthernetSwitchMatrix"/>
+        <topology:hasInterface rdf:resource="&Duke3;BareMetal/TenGigabitEthernet/1/ethernet"/>
+        <compute:availableVMLabelSet rdf:resource="&Duke3;BareMetal/availableBareMetalLabelSet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/BareMetal/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;BareMetal/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/BareMetal/TenGigabitEthernet/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;BareMetal/TenGigabitEthernet/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>35-38</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/2/ethernet"/>
+        <topology:interfaceOf rdf:resource="&Duke3;BareMetal"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/BareMetal/availableBareMetalLabelSet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;BareMetal/availableBareMetalLabelSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">4</collections:size>
+        <domain:hasResourceType rdf:resource="&compute;BareMetalCE"/>
+    </owl:NamedIndividual>
     
 
 
@@ -421,55 +546,6 @@
         <rdf:type rdf:resource="&location;Location"/>
         <wgs84_pos:long>-78.944149</wgs84_pos:long>
         <wgs84_pos:lat>36.00016</wgs84_pos:lat>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Euca -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Euca">
-        <rdf:type rdf:resource="&exogeni;ExoGENICluster"/>
-        <rdf:type rdf:resource="&topology;Device"/>
-        <topology:hasInterface rdf:resource="&Duke3;Euca/1/ethernet"/>
-        <topology:hasSwitchMatrix rdf:resource="&Duke3;Euca/EthernetSwitchMatrix"/>
-        <compute:availableVMLabelSet rdf:resource="&Duke3;Euca/availableVMSet"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Euca/1/ethernet -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Euca/1/ethernet">
-        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>ge-0/0/[33-47]</rdfs:label>
-        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
-        <topology:hostInterfaceName>data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="&gB8;ethernet"/>
-        <topology:interfaceOf rdf:resource="&Duke3;Euca"/>
-        <layer:hasBitRate rdf:resource="&layer;1G"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Euca/EthernetSwitchMatrix -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Euca/EthernetSwitchMatrix">
-        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
-        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Euca/PoP -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Euca/PoP">
-        <rdf:type rdf:resource="&collections;Set"/>
-        <location:locatedAt rdf:resource="&Duke3;CS"/>
-        <collections:element rdf:resource="&Duke3;Euca"/>
-        <collections:element rdf:resource="&Duke3;Port/Cisco/6509/GE"/>
-        <collections:element rdf:resource="&Duke3;Port/Cisco/6509/TenGE"/>
-        <collections:element rdf:resource="&Duke3;perfsoner/1"/>
     </owl:NamedIndividual>
     
 
@@ -492,20 +568,181 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Euca/availableVLANSet -->
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni -->
 
-    <owl:NamedIndividual rdf:about="&Duke3;Euca/availableVLANSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">1000</collections:size>
-        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
-        <collections:element rdf:resource="&Duke3;Euca/availableVLANSet/1"/>
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni">
+        <rdf:type rdf:resource="&exogeni;ExoGENICluster"/>
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasInterface rdf:resource="&Duke3;ExoGeni/1/ethernet"/>
+        <topology:hasSwitchMatrix rdf:resource="&Duke3;ExoGeni/EthernetSwitchMatrix"/>
+        <compute:availableVMLabelSet rdf:resource="&Duke3;ExoGeni/availableVMSet"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Euca/availableVLANSet/1 -->
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="&Duke3;Euca/availableVLANSet/1">
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>23-34</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName>of-data</topology:hostInterfaceName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/1/ethernet"/>
+        <topology:interfaceOf rdf:resource="&Duke3;ExoGeni"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/LUNLabel/1 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/LUNLabel/1">
+        <rdf:type rdf:resource="&storage;LUN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/LUNLabel/4000 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/LUNLabel/4000">
+        <rdf:type rdf:resource="&storage;LUN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">4000.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/PoP -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/PoP">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:element rdf:resource="&Duke3;BareMetal"/>
+        <location:locatedAt rdf:resource="&Duke3;CS"/>
+        <collections:element rdf:resource="&Duke3;ExoGeni"/>
+        <collections:element rdf:resource="&Duke3;ISCSI"/>
+        <collections:element rdf:resource="&Duke3;perfsoner/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/1 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/1">
+        <rdf:type rdf:resource="&ip4;IPAddress"/>
+        <layer:label_ID rdf:datatype="&xsd;string">10.104.0.2</layer:label_ID>
+        <ip4:netmask rdf:datatype="&xsd;string">255.255.255.0</ip4:netmask>
+        <layer:isPrimary rdf:datatype="&xsd;boolean">true</layer:isPrimary>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/2 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/2">
+        <rdf:type rdf:resource="&ip4;IPAddress"/>
+        <layer:label_ID rdf:datatype="&xsd;string">10.104.0.3</layer:label_ID>
+        <ip4:netmask rdf:datatype="&xsd;string">255.255.255.0</ip4:netmask>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/3 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/3">
+        <rdf:type rdf:resource="&ip4;IPAddress"/>
+        <layer:label_ID rdf:datatype="&xsd;string">10.104.0.4</layer:label_ID>
+        <ip4:netmask rdf:datatype="&xsd;string">255.255.255.0</ip4:netmask>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/TenGigabitEthernet/3/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/TenGigabitEthernet/3/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <ethernet:Tagged-Ethernet rdf:resource="&Duke3;ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <topology:interfaceOf rdf:resource="&Duke3;ISCSI"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <ethernet:vlan rdf:resource="&Duke3;ExoGeni/VLANLabel/1009"/>
+        <topology:interfaceOf rdf:resource="&Duke3;ISCSI"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/VLANLabel/1009 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/VLANLabel/1009">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1009.0</layer:label_ID>
+        <ip4:localIPAddress rdf:resource="&Duke3;ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/1"/>
+        <ip4:localIPAddress rdf:resource="&Duke3;ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/2"/>
+        <ip4:localIPAddress rdf:resource="&Duke3;ExoGeni/TenGigabitEthernet/3/etherent/VLAN/1009/ipaddress/3"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/availabelLUNLabelset/1 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/availabelLUNLabelset/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&Duke3;ExoGeni/LUNLabel/1"/>
+        <layer:upperBound rdf:resource="&Duke3;ExoGeni/LUNLabel/4000"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/availableLUNLabelSet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/availableLUNLabelSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">4000</collections:size>
+        <storage:storageCapacity rdf:datatype="&xsd;int">40000</storage:storageCapacity>
+        <collections:element rdf:resource="&Duke3;ExoGeni/availabelLUNLabelset/1"/>
+        <domain:hasResourceType rdf:resource="&storage;LUN"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/availableVLANSet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/availableVLANSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">1000</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&Duke3;ExoGeni/availableVLANSet/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/availableVLANSet/1 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/availableVLANSet/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&Duke3;Euca/VLANLabel/2000"/>
         <layer:upperBound rdf:resource="&Duke3;Euca/VLANLabel/2999"/>
@@ -513,149 +750,26 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Euca/availableVMSet -->
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/availableVMSet -->
 
-    <owl:NamedIndividual rdf:about="&Duke3;Euca/availableVMSet">
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/availableVMSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">96</collections:size>
+        <collections:size rdf:datatype="&xsd;int">125</collections:size>
         <domain:hasResourceType rdf:resource="&compute;VM"/>
         <compute:hasUnitServer rdf:resource="&exogeni;ExoGENIUnitServer"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/GE -->
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ISCSI -->
 
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/GE">
+    <owl:NamedIndividual rdf:about="&Duke3;ISCSI">
+        <rdf:type rdf:resource="&storage;ISCSI"/>
         <rdf:type rdf:resource="&topology;Device"/>
-        <topology:hasInterface rdf:resource="&Duke3;Port/Cisco/6509/GE/gB/1/ethernet"/>
-        <topology:hasSwitchMatrix rdf:resource="&Duke3;Port/EthernetSwitchMatrix"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/GE/Port/1/48 -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/GE/Port/1/48">
-        <rdf:type rdf:resource="&ethernet;GEPort"/>
-        <layer:label_ID rdf:datatype="&xsd;float">48.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/GE/Port/1/9 -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/GE/Port/1/9">
-        <rdf:type rdf:resource="&ethernet;GEPort"/>
-        <layer:label_ID rdf:datatype="&xsd;float">9.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/GE/availablePortLabelSet -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/GE/availablePortLabelSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">40</collections:size>
-        <domain:hasResourceType rdf:resource="&domain;GEPort"/>
-        <collections:element rdf:resource="&Duke3;Port/Cisco/6509/GE/availablePortLabelSet/1"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/GE/availablePortLabelSet/1 -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/GE/availablePortLabelSet/1">
-        <rdf:type rdf:resource="&layer;LabelRange"/>
-        <rdfs:label rdf:datatype="&xsd;string">gigabitethernet 1/</rdfs:label>
-        <layer:upperBound rdf:resource="&Duke3;Port/Cisco/6509/GE/Port/1/48"/>
-        <layer:lowerBound rdf:resource="&Duke3;Port/Cisco/6509/GE/Port/1/9"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/GE/gB/1/ethernet -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/GE/gB/1/ethernet">
-        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <rdf:type rdf:resource="&topology;Interface"/>
-        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
-        <topology:linkTo rdf:resource="&gB6;ethernet"/>
-        <topology:interfaceOf rdf:resource="&Duke3;Port/Cisco/6509/GE"/>
-        <compute:availablePortLabelSet rdf:resource="&Duke3;Port/Cisco/6509/GE/availablePortLabelSet"/>
-        <layer:hasBitRate rdf:resource="&layer;1G"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/TenGE -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/TenGE">
-        <rdf:type rdf:resource="&topology;Device"/>
-        <topology:hasInterface rdf:resource="&Duke3;Port/Cisco/6509/TenGE/gB/1/ethernet"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/TenGE/Port/2/4 -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/TenGE/Port/2/4">
-        <rdf:type rdf:resource="&ethernet;TenGEPort"/>
-        <layer:label_ID rdf:datatype="&xsd;float">4.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/TenGE/Port/2/6 -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/TenGE/Port/2/6">
-        <rdf:type rdf:resource="&ethernet;TenGEPort"/>
-        <layer:label_ID rdf:datatype="&xsd;float">6.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/TenGE/availablePortLabelSet -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/TenGE/availablePortLabelSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">3</collections:size>
-        <domain:hasResourceType rdf:resource="&domain;TenGEPort"/>
-        <collections:element rdf:resource="&Duke3;Port/Cisco/6509/TenGE/availablePortLabelSet/1"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/TenGE/availablePortLabelSet/1 -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/TenGE/availablePortLabelSet/1">
-        <rdf:type rdf:resource="&layer;LabelRange"/>
-        <rdfs:label rdf:datatype="&xsd;string">tengigabitethernet 2/</rdfs:label>
-        <layer:lowerBound rdf:resource="&Duke3;Port/Cisco/6509/TenGE/Port/2/4"/>
-        <layer:upperBound rdf:resource="&Duke3;Port/Cisco/6509/TenGE/Port/2/6"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/Cisco/6509/TenGE/gB/1/ethernet -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/Cisco/6509/TenGE/gB/1/ethernet">
-        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <rdf:type rdf:resource="&topology;Interface"/>
-        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:linkTo rdf:resource="&gB7;ethernet"/>
-        <topology:interfaceOf rdf:resource="&Duke3;Port/Cisco/6509/TenGE"/>
-        <compute:availablePortLabelSet rdf:resource="&Duke3;Port/Cisco/6509/TenGE/availablePortLabelSet"/>
-        <layer:hasBitRate rdf:resource="&layer;10G"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/Port/EthernetSwitchMatrix -->
-
-    <owl:NamedIndividual rdf:about="&Duke3;Port/EthernetSwitchMatrix">
-        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
-        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <storage:storageCapacity rdf:datatype="&xsd;int">40000</storage:storageCapacity>
+        <topology:hasInterface rdf:resource="&Duke3;ExoGeni/TenGigabitEthernet/3/ethernet"/>
+        <topology:hasInterface rdf:resource="&Duke3;ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <storage:availableLUNLabelSet rdf:resource="&Duke3;ExoGeni/availableLUNLabelSet"/>
     </owl:NamedIndividual>
     
 
@@ -693,10 +807,8 @@
         <rdf:type rdf:resource="&domain;NetworkService"/>
         <domain:hasTopology rdf:resource="&domain;Node"/>
         <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
-        <ethernet:availableVLANSet rdf:resource="&Duke3;Euca/availableVLANSet"/>
-        <compute:availableVMLabelSet rdf:resource="&Duke3;Euca/availableVMSet"/>
-        <compute:availablePortLabelSet rdf:resource="&Duke3;Port/Cisco/6509/GE/availablePortLabelSet"/>
-        <compute:availablePortLabelSet rdf:resource="&Duke3;Port/Cisco/6509/TenGE/availablePortLabelSet"/>
+        <ethernet:availableVLANSet rdf:resource="&Duke3;ExoGeni/availableVLANSet"/>
+        <compute:availableVMLabelSet rdf:resource="&Duke3;ExoGeni/availableVMSet"/>
         <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
     </owl:NamedIndividual>
     
@@ -707,9 +819,21 @@
     <owl:NamedIndividual rdf:about="&dukevmsite;Domain">
         <rdf:type rdf:resource="&topology;NetworkDomain"/>
         <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
-        <collections:element rdf:resource="&Duke3;Euca/PoP"/>
+        <collections:element rdf:resource="&Duke3;ExoGeni/PoP"/>
         <domain:hasService rdf:resource="&DukeVMSite;Domain/NetworkService/1"/>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/exogeni.owl#ExoGENIUnitServer -->
+
+    <owl:NamedIndividual rdf:about="&exogeni;ExoGENIUnitServer"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#LUN -->
+
+    <owl:NamedIndividual rdf:about="&storage;LUN"/>
 </rdf:RDF>
 
 
