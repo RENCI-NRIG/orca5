@@ -807,6 +807,8 @@
         <rdf:type rdf:resource="&domain;NetworkService"/>
         <domain:hasTopology rdf:resource="&domain;Node"/>
         <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
+        <compute:availableVMLabelSet rdf:resource="&Duke3;BareMetal/availableBareMetalLabelSet"/>
+        <storage:availableLUNLabelSet rdf:resource="&Duke3;ExoGeni/availableLUNLabelSet"/>
         <ethernet:availableVLANSet rdf:resource="&Duke3;ExoGeni/availableVLANSet"/>
         <compute:availableVMLabelSet rdf:resource="&Duke3;ExoGeni/availableVMSet"/>
         <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
