@@ -277,11 +277,13 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 				}
 				if(domainCount.containsKey(e_domain)){
 					domainCount.get(e_domain).add(e);
-					c_e.setGroup(e_domain);
+					if(c_e.getGroup()==null)
+						c_e.setGroup(c_e.getName());
 				}else{
 					elements = new LinkedList <NetworkElement>();
 					elements.add(e);
-					c_e.setGroup(e_domain);
+					if(c_e.getGroup()==null)
+						c_e.setGroup(c_e.getName());
 					domainCount.put(e_domain, elements);
 				}
 			}
