@@ -155,6 +155,7 @@ public class RequestWorkflow {
 		}
 		modifyGlobalControllerAssignedLabel();
 		boundElements = ((CloudHandler) embedderAlgorithm).getDeviceList();
+		staticLabelDependency();
 		
 		manifestModel = ((CloudHandler) embedderAlgorithm).createManifest(boundElements, request, userDN, controller_url, sliceId);
 		domainInConnectionList = ((CloudHandler) embedderAlgorithm).getDomainInConnectionList();
@@ -191,7 +192,7 @@ public class RequestWorkflow {
 			DomainElement de = (DomainElement) elements.get(0);
 			LinkedList <DomainElement> static_elements = new LinkedList <DomainElement>();
 			LinkedList <DomainElement> free_elements = new LinkedList <DomainElement>();
-			if(elements.size()>1 && de.getCe() ==null){ //network domain with >1 reservations
+			if(elements.size()>1 && (de.getCe() == null || (de.getCastType()!=null && de.getCastType().equalsIgnoreCase(NdlCommons.multicast))  )){ //network domain with >1 reservations
 				for(NetworkElement dee:elements){
 					de = (DomainElement) dee;
 					if(de.getStaticLabel()>0)
