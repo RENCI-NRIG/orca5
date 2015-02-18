@@ -174,14 +174,14 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 					if(source.getCastType()!=null && source.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 						isMulticast=true;
 					}
-					if((isMulticast!=true) && (source.getNumUnits()>0) ){
+					if((isMulticast!=true) && (source.getNumUnits()>0 || source.getCe().getCeGroup()!=null) ){
 						RequestReservation edgeRequest = generateEdgeRequest(source.getInDomain(),source,source_link,element,
 								rr.getTerm(), requestModel);
 						edgeRequest.setOri_reservationDomain(rr.getReservationDomain());
 						error=runEmbedding(source.getInDomain(),edgeRequest, domainResourcePools);
 						if(error!=null)
 							break;
-						if(source.getCe().getGroup()!=null){
+						if(source.getCe().getGroup()!=null || source.getCe().getCeGroup()!=null){
 							if(source_link.getFollowedBy()!=null)
 								source_link.getFollowedBy().remove(source);
 							deviceList.remove(source);
@@ -199,14 +199,14 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 					if(dest.getCastType()!=null && dest.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 						isMulticast=true;
 					}
-					if((isMulticast!=true) && (dest.getNumUnits()>0) ){
+					if((isMulticast!=true) && (dest.getNumUnits()>0  || dest.getCe().getCeGroup()!=null) ){
 						RequestReservation edgeRequest = generateEdgeRequest(dest.getInDomain(),dest,dest_link,element,
 								rr.getTerm(), requestModel);
 						edgeRequest.setOri_reservationDomain(rr.getReservationDomain());
 						error=runEmbedding(dest.getInDomain(),edgeRequest, domainResourcePools);
 						if(error!=null)
 							break;
-						if(dest.getCe().getGroup()!=null){
+						if(dest.getCe().getGroup()!=null || dest.getCe().getCeGroup()!=null){
 							if(dest_link.getFollowedBy()!=null)
 								dest_link.getFollowedBy().remove(dest);
 							deviceList.remove(dest);

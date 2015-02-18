@@ -2,8 +2,10 @@ package orca.embed.cloudembed.controller;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 import orca.embed.cloudembed.IConnectionManager;
 import orca.embed.policyhelpers.DomainResourcePools;
@@ -86,42 +88,102 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			error.setMessage("There is no multicast capable domain"+"!");
 			return error;
 		}
-		ComputeElement root = null;
 		Iterator<NetworkElement> it = elements.iterator();
 		while(it.hasNext()){
+			ComputeElement root = null;
+			HashMap <String, LinkedList <NetworkElement>> domainCount = null;
 			NetworkConnection element = (NetworkConnection) it.next();
-			OntResource root_rs=requestModel.createIndividual(multicastDomain.getURI(),NdlCommons.computeElementClass);
-			root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
-			root = new ComputeElement(requestModel,multicastDomain);
-			mpRequest = generateConnectionRequest(requestModel, element, rr,root);
+			if(element.getResource()!=null && element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty)!=null){
+				multicastDomain = element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty);
+			}else{
+				domainCount = ifMPConnection(element);
+				if(domainCount.size()==2){	//in-rack broadcasting
+					
+				}else{
+					OntResource root_rs=requestModel.createIndividual(multicastDomain.getURI(),NdlCommons.computeElementClass);
+					root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
+					root = new ComputeElement(requestModel,multicastDomain);
+				}
+			}
+			if(root!=null)
+				mpRequest = generateConnectionRequest(requestModel, element, rr,root);
+			else
+				mpRequest = generateConnectionRequest(requestModel, domainCount, element, rr, multicastDomain);
 			try {
 				error=runEmbedding(mpRequest, domainResourcePools);
+				if(root!=null)
+					setCastType(root, deviceList);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		setCastType(root, deviceList);
-		
 		return error;
 	}
+
+	@SuppressWarnings("unchecked")
+	public RequestReservation generateConnectionRequest(OntModel m,HashMap <String, LinkedList <NetworkElement>> domainCount,NetworkConnection e,RequestReservation rr, Resource multicastDomain){
+		OrcaReservationTerm t = rr.getTerm();
+		String reservationD = rr.getReservationDomain();
+		String r = rr.getReservation();
+		Resource r_rs=rr.getReservation_rs();
+		
+		RequestReservation request = new RequestReservation();
+		LinkedList<NetworkElement> ne1_elements = null,ne2_elements = null;
+		String ne1_domain_str = null,ne2_domain_str = null;
+		Resource ne1_domain_rs=null,ne2_domain_rs=null;
+
+		ne1_elements = (LinkedList<NetworkElement>) domainCount.values().toArray()[0];
+		ne2_elements = (LinkedList<NetworkElement>) domainCount.values().toArray()[1];
+		ne1_domain_str = (String) domainCount.keySet().toArray()[0];
+		ne2_domain_str = (String) domainCount.keySet().toArray()[1];
+		ne1_domain_rs = m.getResource(ne1_domain_str);
+		ne2_domain_rs = m.getResource(ne2_domain_str);
+
+		//new request network connection
+		NetworkConnection c_e = new NetworkConnection(m,e.getURI(),e.getName());
+		c_e.setBandwidth(e.getBandwidth());
+		c_e.setLatency(e.getLatency());
+		c_e.setOpenflowCapable(e.getOpenflowCapable());
+		DomainResourceType dType=e.getResourceType();
+		if(dType.getResourceType()==null)
+			dType.setResourceType(DomainResourceType.VLAN_RESOURCE_TYPE);
+		c_e.setResourceType(dType);
+		String layer=e.getAtLayer();
+		if(layer==null)
+			layer = "EthernetNetworkElement";
+		c_e.setAtLayer(layer);
+		c_e.setInDomain(RequestReservation.Interdomain_Domain);
+		//ne1
+		ComputeElement ne = createNE(m,ne1_domain_rs,ne1_elements);
+		c_e.setNe1(ne);
+		//ne2
+		ne = createNE(m,ne2_domain_rs,ne2_elements);
+		c_e.setNe2(ne);
+		
+		request.setRequest(m,c_e,t,reservationD,r, r_rs);
+		
+		return request;
+	}
 	
-	protected void setCastType(NetworkElement root, LinkedList<NetworkElement> deviceList){
-		for(NetworkElement d: deviceList){
-			if(root.getURI().equalsIgnoreCase(d.getURI())){
-				d.setCastType(NdlCommons.multicast);
-				LinkedList <SwitchingAction> action_list = ((Device) d).getActionList();
-				int size=action_list.size();
-				SwitchingAction action = null;
-				for(int i=0;i<size;i++){
-					action=(SwitchingAction) action_list.get(i);
-					if(action==null) logger.info("No Action");
-					else action.setCastType(NdlCommons.multicast);
-				}
-				logger.info("The multicast domain:"+d.getURI());
-				break;
-			}
+	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg){
+		OntResource ne1_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
+		ne1_rs.addProperty(NdlCommons.inDomainProperty, rs);
+		ComputeElement ne = new ComputeElement(m,ne1_rs);
+		
+		DomainResourceType dType=((NetworkElement) cg.toArray()[0]).getResourceType();
+		int res_count=0;
+		for(NetworkElement e:cg){
+			res_count = res_count+e.getResourceType().getCount();
 		}
+		DomainResourceType rType = new DomainResourceType(dType.getResourceType(),res_count);
+		rType.setRank(dType.getRank());
+		rType.setDomainURL(rs.getURI());
+		ne.setResourceType(rType);
+		
+		ne.setCeGroup(cg);
+		
+		return ne;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -132,7 +194,6 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		Resource r_rs=rr.getReservation_rs();
 		RequestReservation request = new RequestReservation();
 		NetworkConnection c_e=null;
-		
 
 		if(e.getConnection()!=null){
         	LinkedList <NetworkElement> bcNodeList = (LinkedList<NetworkElement>)e.getConnection();
@@ -145,9 +206,6 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
         		bc_ce=(ComputeElement)bcNodeList.get(i);
         		intf_nc = bc_ce.getInterfaceName(e);
         		NetworkConnection bc_ce_nc = bc_ce.getConnectionByInterfaceName(intf_nc);
-        	
-        		//name = root.getResource().getLocalName() + "-" + bcNodeList.get(i).getResource().getLocalName();
-        		//url = e.getResource().getNameSpace()+"root";
         		
         		name=bcNodeList.get(i).getResource().getLocalName() + "-" + bc_ce_nc.getResource().getLocalName();
         		url = bc_ce_nc.getURI();
@@ -180,5 +238,54 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
         	}
         }
 		return request;	
+	}
+	
+	
+	protected void setCastType(NetworkElement root, LinkedList<NetworkElement> deviceList){
+		for(NetworkElement d: deviceList){
+			if(root.getURI().equalsIgnoreCase(d.getURI())){
+				d.setCastType(NdlCommons.multicast);
+				LinkedList <SwitchingAction> action_list = ((Device) d).getActionList();
+				int size=action_list.size();
+				SwitchingAction action = null;
+				for(int i=0;i<size;i++){
+					action=(SwitchingAction) action_list.get(i);
+					if(action==null) logger.info("No Action");
+					else action.setCastType(NdlCommons.multicast);
+				}
+				logger.info("The multicast domain:"+d.getURI());
+				break;
+			}
+		}
+	}
+	
+	//decide to call unboundhandler or mphandler which is for bounded inter-domain mp connection
+	@SuppressWarnings("unchecked")
+	public HashMap <String, LinkedList <NetworkElement>> ifMPConnection(NetworkConnection rc){
+		LinkedList <NetworkElement> con_elements = (LinkedList<NetworkElement>) rc.getConnection();
+		String e_domain=null;
+		LinkedList <NetworkElement> elements = null;
+		ComputeElement c_e = null;
+		HashMap <String, LinkedList <NetworkElement>> domainCount = new HashMap <String, LinkedList <NetworkElement>>();
+		if(con_elements.size()>0){
+			for(NetworkElement e:con_elements){
+				e_domain = e.getInDomain();
+				c_e= (ComputeElement) e;
+				if(e_domain==null){
+					domainCount = new HashMap <String, LinkedList <NetworkElement>>();
+					break;
+				}
+				if(domainCount.containsKey(e_domain)){
+					domainCount.get(e_domain).add(e);
+					c_e.setGroup(e_domain);
+				}else{
+					elements = new LinkedList <NetworkElement>();
+					elements.add(e);
+					c_e.setGroup(e_domain);
+					domainCount.put(e_domain, elements);
+				}
+			}
+		}
+		return domainCount;
 	}
 }

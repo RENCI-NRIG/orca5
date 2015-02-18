@@ -530,9 +530,10 @@ public class ReservationConverter implements LayerConstant {
 
 				String mappedVlanProperty = UnitProperties.UnitVlanTag;
 				String mappedPortListProperty = UnitProperties.UnitPortList;
-				// if both reservations are for network resources we must map the vlan tag from pr into a prefixed vlan tag
+				// 1. if both reservations are for network resources we must map the vlan tag from pr into a prefixed vlan tag
 				// so that it does not collide with the vlan tags of other dependent reservations
-				if (r.isNetwork) {
+				//2. for two reservations from the same domain, parent could be the one w/ static tag, in which case, the interface value is null
+				if (r.isNetwork && parent.getValue()!=null) {
 					mappedVlanProperty = pdomain + "." + mappedVlanProperty;
 					mappedPortListProperty = pdomain + "." + mappedPortListProperty;
 					logger.debug("Mapped Parent Vlan Property:" + mappedVlanProperty+";Parent static tag="+parent_de.getStaticLabel());
