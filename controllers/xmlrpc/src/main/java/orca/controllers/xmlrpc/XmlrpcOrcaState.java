@@ -214,6 +214,32 @@ public final class XmlrpcOrcaState implements Serializable {
 			 }
 		 }
 	 }
+	 
+	 //This happens when there is mismatch in passed in tags and the available tags in the site, by a speciall error message
+	 //Normally, it means the tag was not released properly in the site controller 
+	 //To mark off this tag in order to make the controller work
+	 //needs further debugging in the control policy code
+	 public void markFailedMissedTag(ReservationMng  r){
+		 String notice = r.getNotices();
+		 int tag=-1;
+		 String domain=null;
+		 if(notice== null)
+			 return;
+		 if(notice.contains("Passed in static label is not in the available labelset:static=")){
+			 int index1 = notice.indexOf('=');
+			 int index2 = notice.indexOf(";set");
+			 tag = Integer.valueOf(notice.substring(index1+1, index2)).intValue();
+		 }
+		 if(tag>0){
+			 domain = r.getResourceType();
+			 if(domain == null)
+				 return;
+			 domain = domain.split("\\.")[0];
+			 if(this.controllerAssignedLabel.get(domain)!=null)
+				 this.controllerAssignedLabel.get(domain).set(tag);
+		 }
+		 logger.warn("Marked failed tag to move on:"+domain+";tag="+tag);
+	 }
 
 	 /**
 	  * Close dead slices and free up workflows/models. 
@@ -273,6 +299,7 @@ public final class XmlrpcOrcaState implements Serializable {
 					 if (allR != null) {
 						 for(ReservationMng res: allR) {
 							 releaseAddressAssignment(res);
+							 markFailedMissedTag(res);
 						 }
 					 }
 					 removeSlice(sl);

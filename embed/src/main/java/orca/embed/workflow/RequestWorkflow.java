@@ -25,7 +25,9 @@ import orca.ndl.NdlModel;
 import orca.ndl.NdlModifyParser;
 import orca.ndl.NdlRequestParser;
 import orca.ndl.OntProcessor;
+import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.DomainElement;
+import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
 import orca.ndl.elements.OrcaReservationTerm;
 import orca.ndl.elements.RequestSlice;
@@ -159,6 +161,53 @@ public class RequestWorkflow {
 		
 		TDB.sync(requestModel);
 		//closeCreateModel();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void staticLabelDependency(){
+		LinkedList <NetworkElement> con_elements = ((CloudHandler) embedderAlgorithm).getDeviceList();
+		String e_domain=null;
+		LinkedList <NetworkElement> elements = null;
+		HashMap <String, LinkedList <NetworkElement>> domainCount = new HashMap <String, LinkedList <NetworkElement>>();
+		if(con_elements.size()>0){
+			for(NetworkElement e:con_elements){
+				e_domain = e.getInDomain();
+				if(e_domain==null){
+					domainCount = new HashMap <String, LinkedList <NetworkElement>>();
+					break;
+				}
+				if(domainCount.containsKey(e_domain)){
+					domainCount.get(e_domain).add(e);
+				}else{
+					elements = new LinkedList <NetworkElement>();
+					elements.add(e);
+					domainCount.put(e_domain, elements);
+				}
+			}
+		}
+		//make network reservations without static tag (local control picks) depending on reservations w/ static tag to avoid tag mismatch
+		for(Entry <String, LinkedList <NetworkElement>> entry: domainCount.entrySet()){
+			elements = entry.getValue();
+			DomainElement de = (DomainElement) elements.get(0);
+			LinkedList <DomainElement> static_elements = new LinkedList <DomainElement>();
+			LinkedList <DomainElement> free_elements = new LinkedList <DomainElement>();
+			if(elements.size()>1 && de.getCe() ==null){ //network domain with >1 reservations
+				for(NetworkElement dee:elements){
+					de = (DomainElement) dee;
+					if(de.getStaticLabel()>0)
+						static_elements.add(de);
+					else
+						free_elements.add(de);
+				}
+				for(DomainElement fde:free_elements){
+					for(DomainElement sde:static_elements){
+						fde.setPrecededBy(sde, null);
+						logger.debug("RequestWorkflow: adding static tag dependency for network reservations: domain="+entry.getKey()+":"+sde.getStaticLabel());
+					}
+				}
+			}
+		}
+		return;
 	}
 	
 	public synchronized void modify(DomainResourcePools domainResourcePools, String modReq, 

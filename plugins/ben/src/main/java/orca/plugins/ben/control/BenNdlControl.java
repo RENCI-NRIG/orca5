@@ -144,7 +144,7 @@ public class BenNdlControl extends ResourceControl {
 			error = handler.handleRequest(rr);
 			
 			if(error!=null)
-				throw new Exception("Request embedding failed."); 
+				throw new Exception("Request embedding failed:"+error.toString()); 
 		} catch(Exception e) {
 			r.fail("Unable to satisfy request due to " + error);
 			setInprogress(false);

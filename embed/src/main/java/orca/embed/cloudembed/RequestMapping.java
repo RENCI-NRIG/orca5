@@ -453,8 +453,8 @@ try {
 				static_label = findCommonLabel(deviceList);
 			}catch (Exception e){
 				error = new SystemNativeError();
-				error.setErrno(1);
-				error.setMessage("Exception in finding common label !");
+				error.setErrno(99);
+				error.setMessage("Exception in finding common label:"+e.toString());
 				e.printStackTrace();
 				return error;
 			} 

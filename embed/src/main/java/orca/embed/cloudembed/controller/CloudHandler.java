@@ -394,17 +394,37 @@ public class CloudHandler extends MappingHandler{
 		return sBitSet;
 	}
 	
-	private SystemNativeError createEdgeDevice(NetworkElement element,DomainElement link_device,String domainName,int maxNumNetworkConnection, OntModel requestModel, LinkedList<NetworkElement> deviceList,DomainResourcePools domainResourcePools){ 		
+	private SystemNativeError createEdgeDevice(NetworkElement element,DomainElement link_device,String domainName,
+			int maxNumNetworkConnection, OntModel requestModel, LinkedList<NetworkElement> deviceList,DomainResourcePools domainResourcePools){ 		
 		SystemNativeError error = null;
 		int num = element.getNumUnits();
+
+		ComputeElement ce_element = (ComputeElement) element;
+		ComputeElement cg_element = null;
+		if(ce_element.getCeGroup()==null){
+			error = createEdgeDeviceCG(ce_element, link_device, domainName, requestModel,domainResourcePools,num);	
+		}else{
+			for(NetworkElement ne_cg:ce_element.getCeGroup()){
+				cg_element = (ComputeElement) ne_cg;
+				cg_element.setDependencies(ce_element.getDependencies());
+				num = cg_element.getNumUnits();
+				error = createEdgeDeviceCG(cg_element, link_device, domainName, requestModel,domainResourcePools,num);
+			}
+		}
+		return error;
+	}	
+	
+	private SystemNativeError createEdgeDeviceCG(NetworkElement element,DomainElement link_device,String domainName,OntModel requestModel,DomainResourcePools domainResourcePools,int num){
+		SystemNativeError error = null;
 		DomainElement device = null;
 		boolean mpDevice=false;
 		DomainResourceType dType = null;
 		String domain_name = domainName+"/"+element.getResourceType().getResourceType();
+		
 		for(int i=0;i<num;i++){			
 			mpDevice=false;
 			device = createNewNode(element, i, link_device, domain_name, requestModel, deviceList, num);
-			
+		
 			if(device.getCastType()!=null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				mpDevice=true;
 			}
@@ -424,9 +444,9 @@ public class CloudHandler extends MappingHandler{
 			}
 			if(!mpDevice)
 				newDomainList.add(device);
-		}	
+		}
 		return error;
-	}	
+	}
 	
 	private DomainElement createNewNode(NetworkElement element,int i,DomainElement link_device, String domainName, 
 			OntModel requestModel, LinkedList<NetworkElement> deviceList, int num){
@@ -473,6 +493,10 @@ public class CloudHandler extends MappingHandler{
 					ncByInterface = ce_element.getConnectionByInterfaceName(intf);
 					if(ncByInterface==null){
 						logger.warn("No connection associated with this interface"+intf.getName());
+						continue;
+					}
+					if(link_device==null){
+						logger.warn("No linked device:"+element.getName());
 						continue;
 					}
 					if(!ncByInterface.getName().equals(link_device.getName()))                      //inter-site topology request: link != connection

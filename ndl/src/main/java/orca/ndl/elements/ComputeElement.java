@@ -2,6 +2,7 @@ package orca.ndl.elements;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -44,6 +45,9 @@ public class ComputeElement extends NetworkElement {
 	
 	@Persistent
 	protected boolean isSplittable;
+	
+	@NotPersistent
+	protected LinkedList <NetworkElement> ceGroup;
 	
 	@NotPersistent
 	protected Set<NetworkElement> dependencies = new HashSet<NetworkElement>();
@@ -330,7 +334,21 @@ public class ComputeElement extends NetworkElement {
 	public void setCHAP_Password(String cHAP_Password) {
 		CHAP_Password = cHAP_Password;
 	}
-
+	
+	public LinkedList<NetworkElement> getCeGroup() {
+		return ceGroup;
+	}
+	
+	public void setCeGroup(LinkedList<NetworkElement> cg) {
+		this.ceGroup=cg;
+	}
+	
+	public void setCeGroup(NetworkElement ce) {
+		if(this.ceGroup==null)
+			ceGroup = new LinkedList <NetworkElement>();
+		this.ceGroup.add(ce);
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
