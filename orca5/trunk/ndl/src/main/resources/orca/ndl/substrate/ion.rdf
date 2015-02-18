@@ -341,6 +341,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/TenGigabitEthernet/0/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/TenGigabitEthernet/0/1/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Atlanta/Cisco/6509 -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Atlanta/Cisco/6509">
@@ -427,8 +433,18 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509">
         <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509/EthernetSwitchMatrix"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
-        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#Al2S/FIU/Cisco/6509/EthernetSwitchMatrix"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:swappingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
     </owl:NamedIndividual>
     
 
@@ -454,6 +470,51 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/PoP">
         <rdf:type rdf:resource="&collections;Set"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509">
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509/EthernetSwitchMatrix"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <layer:swappingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.wash.net.internet2.edu:port=eth7/2:link=gwu</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.wash.net.internet2.edu:port=eth7/2:link=gwu</topology:hasURN>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/TenGigabitEthernet/0/1/ethernet"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509"/>
+        <ethernet:availableVLANSet rdf:resource="&ION;Domain/NetworkService/1/availableVLANSet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/PoP -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/PoP">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509"/>
     </owl:NamedIndividual>
     
 
@@ -1013,16 +1074,6 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/wsuNet/PoP">
         <rdf:type rdf:resource="&collections;Set"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/wsuNet/Cisco/6509"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ion.rdf#Al2S/FIU/Cisco/6509/EthernetSwitchMatrix -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#Al2S/FIU/Cisco/6509/EthernetSwitchMatrix">
-        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
-        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <layer:swappingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
     </owl:NamedIndividual>
     
 
@@ -1841,6 +1892,7 @@
         <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Atlanta/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/MANLAN/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/StarLight/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UCDNet/PoP"/>
