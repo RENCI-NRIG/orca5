@@ -43,13 +43,13 @@
 		(?A rdf:type comp:ComputeElement), (?B rdf:type topo:Device), notEqual(?A, ?B) ] ]
 
 # multi-domain broadcast link domains can't be repeated
-[saneBcastLink1: (?v rb:validation on()) ->
-	[ (?Z rb:violation error('Broadcast link Validation', 'Domains in inter-domain broadcast link cannot be repeated', ?X))
-		<- (?X rdf:type topo:BroadcastConnection), (?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), notEqual(?I1, ?I2),
-		(?A topo:hasInterface ?I1), (?B topo:hasInterface ?I2), (?A rdf:type comp:ComputeElement), (?B rdf:type comp:ComputeElement),
-		notEqual(?A, ?B), (?A req:inDomain ?D1), (?B req:inDomain ?D2), equal(?D1, ?D2), 
-		(?X topo:hasInterface ?I3), notEqual(?I1, ?I3), notEqual(?I2, ?I3), (?C topo:hasInterface ?I3), (?C rdf:type comp:ComputeElement),
-		(?C req:inDomain ?D3), notEqual(?D3, ?D1) ] ]
+#[saneBcastLink1: (?v rb:validation on()) ->
+#	[ (?Z rb:violation error('Broadcast link Validation', 'Domains in inter-domain broadcast link cannot be repeated', ?X))
+#		<- (?X rdf:type topo:BroadcastConnection), (?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), notEqual(?I1, ?I2),
+#		(?A topo:hasInterface ?I1), (?B topo:hasInterface ?I2), (?A rdf:type comp:ComputeElement), (?B rdf:type comp:ComputeElement),
+#		notEqual(?A, ?B), (?A req:inDomain ?D1), (?B req:inDomain ?D2), equal(?D1, ?D2), 
+#		(?X topo:hasInterface ?I3), notEqual(?I1, ?I3), notEqual(?I2, ?I3), (?C topo:hasInterface ?I3), (?C rdf:type comp:ComputeElement),
+#		(?C req:inDomain ?D3), notEqual(?D3, ?D1) ] ]
 
 # nodes on any links can't be repeated (Link -> PPTSegment -> Connection -> NetworkConnection or Link->BroadcastSegment->BroadcastConnection) 
 [validateLink1: (?v rb:validation on()) ->
