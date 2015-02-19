@@ -353,6 +353,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Thu Feb 19 2015  Ilya Baldin <ibaldin@renci.org>
+- Building for redeployment on ExoSM, ION, DD, BEN and WSU
+
 *Mon Feb 09 2015  Victor J. Orlikowski <vjo@cs.duke.edu>
 - New production build to address storage_service issues at racks having Linux-based storage.
 
