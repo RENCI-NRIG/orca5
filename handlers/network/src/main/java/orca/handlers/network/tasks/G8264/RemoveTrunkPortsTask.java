@@ -16,9 +16,7 @@ public class RemoveTrunkPortsTask extends G8264BaseTask {
             if (ports == null) {
                 throw new Exception("Missing ports");
             }
-            // commented out for now - on QFX we add all vlans
-            // to trunk ports by hand /ib 4/12/13
-            //router.removeTrunkPortsFromVLAN(vlanTag, ports);
+            router.removeTrunkPortsFromVLAN(vlanTag, ports);
             setResult(0);
         } catch (BuildException e) {
             throw e;
