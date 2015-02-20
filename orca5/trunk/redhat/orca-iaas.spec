@@ -353,6 +353,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
+- Updating semantic validation ruleset to support multiple stitchports
+
 *Thu Feb 19 2015  Ilya Baldin <ibaldin@renci.org>
 - Building for redeployment on ExoSM, ION, DD, BEN and WSU with handler changes
 
