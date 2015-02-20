@@ -166,7 +166,7 @@ public class ReservationConverter implements LayerConstant {
 	}
 	
 	public ArrayList<TicketReservationMng> getReservations(IOrcaServiceManager sm, Collection<NetworkElement> boundElements, HashMap<String, SiteResourceTypes> typesMap,OrcaReservationTerm OTerm, RequestSlice rSlice)  throws ReservationConverterException, NdlException {
-		setLeaseTerm(OTerm);
+		setLeaseTerm(OTerm, false);
 		
 		if(firstGroupElement==null)
 			firstGroupElement=new HashMap <String,DomainElement>();
@@ -1607,7 +1607,13 @@ public class ReservationConverter implements LayerConstant {
 		TDB.sync(manifestModel);
 	}
 	
-	public void setLeaseTerm(OrcaReservationTerm term)  throws ReservationConverterException {
+	/**
+	 * Set the term, skip total duration check if recovery set to true
+	 * @param term
+	 * @param recovery
+	 * @throws ReservationConverterException
+	 */
+	public void setLeaseTerm(OrcaReservationTerm term, boolean recovery)  throws ReservationConverterException {
 		long termDuration = DEFAULT_DURATION; //milliseconds
 		if(term!=null){
 			termDuration = ((long) term.getDurationInSeconds())*1000;
@@ -1618,8 +1624,9 @@ public class ReservationConverter implements LayerConstant {
 		if (leaseStart == null){
 			leaseStart=term.getStart();
 		}
-
-		if(termDuration > OrcaXmlrpcHandler.MaxReservationDuration) {
+		
+		// after recovery duration can be longer than allowed due to extensions /ib
+		if(!recovery && termDuration > OrcaXmlrpcHandler.MaxReservationDuration) {
 			throw new ReservationConverterException("Slice terms are limited to " + OrcaXmlrpcHandler.MaxReservationDuration/1000/3600 + " hours");
 		}
 		leaseEnd = new Date(leaseStart.getTime() + termDuration);
@@ -1901,7 +1908,7 @@ public class ReservationConverter implements LayerConstant {
     	// 
     	logger.info("Recovering ReservationConverter for workflow");
     	try {
-			this.setLeaseTerm(w.getTerm());
+			this.setLeaseTerm(w.getTerm(), true);
 		} catch (ReservationConverterException e) {
 			e.printStackTrace();
 		}
