@@ -25,12 +25,15 @@
 [saneInterface1: (?v rb:validation on()) ->
 	[ (?Z rb:violation error('Interface Validation 1', 'Interface must be between node and link', ?X))
 		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
-		(?A rdf:type topo:Link), (?B rdf:type topo:Link), notEqual(?A, ?B) ] ]
+		(?A rdf:type topo:Link), (?B rdf:type topo:Link), notEqual(?A, ?B), 
+		(?C topo:hasInterface ?X), notEqual(?C, ?A), notEqual(?C, ?B), 
+		noValue(?C, req:inDomain, http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain) ] ]
 		
 [saneInterface2: (?v rb:validation on()) ->
 	[ (?Z rb:violation error('Interface Validation 2', 'Interface must be between node and link', ?X))
 		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
-		(?A rdf:type topo:Device), (?B rdf:type topo:Device), notEqual(?A, ?B) ] ]
+		(?A rdf:type topo:Device), (?B rdf:type topo:Device), notEqual(?A, ?B),
+		noValue(?C, req:inDomain, http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain) ] ]
 		
 [saneInterface3: (?v rb:validation on()) ->
 	[ (?Z rb:violation error('Interface Validation 3', 'Interface must be between node and link', ?X))
