@@ -475,6 +475,18 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/BareMetal/TenGigabitEthernet/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/BareMetal/TenGigabitEthernet/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/BareMetal/TenGigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/BareMetal/TenGigabitEthernet/2/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/1/ethernet"/>
@@ -500,6 +512,7 @@
         <rdf:type rdf:resource="&topology;Device"/>
         <topology:hasSwitchMatrix rdf:resource="&Duke3;BareMetal/EthernetSwitchMatrix"/>
         <topology:hasInterface rdf:resource="&Duke3;BareMetal/TenGigabitEthernet/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&Duke3;BareMetal/TenGigabitEthernet/2/ethernet"/>
         <compute:availableVMLabelSet rdf:resource="&Duke3;BareMetal/availableBareMetalLabelSet"/>
     </owl:NamedIndividual>
     
@@ -522,10 +535,25 @@
         <rdfs:label>35-38</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/2/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/BareMetal/TenGigabitEthernet/1/ethernet"/>
         <topology:interfaceOf rdf:resource="&Duke3;BareMetal"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/BareMetal/TenGigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;BareMetal/TenGigabitEthernet/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>35-38</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/BareMetal/TenGigabitEthernet/2/ethernet"/>
+        <topology:interfaceOf rdf:resource="&Duke3;BareMetal"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
     </owl:NamedIndividual>
     
 
@@ -574,6 +602,7 @@
         <rdf:type rdf:resource="&exogeni;ExoGENICluster"/>
         <rdf:type rdf:resource="&topology;Device"/>
         <topology:hasInterface rdf:resource="&Duke3;ExoGeni/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&Duke3;ExoGeni/2/ethernet"/>
         <topology:hasSwitchMatrix rdf:resource="&Duke3;ExoGeni/EthernetSwitchMatrix"/>
         <compute:availableVMLabelSet rdf:resource="&Duke3;ExoGeni/availableVMSet"/>
     </owl:NamedIndividual>
@@ -592,6 +621,21 @@
         <topology:interfaceOf rdf:resource="&Duke3;ExoGeni"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>23-34</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/2/ethernet"/>
+        <topology:interfaceOf rdf:resource="&Duke3;ExoGeni"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
     </owl:NamedIndividual>
     
 
