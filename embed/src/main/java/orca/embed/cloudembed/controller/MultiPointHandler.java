@@ -167,7 +167,11 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 	}
 	
 	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg){
-		OntResource ne1_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
+		OntResource ne1_rs=null;
+		if(rs.getURI().contains(NdlCommons.stitching_domain_str))
+			ne1_rs=m.createIndividual(rs.getURI(),NdlCommons.deviceOntClass);
+		else
+			ne1_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
 		ne1_rs.addProperty(NdlCommons.inDomainProperty, rs);
 		ComputeElement ne = new ComputeElement(m,ne1_rs);
 		

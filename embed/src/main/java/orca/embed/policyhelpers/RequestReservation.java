@@ -155,7 +155,7 @@ public class RequestReservation {
 					String elementDomain = element.getInDomain();
 					if(elementDomain!=null){
 						if(reservationDomain==null){
-							if(mixDomain==false)
+							if(mixDomain==false && !elementDomain.contains(NdlCommons.stitching_domain_str))
 								reservationDomain = elementDomain;
 						}			
 						else if( !(reservationDomain.equals(elementDomain)) ){
