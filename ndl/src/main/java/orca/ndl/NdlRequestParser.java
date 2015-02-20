@@ -403,12 +403,18 @@ public class NdlRequestParser extends NdlCommons {
 					
 					// this can probably be solved with cardinality restrictions, but we can't
 					// have those on non-simple properties like hasInterface
+					
+					/** this doesn't pass multi-stitchport on the same URL
+					 * disabling for now /ib 02/20/15
+					 */
+					/*
 					if (!lessStrictChecking) {
 						if (conn == null)
 							throw new NdlException("Interface " + tmpR + " is not part of a link or connection");
 						if (node == null)
 							throw new NdlException("Interface " + tmpR + " is not part of a node");
 					}
+					*/
 					if (locIPStmt != null) {
 						listener.ndlInterface(tmpR, requestModel, conn, node, 
 								getAddressIP(locIPStmt.getResource()), 

@@ -354,6 +354,9 @@ exit 0
 
 %changelog
 *Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
+- Relaxing request checking for multi-stitchport configurations 
+
+*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
 - Support for broadcast links with stitchports Fix2 and controller recovery long-lived slices
 
 *Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
