@@ -45,6 +45,13 @@
 		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
 		(?A rdf:type comp:ComputeElement), (?B rdf:type topo:Device), notEqual(?A, ?B) ] ]
 
+#broadcast links with stitchports can't have unbound members
+[saneBcastLink2: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Broadcast link connected to Stitch Port must not have unbound endpoints', ?X, ?B))
+		<- (?X rdf:type topo:BroadcastConnection), (?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), notEqual(?I1, ?I2),
+		(?A topo:hasInterface ?I1), (?A req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), 
+		(?B topo:hasInterface ?I2), notEqual(?A, ?B), notEqual(?A, ?X), notEqual(?B, ?X), noValue(?B, req:inDomain) ] ]
+
 # multi-domain broadcast link domains can't be repeated
 #[saneBcastLink1: (?v rb:validation on()) ->
 #	[ (?Z rb:violation error('Broadcast link Validation', 'Domains in inter-domain broadcast link cannot be repeated', ?X))
