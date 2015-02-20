@@ -354,6 +354,9 @@ exit 0
 
 %changelog
 *Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
+- Fix for rack-local controller generalized node group
+
+*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
 - Updating semantic validation ruleset to support multiple stitchports
 
 *Thu Feb 19 2015  Ilya Baldin <ibaldin@renci.org>
