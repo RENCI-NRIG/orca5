@@ -82,12 +82,6 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		//LinkedList<NetworkElement> deviceList = new LinkedList<NetworkElement>();
 
 		Resource multicastDomain = NdlCommons.getDomainHasCastType(NdlCommons.multicast,"domain:hasService",this.idm);
-		if(multicastDomain==null){
-			error = new SystemNativeError();
-			error.setErrno(1);
-			error.setMessage("There is no multicast capable domain"+"!");
-			return error;
-		}
 		Iterator<NetworkElement> it = elements.iterator();
 		while(it.hasNext()){
 			ComputeElement root = null;
@@ -95,20 +89,26 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			NetworkConnection element = (NetworkConnection) it.next();
 			if(element.getResource()!=null && element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty)!=null){
 				multicastDomain = element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty);
-			}else{
-				domainCount = ifMPConnection(element);
-				if(domainCount.size()==2){	//in-rack broadcasting
+			}
+			
+			domainCount = ifMPConnection(element);
+			if(domainCount.size()==2){	//in-rack broadcasting
 					
-				}else{
-					OntResource root_rs=requestModel.createIndividual(multicastDomain.getURI(),NdlCommons.computeElementClass);
-					root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
-					root = new ComputeElement(requestModel,multicastDomain);
+			}else{	
+				if(multicastDomain==null){
+					error = new SystemNativeError();
+					error.setErrno(1);
+					error.setMessage("There is no multicast capable domain"+"!");
+					return error;
 				}
+				OntResource root_rs=requestModel.createIndividual(multicastDomain.getURI(),NdlCommons.computeElementClass);
+				root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
+				root = new ComputeElement(requestModel,multicastDomain);
 			}
 			if(root!=null)
 				mpRequest = generateConnectionRequest(requestModel, element, rr,root);
 			else
-				mpRequest = generateConnectionRequest(requestModel, domainCount, element, rr, multicastDomain);
+				mpRequest = generateConnectionRequest(requestModel, domainCount, element, rr);
 			try {
 				error=runEmbedding(mpRequest, domainResourcePools);
 				if(root!=null)
@@ -122,7 +122,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 	}
 
 	@SuppressWarnings("unchecked")
-	public RequestReservation generateConnectionRequest(OntModel m,HashMap <String, LinkedList <NetworkElement>> domainCount,NetworkConnection e,RequestReservation rr, Resource multicastDomain){
+	public RequestReservation generateConnectionRequest(OntModel m,HashMap <String, LinkedList <NetworkElement>> domainCount,NetworkConnection e,RequestReservation rr){
 		OrcaReservationTerm t = rr.getTerm();
 		String reservationD = rr.getReservationDomain();
 		String r = rr.getReservation();
