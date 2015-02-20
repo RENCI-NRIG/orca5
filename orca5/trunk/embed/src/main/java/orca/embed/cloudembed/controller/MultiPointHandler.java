@@ -168,25 +168,26 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 	
 	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg){
 		OntResource ne1_rs=null;
+		ComputeElement ne = null;
 		if(rs.getURI().contains(NdlCommons.stitching_domain_str))
-			ne1_rs=m.createIndividual(rs.getURI(),NdlCommons.deviceOntClass);
-		else
+			ne=(ComputeElement) cg.getFirst();
+		else{
 			ne1_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
-		ne1_rs.addProperty(NdlCommons.inDomainProperty, rs);
-		ComputeElement ne = new ComputeElement(m,ne1_rs);
+			ne1_rs.addProperty(NdlCommons.inDomainProperty, rs);
+			ne = new ComputeElement(m,ne1_rs);
 		
-		DomainResourceType dType=((NetworkElement) cg.toArray()[0]).getResourceType();
-		int res_count=0;
-		for(NetworkElement e:cg){
-			res_count = res_count+e.getResourceType().getCount();
+			DomainResourceType dType=((NetworkElement) cg.toArray()[0]).getResourceType();
+			int res_count=0;
+			for(NetworkElement e:cg){
+				res_count = res_count+e.getResourceType().getCount();
+			}
+			DomainResourceType rType = new DomainResourceType(dType.getResourceType(),res_count);
+			rType.setRank(dType.getRank());
+			rType.setDomainURL(rs.getURI());
+			ne.setResourceType(rType);
+		
+			ne.setCeGroup(cg);
 		}
-		DomainResourceType rType = new DomainResourceType(dType.getResourceType(),res_count);
-		rType.setRank(dType.getRank());
-		rType.setDomainURL(rs.getURI());
-		ne.setResourceType(rType);
-		
-		ne.setCeGroup(cg);
-		
 		return ne;
 	}
 	
