@@ -354,6 +354,9 @@ exit 0
 
 %changelog
 *Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
+- Correcting OSCARS handler behavior for duration wrt to new controller behavior
+
+*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
 - Relaxing request checking for multi-stitchport configurations 
 
 *Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
