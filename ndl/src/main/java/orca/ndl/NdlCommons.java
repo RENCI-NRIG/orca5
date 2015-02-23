@@ -659,6 +659,22 @@ public class NdlCommons {
 	    return createQueryString(selectStr, fromStr, whereStr);
 	}
 
+	public static String createQueryStringWhoHaveInterface(Resource intf) {
+		// FIXME: we SHOULD check the type (10/03/2011 /ib), but manifest
+		// currently does not declare interface individuals
+	    String selectStr = "SELECT DISTINCT ?node ?conn ";
+	    String fromStr = "";
+	    String whereStr = "WHERE {" + 
+	    				//"<" + intf.getURI() + "> rdf:type topology:Interface. " +
+	    				"?node topology:hasInterface <" + intf.getURI() + ">." + 
+	    				"?conn topology:hasInterface <" + intf.getURI() + ">." +
+	    				"?conn rdf:type ndl:NetworkConnection. " +
+	    				"{{?node rdf:type compute:ServerCloud.} UNION {?node rdf:type compute:ComputeElement.} UNION {?node rdf:type ndl:Device.}}. " +
+	    				"      }";
+	    return createQueryString(selectStr, fromStr, whereStr);
+	}
+
+	
 	public static String createQueryStringManifestDetails() {
 		String selectStr = "SELECT DISTINCT ?manifest ";
 	    String fromStr = "";
@@ -814,6 +830,21 @@ public class NdlCommons {
         String w = "WHERE {" + 
         	"{<" + rsURI + ">" + " ?p ?r." + " ?p rdf:type layer:AdaptationProperty} UNION{" +
         	"<" + rsURI + ">"+" layer:AdaptationProperty ?r}"+
+        	"      }";
+        String queryPhrase = createQueryString(s, f, w);
+
+        ResultSet results = rdfQuery(m, queryPhrase);
+
+        return results;
+    }
+    
+    public static ResultSet getLayerAdapatationOf(OntModel m, String rsURI)
+    {
+        String s = "SELECT ?r ";
+        String f = "";
+        String w = "WHERE {" + 
+        	"{?r ?p "+ "<" + rsURI + ">" +"." + " ?p rdf:type layer:AdaptationProperty} UNION{" +
+        	"?r layer:AdaptationProperty " +"<" + rsURI + ">}"+
         	"      }";
         String queryPhrase = createQueryString(s, f, w);
 
@@ -2418,7 +2449,7 @@ public class NdlCommons {
 			Resource dom = getDomain(r);
 			if(dom==null)
 				return false;	
-			if (dom.getURI().equals(stitchingDomain.getURI()))
+			if (dom.getURI().contains(stitching_domain_str))
 				return true;
 		}
 		return false;

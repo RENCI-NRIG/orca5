@@ -34,6 +34,7 @@ import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -267,8 +268,18 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			statement = (Statement) j.next();
 			shadow_intf_rs.addProperty(statement.getPredicate(),statement.getObject());
 		}
-		shadow_intf_rs.addProperty(NdlCommons.linkTo, intf_rs);
-		Resource idm_intf_rs = idm.getResource(intf_rs.getURI());
+		
+		ResultSet results=NdlCommons.getLayerAdapatationOf(requestModel,intf_rs.getURI());
+		String varName=(String) results.getResultVars().get(0); 
+		Resource intf_rs_base = null, device_rs=null;
+		if (results.hasNext()){
+			intf_rs_base=results.nextSolution().getResource(varName);				
+		}
+		Resource idm_intf_rs = null;
+		if(intf_rs_base==null)
+			idm_intf_rs =idm.getResource(intf_rs.getURI());
+		else
+			idm_intf_rs =idm.getResource(intf_rs_base.getURI());
 		String stitching_domain_name = null;
 		if(idm_intf_rs!=null){
 			if(idm_intf_rs.getProperty(NdlCommons.topologyHasName)!=null){
@@ -280,8 +291,18 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		}
 		domain_rs.addProperty(NdlCommons.topologyHasInterfaceProperty, shadow_intf_rs);
 		domain_rs.addProperty(NdlCommons.RDF_TYPE,NdlCommons.deviceOntClass);
-		idm_intf_rs.addProperty(NdlCommons.linkTo, shadow_intf_rs);
 		shadow_intf_rs.addProperty(NdlCommons.topologyInterfaceOfProperty, domain_rs);
+		shadow_intf_rs.addProperty(NdlCommons.linkTo, intf_rs);
+		intf_rs.addProperty(NdlCommons.linkTo, shadow_intf_rs);
+		if(intf_rs_base!=null){
+			p_set = (HashSet<Statement>) idm_intf_rs.listProperties(NdlCommons.topologyInterfaceOfProperty).toSet();
+			for (Iterator <Statement> j=p_set.iterator();j.hasNext();){
+				statement = (Statement) j.next();
+				device_rs=statement.getResource();
+				intf_rs.addProperty(statement.getPredicate(),device_rs);
+				requestModel.add(device_rs, NdlCommons.topologyHasInterfaceProperty, intf_rs);
+			}
+		}
 		
 		ExtendedIterator<Individual> res_it= requestModel.listIndividuals(NdlCommons.reservationOntClass);
 		Individual res_ind = null;
@@ -866,7 +887,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	
 	//If the VLAN is fixed in the interface, then no need for dependency
 	public void domainNoDepend(Device domain){
-		boolean isStitchingDomain = domain.getResource().getURI().equalsIgnoreCase(NdlCommons.stitchingDomain.getURI())?true:false;	
+		String elementDomain = domain.getInDomain();
+		boolean isStitchingDomain = elementDomain.contains(NdlCommons.stitching_domain_str)?true:false;	
 		if(isStitchingDomain){
 			domain.setDepend(true);
 			return;
