@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -28,9 +27,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.security.cert.CertificateException;
 
-import orca.shirako.container.ActorLiveness;
-import orca.shirako.container.DistributedRemoteRegistryCache;
-import orca.shirako.container.Globals;
 import orca.util.ssl.MultiKeyManager;
 
 import org.apache.commons.codec.binary.Base64;
@@ -167,7 +163,7 @@ public class SSLCurl
 						}
 						byte[] certDigest = md.digest(certs[0].getEncoded());
 						if (!Arrays.equals(certDigest, registryCertDigest)) {
-							Globals.Log.error("Certificate presented by registry does not match local copy, communications with registry is not possible");
+							System.err.println("Certificate presented by registry does not match local copy, communications with registry is not possible");
 							
 							
 							throw new CertificateException();
@@ -175,7 +171,7 @@ public class SSLCurl
 					} catch (NoSuchAlgorithmException e) {
 
 					} catch (Exception e) {
-						Globals.Log.error("Unable to compare server certificate digest to the existing registry digest: " + e.toString());
+						System.err.println("Unable to compare server certificate digest to the existing registry digest: " + e.toString());
 					
 					}
 				}
