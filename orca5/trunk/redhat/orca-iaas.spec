@@ -353,32 +353,11 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Feb 24 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
+- Touch off build, to check all is working well.
+
 *Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
 - Correcting OSCARS handler behavior for duration wrt to new controller behavior
-
-*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
-- Relaxing request checking for multi-stitchport configurations 
-
-*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
-- Support for broadcast links with stitchports Fix2 and controller recovery long-lived slices
-
-*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
-- Support for broadcast links with stitchports Fix1
-
-*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
-- Adding rule for embedding bcast links with stitchports
-
-*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
-- Fix for rack-local controller generalized node group
-
-*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
-- Updating semantic validation ruleset to support multiple stitchports
-
-*Thu Feb 19 2015  Ilya Baldin <ibaldin@renci.org>
-- Building for redeployment on ExoSM, ION, DD, BEN and WSU with handler changes
-
-*Mon Feb 09 2015  Victor J. Orlikowski <vjo@cs.duke.edu>
-- New production build to address storage_service issues at racks having Linux-based storage.
 
 *Mon Feb 11 2013 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Initial packaging
