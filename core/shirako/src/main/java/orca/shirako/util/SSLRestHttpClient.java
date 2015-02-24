@@ -15,7 +15,6 @@ import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
@@ -28,14 +27,12 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.security.cert.CertificateException;
 
-import orca.ektorp.client.SSLCurl;
 import orca.shirako.container.Globals;
 import orca.shirako.container.OrcaContainer;
 import orca.util.ssl.MultiKeyManager;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
