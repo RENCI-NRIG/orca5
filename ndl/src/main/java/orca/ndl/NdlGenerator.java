@@ -1316,6 +1316,18 @@ public class NdlGenerator {
 	}
 	
 	/**
+	 * Add ethernet adaptation to another interface
+	 * @param intf - interface 
+	 * @param adaptTo - interface to be adapted
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual addEthernetAdaptation(Individual intf, Individual adaptTo) throws NdlException {
+		addProperty(intf, "ethernet", "Tagged-Ethernet", adaptTo);
+		return intf;
+	}
+	
+	/**
 	 * produce N3 output of the model
 	 */
 	public String toN3String() {
