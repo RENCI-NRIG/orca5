@@ -36,6 +36,7 @@
     <echo message="STORAGE_SERVICE_REQUEST_TIMEOUT=${storage_service.request.timeout}" />
 
     <echo message="STORAGE_SERVICE_IP=${storage_service.ip}" />
+    <echo message="STORAGE_SERVICE_PORT=${storage_service.port}" />
     <echo message="STORAGE_SERVICE_USERNAME=${storage_service.username}" />
     <echo message="STORAGE_SERVICE_PASSWORD=${storage_service.password}" />
   
@@ -74,6 +75,7 @@
       <env key="STORAGE_SERVICE_REQUEST_TIMEOUT" value="${storage_service.request.timeout}" />
 
       <env key="STORAGE_SERVICE_IP" value="${storage_service.ip}" />
+      <env key="STORAGE_SERVICE_PORT" value="${storage_service.port}" />
       <env key="STORAGE_SERVICE_USERNAME" value="${storage_service.username}" />
       <env key="STORAGE_SERVICE_PASSWORD" value="${storage_service.password}" />
 
@@ -123,6 +125,7 @@
     <echo message="STORAGE_SERVICE_REQUEST_TIMEOUT=${storage_service.request.timeout}" />
 
     <echo message="STORAGE_SERVICE_IP=${storage_service.ip}" />
+    <echo message="STORAGE_SERVICE_PORT=${storage_service.port}" />
     <echo message="STORAGE_SERVICE_USERNAME=${storage_service.username}" />
     <echo message="STORAGE_SERVICE_PASSWORD=${storage_service.password}" />
   
@@ -155,6 +158,7 @@
           <env key="STORAGE_SERVICE_REQUEST_TIMEOUT" value="${storage_service.request.timeout}" />
           
           <env key="STORAGE_SERVICE_IP" value="${storage_service.ip}" />
+          <env key="STORAGE_SERVICE_PORT" value="${storage_service.port}" />
           <env key="STORAGE_SERVICE_USERNAME" value="${storage_service.username}" />
           <env key="STORAGE_SERVICE_PASSWORD" value="${storage_service.password}" />
           

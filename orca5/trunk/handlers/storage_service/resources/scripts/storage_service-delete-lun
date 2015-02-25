@@ -66,7 +66,8 @@ try:
     storage_service = xmlrpclib.Server('https://' +
                                        os.environ['STORAGE_SERVICE_USERNAME'] + ':' +
                                        os.environ['STORAGE_SERVICE_PASSWORD'] + '@' +
-                                       os.environ['STORAGE_SERVICE_IP'] + ':8000/RPC2',
+                                       os.environ['STORAGE_SERVICE_IP'] + ':' +
+                                       os.environ['STORAGE_SERVICE_PORT'] + '/RPC2',
                                        transport=t)
     
     stdOut, rtncode = storage_service.delete(os.environ['UNIT_LUN_GUID'])
