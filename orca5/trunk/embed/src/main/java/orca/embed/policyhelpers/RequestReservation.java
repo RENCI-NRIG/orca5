@@ -184,10 +184,8 @@ public class RequestReservation {
 			if(reservationDomain==null){	
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
-					if(ifMPConnection(requestConnection))
-						element.setInDomain(RequestReservation.MultiPoint_Domain);
-					else
-						element.setInDomain(RequestReservation.Unbound_Domain);
+					String connection_domain = ifMPConnection(requestConnection);
+					element.setInDomain(connection_domain);
 					setDomainRequestReservation(element,domainRequestReservation);
 					continue;
 				}
@@ -258,22 +256,25 @@ public class RequestReservation {
 	
 	//decide to call unboundhandler or mphandler which is for bounded inter-domain mp connection
 	@SuppressWarnings("unchecked")
-	public boolean ifMPConnection(NetworkConnection rc){
+	public String ifMPConnection(NetworkConnection rc){
 		LinkedList <NetworkElement> con_elements = (LinkedList<NetworkElement>)rc.getConnection();
 		String e_domain=null,r_domain=con_elements.getFirst().getInDomain();
-		boolean ifMP=false;
+		String connection_domain=null;
 		if(con_elements.size()>0){
 			for(NetworkElement e:con_elements){
 				e_domain = e.getInDomain();
 				if(e_domain==null){
-					ifMP=false;
+					connection_domain = RequestReservation.Unbound_Domain;
 					break;
-				}else if(!r_domain.equals(e_domain)){
-					ifMP=true;
+				}else if(!e_domain.equals(r_domain)){
+					connection_domain = RequestReservation.MultiPoint_Domain;
+					r_domain = connection_domain;
+				}else{
+					connection_domain = e_domain;
 				}
 			}
 		}
-		return ifMP;
+		return connection_domain;
 	}
 	
 	public void setDomainRequestReservation(NetworkElement element, HashMap <String, RequestReservation> dRR){

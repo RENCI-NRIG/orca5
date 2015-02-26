@@ -903,23 +903,25 @@ public class ConnectionManager extends RequestMapping {
 		logger.info("Returning used label:"+uSet_p+":"+rs1_parent+":"+rs1_parent.getProperty(uSet_p));
 		if(rs1_parent.getProperty(uSet_p)!=null){
 			rs1_parent_usedSet = ontModel.getOntResource(rs1_parent.getProperty(uSet_p).getResource());
-			if(rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label1_rs) && (label1_rs!=null)){
+			if(rs1_parent_availableSet!=null && rs1_parent_usedSet!=null && rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label1_rs) && (label1_rs!=null)){
 				rs1_parent_usedSet.removeProperty(NdlCommons.collectionElementProperty, label1_rs);
 				rs1_parent_availableSet.addProperty(NdlCommons.collectionElementProperty, label1_rs);
-			}
-			logger.info("Returned used label:"+label1_rs+":"+rs1_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+":" + 
-			rs1_parent_usedSet+":"+rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+"\n");
+				logger.info("Returned used label:"+label1_rs+":"+rs1_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+":" + 
+						rs1_parent_usedSet+":"+rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+"\n");	
+			}else
+				logger.warn("No Returned used label:label1_rs="+label1_rs);
 		}
 		logger.info("Returning used label:"+uSet_p+":"+rs2_parent+":"+rs2_parent.getProperty(uSet_p));
 		if(rs2_parent.getProperty(uSet_p)!=null){
 			if(rs2_parent.getProperty(uSet_p)!=rs1_parent.getProperty(uSet_p)){
 				rs2_parent_usedSet = ontModel.getOntResource(rs2_parent.getProperty(uSet_p).getResource());
-				if(rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label2_rs) && (label2_rs!=null)){
+				if(rs2_parent_availableSet!=null && rs2_parent_usedSet!=null && rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label2_rs) && (label2_rs!=null)){
 					rs2_parent_usedSet.removeProperty(NdlCommons.collectionElementProperty, label2_rs);
 					rs2_parent_availableSet.addProperty(NdlCommons.collectionElementProperty, label2_rs);
-				}
-				logger.info("Returned used label:"+label2_rs+":"+rs2_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty,label2_rs) + ":" + 
-				rs2_parent_usedSet+":"+rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label2_rs)+"\n");
+					logger.info("Returned used label:"+label2_rs+":"+rs2_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty,label2_rs) + ":" + 
+							rs2_parent_usedSet+":"+rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label2_rs)+"\n");
+				}else
+					logger.warn("No Returned used label:label2_rs="+label2_rs);
 			}
 		}
 		return label_rs;

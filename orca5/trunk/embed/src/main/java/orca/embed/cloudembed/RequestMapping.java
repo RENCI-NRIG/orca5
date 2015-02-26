@@ -646,10 +646,22 @@ try {
 						rs_next.addProperty(NdlCommons.switchedTo, rs);
 						String labelP=NdlCommons.ORCA_NS+Layer.valueOf(layer).getPrefix()+".owl#"+Layer.valueOf(layer).getLabelP();
 						ObjectProperty label_p=ontModel.getObjectProperty(labelP);
-						if(intf.getLabel()!=null)
-							rs.addProperty(label_p,intf.getLabel().getResource(intf.getModel()));
-						if(interfaceList.get(k).getLabel()!=null)
-							rs_next.addProperty(label_p,interfaceList.get(k).getLabel().getResource(interfaceList.get(k).getModel()));
+						Resource label_rs = null;
+						if(intf.getLabel()!=null){
+							label_rs = intf.getLabel().getResource(intf.getModel())!=null?intf.getLabel().getResource(intf.getModel()):intf.getLabel().getResource(ontModel);
+							if(label_rs!=null)
+								rs.addProperty(label_p,intf.getLabel().getResource(intf.getModel()));
+							else
+								logger.error("label_rs is null: label="+intf.getLabel().getURI());
+						}
+						Label k_label = interfaceList.get(k).getLabel();
+						if(k_label !=null){
+							label_rs = k_label.getResource(interfaceList.get(k).getModel())!=null?k_label.getResource(interfaceList.get(k).getModel()):intf.getLabel().getResource(ontModel);
+							if(label_rs!=null)
+								rs_next.addProperty(label_p,interfaceList.get(k).getLabel().getResource(interfaceList.get(k).getModel()));
+							else
+								logger.error("label_rs is null: label="+k_label.getURI());
+						}
 					}
 				}
 				
