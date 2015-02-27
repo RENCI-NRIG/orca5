@@ -280,13 +280,18 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			idm_intf_rs =idm.getResource(intf_rs.getURI());
 		else
 			idm_intf_rs =idm.getResource(intf_rs_base.getURI());
-		String stitching_domain_name = null;
+		String stitching_intf_label = null;
 		if(idm_intf_rs!=null){
 			if(idm_intf_rs.getProperty(NdlCommons.topologyHasName)!=null){
-				stitching_domain_name = idm_intf_rs.getProperty(NdlCommons.topologyHasName).getString();
+				String stitching_domain_name = idm_intf_rs.getProperty(NdlCommons.topologyHasName).getString();
 				domain_rs.addProperty(NdlCommons.topologyHasName,stitching_domain_name);
 			}else{
 				logger.error("Stitching interface doesn't specify the neighboring domain name, may fail the tag mapping!"+idm_intf_rs.getURI());
+			}
+			if(idm_intf_rs.getProperty(NdlCommons.RDFS_Label)!=null){
+				stitching_intf_label = idm_intf_rs.getProperty(NdlCommons.RDFS_Label).getString();
+			}else{
+				logger.error("Stitching interface doesn't specify the label!"+idm_intf_rs.getURI());
 			}
 		}
 		domain_rs.addProperty(NdlCommons.topologyHasInterfaceProperty, shadow_intf_rs);
@@ -302,6 +307,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				intf_rs.addProperty(statement.getPredicate(),device_rs);
 				requestModel.add(device_rs, NdlCommons.topologyHasInterfaceProperty, intf_rs);
 			}
+			if(stitching_intf_label!=null)
+				intf_rs.addProperty(NdlCommons.RDFS_Label,stitching_intf_label);
 		}
 		
 		ExtendedIterator<Individual> res_it= requestModel.listIndividuals(NdlCommons.reservationOntClass);
