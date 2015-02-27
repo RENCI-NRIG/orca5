@@ -273,7 +273,7 @@ public class RequestParserListener implements INdlRequestModelListener {
 					return;
 				}
 				//always treat the stitching port as the source of a connection 
-				if(if2Node.getURI().contains(NdlCommons.stitching_domain_str)){
+				if(if2Node.getInDomain().contains(NdlCommons.stitching_domain_str)){
 					start_if = if2;
 					if2=if1;
 					if1=start_if;

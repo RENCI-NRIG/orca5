@@ -400,9 +400,11 @@ public class ReservationConverter implements LayerConstant {
 						logger.error("ERROR: config.interface.ports is null!");
 					
 					bw = String.valueOf(a.getBw());
-					from = ifs.get(0).getURI();
+					//from = ifs.get(0).getURI();
+					from = checkBorderInterface(ifs.get(0), a.getAtLayer());
 					if (count > 1) {
-						to = ifs.get(1).getURI();
+						//to = ifs.get(1).getURI();
+						to = checkBorderInterface(ifs.get(1),a.getAtLayer());
 					}
 					logger.debug("From:" + from + " To: " + to + " BW:" + bw + ":" + ports + "\n");
 					if (bw != null) {
@@ -437,6 +439,22 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 		return map;
+	}
+	
+	//to deal with the stitching port that is adapted to the real border interface as a resource in the broker
+	public String checkBorderInterface(Interface intf, String layer){
+		String intf_str=intf.getURI();
+		ResultSet results=NdlCommons.getLayerAdapatationOf(intf.getModel(),intf.getURI());
+		String varName=(String) results.getResultVars().get(0); 
+		Resource intf_rs_base = null;
+		if (results.hasNext()){
+			intf_rs_base=results.nextSolution().getResource(varName);
+			String base_layer=NdlCommons.findLayer(intf.getModel(),intf_rs_base);
+			if(layer.contains(base_layer))
+				intf_str=intf_rs_base.getURI();
+			logger.debug("intf_rs_base="+intf_rs_base.getURI()+";base_layer="+base_layer);
+		}	
+		return intf_str;
 	}
 
 	public ArrayList<TicketReservationMng> setDependency(Collection<NetworkElement> boundElements,HashMap<String, ReservationRequest> map){		
