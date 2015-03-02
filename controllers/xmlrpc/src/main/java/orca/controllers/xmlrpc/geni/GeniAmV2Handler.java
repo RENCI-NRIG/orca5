@@ -750,7 +750,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
             ndlSlice = instance.getSlice(slice_urn);
             if (ndlSlice == null) {
             	logger.error("SliverStatus(): invalid slice URN " + slice_urn);
-            	return getStandardApiReturn(ApiReturnCodes.ERROR.code, null,
+            	return getStandardApiReturn(ApiReturnCodes.SEARCHFAILED.code, null,
             			"ERROR: unable to get slice status for " + slice_urn);
             }
             // lock the slice
