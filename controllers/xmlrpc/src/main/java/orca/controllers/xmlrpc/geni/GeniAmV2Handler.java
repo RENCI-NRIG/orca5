@@ -131,7 +131,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 			ndlSlice = instance.getSlice(slice_urn);
 			if (ndlSlice == null) {
 				logger.error("getSliceManifest(): Slice " + slice_urn + " does not exist.");
-				return getStandardApiReturn(ApiReturnCodes.ERROR.code, null, "Invalid slice urn " + slice_urn);
+				return getStandardApiReturn(ApiReturnCodes.SEARCHFAILED.code, null, "Invalid slice urn " + slice_urn);
 			}
 			// lock slice
 			ndlSlice.lock();
@@ -351,13 +351,24 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 			// submit the request
 			Map<String, Object> rr = orcaHandler.deleteSlice(slice_urn, credentials);
 			boolean ret;
-			if ((Boolean)rr.get(OrcaXmlrpcHandler.ERR_RET_FIELD))
+			String msg = null;
+			int code = ApiReturnCodes.SUCCESS.code;
+	
+			if ((Boolean)rr.get(OrcaXmlrpcHandler.ERR_RET_FIELD)) {
 				ret = false;
-			else
-				ret = (Boolean)rr.get(OrcaXmlrpcHandler.RET_RET_FIELD);
+				msg = (String)rr.get(OrcaXmlrpcHandler.MSG_RET_FIELD);
+				if (msg.contains("unable to find"))
+					code = ApiReturnCodes.SEARCHFAILED.code;
+				else
+					code = ApiReturnCodes.ERROR.code;
+			}
+			else {
+				ret = true;
+				msg = (String)rr.get(OrcaXmlrpcHandler.RET_RET_FIELD);
+			}
 
 			// return the response
-			return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ret, null);
+			return getStandardApiReturn(code, ret, msg);
 		} catch (CredentialException ce) {
 			logger.error("GENI DeleteSliver: Credential Exception: " + ce);
 			return getStandardApiReturn(ApiReturnCodes.FORBIDDEN.code, null, "Credendial Exception: " + ce);
