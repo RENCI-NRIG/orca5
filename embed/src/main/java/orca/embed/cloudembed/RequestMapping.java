@@ -625,7 +625,7 @@ try {
 				}
 				if(action.getLabel()!=null){
 					logger.debug("Label to the stack?:"+action.getLabel().toString());
-					if(action.getLabel_ID()>=0)	//the edge device may not have a label ID
+					if(action.getLabel().label>0)	//the edge device may not have a label ID
 						labelStack.add(action.getLabel());
 				}
 				//System.out.println("Action info:"+actionCount);
@@ -1185,7 +1185,7 @@ try {
 			Label currentLabel, Label labelFromStack, String currentLayer){
 		
 		if(currentLabel!=null){
-			if( (currentLabel.label>0) && (currentLayer.equals(Layer.EthernetNetworkElement.toString()))) {
+			if( (currentLabel.getResource(m)!=null) && (currentLabel.label>0) && (currentLayer.equals(Layer.EthernetNetworkElement.toString()))) {
 				return currentLabel.getResource(m);
 			}
 		}
