@@ -338,6 +338,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/ESNET/Cisco/6509/TenGigabitEthernet/1/3/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/ESNET/Cisco/6509/TenGigabitEthernet/1/3/ethernet"/>
@@ -388,6 +394,7 @@
         <topology:hasInterface rdf:resource="&osfNet;IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
         <topology:hasInterface rdf:resource="&osfNet;IBM/G8052/TenGigabitEthernet/3/ethernet"/>
         <topology:hasInterface rdf:resource="&osfNet;IBM/G8052/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <topology:hasInterface rdf:resource="&osfNet;IBM/G8052/TenGigabitEthernet/30/ethernet"/>
         <topology:hasInterface rdf:resource="&osfNet;IBM/G8052/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:hasInterface rdf:resource="&osfNet;IBM/G8052/TenGigabitEthernet/BareMetal/2/ethernet"/>
     </owl:NamedIndividual>
@@ -415,6 +422,17 @@
         <layer:hasBitRate rdf:resource="&layer;40G"/>
         <topology:interfaceOf rdf:resource="&osfNet;IBM/G8052"/>
         <ethernet:availableVLANSet rdf:resource="&osfNet;IBM/G8052/availableVLANSet/fourtyGB"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/SDMZaaSVlanSet -->
+
+    <owl:NamedIndividual rdf:about="&osfNet;IBM/G8052/SDMZaaSVlanSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">1</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&osfNet;IBM/G8052/VLANLabel/4004"/>
     </owl:NamedIndividual>
     
 
@@ -457,6 +475,22 @@
         <topology:interfaceOf rdf:resource="&osfNet;IBM/G8052"/>
         <ethernet:vlan rdf:resource="&osfNet;IBM/G8052/VLANLabel/1009"/>
         <topology:linkTo rdf:resource="&osfvmsite;OSF/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/TenGigabitEthernet/30/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&osfNet;IBM/G8052/TenGigabitEthernet/30/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label rdf:datatype="&xsd;string">30</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">SDMZaaS</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:interfaceOf rdf:resource="&osfNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&osfNet;IBM/G8052/SDMZaaSVlanSet"/>
     </owl:NamedIndividual>
     
 
@@ -568,12 +602,22 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/VLANLabel/4004 -->
+
+    <owl:NamedIndividual rdf:about="&osfNet;IBM/G8052/VLANLabel/4004">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">4004.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/availableVLANSet -->
 
     <owl:NamedIndividual rdf:about="&osfNet;IBM/G8052/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">100</collections:size>
+        <collections:size rdf:datatype="&xsd;int">101</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&osfNet;IBM/G8052/VLANLabel/4004"/>
         <collections:element rdf:resource="&osfNet;IBM/G8052/availableVLANSet/1"/>
         <collections:element rdf:resource="&osfNet;IBM/G8052/availableVLANSet/2"/>
         <domain:hasBroker rdf:resource="&orca;ExoGENIBroker"/>

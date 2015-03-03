@@ -249,6 +249,65 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/PoP -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/PoP">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/Switch"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/Switch -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/Switch">
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/Switch"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/TenGigabitEthernet/30/ethernet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#VTS/PoP -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#VTS/PoP">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch">
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#instageni/Domain -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#instageni/Domain">
@@ -260,7 +319,15 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UCD/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#VTS/PoP"/>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/TenGigabitEthernet/30/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/TenGigabitEthernet/30/ethernet"/>
     
 
 
