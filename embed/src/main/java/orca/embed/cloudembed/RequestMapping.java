@@ -465,7 +465,7 @@ try {
 				count++;
 				d=it.next();
 				if(static_label!=null){
-					logger.info("Num of actions:"+d.getActionCount()+";"+d.getActionList().size());
+					logger.info("Num of actions:"+d.getActionCount()+";"+d.getActionList().size()+";static label="+static_label.toString());
 					
 					d.getDefaultSwitchingAction().setLabel(static_label);
 				}
@@ -843,24 +843,33 @@ try {
 									logger.info("static_rs="+static_rs.getURI()+";static_label="+static_label);
 									//always using the tag from parent reservation first.
 									p_tag=get_pdomain_tag(p_intf_rs.getURI(),static_label);
-									if((p_tag==static_label) || (p_tag==0)){
+									//if((p_tag==static_label) || (p_tag==0)){
+									if(p_tag==static_label){
 										static_rs.addProperty(NdlCommons.visited, "true", XSDDatatype.XSDboolean);
 										static_label_rs=static_rs;
+										intf.getResource().removeProperty(NdlCommons.layerLabel, static_rs);
 										logger.info("Passed label:intf="+p_intf_rs.getURI()+";static Label="+static_label_rs.getURI()+";p_tag="+p_tag+";static_layer="+static_layer);
 										break;
 									}else{
-										static_label = p_tag;
+										//static_label = p_tag;
+										static_label = -1;
 										static_label_rs=this.ontModel.createIndividual(p_intf_rs.getNameSpace()+String.valueOf(p_tag),NdlCommons.labelOntClass);
+										static_label_rs=intf.getModel().createIndividual(p_intf_rs.getNameSpace()+String.valueOf(p_tag),NdlCommons.labelOntClass);
 										static_label_rs.addProperty(NdlCommons.layerLabelIdProperty,String.valueOf(p_tag),XSDDatatype.XSDint);
+										logger.error("Passed in static label is not in the available labelset:static="+static_label+";set=");
+										throw new Exception("Passed in static label is not in the available labelset:static="+static_label+";set=");
+										
+									
 									}
-									intf.getResource().removeProperty(NdlCommons.layerLabel, static_rs);
+									//intf.getResource().removeProperty(NdlCommons.layerLabel, static_rs);
 								}
 							}
 			            }else{
 							p_tag=get_pdomain_tag(p_intf_rs.getURI(), -1);
 							if(p_tag!=0){
 								static_label = p_tag;
-								static_label_rs=this.ontModel.createIndividual(p_intf_rs.getNameSpace()+String.valueOf(p_tag),NdlCommons.labelOntClass);
+								//static_label_rs=this.ontModel.createIndividual(p_intf_rs.getNameSpace()+String.valueOf(p_tag),NdlCommons.labelOntClass);
+								static_label_rs=intf.getModel().createIndividual(p_intf_rs.getNameSpace()+String.valueOf(p_tag),NdlCommons.labelOntClass);
 								static_label_rs.addProperty(NdlCommons.layerLabelIdProperty,String.valueOf(p_tag),XSDDatatype.XSDint);
 								/*OntResource static_label_ont = this.ontModel.createOntResource(static_label_rs.getURI());	            			
 								label = new Label(static_label_ont,p_tag,static_layer);
@@ -932,7 +941,7 @@ try {
 				logger.error("No avaialbel label set: current layer="+static_layer);
 				throw new Exception("No avaialbel label set: current layer="+static_layer);
 			}else{
-				System.out.println("findCommonLabel:check match:"+current_static_label+";static_label="+static_label);
+				logger.debug("findCommonLabel:check match:"+current_static_label+";static_label="+static_label);
 				
 				if(!staticLabelSet.get((int)static_label)){
 					current_static_label=staticLabelSet.nextSetBit(0);
@@ -978,6 +987,7 @@ try {
 			logger.warn("No pdomain_property!");
 			return 0;
 		}
+		logger.info("pdomain_properties:"+pdomain_properties);
 		for(Entry entry:pdomain_properties.entrySet()){
 			logger.info("tag:"+entry.getKey()+";intf="+entry.getValue());
 			if(intf_url.equalsIgnoreCase((String)entry.getValue())){

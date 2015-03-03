@@ -230,11 +230,12 @@ public final class XmlrpcOrcaState implements Serializable {
 			 int index2 = notice.indexOf(";set");
 			 tag = Integer.valueOf(notice.substring(index1+1, index2)).intValue();
 		 }
-		 if(tag>0){
-			 domain = r.getResourceType();
-			 if(domain == null)
-				 return;
-			 domain = domain.split("\\.")[0];
+		 
+		 domain = r.getResourceType();
+		 if(domain == null)
+			 return;
+		 domain = domain.split("\\.")[0];
+		 if(tag>0){	 
 			 if(this.controllerAssignedLabel.get(domain)!=null)
 				 this.controllerAssignedLabel.get(domain).set(tag);
 		 }
