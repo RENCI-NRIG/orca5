@@ -333,6 +333,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/UH/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UH/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
@@ -361,6 +367,7 @@
         <topology:hasInterface rdf:resource="&UHNet;IBM/G8052/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <topology:hasInterface rdf:resource="&UHNet;IBM/G8052/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:hasInterface rdf:resource="&UHNet;IBM/G8052/TenGigabitEthernet/BareMetal/2/ethernet"/>
+        <topology:hasInterface rdf:resource="&UHNet;IBM/G8052/TengigabitEthernet/1/1/ethernet"/>
     </owl:NamedIndividual>
     
 
@@ -478,11 +485,44 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/TengigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/TengigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">VTS</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:interfaceOf rdf:resource="&UHNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&UHNet;IBM/G8052/availableVLANSet/VTS"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/VLANLabel/1009 -->
 
     <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/VLANLabel/1009">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
         <layer:label_ID rdf:datatype="&xsd;float">1009.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/VLANLabel/2001 -->
+
+    <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/VLANLabel/2001">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2001.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/VLANLabel/2050 -->
+
+    <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/VLANLabel/2050">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2050.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -527,6 +567,27 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/availableVLANSet/VTS -->
+
+    <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/availableVLANSet/VTS">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">50</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&UHNet;IBM/G8052/availableVLANSet/VTS/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/availableVLANSet/VTS/1 -->
+
+    <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/availableVLANSet/VTS/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&UHNet;IBM/G8052/VLANLabel/2001"/>
+        <layer:upperBound rdf:resource="&UHNet;IBM/G8052/VLANLabel/2050"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/PoP -->
 
     <owl:NamedIndividual rdf:about="&UHNet;PoP">
@@ -556,6 +617,7 @@
         <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
         <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
         <ethernet:availableVLANSet rdf:resource="&UHNet;IBM/G8052/availableVLANSet"/>
+        <ethernet:availableVLANSet rdf:resource="&UHNet;IBM/G8052/availableVLANSet/VTS"/>
     </owl:NamedIndividual>
     
 

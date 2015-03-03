@@ -349,6 +349,18 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/StarLight/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/StarLight/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
@@ -440,12 +452,14 @@
     <owl:NamedIndividual rdf:about="&slNet;IBM/G8264">
         <rdf:type rdf:resource="&topology;Device"/>
         <topology:hasSwitchMatrix rdf:resource="&slNet;IBM/G8264/EthernetSwitchMatrix"/>
+        <topology:hasInterface rdf:resource="&slNet;IBM/G8264/FourtyGigabitEthernet/1/SDMZaaS/etherent"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/FoutyGigabitEthernet/1/ethernet"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/GigabitEthernet/1/0/ethernet"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/TenGigabitEthernet/1/1/ethernet"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/TenGigabitEthernet/3/ethernet"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+        <topology:hasInterface rdf:resource="&slNet;IBM/G8264/TenGigabitEthernet/64/ethernet"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:hasInterface rdf:resource="&slNet;IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
     </owl:NamedIndividual>
@@ -457,6 +471,22 @@
     <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/EthernetSwitchMatrix">
         <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
         <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/FourtyGigabitEthernet/1/SDMZaaS/etherent -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/FourtyGigabitEthernet/1/SDMZaaS/etherent">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>1</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">40000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">SDMZaaS</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#SDMZaaS/TenGigabitEthernet/64/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;40G"/>
+        <topology:interfaceOf rdf:resource="&slNet;IBM/G8264"/>
+        <ethernet:availableVLANSet rdf:resource="&slNet;IBM/G8264/availableVLANSet/SDMZaaS"/>
     </owl:NamedIndividual>
     
 
@@ -546,6 +576,22 @@
         <topology:interfaceOf rdf:resource="&slNet;IBM/G8264"/>
         <ethernet:vlan rdf:resource="&slNet;IBM/G8264/VLANLabel/1009"/>
         <topology:linkTo rdf:resource="&slvmsite;SL/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/TenGigabitEthernet/64/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/TenGigabitEthernet/64/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>64</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">VTS</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:interfaceOf rdf:resource="&slNet;IBM/G8264"/>
+        <ethernet:availableVLANSet rdf:resource="&slNet;IBM/G8264/availableVLANSet/VTS"/>
     </owl:NamedIndividual>
     
 
@@ -657,6 +703,33 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/2001 -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/VLANLabel/2001">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2001.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/2050 -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/VLANLabel/2050">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2050.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/4004 -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/VLANLabel/4004">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">4004.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet -->
 
     <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/availableVLANSet">
@@ -687,6 +760,38 @@
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&slNet;IBM/G8264/VLANLabel/1921"/>
         <layer:upperBound rdf:resource="&slNet;IBM/G8264/VLANLabel/1922"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/SDMZaaS -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/availableVLANSet/SDMZaaS">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:size rdf:datatype="&xsd;int">1</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&slNet;IBM/G8264/VLANLabel/4004"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/VTS -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/availableVLANSet/VTS">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:size rdf:datatype="&xsd;int">50</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&slNet;IBM/G8264/availableVLANSet/VTS/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/VTS/1 -->
+
+    <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/availableVLANSet/VTS/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&slNet;IBM/G8264/VLANLabel/2001"/>
+        <layer:upperBound rdf:resource="&slNet;IBM/G8264/VLANLabel/2050"/>
     </owl:NamedIndividual>
     
 

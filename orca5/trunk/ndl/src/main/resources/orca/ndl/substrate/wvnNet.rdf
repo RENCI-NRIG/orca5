@@ -309,6 +309,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/WVNNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/WVNNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
@@ -365,6 +371,8 @@
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>64</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
+        <topology:hasName>InstaGeni</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&wvnNet;Cisco/UCSFI"/>
         <ethernet:availableVLANSet rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/DD"/>
@@ -402,24 +410,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3711 -->
-
-    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3711">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">3711.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3716 -->
-
-    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3716">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">3716.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3719 -->
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3719">
@@ -434,6 +424,24 @@
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3720">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
         <layer:label_ID rdf:datatype="&xsd;float">3720.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3750 -->
+
+    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3750">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3750.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3759 -->
+
+    <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/VLANLabel/3759">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3759.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -454,8 +462,8 @@
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3711"/>
-        <layer:upperBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3716"/>
+        <layer:lowerBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3750"/>
+        <layer:upperBound rdf:resource="&wvnNet;Cisco/UCSFI/VLANLabel/3759"/>
     </owl:NamedIndividual>
     
 
@@ -474,7 +482,7 @@
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet/DD">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">6</collections:size>
+        <collections:size rdf:datatype="&xsd;int">10</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/1"/>
     </owl:NamedIndividual>
