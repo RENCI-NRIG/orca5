@@ -351,20 +351,21 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 			// submit the request
 			Map<String, Object> rr = orcaHandler.deleteSlice(slice_urn, credentials);
 			boolean ret;
-			String msg = null;
+			Object msg = null;
 			int code = ApiReturnCodes.SUCCESS.code;
 	
 			if ((Boolean)rr.get(OrcaXmlrpcHandler.ERR_RET_FIELD)) {
 				ret = false;
-				msg = (String)rr.get(OrcaXmlrpcHandler.MSG_RET_FIELD);
-				if (msg.contains("unable to find"))
+				String tmsg = (String)rr.get(OrcaXmlrpcHandler.MSG_RET_FIELD);
+				if (tmsg.contains("unable to find"))
 					code = ApiReturnCodes.SEARCHFAILED.code;
 				else
 					code = ApiReturnCodes.ERROR.code;
+				msg = tmsg;
 			}
 			else {
 				ret = true;
-				msg = (String)rr.get(OrcaXmlrpcHandler.RET_RET_FIELD);
+				msg = rr.get(OrcaXmlrpcHandler.RET_RET_FIELD);
 			}
 
 			// return the response
