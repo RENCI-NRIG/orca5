@@ -615,7 +615,7 @@
 
     <owl:NamedIndividual rdf:about="&osfNet;IBM/G8052/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">100</collections:size>
+        <collections:size rdf:datatype="&xsd;int">110</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&osfNet;IBM/G8052/VLANLabel/4004"/>
         <collections:element rdf:resource="&osfNet;IBM/G8052/availableVLANSet/1"/>
