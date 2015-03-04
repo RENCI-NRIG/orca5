@@ -391,7 +391,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UH/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&UHNet;IBM/G8052"/>
-        <ethernet:availableVLANSet rdf:resource="&UHNet;IBM/G8052/availableVLANSet"/>
+        <ethernet:availableVLANSet rdf:resource="&UHNet;IBM/G8052/availableVLANSet/AL2S"/>
     </owl:NamedIndividual>
     
 
@@ -549,7 +549,7 @@
 
     <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <collections:size rdf:datatype="&xsd;int">60</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&UHNet;IBM/G8052/availableVLANSet/1"/>
         <collections:element rdf:resource="&UHNet;IBM/G8052/availableVLANSet/VTS/1"/>
@@ -564,6 +564,17 @@
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&UHNet;IBM/G8052/VLANLabel/861"/>
         <layer:upperBound rdf:resource="&UHNet;IBM/G8052/VLANLabel/870"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/availableVLANSet/AL2S -->
+
+    <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/availableVLANSet/AL2S">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&UHNet;IBM/G8052/availableVLANSet/1"/>
     </owl:NamedIndividual>
     
 
