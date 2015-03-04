@@ -490,6 +490,7 @@
     <owl:NamedIndividual rdf:about="&UHNet;IBM/G8052/TengigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>64</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="&xsd;string">VTS</topology:hasName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#VTS/Switch/TenGigabitEthernet/30/ethernet"/>
