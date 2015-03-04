@@ -353,6 +353,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Mar 4 2015 Ilya Baldin <ibaldin@renci.org>
+- Touch off build for updating OSF, SL, TAMU and WVN
+
 *Tue Feb 24 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Touch off build, to check all is working well.
 
