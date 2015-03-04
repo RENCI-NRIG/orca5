@@ -734,7 +734,7 @@
 
     <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">112</collections:size>
+        <collections:size rdf:datatype="&xsd;int">163</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#SlNet/IBM/G8052/InstaGeniVlanSet/1"/>
