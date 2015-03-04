@@ -359,7 +359,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/WVNNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&wvnNet;Cisco/UCSFI"/>
-        <ethernet:availableVLANSet rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet"/>
+        <ethernet:availableVLANSet rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/N3K"/>
     </owl:NamedIndividual>
     
 
@@ -450,7 +450,7 @@
 
     <owl:NamedIndividual rdf:about="&wvnNet;Cisco/UCSFI/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">8</collections:size>
+        <collections:size rdf:datatype="&xsd;int">12</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/1"/>
         <collections:element rdf:resource="&wvnNet;Cisco/UCSFI/availableVLANSet/2"/>
