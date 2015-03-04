@@ -552,6 +552,7 @@
         <collections:size rdf:datatype="&xsd;int">10</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&UHNet;IBM/G8052/availableVLANSet/1"/>
+        <collections:element rdf:resource="&UHNet;IBM/G8052/availableVLANSet/VTS/1"/>
         <domain:hasBroker rdf:resource="&orca;ExoGENIBroker"/>
     </owl:NamedIndividual>
     
@@ -617,7 +618,6 @@
         <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
         <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
         <ethernet:availableVLANSet rdf:resource="&UHNet;IBM/G8052/availableVLANSet"/>
-        <ethernet:availableVLANSet rdf:resource="&UHNet;IBM/G8052/availableVLANSet/VTS"/>
     </owl:NamedIndividual>
     
 
