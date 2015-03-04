@@ -132,7 +132,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	 */
 	 public void addSlice(XmlrpcControllerSlice s) {
 		 if (s != null) {
-			 synchronized(slices) {
+			 synchronized(this) {
 				 slices.put(s.getSliceID(), s);
 			 }
 		 }
@@ -145,7 +145,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	 public void removeSlice(XmlrpcControllerSlice s) {
 		 if (s != null) {
 			 // this also unmaps it from various mappings
-			 synchronized(slices) {
+			 synchronized(this) {
 				 slices.remove(s.getSliceID());
 			 }
 			 s.close();
@@ -159,7 +159,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	 public void removeSlice(SliceID sid) {
 		 if (sid != null) {
 			 XmlrpcControllerSlice s = null;
-			 synchronized (slices) {
+			 synchronized(this) {
 				 s = slices.get(sid.toString());
 			 }
 			 removeSlice(s);
@@ -175,7 +175,7 @@ public final class XmlrpcOrcaState implements Serializable {
 		 if (sid == null)
 			 return null;
 
-		 synchronized (slices) {
+		 synchronized(this) {
 			 return slices.get(sid.toString());
 		 }
 	 }
@@ -190,7 +190,7 @@ public final class XmlrpcOrcaState implements Serializable {
 		 logger.debug("This slice ID="+sid+" for urn="+urn);
 		 if (sid != null) {
 			 //return getSlice(new SliceID(sid));
-			 synchronized (slices) {
+			 synchronized (this) {
 				 return slices.get(sid);
 			 }
 
@@ -253,7 +253,7 @@ public final class XmlrpcOrcaState implements Serializable {
 		 IOrcaServiceManager sm = null;
 		 try {
 			 sm = getSM();
-			 synchronized(slices) {
+			 synchronized(this) {
 				 for(Entry <String, XmlrpcControllerSlice> urn_wf : slices.entrySet() ){
 					 XmlrpcControllerSlice sl;
 					 sl = urn_wf.getValue();
@@ -331,7 +331,7 @@ public final class XmlrpcOrcaState implements Serializable {
 
 		 List<String> ret = new ArrayList<String>();
 
-		 synchronized(slices) {
+		 synchronized(this) {
 			 for(Entry <String, XmlrpcControllerSlice> entry : slices.entrySet() ) {
 				 XmlrpcControllerSlice sl = entry.getValue();
 				 if (sl == null)
