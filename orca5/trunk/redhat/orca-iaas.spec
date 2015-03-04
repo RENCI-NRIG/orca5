@@ -354,6 +354,9 @@ exit 0
 
 %changelog
 *Wed Mar 4 2015 Ilya Baldin <ibaldin@renci.org>
+- This time without the controller deadlock
+
+*Wed Mar 4 2015 Ilya Baldin <ibaldin@renci.org>
 - Touch off build for updating OSF, SL, TAMU and WVN
 
 *Tue Feb 24 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
