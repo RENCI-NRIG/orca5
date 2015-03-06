@@ -549,8 +549,8 @@
 
     <owl:NamedIndividual rdf:about="&wvnvmsite;wvnNet">
         <rdf:type rdf:resource="&location;Location"/>
-        <wgs84_pos:lat>25.757292</wgs84_pos:lat>
-        <wgs84_pos:long>-80.374042</wgs84_pos:long>
+        <wgs84_pos:long>-79.955997</wgs84_pos:long>
+        <wgs84_pos:lat>39.637537</wgs84_pos:lat>
     </owl:NamedIndividual>
 </rdf:RDF>
 
