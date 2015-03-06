@@ -751,6 +751,15 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/VLANLabel/907 -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/VLANLabel/907">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;int">603</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/availabelLUNLabelset/1 -->
 
     <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/availabelLUNLabelset/1">
@@ -805,6 +814,18 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ExoGeni/staticVLANSet -->
+
+    <owl:NamedIndividual rdf:about="&Duke3;ExoGeni/staticVLANSet">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">1</collections:size>
+        <domain:isAllocatable rdf:datatype="&xsd;boolean">false</domain:isAllocatable>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&Duke3;ExoGeni/VLANLabel/907"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/dukevmsite.rdf#Duke/ISCSI -->
 
     <owl:NamedIndividual rdf:about="&Duke3;ISCSI">
@@ -855,6 +876,7 @@
         <storage:availableLUNLabelSet rdf:resource="&Duke3;ExoGeni/availableLUNLabelSet"/>
         <ethernet:availableVLANSet rdf:resource="&Duke3;ExoGeni/availableVLANSet"/>
         <compute:availableVMLabelSet rdf:resource="&Duke3;ExoGeni/availableVMSet"/>
+        <ethernet:availableVLANSet rdf:resource="&Duke3;ExoGeni/staticVLANSet"/>
         <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
     </owl:NamedIndividual>
     
