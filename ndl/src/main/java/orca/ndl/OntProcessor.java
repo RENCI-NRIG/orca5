@@ -1232,7 +1232,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant
         Device itDevice;
         while (it.hasNext()) {
             itDevice = (Device) it.next();
-            if( (d.getURI().equals(itDevice.getURI())) &&(d.getName().equals(itDevice.getName())) ){            	
+            if(d.getName().equals(itDevice.getName()) ){            	
             	device = itDevice;
                 break;
             }
