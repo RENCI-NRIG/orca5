@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request VLAN_Tag="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/DeleteVLANRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/DeleteVLANRequest DeleteVLANRequest.xsd ">
+    <script>AddTrunkPort</script>
+    <script>AddQoSPort</script>
+</request>

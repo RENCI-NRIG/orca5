@@ -1,0 +1,196 @@
+package orca.handlers.network.router;
+
+import orca.handlers.network.core.CommandException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import java.util.Properties;
+
+
+
+
+public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterDevice, RouterConstants {
+
+    protected static final String PropertySubPort = "subPort"; //8700
+    protected static final String PropertyQoSSubPort = "qosSubPort"; //8700
+    protected static final String PropertyVirtualSwitch = "virtualSwitch"; //8700
+    protected static final String CommandAddAccessPort = "AddAccessPortRequest"; //8700
+    protected static final String CommandAddQoSAccessPort = "AddAccessQoSPortRequest"; //8700
+    protected static final String CommandAddTrunkPort = "AddTrunkPortRequest"; //8700
+    protected static final String CommandAddQoSTrunkPort = "AddTrunkQoSPortRequest"; //8700
+    protected static final String CommandLogon = "Log_on"; //8700
+    protected static final String CommandLogoff = "Log_off"; //8700
+
+
+    protected String defaultPrompt, virtualSwitch;
+
+    public Ciena8700Device(String deviceAddress, String uid, String password, String defaultPrompt) {
+        super(deviceAddress, uid, password);
+        this.defaultPrompt = defaultPrompt;
+        basepath = "/orca/handlers/network/router/ciena/8700";
+    }
+
+    protected static String genSubPortName(String virtualSwitch, String parentPort, boolean tagged){
+        assert parentPort != null;
+        assert virtualSwitch != null;
+
+        String delim = "-";
+        String prefix = "SP";
+        if (tagged)
+            return virtualSwitch + delim + prefix + delim + parentPort + "t";
+        else
+            return virtualSwitch + delim + prefix + delim + parentPort + "u";
+
+    }
+
+    protected static String genQoSSubPortName(String virtualSwitch, String parentPort){
+        assert parentPort != null;
+        assert virtualSwitch != null;
+
+        String delim = "-";
+        String prefix = "QSP";
+        return virtualSwitch + delim + prefix + delim + parentPort;
+
+    }
+
+    protected static String genVirtualSwitchName(String vlanTag){
+        String prefix = "xo";
+        String delim = "-";
+
+        if (vlanTag==null)
+            return prefix;
+        return prefix + delim + vlanTag;
+    }
+
+    /**
+     * The parameter e is of the form a/b ... where a, b are non-negative integers
+     *
+     * @param e
+     * @return a list of string to which this pseudo-regular expression expands
+     */
+    protected static List<String> parseInterfaceList(String e) throws CommandException {
+        String portPat = "^(\\d+)/(\\d+)$";
+
+        if ((e == null) || (e.length() == 0))
+            return new ArrayList<String>();
+
+        List<String> ret = new ArrayList<String>();
+
+        // split along spaces
+        // then in a loop generate new array elements
+        String[] intGroups = e.split(" ");
+
+        for(String s:intGroups) {
+            // see if it matches the expected pattern for interfaces
+            if (Pattern.matches(portPat, s))
+                ret.add(s);
+            else
+                throw new CommandException("Interface name " + s + " does not match any available patterns for SAOS");
+        }
+
+        return ret;
+    }
+
+    @Override
+    protected Properties getProperties() {
+        Properties p = super.getProperties();
+        p.setProperty(PropertyDefaultPrompt, defaultPrompt);
+        return p;
+    }
+
+    public void createVLAN(String vlanTag, String qosRate, String qosBurstSize) throws CommandException {
+        Properties p = getProperties();
+        p.setProperty(PropertyVirtualSwitch, genVirtualSwitchName(vlanTag));
+        if ((qosRate != null) && (qosRate.length() > 0) && (Integer.parseInt(qosRate) > 0)) {
+            logger.debug("Ciena 8700 does not support vlan QoS => creating non-QoS vlan");
+        }
+        executeScript(CommandCreateVLAN, p);
+    }
+
+    public void deleteVLAN(String vlanTag, boolean withQoS) throws CommandException {
+        Properties p = getProperties();
+        p.setProperty(PropertyVirtualSwitch, genVirtualSwitchName(vlanTag));
+        if (withQoS) {
+            logger.debug("Ciena 8700 does not support vlan QoS => deleting non-QoS vlan");
+        }
+        executeScript(CommandDeleteVLAN, p);
+    }
+
+    public void addTrunkPortsToVLAN(String vlanTag, String ports) throws CommandException {
+        Properties p = getProperties();
+        p.setProperty(PropertyVLANTagNm, vlanTag);
+        String virtualSwitch = genVirtualSwitchName(vlanTag);
+        p.setProperty(PropertyVirtualSwitch, virtualSwitch);
+        executeScript(CommandLogon, p);
+        for (String s:parseInterfaceList(ports)) {
+            p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, s, true));
+            p.setProperty(PropertyTrunkPorts, s);
+            executeScript(CommandAddTrunkPort, p);
+        }
+        executeScript(CommandLogoff, p);
+    }
+
+    public void addAccessPortsToVLAN(String vlanTag, String ports) throws CommandException {
+        Properties p = getProperties();
+        p.setProperty(PropertyVLANTagNm, vlanTag);
+        String virtualSwitch = genVirtualSwitchName(vlanTag);
+        p.setProperty(PropertyVirtualSwitch, virtualSwitch);
+        executeScript(CommandLogon, p);
+        for (String s:parseInterfaceList(ports)) {
+            p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, s, false));
+            p.setProperty(PropertyAccessPorts, s);
+            executeScript(CommandAddAccessPort, p);
+        }
+        executeScript(CommandLogoff, p);
+    }
+
+    public void removeTrunkPortsFromVLAN(String vlanTag, String ports) throws CommandException {
+        Properties p = getProperties();
+        String virtualSwitch = genVirtualSwitchName(vlanTag);
+        p.setProperty(PropertyVLANTagNm, vlanTag);
+        p.setProperty(PropertyVirtualSwitch, virtualSwitch);
+        for (String s:parseInterfaceList(ports)) {
+            p.setProperty(PropertyTrunkPorts, s);
+            p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, s, true));
+            executeScript(CommandRemoveTrunkPorts, p);
+        }
+    }
+
+    public void removeAccessPortsFromVLAN(String vlanTag, String ports) throws CommandException {
+        Properties p = getProperties();
+        String virtualSwitch = genVirtualSwitchName(vlanTag);
+        p.setProperty(PropertyVLANTagNm, vlanTag);
+        p.setProperty(PropertyAccessPorts, ports);
+        p.setProperty(PropertyVirtualSwitch, virtualSwitch);
+        for (String s:parseInterfaceList(ports)) {
+            p.setProperty(PropertyAccessPorts, s);
+            p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, s, false));
+            executeScript(CommandRemoveAccessPorts, p);
+        }
+    }
+
+    public void mapVLANs(String sourceTag, String destinationTag, String port) throws CommandException {
+        Properties p = getProperties();
+        String virtualSwitch = genVirtualSwitchName(destinationTag);
+        p.setProperty(PropertySrcVLAN, sourceTag);
+        p.setProperty(PropertyDstVLAN, destinationTag);
+        p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, port, true));
+        executeScript(CommandMapVLANS, p);
+    }
+
+    public void unmapVLANs(String sourceTag, String destinationTag, String port) throws CommandException {
+        Properties p = getProperties();
+        String virtualSwitch = genVirtualSwitchName(destinationTag);
+        p.setProperty(PropertySrcVLAN, sourceTag);
+        p.setProperty(PropertyDstVLAN, destinationTag);
+        p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, port, true));
+        p.setProperty(PropertyPort, port);
+        executeScript(CommandUnmapVLANS, p);
+    }
+
+}
