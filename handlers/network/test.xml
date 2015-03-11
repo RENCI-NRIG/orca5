@@ -195,6 +195,118 @@
                                     vlanTag="${vlan.tag}" />
     </target>
 
+    <target name="ciena.8700.createQoSVlan">
+        <network.router.8700.create.vlan deviceInstance="${network.device.ciena8700}"
+                                         defaultPrompt="${router.8700.prompt}"
+                                         user="${router.8700.user}"
+                                         password="${router.8700.password}"
+                                         adminPassword="${router.8700.adminpassword}"
+                                         deviceAddress="${router.8700}"
+                                         vlanTag="${vlan.tag}"
+                                         vlanQoSBurstSize="${router.8700.qos.burstSize}"
+                                         vlanQosRate="${router.8700.qos.rate}" />
+    </target>
+
+    <target name="ciena.8700.createVlan">
+        <network.router.8700.create.vlan deviceInstance="${network.device.ciena8700}"
+                                         defaultPrompt="${router.8700.prompt}"
+                                         user="${router.8700.user}"
+                                         password="${router.8700.password}"
+                                         adminPassword="${router.8700.adminpassword}"
+                                         deviceAddress="${router.8700}"
+                                         vlanTag="${vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.deleteQoSVlan">
+        <network.router.8700.delete.vlan deviceInstance="${network.device.ciena8700}"
+                                         defaultPrompt="${router.8700.prompt}"
+                                         user="${router.8700.user}"
+                                         password="${router.8700.password}"
+                                         adminPassword="${router.8700.adminpassword}"
+                                         deviceAddress="${router.8700}"
+                                         vlanWithQos="true"
+                                         vlanTag="${vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.deleteVlan">
+        <network.router.8700.delete.vlan deviceInstance="${network.device.ciena8700}"
+                                         defaultPrompt="${router.8700.prompt}"
+                                         user="${router.8700.user}"
+                                         password="${router.8700.password}"
+                                         adminPassword="${router.8700.adminpassword}"
+                                         deviceAddress="${router.8700}"
+                                         vlanWithQos="false"
+                                         vlanTag="${vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.addTrunkPorts">
+        <network.router.8700.add.trunkPorts deviceInstance="${network.device.ciena8700}"
+                                            defaultPrompt="${router.8700.prompt}"
+                                            user="${router.8700.user}"
+                                            password="${router.8700.password}"
+                                            adminPassword="${router.8700.adminpassword}"
+                                            deviceAddress="${router.8700}"
+                                            ports="${router.8700.ports}"
+                                            vlanTag="${vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.addAccessPorts">
+        <network.router.8700.add.accessPorts deviceInstance="${network.device.ciena8700}"
+                                            defaultPrompt="${router.8700.prompt}"
+                                            user="${router.8700.user}"
+                                            password="${router.8700.password}"
+                                            adminPassword="${router.8700.adminpassword}"
+                                            deviceAddress="${router.8700}"
+                                            ports="${router.8700.ports}"
+                                            vlanTag="${vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.removeTrunkPorts">
+        <network.router.8700.remove.trunkPorts deviceInstance="${network.device.ciena8700}"
+                                               user="${router.8700.user}"
+                                               defaultPrompt="${router.8700.prompt}"
+                                               password="${router.8700.password}"
+                                               adminPassword="${router.8700.adminpassword}"
+                                               deviceAddress="${router.8700}"
+                                               ports="${router.8700.ports}"
+                                               vlanTag="${vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.removeAccessPorts">
+        <network.router.8700.remove.accessPorts deviceInstance="${network.device.ciena8700}"
+                                               user="${router.8700.user}"
+                                               defaultPrompt="${router.8700.prompt}"
+                                               password="${router.8700.password}"
+                                               adminPassword="${router.8700.adminpassword}"
+                                               deviceAddress="${router.8700}"
+                                               ports="${router.8700.ports}"
+                                               vlanTag="${vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.mapVLANs">
+        <network.router.8700.map.vlans deviceInstance="${network.device.ciena8700}"
+                                               user="${router.8700.user}"
+                                               defaultPrompt="${router.8700.prompt}"
+                                               password="${router.8700.password}"
+                                               adminPassword="${router.8700.adminpassword}"
+                                               deviceAddress="${router.8700}"
+                                               port="${router.8700.map.port}"
+                                               destinationTag="${router.8700.dst.vlan.tag}"
+                                               sourceTag="${router.8700.src.vlan.tag}" />
+    </target>
+
+    <target name="ciena.8700.unmapVLANs">
+        <network.router.8700.unmap.vlans deviceInstance="${network.device.ciena8700}"
+                                       user="${router.8700.user}"
+                                       defaultPrompt="${router.8700.prompt}"
+                                       password="${router.8700.password}"
+                                       adminPassword="${router.8700.adminpassword}"
+                                       deviceAddress="${router.8700}"
+                                       port="${router.8700.map.port}"
+                                       destinationTag="${router.8700.dst.vlan.tag}"
+                                       sourceTag="${router.8700.src.vlan.tag}" />
+    </target>
+
     <target name="cisco.6509.createQoSVlan">
         <network.router.6509.create.vlan deviceInstance="${network.device.cisco6509}"
                                     user="${router.6509.user}"
@@ -202,7 +314,7 @@
                                     adminPassword="${router.6509.adminpassword}"
                                     deviceAddress="${router.6509}"
                                     vlanTag="${vlan.tag}"
-				    vlanQoSBurstSize="${router.6509.qos.burstSize}"
+				                    vlanQoSBurstSize="${router.6509.qos.burstSize}"
                                     vlanQosRate="${router.6509.qos.rate}" />
     </target>
 

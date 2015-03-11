@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/UnmapVLANS"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/UnmapVLANS UnmapVLANS.xsd">
+	<action name="UnmapVLANS">
+        <exchange>
+            <send>sub-port unset sub-port {$subPort} ingress-l2-transform egress-l2-transform</send>
+            <expect>{$DefaultPrompt}</expect>
+        </exchange>
+    </action>
+</script>

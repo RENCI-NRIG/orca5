@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request srcVLAN="" dstVLAN="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/RemoveAccessPortsRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/RemoveAccessPortsRequest RemoveAccessPortsRequest.xsd ">
+  <script>RemoveSubPort</script>
+</request>

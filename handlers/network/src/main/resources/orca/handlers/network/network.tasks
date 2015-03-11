@@ -39,6 +39,15 @@ network.router.qfx3500.add.accessPorts=orca.handlers.network.tasks.QFX3500.AddAc
 network.router.qfx3500.remove.trunkPorts=orca.handlers.network.tasks.QFX3500.RemoveTrunkPortsTask
 network.router.qfx3500.remove.accessPorts=orca.handlers.network.tasks.QFX3500.RemoveAccessPortsTask
 
+network.router.8700.create.vlan=orca.handlers.network.tasks.Ciena8700.CreateVLANTask
+network.router.8700.delete.vlan=orca.handlers.network.tasks.Ciena8700.DeleteVLANTask
+network.router.8700.map.vlans=orca.handlers.network.tasks.Ciena8700.MapVLANSTask
+network.router.8700.unmap.vlans=orca.handlers.network.tasks.Ciena8700.UnmapVLANSTask
+network.router.8700.add.trunkPorts=orca.handlers.network.tasks.Ciena8700.AddTrunkPortsTask
+network.router.8700.add.accessPorts=orca.handlers.network.tasks.Ciena8700.AddAccessPortsTask
+network.router.8700.remove.trunkPorts=orca.handlers.network.tasks.Ciena8700.RemoveTrunkPortsTask
+network.router.8700.remove.accessPorts=orca.handlers.network.tasks.Ciena8700.RemoveAccessPortsTask
+
 network.dtn.create.crs=orca.handlers.network.tasks.CreateDTNCRSTask
 network.dtn.delete.crs=orca.handlers.network.tasks.DeleteDTNCRSTask
 

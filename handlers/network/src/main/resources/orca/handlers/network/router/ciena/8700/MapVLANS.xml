@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/MapVLANS"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/MapVLANS MapVLANS.xsd">
+	<action name="MapVLANS">
+		<exchange>
+			<send>sub-port set sub-port {$subPort} ingress-l2-transform stamp-*.{$dstVLAN}.* egress-l2-transform stamp-*.{$srcVLAN}.*</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+	</action>
+</script>
