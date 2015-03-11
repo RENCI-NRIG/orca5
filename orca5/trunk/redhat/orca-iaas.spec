@@ -353,6 +353,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Mar 10 2015 Claris Castillo <claris@renci.org>
+- Fixes. Ticket 388 and ticket 404
+
 *Wed Mar 9 2015 Ilya Baldin <ibaldin@renci.org>
 - This time without nascent reservation bug in controller
 
