@@ -354,6 +354,9 @@ exit 0
 
 %changelog
 *Tue Mar 10 2015 Claris Castillo <claris@renci.org>
+- Ticket 407 Set client-triggered replication in ActorLiveness thread
+
+*Tue Mar 10 2015 Claris Castillo <claris@renci.org>
 - Fixes. Ticket 388 and ticket 404
 
 *Wed Mar 9 2015 Ilya Baldin <ibaldin@renci.org>
