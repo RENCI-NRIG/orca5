@@ -528,20 +528,20 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/880 -->
+    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/3561 -->
 
-    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/880">
+    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/3561">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">880.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">3561.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/889 -->
+    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/3570 -->
 
-    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/889">
+    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/3570">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">889.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">3570.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -590,8 +590,8 @@
 
     <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/availableVLANSet/AL2S/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/880"/>
-        <layer:upperBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/889"/>
+        <layer:lowerBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/3561"/>
+        <layer:upperBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/3570"/>
     </owl:NamedIndividual>
     
 
