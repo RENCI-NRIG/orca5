@@ -25,6 +25,13 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
     protected static final String CommandAddQoSTrunkPort = "AddTrunkQoSPortRequest"; //8700
     protected static final String CommandLogon = "Log_on"; //8700
     protected static final String CommandLogoff = "Log_off"; //8700
+    //expectedPat_1 1/2 or [1-2]/2 or 1/[1-2] or [1-2]/[11-2]
+    protected static final String rangePortPat = "^\\s*(\\[\\d+-\\d+\\]|\\d+)/(\\[\\d+-\\d+\\]|\\d+)\\s*$";
+    protected static final String singlePortPat = "^\\s*(\\d+)/(\\d+)\\s*$";
+    protected static final String rangesPat = "^\\[(\\d+)-(\\d+)\\]$";
+
+    protected static final Pattern rangePortComp = Pattern.compile(rangePortPat);
+    protected static final Pattern rangesComp = Pattern.compile(rangesPat);
 
 
     protected String defaultPrompt, virtualSwitch;
@@ -67,28 +74,73 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
         return prefix + delim + vlanTag;
     }
 
+    private static List<String> expandRange(String s) throws CommandException {
+        List<String> ret = new ArrayList<String>();
+
+        // expand available groups
+        Matcher matcher = rangePortComp.matcher(s);
+        matcher.find();
+
+        int[] start = new int[2];
+        int[] stop = new int[2];
+        if (matcher.groupCount() != 2)
+            throw new CommandException("Unexpected number of groups " + matcher.groupCount() + " in a pattern!");
+        final int firstGroup = 1;
+        for (int i = firstGroup; i <= matcher.groupCount(); i++) {
+            // see if this is a range
+            if (Pattern.matches(rangesPat, matcher.group(i))) {
+                Matcher tmpMat = rangesComp.matcher(matcher.group(i));
+                tmpMat.find();
+                start[i-firstGroup] = Integer.parseInt(tmpMat.group(1));
+                stop[i-firstGroup] = Integer.parseInt(tmpMat.group(2));
+                // swap the two if needed
+                if (stop[i-firstGroup] < start[i-firstGroup]) {
+                    int tmp = stop[i-firstGroup];
+                    stop[i-firstGroup] = start[i-firstGroup];
+                    start[i-firstGroup] = tmp;
+                }
+            } else {
+                //not a range
+                start[i-firstGroup] = Integer.parseInt(matcher.group(i));
+                stop[i-firstGroup] = start[i-firstGroup];
+            }
+
+        }
+
+        // set ranges for two for loops
+        for(int pic = start[0]; pic <= stop[0]; pic++) {
+            for (int port = start[1]; port <= stop[1]; port++) {
+                System.out.println("" + pic + "/" + port);
+            }
+        }
+
+        return ret;
+    }
+
+
     /**
-     * The parameter e is of the form a/b ... where a, b are non-negative integers
+     * The parameter e is of the form [a-b]/[c-d], ... where a, b, c, d are non-negative integers
      *
      * @param e
      * @return a list of string to which this pseudo-regular expression expands
      */
     protected static List<String> parseInterfaceList(String e) throws CommandException {
-        String portPat = "^(\\d+)/(\\d+)$";
 
         if ((e == null) || (e.length() == 0))
             return new ArrayList<String>();
 
         List<String> ret = new ArrayList<String>();
 
-        // split along spaces
+        // split along commas
         // then in a loop generate new array elements
-        String[] intGroups = e.split(" ");
+        String[] intGroups = e.split(",");
 
         for(String s:intGroups) {
             // see if it matches the expected pattern for interfaces
-            if (Pattern.matches(portPat, s))
-                ret.add(s);
+            if (Pattern.matches(singlePortPat, s))
+                ret.add(s.trim());
+            else if (Pattern.matches(rangePortPat, s))
+                ret.addAll(expandRange(s));
             else
                 throw new CommandException("Interface name " + s + " does not match any available patterns for SAOS");
         }
