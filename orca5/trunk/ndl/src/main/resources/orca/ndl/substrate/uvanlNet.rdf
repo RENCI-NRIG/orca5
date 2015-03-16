@@ -333,6 +333,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/Uva-nlNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="&TenGigabitEthernet6;ethernet">
@@ -360,6 +366,7 @@
         <topology:hasSwitchMatrix rdf:resource="&Uva-nlNet;Force10/S4810/EthernetSwitchMatrix"/>
         <topology:hasInterface rdf:resource="&Uva-nlNet;Force10/S4810/FourtyGigabitEthernet/1/ethernet"/>
         <topology:hasInterface rdf:resource="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/0/0/ethernet"/>
+        <topology:hasInterface rdf:resource="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/0/1/ethernet"/>
         <topology:hasInterface rdf:resource="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/1/0/ethernet"/>
         <topology:hasInterface rdf:resource="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/1/1/ethernet"/>
         <topology:hasInterface rdf:resource="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/1/2/ethernet"/>
@@ -404,6 +411,22 @@
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&Uva-nlNet;Force10/S4810"/>
         <ethernet:availableVLANSet rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/autogole"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/0/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/0/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>43</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">iMind</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:interfaceOf rdf:resource="&Uva-nlNet;Force10/S4810"/>
+        <ethernet:availableVLANSet rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/iMind"/>
     </owl:NamedIndividual>
     
 
@@ -490,6 +513,24 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/VLANLabel/1025 -->
+
+    <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/VLANLabel/1025">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1025.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/VLANLabel/1074 -->
+
+    <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/VLANLabel/1074">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1074.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/VLANLabel/1779 -->
 
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/VLANLabel/1779">
@@ -548,12 +589,13 @@
 
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">41</collections:size>
+        <collections:size rdf:datatype="&xsd;int">91</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <domain:hasBroker rdf:resource="&orca;ExoGENIBroker"/>
         <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/1"/>
         <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/2"/>
         <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/3"/>
+        <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/4"/>
     </owl:NamedIndividual>
     
 
@@ -588,6 +630,16 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/availableVLANSet/4 -->
+
+    <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet/4">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&Uva-nlNet;Force10/S4810/VLANLabel/1025"/>
+        <layer:upperBound rdf:resource="&Uva-nlNet;Force10/S4810/VLANLabel/1074"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/availableVLANSet/autogole -->
 
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet/autogole">
@@ -606,6 +658,17 @@
         <collections:size rdf:datatype="&xsd;int">9</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/2"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/availableVLANSet/iMind -->
+
+    <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet/iMind">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">50</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/4"/>
     </owl:NamedIndividual>
     
 
