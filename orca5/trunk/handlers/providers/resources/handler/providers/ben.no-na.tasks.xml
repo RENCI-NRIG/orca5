@@ -140,6 +140,22 @@ This file contains definitions of tasks used by the ben package
 							/>
 						</then>
 					</if>
+                    <!-- Ciena8700 -->
+                    <if>
+                        <equals arg1="@{router.type}" arg2="ciena8700" />
+                        <then>
+                            <network.router.8700.delete.vlan
+                                deviceInstance="${network.device.ciena8700}"
+                                defaultPrompt="@{router.8700.prompt}"
+                                user="@{router.8700.user}"
+                                password="@{router.8700.password}"
+                                adminPassword="@{router.8700.adminpassword}"
+                                deviceAddress="@{router.8700}"
+                                vlanTag="@{vlan.tag}"
+                            />
+                            </target>
+                        </then>
+                    </if>
 					<!-- Router type check -->
 					<if>
 						<and>
@@ -158,6 +174,9 @@ This file contains definitions of tasks used by the ben package
 							<not>
 								<equals arg1="@{router.type}" arg2="g8264" />
 							</not>
+                            <not>
+                                <equals arg1="@{router.type}" arg2="ciena8700" />
+                            </not>
 						</and>
 						<then>
 							<echo message="Unknown router type @{router.type}" />
@@ -280,6 +299,21 @@ This file contains definitions of tasks used by the ben package
 							/>
 						</then>
 					</if>
+                    <!-- Ciena8700  -->
+                    <if>
+                    <equals arg1="@{router.type}" arg2="ciena8700" />
+                    <then>
+                        <network.router.8700.delete.vlan
+                                deviceInstance="${network.device.ciena8700}"
+                                defaultPrompt="@{router.8700.prompt}"
+                                user="@{router.8700.user}"
+                                password="@{router.8700.password}"
+                                adminPassword="@{router.8700.adminpassword}"
+                                deviceAddress="@{router.8700}"
+                                vlanWithQos="@{vlan.with.qos}"
+                                vlanTag="@{vlan.tag}"
+                        />
+                    </then>
 					<!-- Router type check -->
 					<if>
 						<and>
@@ -420,6 +454,22 @@ This file contains definitions of tasks used by the ben package
 							/>
 						</then>
 					</if>
+                    <!-- Ciena8700  -->
+                    <if>
+                        <equals arg1="@{router.type}" arg2="ciena8700" />
+                        <then>
+                            <network.router.8700.add.trunkPorts
+                                deviceInstance="${network.device.ciena8700}"
+                                vlanTag="@{vlan.tag}"
+                                defaultPrompt="@{router.8700.prompt}"
+                                user="@{router.8700.user}"
+                                password="@{router.8700.password}"
+                                adminPassword="@{router.8700.adminpassword}"
+                                deviceAddress="@{router.8700}"
+                                ports="@{router.8700.ports}"
+                                />
+                        </then>
+                    </if>
 					<!-- Router type check -->
 					<if>
 						<and>
@@ -438,6 +488,9 @@ This file contains definitions of tasks used by the ben package
 							<not>
 								<equals arg1="@{router.type}" arg2="g8264" />
 							</not>
+                            <not>
+                                <equals arg1="@{router.type}" arg2="ciena8700" />
+                            </not>
 						</and>
 						<then>
 							<echo message="Unknown router type @{router.type}" />
@@ -558,7 +611,24 @@ This file contains definitions of tasks used by the ben package
 				    			ports="@{ports}"
 							/>
 						</then>
-					</if>	
+					</if>
+                    <!-- Ciena8700  -->
+                    <if>
+                        <equals arg1="@{router.type}" arg2="ciena8700" />
+                        <then>
+                            <network.router.8700.remove.trunkPorts
+                                deviceInstance="${network.device.ciena8700}"
+                                user="@{router.8700.user}"
+                                defaultPrompt="@{router.8700.prompt}"
+                                password="@{router.8700.password}"
+                                adminPassword="@{router.8700.adminpassword}"
+                                deviceAddress="@{router.8700}"
+                                ports="@{router.8700.ports}"
+                                vlanTag="@{vlan.tag}"
+                            />
+                        </target>
+                        </then>
+                    </if>
 					<!-- Router type check -->
 					<if>
 						<and>
@@ -577,6 +647,9 @@ This file contains definitions of tasks used by the ben package
 							<not>
 								<equals arg1="@{router.type}" arg2="g8264" />
 							</not>
+                            <not>
+                                <equals arg1="@{router.type}" arg2="ciena8700" />
+                            </not>
 						</and>
 						<then>
 							<echo message="Unknown router type @{router.type}" />
