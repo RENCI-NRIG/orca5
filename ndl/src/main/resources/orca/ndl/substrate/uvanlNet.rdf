@@ -513,11 +513,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/VLANLabel/1025 -->
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/VLANLabel/1026 -->
 
-    <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/VLANLabel/1025">
+    <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/VLANLabel/1026">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">1025.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">1026.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -589,7 +589,7 @@
 
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">91</collections:size>
+        <collections:size rdf:datatype="&xsd;int">90</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <domain:hasBroker rdf:resource="&orca;ExoGENIBroker"/>
         <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/1"/>
@@ -634,7 +634,7 @@
 
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet/4">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&Uva-nlNet;Force10/S4810/VLANLabel/1025"/>
+        <layer:lowerBound rdf:resource="&Uva-nlNet;Force10/S4810/VLANLabel/1026"/>
         <layer:upperBound rdf:resource="&Uva-nlNet;Force10/S4810/VLANLabel/1074"/>
     </owl:NamedIndividual>
     
@@ -666,7 +666,7 @@
 
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet/iMind">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">50</collections:size>
+        <collections:size rdf:datatype="&xsd;int">49</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet/4"/>
     </owl:NamedIndividual>
