@@ -395,7 +395,7 @@
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/TenGigabitEthernet/1/0/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>1</rdfs:label>
+        <rdfs:label>64</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/pscNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
@@ -410,7 +410,7 @@
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>1</rdfs:label>
+        <rdfs:label>64</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="&xsd;string">InstaGeni-PSC</topology:hasName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/PSC/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
@@ -453,7 +453,7 @@
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>9,13</rdfs:label>
+        <rdfs:label>31-32</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
@@ -469,7 +469,7 @@
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>49-50</rdfs:label>
+        <rdfs:label>9,13</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&PSCNet;IBM/G8264"/>
@@ -559,9 +559,10 @@
 
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <collections:size rdf:datatype="&xsd;int">20</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&PSCNet;IBM/G8264/availableVLANSet/AL2S/1"/>
+        <collections:element rdf:resource="&PSCNet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
     </owl:NamedIndividual>
     
 
