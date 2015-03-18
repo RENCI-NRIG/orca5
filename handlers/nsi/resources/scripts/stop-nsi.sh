@@ -10,13 +10,8 @@
 # If NSI_DEBUG is not set, no additional output will be shown (default = false)
 
 # prep
-if [ -z ${NSI_SCRIPTS_DIR} ]; then
-    echo "NSI package scripts directory undefined, exiting"
-    exit 1
-fi
-
 if [ -z ${NSI_CONNECTION_ID} ]; then
-  	echo "stop-nsi.sh: NSI_CONNECTION_ID must be specified, exiting"
+  	echo "stop-nsi.sh: NSI_CONNECTION_ID must be specified, exiting" >&2
     exit 1
 fi
 
@@ -37,24 +32,24 @@ fi
 
 # Detailed output?
 if [ "$NSI_DEBUG" = "true" ]; then
-    VERBOSE="-v"
+    VERBOSE="-v" # verbose output
 fi
 
-# FIXME: use proper logging location, use a property for the location
-# Also, this is a security hole *waiting* to be exploited via the trap.
-OUTFILE="/tmp/nsi.tmp"
-trap 'rm -f $OUTFILE' EXIT
-
-if [ ! -z ${VERBOSE} ]; then
-    echo "Running reservation cancel for ${NSI_CONNECTION_ID}"
+if [ "${VERBOSE}" ]; then
+    echo "Running reservation cancel for ${NSI_CONNECTION_ID}" >&2
 fi
 
+if [ "${VERBOSE}" ]; then
+    echo "command: ${NSI_PYTHON} ${NSI_ONSA} terminate -r ${NSI_REQUESTER} -p ${NSI_PROVIDER} -u ${NSI_SERVICE} -l ${NSI_HOSTCERT} -k ${NSI_HOSTKEY} -i ${NSI_CERTDIR} -c ${NSI_CONNECTION_ID} ${TLS} ${VERIFY} ${VERBOSE}" >&2
+fi
+    
 # Terminate reservation
-$NSI_PYTHON $NSI_ONSA terminate -r "$NSI_REQUESTER" -p "$NSI_PROVIDER" -u "$NSI_SERVICE" -l "${NSI_HOSTCERT}" -k "$NSI_HOSTKEY" -i "$NSI_CERTDIR" -c "$NSI_CONNECTION_ID" "$TLS" "$VERIFY" "$VERBOSE" > "$OUTFILE"
+OUTPUT=$($NSI_PYTHON $NSI_ONSA terminate -r $NSI_REQUESTER -p $NSI_PROVIDER -u $NSI_SERVICE -l $NSI_HOSTCERT -k $NSI_HOSTKEY -i $NSI_CERTDIR -c $NSI_CONNECTION_ID $TLS $VERIFY $VERBOSE)
 
-STATUS=`grep "${NSI_CONNECTION_ID} terminated" ${OUTFILE}`
+STATUS=`echo "$OUTPUT" | grep "${NSI_CONNECTION_ID} ${NSI_TERMINATEDS}"`
 
 if [ -z "${STATUS}" ]; then
-    echo "Unable to close reservation ${NSI_CONNECTION_ID}: \"${OUTFILE}\""
+    echo "Unable to close reservation ${NSI_CONNECTION_ID}" >&2
+    echo "$OUTPUT" >&2
     exit 1
 fi
