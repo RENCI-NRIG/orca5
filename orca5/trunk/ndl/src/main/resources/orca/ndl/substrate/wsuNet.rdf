@@ -377,6 +377,7 @@
         <topology:hasSwitchMatrix rdf:resource="&wsuNet;IBM/G8264/EthernetSwitchMatrix"/>
         <topology:hasInterface rdf:resource="&wsuNet;IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <topology:hasInterface rdf:resource="&wsuNet;IBM/G8264/TenGigabitEthernet/1/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&wsuNet;IBM/G8264/TenGigabitEthernet/1/2/ethernet"/>
         <topology:hasInterface rdf:resource="&wsuNet;IBM/G8264/TenGigabitEthernet/3/ethernet"/>
         <topology:hasInterface rdf:resource="&wsuNet;IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <topology:hasInterface rdf:resource="&wsuNet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
@@ -423,6 +424,21 @@
         <layer:hasBitRate rdf:resource="&layer;1G"/>
         <topology:interfaceOf rdf:resource="&wsuNet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&wsuNet;IBM/G8264/availableVLANSet/InstaGeni"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/wsuNet.rdf#wsuNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&wsuNet;IBM/G8264/TenGigabitEthernet/1/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">wsu</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:interfaceOf rdf:resource="&wsuNet;IBM/G8264"/>
+        <ethernet:availableVLANSet rdf:resource="&wsuNet;IBM/G8264/availableVLANSet/WSU"/>
     </owl:NamedIndividual>
     
 
@@ -608,10 +624,9 @@
 
     <owl:NamedIndividual rdf:about="&wsuNet;IBM/G8264/availableVLANSet/InstaGeni">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">11</collections:size>
+        <collections:size rdf:datatype="&xsd;int">10</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&wsuNet;IBM/G8264/VLANLabel/1815"/>
-        <collections:element rdf:resource="&wsuNet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
     </owl:NamedIndividual>
     
 
@@ -622,6 +637,17 @@
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&wsuNet;IBM/G8264/VLANLabel/1831"/>
         <layer:upperBound rdf:resource="&wsuNet;IBM/G8264/VLANLabel/1840"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/wsuNet.rdf#wsuNet/IBM/G8264/availableVLANSet/WSU -->
+
+    <owl:NamedIndividual rdf:about="&wsuNet;IBM/G8264/availableVLANSet/WSU">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">1</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&wsuNet;IBM/G8264/VLANLabel/1815"/>
     </owl:NamedIndividual>
     
 
