@@ -354,7 +354,7 @@ exit 0
 
 %changelog
 *Wed Mar 18 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Cleanup changelog, rebuild with latest NSI handler for UvA-NL
+- Re-build, with fixed BEN handler tasks.
 
 *Mon Feb 11 2013 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Initial packaging
