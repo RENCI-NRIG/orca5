@@ -353,32 +353,8 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Tue Mar 10 2015 Claris Castillo <claris@renci.org>
-- Ticket 407 Set client-triggered replication in ActorLiveness thread
-
-*Tue Mar 10 2015 Claris Castillo <claris@renci.org>
-- Fixes. Ticket 388 and ticket 404
-
-*Wed Mar 9 2015 Ilya Baldin <ibaldin@renci.org>
-- This time without nascent reservation bug in controller
-
-*Wed Mar 4 2015 Ilya Baldin <ibaldin@renci.org>
-- This time without cast bug in controller
-
-*Wed Mar 4 2015 Ilya Baldin <ibaldin@renci.org>
-- This time without NPE
-
-*Wed Mar 4 2015 Ilya Baldin <ibaldin@renci.org>
-- This time without the controller deadlock
-
-*Wed Mar 4 2015 Ilya Baldin <ibaldin@renci.org>
-- Touch off build for updating OSF, SL, TAMU and WVN
-
-*Tue Feb 24 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Touch off build, to check all is working well.
-
-*Fri Feb 20 2015  Ilya Baldin <ibaldin@renci.org>
-- Correcting OSCARS handler behavior for duration wrt to new controller behavior
+*Wed Mar 18 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
+- Cleanup changelog, rebuild with latest NSI handler for UvA-NL
 
 *Mon Feb 11 2013 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Initial packaging
