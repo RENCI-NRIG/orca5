@@ -153,7 +153,6 @@ This file contains definitions of tasks used by the ben package
                                 deviceAddress="@{router.8700}"
                                 vlanTag="@{vlan.tag}"
                             />
-                            </target>
                         </then>
                     </if>
 					<!-- Router type check -->
@@ -314,6 +313,7 @@ This file contains definitions of tasks used by the ben package
                                 vlanTag="@{vlan.tag}"
                         />
                     </then>
+                    </if>
 					<!-- Router type check -->
 					<if>
 						<and>
@@ -626,7 +626,6 @@ This file contains definitions of tasks used by the ben package
                                 ports="@{router.8700.ports}"
                                 vlanTag="@{vlan.tag}"
                             />
-                        </target>
                         </then>
                     </if>
 					<!-- Router type check -->
