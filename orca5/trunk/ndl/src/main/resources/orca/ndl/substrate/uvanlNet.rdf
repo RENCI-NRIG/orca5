@@ -335,7 +335,9 @@
 
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet">
+        <topology:hasURN>urn:publicid:IDN+wall2.ilabt.iminds.be+interface+c300b:0.12:uva</topology:hasURN>
+    </owl:NamedIndividual>
     
 
 
