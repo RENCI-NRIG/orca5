@@ -15,7 +15,7 @@
 	<property file="oscars.test.properties"/>
 	-->
 	
-	<target name="join" depends="resolve.configuration">
+	<target name="join" depends="resolve.configuration,ben.load.tasks">
 
 		<taskdef resource="orca/handlers/network/oscars/oscars.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
     	<echo message="OSCARS/ION HANDLER: JOIN" />
@@ -239,7 +239,7 @@
 	<!-- Modify operation is not supported -->
 	<target name="modify" />
 
-	<target name="leave" depends="resolve.configuration">
+	<target name="leave" depends="resolve.configuration,ben.load.tasks">
 		<echo message="OSCARS/ION HANDLER: LEAVE" />
 
 		<if>

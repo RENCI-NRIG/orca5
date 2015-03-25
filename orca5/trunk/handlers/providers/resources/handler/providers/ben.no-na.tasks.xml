@@ -17,6 +17,7 @@ This file contains definitions of tasks used by the ben package
 		<atomic.sequence.start 
 			device="@{device}"
 			/>
+		<echo message="Entered atomic sequence for @{device}" />
 	</limit>
 	</sequential>
 </macrodef>
