@@ -19,7 +19,7 @@
         &drivertasks;
         &bentasks;
 	
-        <target name="join" depends="resolve.configuration"  > 
+        <target name="join" depends="resolve.configuration,ben.load.tasks"  > 
 
     	<echo message="NSI HANDLER: JOIN" />
 		<if>
@@ -223,7 +223,7 @@
 	<target name="modify" />
 
 
-    <target name="leave" depends="resolve.configuration"> 
+    <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
 		<echo message="NSI HANDLER: LEAVE" />
 
 		<if>
