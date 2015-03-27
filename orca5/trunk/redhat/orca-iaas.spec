@@ -353,6 +353,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Fri Mar 27 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
+- Re-build, with fixed OSCARS and NSI handlers
+
 *Wed Mar 18 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Re-build, with fixed BEN handler tasks.
 
