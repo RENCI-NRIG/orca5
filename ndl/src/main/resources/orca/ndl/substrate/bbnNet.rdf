@@ -707,7 +707,7 @@
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet">
-        <topology:hasURN>urn:publicid:IDN+ion.internet2.edu+interface+rtr.newy:et-5/0/0:gpo-eg</topology:hasURN>
+        <topology:hasURN>urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.newy32aoa.net.internet2.edu:eth5/2:gpo-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 
