@@ -694,10 +694,9 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
      */
     @Override
     public boolean canRenew() {
-    	// commenting out to support recovery /ib 03/01/15
-    	//if (!renewable) {
-        //    return false;
-       // }
+    	if (!renewable) {
+    		return false;
+    	}
 
         if (lastTicketUpdate == null) {
             return false;
