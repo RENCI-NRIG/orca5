@@ -548,8 +548,16 @@ public class ClientActorManagementObjectHelper implements IClientActorManagement
 					rset.setRequestProperties(requestProperties);
 					// FIXME: not setting local/resource properties, but should
 					// we?
+					//Term newTerm = r.getTerm().extend();
+					//newTerm.setEndTime(newEndTime);
+					
+					// resetting start time so extend can take place immediately /ib 04/2015
+					Date tmpStartTime = r.getTerm().getStartTime();
 					Term newTerm = r.getTerm().extend();
 					newTerm.setEndTime(newEndTime);
+					newTerm.setNewStartTime(tmpStartTime);
+					newTerm.setStartTime(tmpStartTime);
+					
 					client.extend(reservation, rset, newTerm);
 					return null;
 				}

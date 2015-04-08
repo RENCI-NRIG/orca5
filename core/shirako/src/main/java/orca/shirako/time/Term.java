@@ -512,8 +512,11 @@ public class Term implements Cloneable, Persistable
             throw new IllegalStateException();
         }
 
-        return (startTime.equals(oldTerm.startTime) && newStartTime.after(oldTerm.endTime) &&
-               endTime.after(newStartTime));
+        //return (startTime.equals(oldTerm.startTime) && newStartTime.after(oldTerm.endTime) &&
+         //      endTime.after(newStartTime));
+        // loosening the constraints so extend can take place immediately /ib 04/2015
+        return (startTime.equals(oldTerm.startTime) &&
+                endTime.after(newStartTime));
     }
 
     /**
