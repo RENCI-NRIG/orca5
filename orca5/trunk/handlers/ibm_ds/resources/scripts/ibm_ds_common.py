@@ -223,6 +223,8 @@ class IBM_DS:
             
             if found_section == True:
                 if len(line) >= 5:
+                    if line[0].strip() == 'Access Logical Drive':
+                        continue
                     accessible_split = line[3].strip().split()
                     #LOG.debug('accessibled_split = ' + str(accessible_split))
                     if len(accessible_split) == 2 and accessible_split[0].strip() == 'Host':
