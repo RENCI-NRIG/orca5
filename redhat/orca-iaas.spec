@@ -353,8 +353,8 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Wed Apr 08 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Re-build to show Adam how it's done.
+*Thu Apr 09 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
+- Re-build to integrate missing patch for controller and extended reservation recovery.
 
 *Fri Mar 27 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Re-build, with fixed OSCARS and NSI handlers
