@@ -1,9 +1,10 @@
 package orca.controllers.xmlrpc;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
+//import com.ibm.icu.util.Calendar;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,9 +57,6 @@ import orca.util.VersionUtils;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.ontology.OntModel;
-
-//import com.ibm.icu.util.Calendar;
-import java.util.Calendar;
 /**
  * ORCA XMLRPC client interface
  * WARNING: Any method you declare public (non-static) becomes a remote method!
@@ -908,6 +906,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 			
 			List<ReservationMng> allRes =  ndlSlice.getAllReservations(sm);
+			List<ReservationMng> failedToExtend = new ArrayList<ReservationMng>();
 			if (allRes == null){
 				result = false;
 				logger.debug("No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
@@ -927,17 +926,35 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						if (AbacUtil.verifyCredentials){
 							setAbacAttributes(r, logger);
 						}
-						sm.extendReservation(new ReservationID(r.getReservationID()), termEndDate);
+						boolean extret = sm.extendReservation(new ReservationID(r.getReservationID()), termEndDate);
+						if (!extret) 
+							failedToExtend.add(r);
 					} catch (Exception ex) {
 						result = false;
 						throw new RuntimeException("Failed to extend reservation", ex);
 					}
 				}
 				
-				workflow.modifyTerm(termEndDate);
-				ReservationConverter orc = ndlSlice.getOrc();
-				orc.modifyTerm(workflow.getManifestModel(), workflow.getTerm());
-				result = true;
+				if (failedToExtend.size() == 0) {
+					workflow.modifyTerm(termEndDate);
+					ReservationConverter orc = ndlSlice.getOrc();
+					orc.modifyTerm(workflow.getManifestModel(), workflow.getTerm());
+					result = true;
+				} else {
+					String extMessage;
+					if (failedToExtend.size() == allRes.size()) {
+						extMessage = "Failed to extend all reservations in slice " + slice_urn;
+					} else {
+						StringBuilder sb = new StringBuilder("Failed to extend reservations ");
+						for (ReservationMng r: failedToExtend) {
+							sb.append(" " + r.getReservationID());
+						}
+						sb.append(" in slice " + slice_urn);
+						extMessage = sb.toString();
+					}
+					result = false;
+					return setError("renewSlice(): " + extMessage);
+				}
 			}
 
 			return setReturn(result);
