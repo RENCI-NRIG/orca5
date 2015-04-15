@@ -422,7 +422,7 @@
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/0/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>43</rdfs:label>
+        <rdfs:label>46</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="&xsd;string">iMind</topology:hasName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
