@@ -1,0 +1,3 @@
+nodeagent2.join=orca.handlers.nodeagent2.JoinTask
+nodeagent2.leave=orca.handlers.nodeagent2.LeaveTask
+nodeagent2.modify=orca.handlers.nodeagent2.ModifyTask

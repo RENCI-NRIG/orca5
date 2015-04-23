@@ -104,6 +104,9 @@
 								<resolveArtifact groupId="orca.handlers.network"
 									artifactId="oscars" version="${project.version}" classifier="package"
 									type="tar.gz" tofile="startup/package-orca.handlers.network.oscars.tar.gz" />
+								<resolveArtifact groupId="orca.handlers"
+									artifactId="nodeagent2" version="${project.version}" classifier="package"
+									type="tar.gz" tofile="startup/package-orca.handlers.nodeagent2.tar.gz" />
 								<resolveArtifact groupId="orca.handlers.network"
 									artifactId="providers" version="${project.version}" classifier="package"
 									type="tar.gz" tofile="startup/package-orca.handlers.network.providers.tar.gz" />
