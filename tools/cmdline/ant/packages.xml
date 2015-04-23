@@ -61,6 +61,7 @@
 	<resolve.file groupId="orca.handlers.network" artifactId="providers" version="${orca.version}" classifier="package" type="tar.gz" />
         <resolve.file groupId="orca.handlers" artifactId="ibm_ds" version="${orca.version}" classifier="package" type="tar.gz" />
         <resolve.file groupId="orca.handlers" artifactId="storage_service" version="${orca.version}" classifier="package" type="tar.gz" />
+        <resolve.file groupId="orca.handlers" artifactId="nodeagent2" version="${orca.version}" classifier="package" type="tar.gz" />
 	<resolve.file groupId="orca.controllers" artifactId="xmlrpc" version="${orca.version}" classifier="package" type="tar.gz" />
 </target>	
 -->
