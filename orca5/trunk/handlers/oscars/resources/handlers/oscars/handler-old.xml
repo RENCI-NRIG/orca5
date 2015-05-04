@@ -17,10 +17,8 @@
 	
 	<target name="join" depends="resolve.configuration,ben.load.tasks">
 
-		<taskdef resource="orca/handlers/nodeagent2/nodeagent2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
 		<taskdef resource="orca/handlers/network/oscars/oscars.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-	
-    	<echo message="OSCARS/ION NA2 HANDLER: JOIN" />
+    	<echo message="OSCARS/ION HANDLER: JOIN" />
 		<!-- see oscars.site.sample.properties and wiki for description
 		of static properties that can be specified in oscars.site.properties
 		-->
@@ -126,30 +124,30 @@
 	    	select="\1"
 	    	casesensitive="false" />
 
-		<var name="oscars.ctrl.to.call" unset="true"/>
+		<var name="ctrl.to.call" unset="true"/>
 
 		<if>
 			<equals arg1="${ctrl.domain.A}" arg2="al2s" />
 			<then>
-				<property name="oscars.ctrl.to.call" value="${oscars.idc.al2s}" />
+				<property name="ctrl.to.call" value="${oscars.idc.al2s}" />
 			</then>
 			<else>
 				<if>
 					<equals arg1="${ctrl.domain.A}" arg2="es" />
 					<then>
-						<property name="oscars.ctrl.to.call" value="${oscars.idc.es}" />
+						<property name="ctrl.to.call" value="${oscars.idc.es}" />
 					</then>
 					<else>
 						<if>
 							<equals arg1="${ctrl.domain.A}" arg2="ion" />
 							<then>
-								<property name="oscars.ctrl.to.call" value="${oscars.idc.ion}" />
+								<property name="ctrl.to.call" value="${oscars.idc.ion}" />
 							</then>
 							<else>
 								<if>
 									<equals arg1="${ctrl.domain.A}" arg2="tb" />
 									<then>
-										<property name="oscars.ctrl.to.call" value="${oscars.idc.tb}" />
+										<property name="ctrl.to.call" value="${oscars.idc.tb}" />
 									</then>
 									<else>
 										<echo message="Unknown OSCARS domain ${ctrl.domain.A} in one of the interfaces" />
@@ -162,8 +160,8 @@
 				</if>
 			</else>
 		</if>
-		<echo message="Calling OSCARS controller ${oscars.ctrl.to.call}" />
-		<property name="shirako.save.unit.vlan.idc" value="${oscars.ctrl.to.call}" />
+		<echo message="Calling OSCARS controller ${ctrl.to.call}" />
+		<property name="shirako.save.unit.vlan.idc" value="${ctrl.to.call}" />
 	
 		<if>
 			<equals arg1="${emulation}" arg2="true" />
@@ -179,30 +177,44 @@
 				<property name="shirako.target.code" value="0" />
 			</then>
 			<else>				
-				<var name="oscars.join.reservation" unset="true" />
+				<var name="create.circuit.output" unset="true" />
 				<var name="code" unset="true" />
 				<var name="message" unset="true" />
 	
 				<!-- per evangelos on 03/07/14 - asked to serialize requests to oscars -->
 				<atomic.sequence.start.macro
-					device="${oscars.ctrl.to.call}" />
-	
-					<!-- this collects all properties that start with "oscars" and sends them to the NA2 OSCARS plugin -->
-					<nodeagent2.join baseUrl="${na2.url}" prefix="oscars" returnPrefix="oscars.return" password="${na2.password}" plugin="${na2.plugin}" 
-						statusProperty="code" errorMsgProperty="message" reservationIdProperty="oscars.join.reservation" />
-	
+					device="${ctrl.to.call}" />
+				<exec executable="${oscars.scripts}/start-oscars-${oscars.version}.sh" resultproperty="code" outputproperty="create.circuit.output">
+				  	<env key="OSCARS_SCRIPTS_DIR" value="${oscars.scripts}" />
+				  	<env key="OSCARS_HOME" value="${oscars.home}" />
+				  	<env key="OSCARS_IDC" value="${ctrl.to.call}" />
+				  	<env key="OSCARS_QUERY_INTERVAL" value="${oscars.query.interval}" />
+				  	<env key="OSCARS_DESC" value="${oscars.desc}" />
+				  	<env key="OSCARS_PATHSETUP" value="${oscars.pathsetup}" />
+					<env key="OSCARS_TRUSTSTORE" value="${oscars.truststore}" />
+					<env key="OSCARS_KEYSTORE" value="${oscars.keystore}" />
+					<env key="OSCARS_ALIAS" value="${oscars.alias}" />
+					<env key="OSCARS_KEYSTOREPASS" value="${oscars.keystorepass}" />
+					<!-- controller-supplied properties -->
+				  	<env key="OSCARS_L2_SRC" value="${oscars.endpointA}" />
+				  	<env key="OSCARS_L2_DST" value="${oscars.endpointZ}" />
+				  	<env key="OSCARS_BW" value="${oscars.bw}" />
+				  	<env key="OSCARS_DURATION" value="${config.duration}" />
+					<env key="OSCARS_L2_SRC_TAG" value="${oscars.tagA}" />
+					<env key="OSCARS_L2_DST_TAG" value="${oscars.tagZ}" />
+				</exec>
 				<atomic.sequence.stop.macro
-						device="${oscars.ctrl.to.call}" />
+						device="${ctrl.to.call}" />
 				<if>
 					<not>
 						<equals arg1="${code}" arg2="0" />
 					</not>
 					<then>
-						<echo message="Unable to create circuit: ${message}" />
-						<property name="message" value="Unable to create circuit: ${message}" />
+						<echo message="Unable to create circuit: ${create.circuit.output}" />
+						<property name="message" value="Unable to create circuit: ${create.circuit.output}" />
 					</then>
 					<else>
-						<property name="shirako.save.unit.vlan.reservation" value="${oscars.join.reservation}" />
+						<property name="shirako.save.unit.vlan.reservation" value="${create.circuit.output}" />
 						<property name="shirako.save.unit.vlan.tag" value="${unit.vlan.tag}" />
 						<property name="shirako.save.unit.status" value="ACTIVE" />
 						<echo message="Reserved unit.vlan.tag=${shirako.save.unit.vlan.tag} unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
@@ -228,9 +240,7 @@
 	<target name="modify" />
 
 	<target name="leave" depends="resolve.configuration,ben.load.tasks">
-	
-		<taskdef resource="orca/handlers/nodeagent2/nodeagent2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-		<echo message="OSCARS/ION NA2 HANDLER: LEAVE" />
+		<echo message="OSCARS/ION HANDLER: LEAVE" />
 
 		<if>
 			<isset property="oscars.site.properties" />
@@ -246,7 +256,7 @@
 				<isset property="unit.vlan.idc"/>
 			</not>
 			<then>
-				<property name="unit.vlan.idc" value="${oscars.idc.al2s}" />
+				<property name="unit.vlan.idc" value="${oscars.idc.ion}" />
 			</then>
 		</if>
 	
@@ -260,19 +270,24 @@
 				<property name="shirako.target.code" value="0" />
 			</then>
 			<else>
-				<var name="code" unset="true" />	
-				<var name="message" unset="true" />
+				<var name="code" unset="true" />				
 				<echo message="terminating OSCARS circuit: ${unit.vlan.reservation}" />
 				<atomic.sequence.start.macro
 					device="${unit.vlan.idc}" />
-	
-					<!-- this collects all properties that start with "unit" and sends them to the NA2 OSCARS plugin -->
-					<nodeagent2.leave baseUrl="${na2.url}" prefix="unit" returnPrefix="oscars.return" password="${na2.password}" plugin="${na2.plugin}" 
-						reservationId="${unit.vlan.reservation}" statusProperty="code" errorMsgProperty="message" reservationIdProperty="oscars.leave.reservation" />
-	
+				<exec executable="${oscars.scripts}/stop-oscars-${oscars.version}.sh" resultproperty="code" outputproperty="terminate.circuit.output" >
+				  	<env key="OSCARS_SCRIPTS_DIR" value="${oscars.scripts}" />
+				  	<env key="OSCARS_HOME" value="${oscars.home}" />
+				  	<env key="OSCARS_IDC" value="${unit.vlan.idc}" />
+					<env key="OSCARS_TRUSTSTORE" value="${oscars.truststore}" />
+					<env key="OSCARS_KEYSTORE" value="${oscars.keystore}" />
+					<env key="OSCARS_ALIAS" value="${oscars.alias}" />
+					<env key="OSCARS_KEYSTOREPASS" value="${oscars.keystorepass}" />
+					<!-- controller-supplied properties -->
+					<env key="OSCARS_UNIT_VLAN_RESERVATION" value="${unit.vlan.reservation}" />
+				</exec>
 				<atomic.sequence.stop.macro
 					device="${unit.vlan.idc}" />
-				<echo message="NodeAgent exit code: ${code} with message ${message}" />	
+				<echo message="oscars-stop.sh exit code: ${code}" />	
 				<property name="shirako.target.code" value="${code}" />
 			</else>
 		</if>
