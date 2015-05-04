@@ -153,7 +153,10 @@ public abstract class RestTask extends OrcaAntTask {
 
 		Hashtable<?,?> props = getProject().getProperties();
 
-		Enumeration<?> e = this.getProject().getProperties().keys();
+		if (props == null)
+			return null;
+		
+		Enumeration<?> e = props.keys();
 		while(e.hasMoreElements()) {
 			String key = (String)e.nextElement();
 			String val = (String)props.get(key);
@@ -185,7 +188,11 @@ public abstract class RestTask extends OrcaAntTask {
 			// collect matching properties 
 			JSONObject p = collectPluginProperties();
 
-			StringEntity se = new StringEntity(p.toString());
+			StringEntity se;
+			if (p != null) 
+				se = new StringEntity(p.toString());
+			else 
+				se = new StringEntity("");
 
 			se.setContentType("application/json");
 
@@ -208,15 +215,18 @@ public abstract class RestTask extends OrcaAntTask {
 			getProject().setProperty(errorMsgProperty, pr.getErrorMsg());
 			getProject().setProperty(reservationIdProperty, pr.getResId().getId());
 
-			// set properties returned by the plugin
-			for(Map.Entry<String, String> me: pr.getProperties().entrySet()) {
-				getProject().setProperty(returnPrefix + "." + me.getKey(), me.getValue());
-				System.out.println("Adding property " + returnPrefix + "." + me.getKey() + "=" + me.getValue());
+			if (pr.getProperties() != null) {
+				// 	set properties returned by the plugin
+				for(Map.Entry<String, String> me: pr.getProperties().entrySet()) {
+					getProject().setProperty(returnPrefix + "." + me.getKey(), me.getValue());
+					System.out.println("Adding property " + returnPrefix + "." + me.getKey() + "=" + me.getValue());
+				}
 			}
 
 		} catch(BuildException be) {
 			throw be;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BuildException("Unable to POST " + rop + " to " + plugin + ": " + e);
 		}
 	}
