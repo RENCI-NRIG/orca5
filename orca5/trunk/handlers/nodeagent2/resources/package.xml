@@ -1,0 +1,8 @@
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
+                  id="AEFA2797-BD4D-4364-A6AB-C62920F7563D">
+  <name>NodeAgent2 Handler Library</name>
+  <description>Provides NodeAgent2 tasks.</description>
+  <plugins>
+  </plugins>
+</extensionPackage>
+
