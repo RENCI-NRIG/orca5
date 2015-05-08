@@ -79,11 +79,13 @@
 			</snapshots>
 		</repository>
 		<!--  FIXME: get rid of these repositories. Move what we need from them into the orca nexus repo -->
+		<!--
 		<repository>
 			<id>codehaus.mojo</id>
 			<name>Codehaus Mojos</name>
 			<url>http://repository.codehaus.org/org/codehaus/mojo/</url>
 		</repository>
+		-->
 		<repository>
 			<id>maven2-repository.java.net</id>
 			<name>Java.net Repository for Maven</name>
