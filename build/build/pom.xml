@@ -54,11 +54,13 @@
 			<url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs</url>
 		</repository>
 		<!-- Codehous repository -->
+		<!--
 		<repository>
 			<id>codehous.mojo</id>
 			<name>Codehous Mojos</name>
 			<url>http://repository.codehaus.org/org/codehaus/mojo/</url>
 		</repository>
+		-->
 	</repositories>
 
 	<dependencies>
