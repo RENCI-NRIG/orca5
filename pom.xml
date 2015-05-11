@@ -136,9 +136,8 @@
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:svn:https://geni-orca.renci.org/svn/orca/trunk</connection>
-		<developerConnection>scm:svn:https://geni-orca.renci.org/svn/orca/trunk</developerConnection>
-		<url>https://geni-orca.renci.org/svn/orca/trunk</url>
+		<connection>scm:git:https://github.com/RENCI-NRIG/orca5.git</connection>
+		<url>https://github.com/RENCI-NRIG/orca5</url>
 	</scm>
 
 	<issueManagement>
@@ -390,7 +389,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0</version>
+				<version>1.3</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>
