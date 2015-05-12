@@ -608,4 +608,9 @@ public class Broker extends Actor implements IBroker {
     public String getManagementObjectClass() {
         return BrokerManagementObject.class.getName();
     }
+    
+    public void modify(final ReservationID reservationID, final Properties modifyProps) throws Exception{
+    	// no-op
+    }
+    
 }

@@ -295,6 +295,8 @@ public class AntConfig extends Config {
         RunConfig task = new RunConfig(TargetJoin, p, token);
         enqueueBlocking(task);
 
+        System.out.println("In AntConfig.join() aftger enqueing RunConfig TargetJoin task");
+        
         if (isSynchronous) {
             while (!task.isFinished()) {
                 Thread.sleep(DefaultPollInterval);
@@ -308,6 +310,8 @@ public class AntConfig extends Config {
         RunConfig task = new RunConfig(TargetLeave, p, token);
         enqueueBlocking(task);
 
+        System.out.println("In AntConfig.leave() aftger enqueing RunConfig TargetLeave task");
+        
         if (isSynchronous) {
             // FIXME: replace with wait / notify
             while (!task.isFinished()) {
@@ -319,7 +323,20 @@ public class AntConfig extends Config {
     public void modify(ConfigToken token, Properties p) throws Exception {
         preprocess(p);
 
-        RunConfig task = new RunConfig(TargetModify, p, token);
+        // Get the modify subcommand from the property "modify.subcommand" and pass it as target
+        // For modify to work, the modify.subcommand needs to be present, and needs to be a string that starts with "modify."
+        // Else it will default to a target called "modify"
+        // If there is no "modify" target in the handler, it will fail in the same way as it will fail when a specified target does not exisit
+        // TODO: revisit above assumption
+        
+        String modifyTarget = (String) p.getProperty("modify.subcommand");
+        
+        if(modifyTarget == null){
+        	modifyTarget = TargetModify;
+        }
+        
+        //RunConfig task = new RunConfig(TargetModify, p, token);
+        RunConfig task = new RunConfig(modifyTarget, p, token);
         enqueueBlocking(task);
 
         if (isSynchronous) {
@@ -433,7 +450,7 @@ public class AntConfig extends Config {
                 String value = (String) entry.getValue();
                 project.setUserProperty(key, value);
 
-                //System.out.println("Setting property: " + key + "=" + value);
+                System.out.println("Setting property: " + key + "=" + value);
             }
         }
 
@@ -461,6 +478,8 @@ public class AntConfig extends Config {
         }
 
         private Properties executeTarget() throws Exception {
+        	
+        	System.out.println("In RunConfig.executeTarget()");
             File buildFile = new File(getFileName());
             SliceProject project = new SliceProject(token, actorConfigurationLock, handlerSemaphoreMap, secureRandom);
 
@@ -492,7 +511,12 @@ public class AntConfig extends Config {
             } catch (BuildException e) {
                 project.fireBuildFinished(e);
                 throw e;
+            } catch (Exception ex){
+            	// TODO: Fix catchall exception
+            	project.fireBuildFinished(ex);
+                throw ex;
             }
+            
         }
 
         public void execute() {

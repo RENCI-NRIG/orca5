@@ -137,6 +137,9 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
 
     @Override
     public void extendLease() throws Exception {
+    	
+    	System.out.println("In AuthorityReservation.extendLease()");
+    	
         nothingPending();
         incomingRequest();
 
@@ -151,16 +154,39 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         approved = false;
         bidPending = true;
         pendingRecover = false;
+        System.out.println("Calling mapAndUpdate() from AuthorityReservation.extendLease()");
         mapAndUpdate(true);
     }
 
+    @Override
+    public void modifyLease() throws Exception {
+    	
+    	System.out.println("In AuthorityReservation.modifyLease()");
+    	
+        nothingPending();
+        incomingRequest();
+
+        if (!isActive()) {
+            error("reservation does not yet hold a lease");
+        }
+
+        // anirban@ 04/07/15: If we decide to call a modify policy at some later point of time, set approved to false
+        approved = true;
+        bidPending = true;
+        pendingRecover = false;
+        mapAndUpdateModifyLease();
+    }
+    
     @Override
     public void serviceExtendLease() throws Exception {
         assert ((state == ReservationStates.Failed) && (pending == ReservationStates.None))
                 || ((pending == ReservationStates.ExtendingLease) || (pending == ReservationStates.Priming));
 
+        System.out.println("In AuthorityReservation.serviceExtendLease() | pending = " + pending);
+        
         try {
             if (pending == ReservationStates.Priming) {
+            	System.out.println("Calling ResourceSet.serviceExtend()");
                 resources.serviceExtend();
             }
         } catch (TestException e) {
@@ -171,6 +197,25 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         }
     }
 
+    @Override
+    public void serviceModifyLease() throws Exception {
+    	System.out.println("In AuthorityReservation.serviceModifyLease()");
+        assert ((state == ReservationStates.Failed) && (pending == ReservationStates.None))
+                || ((pending == ReservationStates.ModifyingLease) || (pending == ReservationStates.Priming));
+
+        try {
+            if (pending == ReservationStates.Priming) {
+            	System.out.println("To Call ResourceSet.serviceModify()");
+                resources.serviceModify();
+            }
+        } catch (TestException e) {
+            throw e;
+        } catch (Exception e) {
+            logException("authority failed servicing modifyLease", e);
+            failNotify(e.toString());
+        }
+    }
+    
     @Override
     public void close() {
         if (logger.isDebugEnabled()) {
@@ -205,6 +250,11 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                 generateUpdate();
             }
             break;
+        case RequestTypes.RequestModifyLease:
+            if ((pending == ReservationStates.None) && !bidPending && !pendingRecover) {
+                generateUpdate();
+            }
+            break;    
         default:
             throw new OrcaException("Unsupported operation: " + operation);
         }
@@ -321,6 +371,83 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         return success;
     }
 
+    /**
+     * Calls the policy to fill a request, with associated state transitions.
+     * 
+     * @param extend
+     *            true iff this request is an extend
+     * @return boolean success
+     */
+    protected boolean mapAndUpdateModifyLease() {
+    	
+    	System.out.println("In AuthorityReservation.mapAndUpdateModifyLease()");
+        boolean success = false;
+        boolean granted = false;
+
+        switch (state) {
+        case ReservationStates.Failed:
+            /*
+             * Must be a previous failure, or policy marked it as failed. Send
+             * update to reset client.
+             */
+            generateUpdate();
+            break;
+
+        case ReservationStates.Active:
+            try {
+                transition("modifying lease",
+                        ReservationStates.Active,
+                        ReservationStates.ModifyingLease);
+//                /*
+//                 * If the policy has processed this reservation, set granted to
+//                 * true so that we can start priming the resources. If the
+//                 * policy has not yet processed this reservation (binPending is
+//                 * true) then call the policy. The policy may choose to process
+//                 * the request immediately (true) or to defer it (false). In
+//                 * case of a deferred request, we will eventually come back to
+//                 * this method after the policy has done its job.
+//                 */
+//                if (isBidPending()) {
+//                    granted = ((IAuthorityPolicy) policy).extend(this);
+//                } else {
+//                    granted = true;
+//                }
+                
+                // anirban@ 04/07/15: If we decide to have a modify policy, call policy here, as above
+            	// For now, assume modify is always granted
+                granted = true;
+
+                if (granted) {
+                    success = true;
+                    ticket = requestedResources;
+                    // attach the configuration properties to the approved
+                    // resources
+                    // requestedResources.getConfigurationProperties() contains the modifyProperties
+                    
+                    // TODO: merge the configuration properties of approved and requested resources and put it in approved resources instead ?
+                    System.out.println("requestedResources.getConfigurationProperties() = " + requestedResources.getConfigurationProperties());
+                    System.out.println("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
+                    if (requestedResources.getConfigurationProperties() != null) {
+                        approvedResources.setConfigurationProperties(requestedResources.getConfigurationProperties());
+                    }
+                    System.out.println("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
+                    resources.updateProps(this, approvedResources);
+                    // transition to priming
+                    transition("modify lease", ReservationStates.Active, ReservationStates.Priming);
+                }
+            } catch (Exception e) {
+                logException("authority mapper modify", e);
+                failNotify(e.toString());
+            }
+            break;
+        default:
+            fail("mapAndUpdateModifyLease: unexpected state");
+        }
+
+        return success;
+    }
+    
+    
     @Override
     protected void generateUpdate() {
         if (callback == null) {
@@ -358,6 +485,10 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         requestedResources.validateIncomingTicket(requestedTerm);
     }
 
+    public void prepareModifyLease() throws Exception {
+        requestedResources.validateIncomingTicket(requestedTerm);
+    }
+    
     @Override
     public void prepareProbe() throws Exception {
         try {
@@ -374,7 +505,7 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
 //        if (logger.isDebugEnabled()) {
 //            logger.debug("AuthorityReservation probePending: " + this.toLogString());
 //        }
-
+    	
         if (servicePending != ReservationStates.None) {
             logError("service overrun in probePending");
             return;
@@ -389,6 +520,15 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                 generateUpdate();
                 notifiedAboutFailure = true;
             }
+            
+            // 	if (modifying == Reservationstates.modifyPending){
+            // 		if (resources.isActive()){
+            //			transition("modify complete", ReservationStates.Active, ReservationStates.None);
+            //			System.out.println("modify complete in AuthorityReservation.probePending()");
+            //			generateUpdate();
+            //		}
+            //	}
+            
             break;
 
         case ReservationStates.Redeeming:
@@ -398,7 +538,7 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
              */
             assert state == ReservationStates.Ticketed;
             if (!bidPending && mapAndUpdate(false)) {
-                logger.debug("Resource assignment for #" + rid.toHashString() + " completed");
+                logger.debug("Resource assignment (redeem) for #" + rid.toHashString() + " completed");
                 servicePending = ReservationStates.Redeeming;
             }
             break;
@@ -406,11 +546,21 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         case ReservationStates.ExtendingLease:
             assert state == ReservationStates.Active;
             if (!bidPending && mapAndUpdate(true)) {
-                logger.debug("Resource assignment for #" + rid.toHashString() + " completed");
+                logger.debug("Resource assignment (extend) for #" + rid.toHashString() + " completed");
                 servicePending = ReservationStates.ExtendingLease;
             }
             break;
 
+        // This case will not arise if there are no modify policies, which might defer modify    
+        case ReservationStates.ModifyingLease:
+            assert state == ReservationStates.Active;
+            System.out.println("In AuthorityReservation.probePending(): pending state is ModifyingLease and res state is Active");
+            if (!bidPending && mapAndUpdateModifyLease()) {
+                logger.debug("Resource assignment (modify) for #" + rid.toHashString() + " completed");
+                servicePending = ReservationStates.ModifyingLease;
+            }
+            break;
+            
         case ReservationStates.Closing:
             if ((resources == null) || resources.isClosed()) {
                 transition("close complete", ReservationStates.Closed, ReservationStates.None);
@@ -427,6 +577,8 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
              * something succeeded, then we report what we got as active, else
              * it's a complete bust.
              */
+        	System.out.println("In AuthorityReservation.probePending(): state = Priming");
+        	
             if (resources.isActive()) {
                 /*
                  * If something failed or we are recovering, we need to correct
@@ -479,9 +631,12 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                 } else {
                     pendingRecover = false;
                     transition("prime complete2", ReservationStates.Active, ReservationStates.None);
+                    System.out.println("prime complete2 in AuthorityReservation.probePending()");
                     generateUpdate();
                 }
             }
+            
+            // If no unit is priming or closing, but modification is in process
 
             break;
         }
@@ -502,9 +657,15 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                 break;
 
             case ReservationStates.ExtendingLease:
+            	System.out.println("Calling AuthorityReservation.serviceExtendLease() from AuthorityReservation.serviceProbe()");
                 serviceExtendLease();
                 break;
+             
+            case ReservationStates.ModifyingLease:
+                serviceModifyLease();
+                break;                    
             }
+            
         } catch (TestException e) {
             throw e;
         } catch (Exception e) {

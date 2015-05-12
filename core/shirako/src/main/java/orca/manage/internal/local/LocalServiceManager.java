@@ -8,6 +8,7 @@ import java.util.Properties;
 import orca.manage.IOrcaActor;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
+import orca.manage.OrcaConverter;
 import orca.manage.beans.PoolInfoMng;
 import orca.manage.beans.ProxyMng;
 import orca.manage.beans.ReservationMng;
@@ -227,5 +228,23 @@ public class LocalServiceManager extends LocalActor implements IOrcaServiceManag
     	}
     	return false;	
     }
+    
+    public boolean modifyReservation(ReservationID reservation,  
+			 Properties modifyProperties){
+    	clearLast();
+    	if (reservation == null || modifyProperties == null) {
+    		lastException = new IllegalArgumentException();
+    		return false;
+    	}
+    	try {
+    		lastStatus = manager.modifyReservation(reservation, modifyProperties, auth);
+    		return (lastStatus.getCode() == 0);
+    	} catch (Exception e){
+    		lastException = e;
+    	}
+    	return false;
+    	
+   }
+    
 
 }

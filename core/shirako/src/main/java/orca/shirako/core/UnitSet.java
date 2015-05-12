@@ -307,10 +307,15 @@ public class UnitSet implements IConcreteSet, CustomRecoverable {
 		return getUnits();
 	}
 
-	protected int getPendingCount() {
+	protected int getPendingCount() { // Now only returns the count for number of units in PRIMING or CLOSING states
 		int count = 0;
 		for (Unit u : units) {
 			if (u.hasPendingAction()) {
+				// Check if pending action is a modify
+				// If pending action is not modify, increment count
+				//if(!u.isPendingModifying()){
+				//	count++;
+				//}
 				count++;
 			}
 		}

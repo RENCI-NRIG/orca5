@@ -14,6 +14,10 @@ public enum UnitState {
         return (state == PRIMING || state == MODIFYING || state == CLOSING);
     }
     
+    public static boolean isPendingModifying(UnitState state){
+        return (state == MODIFYING);
+    }
+    
     public static UnitState convert(int ordinal) {
         for (UnitState s : values()){
             if (s.ordinal() == ordinal) {

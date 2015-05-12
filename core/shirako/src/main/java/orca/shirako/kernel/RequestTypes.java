@@ -18,4 +18,5 @@ public class RequestTypes
     public static final int RequestExtendLease = 4;
     public static final int RequestClose = 5;
     public static final int RequestRelinquish = 6;
+    public static final int RequestModifyLease = 7;
 }

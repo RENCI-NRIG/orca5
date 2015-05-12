@@ -326,7 +326,7 @@ public abstract class Actor implements IActor {
             throws Exception {
         wrapper.extendReservation(rid, rset, term);
     }
-
+    
     public void externalTick(final long cycle) throws Exception {
         IActorEvent e = new IActorEvent() {
             public void process() throws Exception {

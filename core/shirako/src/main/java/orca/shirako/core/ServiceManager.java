@@ -10,6 +10,7 @@
 package orca.shirako.core;
 
 import java.util.Iterator;
+import java.util.Properties;
 
 import orca.manage.OrcaConstants;
 import orca.manage.internal.ServiceManagerManagementObject;
@@ -32,6 +33,7 @@ import orca.shirako.util.TestException;
 import orca.shirako.util.UpdateData;
 import orca.util.ID;
 import orca.util.OrcaException;
+import orca.util.PropList;
 import orca.util.persistence.NotPersistent;
 
 /**
@@ -63,6 +65,12 @@ public class ServiceManager extends Actor implements IServiceManager {
     @NotPersistent
     protected ReservationSet extendingLease = new ReservationSet();
 
+    /**
+     * Recovered reservations that need to modify leases.
+     */
+    @NotPersistent
+    protected ReservationSet modifyingLease = new ReservationSet();
+    
     /**
      * Peer registry.
      */
@@ -449,8 +457,90 @@ public class ServiceManager extends Actor implements IServiceManager {
         wrapper.updateTicket(reservation, udd, caller);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void modify(final ReservationID rid, final Properties modifyProps) throws Exception{
+    	System.out.println("Called ServiceManager.modify()");
+    	
+        if (rid == null || modifyProps == null) { // When it arrives at the SM, modifyProps can't be null
+            throw new IllegalArgumentException();
+        }
+
+        IClientReservation rc = (IClientReservation) getReservation(rid);
+        if (rc == null) {
+            throw new Exception("Unknown reservation: " + rid);
+        }
+        
+        if(rc.getApprovedResources() != null){
+        	
+        	// All client-side property manipulation happens here
+        	
+        	System.out.println("Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
+        	// Merging modifyProperties into ConfigurationProperties
+        	Properties currConfigProps = rc.getApprovedResources().getConfigurationProperties();        	
+        	PropList.mergePropertiesPriority(modifyProps, currConfigProps);
+        	
+        	//rc.getApprovedResources().setConfigurationProperties(modifyProps);
+        	rc.getApprovedResources().setConfigurationProperties(currConfigProps);
+        	
+        	System.out.println("ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
+        	
+        	// After this point the new modifyProperties are a part of the configuration properties 
+        	// of the resource set associated with the reservation; These properties flow from the SM
+        	// to the AM as part of the reservation, and land up as part of requestedResources.getConfigurationProperties()
+        	// which is processed in AuthorityReservation.mapAndUpdateModifyLease()
+        	
+        }
+        
+        if (!recovered) {
+            modifyingLease.add((IServiceManagerReservation) rc);
+        }else {
+            wrapper.modifyLease((IServiceManagerReservation) rc);
+        }
+        
+          	
+    }
+    
+    
     public String getManagementObjectClass() {
         return ServiceManagerManagementObject.class.getName();
+    }
+    
+    /**
+     * For recovery, mark extending reservations renewable or the opposite
+     * and save this, then restore afterwards
+     * @param t
+     */
+    static ReservationSet savedExtendedRenewable = new ReservationSet();
+    private void saveExtendingRenewable() {
+    	 for (IReservation r: extendingTicket) {
+             try {
+                 if (r instanceof IClientReservation) {
+                	 if (!((IClientReservation) r).getRenewable()) {
+                		 ((IClientReservation) r).setRenewable(true);
+                		 savedExtendedRenewable.add(r);
+                	 }
+                 }else {
+                     logger.warn("Reservation #" + r.getReservationID() + " cannot be re-marked");
+                 }
+             } catch (Exception e) {
+                 logger.error("Could not mark ticket renewable for #" + r.getReservationID().toHashString());
+             }
+         }
+    }
+    
+    /**
+     * Restore the value of renewable field after recovery if we changed it
+     */
+    private void restoreExtendingRenewable() {
+    	for (IReservation r: savedExtendedRenewable) {
+    		try {
+    			((IClientReservation) r).setRenewable(false);
+    		} catch (Exception e) {
+    			logger.error("Could not re-mark ticket nonrenewable for #" + r.getReservationID().toHashString());
+    		}
+    	}
     }
     
     @Override
@@ -460,7 +550,9 @@ public class ServiceManager extends Actor implements IServiceManager {
         ticket(ticketing);
         ticketing.clear();
         
+        saveExtendingRenewable();
         extendTicket(extendingTicket);
+        restoreExtendingRenewable();
         extendingTicket.clear();
         
         redeem(redeeming);
@@ -468,5 +560,8 @@ public class ServiceManager extends Actor implements IServiceManager {
         
         extendLease(extendingLease);
         extendingLease.clear();
+        
+        // TODO: Do something about the modifyingLease actions
+        
     }
 }

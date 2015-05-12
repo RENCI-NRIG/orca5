@@ -27,6 +27,10 @@ public class DummyAuthorityProxy extends DummyProxy implements IAuthorityProxy {
         return null;
     }    
     
+    public IRPCRequestState prepareModifyLease(IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback, AuthToken caller) {
+        return null;
+    }
+    
     public IRPCRequestState prepareClose(IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback, AuthToken caller) {
         return null;
     }

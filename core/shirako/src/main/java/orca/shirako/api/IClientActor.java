@@ -10,6 +10,8 @@
 
 package orca.shirako.api;
 
+import java.util.Properties;
+
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
 import orca.shirako.kernel.ResourceSet;
@@ -164,4 +166,15 @@ public interface IClientActor extends IActor, IClientPublic {
 	 *            set of reservations to obtain tickets for
 	 */
 	public void ticket(ReservationSet set);
+	
+	/**
+     * Issue modify request for given reservation. Note: the reservation
+     * must have already been registered with the actor.
+     *
+     * @param reservationID reservationID for the reservation to modify
+     * @param modifyProperties property list for modify
+     * @throws Exception
+     */
+    public void modify(ReservationID reservationID, Properties modifyProperties) throws Exception;
+	
 }

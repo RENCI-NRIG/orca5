@@ -58,6 +58,13 @@ public class LocalAuthority extends LocalBroker implements IAuthorityProxy {
         return state;
     }
 
+    public IRPCRequestState prepareModifyLease(IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback, AuthToken caller) {
+        LocalProxyRequestState state = new LocalProxyRequestState();
+        state.reservation = passReservationAuthority(reservation, caller);
+        state.callback = callback;
+        return state;
+    }
+    
     public IRPCRequestState prepareClose(IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback, AuthToken caller) {
         LocalProxyRequestState state = new LocalProxyRequestState();
         state.reservation = passReservationAuthority(reservation, caller);

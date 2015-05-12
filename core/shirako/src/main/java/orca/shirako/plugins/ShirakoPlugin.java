@@ -237,7 +237,7 @@ public class ShirakoPlugin implements IShirakoPlugin {
             processJoinComplete(token, properties);
         } else if (target.equals(Config.TargetLeave)) {
             processLeaveComplete(token, properties);
-        } else if (target.equals(Config.TargetModify)) {
+        } else if (target.startsWith(Config.TargetModify)) { // changed from target.equals to target.startsWith because modify targets will have subcommands (e.g. modify.restart)
             processModifyComplete(token, properties);
         } else {
             // FIXME: should be an exception?

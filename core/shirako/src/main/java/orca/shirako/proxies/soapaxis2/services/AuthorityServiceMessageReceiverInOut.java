@@ -37,10 +37,31 @@
 
         
 
+            if("modifyLease".equals(methodName)){
+
+            
+            orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse param53 = null;
+                    
+                            //doc style
+                            orca.shirako.proxies.soapaxis2.services.ModifyLease wrappedParam =
+                                                 (orca.shirako.proxies.soapaxis2.services.ModifyLease)fromOM(
+                        msgContext.getEnvelope().getBody().getFirstElement(),
+                        orca.shirako.proxies.soapaxis2.services.ModifyLease.class,
+                        getEnvelopeNamespaces(msgContext.getEnvelope()));
+                                    
+                                   param53 = 
+                                             skel.modifyLease(wrappedParam) ;
+                                        
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param53, false);
+                                
+
+            }
+        
+
             if("updateLease".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.UpdateLeaseResponse param49 = null;
+            orca.shirako.proxies.soapaxis2.services.UpdateLeaseResponse param55 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.UpdateLease wrappedParam =
@@ -49,10 +70,10 @@
                         orca.shirako.proxies.soapaxis2.services.UpdateLease.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param49 =
+                                   param55 =
                                              skel.updateLease(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param49, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param55, false);
                                 
 
             }
@@ -61,7 +82,7 @@
             if("extendLease".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.ExtendLeaseResponse param51 = null;
+            orca.shirako.proxies.soapaxis2.services.ExtendLeaseResponse param57 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.ExtendLease wrappedParam =
@@ -70,10 +91,10 @@
                         orca.shirako.proxies.soapaxis2.services.ExtendLease.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param51 =
+                                   param57 =
                                              skel.extendLease(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param51, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param57, false);
                                 
 
             }
@@ -82,7 +103,7 @@
             if("updateTicket".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.UpdateTicketResponse param53 = null;
+            orca.shirako.proxies.soapaxis2.services.UpdateTicketResponse param59 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.UpdateTicket wrappedParam =
@@ -91,10 +112,10 @@
                         orca.shirako.proxies.soapaxis2.services.UpdateTicket.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param53 =
+                                   param59 =
                                              skel.updateTicket(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param53, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param59, false);
                                 
 
             }
@@ -103,7 +124,7 @@
             if("ticket".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.TicketResponse param55 = null;
+            orca.shirako.proxies.soapaxis2.services.TicketResponse param61 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.Ticket wrappedParam =
@@ -112,10 +133,10 @@
                         orca.shirako.proxies.soapaxis2.services.Ticket.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param55 =
+                                   param61 =
                                              skel.ticket(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param55, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param61, false);
                                 
 
             }
@@ -124,7 +145,7 @@
             if("query".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.QueryResponse param57 = null;
+            orca.shirako.proxies.soapaxis2.services.QueryResponse param63 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.Query wrappedParam =
@@ -133,10 +154,10 @@
                         orca.shirako.proxies.soapaxis2.services.Query.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param57 =
+                                   param63 =
                                              skel.query(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param57, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param63, false);
                                 
 
             }
@@ -145,7 +166,7 @@
             if("relinquish".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.RelinquishResponse param59 = null;
+            orca.shirako.proxies.soapaxis2.services.RelinquishResponse param65 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.Relinquish wrappedParam =
@@ -154,10 +175,10 @@
                         orca.shirako.proxies.soapaxis2.services.Relinquish.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param59 =
+                                   param65 =
                                              skel.relinquish(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param59, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param65, false);
                                 
 
             }
@@ -166,7 +187,7 @@
             if("redeem".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.RedeemResponse param61 = null;
+            orca.shirako.proxies.soapaxis2.services.RedeemResponse param67 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.Redeem wrappedParam =
@@ -175,10 +196,10 @@
                         orca.shirako.proxies.soapaxis2.services.Redeem.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param61 =
+                                   param67 =
                                              skel.redeem(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param61, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param67, false);
                                 
 
             }
@@ -187,7 +208,7 @@
             if("failedRPC".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.FailedRPCResponse param63 = null;
+            orca.shirako.proxies.soapaxis2.services.FailedRPCResponse param69 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.FailedRPC wrappedParam =
@@ -196,10 +217,10 @@
                         orca.shirako.proxies.soapaxis2.services.FailedRPC.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param63 =
+                                   param69 =
                                              skel.failedRPC(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param63, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param69, false);
                                 
 
             }
@@ -208,7 +229,7 @@
             if("claim".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.ClaimResponse param65 = null;
+            orca.shirako.proxies.soapaxis2.services.ClaimResponse param71 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.Claim wrappedParam =
@@ -217,10 +238,10 @@
                         orca.shirako.proxies.soapaxis2.services.Claim.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param65 =
+                                   param71 =
                                              skel.claim(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param65, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param71, false);
                                 
 
             }
@@ -229,7 +250,7 @@
             if("queryResult".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.QueryResultResponse param67 = null;
+            orca.shirako.proxies.soapaxis2.services.QueryResultResponse param73 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.QueryResult wrappedParam =
@@ -238,10 +259,10 @@
                         orca.shirako.proxies.soapaxis2.services.QueryResult.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param67 =
+                                   param73 =
                                              skel.queryResult(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param67, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param73, false);
                                 
 
             }
@@ -250,7 +271,7 @@
             if("extendTicket".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.ExtendTicketResponse param69 = null;
+            orca.shirako.proxies.soapaxis2.services.ExtendTicketResponse param75 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.ExtendTicket wrappedParam =
@@ -259,10 +280,10 @@
                         orca.shirako.proxies.soapaxis2.services.ExtendTicket.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param69 =
+                                   param75 =
                                              skel.extendTicket(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param69, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param75, false);
                                 
 
             }
@@ -271,7 +292,7 @@
             if("close".equals(methodName)){
 
             
-            orca.shirako.proxies.soapaxis2.services.CloseResponse param71 = null;
+            orca.shirako.proxies.soapaxis2.services.CloseResponse param77 = null;
                     
                             //doc style
                             orca.shirako.proxies.soapaxis2.services.Close wrappedParam =
@@ -280,10 +301,10 @@
                         orca.shirako.proxies.soapaxis2.services.Close.class,
                         getEnvelopeNamespaces(msgContext.getEnvelope()));
                                     
-                                   param71 =
+                                   param77 =
                                              skel.close(wrappedParam) ;
                                         
-                                    envelope = toEnvelope(getSOAPFactory(msgContext), param71, false);
+                                    envelope = toEnvelope(getSOAPFactory(msgContext), param77, false);
                                 
 
             }
@@ -298,6 +319,22 @@
         }
         
         //
+            private  org.apache.axiom.om.OMElement  toOM(orca.shirako.proxies.soapaxis2.services.ModifyLease param, boolean optimizeContent){
+            
+                     return param.getOMElement(orca.shirako.proxies.soapaxis2.services.ModifyLease.MY_QNAME,
+                                  org.apache.axiom.om.OMAbstractFactory.getOMFactory());
+                    
+
+            }
+        
+            private  org.apache.axiom.om.OMElement  toOM(orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse param, boolean optimizeContent){
+            
+                     return param.getOMElement(orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse.MY_QNAME,
+                                  org.apache.axiom.om.OMAbstractFactory.getOMFactory());
+                    
+
+            }
+        
             private  org.apache.axiom.om.OMElement  toOM(orca.shirako.proxies.soapaxis2.services.UpdateLease param, boolean optimizeContent){
             
                      return param.getOMElement(orca.shirako.proxies.soapaxis2.services.UpdateLease.MY_QNAME,
@@ -490,6 +527,15 @@
 
             }
         
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse param, boolean optimizeContent){
+                      org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
+                       
+                                emptyEnvelope.getBody().addChild(param.getOMElement(orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse.MY_QNAME,factory));
+                            
+
+                     return emptyEnvelope;
+                    }
+                    
                     private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, orca.shirako.proxies.soapaxis2.services.UpdateLeaseResponse param, boolean optimizeContent){
                       org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
                        
@@ -615,6 +661,20 @@
 
         try {
         
+                if (orca.shirako.proxies.soapaxis2.services.ModifyLease.class.equals(type)){
+                
+                           return orca.shirako.proxies.soapaxis2.services.ModifyLease.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    
+
+                }
+           
+                if (orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse.class.equals(type)){
+                
+                           return orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    
+
+                }
+           
                 if (orca.shirako.proxies.soapaxis2.services.UpdateLease.class.equals(type)){
                 
                            return orca.shirako.proxies.soapaxis2.services.UpdateLease.Factory.parse(param.getXMLStreamReaderWithoutCaching());

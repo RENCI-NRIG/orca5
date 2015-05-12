@@ -60,6 +60,16 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
     public void extendLease(IAuthorityReservation reservation) throws Exception;
 
     /**
+     * Processes an modify lease request for the reservation.
+     *
+     * @param reservation reservation representing a request for a lease
+     *        modification
+     *
+     * @throws Exception
+     */
+    public void modifyLease(IAuthorityReservation reservation) throws Exception;
+    
+    /**
      * Informs the actor that the given resources are no longer in use
      * and can be considered as free, regardless of the state of the
      * individual units.

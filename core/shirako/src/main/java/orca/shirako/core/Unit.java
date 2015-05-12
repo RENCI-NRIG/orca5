@@ -237,6 +237,10 @@ public class Unit implements Persistable, Cloneable, UnitProperties, ConfigToken
         return UnitState.isPending(state);
     }
 
+    public synchronized boolean isPendingModifying() {
+        return UnitState.isPendingModifying(state);
+    }
+    
     public synchronized void setModified(Unit modified) {
         this.modified = modified;
     }

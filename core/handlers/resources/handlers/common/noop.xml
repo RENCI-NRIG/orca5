@@ -82,6 +82,10 @@
         <property name="shirako.target.code" value="0" />
     </target>
 
+    <target name="modify.restart" depends="merge.properties,resolve.configuration">
+        <property name="shirako.target.code" value="0" />
+    </target>
+
     <target name="recover">
         <property name="shirako.target.code" value="0" />
     </target>

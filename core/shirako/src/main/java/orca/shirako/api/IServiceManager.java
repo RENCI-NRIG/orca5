@@ -10,6 +10,8 @@
 
 package orca.shirako.api;
 
+import java.util.Properties;
+
 import orca.shirako.util.ReservationSet;
 
 
@@ -66,4 +68,5 @@ public interface IServiceManager extends IClientActor, IServiceManagerPublic
      * @param set set of reservations to redeem
      */
     public void redeem(ReservationSet set);
+    
 }

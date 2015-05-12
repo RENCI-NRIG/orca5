@@ -1,22 +1,15 @@
 <!-- This file was auto-generated from WSDL -->
 <!-- by the Apache Axis2 version: #axisVersion# #today# -->
 
-  <service name="AuthorityService">
-    <messageReceivers>
-      <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
-      class="orca.shirako.proxies.soapaxis2.services.AuthorityServiceMessageReceiverInOut" />
-    </messageReceivers>
+<service name="AuthorityService">
+<messageReceivers>
+<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="orca.shirako.proxies.soapaxis2.services.AuthorityServiceMessageReceiverInOut"/>
+</messageReceivers>
+<parameter locked="false" name="ServiceClass">orca.shirako.proxies.soapaxis2.services.AuthorityServiceSkeleton</parameter>
+<operation name="modifyLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>modifyLease</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/modifyLeaseResponse</outputActionMapping>
 
-    <parameter locked="false" name="ServiceClass">
-    orca.shirako.proxies.soapaxis2.services.AuthorityServiceSkeleton</parameter>
-
-    <operation name="updateLease"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateLease</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateLeaseResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -38,14 +31,10 @@
 </parameter>
 
 </operation>
+<operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateLease</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateLeaseResponse</outputActionMapping>
 
-    <operation name="extendLease"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>extendLease</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendLeaseResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -67,14 +56,10 @@
 </parameter>
 
 </operation>
+<operation name="extendLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>extendLease</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendLeaseResponse</outputActionMapping>
 
-    <operation name="updateTicket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateTicket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateTicketResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -96,14 +81,10 @@
 </parameter>
 
 </operation>
+<operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateTicketResponse</outputActionMapping>
 
-    <operation name="ticket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>ticket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/ticketResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -125,14 +106,10 @@
 </parameter>
 
 </operation>
+<operation name="ticket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>ticket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/ticketResponse</outputActionMapping>
 
-    <operation name="query"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>query</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -154,14 +131,10 @@
 </parameter>
 
 </operation>
+<operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>query</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResponse</outputActionMapping>
 
-    <operation name="relinquish"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>relinquish</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/relinquishResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -183,14 +156,10 @@
 </parameter>
 
 </operation>
+<operation name="relinquish" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>relinquish</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/relinquishResponse</outputActionMapping>
 
-    <operation name="redeem"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>redeem</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/redeemResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -212,14 +181,10 @@
 </parameter>
 
 </operation>
+<operation name="redeem" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>redeem</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/redeemResponse</outputActionMapping>
 
-    <operation name="failedRPC"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>failedRPC</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/failedRPCResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -241,14 +206,10 @@
 </parameter>
 
 </operation>
+<operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>failedRPC</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/failedRPCResponse</outputActionMapping>
 
-    <operation name="claim"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>claim</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/claimResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -270,14 +231,10 @@
 </parameter>
 
 </operation>
+<operation name="claim" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>claim</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/claimResponse</outputActionMapping>
 
-    <operation name="queryResult"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>queryResult</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResultResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -299,14 +256,10 @@
 </parameter>
 
 </operation>
+<operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>queryResult</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResultResponse</outputActionMapping>
 
-    <operation name="extendTicket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>extendTicket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendTicketResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -328,14 +281,10 @@
 </parameter>
 
 </operation>
+<operation name="extendTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>extendTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendTicketResponse</outputActionMapping>
 
-    <operation name="close"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>close</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/closeResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -357,6 +306,30 @@
 </parameter>
 
 </operation>
-  </service>
+<operation name="close" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>close</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/closeResponse</outputActionMapping>
 
+<parameter name="InflowSecurity">
+   <action>
+     <items>Signature</items>
+     <passwordCallbackClass>orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+     <signaturePropFile>PROPFILE</signaturePropFile>
+     <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+   </action>
+</parameter>
+
+<parameter name="OutflowSecurity">
+    <action>
+      <items>Signature</items>
+      <passwordCallbackClass>orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+      <signaturePropFile>PROPFILE</signaturePropFile>
+      <items>Signature</items>
+      <user>actorKey</user>
+      <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+    </action>
+</parameter>
+
+</operation>
+</service>
 

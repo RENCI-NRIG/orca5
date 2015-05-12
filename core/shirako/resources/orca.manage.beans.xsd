@@ -751,15 +751,20 @@
 		</xsd:sequence>
 	</xsd:complexType>
 
+        <xsd:complexType name="resultEventMng">
+                <xsd:sequence>
+                        <xsd:element name="status" type="resultMng" />
+                        <xsd:element name="result" type="eventMng"
+                                minOccurs="0" maxOccurs="unbounded" />
+                </xsd:sequence>
+        </xsd:complexType>
+
 	<!-- <xsd:complexType name="eventMng"> <xsd:sequence> <xsd:element name="eventType" 
 		type="xsd:int" /> <xsd:element name="properties" type="propertiesMng" minOccurs="0"/> 
 		<xsd:element name="actorId" type="xsd:string" minOccurs="0"/> <xsd:element 
 		name="reservationId" type="xsd:string" minOccurs="0" /> <xsd:element name="sliceId" 
 		type="xsd:string" minOccurs="0" /> <xsd:element name="unitId" type="xsd:string" 
-		minOccurs="0" /> </xsd:sequence> </xsd:complexType> <xsd:complexType name="resultEventMng"> 
-		<xsd:sequence> <xsd:element name="status" type="resultMng" /> <xsd:element 
-		name="result" type="eventMng" minOccurs="0" maxOccurs="unbounded" /> </xsd:sequence> 
-		</xsd:complexType> -->
+		minOccurs="0" /> </xsd:sequence> </xsd:complexType> --> 
 
 </xsd:schema>
 

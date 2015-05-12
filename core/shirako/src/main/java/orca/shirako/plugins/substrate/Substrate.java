@@ -127,6 +127,7 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
     protected void doModify(IReservation r, Unit unit) throws Exception {
         Properties p = getConfigurationProperties(r, unit);
         Config.setActionSequenceNumber(p, unit.getSequenceIncrement());
+        System.out.println("Properties in Substrate.doModify() = " + p);
         config.modify(unit, p);
     }
 

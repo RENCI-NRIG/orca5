@@ -40,6 +40,16 @@ public interface IAuthorityPublic
     public void extendLease(IReservation reservation, AuthToken caller) throws Exception;
 
     /**
+     * Modifies a lease.
+     *
+     * @param reservation reservation to modify
+     * @param caller owner of the reservation
+     *
+     * @throws Exception
+     */
+    public void modifyLease(IReservation reservation, AuthToken caller) throws Exception;
+    
+    /**
      * Redeems a lease.
      *
      * @param reservation reservation to redeem

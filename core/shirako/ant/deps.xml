@@ -18,7 +18,13 @@
 <property file="${basedir}/ant/tests.properties" />
 
 <!-- Antcontrib tasks -->
-<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${compile_classpath}" />
+<!--<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${compile_classpath}" /> -->
 
 <!-- xjc task: used for generating beans from xsd files -->
-<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpath="${compile_classpath}" />
+<!--<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpath="${compile_classpath}" />-->
+
+<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+        <classpath>
+            <fileset dir="/Users/anirban/Documents/RENCI-research/Codes/orca-5.0-modify/orca-5.0/core/shirako/ant/jaxb-ri-2.2.7/lib" includes="*.jar" />
+        </classpath>
+</taskdef> 

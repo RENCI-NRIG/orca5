@@ -141,6 +141,14 @@ public class IncomingRPCEvent implements IActorEvent {
 			authority.extendLease(rrpc.getReservation(), rrpc.getCaller());
 		}
 			break;
+		case ModifyLease: {
+			IncomingReservationRPC rrpc = (IncomingReservationRPC) rpc;
+			authority.getLogger().info(
+					"Processing modifyLease request from <" + rrpc.getCaller().getName() + ">: "
+							+ rrpc.getReservation().toLogString());
+			authority.modifyLease(rrpc.getReservation(), rrpc.getCaller());
+		}
+			break;
 		case Close: {
 			IncomingReservationRPC rrpc = (IncomingReservationRPC) rpc;
 			authority.getLogger().info(

@@ -44,11 +44,26 @@
 
         
            /**
+            * auto generated Axis2 call back method for modifyLease method
+            *
+            */
+           public void receiveResultmodifyLease(
+                    orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse param235) {
+           }
+
+          /**
+           * auto generated Axis2 Error handler
+           *
+           */
+            public void receiveErrormodifyLease(java.lang.Exception e) {
+            }
+                
+           /**
             * auto generated Axis2 call back method for updateLease method
             *
             */
            public void receiveResultupdateLease(
-                    orca.shirako.proxies.soapaxis2.services.UpdateLeaseResponse param217) {
+                    orca.shirako.proxies.soapaxis2.services.UpdateLeaseResponse param237) {
            }
 
           /**
@@ -63,7 +78,7 @@
             *
             */
            public void receiveResultextendLease(
-                    orca.shirako.proxies.soapaxis2.services.ExtendLeaseResponse param219) {
+                    orca.shirako.proxies.soapaxis2.services.ExtendLeaseResponse param239) {
            }
 
           /**
@@ -78,7 +93,7 @@
             *
             */
            public void receiveResultupdateTicket(
-                    orca.shirako.proxies.soapaxis2.services.UpdateTicketResponse param221) {
+                    orca.shirako.proxies.soapaxis2.services.UpdateTicketResponse param241) {
            }
 
           /**
@@ -93,7 +108,7 @@
             *
             */
            public void receiveResultticket(
-                    orca.shirako.proxies.soapaxis2.services.TicketResponse param223) {
+                    orca.shirako.proxies.soapaxis2.services.TicketResponse param243) {
            }
 
           /**
@@ -108,7 +123,7 @@
             *
             */
            public void receiveResultquery(
-                    orca.shirako.proxies.soapaxis2.services.QueryResponse param225) {
+                    orca.shirako.proxies.soapaxis2.services.QueryResponse param245) {
            }
 
           /**
@@ -123,7 +138,7 @@
             *
             */
            public void receiveResultrelinquish(
-                    orca.shirako.proxies.soapaxis2.services.RelinquishResponse param227) {
+                    orca.shirako.proxies.soapaxis2.services.RelinquishResponse param247) {
            }
 
           /**
@@ -138,7 +153,7 @@
             *
             */
            public void receiveResultredeem(
-                    orca.shirako.proxies.soapaxis2.services.RedeemResponse param229) {
+                    orca.shirako.proxies.soapaxis2.services.RedeemResponse param249) {
            }
 
           /**
@@ -153,7 +168,7 @@
             *
             */
            public void receiveResultfailedRPC(
-                    orca.shirako.proxies.soapaxis2.services.FailedRPCResponse param231) {
+                    orca.shirako.proxies.soapaxis2.services.FailedRPCResponse param251) {
            }
 
           /**
@@ -168,7 +183,7 @@
             *
             */
            public void receiveResultclaim(
-                    orca.shirako.proxies.soapaxis2.services.ClaimResponse param233) {
+                    orca.shirako.proxies.soapaxis2.services.ClaimResponse param253) {
            }
 
           /**
@@ -183,7 +198,7 @@
             *
             */
            public void receiveResultqueryResult(
-                    orca.shirako.proxies.soapaxis2.services.QueryResultResponse param235) {
+                    orca.shirako.proxies.soapaxis2.services.QueryResultResponse param255) {
            }
 
           /**
@@ -198,7 +213,7 @@
             *
             */
            public void receiveResultextendTicket(
-                    orca.shirako.proxies.soapaxis2.services.ExtendTicketResponse param237) {
+                    orca.shirako.proxies.soapaxis2.services.ExtendTicketResponse param257) {
            }
 
           /**
@@ -213,7 +228,7 @@
             *
             */
            public void receiveResultclose(
-                    orca.shirako.proxies.soapaxis2.services.CloseResponse param239) {
+                    orca.shirako.proxies.soapaxis2.services.CloseResponse param259) {
            }
 
           /**

@@ -1,22 +1,15 @@
 <!-- This file was auto-generated from WSDL -->
 <!-- by the Apache Axis2 version: #axisVersion# #today# -->
 
-  <service name="BrokerService">
-    <messageReceivers>
-      <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
-      class="orca.shirako.proxies.soapaxis2.services.BrokerServiceMessageReceiverInOut" />
-    </messageReceivers>
+<service name="BrokerService">
+<messageReceivers>
+<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="orca.shirako.proxies.soapaxis2.services.BrokerServiceMessageReceiverInOut"/>
+</messageReceivers>
+<parameter locked="false" name="ServiceClass">orca.shirako.proxies.soapaxis2.services.BrokerServiceSkeleton</parameter>
+<operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateLease</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateLeaseResponse</outputActionMapping>
 
-    <parameter locked="false" name="ServiceClass">
-    orca.shirako.proxies.soapaxis2.services.BrokerServiceSkeleton</parameter>
-
-    <operation name="updateLease"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateLease</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateLeaseResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -38,14 +31,10 @@
 </parameter>
 
 </operation>
+<operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateTicketResponse</outputActionMapping>
 
-    <operation name="updateTicket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateTicket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateTicketResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -67,14 +56,10 @@
 </parameter>
 
 </operation>
+<operation name="ticket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>ticket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/ticketResponse</outputActionMapping>
 
-    <operation name="ticket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>ticket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/ticketResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -96,14 +81,10 @@
 </parameter>
 
 </operation>
+<operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>query</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResponse</outputActionMapping>
 
-    <operation name="query"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>query</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -125,14 +106,10 @@
 </parameter>
 
 </operation>
+<operation name="relinquish" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>relinquish</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/relinquishResponse</outputActionMapping>
 
-    <operation name="relinquish"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>relinquish</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/relinquishResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -154,14 +131,10 @@
 </parameter>
 
 </operation>
+<operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>failedRPC</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/failedRPCResponse</outputActionMapping>
 
-    <operation name="failedRPC"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>failedRPC</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/failedRPCResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -183,14 +156,10 @@
 </parameter>
 
 </operation>
+<operation name="claim" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>claim</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/claimResponse</outputActionMapping>
 
-    <operation name="claim"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>claim</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/claimResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -212,14 +181,10 @@
 </parameter>
 
 </operation>
+<operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>queryResult</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResultResponse</outputActionMapping>
 
-    <operation name="queryResult"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>queryResult</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResultResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -241,14 +206,10 @@
 </parameter>
 
 </operation>
+<operation name="extendTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>extendTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/extendTicketResponse</outputActionMapping>
 
-    <operation name="extendTicket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>extendTicket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/extendTicketResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -270,6 +231,5 @@
 </parameter>
 
 </operation>
-  </service>
-
+</service>
 

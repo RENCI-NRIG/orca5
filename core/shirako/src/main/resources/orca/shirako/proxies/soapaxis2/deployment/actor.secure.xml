@@ -1,22 +1,15 @@
 <!-- This file was auto-generated from WSDL -->
 <!-- by the Apache Axis2 version: #axisVersion# #today# -->
 
-  <service name="ActorService">
-    <messageReceivers>
-      <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
-      class="orca.shirako.proxies.soapaxis2.services.ActorServiceMessageReceiverInOut" />
-    </messageReceivers>
+<service name="ActorService">
+<messageReceivers>
+<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="orca.shirako.proxies.soapaxis2.services.ActorServiceMessageReceiverInOut"/>
+</messageReceivers>
+<parameter locked="false" name="ServiceClass">orca.shirako.proxies.soapaxis2.services.ActorServiceSkeleton</parameter>
+<operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateLease</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateLeaseResponse</outputActionMapping>
 
-    <parameter locked="false" name="ServiceClass">
-    orca.shirako.proxies.soapaxis2.services.ActorServiceSkeleton</parameter>
-
-    <operation name="updateLease"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateLease</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateLeaseResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -38,14 +31,10 @@
 </parameter>
 
 </operation>
+<operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateTicketResponse</outputActionMapping>
 
-    <operation name="updateTicket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateTicket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateTicketResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -67,14 +56,10 @@
 </parameter>
 
 </operation>
+<operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>query</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResponse</outputActionMapping>
 
-    <operation name="query"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>query</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -96,14 +81,10 @@
 </parameter>
 
 </operation>
+<operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>failedRPC</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/failedRPCResponse</outputActionMapping>
 
-    <operation name="failedRPC"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>failedRPC</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/failedRPCResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -125,14 +106,10 @@
 </parameter>
 
 </operation>
+<operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>queryResult</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResultResponse</outputActionMapping>
 
-    <operation name="queryResult"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>queryResult</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResultResponse</outputActionMapping>
-    
 <parameter name="InflowSecurity">
    <action>
      <items>Signature</items>
@@ -154,6 +131,5 @@
 </parameter>
 
 </operation>
-  </service>
-
+</service>
 

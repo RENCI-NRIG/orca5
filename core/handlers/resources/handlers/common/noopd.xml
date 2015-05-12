@@ -51,6 +51,16 @@
     </target>
 
     <target name="modify" depends="merge.properties,resolve.configuration">
+	<echo message="**** modify handler start..."/>
+	<echo message="Sleeping for 5000 milliseconds"/>
+        <sleep milliseconds="5000"/>
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="modify.restart" depends="merge.properties,resolve.configuration">
+	<echo message="**** modify.restart handler start..."/>
+	<echo message="Sleeping for 4000 milliseconds"/>
+        <sleep milliseconds="4000"/>
         <property name="shirako.target.code" value="0" />
     </target>
 

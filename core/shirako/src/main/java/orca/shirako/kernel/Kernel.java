@@ -292,10 +292,13 @@ class Kernel
      */
     protected void extendLease(final IKernelReservation reservation) throws Exception
     {
+    	System.out.println("In Kernel.extendLease()");
         try {
+        	System.out.println("Calling AuthorityReservation.extendLease() from Kernel.extendLease()");
             reservation.extendLease();
             plugin.getDatabase().updateReservation(reservation);
             if (!reservation.isFailed()) {
+            	System.out.println("Calling AuthorityReservation.serviceExtendLease() from Kernel.extendLease()");
                 reservation.serviceExtendLease();
             }
         } catch (TestException e) {
@@ -305,6 +308,35 @@ class Kernel
         }
     }
 
+    /**
+     * Handles a modify lease operation for the reservation.
+     * <p>
+     * Client: issue a modify lease request.
+     * </p>
+     * <p>
+     * Authority: process a request for a modifying a lease.
+     * </p>
+     * @param reservation reservation for which to perform modify lease
+     * @throws Exception
+     */
+    protected void modifyLease(final IKernelReservation reservation) throws Exception
+    {
+        try {
+        	System.out.println("In Kernel.modifyLease()");
+            reservation.modifyLease();
+            plugin.getDatabase().updateReservation(reservation);
+            if (!reservation.isFailed()) {
+                reservation.serviceModifyLease();
+            }
+        } catch (TestException e) {
+            throw e;
+        } catch (Exception e) {
+            error("An error occurred during modifying lease for reservation #" + reservation.getReservationID().toHashString(), e);
+        }
+    }
+    
+    
+    
     /**
      * Extends the reservation with the given resources and term.
      * @param reservation reservation to extend
@@ -345,7 +377,7 @@ class Kernel
 
         /* check if this reservation is managed by us */
         real = (IKernelReservation) reservations.get(rid);
-
+        
         if (real == null) {
             throw new RuntimeException("Unknown reservation: rid=" + rid);
         }
@@ -371,6 +403,7 @@ class Kernel
 
         /* trigger the operation */
         if (ticket) {
+        	System.out.println("In Kernel.extendReservation(), calling ReservationClient.extendTicket()");
             real.extendTicket(plugin.getActor());
         } else {
             real.extendLease();
@@ -384,6 +417,7 @@ class Kernel
             if (ticket) {
                 real.serviceExtendTicket();
             } else {
+            	System.out.println("Calling AuthorityReservation.serviceExtendLease() from Kernel.extendReservation()");
                 real.serviceExtendLease();
             }
         }

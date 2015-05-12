@@ -323,6 +323,7 @@ public class ResourceSet implements Persistable, Recoverable {
     }
 
     protected void deltaUpdate(IReservation r, ResourceSet set) throws Exception {
+    	System.out.println("In ResourceSet.deltaUpdate()");
         if (resources == null) {
             // in case of close for a canceled reservation.
             if (set.gained == null) {
@@ -382,6 +383,8 @@ public class ResourceSet implements Persistable, Recoverable {
                 this.modified = set.modified;
             }
 
+            System.out.println("difference in ResourceSet.deltaUpdate() = " + difference);
+            
             /* update the units */
             this.units += difference;
             this.previousProperties = properties;
@@ -411,6 +414,9 @@ public class ResourceSet implements Persistable, Recoverable {
      * =======================================================================
      */
     protected void fullUpdate(IReservation r, ResourceSet rset) throws Exception {
+    	
+    	System.out.println("In ResourceSet.fullUpdate()");
+    	
         /* take the units and the type */
         units = rset.units;
         type = rset.type;
@@ -789,6 +795,9 @@ public class ResourceSet implements Persistable, Recoverable {
      */
 
     public void serviceExtend() throws Exception {
+    	
+    	System.out.println("In ResourceSet.serviceExtend()");
+    	
         serviceCheck();
 
         /*
@@ -829,18 +838,45 @@ public class ResourceSet implements Persistable, Recoverable {
         modified = null;
 
         if (myGained != null) {
+        	System.out.println("Calling UnitSet.add()");
             resources.add(myGained, true);
         }
 
         if (myLost != null) {
+        	System.out.println("Calling UnitSet.remove()");
             resources.remove(myLost, true);
         }
 
         if (modified != null) {
+        	System.out.println("Calling UnitSet.modify()");
             resources.modify(myModified, true);
         }
+        
+        System.out.println("Returning from ResourceSet.serviceExtend()");
+        
     }
 
+    /**
+     * Complete service for a term extension (server side).
+     * @param term the new term
+     * @throws Exception
+     */
+
+    public void serviceModify() throws Exception {
+    	
+    	System.out.println("In ResourceSet.serviceModify()");
+    	
+        serviceCheck();
+
+        System.out.println("Calling UnitSet.modify()");
+        resources.modify(resources, true);
+               
+        System.out.println("Returning from ResourceSet.serviceModify()");
+        
+    }
+    
+    
+    
     public void serviceReserveSite() throws Exception {
         IConcreteSet cs = null;
 
@@ -1051,6 +1087,15 @@ public class ResourceSet implements Persistable, Recoverable {
         }
     }
 
+    public void updateProps(IReservation r, ResourceSet rset) throws Exception {
+        if ((r == null) || (rset == null)) {
+            throw new IllegalArgumentException();
+        }
+
+        mergeProperties(r, rset);
+        
+    }
+    
     /**
      * Validates a fresh <code>ResourceSet</code> passed in from outside. *
      * @throws Exception thrown if the set is determined to be invalid
