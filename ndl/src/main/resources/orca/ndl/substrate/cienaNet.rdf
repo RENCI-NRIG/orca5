@@ -620,6 +620,7 @@
         <rdf:type rdf:resource="&layer;LabelSet"/>
         <collections:size rdf:datatype="&xsd;int">1</collections:size>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/VLANLabel/3300"/>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
     </owl:NamedIndividual>
     
 

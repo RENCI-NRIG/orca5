@@ -388,8 +388,8 @@
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264"/>
-        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/availableVLANSet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <ethernet:availableVLANSet rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uvanlvmsite.rdf#Uva-nl/BareMetal/TenGigabitEthernet/2/ethernet"/>
     </owl:NamedIndividual>
     
@@ -404,8 +404,8 @@
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264"/>
-        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/availableVLANSet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <ethernet:availableVLANSet rdf:resource="&Uva-nlNet;Force10/S4810/availableVLANSet"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uvanlvmsite.rdf#Uva-nl/ExoGeni/TenGigabitEthernet/2/ethernet"/>
     </owl:NamedIndividual>
     
@@ -725,6 +725,7 @@
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/availableVLANSet/CIENA">
         <rdf:type rdf:resource="&layer;LabelSet"/>
         <collections:size rdf:datatype="&xsd;int">1</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&Uva-nlNet;Force10/S4810/VLANLabel/3300"/>
     </owl:NamedIndividual>
     
