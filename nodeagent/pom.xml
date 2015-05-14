@@ -1,0 +1,201 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>orca</groupId>
+	<artifactId>nodeagent</artifactId>
+	<packaging>jar</packaging>
+	<version>5.0-SNAPSHOT</version>
+	<name>Orca Node Agent</name>
+	<parent>
+		<groupId>orca</groupId>
+		<artifactId>orca</artifactId>
+		<version>5.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<properties>
+		<client.jar>${project.build.directory}/orca.nodeagent.client-${project.version}.jar</client.jar>
+		<service.aar>${project.build.directory}/orca.nodeagent-${project.version}.aar</service.aar>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>orca.core</groupId>
+			<artifactId>drivers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>orca.core</groupId>
+			<artifactId>tools-axis2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ant-contrib</groupId>
+			<artifactId>ant-contrib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<testSourceDirectory>test</testSourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
+				<artifactId>maven-antrun-extended-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<configuration>
+							<tasks>
+								<taskdef resource="net/sf/antcontrib/antlib.xml" />
+								<!-- build the client library -->
+								<copy todir="${project.build.outputDirectory}/orca/nodeagent/client">
+									<fileset dir="${project.build.sourceDirectory}/orca/nodeagent/client">
+										<include name="nodeagent.tasks" />
+										<include name="nodeagent.properties" />
+										<include name="nodeagent.xml" />
+									</fileset>
+								</copy>
+								<jar jarfile="${client.jar}">
+									<fileset dir="${project.build.outputDirectory}">
+										<include name="orca/nodeagent/documents/*" />
+										<include name="orca/nodeagent/tests/**/*" />
+										<include name="orca/nodeagent/drivers/**/*" />
+										<include name="orca/nodeagent/KeyMasterMessage*" />
+										<include name="orca/nodeagent/NodeAgentConstants*" />
+										<include name="orca/nodeagent/NodeAgentServiceCallbackHandler*" />
+										<include name="orca/nodeagent/NodeAgentServiceMessageReceiverInOut*" />
+										<include name="orca/nodeagent/NodeAgentServiceStub*" />
+										<include name="orca/nodeagent/util/Serializer*" />
+										<include name="orca/nodeagent/tools/*" />
+										<include name="orca/nodeagent/client/**/*" />
+										<include name="orca/axis2/tools/KeyMasterMessage*" />
+									</fileset>
+								</jar>
+								<attachArtifact file="${client.jar}" classifier="client" type="jar" />
+								<!-- build and organize testjar -->
+								<copy todir="${project.build.testOutputDirectory}/orca/nodeagent/tests/security/known">
+									<fileset dir="${project.build.testSourceDirectory}/orca/nodeagent/tests/security/known">
+										<include name="client.jks" />
+									</fileset>
+								</copy>
+
+								<copy todir="${project.build.testOutputDirectory}/orca/nodeagent/tests/security/unknown">
+									<fileset dir="${project.build.testSourceDirectory}/orca/nodeagent/tests/security/unknown">
+										<include name="trudy.jks" />
+									</fileset>
+								</copy>
+
+								<jar destfile="${project.build.directory}/orca-nodeagent-tests-${project.version}.jar" basedir="${project.build.testOutputDirectory}" includes="**/*" />
+
+								<!-- test driver -->
+								<jar jarfile="${project.build.directory}/testdriver.jar">
+									<fileset dir="${project.build.testOutputDirectory}">
+										<include name="orca/nodeagent/tests/drivers/TestDriver*" />
+									</fileset>
+								</jar>
+								<delete dir="package" />
+								<mkdir dir="package" />
+								<mkdir dir="package/lib" />
+								<copy todir="package/lib">
+									<fileset dir="${project.build.directory}">
+										<include name="testdriver.jar" />
+									</fileset>
+								</copy>
+								<tar tarfile="${project.build.directory}/testdriver.tar" basedir="package" />
+								<gzip zipfile="${project.build.directory}/testdriver.tar.gz" src="${project.build.directory}/testdriver.tar" />
+								<delete file="${project.build.directory}/testdriver.tar" />
+								<delete dir="package" />
+
+								<!-- prepare the service archive -->
+								<mkdir dir="local" />
+								<copy todir="local">
+									<fileset dir="conf">
+										<include name="**/*" />
+									</fileset>
+								</copy>
+
+								<!-- WS-Security related files -->
+								<copy todir="${project.build.outputDirectory}" file="src/resources/service.properties" />
+
+								<!-- this is broken when building from the top-level, but works when 
+									building from inside this project. I am not sure what is going on but we 
+									can ignore this for now <if> <equals arg1="true" arg2="${aar.include.testfile}" /> <then> <copy todir="${project.build.outputDirectory}" file="src/resources/testcmdline" /> </then> <else> <delete file="${project.build.outputDirectory}/testcmdline" /> </else> </if> -->
+								<delete dir="${project.build.outputDirectory}/META-INF" />
+								<mkdir dir="${project.build.outputDirectory}/META-INF" />
+								<copy todir="${project.build.outputDirectory}/META-INF">
+									<fileset dir="src/resources">
+										<!-- axis2 web services definitions file -->
+										<include name="services.xml" />
+										<include name="*.wsdl" />
+									</fileset>
+								</copy>
+
+								<delete dir="${project.build.outputDirectory}/lib" />
+								<mkdir dir="${project.build.outputDirectory}/lib" />
+								<mkdir dir="${project.build.outputDirectory}/local" />
+								<copy todir="${project.build.outputDirectory}/lib/local">
+									<fileset dir="local">
+										<include name="*.properties" />
+									</fileset>
+								</copy>
+								<mkdir dir="${project.build.outputDirectory}/local" />
+								<copy todir="${project.build.outputDirectory}/local">
+									<fileset dir="local">
+										<include name="*.properties" />
+									</fileset>
+								</copy>
+								<copy todir="${project.build.outputDirectory}/lib">
+									<fileset dir="local">
+										<include name="*.properties" />
+									</fileset>
+								</copy>
+								<!-- We expand out dependencies instead of including the jars. We 
+									do this because the nodeagenthost (unlike Tomcat) has problems resolving 
+									paths. -->
+								<unjar src="${maven.dependency.orca.core.drivers.jar.path}" dest="${project.build.outputDirectory}" />
+								<unjar src="${maven.dependency.orca.core.tools-axis2.jar.path}" dest="${project.build.outputDirectory}" />
+								<unjar src="${maven.dependency.orca.core.util.jar.path}" dest="${project.build.outputDirectory}" />
+
+								<jar jarfile="${service.aar}">
+									<fileset dir="${project.build.outputDirectory}">
+										<exclude name="orca/axis2/tools/**/*" />
+										<exclude name="orca/nodeagent/Server.class" />
+										<exclude name="orca/nodeagent/tests/**/*.class" />
+										<exclude name="orca/nodeagent/AllTests.class" />
+										<exclude name="orca/nodeagent/client/*" />
+									</fileset>
+								</jar>
+								<attachArtifact file="${service.aar}" classifier="package" type="aar" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

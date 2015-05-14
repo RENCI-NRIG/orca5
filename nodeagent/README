@@ -1,0 +1,4 @@
+To regenerate the service:
+
+ mvn -Pant -Dtarget=wsdl
+
