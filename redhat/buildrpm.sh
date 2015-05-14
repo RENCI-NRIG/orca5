@@ -88,8 +88,7 @@ cd "$( dirname "$0" )"
 cp -a ../. "${SRC_DIRPATH}"
 
 # Post-process source
-export BLD_DATE=`date "+%Y%m%d"`
-#export BLD_REVISION=`svn status -u | grep -i ^status | awk '{print $4}'`
+export BLD_DATE=`date "+%Y%m%d%H%M"`
 export BLD_REVISION=`git rev-parse --short=8 HEAD`
 sed -i -e "s;@@DATE@@;${BLD_DATE};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
 sed -i -e "s;@@GLOBALREV@@;${BLD_REVISION};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
