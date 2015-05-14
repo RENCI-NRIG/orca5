@@ -12,7 +12,7 @@ export VERSION="5.0.0"
 
 # Define ORCA source directory
 BASE_SRC_DIR="orca-iaas-${VERSION}"
-BASE_SRC_DIRPATH="${ORCA_BLD}/${SRC_DIR}"
+BASE_SRC_DIRPATH="${ORCA_BLD}/${BASE_SRC_DIR}"
 
 # Define RPM build directory
 RPM_BUILD_DIR="${ORCA_BLD}/rpmbuild"
