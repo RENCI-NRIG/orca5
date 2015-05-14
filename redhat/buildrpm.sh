@@ -89,7 +89,8 @@ cp -a ../. "${SRC_DIRPATH}"
 
 # Post-process source
 export BLD_DATE=`date "+%Y%m%d"`
-export BLD_REVISION=`svn status -u | grep -i ^status | awk '{print $4}'`
+#export BLD_REVISION=`svn status -u | grep -i ^status | awk '{print $4}'`
+export BLD_REVISION=`git rev-parse --short=8 HEAD`
 sed -i -e "s;@@DATE@@;${BLD_DATE};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
 sed -i -e "s;@@GLOBALREV@@;${BLD_REVISION};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
 
@@ -116,7 +117,7 @@ fi
 if [ -n "${INSTALL_RPM}" ]; then
     echo "Preparing to install RPMs..."
     cd "${RPM_BUILD_DIR}/RPMS/x86_64"
-    sudo rpm -Uvh --force "*${BLD_DATE}svn${BLD_REVISION}*.rpm"
+    sudo rpm -Uvh --force "*${BLD_DATE}git${BLD_REVISION}*.rpm"
 fi
 
 echo "Done."
