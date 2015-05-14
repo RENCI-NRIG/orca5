@@ -89,9 +89,11 @@ cp -a ../. "${SRC_DIRPATH}"
 
 # Post-process source
 export BLD_DATE=`date "+%Y%m%d%H%M"`
-export BLD_REVISION=`git rev-parse --short=8 HEAD`
+export COMMIT=`git rev-parse HEAD`
+export SHORTCOMMIT=`git rev-parse --short=8 HEAD`
 sed -i -e "s;@@DATE@@;${BLD_DATE};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
-sed -i -e "s;@@GLOBALREV@@;${BLD_REVISION};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
+sed -i -e "s;@@COMMIT@@;${COMMIT};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
+sed -i -e "s;@@SHORTCOMMIT@@;${SHORTCOMMIT};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
 
 # Change directory to build location
 cd "${ORCA_BLD}"
