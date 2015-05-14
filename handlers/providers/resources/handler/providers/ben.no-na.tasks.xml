@@ -145,13 +145,14 @@ This file contains definitions of tasks used by the ben package
                     <if>
                         <equals arg1="@{router.type}" arg2="ciena8700" />
                         <then>
-                            <network.router.8700.delete.vlan
+                            <network.router.8700.create.vlan
                                 deviceInstance="${network.device.ciena8700}"
-                                defaultPrompt="@{router.8700.prompt}"
-                                user="@{router.8700.user}"
-                                password="@{router.8700.password}"
-                                adminPassword="@{router.8700.adminpassword}"
-                                deviceAddress="@{router.8700}"
+                                exitCodeProperty="code"
+                                defaultPrompt="@{router.default.prompt}"
+                                user="@{router.user}"
+                                password="@{router.password}"
+                                adminPassword="@{router.admin.password}"
+                                deviceAddress="@{router}"
                                 vlanTag="@{vlan.tag}"
                             />
                         </then>
@@ -305,11 +306,12 @@ This file contains definitions of tasks used by the ben package
                     <then>
                         <network.router.8700.delete.vlan
                                 deviceInstance="${network.device.ciena8700}"
-                                defaultPrompt="@{router.8700.prompt}"
-                                user="@{router.8700.user}"
-                                password="@{router.8700.password}"
-                                adminPassword="@{router.8700.adminpassword}"
-                                deviceAddress="@{router.8700}"
+                                exitCodeProperty="code"
+                                defaultPrompt="@{router.default.prompt}"
+                                user="@{router.user}"
+                                password="@{router.password}"
+                                adminPassword="@{router.admin.password}"
+                                deviceAddress="@{router}"
                                 vlanWithQos="@{vlan.with.qos}"
                                 vlanTag="@{vlan.tag}"
                         />
@@ -461,13 +463,14 @@ This file contains definitions of tasks used by the ben package
                         <then>
                             <network.router.8700.add.trunkPorts
                                 deviceInstance="${network.device.ciena8700}"
+                                exitCodeProperty="code"
                                 vlanTag="@{vlan.tag}"
-                                defaultPrompt="@{router.8700.prompt}"
-                                user="@{router.8700.user}"
-                                password="@{router.8700.password}"
-                                adminPassword="@{router.8700.adminpassword}"
-                                deviceAddress="@{router.8700}"
-                                ports="@{router.8700.ports}"
+                                defaultPrompt="@{router.default.prompt}"
+                                user="@{router.user}"
+                                password="@{router.password}"
+                                adminPassword="@{router.admin.password}"
+                                deviceAddress="@{router}"
+                                ports="@{ports}"
                                 />
                         </then>
                     </if>
@@ -619,12 +622,13 @@ This file contains definitions of tasks used by the ben package
                         <then>
                             <network.router.8700.remove.trunkPorts
                                 deviceInstance="${network.device.ciena8700}"
-                                user="@{router.8700.user}"
-                                defaultPrompt="@{router.8700.prompt}"
-                                password="@{router.8700.password}"
-                                adminPassword="@{router.8700.adminpassword}"
-                                deviceAddress="@{router.8700}"
-                                ports="@{router.8700.ports}"
+                                exitCodeProperty="code"
+                                user="@{router.user}"
+                                defaultPrompt="@{router.default.prompt}"
+                                password="@{router.password}"
+                                adminPassword="@{router.admin.password}"
+                                deviceAddress="@{router}"
+                                ports="@{ports}"
                                 vlanTag="@{vlan.tag}"
                             />
                         </then>
