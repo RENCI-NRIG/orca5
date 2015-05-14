@@ -127,7 +127,7 @@ This package contains the ORCA_HOME directory specific to the
 container housing the SM actor.
 
 %prep
-%setup -q -n orca-%{version}
+%setup -q -n %{name}-%{version}-%{shortcommit}
 
 %build
 LANG=en_US.UTF-8 MAVEN_OPTS=%{maven_opts} mvn ${MAVEN_ARGS} clean install -DskipTests=true
