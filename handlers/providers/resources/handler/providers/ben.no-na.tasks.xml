@@ -335,6 +335,9 @@ This file contains definitions of tasks used by the ben package
 							<not>
 								<equals arg1="@{router.type}" arg2="g8264" />
 							</not>
+                                                        <not>
+                                                                <equals arg1="@{router.type}" arg2="ciena8700" />
+                                                        </not>
 						</and>
 						<then>
 							<echo message="Unknown router type @{router.type}" />
