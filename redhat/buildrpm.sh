@@ -100,15 +100,15 @@ cd "${ORCA_BLD}"
 
 # Create tarball
 mv ${BASE_SRC_DIR} ${BASE_SRC_DIR}-${SHORTCOMMIT}
-rm -rf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tgz
-tar -czf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tgz ${BASE_SRC_DIR}-${SHORTCOMMIT}
+rm -rf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
+tar -czf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz ${BASE_SRC_DIR}-${SHORTCOMMIT}
 
 # Place some command-line arguments for Maven in an environment variable,
 # and export.
 export MAVEN_ARGS="-s ${ORCA_BLD}/settings.xml"
 
 # Build RPM from tarball
-rpmbuild --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BASE_SRC_DIR}-${SHORTCOMMIT}.tgz
+rpmbuild --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
 
 BLD_STATUS=$?
 if [ $BLD_STATUS -ne 0 ]; then
