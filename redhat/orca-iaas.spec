@@ -5,7 +5,7 @@ Version: 5.0.0
 # DO NOT MODIFY "Release", UNLESS:
 # 1) We move to a revision structure that isn't based on the subversion GlobalRev.
 # 2) Packaging up a tarball for others to use with "rpmbuild -ta"
-Release: @@DATE@@svn@@GLOBALREV@@
+Release: @@DATE@@git@@GLOBALREV@@
 #
 BuildRoot: %{_builddir}/%{name}-root
 Source: orca-%{version}.tgz
@@ -13,7 +13,7 @@ Group: Applications/System
 Vendor: RENCI/ExoGENI
 Packager: RENCI/ExoGENI
 License: Eclipse Public License
-URL: https://geni-orca.renci.org/svn/orca/trunk
+URL: https://github.com/RENCI-NRIG/orca5.git
 
 # NOTE:
 # Maven is required for build, but there's not a RHEL package for it.

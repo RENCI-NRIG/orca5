@@ -30,6 +30,11 @@ start() {
     export PATH=/usr/java/latest/bin:$PATH
     export ORCA_HOME
     export ORCA_SERVER_PORT
+    export ORCA_SSL_SERVER_PORT
+    export ORCA_KEYSTORE
+    export ORCA_TRUSTSTORE
+    export ORCA_ALIAS
+    export ORCA_PASSPHRASE
     [ -d ${ORCA_HOME}/packages ] && rm -rf ${ORCA_HOME}/packages
     [ -d ${ORCA_HOME}/handlers ] && rm -rf ${ORCA_HOME}/handlers
     [ -d ${ORCA_HOME}/scripts ] && rm -rf ${ORCA_HOME}/scripts
@@ -42,6 +47,11 @@ stop() {
     echo -n $"Stopping $prog: "
     export ORCA_HOME
     export ORCA_SERVER_PORT
+    export ORCA_SSL_SERVER_PORT
+    export ORCA_KEYSTORE
+    export ORCA_TRUSTSTORE
+    export ORCA_ALIAS
+    export ORCA_PASSPHRASE
     $exec stop
     retval=$?
     return $retval
