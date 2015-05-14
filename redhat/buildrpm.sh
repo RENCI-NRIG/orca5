@@ -99,15 +99,16 @@ sed -i -e "s;@@SHORTCOMMIT@@;${SHORTCOMMIT};" "${SRC_DIRPATH}/redhat/orca-iaas.s
 cd "${ORCA_BLD}"
 
 # Create tarball
-rm -rf ${SRC_DIR}.tgz
-tar -czf ${SRC_DIR}.tgz ${SRC_DIR}
+mv ${SRC_DIR} ${SRC_DIR}-${SHORTCOMMIT}
+rm -rf ${SRC_DIR}-${SHORTCOMMIT}.tgz
+tar -czf ${SRC_DIR}-${SHORTCOMMIT}.tgz ${SRC_DIR}-${SHORTCOMMIT}
 
 # Place some command-line arguments for Maven in an environment variable,
 # and export.
 export MAVEN_ARGS="-s ${ORCA_BLD}/settings.xml"
 
 # Build RPM from tarball
-rpmbuild --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${SRC_DIR}.tgz
+rpmbuild --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${SRC_DIR}-${SHORTCOMMIT}.tgz
 
 BLD_STATUS=$?
 if [ $BLD_STATUS -ne 0 ]; then
