@@ -11,8 +11,8 @@ export ORCA_BLD="${HOME}/orca-build"
 export VERSION="5.0.0"
 
 # Define ORCA source directory
-SRC_DIR="orca-${VERSION}"
-SRC_DIRPATH="${ORCA_BLD}/${SRC_DIR}"
+BASE_SRC_DIR="orca-iaas-${VERSION}"
+BASE_SRC_DIRPATH="${ORCA_BLD}/${SRC_DIR}"
 
 # Define RPM build directory
 RPM_BUILD_DIR="${ORCA_BLD}/rpmbuild"
@@ -80,35 +80,35 @@ cat << EOF > "${ORCA_BLD}/settings.xml"
 EOF
 
 # Clean and create source directory
-rm -rf "${SRC_DIRPATH}"
-mkdir -p "${SRC_DIRPATH}"
+rm -rf "${BASE_SRC_DIRPATH}"
+mkdir -p "${BASE_SRC_DIRPATH}"
 
 # Copy the source to it
 cd "$( dirname "$0" )"
-cp -a ../. "${SRC_DIRPATH}"
+cp -a ../. "${BASE_SRC_DIRPATH}"
 
 # Post-process source
 export BLD_DATE=`date "+%Y%m%d%H%M"`
 export COMMIT=`git rev-parse HEAD`
 export SHORTCOMMIT=`git rev-parse --short=8 HEAD`
-sed -i -e "s;@@DATE@@;${BLD_DATE};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
-sed -i -e "s;@@COMMIT@@;${COMMIT};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
-sed -i -e "s;@@SHORTCOMMIT@@;${SHORTCOMMIT};" "${SRC_DIRPATH}/redhat/orca-iaas.spec"
+sed -i -e "s;@@DATE@@;${BLD_DATE};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
+sed -i -e "s;@@COMMIT@@;${COMMIT};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
+sed -i -e "s;@@SHORTCOMMIT@@;${SHORTCOMMIT};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
 
 # Change directory to build location
 cd "${ORCA_BLD}"
 
 # Create tarball
-mv ${SRC_DIR} ${SRC_DIR}-${SHORTCOMMIT}
-rm -rf ${SRC_DIR}-${SHORTCOMMIT}.tgz
-tar -czf ${SRC_DIR}-${SHORTCOMMIT}.tgz ${SRC_DIR}-${SHORTCOMMIT}
+mv ${BASE_SRC_DIR} ${BASE_SRC_DIR}-${SHORTCOMMIT}
+rm -rf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tgz
+tar -czf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tgz ${BASE_SRC_DIR}-${SHORTCOMMIT}
 
 # Place some command-line arguments for Maven in an environment variable,
 # and export.
 export MAVEN_ARGS="-s ${ORCA_BLD}/settings.xml"
 
 # Build RPM from tarball
-rpmbuild --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${SRC_DIR}-${SHORTCOMMIT}.tgz
+rpmbuild --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BASE_SRC_DIR}-${SHORTCOMMIT}.tgz
 
 BLD_STATUS=$?
 if [ $BLD_STATUS -ne 0 ]; then
