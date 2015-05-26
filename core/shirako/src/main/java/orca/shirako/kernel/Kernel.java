@@ -292,13 +292,10 @@ class Kernel
      */
     protected void extendLease(final IKernelReservation reservation) throws Exception
     {
-    	System.out.println("In Kernel.extendLease()");
         try {
-        	System.out.println("Calling AuthorityReservation.extendLease() from Kernel.extendLease()");
             reservation.extendLease();
             plugin.getDatabase().updateReservation(reservation);
             if (!reservation.isFailed()) {
-            	System.out.println("Calling AuthorityReservation.serviceExtendLease() from Kernel.extendLease()");
                 reservation.serviceExtendLease();
             }
         } catch (TestException e) {
@@ -322,7 +319,6 @@ class Kernel
     protected void modifyLease(final IKernelReservation reservation) throws Exception
     {
         try {
-        	System.out.println("In Kernel.modifyLease()");
             reservation.modifyLease();
             plugin.getDatabase().updateReservation(reservation);
             if (!reservation.isFailed()) {
@@ -403,7 +399,6 @@ class Kernel
 
         /* trigger the operation */
         if (ticket) {
-        	System.out.println("In Kernel.extendReservation(), calling ReservationClient.extendTicket()");
             real.extendTicket(plugin.getActor());
         } else {
             real.extendLease();
@@ -417,7 +412,6 @@ class Kernel
             if (ticket) {
                 real.serviceExtendTicket();
             } else {
-            	System.out.println("Calling AuthorityReservation.serviceExtendLease() from Kernel.extendReservation()");
                 real.serviceExtendLease();
             }
         }

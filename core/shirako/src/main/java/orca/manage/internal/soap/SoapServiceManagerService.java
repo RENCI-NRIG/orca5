@@ -70,7 +70,6 @@ public class SoapServiceManagerService extends SoapService {
 	@PayloadRoot(localPart = "ModifyReservationRequest", namespace = SERVICE_MANAGER_NS)
 	public @ResponsePayload
 	ModifyReservationResponse modifyReservation(@RequestPayload ModifyReservationRequest request) {
-		System.out.println("In SoapServiceManagerService:modifyReservation()");
 		ResultMng status = new ResultMng();
 		ModifyReservationResponse response = new ModifyReservationResponse();
 		response.setStatus(status);

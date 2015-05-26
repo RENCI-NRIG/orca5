@@ -461,9 +461,9 @@ public class ServiceManager extends Actor implements IServiceManager {
      * {@inheritDoc}
      */
     public void modify(final ReservationID rid, final Properties modifyProps) throws Exception{
-    	System.out.println("Called ServiceManager.modify()");
     	
         if (rid == null || modifyProps == null) { // When it arrives at the SM, modifyProps can't be null
+        	logger.error("ServiceManager.modify(): modifyProperties argument is null or non-existing reservation");
             throw new IllegalArgumentException();
         }
 
@@ -476,7 +476,7 @@ public class ServiceManager extends Actor implements IServiceManager {
         	
         	// All client-side property manipulation happens here
         	
-        	System.out.println("Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
+        	logger.info("ServiceManager.modify(): Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
         	// Merging modifyProperties into ConfigurationProperties
         	Properties currConfigProps = rc.getApprovedResources().getConfigurationProperties();        	
         	PropList.mergePropertiesPriority(modifyProps, currConfigProps);
@@ -484,7 +484,7 @@ public class ServiceManager extends Actor implements IServiceManager {
         	//rc.getApprovedResources().setConfigurationProperties(modifyProps);
         	rc.getApprovedResources().setConfigurationProperties(currConfigProps);
         	
-        	System.out.println("ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
+        	logger.info("ServiceManager.modify(): ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
         	
         	// After this point the new modifyProperties are a part of the configuration properties 
         	// of the resource set associated with the reservation; These properties flow from the SM

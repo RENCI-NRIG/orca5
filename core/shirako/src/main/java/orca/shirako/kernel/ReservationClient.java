@@ -930,7 +930,6 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
     @Override
     public void modifyLease() throws Exception {
         
-    	System.out.println("In ReservationClient.modifyLease()");
     	/*
          * Not permitted if there is a pending operation.
          */

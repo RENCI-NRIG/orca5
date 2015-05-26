@@ -252,8 +252,6 @@ public class Authority extends Actor implements IAuthority {
     public void modifyLease(final IReservation reservation, final AuthToken caller)
             throws Exception {
     	
-    	System.out.println("In Authority.modifyLease()");
-    	
         if (!isRecovered() || isStopped()) {
             throw new Exception("This actor cannot receive calls");
         }

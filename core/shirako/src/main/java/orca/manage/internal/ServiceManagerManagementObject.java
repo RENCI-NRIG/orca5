@@ -149,7 +149,6 @@ public class ServiceManagerManagementObject extends ActorManagementObject implem
 	public ResultMng modifyReservation(final ReservationID reservation,
 			   final Properties modifyProperties, 
 			   AuthToken caller) {
-		System.out.println("In ServiceManagerManagementObject:modifyReservation()");
 		return clientHelper.modifyReservation(reservation, modifyProperties, caller);
 	}
 

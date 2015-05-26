@@ -196,7 +196,6 @@ public class RPCManager {
     public static void modifyLease(IAuthorityProxy proxy, IServiceManagerReservation reservation,
             AuthToken caller) {
         validate(reservation, true);
-        System.out.println("In RPCManager.modifyLease()");
         instance.doModifyLease(reservation.getActor(),
                 reservation.getAuthority(),
                 reservation,
@@ -464,7 +463,6 @@ public class RPCManager {
     private void doModifyLease(IActor actor, IAuthorityProxy proxy,
             IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback,
             AuthToken caller) {
-    	System.out.println("In RPCManager.doModifyLease()");
         proxy.getLogger().info("Outbound modifyLease request from <" + caller.getName() + ">: "
                 + reservation.toLogString());
         // call the proxy to prepare the state for the RPC request.
@@ -523,9 +521,6 @@ public class RPCManager {
     private void doUpdateLease(IActor actor, IServiceManagerCallbackProxy proxy,
             IAuthorityReservation reservation, UpdateData udd, ICallbackProxy callback,
             AuthToken caller) {
-    	System.out.println("Outbound updateLease from <" + caller.getName() + "> for #"
-                + reservation.getReservationID().toHashString() + ": r="
-                + reservation.toLogString());
         proxy.getLogger().info("Outbound updateLease from <" + caller.getName() + "> for #"
                 + reservation.getReservationID().toHashString() + ": r="
                 + reservation.toLogString());

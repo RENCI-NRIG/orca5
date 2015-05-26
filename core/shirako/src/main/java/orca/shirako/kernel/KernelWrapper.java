@@ -404,8 +404,6 @@ public class KernelWrapper {
             throw new IllegalArgumentException();
         }
         
-        System.out.println("In KernelWrapper.modifyLeaseRequest()");
-        
         IKernelAuthorityReservation r = (IKernelAuthorityReservation) reservation;
 
         if (compareSequenceNumbers) {
@@ -586,8 +584,6 @@ public class KernelWrapper {
      * @throws Exception
      */
     public void modifyLease(final IServiceManagerReservation reservation) throws Exception {
-        
-    	System.out.println("In KernelWrapper.modifyLease()");
     	
     	if (reservation == null) {
             throw new IllegalArgumentException();

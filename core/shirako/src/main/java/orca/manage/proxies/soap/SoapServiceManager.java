@@ -359,7 +359,6 @@ public class SoapServiceManager extends SoapActor implements IOrcaServiceManager
     
     public boolean modifyReservation(ReservationID reservation,  
 			 Properties modifyProperties){
-    	System.out.println("In SoapServiceManager:modifyReservation()");
     	clearLast();
     	if (reservation == null || modifyProperties == null) {
     		lastException = new IllegalArgumentException();
