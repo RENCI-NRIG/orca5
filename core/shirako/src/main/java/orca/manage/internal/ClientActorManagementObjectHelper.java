@@ -592,6 +592,7 @@ public class ClientActorManagementObjectHelper implements IClientActorManagement
 			result.setCode(OrcaConstants.ErrorInvalidArguments);
 			return result;
 		}
+		logger.info("ClientActorManagementObjectHelper: modifyReservation(): reservation:" + reservation + " | modifyProperties = " + modifyProperties);
 		try {
 			client.executeOnActorThreadAndWait(new IActorRunnable() {
 				public Object run() throws Exception {
