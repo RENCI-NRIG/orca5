@@ -1,0 +1,117 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://orca/nodeagent" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="http://orca/nodeagent/documents" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://orca/nodeagent"><wsdl:types><xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://orca/nodeagent/documents">
+<xsd:element name="scriptElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="script" type="xsd:string" />
+<xsd:element minOccurs="0" name="arguments" type="xsd:string" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="scriptResultElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="code" type="xsd:int" />
+<xsd:element minOccurs="0" name="message" type="xsd:string" />
+<xsd:element minOccurs="0" name="stdOut" type="xsd:string" />
+<xsd:element minOccurs="0" name="stdError" type="xsd:string" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:complexType name="propertiesElement">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="property" type="types:propertyElement" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="propertyElement">
+<xsd:all>
+<xsd:element name="name" type="xsd:string" />
+<xsd:element name="value" type="xsd:string" />
+</xsd:all>
+</xsd:complexType>
+<xsd:element name="driverElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="driverId" type="xsd:string" />
+<xsd:element minOccurs="0" name="className" type="xsd:string" />
+<xsd:element minOccurs="0" name="path" type="xsd:string" />
+<xsd:element minOccurs="0" name="pkg" type="xsd:base64Binary" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="driverRequestElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="driverId" type="xsd:string" />
+<xsd:element name="actionId" type="xsd:string" />
+<xsd:element minOccurs="0" name="properties" type="types:propertiesElement" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="driverObjectRequestElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="driverId" type="xsd:string" />
+<xsd:element name="objectId" type="xsd:string" />
+<xsd:element name="actionId" type="xsd:string" />
+<xsd:element minOccurs="0" name="properties" type="types:propertiesElement" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="resultElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="code" type="xsd:int" />
+<xsd:element minOccurs="0" name="properties" type="types:propertiesElement" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="testFuncElement" type="xsd:int" />
+<xsd:element name="testFuncResultElement" type="xsd:int" />
+<xsd:element name="registerKeyElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="alias" type="xsd:string" />
+<xsd:element maxOccurs="unbounded" name="publickey" type="xsd:byte" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="registerKeyResultElement" type="xsd:int" />
+<xsd:element name="unregisterKeyElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="alias" type="xsd:string" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="unregisterKeyResultElement" type="xsd:int" />
+<xsd:element name="registerAuthorityKeyElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="alias" type="xsd:string" />
+<xsd:element maxOccurs="unbounded" name="certificate" type="xsd:byte" />
+<xsd:element maxOccurs="unbounded" name="request" type="xsd:byte" />
+<xsd:element maxOccurs="unbounded" name="signature" type="xsd:byte" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="registerAuthorityKeyResultElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="code" type="xsd:int" />
+<xsd:element maxOccurs="unbounded" name="response" type="xsd:byte" />
+<xsd:element maxOccurs="unbounded" name="key" type="xsd:byte" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getServiceKeyElement">
+<xsd:complexType />
+</xsd:element>
+<xsd:element name="getServiceKeyResultElement">
+<xsd:complexType>
+<xsd:all>
+<xsd:element name="code" type="xsd:int" />
+<xsd:element maxOccurs="unbounded" name="key" type="xsd:byte" />
+</xsd:all>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema></wsdl:types><wsdl:message name="uninstallDriverRequest"><wsdl:part name="part1" element="types:driverElement" /></wsdl:message><wsdl:message name="uninstallDriverResponse"><wsdl:part name="part1" element="types:resultElement" /></wsdl:message><wsdl:message name="executeScriptRequest"><wsdl:part name="part1" element="types:scriptElement" /></wsdl:message><wsdl:message name="executeScriptResponse"><wsdl:part name="part1" element="types:scriptResultElement" /></wsdl:message><wsdl:message name="testFuncRequest"><wsdl:part name="part1" element="types:testFuncElement" /></wsdl:message><wsdl:message name="testFuncResponse"><wsdl:part name="part1" element="types:testFuncResultElement" /></wsdl:message><wsdl:message name="executeObjectDriverRequest"><wsdl:part name="part1" element="types:driverObjectRequestElement" /></wsdl:message><wsdl:message name="executeObjectDriverResponse"><wsdl:part name="part1" element="types:resultElement" /></wsdl:message><wsdl:message name="unregisterKeyRequest"><wsdl:part name="part1" element="types:unregisterKeyElement" /></wsdl:message><wsdl:message name="unregisterKeyResponse"><wsdl:part name="part1" element="types:unregisterKeyResultElement" /></wsdl:message><wsdl:message name="executeDriverRequest"><wsdl:part name="part1" element="types:driverRequestElement" /></wsdl:message><wsdl:message name="executeDriverResponse"><wsdl:part name="part1" element="types:resultElement" /></wsdl:message><wsdl:message name="upgradeDriverRequest"><wsdl:part name="part1" element="types:driverElement" /></wsdl:message><wsdl:message name="upgradeDriverResponse"><wsdl:part name="part1" element="types:resultElement" /></wsdl:message><wsdl:message name="registerAuthorityKeyRequest"><wsdl:part name="part1" element="types:registerAuthorityKeyElement" /></wsdl:message><wsdl:message name="registerAuthorityKeyResponse"><wsdl:part name="part1" element="types:registerAuthorityKeyResultElement" /></wsdl:message><wsdl:message name="getServiceKeyRequest"><wsdl:part name="part1" element="types:getServiceKeyElement" /></wsdl:message><wsdl:message name="getServiceKeyResponse"><wsdl:part name="part1" element="types:getServiceKeyResultElement" /></wsdl:message><wsdl:message name="registerKeyRequest"><wsdl:part name="part1" element="types:registerKeyElement" /></wsdl:message><wsdl:message name="registerKeyResponse"><wsdl:part name="part1" element="types:registerKeyResultElement" /></wsdl:message><wsdl:message name="installDriverRequest"><wsdl:part name="part1" element="types:driverElement" /></wsdl:message><wsdl:message name="installDriverResponse"><wsdl:part name="part1" element="types:resultElement" /></wsdl:message><wsdl:portType name="NodeAgentServicePortType"><wsdl:operation name="uninstallDriver"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:uninstallDriverRequest" wsaw:Action="uninstallDriver" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:uninstallDriverResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/uninstallDriverResponse" /></wsdl:operation><wsdl:operation name="executeScript"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:executeScriptRequest" wsaw:Action="executeScript" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:executeScriptResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/executeScriptResponse" /></wsdl:operation><wsdl:operation name="testFunc"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:testFuncRequest" wsaw:Action="testFunc" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:testFuncResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/testFuncResponse" /></wsdl:operation><wsdl:operation name="executeObjectDriver"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:executeObjectDriverRequest" wsaw:Action="executeObjectDriver" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:executeObjectDriverResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/executeObjectDriverResponse" /></wsdl:operation><wsdl:operation name="unregisterKey"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:unregisterKeyRequest" wsaw:Action="unregisterKey" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:unregisterKeyResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/unregisterKeyResponse" /></wsdl:operation><wsdl:operation name="executeDriver"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:executeDriverRequest" wsaw:Action="executeDriver" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:executeDriverResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/executeDriverResponse" /></wsdl:operation><wsdl:operation name="upgradeDriver"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:upgradeDriverRequest" wsaw:Action="upgradeDriver" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:upgradeDriverResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/upgradeDriverResponse" /></wsdl:operation><wsdl:operation name="registerAuthorityKey"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:registerAuthorityKeyRequest" wsaw:Action="registerAuthorityKey" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:registerAuthorityKeyResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/registerAuthorityKeyResponse" /></wsdl:operation><wsdl:operation name="getServiceKey"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:getServiceKeyRequest" wsaw:Action="getServiceKey" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:getServiceKeyResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/getServiceKeyResponse" /></wsdl:operation><wsdl:operation name="registerKey"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:registerKeyRequest" wsaw:Action="registerKey" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:registerKeyResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/registerKeyResponse" /></wsdl:operation><wsdl:operation name="installDriver"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:installDriverRequest" wsaw:Action="installDriver" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:installDriverResponse" wsaw:Action="http://orca/nodeagent/NodeAgentPortType/installDriverResponse" /></wsdl:operation></wsdl:portType><wsdl:binding name="NodeAgentServiceSOAP11Binding" type="tns:NodeAgentServicePortType"><soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" /><wsdl:operation name="uninstallDriver"><soap:operation soapAction="uninstallDriver" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="executeScript"><soap:operation soapAction="executeScript" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="testFunc"><soap:operation soapAction="testFunc" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="executeObjectDriver"><soap:operation soapAction="executeObjectDriver" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="unregisterKey"><soap:operation soapAction="unregisterKey" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="executeDriver"><soap:operation soapAction="executeDriver" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="upgradeDriver"><soap:operation soapAction="upgradeDriver" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="registerAuthorityKey"><soap:operation soapAction="registerAuthorityKey" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="getServiceKey"><soap:operation soapAction="getServiceKey" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="registerKey"><soap:operation soapAction="registerKey" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="installDriver"><soap:operation soapAction="installDriver" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation></wsdl:binding><wsdl:binding name="NodeAgentServiceSOAP12Binding" type="tns:NodeAgentServicePortType"><soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" /><wsdl:operation name="uninstallDriver"><soap12:operation soapAction="uninstallDriver" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="executeScript"><soap12:operation soapAction="executeScript" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="testFunc"><soap12:operation soapAction="testFunc" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="executeObjectDriver"><soap12:operation soapAction="executeObjectDriver" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="unregisterKey"><soap12:operation soapAction="unregisterKey" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="executeDriver"><soap12:operation soapAction="executeDriver" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="upgradeDriver"><soap12:operation soapAction="upgradeDriver" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="registerAuthorityKey"><soap12:operation soapAction="registerAuthorityKey" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="getServiceKey"><soap12:operation soapAction="getServiceKey" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="registerKey"><soap12:operation soapAction="registerKey" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="installDriver"><soap12:operation soapAction="installDriver" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation></wsdl:binding><wsdl:service name="NodeAgentService"><wsdl:port name="NodeAgentServiceSOAP11port_http" binding="tns:NodeAgentServiceSOAP11Binding"><soap:address location="http://localhost:8080/shirako/services/NodeAgentService" /></wsdl:port><wsdl:port name="NodeAgentServiceSOAP12port_http" binding="tns:NodeAgentServiceSOAP12Binding"><soap12:address location="http://localhost:8080/shirako/services/NodeAgentService" /></wsdl:port></wsdl:service></wsdl:definitions>

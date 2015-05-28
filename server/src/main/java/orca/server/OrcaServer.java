@@ -1,5 +1,11 @@
 package orca.server;
 
+import java.io.FileInputStream;
+import java.security.KeyStore;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -12,6 +18,7 @@ import org.apache.axis2.context.ConfigurationContextFactory;
 import org.apache.axis2.transport.http.AxisServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.web.context.WebApplicationContext;
@@ -21,30 +28,73 @@ import org.springframework.ws.transport.http.MessageDispatcherServlet;
 public class OrcaServer {
 	private static final String PROPERTY_BASEDIR = "basedir";
 	public static final String ORCA_SERVER_PORT = "ORCA_SERVER_PORT";
+	public static final String ORCA_SSL_SERVER_PORT = "ORCA_SSL_SERVER_PORT";
+	public static final String ORCA_KEYSTORE="ORCA_KEYSTORE";
+	public static final String ORCA_TRUSTSTORE="ORCA_TRUSTSTORE";
+	public static final String ORCA_PASSPHRASE="ORCA_PASSPHRASE";
+	public static final String ORCA_ALIAS="ORCA_ALIAS";
 	public static final int DefaultServerPort = 8080;
+	public static final int DefaultSSLServerPort = 8443;
 	
-	public static final int ServerPort;
+	private static final int ServerPort, SSLServerPort;
+	private static final String keystore, truststore, alias, passphrase;
+	private static boolean enableSsl = true;
 	
 	static {
-		int serverPortToSet = DefaultServerPort;
-		if (System.getProperty(ORCA_SERVER_PORT) != null) {
-			try {
-				serverPortToSet = Integer.parseInt(System.getProperty(ORCA_SERVER_PORT));
-			} catch (NumberFormatException e) {
-				System.err.println("Unable to parse server port number " + System.getenv(ORCA_SERVER_PORT) + 
-						", using default " + DefaultServerPort + " instead");
-			}
-		} else if (System.getenv(ORCA_SERVER_PORT) != null) {
-			try {
-				serverPortToSet = Integer.parseInt(System.getenv(ORCA_SERVER_PORT));
-			} catch (NumberFormatException e) {
-				System.err.println("Unable to parse server port number " + System.getenv(ORCA_SERVER_PORT) + 
-						", using default " + DefaultServerPort + " instead");
-			}
-		}
-		ServerPort = serverPortToSet;
+		ServerPort = getServerPort(ORCA_SERVER_PORT, DefaultServerPort);
+		SSLServerPort = getServerPort(ORCA_SSL_SERVER_PORT, DefaultSSLServerPort);
+		
+		System.out.println("Got ports: " + ServerPort + "/" + SSLServerPort);
+		
+		keystore = getStringProperty(ORCA_KEYSTORE);
+		truststore = getStringProperty(ORCA_TRUSTSTORE);
+		alias = getStringProperty(ORCA_ALIAS);
+		passphrase = getStringProperty(ORCA_PASSPHRASE);
+		
+		if ((keystore == null) || (alias == null) || (passphrase == null))
+			enableSsl = false;
+		System.out.println("Parsed SSL parameters: " + enableSsl + " " + keystore + " " + alias);
 	}
 
+	/**
+	 * FIgure out the port based on environment settings and defaults
+	 * @param env
+	 * @param def
+	 * @return
+	 */
+	private static int getServerPort(String env, int def) {
+		int serverPortToSet = def;
+		if (System.getProperty(env) != null) {
+			try {
+				serverPortToSet = Integer.parseInt(System.getProperty(env));
+			} catch (NumberFormatException e) {
+				System.err.println("Unable to parse server port number " + System.getenv(env) + 
+						", using default " + def + " instead");
+			}
+		} else if (System.getenv(env) != null) {
+			try {
+				serverPortToSet = Integer.parseInt(System.getenv(env));
+			} catch (NumberFormatException e) {
+				System.err.println("Unable to parse server port number " + System.getenv(env) + 
+						", using default " + def + " instead");
+			}
+		}
+		return serverPortToSet;
+	}
+	
+	/**
+	 * Check system properties, then environment variables, return null if not found
+	 * @param name
+	 * @return
+	 */
+	private static String getStringProperty(String name) {
+		if (System.getProperty(name) != null)
+			return System.getProperty(name);
+		if (System.getenv(name) != null)
+			return System.getenv(name);
+		return null;
+	}
+	
 	private Server server;
 	private boolean forceFresh;
 	
@@ -75,11 +125,49 @@ public class OrcaServer {
 		
 		server = new Server();
 		server.setStopAtShutdown(true);
+		
 		// the connector
 		SelectChannelConnector connector = new SelectChannelConnector();
 		connector.setPort(ServerPort);
 		connector.setAcceptors(2);
 		server.addConnector(connector);
+		
+		System.out.println("Checking ssl " + enableSsl + " with " + keystore + " " + alias + " " + passphrase);
+		// SSL connector
+		if (enableSsl) { 
+			try {
+				System.out.println("Enabling SSL with " + keystore);
+				SslSelectChannelConnector sslConnector = new SslSelectChannelConnector();
+				SSLContext sslContext = SSLContext.getInstance("TLS");
+				char[] passphraseChar = passphrase.toCharArray();
+
+				KeyStore keyStore=KeyStore.getInstance("JKS");
+				keyStore.load(new FileInputStream(keystore),passphraseChar);
+
+				String defaultAlgorithm=KeyManagerFactory.getDefaultAlgorithm();
+				KeyManagerFactory keyFactory=KeyManagerFactory.getInstance(defaultAlgorithm);
+				keyFactory.init(keyStore,passphraseChar);
+				
+				KeyStore trustStore = null;
+				if (truststore != null) {
+					trustStore = KeyStore.getInstance("JKS");
+					trustStore.load(new FileInputStream(truststore),passphraseChar);
+					
+					defaultAlgorithm=TrustManagerFactory.getDefaultAlgorithm();
+					TrustManagerFactory trustFactory=TrustManagerFactory.getInstance(defaultAlgorithm);
+					trustFactory.init(trustStore);
+					sslContext.init(keyFactory.getKeyManagers(), trustFactory.getTrustManagers(), null);
+				} else
+					sslContext.init(keyFactory.getKeyManagers(), null, null);
+
+				sslConnector.setSslContext(sslContext);
+				sslConnector.setPort(SSLServerPort);
+				server.addConnector(sslConnector);
+			} catch (Exception e) {
+				System.err.println("Unable to configure SSL due to: " + e);
+			}
+		}
+		
 		// the handler
 		ServletContextHandler servletHandler = new ServletContextHandler(ServletContextHandler.SECURITY|ServletContextHandler.SECURITY);
 		servletHandler.setContextPath("/orca");

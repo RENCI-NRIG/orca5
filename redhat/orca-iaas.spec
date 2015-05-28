@@ -1,3 +1,6 @@
+%global commit @@COMMIT@@
+%global shortcommit @@SHORTCOMMIT@@
+
 Summary: ORCA - An infrastructure-as-a-service control framework
 Name: orca-iaas
 Version: 5.0.0
@@ -5,15 +8,15 @@ Version: 5.0.0
 # DO NOT MODIFY "Release", UNLESS:
 # 1) We move to a revision structure that isn't based on the subversion GlobalRev.
 # 2) Packaging up a tarball for others to use with "rpmbuild -ta"
-Release: @@DATE@@svn@@GLOBALREV@@
+Release: @@DATE@@git%{shortcommit}
 #
 BuildRoot: %{_builddir}/%{name}-root
-Source: orca-%{version}.tgz
+Source: https://github.com/RENCI-NRIG/orca5/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 Group: Applications/System
 Vendor: RENCI/ExoGENI
 Packager: RENCI/ExoGENI
 License: Eclipse Public License
-URL: https://geni-orca.renci.org/svn/orca/trunk
+URL: https://github.com/RENCI-NRIG/orca5.git
 
 # NOTE:
 # Maven is required for build, but there's not a RHEL package for it.
@@ -124,7 +127,7 @@ This package contains the ORCA_HOME directory specific to the
 container housing the SM actor.
 
 %prep
-%setup -q -n orca-%{version}
+%setup -q -n %{name}-%{version}-%{shortcommit}
 
 %build
 LANG=en_US.UTF-8 MAVEN_OPTS=%{maven_opts} mvn ${MAVEN_ARGS} clean install -DskipTests=true
@@ -207,8 +210,9 @@ cp -R server/orca/lib %{buildroot}%{conf_dir}/sm-14080
 # Populate controller-11080
 cp -R controllers/xmlrpc/xmlrpc/config %{buildroot}%{conf_dir}/controller-11080
 
-# Clean up .svn files that came as a result of the copy
-find %{buildroot}%{conf_dir} -type d -name .svn -print0 | xargs -0 rm -rf
+# Clean up .git* files that came as a result of the copy
+find %{buildroot}%{conf_dir} -type d -name .git -print0 | xargs -0 rm -rf
+find %{buildroot}%{conf_dir} -type f -name .gitignore -print0 | xargs -0 rm -rf
 
 # Create a sysconfig directory
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
