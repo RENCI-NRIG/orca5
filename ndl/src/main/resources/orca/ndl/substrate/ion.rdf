@@ -783,9 +783,9 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.cien.net.internet2.edu:port=e3/2:link=*</rdfs:label>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=eth5/2:link=*</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.cien.net.internet2.edu:port=e3/2:link=*</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=eth5/2:link=*</topology:hasURN>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/cienNet.rdf#cienNet/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienNet/Cisco/6509"/>
         <ethernet:availableVLANSet rdf:resource="&ION;Domain/NetworkService/1/availableVLANSet"/>
@@ -1866,9 +1866,9 @@
     <owl:NamedIndividual rdf:about="&ION;Uva-nlNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-0/2/0:link=*</rdfs:label>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=eth5/2:link=*</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-0/2/0:link=*</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=eth5/2:link=*</topology:hasURN>
         <topology:interfaceOf rdf:resource="&ION;Uva-nlNet/Cisco/6509"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/1/0/ethernet"/>
