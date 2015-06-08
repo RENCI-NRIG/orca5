@@ -67,6 +67,10 @@ public class SoapProxy implements IOrcaComponent {
 		client.setMarshaller(m);
 		client.setUnmarshaller(m);
 		client.setDefaultUri(url);
+		// for SSL connections installs all-trusting trust-manager
+		NullHostVerifierMessageSender ss = new NullHostVerifierMessageSender();
+		ss.myInit();
+		client.setMessageSender(ss);
 	}
 	
 	protected void clearLast() {

@@ -59,44 +59,6 @@ public abstract class RestTask extends OrcaAntTask {
 		return asUrl.getHost();
 	}
 
-	/**
-	 * Generate HTTP post object for the plugin join/leave/modify
-	 * @param pluginName
-	 * @return
-	 * @throws BuildException
-	 */
-	protected HttpPost getPostObject(String pluginName) throws BuildException {
-		DefaultHttpClient client = new DefaultHttpClient();
-
-		client.getCredentialsProvider().
-		setCredentials(
-				new AuthScope(getHost(), getPort()),
-				new UsernamePasswordCredentials(USERNAME, password));
-
-		HttpPost post = new HttpPost(na2Url + "/" + pluginName);
-
-		return post;
-	}
-
-	/**
-	 * Generate HttpGet for the plugin status and other GET operations
-	 * @param pluginName
-	 * @return
-	 * @throws BuildException
-	 */
-	protected HttpGet getGetObject(String pluginName) throws BuildException {
-		DefaultHttpClient client = new DefaultHttpClient();
-
-		client.getCredentialsProvider().
-		setCredentials(
-				new AuthScope(getHost(), getPort()),
-				new UsernamePasswordCredentials(USERNAME, password));
-
-		HttpGet get = new HttpGet(na2Url + "/" + pluginName);
-
-		return get;
-	}
-
 	/*
 	 * Task setters
 	 */
@@ -252,8 +214,14 @@ public abstract class RestTask extends OrcaAntTask {
 				props = new Properties();
 				props.putAll((JSONObject)o.get("properties"));
 			}
-
-			PluginReturn pr = new PluginReturn(st, (String)o.get("errorMsg"), rid, props);
+			
+			/**
+			 * If HTTP error is returned, then it is 'message', if plugin error, it is 'errorMsg'
+			 */
+			String msg = (String)o.get("errorMsg");
+			if (msg == null)
+				msg = (String)o.get("message");
+			PluginReturn pr = new PluginReturn(st, msg, rid, props);
 			return pr;
 		} catch (Exception e) {
 			throw new BuildException("Unable to convert plugin status " + o);

@@ -162,6 +162,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
             logger.debug("Ciena 8700 does not support vlan QoS => creating non-QoS vlan");
         }
         executeScript(CommandCreateVLAN, p);
+        
+        disconnect();
     }
 
     public void deleteVLAN(String vlanTag, boolean withQoS) throws CommandException {
@@ -171,6 +173,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
             logger.debug("Ciena 8700 does not support vlan QoS => deleting non-QoS vlan");
         }
         executeScript(CommandDeleteVLAN, p);
+        
+        disconnect();
     }
 
     public void addTrunkPortsToVLAN(String vlanTag, String ports) throws CommandException {
@@ -185,6 +189,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
             executeScript(CommandAddTrunkPort, p);
         }
         executeScript(CommandLogoff, p);
+        
+        disconnect();
     }
 
     public void addAccessPortsToVLAN(String vlanTag, String ports) throws CommandException {
@@ -199,6 +205,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
             executeScript(CommandAddAccessPort, p);
         }
         executeScript(CommandLogoff, p);
+        
+        disconnect();
     }
 
     public void removeTrunkPortsFromVLAN(String vlanTag, String ports) throws CommandException {
@@ -211,6 +219,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
             p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, s, true));
             executeScript(CommandRemoveTrunkPorts, p);
         }
+        
+        disconnect();
     }
 
     public void removeAccessPortsFromVLAN(String vlanTag, String ports) throws CommandException {
@@ -224,6 +234,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
             p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, s, false));
             executeScript(CommandRemoveAccessPorts, p);
         }
+        
+        disconnect();
     }
 
     public void mapVLANs(String sourceTag, String destinationTag, String port) throws CommandException {
@@ -233,6 +245,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
         p.setProperty(PropertyDstVLAN, destinationTag);
         p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, port, true));
         executeScript(CommandMapVLANS, p);
+        
+        disconnect();
     }
 
     public void unmapVLANs(String sourceTag, String destinationTag, String port) throws CommandException {
@@ -243,6 +257,8 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
         p.setProperty(PropertySubPort, genSubPortName(virtualSwitch, port, true));
         p.setProperty(PropertyPort, port);
         executeScript(CommandUnmapVLANS, p);
+        
+        disconnect();
     }
 
 }
