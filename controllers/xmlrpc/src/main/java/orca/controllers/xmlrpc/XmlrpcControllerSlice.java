@@ -18,6 +18,7 @@ import orca.controllers.xmlrpc.pubsub.SliceState;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
+import orca.manage.OrcaConstants;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
@@ -175,18 +176,52 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @return
 	 */
 	public List<UnitMng> getUnits(IOrcaServiceManager sm, String res) {
-		List<ReservationMng> allRes = getAllReservations(sm);
 		try {
-			if (allRes != null) {
-				for(ReservationMng r: allRes) {
-					if (r.getReservationID().trim().equals(res.trim())) {
-						return sm.getUnits(new ReservationID(res));
-					}
-				}
-			}
-			return null;
+			return sm.getUnits(new ReservationID(res));
+		} catch(RuntimeException re) {
+			throw re;
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to get units for reservation " + res + " due to " + e);
+		}
+	}
+	
+	/**
+	 * Conversion
+	 * @param p
+	 * @return
+	 */
+	public static Map<String, String> fromProperties(Properties p) {
+		Map<String, String> m = new HashMap<String, String>();
+		
+		for(Map.Entry<Object, Object>e: p.entrySet()) {
+			m.put((String)e.getKey(), (String)e.getValue());
+		}
+		return m;
+	}
+	
+	public static Properties fromMap(Map<String, String> m) {
+		Properties p = new Properties();
+		
+		for(Map.Entry<String, String>e : m.entrySet()) {
+			p.setProperty(e.getKey(), e.getValue());
+		}
+		return p;
+	}
+	
+	/**
+	 * Modify reservation based on reservation id (or null)
+	 * @param sm
+	 * @param res
+	 * @return
+	 */
+	public boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, Map<String, String> modifyProperties) {
+		try {
+			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY, "modify." + modifySubcommand);
+			return sm.modifyReservation(new ReservationID(res), fromMap(modifyProperties));
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to modify sliver reservation " + res + " due to " + e);
 		}
 	}
 	

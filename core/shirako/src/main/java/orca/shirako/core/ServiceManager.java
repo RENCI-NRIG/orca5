@@ -476,7 +476,7 @@ public class ServiceManager extends Actor implements IServiceManager {
         	
         	// All client-side property manipulation happens here
         	
-        	logger.info("ServiceManager.modify(): Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
+        	logger.debug("ServiceManager.modify(): Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
         	// Merging modifyProperties into ConfigurationProperties
         	Properties currConfigProps = rc.getApprovedResources().getConfigurationProperties();        	
         	PropList.mergePropertiesPriority(modifyProps, currConfigProps);
@@ -484,7 +484,7 @@ public class ServiceManager extends Actor implements IServiceManager {
         	//rc.getApprovedResources().setConfigurationProperties(modifyProps);
         	rc.getApprovedResources().setConfigurationProperties(currConfigProps);
         	
-        	logger.info("ServiceManager.modify(): ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
+        	logger.debug("ServiceManager.modify(): ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
         	
         	// After this point the new modifyProperties are a part of the configuration properties 
         	// of the resource set associated with the reservation; These properties flow from the SM

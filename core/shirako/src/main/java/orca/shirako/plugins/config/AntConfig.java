@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
+import orca.manage.OrcaConstants;
 import orca.shirako.api.IActorIdentity;
 import orca.shirako.api.IServiceManagerReservation;
 import orca.shirako.common.meta.ConfigurationProperties;
@@ -324,7 +325,7 @@ public class AntConfig extends Config {
         // Else it will default to a target called "modify"
         // If there is no "modify.*" or "modify" target in the handler, it will fail in the same way as it will fail when a specified ant target does not exist
         
-        String modifyTarget = (String) p.getProperty("modify.subcommand");
+        String modifyTarget = (String) p.getProperty(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY);
         
         if(modifyTarget == null){
         	modifyTarget = TargetModify;
