@@ -471,12 +471,12 @@ public class ServiceManager extends Actor implements IServiceManager {
         if (rc == null) {
             throw new Exception("Unknown reservation: " + rid);
         }
-        
+
         if(rc.getApprovedResources() != null){
         	
         	// All client-side property manipulation happens here
         	
-        	logger.debug("ServiceManager.modify(): Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
+        	logger.info("ServiceManager.modify(): Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
         	// Merging modifyProperties into ConfigurationProperties
         	Properties currConfigProps = rc.getApprovedResources().getConfigurationProperties();        	
         	PropList.mergePropertiesPriority(modifyProps, currConfigProps);
@@ -484,13 +484,15 @@ public class ServiceManager extends Actor implements IServiceManager {
         	//rc.getApprovedResources().setConfigurationProperties(modifyProps);
         	rc.getApprovedResources().setConfigurationProperties(currConfigProps);
         	
-        	logger.debug("ServiceManager.modify(): ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
+        	logger.info("ServiceManager.modify(): ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
         	
         	// After this point the new modifyProperties are a part of the configuration properties 
         	// of the resource set associated with the reservation; These properties flow from the SM
         	// to the AM as part of the reservation, and land up as part of requestedResources.getConfigurationProperties()
         	// which is processed in AuthorityReservation.mapAndUpdateModifyLease()
         	
+        } else {
+        	logger.warn("ServiceManager.modify(): There are no approved resources for " + rid + ", no modify properties will be added");
         }
         
         if (!recovered) {

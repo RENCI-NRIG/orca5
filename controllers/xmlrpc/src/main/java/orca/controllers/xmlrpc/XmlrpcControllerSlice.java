@@ -201,7 +201,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	
 	public static Properties fromMap(Map<String, String> m) {
 		Properties p = new Properties();
-		
+
 		for(Map.Entry<String, String>e : m.entrySet()) {
 			p.setProperty(e.getKey(), e.getValue());
 		}
@@ -214,10 +214,20 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @param res
 	 * @return
 	 */
-	public boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, Map<String, String> modifyProperties) {
+	public boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		try {
+			// here we break up the semantics of different subcommands
+			Properties modifyProperties = new Properties();
+			boolean implementedSubcommand = false;
+			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
+				implementedSubcommand = true;
+				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
+			}
+			if (!implementedSubcommand)
+				throw new RuntimeException("Subcommand " + modifySubcommand + " is not implemented");
+			// add the subcommand as a property after everything
 			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY, "modify." + modifySubcommand);
-			return sm.modifyReservation(new ReservationID(res), fromMap(modifyProperties));
+			return sm.modifyReservation(new ReservationID(res), modifyProperties);
 		} catch(RuntimeException re) { 
 			throw re;
 		} catch (Exception e) {

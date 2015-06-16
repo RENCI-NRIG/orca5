@@ -1037,8 +1037,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	
     }
      
+    /**
+     * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
+     * this way we can have multiple maps, as e.g. for modifying SSH keys
+     * @param slice_urn
+     * @param sliver_guid
+     * @param credentials
+     * @param modifySubcommand
+     * @param modifyProperties
+     * @return
+     */
     public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
-    		String modifySubcommand, Map<String, String> modifyProperties) {
+    		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
     	IOrcaServiceManager sm = null;
     	XmlrpcControllerSlice ndlSlice = null;
 

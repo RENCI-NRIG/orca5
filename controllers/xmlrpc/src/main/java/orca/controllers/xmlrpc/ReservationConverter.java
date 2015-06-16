@@ -144,7 +144,7 @@ public class ReservationConverter implements LayerConstant {
 	public ReservationConverter(List<Map<String, ?>> u, IOrcaServiceManager asm, XmlrpcControllerSlice sl) throws ReservationConverterException {
 		
 		// convert list of logins/keys to properties
-		usersSSHProperties = generateSSHProperties(u, sl);
+		usersSSHProperties = generateSSHProperties(u);
 		sm = asm;
 		ndlSlice=sl;
 		this.logger = NdlCommons.getNdlLogger();
@@ -1758,7 +1758,7 @@ public class ReservationConverter implements LayerConstant {
      * @return
      */
     @SuppressWarnings("unchecked")
-	private static Properties generateSSHProperties(List<Map<String, ?>> users, XmlrpcControllerSlice sl) throws ReservationConverterException {
+	public static Properties generateSSHProperties(List<Map<String, ?>> users) throws ReservationConverterException {
     	Properties sshProperties = new Properties();
     	
     	int loginCount = 1;

@@ -132,7 +132,7 @@ public class OrcaServer {
 		connector.setAcceptors(2);
 		server.addConnector(connector);
 		
-		System.out.println("Checking ssl " + enableSsl + " with " + keystore + " " + alias + " " + passphrase);
+		System.out.println("Checking ssl " + enableSsl);
 		// SSL connector
 		if (enableSsl) { 
 			try {
