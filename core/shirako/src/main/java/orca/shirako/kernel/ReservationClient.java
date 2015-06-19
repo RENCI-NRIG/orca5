@@ -938,6 +938,7 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
 
         switch (state) {
         case ReservationStates.Active:
+            
             transition("modify lease",
                     ReservationStates.Active,
                     ReservationStates.ModifyingLease);
@@ -998,7 +999,6 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
         // mapper.uncommit(this);
         sequenceTicketOut++;
         
-        System.out.println("In ReservationClient.extendTicket(), calling RPCManager.extendTicket()");
         RPCManager.extendTicket(this);
     }
 

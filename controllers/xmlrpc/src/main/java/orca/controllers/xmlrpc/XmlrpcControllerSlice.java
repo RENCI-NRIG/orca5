@@ -208,6 +208,14 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		return p;
 	}
 	
+	private boolean findProp(PropertiesMng pm, String key) {
+		for(PropertyMng pp: pm.getProperty()) {
+			if (pp.getName().equals(key))
+				return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Modify reservation based on reservation id (or null)
 	 * @param sm
@@ -217,16 +225,24 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	public boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		try {
 			// here we break up the semantics of different subcommands
+			
+			// FIXME: need to find highest previously used index of modify and increment to fill in
+			// modifyX.subcommand and other properties
+
+			ReservationMng rm = sm.getReservation(new ReservationID(res));
+
 			Properties modifyProperties = new Properties();
 			boolean implementedSubcommand = false;
 			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
 				implementedSubcommand = true;
 				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
 			}
+			
 			if (!implementedSubcommand)
 				throw new RuntimeException("Subcommand " + modifySubcommand + " is not implemented");
 			// add the subcommand as a property after everything
 			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY, "modify." + modifySubcommand);
+
 			return sm.modifyReservation(new ReservationID(res), modifyProperties);
 		} catch(RuntimeException re) { 
 			throw re;

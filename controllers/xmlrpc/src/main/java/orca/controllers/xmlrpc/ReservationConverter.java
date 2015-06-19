@@ -905,10 +905,10 @@ public class ReservationConverter implements LayerConstant {
 		if(ip_range!=null){
 			if(ip_range.getBase_IP()!=null){
 				base_ip_addr = ip_range.getBase_ip_addr().address;
-			}else
-				System.out.println("Reservationconverter: VMISCSI: base_ip_addr is null");
-		}else
-			System.out.println("Reservationconverter: VMISCSI: ip_range is null");
+			} else
+				logger.warn("Reservationconverter: VMISCSI: base_ip_addr is null");
+		} else
+			logger.warn("Reservationconverter: VMISCSI: ip_range is null");
 		String storagePrefix = UnitProperties.UnitStoragePrefix+host_interface;
 		String storageTargetPrefix = storagePrefix + ".target"; 
 		//String storageFSPrefix = storagePrefix + ".fs"; 

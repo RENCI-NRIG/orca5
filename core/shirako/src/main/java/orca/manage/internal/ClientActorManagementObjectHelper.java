@@ -569,10 +569,7 @@ public class ClientActorManagementObjectHelper implements IClientActorManagement
 					*/
 					
 					
-					System.out.println("Before calling client.extend()");
 					client.extend(reservation, rset, newTerm);
-					System.out.println("After calling client.extend()");
-					
 					
 					return null;
 				}

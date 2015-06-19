@@ -1052,7 +1052,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	IOrcaServiceManager sm = null;
     	XmlrpcControllerSlice ndlSlice = null;
 
-    	logger.info("ORCA API sliverModify() invoked for " + sliver_guid + " of slice " + slice_urn);
+    	logger.info("ORCA API sliverModify() invoked for " + sliver_guid + " of slice " + slice_urn + " subcommand " + modifySubcommand);
 
     	if (sliver_guid == null) 
     		return setError("ERROR: getSliverProperties() sliver_guid is null");

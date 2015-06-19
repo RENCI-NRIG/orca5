@@ -544,8 +544,9 @@
 
 	<!-- Various Modify Operations -->
 	<!-- add logins -->
-	<target name="modify.ssh">
+	<target name="modify.ssh"  depends="resolve.configuration">
 		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	
 		<tstamp prefix="start">
 			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
 		</tstamp>
@@ -607,6 +608,7 @@
 
 	<!-- leave target -->
 	<target name="leave" depends="resolve.configuration">
+		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
 		<tstamp prefix="start">
 			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
 		</tstamp>

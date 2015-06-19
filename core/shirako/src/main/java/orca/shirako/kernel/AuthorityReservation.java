@@ -415,13 +415,15 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                     // requestedResources.getConfigurationProperties() contains the modifyProperties
                     
                     // TODO: merge the configuration properties of approved and requested resources and put it in approved resources instead ?
-                    logger.info("requestedResources.getConfigurationProperties() = " + requestedResources.getConfigurationProperties());
-                    logger.info("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
+                    logger.debug("requestedResources.getConfigurationProperties() = " + requestedResources.getConfigurationProperties());
+                    logger.debug("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
                     if (requestedResources.getConfigurationProperties() != null) {
-                        //approvedResources.setConfigurationProperties(requestedResources.getConfigurationProperties());
-                        PropList.mergePropertiesPriority(requestedResources.getConfigurationProperties(), approvedResources.getConfigurationProperties());
+                    	if (approvedResources.getConfigurationProperties() == null)
+                    		approvedResources.setConfigurationProperties(requestedResources.getConfigurationProperties());
+                    	else
+                    		PropList.mergePropertiesPriority(requestedResources.getConfigurationProperties(), approvedResources.getConfigurationProperties());
                     }
-                    logger.info("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
+                    logger.debug("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
                     resources.updateProps(this, approvedResources);
                     // transition to priming
                     transition("modify lease", ReservationStates.Active, ReservationStates.Priming);

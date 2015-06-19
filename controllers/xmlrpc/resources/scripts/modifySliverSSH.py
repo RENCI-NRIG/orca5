@@ -50,14 +50,13 @@ users = {}
 f = open(options.key, 'r')
 userKey = f.read()
 if userKey != None:
-    users={ 'config.ssh.numlogins': '1', 
-          'config.ssh.user1.login': options.uname,
-          'config.ssh.user1.keys' : [ userKey ],
-          'config.ssh.user1.sudo' : 'no' }
+    users=[ {'login':'root',
+               'keys': [ userKey ] } ]
+
 else:
     print "Unable to read key file " + options.key
 
-print "User " + users['config.ssh.user1.login'] + " key " + users['config.ssh.user1.keys'][0]
+print "User " + users[0]['login'] + " key " + users[0]['keys'][0]
 
 # Create an object to represent our server.
 server_url = options.server;
@@ -76,5 +75,5 @@ else:
 
 # Call the server and get our result.
 print "Modifying SSH keys for reservation ... \n"
-result = server.orca.modifySliver(options.sliceID, options.reservation, credentials, "ssh", )
+result = server.orca.modifySliver(options.sliceID, options.reservation, credentials, "ssh", users)
 print result
