@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
+import orca.manage.OrcaConstants;
 import orca.shirako.api.IDatabase;
 import orca.shirako.api.IReservation;
 import orca.shirako.common.delegation.ResourceTicket;
@@ -13,6 +14,7 @@ import orca.shirako.core.Actor;
 import orca.shirako.core.Ticket;
 import orca.shirako.core.Unit;
 import orca.shirako.plugins.ShirakoPlugin;
+import orca.shirako.plugins.config.AntConfig;
 import orca.shirako.plugins.config.Config;
 import orca.util.OrcaException;
 import orca.util.PropList;
@@ -373,33 +375,48 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
                 }
             }
 
-            int result = getResultCode(properties);
+            int result = getResultCode(properties); // "shirako.target.code"
             
-            String msg = properties.getProperty(Config.PropertyExceptionMessage);
+            String msg = properties.getProperty(Config.PropertyExceptionMessage); // in case of ant exception
             if (msg == null)
-            	msg = properties.getProperty(Config.PropertyTargetResultCodeMessage);
-
+            	msg = properties.getProperty(Config.PropertyTargetResultCodeMessage); // "shirako.target.code.message"
+            
+            // modify sequence number is passed from AntConfig in the "result" in AntConfig.Runconfig.execute()
+            String modifySequenceNum = properties.getProperty(Config.PropertyModifySequenceNumber);
+            if(modifySequenceNum == null){ // should never hit
+            	modifySequenceNum = "-1"; 
+            }
+            
             switch (result) {
                 case 0:
                     // all went fine
                     // complete operation
                     u.completeModify();
-                    notice = "modify action succeeded";
-                    //properties.setProperty("shirako.save.unit.modify1.message", notice);
+                    notice = "modify action succeeded: message from handler = " + msg;
+                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".message", notice);
+                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".code", "0");
                     // merge properties if needed
                     mergeUnitProperties(u, properties);
                     break;
 
                 case -1:
                     notice = "Exception during modify for unit: " + u.getID().toHashString() + " " + msg;  
-                    //properties.setProperty("shirako.save.unit.modify1.message", notice);
-                    //properties.setProperty("unit.modify1.message", notice);                    
+                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum + ".message", notice);
+                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".code", "-1");
                     failModifyNoUpdate(u, notice);
+                    // merge properties if needed
                     mergeUnitProperties(u, properties);
                     break;
+                    
                 default:
-                    failModifyNoUpdate(u, "Error during modify for node: " + u.getID().toHashString() + " " + Integer.toString(result));
+                	notice = "Error during modify for node: " + u.getID().toHashString() + " " + Integer.toString(result);  
+                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum + ".message", notice);
+                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".code", Integer.toString(result));
+                    failModifyNoUpdate(u, notice);
+                    // merge properties if needed
+                    mergeUnitProperties(u, properties);
                     break;
+                    
             }
         }
 

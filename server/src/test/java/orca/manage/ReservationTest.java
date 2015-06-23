@@ -295,7 +295,9 @@ public abstract class ReservationTest extends ManagementTest {
 		// modify the reservation	
 		Properties modifyProps = new Properties();
 		modifyProps.setProperty("new-modify-property1", "value1");
-		modifyProps.setProperty("modify.subcommand", "modify.restart");
+		modifyProps.setProperty("modify.subcommand.0", "modify.ssh");
+		modifyProps.setProperty("modify.subcommand.1", "modify.restar");
+		modifyProps.setProperty("modify.subcommand.2", "modify.restart");
 		Assert.assertTrue(sm.modifyReservation(rid, modifyProps));
 		
 		synchronized(testDone){

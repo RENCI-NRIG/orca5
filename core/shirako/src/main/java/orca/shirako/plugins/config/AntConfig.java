@@ -54,7 +54,7 @@ public class AntConfig extends Config {
     public static final String PropertyNodeAgentProtocol = "na.protocol";
     public static final String PropertyNodeAgentUri = "na.uri";
     public static final String PropertyStartTime = "start.time";
-    public static final String PropertyEndTime = "stop.time";	
+    public static final String PropertyEndTime = "stop.time";
 	
     public static final int DefaultCapacity = 1000;
     public static final int DefaultThreads = 10;
@@ -320,16 +320,29 @@ public class AntConfig extends Config {
     public void modify(ConfigToken token, Properties p) throws Exception {
         preprocess(p);
 
-        // Get the modify subcommand from the property "modify.subcommand" and pass it as target
-        // For modify to work, the modify.subcommand property needs to be present, and needs to be a string that starts with "modify."
+        // Get the modify subcommand from the property "modify.subcommand.<index>" and pass the one with the highest index as target
+        // For modify to work, the modify.subcommand.<index> property needs to be present, and needs to be a string that starts with "modify."
         // Else it will default to a target called "modify"
         // If there is no "modify.*" or "modify" target in the handler, it will fail in the same way as it will fail when a specified ant target does not exist
         
-        String modifyTarget = (String) p.getProperty(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY);
+        int highestIndex = 0;
+        String modifyTarget = null;
+        for(String key : p.stringPropertyNames()) {        	
+        	if(key.startsWith(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY)){
+        		String indexString = key.split("\\.")[2];
+        		int index = Integer.parseInt(indexString);
+        		if(index >= highestIndex){
+        			highestIndex = index;
+        			modifyTarget = p.getProperty(key);
+        		}
+        	}
+        }
         
         if(modifyTarget == null){
         	modifyTarget = TargetModify;
         }
+        
+        p.setProperty(Config.PropertyModifySequenceNumber, Integer.toString(highestIndex));
         
         //RunConfig task = new RunConfig(TargetModify, p, token);
         RunConfig task = new RunConfig(modifyTarget, p, token);
@@ -571,6 +584,14 @@ public class AntConfig extends Config {
             if (rtype != null) {
                 result.setProperty(Config.PropertyResourceType, rtype);
             }
+            
+            // required for passing in the modify sequence number so that Substrate:processModifyComplete() 
+            // can populate the index for code/message for the modify actions
+            String modifySeqNum = properties.getProperty(Config.PropertyModifySequenceNumber);
+            if(modifySeqNum != null){
+            	result.setProperty(Config.PropertyModifySequenceNumber, properties.getProperty(Config.PropertyModifySequenceNumber));
+            }
+            
             plugin.configurationComplete(token, result);
         }
     }

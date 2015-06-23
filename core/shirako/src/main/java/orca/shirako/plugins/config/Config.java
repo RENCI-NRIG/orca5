@@ -80,6 +80,12 @@ public class Config implements Initializable, Persistable
     public static final String PropertyResourceType = "unit.resourceType";  // if you change this, you must also change Unit.PropertyResourceType
     public static final String PropertyUnitAll = "unit.all";
     
+    /**
+     * For modify sequence number
+     */
+    
+    public static final String PropertyModifySequenceNumber = "shirako.save.unit.modify.sequencenum";
+    
     @Persistent
     protected boolean isSynchronous = false;
 

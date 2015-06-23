@@ -366,8 +366,8 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
     /**
      * Calls the policy to fill a request, with associated state transitions.
      * 
-     * @param extend
-     *            true iff this request is an extend
+     * @param modify
+     *            true iff this request is an modify
      * @return boolean success
      */
     protected boolean mapAndUpdateModifyLease() {
