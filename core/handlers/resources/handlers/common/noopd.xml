@@ -61,6 +61,9 @@
 	<echo message="**** modify.restart handler start..."/>
 	<echo message="Sleeping for 4000 milliseconds"/>
         <sleep milliseconds="4000"/>
+	<var name="shirako.save.unit.modify1.message" unset="true" />
+        <echo message="Setting modify message notice" />
+        <property name="shirako.save.unit.modify1.message" value="modify action succeeded" />
         <property name="shirako.target.code" value="0" />
     </target>
 

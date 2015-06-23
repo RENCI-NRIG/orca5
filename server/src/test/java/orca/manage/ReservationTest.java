@@ -229,6 +229,8 @@ public abstract class ReservationTest extends ManagementTest {
 	public void testModifyResources() throws Exception {
 		IOrcaContainer cont = connect();
 		IOrcaServiceManager sm = cont.getServiceManager(SM_GUID);
+		IOrcaAuthority am = cont.getAuthority(SITE_GUID);
+		
 		final Object testDone = new Object();
 				
 		IOrcaEventHandler handler = new IOrcaEventHandler() {
@@ -300,6 +302,37 @@ public abstract class ReservationTest extends ManagementTest {
 			System.out.println("*** testDone triggered after modifyReservation");
 			testDone.wait(60000);
 		}
+		
+		//System.out.println("Unit properties = " + sm.getUnits(rid).get(0).getProperties());
+		
+		ArrayList<PropertyMng> listPmngConfig = (ArrayList<PropertyMng>) sm.getReservation(rid).getConfigurationProperties().getProperty();
+	
+		System.out.println("Printing SM reservation config properties");
+		for(PropertyMng item:listPmngConfig){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
+		ArrayList<PropertyMng> listPmng = (ArrayList<PropertyMng>) sm.getUnits(rid).get(0).getProperties().getProperty();
+		
+		System.out.println("Printing SM unit properties");
+		for(PropertyMng item:listPmng){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
+		ArrayList<PropertyMng> listPmngConfigAM = (ArrayList<PropertyMng>) am.getReservation(rid).getConfigurationProperties().getProperty();
+		
+		System.out.println("Printing AM reservation config properties");
+		for(PropertyMng item:listPmngConfigAM){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
+		ArrayList<PropertyMng> listPmngAM = (ArrayList<PropertyMng>) am.getUnits(rid).get(0).getProperties().getProperty();
+		
+		System.out.println("Printing AM unit properties");
+		for(PropertyMng item:listPmngAM){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
 		
 		state = sm.getReservationState(rid);
 		Assert.assertNotNull(state);
