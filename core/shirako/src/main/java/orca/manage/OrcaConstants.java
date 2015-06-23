@@ -253,4 +253,5 @@ public class OrcaConstants
 
 	public static final int ExtendSameUnits = -1;
 
+	public static final String MODIFY_SUBCOMMAND_PROPERTY="modify.subcommand";
 }

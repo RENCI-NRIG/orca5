@@ -27,12 +27,8 @@
 			</then>
 		</if>
 
-
 		<var name="code" unset="true" />
 		<var name="message" unset="true" />
-		
-		
-
 
 		<echo message="Cloud Type: ${cloud.type} " />
 		<if>
@@ -365,10 +361,7 @@
 														<equals arg1="${icode}" arg2="0" />
 													</not>
 													<then>
-														<var name="code" unset="true" />
-														<property name="code" value="${icode}" />
-														<var name="message" unset="true" />
-														<property name="message" value="Unable to create account ${loginProperty}, failing" />
+														<fail message="Unable to create account ${loginProperty}, failing" />
 													</then>
 												</if>
 											</sequential>
@@ -549,10 +542,73 @@
 		<echo message="join exit code: ${shirako.target.code}" />
 	</target>
 
-	<!-- Modify operation is not supported -->
-	<target name="modify" />
+	<!-- Various Modify Operations -->
+	<!-- add logins -->
+	<target name="modify.ssh"  depends="resolve.configuration">
+		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+	
+		<echo message="EC2 HANDLER: MODIFY.SSH on ${start.TIME}" />
+		<echo message="modify.ssh: ec2 instance=${unit.ec2.instance}" />
+	
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<echo message="installing ${config.ssh.numlogins} user keys and accounts in the instance" />
+				<var name="message" unset="true" />
+				<for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+					<sequential>
+						<var name="icode" unset="true" />
+						<var name="loginProperty" unset="true" />
+						<var name="keysProperty" unset="true" />
+						<var name="sudoProperty" unset="true" />
+			
+						<property name="loginProperty" value="${config.ssh.user@{iter}.login}" />
+						<property name="keysProperty" value="${config.ssh.user@{iter}.keys}" />
+						<property name="sudoProperty" value="${config.ssh.user@{iter}.sudo}" />
+			
+						<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+						<exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
+							<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+							<env key="EC2_HOME" value="${ec2.home}" />
+							<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+							<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+							<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+							<env key="EC2_DIR" value="${ec2.dir}" />
+							<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+							<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+							<arg value="${unit.manage.ip}" />
+							<arg value="${loginProperty}" />
+							<arg value="${keysProperty}" />
+							<arg value="${sudoProperty}" />
+						</exec>
+						<echo message="Exit code for login ${loginProperty} is ${icode}" />
+						<if>
+							<not>
+								<equals arg1="${icode}" arg2="0" />
+							</not>
+							<then>
+								<fail message="Unable to create account ${loginProperty}, failing" />
+							</then>
+						</if>
+					</sequential>
+				</for>
+			</else>
+		</if>
+		<property name="shirako.target.code" value="0" />
+		<echo message="modify.ssh exit code: ${shirako.target.code}" />
+	</target>
 
+	<!-- leave target -->
 	<target name="leave" depends="resolve.configuration">
+		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
 		<tstamp prefix="start">
 			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
 		</tstamp>
@@ -560,8 +616,8 @@
 		<echo message="EC2 HANDLER: LEAVE on ${start.TIME}" />
 		<echo message="leave: ec2 instance=${unit.ec2.instance}" />
 		<!-- set site-specific properties like the VLAN or PHYS mode
-	 and the interface to operate on
-    -->
+			 and the interface to operate on
+   		-->
 		<if>
 			<isset property="ec2.site.properties" />
 			<then>
@@ -597,8 +653,8 @@
 						</exec>
 						<echo message="get-ip exit code: ${code} ip=${real.ip}" />
 						<!-- all properties passed to proxy script should be statically specified in ec2.site.properties.
-		 See wiki notes on proxies for meaning of these properties.
-	    -->
+		 					See wiki notes on proxies for meaning of these properties.
+	    				-->
 						<echo message="un-configuring ${proxy.type} proxy via host ${proxy.proxy.ip}" />
 						<var name="code" unset="true" />
 						<var name="message" unset="true" />
@@ -618,7 +674,6 @@
 				<var name="code" unset="true" />
 				<var name="message" unset="true" />
 				<echo message="removing instance ifaces: ${unit.ec2.instance}, ${unit.quantum.ifaces}" />
-
 
 				<if>
 					<equals arg1="${cloud.type}" arg2="nova-essex" />
@@ -641,8 +696,6 @@
 						<echo>output: ${remove.iface.output}</echo>
 					</then>
 				</if>
-
-
 
 				<var name="code" unset="true" />
 				<var name="message" unset="true" />

@@ -144,7 +144,7 @@ public class ReservationConverter implements LayerConstant {
 	public ReservationConverter(List<Map<String, ?>> u, IOrcaServiceManager asm, XmlrpcControllerSlice sl) throws ReservationConverterException {
 		
 		// convert list of logins/keys to properties
-		usersSSHProperties = generateSSHProperties(u, sl);
+		usersSSHProperties = generateSSHProperties(u);
 		sm = asm;
 		ndlSlice=sl;
 		this.logger = NdlCommons.getNdlLogger();
@@ -905,10 +905,10 @@ public class ReservationConverter implements LayerConstant {
 		if(ip_range!=null){
 			if(ip_range.getBase_IP()!=null){
 				base_ip_addr = ip_range.getBase_ip_addr().address;
-			}else
-				System.out.println("Reservationconverter: VMISCSI: base_ip_addr is null");
-		}else
-			System.out.println("Reservationconverter: VMISCSI: ip_range is null");
+			} else
+				logger.warn("Reservationconverter: VMISCSI: base_ip_addr is null");
+		} else
+			logger.warn("Reservationconverter: VMISCSI: ip_range is null");
 		String storagePrefix = UnitProperties.UnitStoragePrefix+host_interface;
 		String storageTargetPrefix = storagePrefix + ".target"; 
 		//String storageFSPrefix = storagePrefix + ".fs"; 
@@ -1758,7 +1758,7 @@ public class ReservationConverter implements LayerConstant {
      * @return
      */
     @SuppressWarnings("unchecked")
-	private static Properties generateSSHProperties(List<Map<String, ?>> users, XmlrpcControllerSlice sl) throws ReservationConverterException {
+	public static Properties generateSSHProperties(List<Map<String, ?>> users) throws ReservationConverterException {
     	Properties sshProperties = new Properties();
     	
     	int loginCount = 1;

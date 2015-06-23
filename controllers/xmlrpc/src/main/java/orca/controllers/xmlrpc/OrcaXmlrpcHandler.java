@@ -985,7 +985,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		IOrcaServiceManager sm = null;
 		XmlrpcControllerSlice ndlSlice = null;
 		
-    	logger.info("ORCA API getSliverProperties() invoked for " + sliver_guid);
+    	logger.info("ORCA API getSliverProperties() invoked for " + sliver_guid + " of slice " + slice_urn);
     	
 		if (sliver_guid == null) 
 			return setError("ERROR: getSliverProperties() sliver_guid is null");
@@ -1037,6 +1037,59 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	
     }
      
+    /**
+     * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
+     * this way we can have multiple maps, as e.g. for modifying SSH keys
+     * @param slice_urn
+     * @param sliver_guid
+     * @param credentials
+     * @param modifySubcommand
+     * @param modifyProperties
+     * @return
+     */
+    public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
+    		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
+    	IOrcaServiceManager sm = null;
+    	XmlrpcControllerSlice ndlSlice = null;
+
+    	logger.info("ORCA API sliverModify() invoked for " + sliver_guid + " of slice " + slice_urn + " subcommand " + modifySubcommand);
+
+    	if (sliver_guid == null) 
+    		return setError("ERROR: getSliverProperties() sliver_guid is null");
+    	try {
+			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
+			
+			// check the whitelist
+			if (verifyCredentials && !checkWhitelist(userDN)) 
+				return setError(WHITELIST_ERROR);
+    		sm = instance.getSM();
+    		
+            // find this slice and lock it
+            ndlSlice = instance.getSlice(slice_urn);
+            if (ndlSlice == null) {
+                    logger.error("getSliverProperties(): unable to find slice " + slice_urn + " among active slices");
+                    return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
+            }
+            // lock the slice
+            ndlSlice.lock();
+            
+            Boolean ret = ndlSlice.modifySliver(sm, sliver_guid, modifySubcommand, modifyProperties);
+            
+            return setReturn(ret);
+    	} catch (Exception e) {
+    		logger.error("getSliverProperties(): Exception encountered: " + e.getMessage());	
+    		e.printStackTrace();
+    		return setError("getSliverProperties(): Exception encountered: " + e.getMessage());
+    	} finally {
+    		if (sm != null){
+    			instance.returnSM(sm);
+    		}
+    		if (ndlSlice != null)
+    			ndlSlice.unlock();
+    	}
+
+    }
+		
 	protected void discoverTypes(IOrcaServiceManager sm) {
 		typesMap = new HashMap<String, SiteResourceTypes>();
 		abstractModels = new ArrayList<String>();

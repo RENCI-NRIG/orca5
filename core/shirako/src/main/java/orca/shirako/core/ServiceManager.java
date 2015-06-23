@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import orca.manage.OrcaConstants;
+import orca.manage.beans.ReservationMng;
 import orca.manage.internal.ServiceManagerManagementObject;
 import orca.security.AuthToken;
 import orca.shirako.api.IBrokerProxy;
@@ -466,31 +467,47 @@ public class ServiceManager extends Actor implements IServiceManager {
         	logger.error("ServiceManager.modify(): modifyProperties argument is null or non-existing reservation");
             throw new IllegalArgumentException();
         }
-
-        IClientReservation rc = (IClientReservation) getReservation(rid);
+        
+        IServiceManagerReservation rc = null;
+        try {
+        	rc = (IServiceManagerReservation) getReservation(rid);
+        } catch (Exception e) {
+        	
+        }
+        
         if (rc == null) {
             throw new Exception("Unknown reservation: " + rid);
         }
-        
+
+        // Copy modify properties onto approvedResources (for the AM) and onto leasedResources (so SM has access to them)
         if(rc.getApprovedResources() != null){
         	
         	// All client-side property manipulation happens here
-        	
-        	logger.info("ServiceManager.modify(): Current ConfigurationProperties = " + rc.getApprovedResources().getConfigurationProperties() );
+
         	// Merging modifyProperties into ConfigurationProperties
         	Properties currConfigProps = rc.getApprovedResources().getConfigurationProperties();        	
         	PropList.mergePropertiesPriority(modifyProps, currConfigProps);
         	
         	//rc.getApprovedResources().setConfigurationProperties(modifyProps);
         	rc.getApprovedResources().setConfigurationProperties(currConfigProps);
-        	
-        	logger.info("ServiceManager.modify(): ConfigurationProperties after merging with modifyProps = " + rc.getApprovedResources().getConfigurationProperties() );
+;
         	
         	// After this point the new modifyProperties are a part of the configuration properties 
         	// of the resource set associated with the reservation; These properties flow from the SM
         	// to the AM as part of the reservation, and land up as part of requestedResources.getConfigurationProperties()
         	// which is processed in AuthorityReservation.mapAndUpdateModifyLease()
         	
+			// now same for Leased resources, because look at Converter.attachProperties(ReservationMng mng, IReservation r) /ib - 
+			// Controller or pequod won't see it otherwise 
+			if (rc.getLeasedResources() != null) {
+				currConfigProps = rc.getLeasedResources().getConfigurationProperties();
+				PropList.mergePropertiesPriority(modifyProps, currConfigProps);
+				rc.getLeasedResources().setConfigurationProperties(currConfigProps);
+			} else {
+				logger.warn("ServiceManager.modify(): There were no leased resources for " + rid + ", no modify properties will be added");
+			}
+        } else {
+        	logger.warn("ServiceManager.modify(): There are no approved resources for " + rid + ", no modify properties will be added");
         }
         
         if (!recovered) {

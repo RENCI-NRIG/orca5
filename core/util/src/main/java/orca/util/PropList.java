@@ -423,6 +423,11 @@ public class PropList
         }
     }
 
+    /**
+     * Merge two non-null lists (if either is null, nothing happens)
+     * @param from
+     * @param to
+     */
     public static void mergePropertiesPriority(Properties from, Properties to)
     {
         // no merging if the same list
@@ -442,7 +447,7 @@ public class PropList
             }
         }
     }
-
+    
     /**
      * Reads the value of the given property. It is expected that the
      * value is of boolean type.
