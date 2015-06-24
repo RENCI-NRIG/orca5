@@ -393,16 +393,16 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
                     // complete operation
                     u.completeModify();
                     notice = "modify action succeeded: message from handler = " + msg;
-                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".message", notice);
-                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".code", "0");
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".message", notice);
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", "0");
                     // merge properties if needed
                     mergeUnitProperties(u, properties);
                     break;
 
                 case -1:
                     notice = "Exception during modify for unit: " + u.getID().toHashString() + " " + msg;  
-                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum + ".message", notice);
-                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".code", "-1");
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum + ".message", notice);
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", "-1");
                     failModifyNoUpdate(u, notice);
                     // merge properties if needed
                     mergeUnitProperties(u, properties);
@@ -410,8 +410,8 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
                     
                 default:
                 	notice = "Error during modify for node: " + u.getID().toHashString() + " " + Integer.toString(result);  
-                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum + ".message", notice);
-                    properties.setProperty("shirako.save.unit.modify." + modifySequenceNum +".code", Integer.toString(result));
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum + ".message", notice);
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", Integer.toString(result));
                     failModifyNoUpdate(u, notice);
                     // merge properties if needed
                     mergeUnitProperties(u, properties);

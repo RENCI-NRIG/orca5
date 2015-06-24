@@ -84,6 +84,7 @@ public class Config implements Initializable, Persistable
      * For modify sequence number
      */
     
+    public static final String PropertyModifyPropertySavePrefix = "shirako.save.unit.modify";
     public static final String PropertyModifySequenceNumber = "shirako.save.unit.modify.sequencenum";
     
     @Persistent
