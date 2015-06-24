@@ -335,7 +335,7 @@
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/PSC/Cisco/6509/GigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/PSC/Cisco/6509/GigabitEthernet/1/1/ethernet">
-        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.houh.net.internet2.edu:e7/1:PSC-eg</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+exogeni.net:pscNet+interface+PSCNet:IBM:G8264:TenGigabitEthernet:1:1:ethernet</topology:hasURN>
     </owl:NamedIndividual>
     
 
@@ -519,6 +519,24 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/VLANLabel/3976 -->
+
+    <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/VLANLabel/3976">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3976.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/VLANLabel/3990 -->
+
+    <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/VLANLabel/3990">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3990.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/VLANLabel/3991 -->
 
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/VLANLabel/3991">
@@ -537,29 +555,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/VLANLabel/940 -->
-
-    <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/VLANLabel/940">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">940.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/VLANLabel/949 -->
-
-    <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/VLANLabel/949">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">949.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/availableVLANSet -->
 
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">20</collections:size>
+        <collections:size rdf:datatype="&xsd;int">25</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&PSCNet;IBM/G8264/availableVLANSet/AL2S/1"/>
         <collections:element rdf:resource="&PSCNet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
@@ -592,7 +592,7 @@
 
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/availableVLANSet/InstaGeni">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <collections:size rdf:datatype="&xsd;int">15</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&PSCNet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
     </owl:NamedIndividual>
@@ -603,8 +603,8 @@
 
     <owl:NamedIndividual rdf:about="&PSCNet;IBM/G8264/availableVLANSet/InstaGeni/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&PSCNet;IBM/G8264/VLANLabel/940"/>
-        <layer:upperBound rdf:resource="&PSCNet;IBM/G8264/VLANLabel/949"/>
+        <layer:lowerBound rdf:resource="&PSCNet;IBM/G8264/VLANLabel/3976"/>
+        <layer:upperBound rdf:resource="&PSCNet;IBM/G8264/VLANLabel/3990"/>
     </owl:NamedIndividual>
     
 
