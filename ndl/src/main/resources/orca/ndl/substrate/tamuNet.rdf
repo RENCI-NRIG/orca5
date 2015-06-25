@@ -371,6 +371,24 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8052/VLANLabel/851 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8052/VLANLabel/851">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">851.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8052/VLANLabel/860 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8052/VLANLabel/860">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">860.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264 -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264">
@@ -378,6 +396,7 @@
         <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/EthernetSwitchMatrix"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/1/1/ethernet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/3/ethernet"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
@@ -422,6 +441,20 @@
         <layer:hasBitRate rdf:resource="&layer;1G"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/InstaGeni"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/UH"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/TengigabitEthernet/1/2/ethernet"/>
     </owl:NamedIndividual>
     
 
@@ -563,10 +596,11 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">20</collections:size>
+        <collections:size rdf:datatype="&xsd;int">30</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/AL2S/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/InstaGeni/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/UH/1"/>
     </owl:NamedIndividual>
     
 
@@ -609,6 +643,27 @@
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/VLANLabel/940"/>
         <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/VLANLabel/949"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/UH -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/UH">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/UH/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/UH/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/availableVLANSet/UH/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8052/VLANLabel/851"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8052/VLANLabel/860"/>
     </owl:NamedIndividual>
     
 
@@ -660,6 +715,12 @@
         <wgs84_pos:long>-96.338832</wgs84_pos:long>
         <wgs84_pos:lat>30.619232</wgs84_pos:lat>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/TengigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/TengigabitEthernet/1/2/ethernet"/>
 </rdf:RDF>
 
 
