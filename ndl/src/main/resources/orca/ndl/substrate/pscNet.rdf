@@ -335,7 +335,7 @@
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/PSC/Cisco/6509/GigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/PSC/Cisco/6509/GigabitEthernet/1/1/ethernet">
-        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+exogeni.net:pscNet+interface+PSCNet:IBM:G8264:TenGigabitEthernet:1:1:ethernet</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.pitt.net.internet2.edu:eth1/2:psc-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 
