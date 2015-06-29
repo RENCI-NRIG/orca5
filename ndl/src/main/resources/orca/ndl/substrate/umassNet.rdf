@@ -586,20 +586,20 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/940 -->
+    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/3581 -->
 
-    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/940">
+    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/3581">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">940.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">3581.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/949 -->
+    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/VLANLabel/3595 -->
 
-    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/949">
+    <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/VLANLabel/3595">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">949.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">3595.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -608,7 +608,7 @@
 
     <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">30</collections:size>
+        <collections:size rdf:datatype="&xsd;int">35</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&umassNet;IBM/G8264/availableVLANSet/AL2S/1"/>
         <collections:element rdf:resource="&umassNet;IBM/G8264/availableVLANSet/BBN/1"/>
@@ -663,7 +663,7 @@
 
     <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/availableVLANSet/InstaGeni">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <collections:size rdf:datatype="&xsd;int">15</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&umassNet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
     </owl:NamedIndividual>
@@ -674,8 +674,8 @@
 
     <owl:NamedIndividual rdf:about="&umassNet;IBM/G8264/availableVLANSet/InstaGeni/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/940"/>
-        <layer:upperBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/949"/>
+        <layer:lowerBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/3581"/>
+        <layer:upperBound rdf:resource="&umassNet;IBM/G8264/VLANLabel/3595"/>
     </owl:NamedIndividual>
     
 
