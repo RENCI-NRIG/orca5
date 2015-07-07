@@ -19,6 +19,7 @@ import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
+import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
@@ -31,6 +32,7 @@ import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
 import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.container.Globals;
+import orca.util.PropList;
 
 import org.apache.log4j.Logger;
 
@@ -227,12 +229,25 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 			// here we break up the semantics of different subcommands
 			
 			// FIXME: need to find highest previously used index of modify and increment to fill in
-			// modifyX.subcommand and other properties
+			// modify.subcommand.X and other properties
 
+			
 			ReservationMng rm = sm.getReservation(new ReservationID(res));
-
+			if (rm == null)
+				throw new RuntimeException("modifySliver(): Unable to find reservation " + res);
+			
+			PropertiesMng psmng = rm.getConfigurationProperties();
+			if (psmng == null)
+				throw new RuntimeException("modifySliver(): unable to get configuration properties for reservation " + res);
+			
+			Properties cp = OrcaConverter.fill(psmng);
+			int index = PropList.highestModifyIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
+			
 			Properties modifyProperties = new Properties();
 			boolean implementedSubcommand = false;
+			//
+			// add more subcommands here. make sure to set implementedSubcommand to true.
+			//
 			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
 				implementedSubcommand = true;
 				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
@@ -240,8 +255,13 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 			
 			if (!implementedSubcommand)
 				throw new RuntimeException("Subcommand " + modifySubcommand + " is not implemented");
+			
+			//prepend all property names with modify.x.
+			PropList.renamePropertyNames(modifyProperties, OrcaConstants.MODIFY_PROPERTY_PREFIX + index + ".");
+			
 			// add the subcommand as a property after everything
-			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY, "modify." + modifySubcommand);
+			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + index, 
+					OrcaConstants.MODIFY_PROPERTY_PREFIX + modifySubcommand);
 
 			return sm.modifyReservation(new ReservationID(res), modifyProperties);
 		} catch(RuntimeException re) { 

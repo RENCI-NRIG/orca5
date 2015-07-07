@@ -325,18 +325,8 @@ public class AntConfig extends Config {
         // Else it will default to a target called "modify"
         // If there is no "modify.*" or "modify" target in the handler, it will fail in the same way as it will fail when a specified ant target does not exist
         
-        int highestIndex = 0;
-        String modifyTarget = null;
-        for(String key : p.stringPropertyNames()) {        	
-        	if(key.startsWith(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY)){
-        		String indexString = key.split("\\.")[2];
-        		int index = Integer.parseInt(indexString);
-        		if(index >= highestIndex){
-        			highestIndex = index;
-        			modifyTarget = p.getProperty(key);
-        		}
-        	}
-        }
+        int highestIndex = PropList.highestModifyIndex(p, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY);
+        String modifyTarget = p.getProperty(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + highestIndex);
         
         if(modifyTarget == null){
         	modifyTarget = TargetModify;
@@ -589,7 +579,7 @@ public class AntConfig extends Config {
             // can populate the index for code/message for the modify actions
             String modifySeqNum = properties.getProperty(Config.PropertyModifySequenceNumber);
             if(modifySeqNum != null){
-            	result.setProperty(Config.PropertyModifySequenceNumber, properties.getProperty(Config.PropertyModifySequenceNumber));
+            	result.setProperty(Config.PropertyModifySequenceNumber, modifySeqNum);
             }
             
             plugin.configurationComplete(token, result);
@@ -633,4 +623,5 @@ public class AntConfig extends Config {
             }
         }
     }
+
 }

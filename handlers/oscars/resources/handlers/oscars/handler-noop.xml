@@ -1,0 +1,236 @@
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../common/paths.xml">
+<!ENTITY bentasks SYSTEM "../providers/ben.no-na.tasks.xml">
+]>
+<project name="oscars" basedir=".">
+
+	&paths;
+	&core;
+	&drivertasks;	
+	&bentasks;
+	
+	<!-- Uncomment for handler testing
+	<property file="oscars.test.properties"/>
+	-->
+	
+	<target name="join" depends="resolve.configuration,ben.load.tasks">
+
+		<taskdef resource="orca/handlers/network/oscars/oscars.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+    	<echo message="OSCARS/ION HANDLER: JOIN" />
+		<!-- see oscars.site.sample.properties and wiki for description
+		of static properties that can be specified in oscars.site.properties
+		-->
+		<if>
+			<isset property="oscars.site.properties" />
+			<then>
+				<property file="${oscars.site.properties}" />
+			</then>
+		</if>
+
+		<!-- default to OSCARS v06 (other option is v05) -->
+		<if>
+			<not>
+				<isset property="oscars.version" />
+			</not>
+			<then>
+				<property name="oscars.version" value="v06" />
+			</then>
+		</if>
+	
+		<if>
+			<not>
+				<isset property="oscars.endpointA" />
+			</not>
+			<then>
+				<property name="oscars.endpointA" value="${config.interface.1}" />
+			</then>
+		</if>
+	
+		<if>
+			<not>
+				<isset property="oscars.endpointZ" />
+			</not>
+			<then>
+				<property name="oscars.endpointZ" value="${config.interface.2}" />
+			</then>
+		</if>
+	
+		<if>
+			<not>
+				<isset property="oscars.bw" />
+			</not>
+			<then>
+				<if>
+					<isset property="resource.bandwidth" />
+					<then>
+						<property name="oscars.bw" value="${resource.bandwidth}" />
+					</then>
+					<else>
+						<property name="oscars.bw" value="" />
+					</else>
+				</if>
+			</then>
+		</if>
+	
+		<if>
+			<isset property="config.vlan.tag.1" />
+			<then>
+				<property name="oscars.tagA" value="${config.vlan.tag.1}" />
+			</then>
+		</if>
+	
+		<if>
+			<isset property="config.vlan.tag.2" />
+			<then>
+				<property name="oscars.tagZ" value="${config.vlan.tag.2}" />
+			</then>
+		</if>
+	
+		<echo message="creating OSCARS circuit from ${oscars.endpointA}/${oscars.tagA} to ${oscars.endpointZ}/${oscars.tagZ} for ${config.duration} (sec) with bw=${oscars.bw}" />
+	
+		<var name="shirako.save.unit.vlan.tag" unset="true" />
+		<var name="shirako.save.unit.status" unset="true" />
+		<var name="shirako.save.unit.vlan.reservation" unset="true" />
+		<var name="shirako.save.unit.vlan.idc" unset="true" />
+	
+		<!-- determine the controller to call -->
+		<var name="ctrl.domain.A" unset="true"/>
+		<propertyregex property="ctrl.domain.A"
+	    	input="${oscars.endpointA}"
+	    	regexp="urn:ogf:network:domain=([^\.]*)\.*"
+	    	select="\1"
+	    	casesensitive="false" />
+	
+		<var name="ctrl.domain.Z" unset="true"/>
+		<propertyregex property="ctrl.domain.Z"
+	    	input="${oscars.endpointZ}"
+	    	regexp="urn:ogf:network:domain=([^\.]*)\.*"
+	    	select="\1"
+	    	casesensitive="false" />
+
+		<var name="ctrl.to.call" unset="true"/>
+
+		<if>
+			<equals arg1="${ctrl.domain.A}" arg2="al2s" />
+			<then>
+				<property name="ctrl.to.call" value="${oscars.idc.al2s}" />
+			</then>
+			<else>
+				<if>
+					<equals arg1="${ctrl.domain.A}" arg2="es" />
+					<then>
+						<property name="ctrl.to.call" value="${oscars.idc.es}" />
+					</then>
+					<else>
+						<if>
+							<equals arg1="${ctrl.domain.A}" arg2="ion" />
+							<then>
+								<property name="ctrl.to.call" value="${oscars.idc.ion}" />
+							</then>
+							<else>
+								<if>
+									<equals arg1="${ctrl.domain.A}" arg2="tb" />
+									<then>
+										<property name="ctrl.to.call" value="${oscars.idc.tb}" />
+									</then>
+									<else>
+										<echo message="Unknown OSCARS domain ${ctrl.domain.A} in one of the interfaces" />
+										<fail message="Unknown OSCARS domain ${ctrl.domain.A} in one of the interfaces" />
+									</else>
+								</if>
+							</else>
+						</if>
+					</else>
+				</if>
+			</else>
+		</if>
+		<echo message="Calling OSCARS controller ${ctrl.to.call}" />
+		<property name="shirako.save.unit.vlan.idc" value="${ctrl.to.call}" />
+	
+				<var name="create.circuit.output" unset="true" />
+				<var name="code" unset="true" />
+				<var name="message" unset="true" />
+	
+				<!-- per evangelos on 03/07/14 - asked to serialize requests to oscars -->
+				<atomic.sequence.start.macro
+					device="${ctrl.to.call}" />
+					<echo message="Sleeping for 60000 milliseconds"/>
+					<sleep milliseconds="60000"/>
+					<property name="code" value="0" />
+					<property name="message" value="ALL OK" />
+
+				<atomic.sequence.stop.macro
+						device="${ctrl.to.call}" />
+				<if>
+					<not>
+						<equals arg1="${code}" arg2="0" />
+					</not>
+					<then>
+						<echo message="Unable to create circuit: ${create.circuit.output}" />
+						<property name="message" value="Unable to create circuit: ${create.circuit.output}" />
+					</then>
+					<else>
+						<property name="shirako.save.unit.vlan.reservation" value="${create.circuit.output}" />
+						<property name="shirako.save.unit.vlan.tag" value="${unit.vlan.tag}" />
+						<property name="shirako.save.unit.status" value="ACTIVE" />
+						<echo message="Reserved unit.vlan.tag=${shirako.save.unit.vlan.tag} unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
+					</else>
+				</if>
+			<property name="shirako.target.code" value="${code}" />
+			<property name="shirako.target.code.message" value="${message}" />
+        <!-- hairpin -->
+        <var name="shirako.save.unit.vlan.url" unset="true" />
+        <if>
+                <isset property="unit.vlan.url" />
+                <then>
+                        <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+                </then>
+        </if>
+
+	<echo message="join exit code: ${shirako.target.code}" />
+	</target>
+
+	<!-- Modify operation is not supported -->
+	<target name="modify" />
+
+	<target name="leave" depends="resolve.configuration,ben.load.tasks">
+		<echo message="OSCARS/ION HANDLER: LEAVE" />
+
+		<if>
+			<isset property="oscars.site.properties" />
+			<then>
+				<property file="${oscars.site.properties}" />
+			</then>
+		</if>
+
+		<echo message="Removing vlan ${unit.vlan.tag} reservation ${unit.vlan.reservation}" />
+	
+		<if>
+			<not>
+				<isset property="unit.vlan.idc"/>
+			</not>
+			<then>
+				<property name="unit.vlan.idc" value="${oscars.idc.ion}" />
+			</then>
+		</if>
+	
+		<echo message="Calling OSCARS controller ${unit.vlan.idc}" />
+	
+				<var name="code" unset="true" />				
+				<echo message="terminating OSCARS circuit: ${unit.vlan.reservation}" />
+				<atomic.sequence.start.macro
+					device="${unit.vlan.idc}" />
+					<echo message="Sleeping for 5000 milliseconds"/>
+				        <sleep milliseconds="5000"/>
+				        <property name="code" value="0"/>
+
+				<atomic.sequence.stop.macro
+					device="${unit.vlan.idc}" />
+				<echo message="oscars-stop.sh exit code: ${code}" />	
+				<property name="shirako.target.code" value="${code}" />
+		<echo message="leave exit code: ${shirako.target.code}" />
+	</target>
+</project>
+

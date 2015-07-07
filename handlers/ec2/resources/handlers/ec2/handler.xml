@@ -543,6 +543,75 @@
 	</target>
 
 	<!-- Various Modify Operations -->
+	
+	<!-- Useful macros -->
+	<macrodef name="modify.ssh" description="install new SSH keys via modify">
+		<attribute name="seqnum" description="sequence number"/>
+		<sequential>
+			<if>
+				<equals arg1="${emulation}" arg2="true" />
+				<then>
+					<for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+						<sequential>
+							<var name="loginProperty" unset="true" />
+							<var name="keysProperty" unset="true" />
+							<var name="sudoProperty" unset="true" />
+						
+							<property name="loginProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
+							<property name="keysProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
+							<property name="sudoProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
+						
+							<echo message="About to create account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+						</sequential>
+					</for>
+					<echo message="Running under emulation...exiting" />
+					<property name="shirako.target.code" value="0" />
+				</then>
+				<else>
+					<echo message="installing ${modify.@{seqnum}.config.ssh.numlogins} user keys and accounts in the instance" />
+					<var name="message" unset="true" />
+					<for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+						<sequential>
+							<var name="icode" unset="true" />
+							<var name="loginProperty" unset="true" />
+							<var name="keysProperty" unset="true" />
+							<var name="sudoProperty" unset="true" />
+				
+							<property name="loginProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
+							<property name="keysProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
+							<property name="sudoProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
+				
+							<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+							<exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
+								<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+								<env key="EC2_HOME" value="${ec2.home}" />
+								<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+								<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+								<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+								<env key="EC2_DIR" value="${ec2.dir}" />
+								<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+								<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+								<arg value="${unit.manage.ip}" />
+								<arg value="${loginProperty}" />
+								<arg value="${keysProperty}" />
+								<arg value="${sudoProperty}" />
+							</exec>
+							<echo message="Exit code for login ${loginProperty} is ${icode}" />
+							<if>
+								<not>
+									<equals arg1="${icode}" arg2="0" />
+								</not>
+								<then>
+									<fail message="Unable to create account ${loginProperty}, failing" />
+								</then>
+							</if>
+						</sequential>
+					</for>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+	
 	<!-- add logins -->
 	<target name="modify.ssh"  depends="resolve.configuration">
 		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
@@ -552,56 +621,10 @@
 		</tstamp>
 	
 		<echo message="EC2 HANDLER: MODIFY.SSH on ${start.TIME}" />
-		<echo message="modify.ssh: ec2 instance=${unit.ec2.instance}" />
+		<echo message="modify.ssh: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
 	
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...exiting" />
-				<property name="shirako.target.code" value="0" />
-			</then>
-			<else>
-				<echo message="installing ${config.ssh.numlogins} user keys and accounts in the instance" />
-				<var name="message" unset="true" />
-				<for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
-					<sequential>
-						<var name="icode" unset="true" />
-						<var name="loginProperty" unset="true" />
-						<var name="keysProperty" unset="true" />
-						<var name="sudoProperty" unset="true" />
-			
-						<property name="loginProperty" value="${config.ssh.user@{iter}.login}" />
-						<property name="keysProperty" value="${config.ssh.user@{iter}.keys}" />
-						<property name="sudoProperty" value="${config.ssh.user@{iter}.sudo}" />
-			
-						<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-						<exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
-							<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-							<env key="EC2_HOME" value="${ec2.home}" />
-							<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-							<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-							<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-							<env key="EC2_DIR" value="${ec2.dir}" />
-							<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-							<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-							<arg value="${unit.manage.ip}" />
-							<arg value="${loginProperty}" />
-							<arg value="${keysProperty}" />
-							<arg value="${sudoProperty}" />
-						</exec>
-						<echo message="Exit code for login ${loginProperty} is ${icode}" />
-						<if>
-							<not>
-								<equals arg1="${icode}" arg2="0" />
-							</not>
-							<then>
-								<fail message="Unable to create account ${loginProperty}, failing" />
-							</then>
-						</if>
-					</sequential>
-				</for>
-			</else>
-		</if>
+		<modify.ssh seqnum="${shirako.save.unit.modify.sequencenum}"/>
+
 		<property name="shirako.target.code" value="0" />
 		<echo message="modify.ssh exit code: ${shirako.target.code}" />
 	</target>
