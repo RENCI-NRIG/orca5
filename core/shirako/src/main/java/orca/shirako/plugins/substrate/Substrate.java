@@ -377,6 +377,8 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
 
             int result = getResultCode(properties); // "shirako.target.code"
             
+            processSavedProperties(u, properties);
+            
             String msg = properties.getProperty(Config.PropertyExceptionMessage); // in case of ant exception
             if (msg == null)
             	msg = properties.getProperty(Config.PropertyTargetResultCodeMessage); // "shirako.target.code.message"
@@ -387,34 +389,37 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
             	modifySequenceNum = "-1"; 
             }
             
+            logger.debug("processModifyComplete(): modifySequenceNum from AntConfig:" + modifySequenceNum);
+            
             switch (result) {
                 case 0:
                     // all went fine
                     // complete operation
-                    u.completeModify();
                     notice = "modify action succeeded: message from handler = " + msg;
                     properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".message", notice);
                     properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", "0");
                     // merge properties if needed
+                    //logger.debug("Properties in processModifyComplete(): " + properties);
                     mergeUnitProperties(u, properties);
+                    u.completeModify();
                     break;
 
                 case -1:
                     notice = "Exception during modify for unit: " + u.getID().toHashString() + " " + msg;  
                     properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum + ".message", notice);
-                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", "-1");
-                    failModifyNoUpdate(u, notice);
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", "-1");                    
                     // merge properties if needed
                     mergeUnitProperties(u, properties);
+                    failModifyNoUpdate(u, notice);
                     break;
                     
                 default:
                 	notice = "Error during modify for node: " + u.getID().toHashString() + " " + Integer.toString(result);  
                     properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum + ".message", notice);
                     properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", Integer.toString(result));
-                    failModifyNoUpdate(u, notice);
                     // merge properties if needed
                     mergeUnitProperties(u, properties);
+                    failModifyNoUpdate(u, notice);
                     break;
                     
             }
@@ -438,4 +443,16 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
         }
         super.setDatabase(db);
     }
+
+	@Override
+	public void updateProps(IReservation r, Unit unit) {
+		
+		try {
+            // update the unit database record
+            ((ISubstrateDatabase) db).updateUnit(unit);
+        } catch (Exception e) {
+            failAndUpdate(unit, "update properties error", e);
+        }
+		
+	}
 }

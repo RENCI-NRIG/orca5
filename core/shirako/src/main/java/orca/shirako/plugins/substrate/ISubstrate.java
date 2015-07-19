@@ -33,4 +33,12 @@ public interface ISubstrate extends IShirakoPlugin {
      * @param unit unit to be modified.
      */
     public void modify(IReservation r, Unit unit);
+
+    /**
+     * Updates only the properties of an existing unit that is already part of the substrate.
+     * @param r reservation that contains the unit
+     * @param unit unit to be modified.
+     */
+	public void updateProps(IReservation reservation, Unit u);
+	
 }
