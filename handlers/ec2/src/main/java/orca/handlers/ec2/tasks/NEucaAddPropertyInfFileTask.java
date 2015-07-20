@@ -127,45 +127,76 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask{
 		    String line = userdataSource.readLine();
 		    
 		    String section = "";
+		    String prev_section = "";
 		    String key = "";
-
+		    
+		    //remove the colons from the mac address
+		    if(this.section != null && this.section.equals("interfaces")){
+			this.key = this.key.replace(":","").trim();
+		    }
+		    
+		    boolean processedKey = false;
 		    while (line != null) {
 			System.out.println("PRUTH: line = " + line);
 
-			//String sectionNext = line.replaceAll("^.*[", "");
-			//sectionNext = line.replaceAll("^.*\[", "");
-			
-			//if (line.matches("~\\[users\\].*")){
-			//    System.out.println("PRUTH: line starts with users = " + line);
-			//    section="users";
-			//}
-			
-			//if (line.matches("^\\[.*\\].*")){
-                        //    System.out.println("PRUTH: line matches section = " + line);
-			//    section="";
-			//}
+			//if there is nothing to add, just copy lines
+			if(this.section == null || this.key == null || this.value == null){
+			    sb.append(line);
+			    sb.append(System.lineSeparator());
+			    line = userdataSource.readLine();
+			    processedKey = true;
+			    continue;
+			}
 
 			Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
 			Matcher matcher = pattern.matcher(line);
 			if (matcher.find()){
+			    prev_section=section;
 			    section=matcher.group(1);
 			    System.out.println("found section " + section);
 			}
 			
+			//check to see if we checked all the existing interfaces.  if so, add the new one.
+			if(!processedKey && prev_section.equals("interfaces")){
+			    System.out.println("Adding new interface to userdata: " + this.key.trim());
+			    sb.append(this.key.trim() + "=" +  this.value.trim() + "\n");
+			    processedKey = true;
+			} 
 			
 			key=line.split("=")[0].trim();
 			System.out.println("processing key: " + key);
 			//find key 
 			
-			if (section.equals("users") && key.equals(this.key)){
-			    sb.append(line.trim() +  this.value.trim() + ":\n");
-			} else {
-			    //System.out.println("PRUTH: sectionNext = " + sectionNext);
+			if (section.equals("users")){
+			    if(key.equals(this.key)){
+				sb.append(line.trim() +  this.value.trim() + ":\n");
+			    } else {
+				sb.append(line);
+			    }
+			} else if (section.equals("interfaces")){
+			    if(!processedKey && key.equals(this.key)){
+				//modify an existing interface
+				System.out.println("Modifying interface ing userdata: " + key);
+				sb.append(this.key.trim() + "=" +  this.value.trim() + "\n");
+			    } else {
+				System.out.println("Ignoring interface in userdata: " + key);
+				sb.append(line);
+			    }
+		        } else {
 			    sb.append(line);
 			}
+
 			sb.append(System.lineSeparator());
 			line = userdataSource.readLine();
 		    }
+
+		    if(!processedKey){
+			System.out.println("Adding section interfaces userdata and adding interface: " + key);
+			sb.append("[interfaces]");
+			sb.append(this.key.trim() + " = " +  this.value.trim() + "\n");
+			processedKey=true;
+		    }
+
 		    userdataNew = sb.toString();
 		} finally {
 		    userdataSource.close();
