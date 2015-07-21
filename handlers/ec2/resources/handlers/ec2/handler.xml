@@ -737,7 +737,7 @@
 					<var name="message" unset="true" />
 
 					
-					<var name="iface.list" value="vlan-data.2200.fe:16:3e:00:00:01" />
+					<!-- <var name="iface.list" value="vlan-data.2200.fe:16:3e:00:00:01" /> -->
 
 					<!-- Get old userdata -->
 					<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
