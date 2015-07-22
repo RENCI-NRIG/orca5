@@ -515,29 +515,29 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/1870 -->
+
+    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/1870">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1870.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/1879 -->
+
+    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/1879">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1879.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/3300 -->
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/3300">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
         <layer:label_ID rdf:datatype="&xsd;float">3300.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/3991 -->
-
-    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/3991">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">3991.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/4000 -->
-
-    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/4000">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">4000.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -587,8 +587,8 @@
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/availableVLANSet/AL2S/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/3991"/>
-        <layer:upperBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/4000"/>
+        <layer:lowerBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/1870"/>
+        <layer:upperBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/1879"/>
     </owl:NamedIndividual>
     
 
