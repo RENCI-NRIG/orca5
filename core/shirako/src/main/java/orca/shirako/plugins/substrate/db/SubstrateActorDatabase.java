@@ -136,6 +136,7 @@ public class SubstrateActorDatabase extends ServerActorDatabase implements ISubs
         // So for now update always.
         Properties p = PersistenceUtils.save(u);
         Properties set = mapper.javaToMysql(TypeUnit, p);
+        //logger.debug("updateUnit(): " + actorId + " : unit properties = " + set);
         Connection connection = getConnection();
 
         try {
