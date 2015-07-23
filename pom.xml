@@ -48,8 +48,10 @@
 		<orca.tools.build.version>1.0</orca.tools.build.version>
 		<orca.repository.id>geni-orca-libs</orca.repository.id>
 		<orca.snap.repository.id>geni-orca-snapshot</orca.snap.repository.id>
+		<orca.rel.repository.id>geni-orca-release</orca.rel.repository.id>
 		<orca.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs</orca.repository.url>
 		<orca.snap.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-snapshot/</orca.snap.repository.url>
+		<orca.rel.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-release/</orca.rel.repository.url>
 		<orca.website.id>orca.website</orca.website.id>
 		<orca.website.url>dav:https://geni-orca.renci.org/orca-doc/current</orca.website.url>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,6 +78,14 @@
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+		<!-- ORCA releases -->
+		<repository>
+			<id>${orca.rel.repository.id}</id>
+			<url>${orca.rel.repository.url}</url>
+			<snapshots>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<!--  FIXME: get rid of these repositories. Move what we need from them into the orca nexus repo -->
@@ -126,9 +136,9 @@
                         <url>${orca.snap.repository.url}</url>
 		</snapshotRepository>
 		<repository>
-			<id>${orca.repository.id}</id>
+			<id>${orca.rel.repository.id}</id>
 			<name>Orca Project Maven Release Repository</name>
-			<url>${orca.repository.url}</url>
+			<url>${orca.rel.repository.url}</url>
 		</repository>
 		<site>
 			<id>${orca.website.id}</id>
