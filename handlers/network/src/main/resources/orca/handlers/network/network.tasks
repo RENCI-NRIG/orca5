@@ -61,3 +61,4 @@ network.openflow.slice.vlan.flowspace.add=orca.handlers.network.tasks.openflow.A
 
 atomic.sequence.start=orca.handlers.network.tasks.StartAtomicSequenceTask
 atomic.sequence.stop=orca.handlers.network.tasks.StopAtomicSequenceTask
+atomic.sequence.clear=orca.handlers.network.tasks.ClearAtomicSequenceTask

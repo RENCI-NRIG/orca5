@@ -224,13 +224,10 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @param res
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		try {
 			// here we break up the semantics of different subcommands
-			
-			// FIXME: need to find highest previously used index of modify and increment to fill in
-			// modify.subcommand.X and other properties
-
 			
 			ReservationMng rm = sm.getReservation(new ReservationID(res));
 			if (rm == null)
@@ -251,6 +248,13 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
 				implementedSubcommand = true;
 				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
+			} else {
+				implementedSubcommand = true;
+				// collect properties from first list entry map
+				if (modifyPropertiesList.size() == 0)
+					throw new RuntimeException("Subcommand " + modifySubcommand + " requires a list maps of size one or more");
+				
+				modifyProperties = fromMap((Map<String, String>)modifyPropertiesList.get(0));
 			}
 			
 			if (!implementedSubcommand)

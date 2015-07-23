@@ -8,12 +8,11 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
 /**
- * Use file locking to guarantee sequence atomicity
- * on a particular device
+ * Remove a sempahore from the map to help GC
  * @author ibaldin
  *
  */
-public class StartAtomicSequenceTask extends OrcaAntTask {
+public class ClearAtomicSequenceTask extends OrcaAntTask {
 	// get semaphore map from config
 	protected String exclusiveDevice;
 	protected int timeout;
@@ -23,7 +22,7 @@ public class StartAtomicSequenceTask extends OrcaAntTask {
     	super.execute();
 		
 		if (exclusiveDevice == null) {
-			throw new BuildException("StartAtomicSequenceTask: Missing exclusive device property");
+			throw new BuildException("ClearAtomicSequenceTask: Missing exclusive device property");
 		}
 		
 		Project opr = getProject();
@@ -37,9 +36,9 @@ public class StartAtomicSequenceTask extends OrcaAntTask {
 		SemaphoreMap sems = (SemaphoreMap)pr.getSemaphoreMap();
 		
 		try {
-    		sems.acquire(exclusiveDevice);
+			sems.delete(exclusiveDevice);
     	} catch (Exception e) {
-    		throw new BuildException("Exception encountered waiting for sequence lock " + exclusiveDevice + ": " + e);
+    		throw new BuildException("Exception encountered deleting semaphore for " + exclusiveDevice + ": " + e);
     	}
 	}
 	
