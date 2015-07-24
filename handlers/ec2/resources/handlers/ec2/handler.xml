@@ -709,11 +709,11 @@
 	<!-- add iface macro -->
 	<macrodef name="modify.addiface" description="add a new network iface via modify">
 		<attribute name="seqnum" description="sequence number"/>
+
 		<sequential>
 			<if>
 				<equals arg1="${emulation}" arg2="true" />
 				<then>
-				  
 				        <var name="iface.net.name" unset="true" />
 					<var name="iface.net.vlan" unset="true" />
 					<var name="iface.mac" unset="true" />
@@ -736,7 +736,7 @@
 				        <echo message="adding interfaces to instance" />
 					<var name="message" unset="true" />
 
-					
+					<echo message="testprop1 = ${modify.@{seqnum}.testprop1}" />
 					<!-- <var name="iface.list" value="vlan-data.2200.fe:16:3e:00:00:01" /> -->
 
 					<!-- Get old userdata -->
@@ -804,7 +804,7 @@
 					      <echo>result code: ${code}</echo>
 					      <echo>output: ${add.iface.output}</echo>
 					      
-					      <!-- add property to userdata file -- TODO: add actual config values -->
+					      <!-- add property to userdata file TODO: add actual config values -->
 					      <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${iface.mac}" value="up:ipv4" />                                                                                                                                                                                                  
                                               <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
 					      
@@ -913,7 +913,7 @@
                 <echo message="EC2 HANDLER: MODIFY.ADDIFACE on ${start.TIME}" />
                 <echo message="modify.addiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
 
-                <modify.ssh seqnum="${shirako.save.unit.modify.sequencenum}"/>
+                <modify.addiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
 
 
 
