@@ -411,9 +411,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 
 		if(pubManifestEnabled.equalsIgnoreCase("true")){
 			//logger.info("Deleting " + sliceUrn + " from PubQ");
-                        logger.info("Adding " + sliceUrn + " to DeletedSlicesQ");
+			logger.info("Adding " + sliceUrn + " to DeletedSlicesQ");
 			//PublishQueue.getInstance().deleteFromPubQ(sliceUrn);
-                        PublishQueue.getInstance().addToDeletedSlicesQ(sliceUrn);
+			PublishQueue.getInstance().addToDeletedSlicesQ(sliceUrn);
 		}
 		else {
 			logger.info("ORCA.publish.manifest property needs to be set to true; Can't delete slice from publish Q ");
@@ -458,8 +458,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		if(pubManifestEnabled.equalsIgnoreCase("true")){
 			Date start = workflow.getTerm().getStart(), end = workflow.getTerm().getEnd();
 			logger.info("Adding " + sliceUrn + " to newSlicesQ");
-			PublishQueue.getInstance().addToNewSlicesQ(new SliceState(sliceUrn, slice.getSliceID(),
-					SliceState.PubSubState.SUBMITTED, start, end, 0, userDN));
+			PublishQueue.getInstance().addToNewSlicesQ(new SliceState(this,
+					SliceState.PubSubState.SUBMITTED, start, end, 0));
 		}
 		else {
 			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");
