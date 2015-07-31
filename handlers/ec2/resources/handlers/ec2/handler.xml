@@ -709,11 +709,11 @@
 	<!-- add iface macro -->
 	<macrodef name="modify.addiface" description="add a new network iface via modify">
 		<attribute name="seqnum" description="sequence number"/>
+
 		<sequential>
 			<if>
 				<equals arg1="${emulation}" arg2="true" />
 				<then>
-				  
 				        <var name="iface.net.name" unset="true" />
 					<var name="iface.net.vlan" unset="true" />
 					<var name="iface.mac" unset="true" />
@@ -735,10 +735,15 @@
 				        <!-- Actually do it... no emulation -->
 				        <echo message="adding interfaces to instance" />
 					<var name="message" unset="true" />
-
+           
+					<echo message="vlan.tag = ${modify.@{seqnum}.vlan.tag}" />
+					<echo message="ip = ${modify.@{seqnum}.ip}" />
+					<echo message="mode = ${modify.@{seqnum}.mode}" />
+					<echo message="hosteth = ${modify.@{seqnum}.hosteth}" />
+					<echo message="mac = ${modify.@{seqnum}.mac}" />
+					<echo message="state = ${modify.@{seqnum}.state}" />
+					<echo message="ipversion = ${modify.@{seqnum}.ipversion}" />
 					
-					<!-- <var name="iface.list" value="vlan-data.2200.fe:16:3e:00:00:01" /> -->
-
 					<!-- Get old userdata -->
 					<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
                                         <echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
@@ -768,102 +773,27 @@
 
 					
 					<!-- process each iface to add -->
-					<echo message="iface list: ${iface.list}" />
-                                        <var name="instance.quantum.ifaces" unset="true" />
-                                        <for list="${iface.list}" param="iface" delimiter=" " parallel="false">
-                                            <sequential>
-
-
-				              <var name="iface.net.name" unset="true" />
-					      <var name="iface.net.vlan" unset="true" />
-					      <var name="iface.mac" unset="true" />
-					      <echo>iface @{iface}</echo>
-					      <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
-					      <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
-					      <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
-					      <echo>quantum.tenant.id ${quantum.tenant.id}</echo>
-                                              <echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
-					      <echo>iface.mac ${iface.mac}</echo>
-					      <echo>iface.net.vlan ${iface.net.vlan}</echo>
-					      <echo>iface.net.name ${iface.net.name}</echo>
-					      <echo>unit.ec2.instance ${unit.ec2.instance}</echo>
+					<exec executable="${ec2.scripts}/neuca-quantum-add-iface" resultproperty="code" outputproperty="add.iface.output">
+					  <env key="EC2_HOME" value="${ec2.home}" />
+					  <env key="EC2_DIR" value="${ec2.dir}" />
+					  <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+					  <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+					  <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+					  <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+					  <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
+					  <env key="QUANTUM_NET_INSTANCE_NAME" value="${unit.ec2.instance}" />
+					  <env key="QUANTUM_NET_IFACE_MAC" value="${modify.@{seqnum}.mac}" />
+					  <env key="QUANTUM_NET_NETWORK" value="${modify.@{seqnum}.hosteth}" />
+					  <env key="QUANTUM_NET_VLAN" value="${modify.@{seqnum}.vlan.tag}" />
+					</exec>
+					<echo>result code: ${code}</echo>
+					<echo>output: ${add.iface.output}</echo>
 					      
-					      <exec executable="${ec2.scripts}/neuca-quantum-add-iface" resultproperty="code" outputproperty="add.iface.output">
-						<env key="EC2_HOME" value="${ec2.home}" />
-						<env key="EC2_DIR" value="${ec2.dir}" />
-						<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-						<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-						<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-						<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-						<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
-						<env key="QUANTUM_NET_INSTANCE_NAME" value="${unit.ec2.instance}" />
-						<env key="QUANTUM_NET_IFACE_MAC" value="${iface.mac}" />
-						<env key="QUANTUM_NET_NETWORK" value="${iface.net.name}" />
-						<env key="QUANTUM_NET_VLAN" value="${iface.net.vlan}" />
-					      </exec>
-					      <echo>result code: ${code}</echo>
-					      <echo>output: ${add.iface.output}</echo>
+					<!-- add property to userdata file TODO: add actual config values -->
+					<ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${modify.@{seqnum}.mac}" value="${modify.@{seqnum}.state}:${modify.@{seqnum}.ipversion}:${modify.@{seqnum}.ip}" /> 
+                                        <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
 					      
-					      <!-- add property to userdata file -- TODO: add actual config values -->
-					      <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${iface.mac}" value="up:ipv4" />                                                                                                                                                                                                  
-                                              <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-					      
-					    </sequential>
-					</for>					      
-					      
-
-					<!-- add iface to userdata -->
-					<!--
-					<echo message="Modify.ssh, numlogins : ${modify.@{seqnum}.config.ssh.numlogins} " />
-					<for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
-
-						<sequential>
-						        <var name="code" unset="true" />
-				
-							<property name="loginProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
-							<property name="keysProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
-							<property name="sudoProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
-
-							<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-							<echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
-							<echo message="LoginProperty : ${loginProperty}" />
-							<echo message="KeysProperty : ${keysProperty}" />
-							<echo message="SudoProperty : ${sudoProperty}" />
-							
-					
-							<ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="users" key="${loginProperty}" value="${keysProperty}" />
-                                                        <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-                                                        <echo message="neuca.ini: ${neuca.ini}" />
-
-							<exec executable="${ec2.scripts}/neuca-quantum-add-iface" resultproperty="code" outputproperty="add.iface.output">
-							  <env key="EC2_HOME" value="${ec2.home}" />
-							  <env key="EC2_DIR" value="${ec2.dir}" />
-							  <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-							  <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-							  <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-							  <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-							  <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
-							  <env key="QUANTUM_NET_INSTANCE_NAME" value="${unit.ec2.instance}" />
-							  <env key="QUANTUM_NET_IFACE_MAC" value="${iface.mac}" />
-							  <env key="QUANTUM_NET_NETWORK" value="${iface.net.name}" />
-							  <env key="QUANTUM_NET_VLAN" value="${iface.net.vlan}" />
-							</exec>
-							<echo>result code: ${code}</echo>
-							<echo>output: ${add.iface.output}</echo>
-
-							<echo message="Exit code for interface is ${code}" />
-							<if>
-								<not>
-									<equals arg1="${code}" arg2="0" />
-								</not>
-								<then>
-									<fail message="Unable to create interface, failing" />
-								</then>
-							</if>
-						</sequential>
-					</for>
-					-->
-					
+									
 					<!-- update the userdata file  -->
 					<echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
                                         <echo message="update userdata instance: ${shirako.save.unit.ec2.instance}" />
@@ -913,7 +843,7 @@
                 <echo message="EC2 HANDLER: MODIFY.ADDIFACE on ${start.TIME}" />
                 <echo message="modify.addiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
 
-                <modify.ssh seqnum="${shirako.save.unit.modify.sequencenum}"/>
+                <modify.addiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
 
 
 
