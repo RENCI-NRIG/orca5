@@ -8,21 +8,16 @@ package orca.controllers.xmlrpc.pubsub;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import orca.controllers.OrcaController;
 import orca.controllers.OrcaControllerException;
-import orca.controllers.xmlrpc.ReservationConverter;
+import orca.controllers.xmlrpc.SliceStateMachine.SliceTransitionException;
 import orca.controllers.xmlrpc.XmlrpcControllerSlice;
 import orca.controllers.xmlrpc.XmlrpcHandlerHelper;
 import orca.controllers.xmlrpc.XmlrpcOrcaState;
-import orca.controllers.xmlrpc.SliceStateMachine.SliceTransitionException;
-import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
-import orca.manage.beans.ReservationMng;
-import orca.shirako.common.SliceID;
 
 import org.apache.log4j.Logger;
 
@@ -32,11 +27,11 @@ import org.apache.log4j.Logger;
  */
 public class PublishManager {
 
+	private static final int PUBLISHER_PERIOD_MS = 30*1000;
 	private static ArrayList<Timer> timers = new ArrayList<Timer>();
 	private static boolean noStart = false;
 
 	protected XmlrpcOrcaState instance = null;
-	protected PublishQueue pubQ = null;
 	protected Logger logger = OrcaController.getLogger(this.getClass().getName());
 	protected String actor_guid = null;
 	protected String actor_name = null;
@@ -54,7 +49,7 @@ public class PublishManager {
 			timer = new Timer("PublisherTask", true);
 			timers.add(timer);
 		}
-		timer.schedule(new PublisherTask(), 30*1000, 30*1000); // run every 30 seconds
+		timer.schedule(new PublisherTask(), PUBLISHER_PERIOD_MS, PUBLISHER_PERIOD_MS); // run every 30 seconds
 	}
 
 	private void allStop() {
@@ -131,73 +126,18 @@ public class PublishManager {
 
 				logger.info("Orca container is active..... Publishing thread:START");
 
-				pubQ = PublishQueue.getInstance();
+				PublishQueue pubQ = PublishQueue.getInstance();
 
 				ArrayList<SliceState> currSliceStateQ = pubQ.getCurrentQ();
 				ArrayList<SliceState> toRemoveSliceStateQ = new ArrayList<SliceState>();
 
 				// Process new slices Q
-				ArrayList<SliceState> currNewSliceQ = pubQ.getNewSlicesQ();
-
-				ArrayList<SliceState> clonedCurrNewSliceQ = new ArrayList<SliceState>();
-
-				if(currNewSliceQ != null && currNewSliceQ.size() > 0){
-					synchronized(currNewSliceQ){
-						logger.info("New slices arrived...");
-						Iterator<SliceState> it3 = currNewSliceQ.iterator();
-						while(it3.hasNext()){
-							SliceState currSliceState3 = (SliceState) it3.next();
-							clonedCurrNewSliceQ.add(currSliceState3);
-						}
-						currNewSliceQ.clear();
-					}
-
-				}
-
-				if(clonedCurrNewSliceQ != null && clonedCurrNewSliceQ.size() > 0){
-					synchronized(currSliceStateQ){ // lock on slicesToWatch
-						Iterator<SliceState> it1 = clonedCurrNewSliceQ.iterator();
-						while(it1.hasNext()){
-							SliceState currSliceState1 = (SliceState) it1.next();
-							logger.info("Pushing " + currSliceState1.getSlice_urn() + "into PubQ");
-							pubQ.addToPubQ(currSliceState1);
-						}
-					}
-				}
-
+				pubQ.drainNew();
 
 				// Process deleted slices Q
-				ArrayList<String> currDeletedSliceQ = pubQ.getDeletedSlicesQ();
+				pubQ.drainDeleted();
 
-				ArrayList<String> clonedCurrDeletedSliceQ = new ArrayList<String>();
-
-				if(currDeletedSliceQ != null && currDeletedSliceQ.size() > 0){
-					synchronized(currDeletedSliceQ){
-						logger.info("Some slice(s) were deleted...");
-						Iterator<String> it4 = currDeletedSliceQ.iterator();
-						while(it4.hasNext()){
-							String currSliceUrn = (String) it4.next();
-							clonedCurrDeletedSliceQ.add(currSliceUrn);
-						}
-						currDeletedSliceQ.clear();
-					}
-
-				}
-
-				if(clonedCurrDeletedSliceQ != null && clonedCurrDeletedSliceQ.size() > 0){
-					synchronized(currSliceStateQ){ // lock on slicesToWatch == pubQ.getCurrentQ
-						Iterator<String> it2 = clonedCurrDeletedSliceQ.iterator();
-						while(it2.hasNext()){
-							String currSliceUrn = (String) it2.next();
-							logger.info("Deleting " + currSliceUrn + " from PubQ");
-							pubQ.deleteFromPubQ(currSliceUrn);
-						}
-					}
-				}
-
-
-
-				synchronized(currSliceStateQ){
+				synchronized(pubQ){
 
 					if(currSliceStateQ == null){
 						return; // nothing to do if there are no slices to watch
@@ -340,7 +280,6 @@ public class PublishManager {
 					if(!toRemoveSliceStateQ.isEmpty()){
 						for (SliceState s : toRemoveSliceStateQ){
 							logger.info("Removing " + s.getSlice_urn() + " from the PubQ after end of manifest lifecycle");
-							System.out.println("Removing " + s.getSlice_urn() + " from the PubQ after end of manifest lifecycle");
 							currSliceStateQ.remove(s);
 						}
 					}
@@ -401,10 +340,11 @@ public class PublishManager {
 
 		private String buildSliceListString(){
 
+			PublishQueue pubQ = PublishQueue.getInstance();
 			String sliceListString = null;
-			ArrayList<SliceState> currSliceStateList = PublishQueue.getInstance().getCurrentSliceList();
-
-			synchronized(currSliceStateList){
+			ArrayList<SliceState> currSliceStateList = pubQ.getCurrentSliceList();
+			
+			synchronized(pubQ){
 
 				if(currSliceStateList == null){
 					logger.error("buildSliceListString(): slicestatelist = null");

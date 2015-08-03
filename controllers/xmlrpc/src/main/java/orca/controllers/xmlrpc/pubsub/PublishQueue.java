@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import orca.shirako.container.Globals;
+
 
 /**
  *
  * @author anirban
  */
+@SuppressWarnings("serial")
 public final class PublishQueue implements Serializable{
 
     private ArrayList<SliceState> slicesToWatch = new ArrayList<SliceState>(); // slices to watch for the publisher state machine
@@ -37,115 +40,109 @@ public final class PublishQueue implements Serializable{
     }
 
     public ArrayList<SliceState> getCurrentSliceList(){
-        synchronized(sliceList) {
-            return sliceList;
-        }
+    	return sliceList;
     }
 
-    public void addToSliceList(SliceState slice){
-        synchronized(sliceList) {
-            sliceList.add(slice);
-        }
+    public synchronized void addToSliceList(SliceState slice){
+    	sliceList.add(slice);
     }
 
-    public void deleteFromSliceList(String slice_urn){
-        SliceState toRemoveSliceState = null;
-        synchronized(sliceList) {
-            if(sliceList != null){
-                Iterator it = sliceList.iterator();
-                while(it.hasNext()){ // go through all the slicestates
-                    SliceState currSliceState = (SliceState) it.next();
-                    String currSliceUrn = currSliceState.getSlice_urn();
-                    if(currSliceUrn.equalsIgnoreCase(slice_urn)){
-                        toRemoveSliceState = currSliceState;
-                    }
-                }
-                if(toRemoveSliceState != null){
-                    try{
-                        System.out.println("Removing " + toRemoveSliceState.getSlice_urn() + " from sliceList");
-                        sliceList.remove(toRemoveSliceState);
-                    }
-                    catch(Exception e){
-                        System.out.println("Exception while deleting entry from Slice List : " + e);
-                    }
-                }
-            }
-        }
+    public synchronized void deleteFromSliceList(String slice_urn){
+    	SliceState toRemoveSliceState = null;
+    	if(sliceList != null){
+    		Iterator<SliceState> it = sliceList.iterator();
+    		while(it.hasNext()){ // go through all the slicestates
+    			SliceState currSliceState = (SliceState) it.next();
+    			String currSliceUrn = currSliceState.getSlice_urn();
+    			if(currSliceUrn.equalsIgnoreCase(slice_urn)){
+    				toRemoveSliceState = currSliceState;
+    			}
+    		}
+    		if(toRemoveSliceState != null){
+    			try{
+    				Globals.Log.info("PublishQueue: Removing " + toRemoveSliceState.getSlice_urn() + " from sliceList");
+    				sliceList.remove(toRemoveSliceState);
+    			}
+    			catch(Exception e){
+    				Globals.Log.error("PublishQueue: Exception while deleting entry from Slice List : " + e);
+    			}
+    		}
+    	}
     }
 
-    public void setPropsForSliceInSliceList(String slice_urn, SliceState.PubSubState newState, Date newEndTime, int newWaitTime){
-        synchronized(sliceList) {
-            if(sliceList != null){
-                Iterator it = sliceList.iterator();
-                while(it.hasNext()){ // go through all the slicestates
-                    SliceState currSliceState = (SliceState) it.next();
-                    String currSliceUrn = currSliceState.getSlice_urn();
-                    if(currSliceUrn.equalsIgnoreCase(slice_urn)){
-                        currSliceState.setEndTime(newEndTime);
-                        currSliceState.setState(newState);
-                        currSliceState.setWaitTime(newWaitTime);
-                    }
-                }
-            }
-        }
+    public synchronized void setPropsForSliceInSliceList(String slice_urn, SliceState.PubSubState newState, Date newEndTime, int newWaitTime){
+    	if(sliceList != null){
+    		Iterator<SliceState> it = sliceList.iterator();
+    		while(it.hasNext()){ // go through all the slicestates
+    			SliceState currSliceState = (SliceState) it.next();
+    			String currSliceUrn = currSliceState.getSlice_urn();
+    			if(currSliceUrn.equalsIgnoreCase(slice_urn)){
+    				currSliceState.setEndTime(newEndTime);
+    				currSliceState.setState(newState);
+    				currSliceState.setWaitTime(newWaitTime);
+    			}
+    		}
+    	}
     }
 
     public ArrayList<SliceState> getCurrentQ() {
-        synchronized(slicesToWatch) {
-            return slicesToWatch;
-        }
+    	return slicesToWatch;
     }
 
-    public void addToPubQ(SliceState slice){
-        synchronized(slicesToWatch) {
-            slicesToWatch.add(slice);
-        }
+
+    /**
+     * Add a new slices for processing
+     * @param slice
+     */
+    public synchronized void addToNewSlicesQ(SliceState slice){
+    	newSlices.add(slice);
     }
 
-    public ArrayList<SliceState> getNewSlicesQ() {
-        synchronized(newSlices) {
-            return newSlices;
-        }
+    /**
+     * Flag slice as deleted
+     * @param sliceUrn
+     */
+    public synchronized void addToDeletedSlicesQ(String sliceUrn){
+    	deletedSlices.add(sliceUrn);
     }
 
-    public void addToNewSlicesQ(SliceState slice){
-        synchronized(newSlices) {
-            newSlices.add(slice);
-        }
+    /**
+     * Any deleted slices accumulated on deleted slices Q
+     * get dealt with here
+     */
+    public synchronized void drainDeleted() {
+    	for(String ss: deletedSlices) {
+    		Globals.Log.debug("PublishQueue: Deleting slice " + ss);
+    		deleteFromPubQ(ss);
+    	}
     }
-
-    public ArrayList<String> getDeletedSlicesQ() {
-        synchronized(deletedSlices) {
-            return deletedSlices;
-        }
+    
+    /**
+     * Any new slices accumulated on new slices Q
+     * get dealt with here
+     */
+    public synchronized void drainNew() {
+    	for(SliceState ss: newSlices) {
+    		Globals.Log.debug("PublishQueue: Adding slice " + ss.getSlice_urn());
+    		addToPubQ(ss);
+    	}
     }
-
-    public void addToDeletedSlicesQ(String sliceUrn){
-        synchronized(deletedSlices) {
-            deletedSlices.add(sliceUrn);
-        }
+    
+    private void addToPubQ(SliceState slice){
+    	slicesToWatch.add(slice);
     }
-
-    public void deleteFromPubQ(SliceState slice){
-        synchronized(slicesToWatch) {
-            slicesToWatch.remove(slice);
-        }
-    }
-
-    public void deleteFromPubQ(String slice_urn){
-        SliceState toRemoveSliceState = null;
-        synchronized(slicesToWatch) {
-            if(slicesToWatch != null){
-                Iterator it = slicesToWatch.iterator();
-                while(it.hasNext()){ // go through all the slicestates
-                    SliceState currSliceState = (SliceState) it.next();
-                    String currSliceUrn = currSliceState.getSlice_urn();
-                    if(currSliceUrn.equalsIgnoreCase(slice_urn)){
-                        currSliceState.setState(SliceState.PubSubState.DELETED);
-                    }
-                }
-            }
-        }
+    
+    private void deleteFromPubQ(String slice_urn){
+    	if(slicesToWatch != null){
+    		Iterator<SliceState> it = slicesToWatch.iterator();
+    		while(it.hasNext()){ // go through all the slicestates
+    			SliceState currSliceState = (SliceState) it.next();
+    			String currSliceUrn = currSliceState.getSlice_urn();
+    			if(currSliceUrn.equalsIgnoreCase(slice_urn)){
+    				currSliceState.setState(SliceState.PubSubState.DELETED);
+    			}
+    		}
+    	}
     }
 
     // manage state of compression of output
