@@ -8,8 +8,12 @@ package orca.controllers.xmlrpc.pubsub;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import orca.controllers.OrcaController;
 import orca.controllers.OrcaControllerException;
@@ -27,39 +31,45 @@ import org.apache.log4j.Logger;
  */
 public class PublishManager {
 
-	private static final int PUBLISHER_PERIOD_MS = 30*1000;
-	private static ArrayList<Timer> timers = new ArrayList<Timer>();
-	private static boolean noStart = false;
+	private static final int PUBLISHER_PERIOD = 30;
 
 	protected XmlrpcOrcaState instance = null;
-	protected Logger logger = OrcaController.getLogger(this.getClass().getName());
+	protected static Logger logger = OrcaController.getLogger(PublishManager.class.getName());
 	protected String actor_guid = null;
 	protected String actor_name = null;
+	// scheduler that creates daemon threads
+	protected static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
+		   public Thread newThread(Runnable runnable) {
+			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+			      thread.setDaemon(true);
+			      return thread;
+			   }
+		});
+	protected static final List<ScheduledFuture<?>> futures = new ArrayList<>();
+	protected static boolean noStart = false;
 
 	public PublishManager(){
 
 		initialize();
 		//expunge sliceList pubsub node on startup
 		doExpungeSliceList();
-
-		Timer timer = null;
-		synchronized(timers) {
-			if (noStart)
-				return;
-			timer = new Timer("PublisherTask", true);
-			timers.add(timer);
+		
+		if (noStart)
+			return;
+		synchronized(futures) {
+			futures.add(scheduler.scheduleAtFixedRate(new PublisherTask(), PUBLISHER_PERIOD, PUBLISHER_PERIOD, TimeUnit.SECONDS));
 		}
-		timer.schedule(new PublisherTask(), PUBLISHER_PERIOD_MS, PUBLISHER_PERIOD_MS); // run every 30 seconds
 	}
 
-	private void allStop() {
-		logger.info("Shutting down pubsub threads");
-		synchronized(timers) {
-			noStart=true;
-			for (Timer t: timers) {
-				t.cancel();
-			}
-			timers.clear();
+	/**
+	 * Since we use daemon threads, this isn't needed /ib
+	 */
+	public static void allStop() {
+		logger.info("Shutting down pubsub thread");
+		noStart = true;
+		synchronized(futures) {
+			for(ScheduledFuture<?> f: futures)
+				f.cancel(false);
 		}
 	}
 
@@ -90,7 +100,6 @@ public class PublishManager {
 					instance.returnSM(sm);
 			}
 		}
-
 	}
 
 	private void doExpungeSliceList() {
@@ -105,7 +114,7 @@ public class PublishManager {
 		}
 	}
 
-	class PublisherTask extends TimerTask {
+	class PublisherTask implements Runnable {
 
 		public void run() {
 
