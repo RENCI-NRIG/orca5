@@ -261,7 +261,8 @@ public class ReservationStatusUpdateThread implements Runnable {
 	}
 	
 	/**
-	 * true means the watch entry has fired and no longer needed. false otherwise
+	 * true means the watch entry has fired and no longer needed (ie all entries on watch list
+	 * either OK or NOTOK). false otherwise (some are NOTREADY)
 	 * @param we
 	 * @param st
 	 * @return
@@ -275,19 +276,30 @@ public class ReservationStatusUpdateThread implements Runnable {
 		List<ReservationID> ok = new ArrayList<>();
 		List<ReservationID> notok = new ArrayList<>();
 		
+		boolean ready = true;
 		for(Object rid: we.watch) {
-			sc.check(rid, ok, notok);
+			StatusChecker.Status st = sc.check(rid, ok, notok);
+			if (st == StatusChecker.Status.NOTREADY)
+				ready = false;
+		}
+		
+		if (!ready) {
+			logger.debug("Reservation watch not ready for reservations " + we.watch);
+			return false;
 		}
 		
 		if (notok.size() == 0) {
 			// call success callback method
+			logger.debug("Invoking success callback for reservations " + we.watch);
 			we.cb.success(ok, we.act);
+			return true;
 		} else {
 			// call failure callback method
-			we.cb.failure(ok, notok, we.act);
+			logger.debug("Invoking failure callback for reservation " + we.watch);
+			we.cb.failure(notok, ok, we.act);
+			return true;
 		}
-		
-		return true;
+
 	}
 	
 	@Override
@@ -314,6 +326,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 					activeRemove.add(we);
 				}
 			}
+			logger.debug("Removing active entries from watch " + activeRemove);
 			activeWatch.removeAll(activeRemove);
 		}
 		
@@ -329,6 +342,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 					modifyRemove.add(we);
 				}
 			}
+			logger.debug("Removing modify entries from watch " + modifyRemove);
 			modifyWatch.removeAll(modifyRemove);
 		}
 	}
