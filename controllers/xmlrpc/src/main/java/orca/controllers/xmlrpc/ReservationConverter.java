@@ -1428,7 +1428,9 @@ public class ReservationConverter implements LayerConstant {
 	}
 	
 	//Modify reservations
-	public HashMap<String, List<ReservationMng>> modifyReservations(OntModel manifestModel,List<ReservationMng>  allRes,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice,ModifyReservations modifies, LinkedList <NetworkElement> addedDevices) throws Exception{
+	public HashMap<String, List<ReservationMng>> modifyReservations(OntModel manifestModel,List<ReservationMng>  allRes
+			,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice, ModifyReservations modifies
+			, LinkedList <NetworkElement> addedDevices,LinkedList <NetworkElement> modifiedDevices) throws Exception{
 		HashMap <String, List<ReservationMng>> m_map = new HashMap <String, List<ReservationMng>> ();
 		LinkedList <OntResource> reservations = modifies.getRemovedElements();	
 		List<ReservationMng> m_reservations=null;
@@ -1438,8 +1440,9 @@ public class ReservationConverter implements LayerConstant {
 		}
 		if(addedDevices!=null){
 			for(int i=0;i<addedDevices.size();i++){
-				NetworkElement ne = addedDevices.get(i);
-				elementCollection.add_vm((DomainElement) ne);
+				DomainElement ne = (DomainElement) addedDevices.get(i);
+				if(ne.getCe()!=null && (ne.getCe().isModify()==false))
+					elementCollection.add_vm((DomainElement) ne);
 			}	
 			reservations = modifies.getAddedElements();	
 			m_reservations = addReservations(manifestModel,allRes,typesMap,slice,reservations,addedDevices);
@@ -1447,13 +1450,71 @@ public class ReservationConverter implements LayerConstant {
 		}else{
 			logger.warn("No added reservation!");
 		}
+		if(modifiedDevices!=null){	
+			reservations = modifies.getAddedElements();	//for possible dependency 
+			m_reservations = modifyReservations(manifestModel,allRes,reservations,modifiedDevices);
+			m_map.put(ModifyType.MODIFY.toString(), m_reservations);
+		}else{
+			logger.warn("No modified reservation!");
+		}
 		TDB.sync(manifestModel);
 		return m_map;
 	}
 	
-	public List<ReservationMng> addReservations(OntModel manifestModel,List<ReservationMng> allRes,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice,LinkedList <OntResource>addedReservations, LinkedList <NetworkElement> addedDevices) throws Exception{
-		//Remove reservations
-		//Remove reservations
+	public List<ReservationMng> modifyReservations(OntModel manifestModel,List<ReservationMng> allRes
+			,LinkedList <OntResource>modifiedReservations, LinkedList <NetworkElement> modifiedDevices) throws Exception{
+		if(modifiedReservations==null)
+			return null;
+		
+		HashMap <String, DomainElement> m_d_map = new HashMap <String, DomainElement> ();
+		for(NetworkElement ne:modifiedDevices){
+			DomainElement dd = (DomainElement) ne;
+			m_d_map.put(dd.getURL(),dd);
+		}
+			
+		ArrayList<ReservationMng> reservations = new ArrayList<ReservationMng> ();
+		for(ReservationMng rmg:allRes){
+			if (rmg.getState() != OrcaConstants.ReservationStateActive)) 
+				continue;
+
+			Properties local = OrcaConverter.fill(rmg.getLocalProperties());
+			String unit_url = local.getProperty(UNIT_URL_RES);
+			DomainElment dd = m_d_map.get(unit_url);
+			if(dd!=null){
+				//form subcommand, modify properties for adding/deleting interfaces from links
+				HashMap<DomainElement, OntResource> preds = de.getPrecededBy();
+				if (preds == null) {
+					continue;
+					
+				boolean prNetwork=false;
+				int num_interface=0;
+	            String parent_num_interface = "unit.number.interface";
+				for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
+					String intf_name = null;
+					String parent_tag_name = "unit.eth";
+					String parent_ip_addr = "unit.eth";
+					String parent_mac_addr = "unit.eth";
+					String parent_quantum_uuid = "unit.eth";
+					DomainElement parent_de = parent.getKey();
+					ReservationRequest pr = map.get(parent_de.getName());
+					if (pr == null) {
+						logger.warn("Could not find reservation from domain " + parent.getKey().getName());
+						if(parent_de.getStaticLabel()>0)
+							prNetwork=true;	
+					}else{
+						prNetwork = pr.isNetwork;
+					}
+				}
+				reservations.add(rmg);
+			}
+		}
+		
+		return reservations;
+	}
+	
+	public List<ReservationMng> addReservations(OntModel manifestModel,List<ReservationMng> allRes
+			,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice,LinkedList <OntResource>addedReservations
+			, LinkedList <NetworkElement> addedDevices) throws Exception{
 		if(addedReservations==null)
 			return null;
 		Collection <NetworkElement> boundElements = addedDevices;

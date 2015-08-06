@@ -512,7 +512,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public Map<String, Object> modifySlice(String slice_urn, Object[] credentials, String modReq) {
 		XmlrpcControllerSlice ndlSlice = null;
 		IOrcaServiceManager sm = null;
-
+		Map<String, Object> ret = null;
+		
 		try {
 			String result = null;
 			logger.info("ORCA API modifySlice() invoked");
@@ -564,7 +565,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				return setError("Error:ModifySlice Exception! no firstGroupElement");
 			}
 			try{
-				workflow.modify(drp, modReq,r_collection.NodeGroupMap, r_collection.firstGroupElement);
+				workflow.modify(drp, modReq,ndlSlice.getSliceID(), r_collection.NodeGroupMap, r_collection.firstGroupElement);
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("ModifySlice(): No reservations created for this request; Error:");
@@ -612,7 +613,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				LinkedList<NetworkElement> l_D = new LinkedList<NetworkElement>();
 				for(int i=0;i<addedDevices.size();i++)
 					l_D.add((NetworkElement)addedDevices.get(i) );
-				m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D);
+				LinkedList <Device> modifiedDevices = ih.getModifiedDevices(); 
+				LinkedList<NetworkElement> l_M = new LinkedList<NetworkElement>();
+				for(int i=0;i<modifiedDevices.size();i++)
+					l_M.add((NetworkElement)modifiedDevices.get(i) );		
+				m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D,l_M);
 				ih.modifyComplete(); //clear the modify data.
 			}
 			//remove reservations
@@ -663,6 +668,37 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				}
 			}       
 
+			//modify existing reservations
+			a_r=m_map.get(ModifyType.MODIFY.toString());
+			if (a_r == null) {
+				result ="No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
+				logger.debug("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+			} else {
+				logger.debug("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+				for (ReservationMng rr: a_r){
+					try{
+						//instance.releaseAddressAssignment(rr);
+
+						if (userDN != null) 
+							OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
+
+						logger.debug("Issuing demand for reservation: " + rr.getReservationID().toString());
+						if(AbacUtil.verifyCredentials)
+							setAbacAttributes(rr, logger);
+						String sliver_guid = rr.getReservationID();
+						String modifySubcommand = null;
+						List<Map<String, ?>> modifyProperties=null;
+						ret = modifySliver(slice_urn, sliver_guid, credentials, 
+				    		modifySubcommand, modifyProperties);
+						
+					} catch (Exception ex) {
+							result = "Failed to redeem reservation"+ex;
+							throw new RuntimeException("Failed to redeem reservation", ex);
+					}
+				}
+				
+			}
+			
 			// call publishManifest if there are reservations in the slice
 			List<ReservationMng> sliceRes = ndlSlice.getReservationsByState(sm, OrcaConstants.ReservationStateActive, 
 					OrcaConstants.ReservationStateActiveTicketed, OrcaConstants.ReservationStateTicketed);
@@ -670,6 +706,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ndlSlice.publishManifest(logger);
 			}
 
+			if(ret!=null)
+				return ret;
 			if (result == null)
 				result = "No result available";
 			return setReturn(result);
