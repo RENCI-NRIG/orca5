@@ -7,6 +7,7 @@ import com.hp.hpl.jena.ontology.OntResource;
 public class ModifyReservations {
 	protected LinkedList <OntResource> removedElements;
 	protected LinkedList <OntResource> addedElements;
+	protected LinkedList <OntResource> modifiedElements;
 	
 	public void addRemovedElement(OntResource d_ont){
 		if(removedElements==null)
@@ -17,6 +18,14 @@ public class ModifyReservations {
 		if(addedElements==null)
 			addedElements = new LinkedList<OntResource>();
 		addedElements.add(d_ont);
+	}
+	public void addModifedElement(OntResource d_ont){
+		if(modifiedElements==null)
+			modifiedElements = new LinkedList<OntResource>();
+		modifiedElements.add(d_ont);
+	}
+	public LinkedList<OntResource> getModifiedElements() {
+		return modifiedElements;
 	}
 	public LinkedList<OntResource> getRemovedElements() {
 		return removedElements;

@@ -49,6 +49,12 @@ public class MappingHandler implements IRequestEmbedder {
 	@NotPersistent
 	protected boolean debugOn = false;
 	
+	@NotPersistent
+	protected boolean isModify = false;
+	
+	protected int modifyVersion;
+	
+	
 	public void setDebugOn() {
 		debugOn = true;
 	}
@@ -110,8 +116,8 @@ public class MappingHandler implements IRequestEmbedder {
 	}
 	
 	public SystemNativeError modifySlice(
-			Collection<ModifyElement> modifyElements, OntModel manifestOnt, 
-			HashMap <String,Collection <DomainElement>> nodeGroupMap, 
+			DomainResourcePools domainResourcePools, Collection<ModifyElement> modifyElements, OntModel manifestOnt, 
+			String sliceId, HashMap <String,Collection <DomainElement>> nodeGroupMap, 
 			HashMap<String, DomainElement> firstGroupElement, OntModel requestModel) throws UnknownHostException, InetNetworkException {
 		return null;
 	}
@@ -271,4 +277,13 @@ public class MappingHandler implements IRequestEmbedder {
 		}
 		return sb.toString();
 	}
+
+	public boolean isModify() {
+		return isModify;
+	}
+
+	public void setModify(boolean isModify) {
+		this.isModify = isModify;
+	}
+
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/app-color.owl" uri="app-color.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/collections.owl" uri="collections.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/compute.owl" uri="compute.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/domain.owl" uri="domain.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/dtn.owl" uri="dtn.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/ec2.owl" uri="ec2.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/ethernet.owl" uri="ethernet.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/eucalyptus.owl" uri="eucalyptus.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/exogeni.owl" uri="exogeni.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/geni.owl" uri="geni.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/ip4.owl" uri="ip4.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/itu-grid.owl" uri="itu-grid.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/kansei.owl" uri="kansei.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/layer.owl" uri="layer.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/location.owl" uri="location.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/manifest.owl" uri="manifest.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/modify.owl" uri="modify.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/openflow.owl" uri="openflow.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/planetlab.owl" uri="planetlab.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/protogeni.owl" uri="protogeni.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/request.owl" uri="request.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/storage.owl" uri="storage.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/tcp.owl" uri="tcp.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://geni-orca.renci.org/owl/topology.owl" uri="topology.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1432041191150" name="http://www.w3.org/2006/time" uri="time.owl"/>
+    </group>
+</catalog>

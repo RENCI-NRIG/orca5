@@ -26,6 +26,12 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	@NotPersistent 
 	protected OntModel model; // TDB
 	
+	@NotPersistent 
+	protected boolean isModify;
+	
+	@Persistent
+	protected int modifyVersion;
+	
 	@Persistent
 	protected String uri;
 	@Persistent
@@ -358,6 +364,22 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
     		map = new HashMap<String, DomainResource>();
         map.put(resource.getInterface(), resource);
     }
+
+	public boolean isModify() {
+		return isModify;
+	}
+
+	public void setModify(boolean isModify) {
+		this.isModify = isModify;
+	}
+
+	public int getModifyVersion() {
+		return modifyVersion;
+	}
+
+	public void setModifyVersion(int modifyVersion) {
+		this.modifyVersion = modifyVersion;
+	}
 }
 
 

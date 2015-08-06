@@ -29,6 +29,7 @@ import orca.ndl.elements.DomainElement;
 import orca.ndl.elements.IPAddress;
 import orca.ndl.elements.IPAddressRange;
 import orca.ndl.elements.Interface;
+import orca.ndl.elements.LabelSet;
 import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
 import orca.ndl.elements.SwitchingAction;
@@ -48,6 +49,8 @@ public class CloudHandler extends MappingHandler{
 	LinkedList<NetworkElement> deviceList = new LinkedList<NetworkElement>();
 	protected int numNetworkConnection=0;
 	protected DomainElement commonLinkDevice = null;
+	
+	public static final int max_vlan_tag = 4095;
 	
 	// these were migrated from MappingHandler in preparation for recovery /ib 04/10/14
 	protected LinkedList <OntResource> domainInConnectionList = new LinkedList <OntResource>();
@@ -428,7 +431,10 @@ public class CloudHandler extends MappingHandler{
 			if(device.getCastType()!=null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				mpDevice=true;
 			}
-			if(!deviceList.contains(device)){
+			if(!deviceList.contains(device) || device.getModifyVersion() < this.modifyVersion){
+				if(deviceList.contains(device))
+					device.setModify(true);
+				
 				deviceList.add(device);
 				if(!mpDevice){
 					dType = domainResourcePools.getDomainResourceType(domain_name);
@@ -467,6 +473,7 @@ public class CloudHandler extends MappingHandler{
 		}
 		
 		ComputeElement ce = ce_element.copy(element.getModel(), requestModel,url,name);
+		ce.setModify(element.isModify());
 		ce.setResourceType(dType);
 		ce.setNodeGroupName(ce_element.getNodeGroupName());
 		ce.setPostBootScript(ce_element.getPostBootScript());
@@ -786,6 +793,7 @@ public class CloudHandler extends MappingHandler{
 		int resourceCount = resourceCount(link_device,dType);
 		if(resourceCount<0)
 			return null;
+		
 		deviceList.add(link_device);
 		newDomainList.add(link_device);
 		return link_device;
@@ -984,7 +992,13 @@ public class CloudHandler extends MappingHandler{
         	next_Hop = domainList.get(i);
            	link_url=next_Hop.getURI();
             link_name = next_Hop.getName();
-            	
+            
+            DomainElement d = (DomainElement) next_Hop;
+            ComputeElement ce = d.getCe();
+            
+            if(ce!=null && ce.isModify())
+            	continue;
+            
     		if(next_Hop.getType().endsWith("lun"))
           		link_ont=manifestModel.createIndividual(link_name,NdlCommons.networkStorageClass);
             else if( (next_Hop.getType().endsWith("vm")) || (next_Hop.getType().endsWith("baremetalce"))){
@@ -1009,8 +1023,6 @@ public class CloudHandler extends MappingHandler{
     		addDomainProperty(domain_rs,manifestModel);
             	
     		//nodeGroup
-            DomainElement d = (DomainElement) next_Hop;
-            ComputeElement ce = d.getCe();
             if(ce!=null){ 
             	if(ce.getNodeGroupName()!=null)
                 	link_ont.addProperty(NdlCommons.hasRequestGroupURL, ce.getNodeGroupName());
@@ -1091,6 +1103,98 @@ public class CloudHandler extends MappingHandler{
 		}
 		TDB.sync(idm);
 		return idm;
+	}
+	
+	public int findCommonLabel(DomainElement start, DomainElement next){
+		BitSet startBitSet = null,controllerStartBitSet=null;
+		BitSet nextBitSet = null,controllerNextBitSet=null;
+		LinkedList <LabelSet> sSetList = null, nSetList = null;
+		if(this.globalControllerAssignedLabel!=null){
+			startBitSet = this.globalControllerAssignedLabel.get(start.getURI());
+			if(next!=null)
+				nextBitSet =this.globalControllerAssignedLabel.get(next.getURI());
+		}	
+		if(this.controllerAssignedLabel!=null){
+            controllerStartBitSet = this.controllerAssignedLabel.get(start.getURI());
+            if(next!=null)
+            	controllerNextBitSet =this.controllerAssignedLabel.get(next.getURI());
+		}
+		DomainResourceType sRType=start.getResourceType(),nRType=next.getResourceType();
+		sSetList = start.getLabelSet(sRType.getResourceType());
+		if(next!=null)
+			nSetList = next.getLabelSet(nRType.getResourceType());
+		int min=0,max=0;
+		BitSet sBitSet = new BitSet(max_vlan_tag);
+		for(LabelSet sSet:sSetList){
+			min = (int) sSet.getMinLabel_ID();
+			max = (int) sSet.getMaxLabe_ID();
+			if( (min==max) || (max==0)){
+				sBitSet.set(min);
+			}else{
+				sBitSet.set(min,max+1);
+			}
+			if((min==0) && (max==0)){
+				sBitSet.set(0,max_vlan_tag);
+			}
+			sBitSet.andNot(sSet.getUsedBitSet());
+			logger.debug("min-max-used:"+min+":"+max+":"+sSet.getUsedBitSet());
+		}
+		logger.debug("findConmmonLabel----initial Start labelSet:"+sBitSet);
+		if(startBitSet!=null)
+			sBitSet.andNot(startBitSet);
+		logger.debug("After globalAssignedLabel + Start labelSet:"+sBitSet);
+		if(controllerStartBitSet!=null)
+            sBitSet.andNot(controllerStartBitSet);
+		logger.debug("Final Start labelSet:"+sBitSet);		
+		BitSet nBitSet = new BitSet(max_vlan_tag);
+		if(nSetList!=null){		
+			for(LabelSet nSet:nSetList){
+				min = (int) nSet.getMinLabel_ID();
+				max = (int) nSet.getMaxLabe_ID();
+			
+				if( (min==max) || (max==0)){
+					nBitSet.set(min);
+				}else{
+					nBitSet.set(min,max+1);
+				}
+				if((min==0)&&(max==0)){
+					nBitSet.set(0,max_vlan_tag);
+				}
+				nBitSet.andNot(nSet.getUsedBitSet());
+				logger.debug("min-max-used:"+min+":"+max+":"+nSet.getUsedBitSet());
+			}
+			logger.debug("initial next labelSet:"+nBitSet);
+			if(nextBitSet!=null)
+				nBitSet.andNot(nextBitSet);
+			logger.debug("After globalAssignedLabel + next labelSet:"+nBitSet);
+			if(controllerNextBitSet!=null)
+				nBitSet.andNot(controllerNextBitSet);
+		}
+		logger.debug("final next labelSet:"+nBitSet);
+		sBitSet.and(nBitSet);
+		
+		int commonLabel = -1;
+		//in case static label carried over
+		int start_static_label = (int) start.getStaticLabel();
+		if(start_static_label>0 && sBitSet.get(start_static_label))
+			commonLabel = start_static_label;
+		else //otherwise, use the common label
+			commonLabel = sBitSet.nextSetBit(0);
+		//int commonLabel = randomSetBit(sBitSet);
+		if(commonLabel>0){
+			for(LabelSet sSet:sSetList){
+				sSet.setUsedBitSet(commonLabel);
+			}
+			if(nSetList!=null){	
+				for(LabelSet nSet:nSetList){
+					nSet.setUsedBitSet(commonLabel);
+				}
+			}
+		}
+		start.setAvailableLabelSet(sBitSet);
+		if(next!=null)
+			next.setAvailableLabelSet(sBitSet);
+		return commonLabel;
 	}
 	
 }
