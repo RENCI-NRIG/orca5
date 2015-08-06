@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.BitSet;
 //import com.ibm.icu.util.Calendar;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 
 import javax.security.auth.login.CredentialException;
@@ -20,6 +26,10 @@ import orca.controllers.OrcaControllerException;
 import orca.controllers.xmlrpc.SliceStateMachine.SliceCommand;
 import orca.controllers.xmlrpc.geni.GeniAmV2Handler;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
+import orca.controllers.xmlrpc.pubsub.PublishManager;
+import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
+import orca.controllers.xmlrpc.statuswatch.ReservationIDWithModifyIndex;
+import orca.controllers.xmlrpc.statuswatch.ReservationStatusUpdateThread;
 import orca.controllers.xmlrpc.x509util.Credential;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
@@ -49,6 +59,7 @@ import orca.shirako.common.meta.ResourcePoolAttributeDescriptor;
 import orca.shirako.common.meta.ResourcePoolDescriptor;
 import orca.shirako.common.meta.ResourcePoolsDescriptor;
 import orca.shirako.common.meta.ResourceProperties;
+import orca.shirako.container.Globals;
 import orca.util.CompressEncode;
 import orca.util.ID;
 import orca.util.ResourceType;
@@ -57,6 +68,8 @@ import orca.util.VersionUtils;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.ontology.OntModel;
+
+
 /**
  * ORCA XMLRPC client interface
  * WARNING: Any method you declare public (non-static) becomes a remote method!
@@ -77,6 +90,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String PUBSUB_PROPS_FILE_NAME = "controller.properties";
 	public static final String PUBSUB_ENABLED_PROP = "ORCA.publish.manifest";
 	public static final String MAX_DURATION_PROP = "controller.max.duration";
+	public static final String PropertyPublishManifest = "ORCA.publish.manifest";
 
 	public static final long MaxReservationDuration = ReservationConverter.getMaxDuration();
 	
@@ -90,17 +104,50 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	protected boolean verifyCredentials = true;
 
 	// thread for deferred slices due to interdomain complexity
-	protected static final SliceDeferThread sdt = new SliceDeferThread();
-	protected static final Thread sdtThread = new Thread(sdt);
+	protected static final SliceDeferThread sdt; 
+	protected static final Thread sdtThread;
+	
+	// thread for processing status updates (modify and state)
+	protected static final ReservationStatusUpdateThread sut;
+	protected static final ScheduledFuture<?> sutFuture;
+	public static final int MODIFY_CHECK_PERIOD=5; //seconds
+	
+	// PublishManager
+	protected static final PublishManager pubManager;
 	
 	// lock to create slice
 	protected static Integer createLock = 0;
 	
-	// start the thread
+	// start the threads
 	static {
+		// slice defer thread
+		Globals.Log.info("Starting slice defer thread");
+		sdt = new SliceDeferThread();
+		sdtThread = new Thread(sdt);
 		sdtThread.setDaemon(true);
 		sdtThread.setName("SliceDeferThread");
 		sdtThread.start();
+		
+		// modify status thread
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
+			   public Thread newThread(Runnable runnable) {
+			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+			      thread.setDaemon(true);
+			      return thread;
+			   }
+		});
+		sut = new ReservationStatusUpdateThread();
+		sutFuture = scheduler.scheduleAtFixedRate(sut, MODIFY_CHECK_PERIOD, 
+				MODIFY_CHECK_PERIOD, TimeUnit.SECONDS);
+		
+		// Pubsub thread
+		if ("true".equalsIgnoreCase(OrcaController.getProperty(PropertyPublishManifest))) {
+			Globals.Log.info("Starting pubsub thread");
+			pubManager = new PublishManager(); // This will start the publisher thread
+		} else {
+			Globals.Log.info("Not starting pubsub thread");
+			pubManager = null;
+		}
 	}
 	
 	/** manage the xmlrpc return structure
@@ -1108,6 +1155,19 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                     logger.error("getSliverProperties(): unable to find slice " + slice_urn + " among active slices");
                     return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
             }
+            
+            // for testing - add a status watch for this reservation
+            List<ReservationIDWithModifyIndex> actList = Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), 1));
+            
+            sut.addModifyStatusWatch(actList, null, new IStatusUpdateCallback() {
+            	public void success(List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
+            		System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
+            	}
+            	public void failure(List<ReservationID> failed, List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
+            		System.out.println("FAILURE ON MODIFY WATCH OF " + failed);
+            	}
+            });
+            
             // lock the slice
             ndlSlice.lock();
             

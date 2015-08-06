@@ -751,7 +751,7 @@ public abstract class Actor implements IActor {
             try {
                 recoverReservation(p);
             } catch (OrcaException e) {
-                logger.error("Unexpecter error while recoverying reservation", e);
+                logger.error("Unexpected error while recoverying reservation", e);
             }
         }
 
