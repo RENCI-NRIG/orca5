@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 //import com.ibm.icu.util.Calendar;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -68,7 +69,7 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+
 /**
  * ORCA XMLRPC client interface
  * WARNING: Any method you declare public (non-static) becomes a remote method!
@@ -1118,9 +1119,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             }
             
             // for testing - add a status watch for this reservation
-            sut.addModifyStatusWatch(Collections.singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), 1)), 
-            		null, 
-            		new IStatusUpdateCallback() {
+            List<ReservationIDWithModifyIndex> actList = Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), 1));
+            
+            sut.addModifyStatusWatch(actList, null, new IStatusUpdateCallback() {
             	public void success(List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
             		System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
             	}
