@@ -103,53 +103,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	protected final XmlrpcOrcaState instance;
 	protected boolean verifyCredentials = true;
 
-	// thread for deferred slices due to interdomain complexity
-	protected static final SliceDeferThread sdt; 
-	protected static final Thread sdtThread;
-	
-	// thread for processing status updates (modify and state)
-	protected static final ReservationStatusUpdateThread sut;
-	protected static final ScheduledFuture<?> sutFuture;
-	public static final int MODIFY_CHECK_PERIOD=5; //seconds
-	
-	// PublishManager
-	protected static final PublishManager pubManager;
-	
 	// lock to create slice
 	protected static Integer createLock = 0;
-	
-	// start the threads
-	static {
-		// slice defer thread
-		Globals.Log.info("Starting slice defer thread");
-		sdt = new SliceDeferThread();
-		sdtThread = new Thread(sdt);
-		sdtThread.setDaemon(true);
-		sdtThread.setName("SliceDeferThread");
-		sdtThread.start();
 		
-		// modify status thread
-		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
-			   public Thread newThread(Runnable runnable) {
-			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
-			      thread.setDaemon(true);
-			      return thread;
-			   }
-		});
-		sut = new ReservationStatusUpdateThread();
-		sutFuture = scheduler.scheduleAtFixedRate(sut, MODIFY_CHECK_PERIOD, 
-				MODIFY_CHECK_PERIOD, TimeUnit.SECONDS);
-		
-		// Pubsub thread
-		if ("true".equalsIgnoreCase(OrcaController.getProperty(PropertyPublishManifest))) {
-			Globals.Log.info("Starting pubsub thread");
-			pubManager = new PublishManager(); // This will start the publisher thread
-		} else {
-			Globals.Log.info("Not starting pubsub thread");
-			pubManager = null;
-		}
-	}
-	
 	/** manage the xmlrpc return structure
 	 * 
 	 * @param msg
@@ -426,7 +382,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 				// call on slicedeferthread to either demand immediately
 				// or put on deferred queue
-				sdt.processSlice(ndlSlice);
+				XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 
 				// What do we return in the manifest ? reservation Id, type, units ? slice ?
 				StringBuilder result = new StringBuilder("Here are the leases: \n");
@@ -766,7 +722,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
             }
             
-            if (sdt.inDeferredQueue(ndlSlice)) {
+            if (XmlrpcOrcaState.getSDT().inDeferredQueue(ndlSlice)) {
             	logger.error("deleteSlice(): unable to delete slice " + slice_urn + ", it is waiting in the defer queue");
             	return setError("ERROR: unable to delete deferred slice " + slice_urn + ", please try some time later");
             }
@@ -1121,7 +1077,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // for testing - add a status watch for this reservation
             List<ReservationIDWithModifyIndex> actList = Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), 1));
             
-            sut.addModifyStatusWatch(actList, null, new IStatusUpdateCallback() {
+            XmlrpcOrcaState.getSUT().addModifyStatusWatch(actList, null, new IStatusUpdateCallback() {
             	public void success(List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
             		System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
             	}
@@ -1133,7 +1089,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // lock the slice
             ndlSlice.lock();
             
-            Boolean ret = ndlSlice.modifySliver(sm, sliver_guid, modifySubcommand, modifyProperties);
+            Integer ret = ModifyHelper.modifySliver(sm, sliver_guid, modifySubcommand, modifyProperties);
             
             return setReturn(ret);
     	} catch (Exception e) {
