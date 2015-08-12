@@ -132,7 +132,9 @@ public class ReservationStatusUpdateThread implements Runnable {
 				if (rm == null)
 					throw new Exception("Unable to obtain reservation information for " + rid.getReservationID());
 
-				if (rm.getState() != OrcaConstants.ReservationStateActive)
+				// has to be Active, None to be worth checking
+				if ((rm.getState() != OrcaConstants.ReservationStateActive) ||
+						(rm.getPendingState() != OrcaConstants.ReservationPendingStateNone))
 					return StatusChecker.Status.NOTREADY;
 				
 				List<UnitMng> units = sm.getUnits(rid.getReservationID());
