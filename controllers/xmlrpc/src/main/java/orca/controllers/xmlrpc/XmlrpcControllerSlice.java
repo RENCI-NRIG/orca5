@@ -127,6 +127,16 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	public boolean locked() {
 		return (lock.availablePermits() == 0);
 	}
+	
+	/**
+	 * Set a list of computed reservations for this slice
+	 * @param l
+	 */
+	public void addComputedReservations(TicketReservationMng l) {
+		if(computedReservations == null)
+			computedReservations = new ArrayList <TicketReservationMng> ();
+		computedReservations.add(l);
+	}
 
 	/**
 	 * Set a list of computed reservations for this slice
@@ -225,7 +235,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
+	public static boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		try {
 			// here we break up the semantics of different subcommands
 			
