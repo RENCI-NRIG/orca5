@@ -41,7 +41,7 @@ public class NdlRequestParser extends NdlCommons {
 	OntModel requestModel;
 	Set<Resource> interfaces = new HashSet<Resource>();
 	Set<Resource> nodesAndLinks = new HashSet<Resource>();
-	private boolean lessStrictChecking = false;
+	private boolean lessStrictChecking = true;
 	
 	protected String[] inferenceModels = { "topology.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
 	
@@ -55,6 +55,27 @@ public class NdlRequestParser extends NdlCommons {
 		listener = l;
 		requestModel = reqModel;
 		
+		// need some imports for inference to work
+		for (String model: inferenceModels)
+			requestModel.read(ORCA_NS + model);
+	}
+	
+	/**
+	 * Create a parser with a model that is explicitly in-memory or TDB persistent or ephemeral
+	 * @param ndlRequest
+	 * @param l
+	 * @param t
+	 * @param folderName
+	 * @throws NdlException
+	 */
+	public NdlRequestParser(OntModel reqModel, INdlRequestModelListener l, NdlModel.ModelType t, String folderName) throws NdlException {
+		
+		if (l == null)
+			throw new NdlException("Null parameters to the NdlRequestParser constructor");
+		
+		listener = l;
+		
+		requestModel = reqModel;
 		// need some imports for inference to work
 		for (String model: inferenceModels)
 			requestModel.read(ORCA_NS + model);

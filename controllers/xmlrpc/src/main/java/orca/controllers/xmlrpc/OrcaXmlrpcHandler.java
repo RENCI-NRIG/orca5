@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -515,9 +516,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public Map<String, Object> modifySlice(String slice_urn, Object[] credentials, String modReq) {
 		XmlrpcControllerSlice ndlSlice = null;
 		IOrcaServiceManager sm = null;
-
+		Map<String, Object> ret = null;
+		
 		try {
-			String result = null;
+			String result_str = null;
 			logger.info("ORCA API modifySlice() invoked");
 
 			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, verifyCredentials, logger);
@@ -567,7 +569,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				return setError("Error:ModifySlice Exception! no firstGroupElement");
 			}
 			try{
-				workflow.modify(drp, modReq,r_collection.NodeGroupMap, r_collection.firstGroupElement);
+				workflow.modify(drp, modReq,ndlSlice.getSliceID(), r_collection.NodeGroupMap, r_collection.firstGroupElement);
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("ModifySlice(): No reservations created for this request; Error:");
@@ -596,12 +598,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			} 
 
 			if (allRes == null){
-				result = "ERROR: Invalid slice " + slice_urn + ", slice status can't be determined";
+				result_str = "ERROR: Empty slice " + slice_urn + ", slice status can't be determined";
 				logger.error("modifySlice(): Invalid slice " + slice_urn  + ", slice status can't be determined");
-				return setError(result);
+				return setError(result_str);
 			}
 			else {
-				//ReservationConverter orc = new ReservationConverter();
 				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
 				orc.updateGeniStates(ndlSlice.getWorkflow().getManifestModel(), geniStates);
 				OntModel manifestModel=orc.getManifestModel(workflow.getManifestModel(),
@@ -615,13 +616,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				LinkedList<NetworkElement> l_D = new LinkedList<NetworkElement>();
 				for(int i=0;i<addedDevices.size();i++)
 					l_D.add((NetworkElement)addedDevices.get(i) );
-				m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D);
+				LinkedList <Device> modifiedDevices = ih.getModifiedDevices(); 
+				LinkedList<NetworkElement> l_M = new LinkedList<NetworkElement>();
+				for(int i=0;i<modifiedDevices.size();i++)
+					l_M.add((NetworkElement)modifiedDevices.get(i) );		
+				m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D,l_M);
 				ih.modifyComplete(); //clear the modify data.
 			}
+							
 			//remove reservations
 			List <ReservationMng> a_r = m_map.get(ModifyType.REMOVE.toString());
 			if (a_r == null) {
-				result ="No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
+				result_str ="No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
 				logger.debug("No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
 			} else {
 				logger.debug("There are " + a_r.size() + " reservations to be removed in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
@@ -633,17 +639,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						sm.closeReservation(new ReservationID(rr.getReservationID()));
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						result = "Failed to close reservation"+ex;
+						result_str = "Failed to close reservation"+ex;
 						throw new RuntimeException("Failed to close reservation", ex);
 					}
 				}
 			}       
+			
 			//add reservations
 			a_r=m_map.get(ModifyType.ADD.toString());
 			if (a_r == null) {
-				result ="No added reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
+				result_str ="No added reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
 				logger.debug("No added reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
-			} else {
+			}else{ 
 				logger.debug("There are " + a_r.size() + " new reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
 				for (ReservationMng rr: a_r){
 					try{
@@ -656,16 +663,126 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						if(AbacUtil.verifyCredentials)
 							setAbacAttributes(rr, logger);
 						
-						// not really needed /ib 08/05/15
-						//ndlSlice.addComputedReservations((TicketReservationMng) rr);
-						sm.demand(rr);
+						ndlSlice.addComputedReservations((TicketReservationMng) rr);
 					} catch (Exception ex) {
-						result = "Failed to redeem reservation"+ex;
+						result_str = "Failed to redeem reservation"+ex;
 						throw new RuntimeException("Failed to redeem reservation", ex);
 					}
 				}
-			}       
+			}
 
+			orc.updateTerm(workflow.getManifestModel());
+
+			// call on slicedeferthread to either demand immediately
+			// or put on deferred queue
+			XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
+			
+			//modify existing reservations
+			a_r=m_map.get(ModifyType.MODIFY.toString());
+			if (a_r == null) {
+				result_str ="No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
+				logger.debug("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+			} else {
+				logger.debug("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+				for (ReservationMng rr: a_r){
+					try{
+						//instance.releaseAddressAssignment(rr);
+
+						if (userDN != null) 
+							OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
+
+						logger.debug("Issuing demand for reservation: " + rr.getReservationID().toString());
+						if(AbacUtil.verifyCredentials)
+							setAbacAttributes(rr, logger);
+						String sliver_guid = rr.getReservationID();
+			            
+						Properties local = OrcaConverter.fill(rr.getLocalProperties());
+						String unit_url = local.getProperty(ReservationConverter.UNIT_URL_RES);
+						String modify_ver = local.getProperty(ReservationConverter.PropertyModifyVersion);
+						
+			            // for testing - add a status watch for this reservation
+			            //List<ReservationIDWithModifyIndex> actList = 
+			            //		Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), Integer.valueOf(modify_ver)));
+			            
+			            ReservationDependencyStatusUpdate rr_depend = new ReservationDependencyStatusUpdate();
+			            List <ReservationID> rr_l = Collections.<ReservationID>singletonList(new ReservationID(sliver_guid));
+			            List <ReservationID> rr_d_list = new ArrayList<ReservationID>();
+			            
+			            //get properties to get its parent reservations
+					
+						String  p_str = local.getProperty(ReservationConverter.PropertyNumExistParentReservations);
+						int p = 0;
+						String r_id=null;
+						if(p_str!=null){
+							p=Integer.valueOf(p_str);
+							for(int i=0;i<p;i++){
+								String key=ReservationConverter.PropertyExistParent + String.valueOf(i);
+								r_id=local.getProperty(key);
+								if(r_id!=null)
+									rr_d_list.add(new ReservationID(r_id));
+							}
+						}
+						p_str = local.getProperty(ReservationConverter.PropertyNumExistParentReservations);
+						if(p_str!=null){
+							p=Integer.valueOf(p_str);
+							for(int i=0;i<p;i++){
+								String key=ReservationConverter.PropertyNumNewParentReservations + String.valueOf(i);
+								r_id=local.getProperty(key);
+								if(r_id!=null)
+									rr_d_list.add(new ReservationID(r_id));
+							}
+						}
+			            
+						XmlrpcOrcaState.getSUT().addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
+			            
+						String modifySubcommand = null;
+						List<Map<String, ?>> modifyProperties=null;
+						ret = modifySliver(slice_urn, sliver_guid, credentials, 
+				    		modifySubcommand, modifyProperties);
+						
+					} catch (Exception ex) {
+							result_str = "Failed to redeem reservation"+ex;
+							throw new RuntimeException("Failed to redeem reservation", ex);
+					}
+				}
+				
+			}
+
+			// What do we return in the manifest ? reservation Id, type, units ? slice ?
+			StringBuilder result = new StringBuilder("Here are the leases: \n");
+
+			Iterator<TicketReservationMng> it = ndlSlice.getComputedReservations().iterator();
+			result.append("Request id: ");
+			result.append(ndlSlice.getSliceID());
+			result.append("\n");
+
+			while(it.hasNext()){
+				LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
+
+				result.append("[ ");
+
+				result.append("  Slice UID: ");
+				result.append(currRes.getSliceID().toString());
+
+				result.append(" | Reservation UID: ");
+				result.append(currRes.getReservationID().toString());
+
+				result.append(" | Resource Type: ");
+				result.append(currRes.getResourceType().toString());
+
+				result.append(" | Resource Units: ");
+				result.append(currRes.getUnits());
+
+				result.append(" ] \n");
+			}
+
+			// call publishManifest if there are reservations in the slice
+			if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+				ndlSlice.publishManifest(logger);
+			}
+
+			result.append(workflow.getErrorMsg());
+			
 			// call publishManifest if there are reservations in the slice
 			List<ReservationMng> sliceRes = ndlSlice.getReservationsByState(sm, OrcaConstants.ReservationStateActive, 
 					OrcaConstants.ReservationStateActiveTicketed, OrcaConstants.ReservationStateTicketed);
@@ -673,8 +790,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ndlSlice.publishManifest(logger);
 			}
 
+			if(ret!=null)
+				return ret;
 			if (result == null)
-				result = "No result available";
+				result.append("No result available");
+				
 			return setReturn(result);
 		} catch (CredentialException ce) {
 			logger.error("modifySlice(): Credential Exception: " + ce.getMessage());

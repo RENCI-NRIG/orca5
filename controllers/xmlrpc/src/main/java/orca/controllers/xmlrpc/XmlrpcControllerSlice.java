@@ -18,6 +18,8 @@ import orca.controllers.xmlrpc.pubsub.SliceState;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
+import orca.manage.OrcaConstants;
+import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
@@ -30,6 +32,7 @@ import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
 import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.container.Globals;
+import orca.util.PropList;
 
 import org.apache.log4j.Logger;
 
@@ -124,6 +127,16 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	public boolean locked() {
 		return (lock.availablePermits() == 0);
 	}
+	
+	/**
+	 * Set a list of computed reservations for this slice
+	 * @param l
+	 */
+	public void addComputedReservations(TicketReservationMng l) {
+		if(computedReservations == null)
+			computedReservations = new ArrayList <TicketReservationMng> ();
+		computedReservations.add(l);
+	}
 
 	/**
 	 * Set a list of computed reservations for this slice
@@ -184,6 +197,95 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		}
 	}
 	
+	/**
+	 * Conversion
+	 * @param p
+	 * @return
+	 */
+	public static Map<String, String> fromProperties(Properties p) {
+		Map<String, String> m = new HashMap<String, String>();
+		
+		for(Map.Entry<Object, Object>e: p.entrySet()) {
+			m.put((String)e.getKey(), (String)e.getValue());
+		}
+		return m;
+	}
+	
+	public static Properties fromMap(Map<String, String> m) {
+		Properties p = new Properties();
+
+		for(Map.Entry<String, String>e : m.entrySet()) {
+			p.setProperty(e.getKey(), e.getValue());
+		}
+		return p;
+	}
+	
+	private boolean findProp(PropertiesMng pm, String key) {
+		for(PropertyMng pp: pm.getProperty()) {
+			if (pp.getName().equals(key))
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Modify reservation based on reservation id (or null)
+	 * @param sm
+	 * @param res
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
+		try {
+			// here we break up the semantics of different subcommands
+			
+			ReservationMng rm = sm.getReservation(new ReservationID(res));
+			if (rm == null)
+				throw new RuntimeException("modifySliver(): Unable to find reservation " + res);
+			
+			PropertiesMng psmng = rm.getConfigurationProperties();
+			if (psmng == null)
+				throw new RuntimeException("modifySliver(): unable to get configuration properties for reservation " + res);
+			
+			Properties cp = OrcaConverter.fill(psmng);
+			int index = PropList.highestModifyIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
+			
+			Properties modifyProperties = new Properties();
+			boolean implementedSubcommand = false;
+			//
+			// add more subcommands here. make sure to set implementedSubcommand to true.
+			//
+			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
+				implementedSubcommand = true;
+				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
+			} else {
+				implementedSubcommand = true;
+				// collect properties from first list entry map
+				if (modifyPropertiesList.size() == 0)
+					throw new RuntimeException("Subcommand " + modifySubcommand + " requires a list maps of size one or more");
+				
+				modifyProperties = fromMap((Map<String, String>)modifyPropertiesList.get(0));
+			}
+			
+			if (!implementedSubcommand)
+				throw new RuntimeException("Subcommand " + modifySubcommand + " is not implemented");
+			
+			//prepend all property names with modify.x.
+			PropList.renamePropertyNames(modifyProperties, OrcaConstants.MODIFY_PROPERTY_PREFIX + index + ".");
+			
+			// add the subcommand as a property after everything
+			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + index, 
+					OrcaConstants.MODIFY_PROPERTY_PREFIX + modifySubcommand);
+
+			return sm.modifyReservation(new ReservationID(res), modifyProperties);
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to modify sliver reservation " + res + " due to " + e);
+		}
+	}
+	
+
 	public RequestWorkflow getWorkflow() {
 		return workflow;
 	}

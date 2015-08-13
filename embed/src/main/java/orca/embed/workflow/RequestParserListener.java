@@ -403,7 +403,8 @@ public class RequestParserListener implements INdlRequestModelListener {
 			
 			node.setResourceType(dType);
 			node.setSplittable(NdlCommons.isSplittable(ce));
-
+			node.setModify(NdlCommons.isModify(ce));
+			
 			node.setSpecificCEType(NdlCommons.getEC2VMSize(ce));
 
 			// disk image
