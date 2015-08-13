@@ -376,7 +376,7 @@
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/AL2S"/>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienaNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
     </owl:NamedIndividual>
     
@@ -690,9 +690,9 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienaNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienaNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
     
 
 
