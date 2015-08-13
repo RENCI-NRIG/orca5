@@ -225,7 +225,8 @@ public class SliceDeferThread implements Runnable {
 				try {
 					TicketReservationMng currRes = it.next();
 					logger.debug("demandSlice(): Issuing demand for reservation: " + currRes.getReservationID().toString());
-
+					if(currRes.getState() != OrcaConstants.ReservationStateUnknown) //existing reservations, bypass
+						continue;
 					if (!sm.demand(currRes)){
 						throw new Exception("Could not demand resources: " + sm.getLastError());
 					}
