@@ -16,7 +16,6 @@ import orca.shirako.plugins.config.OrcaAntTask;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -136,7 +135,7 @@ public abstract class RestTask extends OrcaAntTask {
 	protected void doPost() throws BuildException {
 		DefaultHttpClient client = new DefaultHttpClient();
 
-		System.out.println("Executing " + rop + " for " + na2Url);
+		//System.out.println("Executing " + rop + " for " + na2Url);
 		try {
 			client.getCredentialsProvider().
 			setCredentials(new AuthScope(getHost(), getPort()),
@@ -175,13 +174,16 @@ public abstract class RestTask extends OrcaAntTask {
 			// set return properties
 			getProject().setProperty(statusProperty, pr.getStatus() + "");
 			getProject().setProperty(errorMsgProperty, pr.getErrorMsg());
-			getProject().setProperty(reservationIdProperty, pr.getResId().getId());
+			if (pr.getResId() != null)
+				getProject().setProperty(reservationIdProperty, pr.getResId().getId());
+			else
+				getProject().setProperty(reservationIdProperty, "null");
 
 			if (pr.getProperties() != null) {
 				// 	set properties returned by the plugin
 				for(Map.Entry<String, String> me: pr.getProperties().entrySet()) {
 					getProject().setProperty(returnPrefix + "." + me.getKey(), me.getValue());
-					System.out.println("Adding property " + returnPrefix + "." + me.getKey() + "=" + me.getValue());
+					//System.out.println("Adding property " + returnPrefix + "." + me.getKey() + "=" + me.getValue());
 				}
 			}
 
