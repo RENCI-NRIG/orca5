@@ -36,9 +36,9 @@ public class ModifyHelper {
 	private static class ModifyOperation {
 		private ReservationID resId;
 		private String modifySubcommand;
-		private List<Map<String, ?>> modifyProperties;
+		private Properties modifyProperties;
 		
-		public ModifyOperation(String res, String sub, List<Map<String, ?>> props) {
+		public ModifyOperation(String res, String sub, Properties props) {
 			resId = new ReservationID(res.trim());
 			modifySubcommand = sub;
 			modifyProperties = props;
@@ -48,7 +48,7 @@ public class ModifyHelper {
 			return modifySubcommand;
 		}
 		
-		List<Map<String, ?>> getProperties() {
+		Properties getProperties() {
 			return modifyProperties;
 		}
 		
@@ -124,7 +124,7 @@ public class ModifyHelper {
 	 * @param modifySubcommand
 	 * @param modifyProperties
 	 */
-	public static void enqueueModify(String res, String modifySubcommand, List<Map<String, ?>> modifyProperties) {
+	public static void enqueueModify(String res, String modifySubcommand, Properties modifyProperties) {
 		
 		Queue<ModifyOperation> l = null;
 		
@@ -156,6 +156,26 @@ public class ModifyHelper {
 	}
 
 	/**
+	 * Enqueue a modify operation on this reservation id and execute directly, if possible
+	 * @param res
+	 * @param modifySubcommand
+	 * @param modifyPropertiesList
+	 */
+	public static void enqueueModify(String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
+		try {
+			// here we break up the semantics of different subcommands
+
+			Properties modifyProperties = convertListMapsToProperties(modifySubcommand, modifyPropertiesList);
+			
+			enqueueModify(res, modifySubcommand, modifyProperties);
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to modify sliver reservation " + res + " due to " + e);
+		}
+	}
+	
+	/**
 	 * Conversion between map of strings and properties object
 	 * @param p
 	 * @return
@@ -182,6 +202,38 @@ public class ModifyHelper {
 		}
 		return m;
 	}
+	
+	/**
+	 * Converts list of maps to properties according to modify subcommand
+	 * @param morifyPropertiesList
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private static Properties convertListMapsToProperties(String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) throws Exception {
+		// here we break up the semantics of different subcommands
+
+		Properties modifyProperties = new Properties();
+		boolean implementedSubcommand = false;
+		//
+		// add more subcommands here. make sure to set implementedSubcommand to true.
+		//
+		if ("ssh".equalsIgnoreCase(modifySubcommand)) {
+			implementedSubcommand = true;
+			modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
+		} else {
+			implementedSubcommand = true;
+			// collect properties from first list entry map
+			if (modifyPropertiesList.size() == 0)
+				throw new RuntimeException("Subcommand " + modifySubcommand + " requires a list maps of size one or more");
+			
+			modifyProperties = fromMap((Map<String, String>)modifyPropertiesList.get(0));
+		}
+		
+		if (!implementedSubcommand)
+			throw new RuntimeException("Modify subcommand " + modifySubcommand + " is not implemented");
+		
+		return modifyProperties;
+	}
 
 	/**
 	 * Same as modifySliver, but acquires and releases it's own SM instance. 
@@ -204,18 +256,62 @@ public class ModifyHelper {
 				XmlrpcOrcaState.getInstance().returnSM(sm);
 		}
 	}
+	
+	/**
+	 * Same as modifySliver, but acquires and releases it's own SM instance. It is safer to
+	 * call enqueueModify
+	 * @param res
+	 * @param modifySubcommand
+	 * @param modifyProperties
+	 * @return
+	 */
+	public static Integer modifySliver(String res, String modifySubcommand, Properties modifyProperties) {
+		IOrcaServiceManager sm = null;
+		
+		try {
+			sm = XmlrpcOrcaState.getInstance().getSM();
+			return ModifyHelper.modifySliver(sm, res, modifySubcommand, modifyProperties);
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to modify sliver reservation: " + e);
+		} finally {
+			if (sm != null)
+				XmlrpcOrcaState.getInstance().returnSM(sm);
+		}
+	}
 
 	/**
-	 * Modify reservation based on reservation id (or null). Note that it is safer to call enqueueModify
+	 * Modify reservation based on reservation id (or null). Note that it is safer to call enqueueModify. 
 	 * @param sm
 	 * @param res
+	 * @param modifySubcommand
+	 * @param modifyProperties
 	 * @return 0 on failure or index of modify operation
 	 */
-	@SuppressWarnings("unchecked")
 	public static Integer modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		try {
 			// here we break up the semantics of different subcommands
+
+			Properties modifyProperties = convertListMapsToProperties(modifySubcommand, modifyPropertiesList);
 			
+			return modifySliver(sm, res, modifySubcommand, modifyProperties);
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to modify sliver reservation " + res + " due to " + e);
+		}
+	}
+	
+	/**
+	 * Modify reservation based on reservation id (or null). Note that it is safer to call enqueueModify. 
+	 * Uses Properties instead of List<Map<String,?>>
+	 * @param sm
+	 * @param res
+	 * @param modifySubcommand
+	 * @param modifyProperties
+	 * @return 0 on failure or index of modify operation
+	 */
+	public static Integer modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, Properties modifyProperties) {
+		try {
 			ReservationMng rm = sm.getReservation(new ReservationID(res));
 			if (rm == null)
 				throw new RuntimeException("modifySliver(): Unable to find reservation " + res);
@@ -226,27 +322,7 @@ public class ModifyHelper {
 			
 			Properties cp = OrcaConverter.fill(psmng);
 			int index = PropList.highestModifyIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
-			
-			Properties modifyProperties = new Properties();
-			boolean implementedSubcommand = false;
-			//
-			// add more subcommands here. make sure to set implementedSubcommand to true.
-			//
-			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
-				implementedSubcommand = true;
-				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
-			} else {
-				implementedSubcommand = true;
-				// collect properties from first list entry map
-				if (modifyPropertiesList.size() == 0)
-					throw new RuntimeException("Subcommand " + modifySubcommand + " requires a list maps of size one or more");
-				
-				modifyProperties = fromMap((Map<String, String>)modifyPropertiesList.get(0));
-			}
-			
-			if (!implementedSubcommand)
-				throw new RuntimeException("Subcommand " + modifySubcommand + " is not implemented");
-			
+
 			//prepend all property names with modify.x.
 			PropList.renamePropertyNames(modifyProperties, OrcaConstants.MODIFY_PROPERTY_PREFIX + index + ".");
 			
@@ -254,7 +330,7 @@ public class ModifyHelper {
 			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + index, 
 					OrcaConstants.MODIFY_PROPERTY_PREFIX + modifySubcommand);
 	
-			sm.modifyReservation(new ReservationID(res), modifyProperties);
+			sm.modifyReservation(new ReservationID(res.trim()), modifyProperties);
 			
 			return index;
 		} catch(RuntimeException re) { 

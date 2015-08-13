@@ -1089,9 +1089,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // lock the slice
             ndlSlice.lock();
             
-            Integer ret = ModifyHelper.modifySliver(sm, sliver_guid, modifySubcommand, modifyProperties);
+            // use the queueing version to avoid collisions with modified performed by the controller itself
+            ModifyHelper.enqueueModify(sliver_guid, modifySubcommand, modifyProperties);
             
-            return setReturn(ret);
+            return setReturn(true);
     	} catch (Exception e) {
     		logger.error("getSliverProperties(): Exception encountered: " + e.getMessage());	
     		e.printStackTrace();
