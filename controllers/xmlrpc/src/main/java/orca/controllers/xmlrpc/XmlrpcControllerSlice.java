@@ -285,6 +285,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		}
 	}
 	
+
 	public RequestWorkflow getWorkflow() {
 		return workflow;
 	}

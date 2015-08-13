@@ -14,10 +14,17 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import orca.controllers.OrcaController;
+import orca.controllers.xmlrpc.pubsub.PublishManager;
+import orca.controllers.xmlrpc.statuswatch.ReservationStatusUpdateThread;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
@@ -30,6 +37,7 @@ import orca.manage.beans.UnitMng;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
 import orca.shirako.common.meta.UnitProperties;
+import orca.shirako.container.Globals;
 
 import org.apache.log4j.Logger;
 
@@ -65,6 +73,66 @@ public final class XmlrpcOrcaState implements Serializable {
 	// patterns of properties to match for restoration
 	private static final Pattern macNamePattern = Pattern.compile(UnitProperties.UnitEthPrefix + "[\\d]+" + UnitProperties.UnitEthMacSuffix);
 	
+	// thread for deferred slices due to interdomain complexity
+	protected static final SliceDeferThread sdt; 
+	protected static final Thread sdtThread;
+	
+	// thread for processing status updates (modify and state)
+	protected static final ReservationStatusUpdateThread sut;
+	protected static final ScheduledFuture<?> sutFuture;
+	public static final int MODIFY_CHECK_PERIOD=5; //seconds
+	
+	// PublishManager
+	protected static final PublishManager pubManager;
+
+	// start the threads
+	static {
+		// slice defer thread
+		Globals.Log.info("Starting slice defer thread");
+		sdt = new SliceDeferThread();
+		sdtThread = new Thread(sdt);
+		sdtThread.setDaemon(true);
+		sdtThread.setName("SliceDeferThread");
+		sdtThread.start();
+		
+		// modify status thread
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
+			   public Thread newThread(Runnable runnable) {
+			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+			      thread.setDaemon(true);
+			      return thread;
+			   }
+		});
+		sut = new ReservationStatusUpdateThread();
+		sutFuture = scheduler.scheduleAtFixedRate(sut, MODIFY_CHECK_PERIOD, 
+				MODIFY_CHECK_PERIOD, TimeUnit.SECONDS);
+		
+		// Pubsub thread
+		if ("true".equalsIgnoreCase(OrcaController.getProperty(OrcaXmlrpcHandler.PropertyPublishManifest))) {
+			Globals.Log.info("Starting pubsub thread");
+			pubManager = new PublishManager(); // This will start the publisher thread
+		} else {
+			Globals.Log.info("Not starting pubsub thread");
+			pubManager = null;
+		}
+	}
+	
+	/**
+	 * Get hold of the Update Thread object
+	 * @return
+	 */
+	public static ReservationStatusUpdateThread getSUT() {
+		return sut;
+	}
+	
+	/**
+	 * Get hold of Slice Defer Thread object
+	 * @return
+	 */
+	public static SliceDeferThread getSDT() {
+		return sdt;
+	}
+	
 	private XmlrpcOrcaState(){
 		// Can't call this constructor
 	}
@@ -72,7 +140,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	// don't save
 	protected String broker;
 
-   public String getBroker() {
+	public String getBroker() {
         return broker;
     }
 
@@ -561,5 +629,4 @@ public final class XmlrpcOrcaState implements Serializable {
     	 } 
     	 logger.info("Sync of XmlrpcOrcaState completed successfully");
      }
-
 }

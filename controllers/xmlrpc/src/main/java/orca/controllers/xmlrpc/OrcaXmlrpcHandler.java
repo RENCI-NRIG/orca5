@@ -104,53 +104,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	protected final XmlrpcOrcaState instance;
 	protected boolean verifyCredentials = true;
 
-	// thread for deferred slices due to interdomain complexity
-	protected static final SliceDeferThread sdt; 
-	protected static final Thread sdtThread;
-	
-	// thread for processing status updates (modify and state)
-	protected static final ReservationStatusUpdateThread sut;
-	protected static final ScheduledFuture<?> sutFuture;
-	public static final int MODIFY_CHECK_PERIOD=5; //seconds
-	
-	// PublishManager
-	protected static final PublishManager pubManager;
-	
 	// lock to create slice
 	protected static Integer createLock = 0;
-	
-	// start the threads
-	static {
-		// slice defer thread
-		Globals.Log.info("Starting slice defer thread");
-		sdt = new SliceDeferThread();
-		sdtThread = new Thread(sdt);
-		sdtThread.setDaemon(true);
-		sdtThread.setName("SliceDeferThread");
-		sdtThread.start();
 		
-		// modify status thread
-		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
-			   public Thread newThread(Runnable runnable) {
-			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
-			      thread.setDaemon(true);
-			      return thread;
-			   }
-		});
-		sut = new ReservationStatusUpdateThread();
-		sutFuture = scheduler.scheduleAtFixedRate(sut, MODIFY_CHECK_PERIOD, 
-				MODIFY_CHECK_PERIOD, TimeUnit.SECONDS);
-		
-		// Pubsub thread
-		if ("true".equalsIgnoreCase(OrcaController.getProperty(PropertyPublishManifest))) {
-			Globals.Log.info("Starting pubsub thread");
-			pubManager = new PublishManager(); // This will start the publisher thread
-		} else {
-			Globals.Log.info("Not starting pubsub thread");
-			pubManager = null;
-		}
-	}
-	
 	/** manage the xmlrpc return structure
 	 * 
 	 * @param msg
@@ -427,7 +383,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 				// call on slicedeferthread to either demand immediately
 				// or put on deferred queue
-				sdt.processSlice(ndlSlice);
+				XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 
 				// What do we return in the manifest ? reservation Id, type, units ? slice ?
 				StringBuilder result = new StringBuilder("Here are the leases: \n");
@@ -719,7 +675,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 			// call on slicedeferthread to either demand immediately
 			// or put on deferred queue
-			sdt.processSlice(ndlSlice);
+			XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 			
 			//modify existing reservations
 			a_r=m_map.get(ModifyType.MODIFY.toString());
@@ -777,7 +733,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							}
 						}
 			            
-			            sut.addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
+						XmlrpcOrcaState.getSUT().addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
 			            
 						String modifySubcommand = null;
 						List<Map<String, ?>> modifyProperties=null;
@@ -859,58 +815,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 	}
 	
-	   /**
-     * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
-     * this way we can have multiple maps, as e.g. for modifying SSH keys
-     * @param slice_urn
-     * @param sliver_guid
-     * @param credentials
-     * @param modifySubcommand
-     * @param modifyProperties
-     * @return
-     */
-    public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
-    		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
-    	IOrcaServiceManager sm = null;
-    	XmlrpcControllerSlice ndlSlice = null;
-
-    	logger.info("ORCA API sliverModify() invoked for " + sliver_guid + " of slice " + slice_urn + " subcommand " + modifySubcommand);
-
-    	if (sliver_guid == null) 
-    		return setError("ERROR: getSliverProperties() sliver_guid is null");
-    	try {
-			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
-			
-			// check the whitelist
-			if (verifyCredentials && !checkWhitelist(userDN)) 
-				return setError(WHITELIST_ERROR);
-    		sm = instance.getSM();
-    		
-            // find this slice and lock it
-            ndlSlice = instance.getSlice(slice_urn);
-            if (ndlSlice == null) {
-                    logger.error("getSliverProperties(): unable to find slice " + slice_urn + " among active slices");
-                    return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
-            }
-
-            // lock the slice
-            ndlSlice.lock();
-            
-            Boolean ret = ndlSlice.modifySliver(sm, sliver_guid, modifySubcommand, modifyProperties);
-            
-            return setReturn(ret);
-    	} catch (Exception e) {
-    		logger.error("getSliverProperties(): Exception encountered: " + e.getMessage());	
-    		e.printStackTrace();
-    		return setError("getSliverProperties(): Exception encountered: " + e.getMessage());
-    	} finally {
-    		if (sm != null){
-    			instance.returnSM(sm);
-    		}
-    		if (ndlSlice != null)
-    			ndlSlice.unlock();
-    	}
-    }
 
 	/**
 	 * Deletes the slices in the slice with input sliceId; Issue close on all underlying reservations
@@ -938,7 +842,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
             }
             
-            if (sdt.inDeferredQueue(ndlSlice)) {
+            if (XmlrpcOrcaState.getSDT().inDeferredQueue(ndlSlice)) {
             	logger.error("deleteSlice(): unable to delete slice " + slice_urn + ", it is waiting in the defer queue");
             	return setError("ERROR: unable to delete deferred slice " + slice_urn + ", please try some time later");
             }
@@ -1256,7 +1160,71 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	
     }
      
- 
+    /**
+     * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
+     * this way we can have multiple maps, as e.g. for modifying SSH keys
+     * @param slice_urn
+     * @param sliver_guid
+     * @param credentials
+     * @param modifySubcommand
+     * @param modifyProperties
+     * @return
+     */
+    public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
+    		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
+    	IOrcaServiceManager sm = null;
+    	XmlrpcControllerSlice ndlSlice = null;
+
+    	logger.info("ORCA API sliverModify() invoked for " + sliver_guid + " of slice " + slice_urn + " subcommand " + modifySubcommand);
+
+    	if (sliver_guid == null) 
+    		return setError("ERROR: getSliverProperties() sliver_guid is null");
+    	try {
+			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
+			
+			// check the whitelist
+			if (verifyCredentials && !checkWhitelist(userDN)) 
+				return setError(WHITELIST_ERROR);
+    		sm = instance.getSM();
+    		
+            // find this slice and lock it
+            ndlSlice = instance.getSlice(slice_urn);
+            if (ndlSlice == null) {
+                    logger.error("getSliverProperties(): unable to find slice " + slice_urn + " among active slices");
+                    return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
+            }
+            
+            // for testing - add a status watch for this reservation
+            List<ReservationIDWithModifyIndex> actList = Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), 1));
+            
+            XmlrpcOrcaState.getSUT().addModifyStatusWatch(actList, null, new IStatusUpdateCallback() {
+            	public void success(List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
+            		System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
+            	}
+            	public void failure(List<ReservationID> failed, List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
+            		System.out.println("FAILURE ON MODIFY WATCH OF " + failed);
+            	}
+            });
+            
+            // lock the slice
+            ndlSlice.lock();
+            
+            Integer ret = ModifyHelper.modifySliver(sm, sliver_guid, modifySubcommand, modifyProperties);
+            
+            return setReturn(ret);
+    	} catch (Exception e) {
+    		logger.error("getSliverProperties(): Exception encountered: " + e.getMessage());	
+    		e.printStackTrace();
+    		return setError("getSliverProperties(): Exception encountered: " + e.getMessage());
+    	} finally {
+    		if (sm != null){
+    			instance.returnSM(sm);
+    		}
+    		if (ndlSlice != null)
+    			ndlSlice.unlock();
+    	}
+
+    }
 		
 	protected void discoverTypes(IOrcaServiceManager sm) {
 		typesMap = new HashMap<String, SiteResourceTypes>();
