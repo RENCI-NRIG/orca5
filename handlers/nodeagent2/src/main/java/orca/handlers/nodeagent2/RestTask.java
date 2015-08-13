@@ -174,8 +174,10 @@ public abstract class RestTask extends OrcaAntTask {
 			// set return properties
 			getProject().setProperty(statusProperty, pr.getStatus() + "");
 			getProject().setProperty(errorMsgProperty, pr.getErrorMsg());
-			if (pr.getResId() != null)
+			
+			if (pr.getResId() != null) {
 				getProject().setProperty(reservationIdProperty, pr.getResId().getId());
+			}
 			else
 				getProject().setProperty(reservationIdProperty, "null");
 
