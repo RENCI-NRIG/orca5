@@ -1866,9 +1866,9 @@
     <owl:NamedIndividual rdf:about="&ION;Uva-nlNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=eth5/2:link=*</rdfs:label>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.newy32aoa.net.internet2.edu:port=eth1/1:link=manlan</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=eth5/2:link=*</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.newy32aoa.net.internet2.edu:port=eth1/1:link=manlan</topology:hasURN>
         <topology:interfaceOf rdf:resource="&ION;Uva-nlNet/Cisco/6509"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/1/0/ethernet"/>
