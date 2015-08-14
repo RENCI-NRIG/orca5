@@ -705,6 +705,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			            //		Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), Integer.valueOf(modify_ver)));
 			            
 			            ReservationDependencyStatusUpdate rr_depend = new ReservationDependencyStatusUpdate();
+			            rr_depend.setReservation(rr);
 			            List <ReservationID> rr_l = Collections.<ReservationID>singletonList(new ReservationID(sliver_guid));
 			            List <ReservationID> rr_d_list = new ArrayList<ReservationID>();
 			            
@@ -722,7 +723,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									rr_d_list.add(new ReservationID(r_id));
 							}
 						}
-						p_str = local.getProperty(ReservationConverter.PropertyNumExistParentReservations);
+						p_str = local.getProperty(ReservationConverter.PropertyNumNewParentReservations);
 						if(p_str!=null){
 							p=Integer.valueOf(p_str);
 							for(int i=0;i<p;i++){
@@ -735,10 +736,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			            
 						XmlrpcOrcaState.getSUT().addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
 			            
-						String modifySubcommand = null;
-						List<Map<String, ?>> modifyProperties=null;
-						ret = modifySliver(slice_urn, sliver_guid, credentials, 
-				    		modifySubcommand, modifyProperties);
+						//String modifySubcommand = null;
+						//List<Map<String, ?>> modifyProperties=null;
+						//ret = modifySliver(slice_urn, sliver_guid, credentials, 
+				    	//	modifySubcommand, modifyProperties);
 						
 					} catch (Exception ex) {
 							result_str = "Failed to redeem reservation"+ex;
@@ -815,6 +816,72 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 	}
 	
+	/**
+     * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
+     * this way we can have multiple maps, as e.g. for modifying SSH keys
+     * @param slice_urn
+     * @param sliver_guid
+     * @param credentials
+     * @param modifySubcommand
+     * @param modifyProperties
+     * @return
+     */
+    public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
+    		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
+    	IOrcaServiceManager sm = null;
+    	XmlrpcControllerSlice ndlSlice = null;
+
+    	logger.info("ORCA API sliverModify() invoked for " + sliver_guid + " of slice " + slice_urn + " subcommand " + modifySubcommand);
+
+    	if (sliver_guid == null) 
+    		return setError("ERROR: getSliverProperties() sliver_guid is null");
+    	try {
+			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
+			
+			// check the whitelist
+			if (verifyCredentials && !checkWhitelist(userDN)) 
+				return setError(WHITELIST_ERROR);
+    		sm = instance.getSM();
+    		
+            // find this slice and lock it
+            ndlSlice = instance.getSlice(slice_urn);
+            if (ndlSlice == null) {
+                    logger.error("getSliverProperties(): unable to find slice " + slice_urn + " among active slices");
+                    return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
+            }
+            
+            // for testing - add a status watch for this reservation
+            List<ReservationIDWithModifyIndex> actList = Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), 1));
+            
+            XmlrpcOrcaState.getSUT().addModifyStatusWatch(actList, null, new IStatusUpdateCallback() {
+            	public void success(List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
+            		System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
+            	}
+            	public void failure(List<ReservationID> failed, List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
+            		System.out.println("FAILURE ON MODIFY WATCH OF " + failed);
+            	}
+            });
+            
+            // lock the slice
+            ndlSlice.lock();
+            
+            // use the queueing version to avoid collisions with modified performed by the controller itself
+            ModifyHelper.enqueueModify(sliver_guid, modifySubcommand, modifyProperties);
+            
+            return setReturn(true);
+    	} catch (Exception e) {
+    		logger.error("getSliverProperties(): Exception encountered: " + e.getMessage());	
+    		e.printStackTrace();
+    		return setError("getSliverProperties(): Exception encountered: " + e.getMessage());
+    	} finally {
+    		if (sm != null){
+    			instance.returnSM(sm);
+    		}
+    		if (ndlSlice != null)
+    			ndlSlice.unlock();
+    	}
+
+    }
 
 	/**
 	 * Deletes the slices in the slice with input sliceId; Issue close on all underlying reservations
@@ -1160,72 +1227,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	
     }
      
-    /**
-     * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
-     * this way we can have multiple maps, as e.g. for modifying SSH keys
-     * @param slice_urn
-     * @param sliver_guid
-     * @param credentials
-     * @param modifySubcommand
-     * @param modifyProperties
-     * @return
-     */
-    public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
-    		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
-    	IOrcaServiceManager sm = null;
-    	XmlrpcControllerSlice ndlSlice = null;
-
-    	logger.info("ORCA API sliverModify() invoked for " + sliver_guid + " of slice " + slice_urn + " subcommand " + modifySubcommand);
-
-    	if (sliver_guid == null) 
-    		return setError("ERROR: getSliverProperties() sliver_guid is null");
-    	try {
-			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
-			
-			// check the whitelist
-			if (verifyCredentials && !checkWhitelist(userDN)) 
-				return setError(WHITELIST_ERROR);
-    		sm = instance.getSM();
-    		
-            // find this slice and lock it
-            ndlSlice = instance.getSlice(slice_urn);
-            if (ndlSlice == null) {
-                    logger.error("getSliverProperties(): unable to find slice " + slice_urn + " among active slices");
-                    return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
-            }
-            
-            // for testing - add a status watch for this reservation
-            List<ReservationIDWithModifyIndex> actList = Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), 1));
-            
-            XmlrpcOrcaState.getSUT().addModifyStatusWatch(actList, null, new IStatusUpdateCallback() {
-            	public void success(List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
-            		System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
-            	}
-            	public void failure(List<ReservationID> failed, List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException {
-            		System.out.println("FAILURE ON MODIFY WATCH OF " + failed);
-            	}
-            });
-            
-            // lock the slice
-            ndlSlice.lock();
-            
-            // use the queueing version to avoid collisions with modified performed by the controller itself
-            ModifyHelper.enqueueModify(sliver_guid, modifySubcommand, modifyProperties);
-            
-            return setReturn(true);
-    	} catch (Exception e) {
-    		logger.error("getSliverProperties(): Exception encountered: " + e.getMessage());	
-    		e.printStackTrace();
-    		return setError("getSliverProperties(): Exception encountered: " + e.getMessage());
-    	} finally {
-    		if (sm != null){
-    			instance.returnSM(sm);
-    		}
-    		if (ndlSlice != null)
-    			ndlSlice.unlock();
-    	}
-
-    }
+    
 		
 	protected void discoverTypes(IOrcaServiceManager sm) {
 		typesMap = new HashMap<String, SiteResourceTypes>();
