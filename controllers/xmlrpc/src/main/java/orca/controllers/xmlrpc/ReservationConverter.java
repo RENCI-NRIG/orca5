@@ -1583,9 +1583,10 @@ public class ReservationConverter implements LayerConstant {
 			String d_uri=dd.getURI();
 			ReservationMng rmg = r_map.get(d_uri);
 			if(rmg!=null){
-				Properties local = new Properties();
+				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
 				//modify properties for adding/deleting interfaces from links
+				String num_interface=local.getProperty(ReservationConverter.parent_num_interface);
 				HashMap<DomainElement, OntResource> preds = dd.getPrecededBy();
 				if (preds == null)
 					continue;
@@ -1609,7 +1610,8 @@ public class ReservationConverter implements LayerConstant {
 						m_p++;
 						m_p_r.add(p_rmg);
 						String site_host_interface = getSiteHostInterface(parent);
-						Properties property = formInterfaceProperties(parent, num_parent, num);
+						Properties property = formInterfaceProperties(parent, Integer.valueOf(num_interface), num);
+						rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
 					}	
 				}
 				//create properties to remember its parent reservations
@@ -1618,13 +1620,13 @@ public class ReservationConverter implements LayerConstant {
 					for(int i=0;i<p;i++){
 						String key=this.PropertyExistParent + String.valueOf(i);
 						local.setProperty(key, p_r.get(i).getReservationID());
-						
 					}
 				}
 				if(m_p>0){
 					local.setProperty(this.PropertyNumNewParentReservations, String.valueOf(m_p));
 					for(int i=0;i<m_p;i++){
 						String key=this.PropertyExistParent + String.valueOf(i);
+						local.setProperty(key, m_p_r.get(i).getReservationID());
 					}
 				}
 				rmg.setLocalProperties(OrcaConverter.fill(local));

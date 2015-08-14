@@ -31,7 +31,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback 
 			System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
 			//ok-parents
 			//actOn-to be modified reservation
-			String modifySubcommand = "add.interface";
+			String modifySubcommand = "addiface";
 			Properties modifyProperties=new Properties();
 
 			// use the queueing version to avoid collisions with modified performed by the controller itself
@@ -63,11 +63,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback 
 									modifyProperties.setProperty(parent_tag_name,unit_tag);
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
+									System.out.println("Parent doesnot return the unit tag:"+pr_local);
 									continue;
 								}
-								String parent_mac_addr = parent_prefix.concat(host_interface).concat(".mac");
-								String parent_ip_addr = parent_prefix.concat(host_interface).concat(".ip");
-								
 							}
 						}
 					}
