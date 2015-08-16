@@ -491,7 +491,7 @@
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/1/0/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>43</rdfs:label>
+        <rdfs:label>4/1</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
         <topology:linkTo rdf:resource="&TenGigabitEthernet6;ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
