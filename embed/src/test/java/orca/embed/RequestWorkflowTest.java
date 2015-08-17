@@ -61,9 +61,9 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		
 		requestFileRenciVMSVlan= "src/test/resources/orca/embed/TS3-3.rdf";  // a vlan connected 3-node cluster in renci vmsite
 		
-		requestFileGPO = "src/test/resources/orca/embed/mp.rdf"; 
+		requestFileGPO = "src/test/resources/orca/embed/mod-ori.rdf"; 
 		
-		requestFileGush = "src/test/resources/orca/embed/t1-m.rdf"; 
+		requestFileGush = "src/test/resources/orca/embed/mod.rdf"; 
 		
 		requestFileDukeUHouston = "src/main/resources/orca/ndl/request/idRequest-dukeEuca-uhoustonEuca.rdf";
 		requestFileDukeRice = "orca/ndl/request/idRequest-dukeEuca-riceEuca.rdf";
@@ -130,7 +130,7 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		
 		ReservationElementCollection elementCollection = new ReservationElementCollection(boundElements, firstGroupElement);
 		
-		workflow.modify(drp, modReq,elementCollection.NodeGroupMap,elementCollection.firstGroupElement);
+		workflow.modify(drp, modReq,"slice-id",elementCollection.NodeGroupMap,elementCollection.firstGroupElement);
 		
 		LinkedList<NetworkElement> connection = (LinkedList<NetworkElement>) workflow.getBoundElements();
 		

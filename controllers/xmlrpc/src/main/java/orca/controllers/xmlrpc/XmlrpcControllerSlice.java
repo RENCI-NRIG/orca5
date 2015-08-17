@@ -127,6 +127,16 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	public boolean locked() {
 		return (lock.availablePermits() == 0);
 	}
+	
+	/**
+	 * Set a list of computed reservations for this slice
+	 * @param l
+	 */
+	public void addComputedReservations(TicketReservationMng l) {
+		if(computedReservations == null)
+			computedReservations = new ArrayList <TicketReservationMng> ();
+		computedReservations.add(l);
+	}
 
 	/**
 	 * Set a list of computed reservations for this slice
@@ -225,7 +235,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
+	public static boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		try {
 			// here we break up the semantics of different subcommands
 			
@@ -275,6 +285,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		}
 	}
 	
+
 	public RequestWorkflow getWorkflow() {
 		return workflow;
 	}
@@ -411,9 +422,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 
 		if(pubManifestEnabled.equalsIgnoreCase("true")){
 			//logger.info("Deleting " + sliceUrn + " from PubQ");
-                        logger.info("Adding " + sliceUrn + " to DeletedSlicesQ");
+			logger.info("Adding " + sliceUrn + " to DeletedSlicesQ");
 			//PublishQueue.getInstance().deleteFromPubQ(sliceUrn);
-                        PublishQueue.getInstance().addToDeletedSlicesQ(sliceUrn);
+			PublishQueue.getInstance().addToDeletedSlicesQ(sliceUrn);
 		}
 		else {
 			logger.info("ORCA.publish.manifest property needs to be set to true; Can't delete slice from publish Q ");
@@ -458,8 +469,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		if(pubManifestEnabled.equalsIgnoreCase("true")){
 			Date start = workflow.getTerm().getStart(), end = workflow.getTerm().getEnd();
 			logger.info("Adding " + sliceUrn + " to newSlicesQ");
-			PublishQueue.getInstance().addToNewSlicesQ(new SliceState(sliceUrn, slice.getSliceID(),
-					SliceState.PubSubState.SUBMITTED, start, end, 0, userDN));
+			PublishQueue.getInstance().addToNewSlicesQ(new SliceState(this,
+					SliceState.PubSubState.SUBMITTED, start, end, 0));
 		}
 		else {
 			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");

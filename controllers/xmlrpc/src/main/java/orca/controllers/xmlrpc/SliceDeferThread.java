@@ -220,27 +220,28 @@ public class SliceDeferThread implements Runnable {
 
 		try {
 			sm = XmlrpcOrcaState.getInstance().getSM();		
+
+			while (it.hasNext()) {
+				try {
+					TicketReservationMng currRes = it.next();
+					logger.debug("demandSlice(): Issuing demand for reservation: " + currRes.getReservationID().toString());
+					if(currRes.getState() != OrcaConstants.ReservationStateUnknown) //existing reservations, bypass
+						continue;
+					if (!sm.demand(currRes)){
+						throw new Exception("Could not demand resources: " + sm.getLastError());
+					}
+				} catch (ThreadDeath td) {
+					throw td;
+				} catch (Throwable t) {
+					logger.error("Exception, failed to demand reservation" + t, t);
+				}
+			}
 		} catch (Exception e) {
-			logger.error("demandSlice(): Unable to get SM");
+			logger.error("demandSlice(): Unable to get SM or demand reservation: " + e);
 			return;
 		} finally {
 			if (sm != null)
 				XmlrpcOrcaState.getInstance().returnSM(sm);
-		}
-
-		while (it.hasNext()) {
-			try {
-				TicketReservationMng currRes = it.next();
-				logger.debug("demandSlice(): Issuing demand for reservation: " + currRes.getReservationID().toString());
-
-				if (!sm.demand(currRes)){
-					throw new Exception("demandSlice(): Could not demand resources: " + sm.getLastError());
-				}
-			} catch (ThreadDeath td) {
-				throw td;
-			} catch (Throwable t) {
-				logger.error("demandSlice(): Exception, failed to demand reservation" + t, t);
-			}
 		}
 	}
 	

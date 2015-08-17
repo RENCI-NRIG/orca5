@@ -1,6 +1,8 @@
 package orca.embed.cloudembed.controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,13 +14,18 @@ import java.util.UUID;
 import net.jwhoisserver.utils.InetNetwork;
 import net.jwhoisserver.utils.InetNetworkException;
 import orca.embed.cloudembed.IConnectionManager;
+import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.ModifyElement;
+import orca.embed.policyhelpers.RequestReservation;
 import orca.embed.policyhelpers.SystemNativeError;
 import orca.embed.workflow.ModifyReservations;
+import orca.embed.workflow.RequestParserListener;
 import orca.ndl.DomainResourceType;
 import orca.ndl.INdlModifyModelListener;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
+import orca.ndl.NdlModel;
+import orca.ndl.NdlRequestParser;
 import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.Device;
 import orca.ndl.elements.DomainElement;
@@ -27,15 +34,26 @@ import orca.ndl.elements.IPAddressRange;
 import orca.ndl.elements.Interface;
 import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
+import orca.ndl.elements.RequestSlice;
+import orca.shirako.container.Globals;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceRequiredException;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.tdb.TDB;
 
 public class ModifyHandler extends UnboundRequestHandler {
 
 	ModifyReservations modifies = new ModifyReservations();
 	LinkedList <Device> addedDevices = new LinkedList <Device> ();
+	LinkedList <Device> modifiedDevices = new LinkedList <Device> ();
 	
 	public ModifyHandler() throws NdlException {
 		super();
@@ -79,10 +97,12 @@ public class ModifyHandler extends UnboundRequestHandler {
 		super(tdbPrefix, recover);
 	}
 	
-	public SystemNativeError modifySlice(Collection <ModifyElement> modifyElements, 
-			OntModel manifestOnt, 
+	public SystemNativeError modifySlice(DomainResourcePools domainResourcePools,
+			Collection <ModifyElement> modifyElements, OntModel manifestOnt, String sliceId,
 			HashMap <String,Collection <DomainElement>> nodeGroupMap,
 			HashMap <String,DomainElement> firstGroupElement, OntModel requestModel) throws UnknownHostException, InetNetworkException{
+		this.modifyVersion++;
+		
 		SystemNativeError error=null;
 		if( (modifyElements==null) || (modifyElements.size()==0) ){
 			error = new SystemNativeError();
@@ -92,39 +112,120 @@ public class ModifyHandler extends UnboundRequestHandler {
 			return error;
 		}
 		logger.debug("ModifyHandler.modifySlice() starts....");
+		LinkedList <ModifyElement> addList = new LinkedList<ModifyElement>();
 		try{
-		Iterator<ModifyElement> mei = modifyElements.iterator();
-		while(mei.hasNext()){
-			ModifyElement me = mei.next();
-			logger.debug("ModifyHandler.modifySlice():"+me.getModType());
-			if(me.getModType().equals(INdlModifyModelListener.ModifyType.REMOVE)){
-				error=removeElement(me, manifestOnt, nodeGroupMap, deviceList);
-			}
+			Iterator<ModifyElement> mei = modifyElements.iterator();
+			while(mei.hasNext()){
+				ModifyElement me = mei.next();
+				logger.debug("ModifyHandler.modifySlice():"+me.getModType());
+				if(me.getModType().equals(INdlModifyModelListener.ModifyType.REMOVE)){
+					error=removeElement(me, manifestOnt, nodeGroupMap, deviceList);
+				}
 			
-			if(me.getModType().equals(INdlModifyModelListener.ModifyType.ADD)){
-				addElement(me,manifestOnt);
-			}
+				if(me.getModType().equals(INdlModifyModelListener.ModifyType.ADD) || me.getModType().equals(INdlModifyModelListener.ModifyType.MODIFY)){
+					addList.add(me);
+				}
 			
-			if(me.getModType().equals(INdlModifyModelListener.ModifyType.INCREASE)){
+				if(me.getModType().equals(INdlModifyModelListener.ModifyType.INCREASE)){
 					error = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
 			}
+			this.addElement(domainResourcePools,addList,manifestOnt,sliceId);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		//modify the manifest
+		OntResource manifest=NdlCommons.getOntOfType(manifestOnt, "request:Manifest");
+		this.createManifest(manifestOnt, manifest, addedDevices);
 		return error;
 	}
 	
 	public void modifyComplete(){
 		this.modifies.clear();
 		this.addedDevices.clear();
+		this.modifiedDevices.clear();
 	}
 	
-	public void addElement(ModifyElement me,OntModel manifestOntModel){
-		//generating new device
-		//generating new reservation
-		//modify manifest
+	public void addElement(DomainResourcePools domainResourcePools,LinkedList <ModifyElement> meList,OntModel manifestOntModel, String sliceId) throws NdlException, IOException{
+		//generating new reservation in the format of a request RDF model
+		if(meList.isEmpty())
+			return;
+		Resource me=meList.element().getObj();
+		String ns_str=me.getNameSpace();
+		OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM, true);
+		Resource reservation = modifyRequestModel.createIndividual(ns_str,NdlCommons.reservationOntClass);
+		for(ModifyElement mee:meList){
+			me = mee.getObj();
+			OntResource connection_rs = modifyRequestModel.createOntResource(me.getURI());
+			modifyRequestModel.add(reservation,NdlCommons.collectionElementProperty, connection_rs);
+			copyProperty(modifyRequestModel, me);
+		}
+		
+		String fileName = "mod-req.rdf";
+        OutputStream fsw = new FileOutputStream(fileName);
+        modifyRequestModel.write(fsw);
+		
+		//parsing request
+		RequestParserListener parserListener = new RequestParserListener();		
+		// run the parser (to create Java objects)
+		NdlRequestParser nrp = new NdlRequestParser(modifyRequestModel, parserListener, NdlModel.ModelType.TdbPersistent, 
+				Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "modify-" + sliceId);
+		nrp.processRequest();		
+		RequestReservation request = parserListener.getRequest();
+		OntModel modifyModel = request.getModel();
+		RequestSlice slice=request.getSlice();
+		Collection<NetworkElement> requestElements = request.getElements();		
+		SystemNativeError err = request.getError();
+		if(err!=null){
+			logger.error("Ndl request parser unable to parse request:"+err.toString());
+			return;
+		}
+		// TODO: check if the request is already fully bound in one domain, preparing for topology splitting 				
+		boolean bound = request.generateGraph(requestElements);
+		String reservationDomain = request.getReservationDomain();
+
+		if(reservationDomain == null){// invoke the embedding code
+			err = this.runEmbedding(bound, request, domainResourcePools);
+		}else{  //intra-domain embedding
+			err = this.runEmbedding(reservationDomain,request,domainResourcePools);
+		}
+		
+		for(NetworkElement device:this.getDeviceList()){
+			DomainElement dd = (DomainElement) device;
+			if(dd.getModifyVersion() < this.modifyVersion){
+				if(dd.isModify()){
+					modifies.addModifedElement(device.getResource());
+					modifiedDevices.add(dd);
+				}else{
+					modifies.addAddedElement(device.getResource());
+					addedDevices.add(dd);
+				}
+			}
+		}	
+		
+		TDB.sync(modifyModel);
+	}
+	
+	private void copyProperty(OntModel domainRequestModel, Resource me_rs){
+		StmtIterator it = me_rs.listProperties();
+		if(it==null)
+			return;
+		Statement st = null;
+		Property pr=null;
+		Resource sb_rs=null,ob_rs=null; 
+		while(it.hasNext()){
+			st = it.next();
+			pr = st.getPredicate();
+			sb_rs = domainRequestModel.createResource(st.getSubject().getURI());
+			try{
+				ob_rs = domainRequestModel.createResource(st.getResource().getURI());
+				domainRequestModel.add(sb_rs,pr,ob_rs);
+				copyProperty(domainRequestModel,st.getResource());
+			}catch(ResourceRequiredException e){
+				domainRequestModel.add(sb_rs,pr,st.getLiteral());
+			}
+		}
 	}
 	
 	protected SystemNativeError  addElements(ModifyElement me,OntModel manifestOntModel, 
@@ -206,14 +307,13 @@ public class ModifyHandler extends UnboundRequestHandler {
 			}
 		}		
 		
-		OntResource manifest=NdlCommons.getOntOfType(manifestOntModel, "request:Manifest");
 		for(i=0;i<addedDevices.size();i++){
 			NetworkElement ne = addedDevices.get(i);
+			ne.setModifyVersion(this.modifyVersion);
             cde.add((DomainElement) ne);
 			logger.debug("ModifyHandler:added:"+i+":"+ne.getURI()+":"+ne.getName());
         }
-
-		this.createManifest(manifestOntModel, manifest, addedDevices);
+		
 		return error;
 	}	
 	
@@ -245,6 +345,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		DomainElement edge_device=new DomainElement(manifestModel,url,name);
 		edge_device.setCe(ce);
 		edge_device.setResourceType(dType);
+		edge_device.setModifyVersion(edge_device.getModifyVersion()+1);
 		
 		deviceList.add(edge_device);
 		modifies.addAddedElement(edge_device.getResource());
@@ -409,5 +510,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 	public LinkedList<Device> getAddedDevices() {
 		return addedDevices;
 	}
-	
+
+	public LinkedList<Device> getModifiedDevices() {
+		return modifiedDevices;
+	}
+
 }

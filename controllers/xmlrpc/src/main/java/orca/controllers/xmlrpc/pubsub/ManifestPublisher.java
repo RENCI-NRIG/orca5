@@ -25,14 +25,14 @@ public class ManifestPublisher {
 	private static final String PUBSUB_SERVER_PROP = PUBSUB_PROP_PREFIX + ".server";
 	private static final String PUBSUB_LOGIN_PROP = PUBSUB_PROP_PREFIX + ".login";
 	private static final String PUBSUB_PASSWORD_PROP = PUBSUB_PROP_PREFIX + ".password";
-        private static final String PUBSUB_ROOT_PROP = PUBSUB_PROP_PREFIX + ".root";
+	private static final String PUBSUB_ROOT_PROP = PUBSUB_PROP_PREFIX + ".root";
 
-        // For certificate based login
-        private static final String PUBSUB_USECERTIFICATE_PROP = PUBSUB_PROP_PREFIX + ".usecertificate";
-        private static final String PUBSUB_KEYSTOREPATH_PROP = PUBSUB_PROP_PREFIX + ".keystorepath";
-        private static final String PUBSUB_KEYSTORETYPE_PROP = PUBSUB_PROP_PREFIX + ".keystoretype";
-        private static final String PUBSUB_TRUSTSTOREPATH_PROP = PUBSUB_PROP_PREFIX + ".truststorepath";
-        // Note truststore password would be read from the IMF.pubsub.password property when using certificates
+	// For certificate based login
+	private static final String PUBSUB_USECERTIFICATE_PROP = PUBSUB_PROP_PREFIX + ".usecertificate";
+	private static final String PUBSUB_KEYSTOREPATH_PROP = PUBSUB_PROP_PREFIX + ".keystorepath";
+	private static final String PUBSUB_KEYSTORETYPE_PROP = PUBSUB_PROP_PREFIX + ".keystoretype";
+	private static final String PUBSUB_TRUSTSTOREPATH_PROP = PUBSUB_PROP_PREFIX + ".truststorepath";
+	// Note truststore password would be read from the IMF.pubsub.password property when using certificates
 
 	static Logger logger;
 
@@ -151,7 +151,7 @@ public class ManifestPublisher {
                     return;
             }
             
-            if (orcaPubsubProps == null) {
+            if (orcaPubsubProps.size() == 0) {
                     logger.error("Unable to load properties file. Make sure orcapubsub properties is at $ORCA_HOME/config; Can't publish manifest");
                     return;
             }
@@ -222,7 +222,7 @@ public class ManifestPublisher {
                     return;
             }
 
-            if (orcaPubsubProps == null) {
+            if (orcaPubsubProps.size() == 0) {
                     logger.error("Unable to load properties file. Make sure orcapubsub properties is at $ORCA_HOME/config; Can't publish sliceList");
                     return;
             }
@@ -283,7 +283,7 @@ public class ManifestPublisher {
                     return;
             }
 
-            if (orcaPubsubProps == null) {
+            if (orcaPubsubProps.size() == 0) {
                     logger.error("Unable to load properties file. Make sure orcapubsub properties is at $ORCA_HOME/config; Can't expunge xmpp pubsub node");
                     return;
             }
@@ -343,7 +343,7 @@ public class ManifestPublisher {
                     return;
             }
 
-            if (orcaPubsubProps == null) {
+            if (orcaPubsubProps.size() == 0) {
                     logger.error("Unable to load properties file. Make sure orcapubsub properties is at $ORCA_HOME/config; Can't expunge xmpp pubsub node");
                     return;
             }

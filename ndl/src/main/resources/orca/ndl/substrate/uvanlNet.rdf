@@ -362,7 +362,7 @@
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/Uva-nlNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="&TenGigabitEthernet6;ethernet">
-        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=ion.internet2.edu:node=rtr.chic:port=xe-0/2/0:link=*</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.newy32aoa.net.internet2.edu:port=eth1/1:link=manlan</topology:hasURN>
     </owl:NamedIndividual>
     
 
@@ -491,7 +491,7 @@
     <owl:NamedIndividual rdf:about="&Uva-nlNet;Force10/S4810/TenGigabitEthernet/1/0/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>43</rdfs:label>
+        <rdfs:label>4/1</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
         <topology:linkTo rdf:resource="&TenGigabitEthernet6;ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>

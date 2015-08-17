@@ -7,6 +7,8 @@ package orca.controllers.xmlrpc.pubsub;
 
 import java.util.Date;
 
+import orca.controllers.xmlrpc.XmlrpcControllerSlice;
+
 /**
  *
  * @author anirban
@@ -32,36 +34,22 @@ public class SliceState {
 			return name;
 		}
 	}
-    private String slice_urn; // human readable slice id
-    private String orcaSliceID; // needed because sometimes pubsub actions happen after a slice no longer exists in the orca SM
+	private XmlrpcControllerSlice slice;
     private PubSubState state; // SUBMITTED, INPROGRESS, WAITINPROGRESS, DONE, EXPUNGE
     private Date startTime; // date when slice was created
     private Date endTime; // date when slice was closed
     private int waitTime; // waiting time in terms of number of ticks of the publisher timer task
-    private String sliceOwner; // cert DN of slice owner
 
-    public SliceState(String slice_urn, PubSubState state, int waitTime) {
-        this.slice_urn = slice_urn;
-        this.state = state;
-        this.waitTime = waitTime;
-    }
-
-    public SliceState(String slice_urn, String orcaSliceID, PubSubState state, Date startTime, Date endTime, int waitTime, String sliceOwner) {
-        this.slice_urn = slice_urn;
-        this.orcaSliceID = orcaSliceID;
+    public SliceState(XmlrpcControllerSlice s, PubSubState state, Date startTime, Date endTime, int waitTime) {
+        this.slice = s;
         this.state = state; // mutable
         this.startTime = startTime;
         this.endTime = endTime; // mutable
         this.waitTime = waitTime; // mutable
-        this.sliceOwner = sliceOwner;
     }
 
     public String getSlice_urn() {
-        return slice_urn;
-    }
-
-    public void setSlice_urn(String slice_urn) {
-        this.slice_urn = slice_urn;
+        return slice.getSliceUrn();
     }
 
     public PubSubState getState() {
@@ -89,19 +77,11 @@ public class SliceState {
     }
 
     public String getOrcaSliceID() {
-        return orcaSliceID;
-    }
-
-    public void setOrcaSliceID(String orcaSliceID) {
-        this.orcaSliceID = orcaSliceID;
+        return slice.getId();
     }
 
     public String getSliceOwner() {
-        return sliceOwner;
-    }
-
-    public void setSliceOwner(String sliceOwner) {
-        this.sliceOwner = sliceOwner;
+        return slice.getUserDN();
     }
 
     public Date getStartTime() {

@@ -123,7 +123,7 @@ public class NdlCommons {
 	hasRequestGroupURL,inRequestNetworkConnection,
     hasOutputInterface, adaptationProperty, adaptationPropertyOf, carryReservation, atLayer,hasCastType,
     switchingCapability, swappingCapability, tunnelingCapability, connectionDirection, vlan, ocgLine,layerSwapLabelProperty,
-    portOccupied, inConnection, visited, numHop, openflowCapableProperty, modifySubjectProperty, modifyAddElementProperty,
+    portOccupied, inConnection, visited, numHop, openflowCapableProperty, modifySubjectProperty, modifyAddElementProperty, modifyElementProperty, isModifyProperty,
     modifyRemoveElementProperty, modifyIncreaseByProperty,manifestHasParent,manifestHasChild;
 
 	
@@ -189,6 +189,8 @@ public class NdlCommons {
         isLabelProducer = new PropertyImpl(ORCA_NS + "layer.owl#isLabelProducer");
         modifySubjectProperty = new PropertyImpl(ORCA_NS + "modify.owl#modifySubject");
         modifyAddElementProperty = new PropertyImpl(ORCA_NS + "modify.owl#addElement");
+        modifyElementProperty = new PropertyImpl(ORCA_NS + "modify.owl#modifyElement");
+        isModifyProperty = new PropertyImpl(ORCA_NS + "modify.owl#isModify");
         modifyRemoveElementProperty = new PropertyImpl(ORCA_NS + "modify.owl#removeElement");
         modifyIncreaseByProperty = new PropertyImpl(ORCA_NS + "modify.owl#increaseBy");
         manifestHasParent = new PropertyImpl(ORCA_NS + "manifest.owl#hasParent");
@@ -1569,6 +1571,20 @@ public class NdlCommons {
 	public static boolean isSplittable(Resource res) {
 		assert(res != null);
 		Statement splittableStmt = res.getProperty(topologySplittableProperty);
+		if (splittableStmt != null) {
+			return splittableStmt.getBoolean();
+		}
+		return false;
+	}
+	
+	/**
+	 * Is this element a modified element? (default false, if unspecified)
+	 * @param res
+	 * @return
+	 */
+	public static boolean isModify(Resource res) {
+		assert(res != null);
+		Statement splittableStmt = res.getProperty(isModifyProperty);
 		if (splittableStmt != null) {
 			return splittableStmt.getBoolean();
 		}

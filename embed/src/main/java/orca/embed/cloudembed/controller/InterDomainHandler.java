@@ -47,8 +47,6 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	HashMap <String,LinkedList <Device> > connectionList = new HashMap <String,LinkedList<Device>> ();
 	boolean stitching = false;
 	
-	public static final int max_vlan_tag = 4095;
-	
 	public InterDomainHandler(IConnectionManager icm) throws NdlException {
 		super();
 		mapper=(RequestMapping) icm;
@@ -794,88 +792,6 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		return sBitSet;
 	}
 	
-	public int findCommonLabel(DomainElement start, DomainElement next){
-		BitSet startBitSet = null,controllerStartBitSet=null;
-		BitSet nextBitSet = null,controllerNextBitSet=null;
-		if(this.globalControllerAssignedLabel!=null){
-			startBitSet = this.globalControllerAssignedLabel.get(start.getURI());
-			nextBitSet =this.globalControllerAssignedLabel.get(next.getURI());
-		}	
-		if(this.controllerAssignedLabel!=null){
-            controllerStartBitSet = this.controllerAssignedLabel.get(start.getURI());
-            controllerNextBitSet =this.controllerAssignedLabel.get(next.getURI());
-		}
-		DomainResourceType sRType=start.getResourceType(),nRType=next.getResourceType();
-		LinkedList <LabelSet> sSetList = start.getLabelSet(sRType.getResourceType());
-		LinkedList <LabelSet> nSetList = next.getLabelSet(nRType.getResourceType());
-		int min=0,max=0;
-		BitSet sBitSet = new BitSet(max_vlan_tag);
-		for(LabelSet sSet:sSetList){
-			min = (int) sSet.getMinLabel_ID();
-			max = (int) sSet.getMaxLabe_ID();
-			if( (min==max) || (max==0)){
-				sBitSet.set(min);
-			}else{
-				sBitSet.set(min,max+1);
-			}
-			if((min==0) && (max==0)){
-				sBitSet.set(0,max_vlan_tag);
-			}
-			sBitSet.andNot(sSet.getUsedBitSet());
-			logger.debug("min-max-used:"+min+":"+max+":"+sSet.getUsedBitSet());
-		}
-		logger.debug("findConmmonLabel----initial Start labelSet:"+sBitSet);
-		if(startBitSet!=null)
-			sBitSet.andNot(startBitSet);
-		logger.debug("After globalAssignedLabel + Start labelSet:"+sBitSet);
-		if(controllerStartBitSet!=null)
-            sBitSet.andNot(controllerStartBitSet);
-		logger.debug("Final Start labelSet:"+sBitSet);		
-		BitSet nBitSet = new BitSet(max_vlan_tag);
-		for(LabelSet nSet:nSetList){
-			min = (int) nSet.getMinLabel_ID();
-			max = (int) nSet.getMaxLabe_ID();
-			
-			if( (min==max) || (max==0)){
-				nBitSet.set(min);
-			}else{
-				nBitSet.set(min,max+1);
-			}
-			if((min==0)&&(max==0)){
-				nBitSet.set(0,max_vlan_tag);
-			}
-			nBitSet.andNot(nSet.getUsedBitSet());
-			logger.debug("min-max-used:"+min+":"+max+":"+nSet.getUsedBitSet());
-		}
-		logger.debug("initial next labelSet:"+nBitSet);
-		if(nextBitSet!=null)
-			nBitSet.andNot(nextBitSet);
-		logger.debug("After globalAssignedLabel + next labelSet:"+nBitSet);
-		if(controllerNextBitSet!=null)
-			nBitSet.andNot(controllerNextBitSet);
-		logger.debug("final next labelSet:"+nBitSet);
-		
-		int commonLabel = -1;
-		sBitSet.and(nBitSet);
-		//in case static label carried over
-		int start_static_label = (int) start.getStaticLabel();
-		if(start_static_label>0 && sBitSet.get(start_static_label))
-			commonLabel = start_static_label;
-		else //otherwise, use the common label
-			commonLabel = sBitSet.nextSetBit(0);
-		//int commonLabel = randomSetBit(sBitSet);
-		if(commonLabel>0){
-			for(LabelSet sSet:sSetList){
-				sSet.setUsedBitSet(commonLabel);
-			}
-			for(LabelSet nSet:nSetList){
-				nSet.setUsedBitSet(commonLabel);
-			}
-		}
-		start.setAvailableLabelSet(sBitSet);
-		next.setAvailableLabelSet(sBitSet);
-		return commonLabel;
-	}
 	
 	public int randomSetBit(BitSet bs){
 		int sb=0,num=0;

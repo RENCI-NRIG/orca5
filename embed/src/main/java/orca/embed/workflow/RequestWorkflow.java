@@ -211,17 +211,26 @@ public class RequestWorkflow {
 		return;
 	}
 	
-	public synchronized void modify(DomainResourcePools domainResourcePools, String modReq, 
+	public synchronized void modify(DomainResourcePools domainResourcePools, String modReq, String sliceId,
 			HashMap <String,Collection <DomainElement>> nodeGroupMap, 
 			HashMap<String, DomainElement> firstGroupElement) throws NdlException, UnknownHostException, InetNetworkException{
 		logger.info("workflow:modify(); starts...");
 		ModifyParserListener pl = new ModifyParserListener();
 		NdlModifyParser nmp = new NdlModifyParser(modReq,pl);
-		nmp.rewriteModifyRequest();
+		//nmp.rewriteModifyRequest();
 		nmp.processModifyRequest();
 		
+		((CloudHandler) embedderAlgorithm).setControllerAssignedLabel(this.controllerAssignedLabel);
+		((CloudHandler) embedderAlgorithm).setGlobalControllerAssignedLabel(this.globalControllerAssignedLabel);	
+		((CloudHandler) embedderAlgorithm).setShared_IP_set(this.shared_IP_set);
+		
 		Collection <ModifyElement> modifyElements = pl.getModifyElements();
-		err=((MappingHandler) embedderAlgorithm).modifySlice(modifyElements, manifestModel, nodeGroupMap, firstGroupElement, requestModel);
+		err=((MappingHandler) embedderAlgorithm).modifySlice(domainResourcePools,modifyElements, manifestModel,sliceId, nodeGroupMap, firstGroupElement, requestModel);
+		
+		modifyGlobalControllerAssignedLabel();
+		boundElements = ((CloudHandler) embedderAlgorithm).getDeviceList();
+		staticLabelDependency();
+		
 		nmp.freeModel();
 		TDB.sync(manifestModel);
 	}
