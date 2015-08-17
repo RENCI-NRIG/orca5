@@ -710,7 +710,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/1/3/ethernet/VLAN/1009"/>
         <topology:interfaceOf rdf:resource="&uvanlvmsite;Uva-nl/ISCSI"/>
         <ethernet:vlan rdf:resource="&uvanlvmsite;Uval-nl/ExoGeni/VLANLabel/1009"/>
