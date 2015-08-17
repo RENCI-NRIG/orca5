@@ -35,11 +35,16 @@
 	</properties>
 
 	<distributionManagement>
-		<repository>
-			<id>orca</id>
-			<name>Orca Project Maven Repository</name>
-			<url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs</url>
-		</repository>
+		<snapshotRepository>
+			<id>geni-orca-snapshots</id>
+			<name>Orca Snapshots Maven Repository</name>
+			<url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-snapshots</url>
+		</snapshotRepository>
+                <repository>
+                        <id>geni-orca-libs</id>
+                        <name>Orca Project Maven Libs Repository</name>
+                        <url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs</url>
+                </repository>
 		<site>
 			<id>orca.website</id>
 			<url>dav:https://geni-orca.renci.org/orca-doc/current</url>
