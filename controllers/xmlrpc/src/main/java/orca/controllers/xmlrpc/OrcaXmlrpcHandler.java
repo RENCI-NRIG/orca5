@@ -681,9 +681,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			a_r=m_map.get(ModifyType.MODIFY.toString());
 			if (a_r == null) {
 				result_str ="No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
-				logger.debug("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+				System.out.println("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
 			} else {
-				logger.debug("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+				System.out.println("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
 				for (ReservationMng rr: a_r){
 					try{
 						//instance.releaseAddressAssignment(rr);
@@ -691,15 +691,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						if (userDN != null) 
 							OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
 
-						logger.debug("Issuing demand for reservation: " + rr.getReservationID().toString());
+						System.out.println("Issuing modify demand for reservation: " + rr.getReservationID().toString());
 						if(AbacUtil.verifyCredentials)
 							setAbacAttributes(rr, logger);
 						String sliver_guid = rr.getReservationID();
 			            
 						Properties local = OrcaConverter.fill(rr.getLocalProperties());
-						String unit_url = local.getProperty(ReservationConverter.UNIT_URL_RES);
-						String modify_ver = local.getProperty(ReservationConverter.PropertyModifyVersion);
-						
+						//String unit_url = local.getProperty(ReservationConverter.UNIT_URL_RES);
+						//String modify_ver = local.getProperty(ReservationConverter.PropertyModifyVersion);
+						//String element_guid = local.getProperty(ReservationConverter.PropertyElementGUID);
 			            // for testing - add a status watch for this reservation
 			            //List<ReservationIDWithModifyIndex> actList = 
 			            //		Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), Integer.valueOf(modify_ver)));
@@ -733,7 +733,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									rr_d_list.add(new ReservationID(r_id));
 							}
 						}
-			            
+			            System.out.println("addActiveStatuWatch:"+rr_d_list+";;self="+rr_l);
 						XmlrpcOrcaState.getSUT().addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
 			            
 						//String modifySubcommand = null;

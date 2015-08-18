@@ -1328,10 +1328,12 @@ public class NdlCommons {
 	 */
 	public static Resource getResourceType(Resource r) {
 		assert(r != null);
-		Statement rtStmt = r.getProperty(RDF_TYPE);
-		
-		if (rtStmt != null)
-			return rtStmt.getResource();
+		for (StmtIterator j=r.listProperties(RDF_TYPE);j.hasNext();){
+			Resource type=j.next().getResource();
+			if(type.getURI().endsWith("NamedIndividual"))
+				continue;
+			return type;
+		}
 		return null;
 	}
 	
@@ -1584,9 +1586,9 @@ public class NdlCommons {
 	 */
 	public static boolean isModify(Resource res) {
 		assert(res != null);
-		Statement splittableStmt = res.getProperty(isModifyProperty);
-		if (splittableStmt != null) {
-			return splittableStmt.getBoolean();
+		Statement isModifyStmt = res.getProperty(isModifyProperty);
+		if (isModifyStmt != null) {
+			return isModifyStmt.getBoolean();
 		}
 		return false;
 	}

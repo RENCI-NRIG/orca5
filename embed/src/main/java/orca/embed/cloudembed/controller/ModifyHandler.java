@@ -102,6 +102,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			HashMap <String,Collection <DomainElement>> nodeGroupMap,
 			HashMap <String,DomainElement> firstGroupElement, OntModel requestModel) throws UnknownHostException, InetNetworkException{
 		this.modifyVersion++;
+		this.isModify=true;
 		
 		SystemNativeError error=null;
 		if( (modifyElements==null) || (modifyElements.size()==0) ){
@@ -145,6 +146,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		this.modifies.clear();
 		this.addedDevices.clear();
 		this.modifiedDevices.clear();
+		this.isModify=false;
 	}
 	
 	public void addElement(DomainResourcePools domainResourcePools,LinkedList <ModifyElement> meList,OntModel manifestOntModel, String sliceId) throws NdlException, IOException{
@@ -157,14 +159,14 @@ public class ModifyHandler extends UnboundRequestHandler {
 		Resource reservation = modifyRequestModel.createIndividual(ns_str,NdlCommons.reservationOntClass);
 		for(ModifyElement mee:meList){
 			me = mee.getObj();
-			OntResource connection_rs = modifyRequestModel.createOntResource(me.getURI());
+			OntResource connection_rs = modifyRequestModel.createIndividual(me.getURI(),NdlCommons.getResourceType(me));
 			modifyRequestModel.add(reservation,NdlCommons.collectionElementProperty, connection_rs);
 			copyProperty(modifyRequestModel, me);
 		}
 		
 		String fileName = "mod-req.rdf";
-        OutputStream fsw = new FileOutputStream(fileName);
-        modifyRequestModel.write(fsw);
+        //OutputStream fsw = new FileOutputStream(fileName);
+        //modifyRequestModel.write(fsw);
 		
 		//parsing request
 		RequestParserListener parserListener = new RequestParserListener();		
@@ -193,13 +195,14 @@ public class ModifyHandler extends UnboundRequestHandler {
 		
 		for(NetworkElement device:this.getDeviceList()){
 			DomainElement dd = (DomainElement) device;
-			if(dd.getModifyVersion() < this.modifyVersion){
+			if(dd.getModifyVersion() == this.modifyVersion){
 				if(dd.isModify()){
 					modifies.addModifedElement(device.getResource());
 					modifiedDevices.add(dd);
 				}else{
 					modifies.addAddedElement(device.getResource());
-					addedDevices.add(dd);
+					if(!addedDevices.contains(dd))  //added by the add operation
+						addedDevices.add(dd);
 				}
 			}
 		}	
@@ -217,6 +220,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		while(it.hasNext()){
 			st = it.next();
 			pr = st.getPredicate();
+
 			sb_rs = domainRequestModel.createResource(st.getSubject().getURI());
 			try{
 				ob_rs = domainRequestModel.createResource(st.getResource().getURI());
@@ -309,7 +313,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		
 		for(i=0;i<addedDevices.size();i++){
 			NetworkElement ne = addedDevices.get(i);
-			ne.setModifyVersion(this.modifyVersion);
+			//ne.setModifyVersion(this.modifyVersion);
             cde.add((DomainElement) ne);
 			logger.debug("ModifyHandler:added:"+i+":"+ne.getURI()+":"+ne.getName());
         }

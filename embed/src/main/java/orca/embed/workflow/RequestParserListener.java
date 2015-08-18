@@ -395,18 +395,17 @@ public class RequestParserListener implements INdlRequestModelListener {
 			ComputeElement node = new ComputeElement(om,ce);
 			
 			DomainResourceType dType=NdlCommons.getDomainResourceType(ce,node);
-			
 			if(dType.getResourceType()==null){
 				dType.setResourceType(dType.VM_RESOURCE_TYPE);
 				dType.setRank(4); //IP layer
 			}
-			
 			node.setResourceType(dType);
+			
 			node.setSplittable(NdlCommons.isSplittable(ce));
 			node.setModify(NdlCommons.isModify(ce));
+			node.setGUID(NdlCommons.getGuidProperty(ce));
 			
 			node.setSpecificCEType(NdlCommons.getEC2VMSize(ce));
-
 			// disk image
 			Resource di = NdlCommons.getDiskImage(ce);
 			if (di != null) {

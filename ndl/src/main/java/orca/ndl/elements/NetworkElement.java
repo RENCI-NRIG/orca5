@@ -49,6 +49,9 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	protected String castType;
 	
 	@Persistent
+	protected String GUID;
+	
+	@Persistent
 	protected Integer sn;
 	@Persistent
 	protected String hostName;
@@ -379,6 +382,14 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 
 	public void setModifyVersion(int modifyVersion) {
 		this.modifyVersion = modifyVersion;
+	}
+
+	public String getGUID() {
+		return GUID;
+	}
+
+	public void setGUID(String gUID) {
+		GUID = gUID;
 	}
 }
 
