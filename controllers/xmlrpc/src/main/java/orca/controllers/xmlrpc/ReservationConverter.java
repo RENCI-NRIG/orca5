@@ -766,6 +766,7 @@ public class ReservationConverter implements LayerConstant {
 		String parent_ip_addr = "unit.eth";
 		String parent_mac_addr = "unit.eth";
 		String parent_quantum_uuid = "unit.eth";
+		String parent_interface_uuid = "unit.eth";
 		
 		if(parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)!=null)
 			intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
@@ -785,19 +786,17 @@ public class ReservationConverter implements LayerConstant {
 		if (index > 0) {
 			ip_addr = intf_name.substring(0, index);
 			host_interface = String.valueOf(Integer.valueOf(intf_name.substring(index + 1)).intValue() + 1);
-			parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
-			parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
-			property.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
-
-			if (num_parent >= 1) {
-				parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
-				parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
-			}
 		} else {
 			ip_addr = intf_name;
 			host_interface = String.valueOf(num_parent+num);
-			parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
-			parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
+		}
+		parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
+		parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
+		parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
+			
+		property.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
+		if (num_parent >= 1) {
+			parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
 			parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 		}
 
@@ -825,7 +824,6 @@ public class ReservationConverter implements LayerConstant {
 			logger.error("Not a Valid IP address:" + parent_ip_addr + ":" + ip_addr);
 		}
 		
-		
 		String type="request:Manifest";
 		OntResource manifest=NdlCommons.getOntOfType(manifestModel, type);
 		String element_guid=dd.getGUID();
@@ -842,7 +840,12 @@ public class ReservationConverter implements LayerConstant {
 			System.out.println("No modified in manifest:"+dd.getName()+",element_guid="+element_guid);
 		else{
 			if(parent.getValue().hasProperty(NdlCommons.hasGUIDProperty))
-				property.setProperty(PropertyElementGUID, parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getString());			
+				property.setProperty(PropertyElementGUID, parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getString());
+			else{
+				element_guid = UUID.randomUUID().toString();
+				parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
+			}
+			property.setProperty(parent_interface_uuid,element_guid);
 			addDependencyProperty(parent.getKey(),parent.getValue(), manifestModel.getOntResource(ob), manifestModel);
 		}
 		logger.debug("ReservationConverter: parent_ip_addr="+parent_ip_addr+"="+ip_addr);
@@ -1621,11 +1624,10 @@ public class ReservationConverter implements LayerConstant {
 		for(NetworkElement ne:modifiedDevices){
 			DomainElement dd = (DomainElement) ne;
 			String d_uri=dd.getURI();
-			System.out.println("ModifiedReservation:"+d_uri);
 			ReservationMng rmg = r_map.get(d_uri);
 			if(rmg==null && dd.getGUID()!=null)
 				rmg = r_map.get(dd.getGUID());
-			System.out.println("ModifiedReservation:"+rmg);
+			System.out.println("ModifiedReservation:d_uri="+d_uri+"reservation="+rmg);
 			if(rmg!=null){
 				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
@@ -1675,7 +1677,6 @@ public class ReservationConverter implements LayerConstant {
 						local.setProperty(key, m_p_r.get(i).getReservationID());
 					}
 				}
-				local.setProperty(ReservationConverter.parent_num_interface,String.valueOf(num_interface+num));
 				rmg.setLocalProperties(OrcaConverter.merge(local, rmg.getLocalProperties()));
 				reservations.add(rmg);
 			}
