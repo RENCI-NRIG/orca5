@@ -89,7 +89,7 @@ try:
     LOG.info("RESULT: " + stdOut + str(rtncode))
 
     if rtncode != 0:
-        print 'Create LUN failed!'
+        print 'Create LUN failed: ' + stdOut
         sys.exit(1)
 
     print 'OK'
