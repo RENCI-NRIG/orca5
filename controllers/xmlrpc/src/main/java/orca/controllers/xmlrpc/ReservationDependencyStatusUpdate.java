@@ -59,12 +59,22 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 							isWhat = local.getProperty(ReservationConverter.PropertyIsNetwork);
 							if(isWhat!=null && isWhat.equals("1")){	//Parent is a networking reservation
 								String unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
-								System.out.println("parent unit tag:"+unit_tag+";host intf="+num_interface_int);
+								System.out.println("parent unit tag:"+unit_tag+";host intf="+(num_interface_int+1));
 								if(unit_tag!=null){
 									num_interface_int++;
 									host_interface=String.valueOf(num_interface_int);
 									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
 									modifyProperties.setProperty(parent_tag_name,unit_tag);
+									String parent_mac_addr = parent_prefix+host_interface+".mac";
+									String parent_ip_addr = parent_prefix+host_interface+".ip";
+									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
+									if(local.getProperty(parent_mac_addr)!=null)
+										modifyProperties.setProperty(parent_mac_addr,local.getProperty(parent_mac_addr));
+									if(local.getProperty(parent_ip_addr)!=null)
+										modifyProperties.setProperty(parent_ip_addr,local.getProperty(parent_ip_addr));
+									if(local.getProperty(parent_quantum_uuid)!=null)
+										modifyProperties.setProperty(parent_quantum_uuid,local.getProperty(parent_quantum_uuid));
+									
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
 									System.out.println("Parent doesnot return the unit tag:"+pr_local);

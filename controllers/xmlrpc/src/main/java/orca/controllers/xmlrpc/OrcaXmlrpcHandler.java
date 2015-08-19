@@ -827,7 +827,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
      * @param modifyProperties
      * @return
      */
-    public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
+    /*public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
     		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
     	IOrcaServiceManager sm = null;
     	XmlrpcControllerSlice ndlSlice = null;
@@ -883,7 +883,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	}
 
     }
-
+*/
 	/**
 	 * Deletes the slices in the slice with input sliceId; Issue close on all underlying reservations
 	 * @param sliceId
