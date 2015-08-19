@@ -795,7 +795,7 @@ public class ReservationConverter implements LayerConstant {
 			}
 		} else {
 			ip_addr = intf_name;
-			host_interface = String.valueOf(num);
+			host_interface = String.valueOf(num_parent+num);
 			parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
 			parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
 		}
@@ -809,7 +809,7 @@ public class ReservationConverter implements LayerConstant {
 			mac_addr = this.generateNewMAC();
 		if(mac_addr!=null){
 			parent.getValue().addProperty(NdlCommons.ipMacAddressProperty, mac_addr);
-			logger.debug("ReservationConverter:mac property:"+parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)); 
+			System.out.println("ReservationConverter:mac property:"+parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)); 
 			property.setProperty(parent_mac_addr, mac_addr);
 		}
 		else
@@ -817,6 +817,7 @@ public class ReservationConverter implements LayerConstant {
 		try {
 			if(ip_addr!=null){
 				InetAddress addr1 = InetAddress.getByName(ip_addr.split("/")[0]);  //this is only for throwing an exception for a mal-formated IP address.
+				System.out.println("ReservationConverter:ip property:"+parent_ip_addr+"="+ip_addr); 
 				property.setProperty(parent_ip_addr, ip_addr);
 			}
 		} catch (UnknownHostException e) {
@@ -1617,9 +1618,11 @@ public class ReservationConverter implements LayerConstant {
 		for(NetworkElement ne:modifiedDevices){
 			DomainElement dd = (DomainElement) ne;
 			String d_uri=dd.getURI();
+			System.out.println("ModifiedReservation:"+d_uri);
 			ReservationMng rmg = r_map.get(d_uri);
 			if(rmg==null && dd.getGUID()!=null)
 				rmg = r_map.get(dd.getGUID());
+			System.out.println("ModifiedReservation:"+rmg);
 			if(rmg!=null){
 				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
@@ -1641,7 +1644,8 @@ public class ReservationConverter implements LayerConstant {
 						p++;
 						p_r.add(p_rmg);
 					}
-											
+					System.out.println("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);		
+					
 					//Parented by an added reservation: new link
 					p_rmg = m_r_map.get(p_uri);
 					if(p_rmg!=null){
@@ -1650,7 +1654,8 @@ public class ReservationConverter implements LayerConstant {
 						String site_host_interface = getSiteHostInterface(parent);
 						Properties property = formInterfaceProperties(manifestModel, dd, parent, Integer.valueOf(num_interface), num);
 						rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
-					}	
+					}
+					System.out.println("ModifiedReservation Parent new:"+p_uri+";p_rmg="+p_rmg);		
 				}
 				//create properties to remember its parent reservations
 				if(p>0){
@@ -1663,11 +1668,11 @@ public class ReservationConverter implements LayerConstant {
 				if(m_p>0){
 					local.setProperty(this.PropertyNumNewParentReservations, String.valueOf(m_p));
 					for(int i=0;i<m_p;i++){
-						String key=this.PropertyExistParent + String.valueOf(i);
+						String key=this.PropertyNewParent + String.valueOf(i);
 						local.setProperty(key, m_p_r.get(i).getReservationID());
 					}
 				}
-				rmg.setLocalProperties(OrcaConverter.fill(local));
+				rmg.setLocalProperties(OrcaConverter.merge(local, rmg.getLocalProperties()));
 				reservations.add(rmg);
 			}
 		}

@@ -21,11 +21,14 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback 
 		
 		String parent_prefix = "unit.eth";
 		String host_interface=null;
-		if(actOn==null || reservation==null || !actOn.get(0).equals(reservation.getReservationID())){
-			System.out.println("Empty modifying...."+actOn);
+		String reservation_id = null;
+		if(reservation!=null)
+			reservation_id=reservation.getReservationID();
+		if(actOn==null || ! (reservation_id.equals(actOn.get(0).toString()))){
+			System.out.println("Empty modifying...."+actOn+";reservation="+reservation_id);
 			return;
 		}
-		String reservation_id = reservation.getReservationID();
+
 		try {
 			IOrcaServiceManager sm = XmlrpcOrcaState.getInstance().getSM();
 			System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
@@ -46,7 +49,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback 
 			if(p_str!=null){
 				p=Integer.valueOf(p_str);
 				for(int i=0;i<p;i++){
-					String key=ReservationConverter.PropertyExistParent + String.valueOf(i);
+					String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
 					r_id=local.getProperty(key);
 					if(r_id!=null){
 						p_r = sm.getReservation(new ReservationID(r_id));
@@ -56,6 +59,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback 
 							isWhat = local.getProperty(ReservationConverter.PropertyIsNetwork);
 							if(isWhat!=null && isWhat.equals("1")){	//Parent is a networking reservation
 								String unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+								System.out.println("parent unit tag:"+unit_tag+";host intf="+num_interface_int);
 								if(unit_tag!=null){
 									num_interface_int++;
 									host_interface=String.valueOf(num_interface_int);

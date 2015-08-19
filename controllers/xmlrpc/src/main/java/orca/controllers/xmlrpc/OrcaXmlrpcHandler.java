@@ -703,7 +703,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			            // for testing - add a status watch for this reservation
 			            //List<ReservationIDWithModifyIndex> actList = 
 			            //		Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), Integer.valueOf(modify_ver)));
-			            
+						local.list(System.out);
+						
 			            ReservationDependencyStatusUpdate rr_depend = new ReservationDependencyStatusUpdate();
 			            rr_depend.setReservation(rr);
 			            List <ReservationID> rr_l = Collections.<ReservationID>singletonList(new ReservationID(sliver_guid));
@@ -727,7 +728,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						if(p_str!=null){
 							p=Integer.valueOf(p_str);
 							for(int i=0;i<p;i++){
-								String key=ReservationConverter.PropertyNumNewParentReservations + String.valueOf(i);
+								String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
 								r_id=local.getProperty(key);
 								if(r_id!=null)
 									rr_d_list.add(new ReservationID(r_id));
