@@ -51,7 +51,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 	private static class WatchEntry<T> {
 		protected List<T> watch;
 		protected List<ReservationID> act;
-		protected IStatusUpdateCallback cb;
+		protected IStatusUpdateCallback<T> cb;
 		
 		/**
 		 * Copies incoming lists
@@ -59,7 +59,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 		 * @param a
 		 * @param c
 		 */
-		WatchEntry(final List<T> w, final List<ReservationID> a, final IStatusUpdateCallback c) {
+		WatchEntry(final List<T> w, final List<ReservationID> a, final IStatusUpdateCallback<T> c) {
 			watch = new ArrayList<T>(w); 
 			if (a != null)
 				act = new ArrayList<ReservationID>(a);
@@ -70,23 +70,44 @@ public class ReservationStatusUpdateThread implements Runnable {
 	}
 	
 	/**
+	 * WatchEntry that has been triggered
+	 * @author geni-orca
+	 *
+	 * @param <T>
+	 */
+	private static class TriggeredWatchEntry<T> extends WatchEntry<T> {
+		protected List<T> ok, notok;
+		
+		TriggeredWatchEntry(final List<T> w, final List<ReservationID> a, final IStatusUpdateCallback<T> c) {
+			super(w, a, c);
+		}
+		
+		TriggeredWatchEntry(WatchEntry<T> we, final List<T> ok, final List<T> notok) {
+			super(we.watch, we.act, we.cb);
+			this.ok = ok;
+			this.notok = notok;
+		}
+
+	}
+	
+	/**
 	 * Helper interface to abstract checking for various state or status changes for a given
 	 * list of reservations
 	 * @author ibaldin
 	 *
 	 */
-	private abstract static class StatusChecker {
+	private abstract static class StatusChecker<ID> {
 		public enum Status {OK, NOTOK, NOTREADY};
 		
-		public Status check(Object o, List<ReservationID> ok, List<ReservationID> notok) {
+		public Status check(ID o, List<ID> ok, List<ID> notok) {
 			Status resSt = check_(o);
 			
 			switch(resSt) {
 			case OK:
-				addRid(o, ok);
+				ok.add(o);
 				break;
 			case NOTOK:
-				addRid(o, notok);
+				notok.add(o);
 				break;
 			case NOTREADY:
 			}
@@ -98,25 +119,16 @@ public class ReservationStatusUpdateThread implements Runnable {
 		 * @param o
 		 * @return
 		 */
-		protected abstract Status check_(Object o);
-		
-		protected abstract void addRid(Object o, List<ReservationID> to);
+		protected abstract Status check_(ID o);
 	}
 	
-	private static class ModifyStatusChecker extends StatusChecker {
+	private static class ModifyStatusChecker extends StatusChecker<ReservationIDWithModifyIndex> {
 		
 		private static final String UNIT_MODIFY_PROP_MSG_SUFFIX = ".message";
 		private static final String UNIT_MODIFY_PROP_CODE_SUFFIX = ".code";
 		private static final String UNIT_MODIFY_PROP_PREFIX = "unit.modify.";
-
-		protected void addRid(Object l, List<ReservationID> to) {
-			if (!(l instanceof ReservationIDWithModifyIndex))
-				return;
-			ReservationIDWithModifyIndex rid = (ReservationIDWithModifyIndex)l;
-			to.add(rid.getReservationID());
-		}
 		
-		protected StatusChecker.Status check_(Object l) {
+		protected StatusChecker.Status check_(ReservationIDWithModifyIndex l) {
 			if (!(l instanceof ReservationIDWithModifyIndex))
 				return StatusChecker.Status.NOTREADY;
 			
@@ -136,6 +148,11 @@ public class ReservationStatusUpdateThread implements Runnable {
 				if ((rm.getState() != OrcaConstants.ReservationStateActive) ||
 						(rm.getPendingState() != OrcaConstants.ReservationPendingStateNone))
 					return StatusChecker.Status.NOTREADY;
+				
+				// failed or closed abruptly
+				if ((rm.getState() == OrcaConstants.ReservationStateFailed) ||
+						(rm.getState() == OrcaConstants.ReservationStateClosed))
+					return StatusChecker.Status.NOTOK;
 				
 				List<UnitMng> units = sm.getUnits(rid.getReservationID());
 				
@@ -179,16 +196,9 @@ public class ReservationStatusUpdateThread implements Runnable {
 		}
 	}
 	
-	private static class ActiveStatusChecker extends StatusChecker {
+	private static class ActiveStatusChecker extends StatusChecker<ReservationID> {
 		
-		protected void addRid(Object l, List<ReservationID> to) {
-			if (!(l instanceof ReservationID)) 
-				return;
-			ReservationID rid = (ReservationID)l;
-			to.add(rid);
-		}
-		
-		protected StatusChecker.Status check_(Object l) {
+		protected StatusChecker.Status check_(ReservationID l) {
 			if (!(l instanceof ReservationID)) 
 				return StatusChecker.Status.NOTREADY;
 			ReservationID rid = (ReservationID)l;
@@ -232,7 +242,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 	 * @param act - reservations to act on (can be null)
 	 * @param cb - callback
 	 */
-	public void addModifyStatusWatch(List<ReservationIDWithModifyIndex> watch, List<ReservationID> act, IStatusUpdateCallback cb) {
+	public void addModifyStatusWatch(List<ReservationIDWithModifyIndex> watch, List<ReservationID> act, IStatusUpdateCallback<ReservationIDWithModifyIndex> cb) {
 		if ((watch == null) || (watch.size() == 0) || (cb == null)) {
 			logger.info("addModifyStatusWatch: watch list is size 0 or callback is null, ignoring");
 			return;
@@ -252,7 +262,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 	 * @param act - reservations to act on (can be null)
 	 * @param cb - callback object
 	 */
-	public void addActiveStatusWatch(List<ReservationID> watch, List<ReservationID> act, IStatusUpdateCallback cb) {
+	public void addActiveStatusWatch(List<ReservationID> watch, List<ReservationID> act, IStatusUpdateCallback<ReservationID> cb) {
 		if ((watch == null) || (watch.size() == 0) || (cb == null)) {
 			logger.info("addActiveStatusWatch: watch list is size 0 or callback is null, ignoring");
 			return;
@@ -263,23 +273,23 @@ public class ReservationStatusUpdateThread implements Runnable {
 	}
 	
 	/**
-	 * true means the watch entry has fired and no longer needed (ie all entries on watch list
-	 * either OK or NOTOK). false otherwise (some are NOTREADY)
+	 * Non-null means the watch entry has triggered and no longer needed (ie all entries on watch list
+	 * either OK or NOTOK). null otherwise (some are NOTREADY)
 	 * @param we
 	 * @param st
-	 * @return
+	 * @return TriggeredWatchEntry or null if it didn't trigger
 	 */
-	private boolean checkWatchEntry(WatchEntry<?> we, StatusChecker sc) throws IStatusUpdateCallback.StatusCallbackException {
+	private <ID> TriggeredWatchEntry<ID> checkWatchEntry(WatchEntry<ID> we, StatusChecker<ID> sc) {
 		// scan through the list 
 		// if any reservations are in NOTREADY, skip
 		// if all are OK, not OK - split into two lists if necessary
 		// and call callbacks
 		
-		List<ReservationID> ok = new ArrayList<>();
-		List<ReservationID> notok = new ArrayList<>();
+		List<ID> ok = new ArrayList<>();
+		List<ID> notok = new ArrayList<>();
 		
 		boolean ready = true;
-		for(Object rid: we.watch) {
+		for(ID rid: we.watch) {
 			StatusChecker.Status st = sc.check(rid, ok, notok);
 			if (st == StatusChecker.Status.NOTREADY)
 				ready = false;
@@ -287,21 +297,62 @@ public class ReservationStatusUpdateThread implements Runnable {
 		
 		if (!ready) {
 			logger.debug("Reservation watch not ready for reservations " + we.watch);
-			return false;
+			return null;
 		}
 		
-		if (notok.size() == 0) {
+		return new TriggeredWatchEntry<ID>(we, ok, notok);
+	}
+	
+	/**
+	 * Processing the callback of a triggered watch entry
+	 * @param we
+	 * @throws IStatusUpdateCallback.StatusCallbackException
+	 */
+	private <ID> void processCallBack(TriggeredWatchEntry<ID> we) throws IStatusUpdateCallback.StatusCallbackException {
+ 		
+		if (we.notok.size() == 0) {
 			// call success callback method
 			logger.debug("Invoking success callback for reservations " + we.watch);
-			we.cb.success(ok, we.act);
-			return true;
+			we.cb.success(we.ok, we.act);
+			return;
 		} else {
 			// call failure callback method
 			logger.debug("Invoking failure callback for reservation " + we.watch);
-			we.cb.failure(notok, ok, we.act);
-			return true;
+			we.cb.failure(we.notok, we.ok, we.act);
+			return;
 		}
-
+	}
+	
+	private <ID> void processWatchList(List<WatchEntry<ID>> watchList, String watchType, StatusChecker<ID> sc) {
+		List<WatchEntry<ID>> toRemove = new ArrayList<>();
+		
+		logger.info("run(): Scanning " + watchType + " watch list");
+		List<TriggeredWatchEntry<ID>> toProcess;
+		synchronized(watchList) {
+			toProcess = new ArrayList<>();
+			for(WatchEntry<ID> we: watchList) {
+				TriggeredWatchEntry<ID> twe = this.<ID>checkWatchEntry(we, sc);
+				if (twe != null) {
+					// watch entry triggered, add to process list 
+					toProcess.add(twe);
+					toRemove.add(we);
+				} 
+			}
+			logger.debug("run(): Removing " + watchType + " entries from watch " + toRemove.size());
+			watchList.removeAll(toRemove);
+		}
+		
+		// Process triggered active entries, which can create their own watches, so don't do it in the
+		// above loop
+		logger.info("run(): processsing " + toProcess.size() + " triggered " + watchType + " callbacks");
+		for(TriggeredWatchEntry<ID> twe: toProcess) {
+			try {
+				this.<ID>processCallBack(twe);
+			} catch(IStatusUpdateCallback.StatusCallbackException e) {
+				logger.error("run(): Triggered " + watchType + " watch entry for reservations " + 
+						twe.watch + " returned with callback exception " + e);
+			}
+		}
 	}
 	
 	@Override
@@ -313,39 +364,15 @@ public class ReservationStatusUpdateThread implements Runnable {
 		// reservation groups on them are ready for callbacks
 		// remove those ready for callbacks off the lists and invoke callbacks
 		// outside the critical section
-		List<WatchEntry<ReservationID>> activeRemove = new ArrayList<WatchEntry<ReservationID>>();
-		List<WatchEntry<ReservationIDWithModifyIndex>> modifyRemove = new ArrayList<WatchEntry<ReservationIDWithModifyIndex>>();
-
-		logger.info("Scanning active watch list");
-		synchronized(activeWatch) {
-			for(WatchEntry<ReservationID> we: activeWatch) {
-				try {
-					if (checkWatchEntry(we, new ActiveStatusChecker()))
-						activeRemove.add(we);
-				} catch(IStatusUpdateCallback.StatusCallbackException e) {
-					logger.error("Active watch entry for reservations " + we.watch + " returned with callback exception " + 
-							e.getMessage() + ", removing off the watch list");
-					activeRemove.add(we);
-				}
-			}
-			logger.debug("Removing active entries from watch " + activeRemove);
-			activeWatch.removeAll(activeRemove);
-		}
 		
-		logger.info("Scanning modify watch list");
-		synchronized(modifyWatch) {
-			for (WatchEntry<ReservationIDWithModifyIndex> we: modifyWatch) {
-				try {
-					if (checkWatchEntry(we, new ModifyStatusChecker())) 
-						modifyRemove.add(we);
-				} catch (IStatusUpdateCallback.StatusCallbackException e) {
-					logger.error("Modify watch entry for reservations " + we.watch + " returned with exception " + 
-							e.getMessage() + ", removing off the watch list");
-					modifyRemove.add(we);
-				}
-			}
-			logger.debug("Removing modify entries from watch " + modifyRemove);
-			modifyWatch.removeAll(modifyRemove);
+		// NOTE: because callback can create another callback, which can add watches, 
+		// we must make this code re-entrant hence the need to change the watch list 
+		// and only then call the callbacks
+		try {
+			this.<ReservationID>processWatchList(activeWatch, "active", new ActiveStatusChecker());
+			this.<ReservationIDWithModifyIndex>processWatchList(modifyWatch, "modify", new ModifyStatusChecker());
+		} catch (RuntimeException re) {
+			logger.error("run(): RuntimeException " + re + ", continuing");
 		}
 	}
 

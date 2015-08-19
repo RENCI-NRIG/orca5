@@ -5,7 +5,7 @@ import java.util.List;
 import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
 import orca.shirako.common.ReservationID;
 
-public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback {
+public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<ReservationID> {
 
 	@Override
 	public void success(List<ReservationID> ok, List<ReservationID> actOn)

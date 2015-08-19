@@ -34,14 +34,36 @@ public class ModifyHelper {
 	 *
 	 */
 	private static class ModifyOperation {
-		private ReservationID resId;
+		private ReservationIDWithModifyIndex resId;
 		private String modifySubcommand;
 		private Properties modifyProperties;
 		
-		public ModifyOperation(String res, String sub, Properties props) {
-			resId = new ReservationID(res.trim());
+		public ModifyOperation(String res, int index, String sub, Properties props) {
+			resId = new ReservationIDWithModifyIndex(new ReservationID(res.trim()), index);
 			modifySubcommand = sub;
 			modifyProperties = props;
+		}
+		
+		public ModifyOperation(String res, String sub, Properties props) {
+			resId = new ReservationIDWithModifyIndex(new ReservationID(res.trim()), 0);
+			modifySubcommand = sub;
+			modifyProperties = props;
+		}
+		
+		public ModifyOperation(ReservationID res, int index, String sub, Properties props) {
+			resId = new ReservationIDWithModifyIndex(res, index);
+			modifySubcommand = sub;
+			modifyProperties = props;
+		}
+		
+		public ModifyOperation(ReservationID res, String sub, Properties props) {
+			resId = new ReservationIDWithModifyIndex(res, 0);
+			modifySubcommand = sub;
+			modifyProperties = props;
+		}
+		
+		ReservationIDWithModifyIndex get() {
+			return resId;
 		}
 		
 		String getSubcommand() {
@@ -52,8 +74,12 @@ public class ModifyHelper {
 			return modifyProperties;
 		}
 		
-		ReservationID getResId() {
-			return resId;
+		void overrideIndex(int i) {
+			resId.overrideModifyIndex(i);
+		}
+		
+		public String toString() {
+			return modifySubcommand + "/" + resId.getReservationID() + "/" + resId.getModifyIndex();
 		}
 	}
 	
@@ -63,7 +89,7 @@ public class ModifyHelper {
 	 * @author ibaldin
 	 *
 	 */
-	private static class ModifyQueueCallback implements IStatusUpdateCallback {
+	private static class ModifyQueueCallback implements IStatusUpdateCallback<ReservationIDWithModifyIndex> {
 
 		private static ModifyQueueCallback cbInstance = new ModifyQueueCallback();
 		
@@ -71,49 +97,56 @@ public class ModifyHelper {
 			return cbInstance;
 		}
 		
-		public void success(List<ReservationID> ok, List<ReservationID> actOn)
+		public void success(List<ReservationIDWithModifyIndex> ok, List<ReservationID> actOn)
 				throws StatusCallbackException {
 			
 			checkModifyQueue(ok.get(0));
 		}
 
-		public void failure(List<ReservationID> failed, List<ReservationID> ok,
+		public void failure(List<ReservationIDWithModifyIndex> failed, List<ReservationIDWithModifyIndex> ok,
 				List<ReservationID> actOn) throws StatusCallbackException {
 			
 			checkModifyQueue(failed.get(0));
 		}
 		
-		private void checkModifyQueue(ReservationID okOrFailed) {
+		private void checkModifyQueue(ReservationIDWithModifyIndex okOrFailed) {
 			
 			synchronized(modifyQueues) {
 				// dequeue a modify operation
-				Queue<ModifyOperation> resQueue = modifyQueues.get(okOrFailed);
+				Queue<ModifyOperation> resQueue = modifyQueues.get(okOrFailed.getReservationID());
 
+				if (resQueue == null)
+					throw new RuntimeException("checkModifyQueue(): no queue found for " + okOrFailed + ", skipping processing");
+				
 				// remove from the top of the queue
 				ModifyOperation mop = resQueue.poll();
 
-				if (mop == null)
-					return;
+				if (mop == null) {
+					throw new RuntimeException("checkModifyQueue: no modify operation found at top of the queue, proceeding");
+				}
 				
-				if (!mop.getResId().equals(okOrFailed)) {
+				if (!mop.get().equals(okOrFailed)) {
 					// bad thing happened - we dequeued a modify operation
 					// that doesn't match expected reservation id
 					throw new RuntimeException("checkModifyQueue dequeued reservation " + 
-							mop.getResId() + " which doesn't match expected " + okOrFailed);
+							mop.get() + " which doesn't match expected " + okOrFailed);
 				}
 
 				// launch another modify with same callback, if available
 				mop = resQueue.peek();
 
 				if (mop != null) {
-					Integer modIndex = modifySliver(okOrFailed.toString(), 
+					Integer modIndex = modifySliver(okOrFailed.getReservationID(), 
 							mop.getSubcommand(), 
 							mop.getProperties());
-
+					mop.overrideIndex(modIndex);
+					
 					XmlrpcOrcaState.getSUT().addModifyStatusWatch(
-							Collections.singletonList(new ReservationIDWithModifyIndex(okOrFailed, modIndex)), 
+							Collections.singletonList(mop.get()), 
 							null, cbInstance);
-				}	
+				} else {
+					modifyQueues.remove(okOrFailed.getReservationID());
+				}
 			}
 		}	
 	}
@@ -129,29 +162,29 @@ public class ModifyHelper {
 		Queue<ModifyOperation> l = null;
 		
 		ReservationID resId = new ReservationID(res.trim());
-		
 		synchronized(modifyQueues) {
 
 			if (!modifyQueues.containsKey(resId)) {
 				l = new LinkedList<ModifyOperation>();
 				modifyQueues.put(resId, l);
 			} else
-				l = modifyQueues.get(res);
+				l = modifyQueues.get(resId);
 
-			ModifyOperation mop = new ModifyOperation(res, modifySubcommand, modifyProperties);
+			ModifyOperation mop = new ModifyOperation(resId, 0, modifySubcommand, modifyProperties);
 			l.add(mop);
 
 			// launch modify if this is the first operation
 			// otherwise the callback will launch it
 			if (l.size() == 1) {
-				Integer modIndex = modifySliver(res, 
+				Integer modIndex = modifySliver(resId, 
 						modifySubcommand, 
 						modifyProperties);
-
+				mop.overrideIndex(modIndex);
+				
 				XmlrpcOrcaState.getSUT().addModifyStatusWatch(
-						Collections.singletonList(new ReservationIDWithModifyIndex(resId, modIndex)), 
+						Collections.singletonList(mop.get()), 
 						null, ModifyQueueCallback.getInstance());
-			}
+			} 
 		}
 	}
 
@@ -243,7 +276,7 @@ public class ModifyHelper {
 	 * @param modifyPropertiesList
 	 * @return - index of modify operation
 	 */
-	public static Integer modifySliver(String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
+	public static Integer modifySliver(ReservationID res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		IOrcaServiceManager sm = null;
 		
 		try {
@@ -265,7 +298,7 @@ public class ModifyHelper {
 	 * @param modifyProperties
 	 * @return
 	 */
-	public static Integer modifySliver(String res, String modifySubcommand, Properties modifyProperties) {
+	public static Integer modifySliver(ReservationID res, String modifySubcommand, Properties modifyProperties) {
 		IOrcaServiceManager sm = null;
 		
 		try {
@@ -287,7 +320,7 @@ public class ModifyHelper {
 	 * @param modifyProperties
 	 * @return 0 on failure or index of modify operation
 	 */
-	public static Integer modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
+	public static Integer modifySliver(IOrcaServiceManager sm, ReservationID res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
 		try {
 			// here we break up the semantics of different subcommands
 
@@ -310,9 +343,9 @@ public class ModifyHelper {
 	 * @param modifyProperties
 	 * @return 0 on failure or index of modify operation
 	 */
-	public static Integer modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, Properties modifyProperties) {
+	public static Integer modifySliver(IOrcaServiceManager sm, ReservationID res, String modifySubcommand, Properties modifyProperties) {
 		try {
-			ReservationMng rm = sm.getReservation(new ReservationID(res));
+			ReservationMng rm = sm.getReservation(res);
 			if (rm == null)
 				throw new RuntimeException("modifySliver(): Unable to find reservation " + res);
 			
@@ -330,7 +363,7 @@ public class ModifyHelper {
 			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + index, 
 					OrcaConstants.MODIFY_PROPERTY_PREFIX + modifySubcommand);
 	
-			sm.modifyReservation(new ReservationID(res.trim()), modifyProperties);
+			sm.modifyReservation(res, modifyProperties);
 			
 			return index;
 		} catch(RuntimeException re) { 
