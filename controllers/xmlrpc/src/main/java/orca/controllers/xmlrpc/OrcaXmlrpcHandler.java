@@ -1228,7 +1228,61 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	
     }
      
-    
+    /**
+     * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
+     * this way we can have multiple maps, as e.g. for modifying SSH keys
+     * @param slice_urn
+     * @param sliver_guid
+     * @param credentials
+     * @param modifySubcommand
+     * @param modifyProperties
+     * @return
+     */
+    public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
+    		String modifySubcommand, List<Map<String, ?>> modifyProperties) {
+    	IOrcaServiceManager sm = null;
+    	XmlrpcControllerSlice ndlSlice = null;
+
+    	logger.info("ORCA API modifySliver() invoked for " + sliver_guid + " of slice " + slice_urn + " subcommand " + modifySubcommand);
+
+    	if (sliver_guid == null) 
+    		return setError("ERROR: modifySliver() sliver_guid is null");
+    	try {
+			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
+			
+			// check the whitelist
+			if (verifyCredentials && !checkWhitelist(userDN)) 
+				return setError(WHITELIST_ERROR);
+    		sm = instance.getSM();
+    		
+            // find this slice and lock it
+            ndlSlice = instance.getSlice(slice_urn);
+            if (ndlSlice == null) {
+                    logger.error("modifySliver(): unable to find slice " + slice_urn + " among active slices");
+                    return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
+            }
+            
+            // lock the slice
+            ndlSlice.lock();
+            
+            // use the queueing version to avoid collisions with modified performed by the controller itself
+            logger.info("modifySliver(): enqueuing modify operation");
+            ModifyHelper.enqueueModify(sliver_guid, modifySubcommand, modifyProperties);
+            
+            return setReturn(true);
+    	} catch (Exception e) {
+    		logger.error("modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));	
+    		e.printStackTrace();
+    		return setError("modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
+    	} finally {
+    		if (sm != null){
+    			instance.returnSM(sm);
+    		}
+    		if (ndlSlice != null)
+    			ndlSlice.unlock();
+    	}
+
+    }
 		
 	protected void discoverTypes(IOrcaServiceManager sm) {
 		typesMap = new HashMap<String, SiteResourceTypes>();

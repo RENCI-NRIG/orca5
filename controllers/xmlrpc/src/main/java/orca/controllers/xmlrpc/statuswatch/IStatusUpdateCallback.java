@@ -9,7 +9,7 @@ import orca.shirako.common.ReservationID;
  * @author ibaldin
  *
  */
-public interface IStatusUpdateCallback {
+public interface IStatusUpdateCallback<ID> {
 	public static class StatusCallbackException extends Exception {
 
 		/**
@@ -25,7 +25,7 @@ public interface IStatusUpdateCallback {
 	 * @param actOn - reservations that need to be acted on
 	 * @throws StatusCallbackException
 	 */
-	public void success(List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException;
+	public void success(List<ID> ok, List<ReservationID> actOn) throws StatusCallbackException;
 	
 	
 	/**
@@ -35,5 +35,5 @@ public interface IStatusUpdateCallback {
 	 * @param actOn - reservations to be acted on
 	 * @throws StatusCallbackException
 	 */
-	public void failure(List<ReservationID> failed, List<ReservationID> ok, List<ReservationID> actOn) throws StatusCallbackException;
+	public void failure(List<ID> failed, List<ID> ok, List<ReservationID> actOn) throws StatusCallbackException;
 }

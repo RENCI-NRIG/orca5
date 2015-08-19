@@ -11,10 +11,10 @@ import orca.manage.beans.ReservationMng;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.meta.UnitProperties;
 
-public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback {
+public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<ReservationID> {
 	
 	ReservationMng reservation = null;
-	
+
 	@Override
 	public void success(List<ReservationID> ok, List<ReservationID> actOn)
 			throws StatusCallbackException {
