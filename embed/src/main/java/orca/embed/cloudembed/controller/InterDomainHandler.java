@@ -380,6 +380,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			next_Hop=(DomainElement) domainList.get(i);
 			domainNoDepend(next_Hop);
 			if((i==1) && (!start.isDepend())){
+				setModifyFlag(next_Hop);
 				dependList.add(next_Hop);
 			}
 			if(start.isDepend() & next_Hop.isDepend()) {
@@ -400,6 +401,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
               		error.setMessage("Error in building the dependency tree, probably not available vlan path OR trying to reuse a stitching tag:" + rr.getReservation());
                	}
 			}else{
+				setModifyFlag(next_Hop);
 				dependList.add(next_Hop);
 			}
 			start=next_Hop;
@@ -407,6 +409,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		//last domain
 		if(!start.isDepend()){
 			if(mapper.getDevice(start,dependList)==null){
+				setModifyFlag(start);
 				dependList.add(start);
 			}else{
 				int degree = start.getDegree();
@@ -591,8 +594,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			start=device;
 		}
 		else{
-			if(hop==1)
+			if(hop==1){
+				setModifyFlag(start);
 				dependList.add(start);
+			}
 		}
 		
 		device = (DomainElement) mapper.getDevice(next,dependList);
@@ -608,10 +613,13 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 							device.setStaticLabel(next.getStaticLabel()); 
 							next=device;
 			}
-			else
+			else{
+				setModifyFlag(next);
 				dependList.add(next);
+			}
 		}
 		else{
+			setModifyFlag(next);
 			dependList.add(next);
 		}
 		if(flag){//start depends on next

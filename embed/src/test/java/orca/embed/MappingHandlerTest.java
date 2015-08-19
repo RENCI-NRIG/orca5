@@ -18,7 +18,8 @@ import orca.util.ResourceType;
 
 public class MappingHandlerTest extends TestCase {
 	String [] inputFileName={
-			"orca/ndl/substrate/osgvmsite.rdf","orca/ndl/substrate/mass.rdf","orca/ndl/substrate/nictavmsite.rdf",
+			"orca/ndl/substrate/osgvmsite.rdf"
+			,"orca/ndl/substrate/mass.rdf","orca/ndl/substrate/nictavmsite.rdf",
 			"orca/ndl/substrate/rcivmsite.rdf"
 			,"orca/ndl/substrate/bbnvmsite.rdf"
 			,"orca/ndl/substrate/fiuvmsite.rdf"
@@ -26,12 +27,15 @@ public class MappingHandlerTest extends TestCase {
 			,"orca/ndl/substrate/dukevmsite.rdf"
 			,"orca/ndl/substrate/rencivmsite.rdf"
 			,"orca/ndl/substrate/uncvmsite.rdf","orca/ndl/substrate/uvanlvmsite.rdf",
-	"orca/ndl/substrate/ben-6509.rdf",
-	"orca/ndl/substrate/nlr.rdf","orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf","orca/ndl/substrate/uvanlNet.rdf",
-	"orca/ndl/substrate/renciNet.rdf","orca/ndl/substrate/uncNet.rdf","orca/ndl/substrate/dukeNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
+	"orca/ndl/substrate/ben-6509.rdf","orca/ndl/substrate/nlr.rdf"
+	,"orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf"
+	,"orca/ndl/substrate/uvanlNet.rdf",
+	"orca/ndl/substrate/renciNet.rdf","orca/ndl/substrate/uncNet.rdf"
+	,"orca/ndl/substrate/dukeNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
 	"orca/ndl/substrate/rciNet.rdf","orca/ndl/substrate/bbnNet.rdf",
 	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/uhNet.rdf",
-	"orca/ndl/substrate/learnNet.rdf","orca/ndl/substrate/learn.rdf","orca/ndl/substrate/nictaNet.rdf"
+	"orca/ndl/substrate/learnNet.rdf","orca/ndl/substrate/learn.rdf"
+	,"orca/ndl/substrate/nictaNet.rdf"
 	};
 
 	String requestFile,requestFileDuke,requestFile33,requestFileVMSDuke,requestFileUNC,requestFileRenci,requestFileDukeUnc;
@@ -66,7 +70,7 @@ public class MappingHandlerTest extends TestCase {
 		int numDomain=inputFileName.length;
 		String [] type = {"site.vm","site.GEPort","site.TenGEPort","site.vlan"};
 		String [] vmvlantype = {"site.vm","site.vlan","site.baremetalce"};
-		String [] lunvmvlantype = {"site.vm","site.vlan","site.baremetalce","site.lun"};
+		String [] lunvmvlantype = {"site.vm","site.vlan","site.lun"};
 		DomainResources domainResources=null;
 
 		ResourcePoolDescriptor pool=null;
@@ -90,7 +94,7 @@ public class MappingHandlerTest extends TestCase {
 					Domain d = new Domain(inputFileName[i]);
 					abstractModel = d.delegateDomainModelToString(j);
 					try{
-						domainResources=d.getDomainResources(abstractModel,2);
+						domainResources=d.getDomainResources(abstractModel,10);
 					}catch(Exception e){
 						e.printStackTrace();
 						continue;
@@ -115,7 +119,7 @@ public class MappingHandlerTest extends TestCase {
 					abstractModels.add(abstractModel);
 				}
 			}
-			else if(i<10){
+			else if(i<11){
 				for (String j : type){
 					Domain d = new Domain(inputFileName[i]);
 					abstractModel = d.delegateDomainModelToString(j);

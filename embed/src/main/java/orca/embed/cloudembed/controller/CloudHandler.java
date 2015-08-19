@@ -431,10 +431,8 @@ public class CloudHandler extends MappingHandler{
 			if(device.getCastType()!=null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				mpDevice=true;
 			}
-			if(!deviceList.contains(device) || device.getModifyVersion() < this.modifyVersion){
-				if(deviceList.contains(device))
-					device.setModify(true);
-				
+			if(!deviceList.contains(device) || this.isModify()){
+				setModifyFlag(device);
 				deviceList.add(device);
 				if(!mpDevice){
 					dType = domainResourcePools.getDomainResourceType(domain_name);
@@ -473,7 +471,6 @@ public class CloudHandler extends MappingHandler{
 		}
 		
 		ComputeElement ce = ce_element.copy(element.getModel(), requestModel,url,name);
-		ce.setModify(element.isModify());
 		ce.setResourceType(dType);
 		ce.setNodeGroupName(ce_element.getNodeGroupName());
 		ce.setPostBootScript(ce_element.getPostBootScript());
@@ -485,12 +482,14 @@ public class CloudHandler extends MappingHandler{
 		DomainElement edge_device=new DomainElement(element.getModel(),url,name) ;
 		edge_device.setCe(ce);
 		edge_device.setResourceType(dType);
+		edge_device.setGUID(element.getGUID());
 		
 		DomainElement existing_ce = (DomainElement) existingDevice(edge_device, deviceList);
 		if(existing_ce!=null){
 			logger.info("Existing ce="+existing_ce.getName());
 			edge_device = existing_ce;
 		}
+		edge_device.setModify(element.isModify());
 		if(ce.getGroup()==null){
 			LinkedList <Interface> interfaces = ce_element.getClientInterface();
 			NetworkConnection ncByInterface=null;
@@ -794,9 +793,15 @@ public class CloudHandler extends MappingHandler{
 		if(resourceCount<0)
 			return null;
 		
+		setModifyFlag(link_device);
 		deviceList.add(link_device);
 		newDomainList.add(link_device);
 		return link_device;
+	}
+	
+	public void setModifyFlag(DomainElement device){
+		if(this.isModify())
+			device.setModifyVersion(this.modifyVersion);
 	}
 	
 	public int resourceCount(DomainElement de,DomainResourceType dType){

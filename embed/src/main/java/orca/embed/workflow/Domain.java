@@ -66,7 +66,7 @@ public class Domain implements IDomainAbstractor{
 		OntResource domain_ont = getDomain(model);
 		
 		if (domain_ont == null)
-			throw new NdlException("Domain.init(): getDomain() failed to return domain resource");
+			throw new NdlException("Domain.init(): getDomain() failed to return domain resource:");
 
 		domainElement = new DomainElement(model,domain_ont);
 		scList = new HashMap <Resource,Resource> ();
