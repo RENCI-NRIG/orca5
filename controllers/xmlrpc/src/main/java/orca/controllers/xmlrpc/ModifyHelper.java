@@ -176,6 +176,7 @@ public class ModifyHelper {
 			// launch modify if this is the first operation
 			// otherwise the callback will launch it
 			if (l.size() == 1) {
+				System.out.println("About to modify sliver:"+resId+"subcommand:"+modifySubcommand+";Properties:"+modifyProperties);
 				Integer modIndex = modifySliver(resId, 
 						modifySubcommand, 
 						modifyProperties);

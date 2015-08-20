@@ -8,6 +8,7 @@ import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConverter;
 import orca.manage.beans.ReservationMng;
+import orca.manage.beans.UnitMng;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.meta.UnitProperties;
 
@@ -55,10 +56,20 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 						p_r = sm.getReservation(new ReservationID(r_id));
 						pr_local=OrcaConverter.fill(p_r.getLocalProperties());
 						if(p_r!=null){
-							System.out.println("Extracting property of parent: " + p_r.getLocalProperties());
-							isWhat = local.getProperty(ReservationConverter.PropertyIsNetwork);
+							isWhat = pr_local.getProperty(ReservationConverter.PropertyIsNetwork);
+							System.out.println("Extracting property of parent: isWhat="+isWhat );
+							pr_local.list(System.out);
+							pr_local.clear();
 							if(isWhat!=null && isWhat.equals("1")){	//Parent is a networking reservation
-								String unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+								String unit_tag = null;
+								List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
+								if (un != null) {
+									for (UnitMng u : un) {
+										pr_local = OrcaConverter.fill(u.getProperties());										
+										if (pr_local.getProperty("unit.vlan.tag") != null)
+											unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+									}
+								}
 								System.out.println("parent unit tag:"+unit_tag+";host intf="+(num_interface_int+1));
 								if(unit_tag!=null){
 									num_interface_int++;
@@ -68,12 +79,21 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									String parent_mac_addr = parent_prefix+host_interface+".mac";
 									String parent_ip_addr = parent_prefix+host_interface+".ip";
 									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
+									String parent_interface_uuid = parent_prefix+host_interface+".uuid";
+									String site_host_interface_uuid = parent_prefix + host_interface + ".hosteth";
+									
 									if(local.getProperty(parent_mac_addr)!=null)
 										modifyProperties.setProperty(parent_mac_addr,local.getProperty(parent_mac_addr));
 									if(local.getProperty(parent_ip_addr)!=null)
 										modifyProperties.setProperty(parent_ip_addr,local.getProperty(parent_ip_addr));
 									if(local.getProperty(parent_quantum_uuid)!=null)
 										modifyProperties.setProperty(parent_quantum_uuid,local.getProperty(parent_quantum_uuid));
+									if(local.getProperty(parent_interface_uuid)!=null)
+										modifyProperties.setProperty(parent_interface_uuid,local.getProperty(parent_interface_uuid));
+									if(local.getProperty(parent_quantum_uuid)!=null)
+										modifyProperties.setProperty(parent_quantum_uuid,local.getProperty(parent_quantum_uuid));
+									if(local.getProperty(site_host_interface_uuid)!=null)
+										modifyProperties.setProperty(site_host_interface_uuid,local.getProperty(site_host_interface_uuid));
 									
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
