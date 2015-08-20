@@ -145,6 +145,23 @@ public class ModifyHandler extends UnboundRequestHandler {
 	public void modifyComplete(){
 		this.modifies.clear();
 		this.addedDevices.clear();
+		
+		for(Device dd:modifiedDevices){
+			if(this.deviceList.contains(dd)){
+				for(NetworkElement dd_ori:this.deviceList){
+					if(dd_ori.getGUID()==null)
+						continue;
+					if(dd_ori.getGUID().equals(dd.getGUID()) && (dd_ori!=dd) ){
+						DomainElement dd_ori_de = (DomainElement) dd_ori;
+						DomainElement dd_de=(DomainElement) dd;
+						dd_ori_de.copyDependency(dd_de);
+					}		
+				}
+				this.deviceList.remove(dd);
+			}else
+				logger.error("ERROR:Modified device not in the list:"+dd.getName());
+		}
+		
 		this.modifiedDevices.clear();
 		this.isModify=false;
 	}
@@ -442,9 +459,16 @@ public class ModifyHandler extends UnboundRequestHandler {
 			}
 		}
 		
-		if(remove==true){
-			//clear dependency if any
-			DomainElement de = (DomainElement) device;
+		if(remove!=true){
+			error = new SystemNativeError();
+			error.setErrno(7);
+			error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
+			logger.error(error.toString());
+			return error;
+		}
+		//clear dependency if any
+		DomainElement de = (DomainElement) device;
+		if(de.getCe()!=null){	//remove a node
 			HashMap<DomainElement, OntResource> preds = de.getPrecededBy();
 			DomainElement pe = null;
 			LinkedList <DomainElement> pes = new LinkedList <DomainElement> ();
@@ -485,7 +509,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			String group = i>=0 ? n.substring(i+1):n;
 			Collection <DomainElement> cde = nodeGroupMap.get(group);
 			cde.remove(device);
-			
+		}	
 			//remove from domainInConnectionList and deviceList
 			String name = device.getName();			
 			OntResource device_ont = manifestOntModel.getOntResource(name);
@@ -503,7 +527,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				modifies.addRemovedElement(device_ont);
 			}
 			//close reservation and modify manifest will be done in ReservationConverter in the controller.
-		}
+		
 		return error;
 	}
 	
