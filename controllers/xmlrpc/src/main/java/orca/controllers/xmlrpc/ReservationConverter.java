@@ -1566,8 +1566,13 @@ public class ReservationConverter implements LayerConstant {
 		LinkedList <OntResource> reservations = modifies.getRemovedElements();	
 		List<ReservationMng> m_reservations=null;
 		if(reservations!=null){
-			m_reservations = removeReservations(manifestModel,allRes,reservations);
+			m_reservations = removeReservations(manifestModel,allRes,reservations,false);
 			m_map.put(ModifyType.REMOVE.toString(), m_reservations);
+		}
+		reservations = modifies.getModifiedRemoveElements();
+		if(reservations!=null){
+			m_reservations = removeReservations(manifestModel,allRes,reservations,true);
+			m_map.put(ModifyType.MODIFYREMOVE.toString(), m_reservations);
 		}
 		if(addedDevices!=null){
 			for(int i=0;i<addedDevices.size();i++){
@@ -1701,7 +1706,8 @@ public class ReservationConverter implements LayerConstant {
 		return reservations;
 	}
 	
-	public List<ReservationMng> removeReservations(OntModel manifestModel,List<ReservationMng> allRes,LinkedList <OntResource>removedReservations) throws Exception{
+	public List<ReservationMng> removeReservations(OntModel manifestModel
+			,List<ReservationMng> allRes,LinkedList <OntResource>removedReservations, boolean isModify) throws Exception{
 		//Remove reservations
 		if(removedReservations==null){
 			System.out.println("remove collection is null!");
@@ -1737,9 +1743,11 @@ public class ReservationConverter implements LayerConstant {
 					remove_reservations.add((ReservationMng) r);
 				}
 			}
-			removeManifest(domain_ont,manifestModel);			
-			//remove it from the postboot scipt constructor
-			elementCollection.remove_vm(domain_ont.getURI());
+			if(!isModify){
+				removeManifest(domain_ont,manifestModel);			
+				//remove it from the postboot scipt constructor
+				elementCollection.remove_vm(domain_ont.getURI());
+			}
 		}
 			
 		return remove_reservations;

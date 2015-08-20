@@ -466,67 +466,73 @@ public class ModifyHandler extends UnboundRequestHandler {
 			logger.error(error.toString());
 			return error;
 		}
-		//clear dependency if any
+		
 		DomainElement de = (DomainElement) device;
-		if(de.getCe()!=null){	//remove a node
-			HashMap<DomainElement, OntResource> preds = de.getPrecededBy();
-			DomainElement pe = null;
-			LinkedList <DomainElement> pes = new LinkedList <DomainElement> ();
-			if (preds != null) {  
-				for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
-					pe = parent.getKey();
-					pes.add(pe);
-					//pe.removeFollowedByElement(de);
-					//de.removePrecededByElement(pe);
-				}
-				Iterator <DomainElement> pes_it = pes.iterator();
-				while(pes_it.hasNext()){
-					pe=pes_it.next();
-					pe.removeFollowedByElement(de);
-					//de.removePrecededByElement(pe);
-				}
-				pes.clear();
+		String name = null;
+		OntResource device_ont = null;
+		//clear dependency if any
+		HashMap<DomainElement, OntResource> preds = de.getPrecededBy();
+		DomainElement pe = null;
+		LinkedList <DomainElement> pes = new LinkedList <DomainElement> ();
+		if (preds != null) {  
+			for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
+				pe = parent.getKey();
+				pes.add(pe);
 			}
-			preds = de.getFollowedBy();
-			if (preds != null) {  
-				for (Entry<DomainElement, OntResource> parent : de.getFollowedBySet()) {
-					pe = parent.getKey();
-					pes.add(pe);
-					//pe.removePrecededByElement(de);
-					//de.removeFollowedByElement(pe);
-				}
-				Iterator <DomainElement> pes_it = pes.iterator();
-				while(pes_it.hasNext()){
-					pe=pes_it.next();
+			Iterator <DomainElement> pes_it = pes.iterator();
+			while(pes_it.hasNext()){
+				pe=pes_it.next();
+				pe.removeFollowedByElement(de);
+				de.removePrecededByElement(pe);
+			}
+			pes.clear();
+		}
+		preds = de.getFollowedBy();
+		if (preds != null) {  
+			for (Entry<DomainElement, OntResource> parent : de.getFollowedBySet()) {
+				pe = parent.getKey();
+				pes.add(pe);
+			}
+			Iterator <DomainElement> pes_it = pes.iterator();
+			while(pes_it.hasNext()){
+				pe=pes_it.next();
+				if(pe.getCe()==null){ //if follower not a node, remove dependency
 					pe.removePrecededByElement(de);
-					//de.removeFollowedByElement(pe);
+					de.removeFollowedByElement(pe);
 				}
-				pes.clear();
+				else{
+					name=pe.getName();			
+					device_ont = manifestOntModel.getOntResource(name);
+					modifies.addModifedRemoveElement(device_ont);
+				}
 			}
+			pes.clear();
+		}
 			
+		if(de.getCe()!=null){	//remove a node	from its group
 			String n = me.getSub().getURI();
 			int i = n.lastIndexOf("#");
 			String group = i>=0 ? n.substring(i+1):n;
 			Collection <DomainElement> cde = nodeGroupMap.get(group);
 			cde.remove(device);
-		}	
-			//remove from domainInConnectionList and deviceList
-			String name = device.getName();			
-			OntResource device_ont = manifestOntModel.getOntResource(name);
-			logger.debug("device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
-			boolean inDomainList = this.domainInConnectionList.remove(device_ont);
-			boolean inDeviceList = deviceList.remove(device); 
-			if( (!inDomainList) && (!inDeviceList)){
-				error = new SystemNativeError();
-				error.setErrno(7);
-				error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
-				logger.error(error.toString());
-			}else{
-				logger.debug("to be removed ont:"+device_ont.getURI());
-
-				modifies.addRemovedElement(device_ont);
-			}
-			//close reservation and modify manifest will be done in ReservationConverter in the controller.
+		}
+		
+		//remove from domainInConnectionList and deviceList
+		name=device.getName();			
+		device_ont = manifestOntModel.getOntResource(name);
+		logger.debug("device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
+		boolean inDomainList = this.domainInConnectionList.remove(device_ont);
+		boolean inDeviceList = deviceList.remove(device); 
+		if( (!inDomainList) && (!inDeviceList)){
+			error = new SystemNativeError();
+			error.setErrno(7);
+			error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
+			logger.error(error.toString());
+		}else{
+			logger.debug("to be removed ont:"+device_ont.getURI());
+			modifies.addRemovedElement(device_ont);
+		}
+		//close reservation and modify manifest will be done in ReservationConverter in the controller.
 		
 		return error;
 	}

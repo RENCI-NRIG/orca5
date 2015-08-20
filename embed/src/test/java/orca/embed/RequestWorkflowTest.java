@@ -117,6 +117,15 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 	}
 
 	public void testModify() throws NdlException, IOException, RequestMappingException, InetNetworkException {
+		String parent_prefix = "unit.eth";
+		String tag_key="unit.eth2.vlan.tag";
+		String index=tag_key.split(parent_prefix)[1];
+		String index_end = index.split(".vlan.tag")[0];
+		String host_interface = index_end;
+		System.out.println("ModifiedRemove: host_interface="+host_interface+";1="+index+";2="+index_end+";tag_key="+tag_key);
+		
+		String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
+		
 		String reqStr = NdlCommons.readFile(requestFileGPO);
 		String modReq = NdlCommons.readFile(requestFileGush);
 		abstractModels=getAbstractModels();
