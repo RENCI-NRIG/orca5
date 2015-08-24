@@ -337,13 +337,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					e.printStackTrace();
 					instance.removeSlice(ndlSlice);
 					logger.error("createSlice(): No reservations created for this request; Error:" + e);
-					return setError("Error:Embedding workflow Exception! " + e);
+					return setError("ERROR:Embedding workflow Exception! " + e);
 				}
 
 				if(workflow.getErrorMsg()!=null){
 					instance.removeSlice(ndlSlice);
 					logger.error("createSlice(): No reservations created for this request; Error:"+workflow.getErrorMsg());
-					return setError(workflow.getErrorMsg());
+					return setError("ERROR: " + workflow.getErrorMsg());
 				}
 
 				workflow.setSliceName(slice_urn, XmlrpcControllerSlice.getSliceIDForUrn(slice_urn), userDN);
@@ -560,25 +560,25 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			ReservationElementCollection r_collection = orc.getElementCollection();
 			if(r_collection==null){
 				logger.error("ModifySlice(): No reservations created for this request; Error:no r_collection");
-				return setError("Error:ModifySlice Exception! no r_coolection");
+				return setError("ERROR:ModifySlice Exception! no r_coolection");
 			}else if(r_collection.NodeGroupMap==null){
 				logger.error("ModifySlice(): No reservations created for this request; Error:no NodeGroupMap");
-				return setError("Error:ModifySlice Exception! no NodeGroupMap");
+				return setError("ERROR:ModifySlice Exception! no NodeGroupMap");
 			}else if(r_collection.firstGroupElement==null){
 				logger.error("ModifySlice(): No reservations created for this request; Error:no firstGroupElement");
-				return setError("Error:ModifySlice Exception! no firstGroupElement");
+				return setError("ERROR:ModifySlice Exception! no firstGroupElement");
 			}
 			try{
 				workflow.modify(drp, modReq,ndlSlice.getSliceID(), r_collection.NodeGroupMap, r_collection.firstGroupElement);
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("ModifySlice(): No reservations created for this request; Error:");
-				return setError("Error:ModifySlice Exception!");
+				return setError("ERROR:ModifySlice Exception!");
 			}
 
 			if(workflow.getErrorMsg()!=null){
 				logger.error("modifySlice(): No reservations created for this request; Error:"+workflow.getErrorMsg());
-				return setError(workflow.getErrorMsg());
+				return setError("ERROR: " + workflow.getErrorMsg());
 			}
 			
 			// See createSlice() and XmlrpcControllerSlice object for methods.
@@ -950,7 +950,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						}
 					} catch (Exception ex) {
 						result = false;
-						return setError("Failed to close reservation due to " + ex);
+						return setError("ERROR: Failed to close reservation due to " + ex);
 					}
 				}
 				result = true;
@@ -977,11 +977,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			return setReturn(result);
 		} catch (CredentialException ce) {
 			logger.error("deleteSlice(): Credential Exception: " + ce.getMessage());
-			return setError("deleteSlice(): Credential Exception: " + ce.getMessage());
+			return setError("ERROR: deleteSlice(): Credential Exception: " + ce.getMessage());
 		} catch (Exception oe) {
-			logger.error("deleteSlice(): Exception encountered: " + oe.getMessage());	
+			logger.error("ERROR: deleteSlice(): Exception encountered: " + oe.getMessage());	
 			oe.printStackTrace();
-			return setError("deleteSlice(): Exception encountered: " + oe.getMessage());
+			return setError("ERROR: deleteSlice(): Exception encountered: " + oe.getMessage());
 		} finally {
 			if (sm != null){
 				instance.returnSM(sm);
@@ -1019,11 +1019,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		} catch (CredentialException ce) {
 			logger.error("listSlices(): Credential Exception: " + ce.getMessage());
-			return setError("listSlices(): Credential Exception: " + ce.getMessage());
+			return setError("ERROR: listSlices(): Credential Exception: " + ce.getMessage());
 		} catch (Exception oe) {
-			logger.error("listSlices(): Exception encountered: " + oe.getMessage());	
+			logger.error("ERROR: listSlices(): Exception encountered: " + oe.getMessage());	
 			oe.printStackTrace();
-			return setError("listSlices(): Exception encountered: " + oe.getMessage());
+			return setError("ERROR: listSlices(): Exception encountered: " + oe.getMessage());
 		} finally {
 
 		}
@@ -1074,7 +1074,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			
 			if (nowCal.after(termEndDateCal)){
 				logger.debug("New term end date in the past..");
-				return setError("renewSlice(): renewal term end time is in the past.. Can't renew slice..");
+				return setError("ERROR: renewSlice(): renewal term end time is in the past.. Can't renew slice..");
 			}
 			
 			// compare slice end date to system default 
@@ -1093,7 +1093,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			// can't extend back in time
 			if (termEndDateCal.before(sliceEndCal)) {
 				logger.debug("Attempted extend date is shorter than current slice end date");
-				return setError("renewSlice(): renewal term shorter than original slice end is not valid.");
+				return setError("ERROR: renewSlice(): renewal term shorter than original slice end is not valid.");
 			}
 			
 			List<ReservationMng> allRes =  ndlSlice.getAllReservations(sm);
@@ -1110,7 +1110,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					resEnd.setTime(new Date(r.getEnd()));
 					if (extendedEnd.before(resEnd)) {
 						logger.debug("Attempted extend date: " + getRFC3339String(extendedEnd) + " is shorter than original reservation " + r.getReservationID() + " end date: " + getRFC3339String(resEnd));
-						return setError("renewSlice(): renewal term shorter than original reservation end is not valid.");
+						return setError("ERROR: renewSlice(): renewal term shorter than original reservation end is not valid.");
 					}
 					try {
 						logger.debug("Extending reservation with reservation GUID: " + r.getReservationID());
@@ -1144,18 +1144,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						extMessage = sb.toString();
 					}
 					result = false;
-					return setError("renewSlice(): " + extMessage);
+					return setError("ERROR: renewSlice(): " + extMessage);
 				}
 			}
 
 			return setReturn(result);
 		} catch (CredentialException ce) {
 			logger.error("renewSlice(): Credential Exception: " + ce.getMessage());
-			return setError("renewSlice(): Credential Exception: " + ce.getMessage());
+			return setError("ERROR: renewSlice(): Credential Exception: " + ce.getMessage());
 		} catch (Exception oe) {
-			logger.error("renewSlice(): Exception encountered: " + oe.getMessage());	
+			logger.error("ERROR: renewSlice(): Exception encountered: " + oe.getMessage());	
 			oe.printStackTrace();
-			return setError("renewSlice(): Exception encountered: " + oe.getMessage());
+			return setError("ERROR: renewSlice(): Exception encountered: " + oe.getMessage());
 		} finally {
 			if (sm != null){
 				instance.returnSM(sm);
@@ -1200,7 +1200,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     		
     		List<UnitMng> sliverUnits = ndlSlice.getUnits(sm, sliver_guid);
     		if (sliverUnits == null) {
-    			return setError("getSliverProperties(): no units associated with reservation " + sliver_guid);
+    			return setError("ERROR: getSliverProperties(): no units associated with reservation " + sliver_guid);
     		}
     		List<Map<String, String>> uProps = new LinkedList<Map<String, String>>();
     		for(UnitMng unit: sliverUnits) {
@@ -1217,7 +1217,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	} catch (Exception e) {
     		logger.error("getSliverProperties(): Exception encountered: " + e.getMessage());	
 			e.printStackTrace();
-			return setError("getSliverProperties(): Exception encountered: " + e.getMessage());
+			return setError("ERROR: getSliverProperties(): Exception encountered: " + e.getMessage());
     	} finally {
 			if (sm != null){
 				instance.returnSM(sm);
@@ -1273,7 +1273,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     	} catch (Exception e) {
     		logger.error("modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));	
     		e.printStackTrace();
-    		return setError("modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
+    		return setError("ERROR: modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
     	} finally {
     		if (sm != null){
     			instance.returnSM(sm);
