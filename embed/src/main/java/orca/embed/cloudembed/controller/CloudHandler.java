@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 import net.jwhoisserver.utils.InetNetwork;
 import net.jwhoisserver.utils.InetNetworkException;
@@ -482,7 +483,12 @@ public class CloudHandler extends MappingHandler{
 		DomainElement edge_device=new DomainElement(element.getModel(),url,name) ;
 		edge_device.setCe(ce);
 		edge_device.setResourceType(dType);
-		edge_device.setGUID(element.getGUID());
+		String device_guid=element.getGUID();
+		if(device_guid==null){
+			device_guid=UUID.randomUUID().toString();
+			element.getResource().addProperty(NdlCommons.hasGUIDProperty, device_guid);
+		}
+		edge_device.setGUID(device_guid);
 		
 		DomainElement existing_ce = (DomainElement) existingDevice(edge_device, deviceList);
 		if(existing_ce!=null){

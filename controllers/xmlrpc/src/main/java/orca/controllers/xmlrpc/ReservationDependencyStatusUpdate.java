@@ -90,8 +90,6 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										modifyProperties.setProperty(parent_quantum_uuid,local.getProperty(parent_quantum_uuid));
 									if(local.getProperty(parent_interface_uuid)!=null)
 										modifyProperties.setProperty(parent_interface_uuid,local.getProperty(parent_interface_uuid));
-									if(local.getProperty(parent_quantum_uuid)!=null)
-										modifyProperties.setProperty(parent_quantum_uuid,local.getProperty(parent_quantum_uuid));
 									if(local.getProperty(site_host_interface_uuid)!=null)
 										modifyProperties.setProperty(site_host_interface_uuid,local.getProperty(site_host_interface_uuid));
 									
