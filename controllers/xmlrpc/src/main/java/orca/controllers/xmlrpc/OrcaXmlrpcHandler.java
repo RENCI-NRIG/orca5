@@ -520,7 +520,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public Map<String, Object> modifySlice(String slice_urn, Object[] credentials, String modReq) {
 		XmlrpcControllerSlice ndlSlice = null;
 		IOrcaServiceManager sm = null;
-		Map<String, Object> ret = null;
 		
 		try {
 			String result_str = null;
@@ -695,7 +694,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								}
 							}
 							String tag_key=null;
-							for(Entry entry:config.entrySet()){
+							for(Entry<?,?> entry:config.entrySet()){
 								String tag = (String) entry.getValue();
 								if(tag.equals(unit_tag))
 									tag_key = (String) entry.getKey();	
@@ -939,9 +938,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ndlSlice.publishManifest(logger);
 			}
 
-			if(ret!=null)
-				return ret;
-			if (result == null)
+			if (result.length() == 0)
 				result.append("No result available");
 				
 			return setReturn(result);
