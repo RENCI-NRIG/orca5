@@ -88,12 +88,15 @@ public class PublishManager {
 			try {
 				sm = instance.getSM();
 				if (sm == null) {
-					logger.error("initialize(): SM instance is null.");
+					logger.error("initialize(): SM instance is null. Waiting 1 sec.");
+					Thread.sleep(1000);
+					continue;
 				}
 				actor_guid = sm.getGuid().toString();
 				actor_name = sm.getName();
 				logger.info("SM actor name: " + actor_name + " | SM actor guid: " + actor_guid);
 			} catch (Exception e) {
+				e.printStackTrace();
 				logger.error("initialize(): unable to get a connection to SM due to: " + e);
 			} finally {
 				if (sm != null)
