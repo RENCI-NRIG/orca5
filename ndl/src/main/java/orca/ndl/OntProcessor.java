@@ -1095,7 +1095,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant
 
             		if(correctResourceType){
             			if(isEndPoint!=0){
-            				if(!check_of_version(in0,nc_of_version) || !check_of_version(in2,nc_of_version))
+            				if(!check_of_version(in0,nc_of_version) && !check_of_version(in2,nc_of_version))
             					continue;
             			}
             			pair = new ArrayList <OntResource> ();
@@ -1142,6 +1142,12 @@ public class OntProcessor extends NdlCommons implements LayerConstant
     
     public boolean check_of_version(Resource intf_rs,String nc_of_version){
     	boolean right_version = false;
+    	if(intf_rs.hasProperty(this.topologyInterfaceOfProperty)){
+    		Resource domain_rs = intf_rs.getProperty(this.topologyInterfaceOfProperty).getResource();
+    		right_version =isStitchingNodeInManifest(domain_rs);
+    		if(right_version)
+    			return right_version;
+    	}
     	String intf_of = NdlCommons.getOpenFlowVersion(intf_rs);
 		if(nc_of_version!=null){
 			if(intf_of!=null){
