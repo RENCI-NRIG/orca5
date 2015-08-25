@@ -86,6 +86,11 @@ public class PublishManager {
 
 		while (actor_guid == null || actor_name == null){
 			try {
+				if (instance == null) {
+					logger.error("initialize(): unable to get XMLRPCOrcaState instance, Waiting 1 sec.");
+					Thread.sleep(1000);
+					continue;
+				}
 				sm = instance.getSM();
 				if (sm == null) {
 					logger.error("initialize(): SM instance is null. Waiting 1 sec.");
@@ -98,6 +103,11 @@ public class PublishManager {
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("initialize(): unable to get a connection to SM due to: " + e);
+				try {
+					Thread.sleep(1000);
+				} catch (Exception ee) {
+					;
+				}
 			} finally {
 				if (sm != null)
 					instance.returnSM(sm);
