@@ -163,6 +163,8 @@ public class XmlRpcController extends OrcaController {
 				recover();
 				Log.info("Starting XMLRPC handlers");
 				setupXmlRpcHandlers();
+				Log.info("Starting support threads");
+				XmlrpcOrcaState.startThreads();
 			} catch (Exception e){
 				Log.fatal("Could not start the XMLRPC controller", e);
 				System.err.println(e.getMessage());

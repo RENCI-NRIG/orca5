@@ -74,19 +74,19 @@ public final class XmlrpcOrcaState implements Serializable {
 	private static final Pattern macNamePattern = Pattern.compile(UnitProperties.UnitEthPrefix + "[\\d]+" + UnitProperties.UnitEthMacSuffix);
 	
 	// thread for deferred slices due to interdomain complexity
-	protected static final SliceDeferThread sdt; 
-	protected static final Thread sdtThread;
+	protected static SliceDeferThread sdt = null; 
+	protected static Thread sdtThread = null;
 	
 	// thread for processing status updates (modify and state)
-	protected static final ReservationStatusUpdateThread sut;
-	protected static final ScheduledFuture<?> sutFuture;
+	protected static ReservationStatusUpdateThread sut = null;
+	protected static ScheduledFuture<?> sutFuture = null;
 	public static final int MODIFY_CHECK_PERIOD=5; //seconds
 	
 	// PublishManager
-	protected static final PublishManager pubManager;
+	protected static PublishManager pubManager = null;
 
-	// start the threads
-	static {
+	// start the threads (called from the controller startup code)
+	public static void startThreads () {
 		// slice defer thread
 		Globals.Log.info("Starting slice defer thread");
 		sdt = new SliceDeferThread();
@@ -112,7 +112,7 @@ public final class XmlrpcOrcaState implements Serializable {
 			Globals.Log.info("Starting pubsub thread");
 			pubManager = new PublishManager(); // This will start the publisher thread
 		} else {
-			Globals.Log.info("Not starting pubsub thread");
+			Globals.Log.info("Not starting pubsub thread, no configuration found");
 			pubManager = null;
 		}
 	}
@@ -425,6 +425,8 @@ public final class XmlrpcOrcaState implements Serializable {
 	 }
 	 
      public synchronized IOrcaServiceManager getSM() throws Exception {
+    	 if (controller == null)
+    		 throw new Exception("Unable to get SM - controller not set yet.");
          return controller.orca.getServiceManager();
      }
      
