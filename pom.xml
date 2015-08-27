@@ -137,7 +137,8 @@
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:https://github.com/RENCI-NRIG/orca5.git</connection>
+		<developerConnection>scm:git:git@github.com:RENCI-NRIG/orca5.git</developerConnection>
+		<connection>scm:git:git@github.com:RENCI-NRIG/orca5.git</connection>
 		<url>https://github.com/RENCI-NRIG/orca5</url>
 	</scm>
 
