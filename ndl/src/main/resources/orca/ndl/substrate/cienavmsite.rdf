@@ -724,7 +724,7 @@
 
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/availableVMLabelSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">160</collections:size>
+        <collections:size rdf:datatype="&xsd;int">50</collections:size>
         <domain:hasResourceType rdf:resource="&compute;VM"/>
         <compute:hasUnitServer rdf:resource="&exogeni;ExoGENIUnitServer"/>
     </owl:NamedIndividual>
