@@ -372,7 +372,7 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/TenGigabitEthernet/1/0/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>1</rdfs:label>
+        <rdfs:label>4/1</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/AL2S"/>
@@ -445,7 +445,7 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>9,13</rdfs:label>
+        <rdfs:label>3/5,3/6,3/7,3/8,3/9</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>
@@ -461,7 +461,7 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>49-50</rdfs:label>
+        <rdfs:label>3/5,3/6,3/7,3/8,3/9</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>
@@ -476,7 +476,7 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>23-30</rdfs:label>
+        <rdfs:label>3/2,3/3,3/4</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>
@@ -492,7 +492,7 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>3/2,3/3,3/4,3/5,3/6,3/7,3/8,3/9</rdfs:label>
+        <rdfs:label>3/2,3/3,3/4</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>

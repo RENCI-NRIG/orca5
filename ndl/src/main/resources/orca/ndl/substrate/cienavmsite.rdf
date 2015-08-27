@@ -457,7 +457,7 @@
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/BareMetal/TenGigabitEthernet/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>9,13</rdfs:label>
+        <rdfs:label>3/5,3/6,3/7,3/8,3/9</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
@@ -473,7 +473,7 @@
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/BareMetal/TenGigabitEthernet/2/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>49-50</rdfs:label>
+        <rdfs:label>3/5,3/6,3/7,3/8,3/9</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
@@ -487,7 +487,7 @@
 
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/BareMetal/availableBareMetalLabelSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">2</collections:size>
+        <collections:size rdf:datatype="&xsd;int">5</collections:size>
         <domain:hasResourceType rdf:resource="&compute;BareMetalCE"/>
         <compute:hasUnitServer rdf:resource="&exogeni;ExoGENI-M4"/>
     </owl:NamedIndividual>
@@ -560,7 +560,7 @@
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/TenGigabitEthernet/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>23-30</rdfs:label>
+        <rdfs:label>3/2,3/3,3/4</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName>of-data</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet"/>
@@ -576,7 +576,7 @@
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/TenGigabitEthernet/3/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>41-48</rdfs:label>
+        <rdfs:label>3/10</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
         <ethernet:Tagged-Ethernet rdf:resource="&cienavmsite;CIENA/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
@@ -591,7 +591,7 @@
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>41-50</rdfs:label>
+        <rdfs:label>3/10</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
@@ -637,7 +637,7 @@
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/TengigabitEthernet/2/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>3/2,3/3,3/4,3/5,3/6,3/7,3/8,3/9</rdfs:label>
+        <rdfs:label>3/2,3/3,3/4</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName>vlan-data</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet"/>
