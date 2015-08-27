@@ -1617,14 +1617,15 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 		HashMap <String, ReservationMng> m_r_map = new HashMap <String, ReservationMng> ();
-		for(ReservationMng rmg:added_reservations){
-			Properties local = OrcaConverter.fill(rmg.getLocalProperties());
-			String unit_url = local.getProperty(UNIT_URL_RES);
-			System.out.println("Added Reservation.UNIT_URL_RES="+unit_url);
-			if(unit_url!=null)
-				m_r_map.put(unit_url,rmg);
-		}
-			
+		if(added_reservations!=null){
+			for(ReservationMng rmg:added_reservations){
+				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
+				String unit_url = local.getProperty(UNIT_URL_RES);
+				System.out.println("Added Reservation.UNIT_URL_RES="+unit_url);
+				if(unit_url!=null)
+					m_r_map.put(unit_url,rmg);
+			}
+		}	
 		ArrayList<ReservationMng> reservations = new ArrayList<ReservationMng> ();
 		for(NetworkElement ne:modifiedDevices){
 			DomainElement dd = (DomainElement) ne;
