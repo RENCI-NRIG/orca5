@@ -99,8 +99,8 @@ sed -i -e "s;@@SHORTCOMMIT@@;${SHORTCOMMIT};" "${BASE_SRC_DIRPATH}/redhat/orca-i
 cd "${ORCA_BLD}"
 
 # Create tarball
+rm -rf ${BASE_SRC_DIR}-${SHORTCOMMIT} ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
 mv ${BASE_SRC_DIR} ${BASE_SRC_DIR}-${SHORTCOMMIT}
-rm -rf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
 tar -czf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz ${BASE_SRC_DIR}-${SHORTCOMMIT}
 
 # Place some command-line arguments for Maven in an environment variable,
