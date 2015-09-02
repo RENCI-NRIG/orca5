@@ -405,10 +405,10 @@
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>3/17</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">uvanl</topology:hasName>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/UVA"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/4/1/ethernet"/>
     </owl:NamedIndividual>
     
 
