@@ -69,7 +69,7 @@
      xmlns:TenGigabitEthernet4="&cienavmsite;CIENA/ExoGeni/TenGigabitEthernet/1/">
     <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/cienaNet.rdf">
         <owl:imports rdf:resource="http://geni-orca.renci.org/owl/openflow.owl"/>
-        <owl:imports rdf:resource="https://geni-orca.renci.org/owl/orca.rdf"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/orca.rdf"/>
     </owl:Ontology>
     
 
