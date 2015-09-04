@@ -15,6 +15,7 @@ import junit.framework.TestCase;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.RequestMappingException;
+import orca.embed.policyhelpers.SystemNativeError;
 import orca.embed.workflow.Domain;
 import orca.embed.workflow.RequestWorkflow;
 import orca.ndl.DomainResourceType;
@@ -61,7 +62,7 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		
 		requestFileRenciVMSVlan= "src/test/resources/orca/embed/TS3-3.rdf";  // a vlan connected 3-node cluster in renci vmsite
 		
-		requestFileGPO = "src/test/resources/orca/embed/bbn-st.rdf"; 
+		requestFileGPO = "src/test/resources/orca/embed/ciena-uva.rdf"; 
 		
 		requestFileGush = "src/test/resources/orca/embed/t1-m.rdf"; 
 		
@@ -91,7 +92,11 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		abstractModels=getAbstractModels();
 		DomainResourcePools drp = new DomainResourcePools(); 
 		drp.getDomainResourcePools(pools);
-		workflow.run(drp, abstractModels, reqStr, null,null, "slice-id");
+		SystemNativeError err = workflow.run(drp, abstractModels, reqStr, null,null, "slice-id");
+		
+		if(err!=null){
+			System.out.println(err.toString());
+		}
 		
 		LinkedList<NetworkElement> connection = (LinkedList<NetworkElement>) workflow.getBoundElements();
 		

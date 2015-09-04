@@ -25,12 +25,12 @@ public class MappingHandlerTest extends TestCase {
 			,"orca/ndl/substrate/uhvmsite.rdf"
 			,"orca/ndl/substrate/dukevmsite.rdf"
 			,"orca/ndl/substrate/rencivmsite.rdf"
-			,"orca/ndl/substrate/uncvmsite.rdf","orca/ndl/substrate/uvanlvmsite.rdf",
+			,"orca/ndl/substrate/cienavmsite.rdf","orca/ndl/substrate/uvanlvmsite.rdf",
 	"orca/ndl/substrate/ben-6509.rdf",
 	"orca/ndl/substrate/nlr.rdf","orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf","orca/ndl/substrate/uvanlNet.rdf",
 	"orca/ndl/substrate/renciNet.rdf","orca/ndl/substrate/uncNet.rdf","orca/ndl/substrate/dukeNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
 	"orca/ndl/substrate/rciNet.rdf","orca/ndl/substrate/bbnNet.rdf",
-	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/uhNet.rdf",
+	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/cienaNet.rdf",
 	"orca/ndl/substrate/learnNet.rdf","orca/ndl/substrate/learn.rdf","orca/ndl/substrate/nictaNet.rdf"
 	};
 
@@ -64,7 +64,7 @@ public class MappingHandlerTest extends TestCase {
 		pools=new ResourcePoolsDescriptor();
 		String abstractModel=null;
 		int numDomain=inputFileName.length;
-		String [] type = {"site.vm","site.GEPort","site.TenGEPort","site.vlan"};
+		String [] type = {"site.vm","site.vlan"};
 		String [] vmvlantype = {"site.vm","site.vlan","site.baremetalce"};
 		String [] lunvmvlantype = {"site.vm","site.vlan","site.baremetalce","site.lun"};
 		DomainResources domainResources=null;
@@ -72,6 +72,7 @@ public class MappingHandlerTest extends TestCase {
 		ResourcePoolDescriptor pool=null;
 
 		for(int i=0;i<numDomain;i++){	
+			System.out.println("Abstracting domain:"+i);
 			if( (i<3) || (i==7) || (i==8)){
 				Domain d = new Domain(inputFileName[i]);
 				abstractModel = d.delegateDomainModelToString("site.vm");
@@ -115,7 +116,7 @@ public class MappingHandlerTest extends TestCase {
 					abstractModels.add(abstractModel);
 				}
 			}
-			else if(i<10){
+			else if(i<11){
 				for (String j : type){
 					Domain d = new Domain(inputFileName[i]);
 					abstractModel = d.delegateDomainModelToString(j);

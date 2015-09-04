@@ -122,7 +122,7 @@ public class RequestWorkflow {
 	 * Run the workflow
 	 * @throws Exception 
 	 */
-	public synchronized void run(DomainResourcePools domainResourcePools,List<String> abstractModels,
+	public synchronized SystemNativeError run(DomainResourcePools domainResourcePools,List<String> abstractModels,
 			String resReq, String userDN, String controller_url, String sliceId) throws  NdlException, IOException {
 		
 		RequestParserListener parserListener = new RequestParserListener();		
@@ -137,7 +137,7 @@ public class RequestWorkflow {
 		err = request.getError();
 		if(err!=null){
 			logger.error("Ndl request parser unable to parse request:"+err.toString());
-			return;
+			return err;
 		}
 		// TODO: check if the request is already fully bound in one domain, preparing for topology splitting 				
 		boolean bound = request.generateGraph(requestElements);
@@ -162,6 +162,8 @@ public class RequestWorkflow {
 		
 		TDB.sync(requestModel);
 		//closeCreateModel();
+		
+		return err;
 	}
 	
 	@SuppressWarnings("unchecked")
