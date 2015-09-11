@@ -119,7 +119,7 @@ fi
 if [ -n "${INSTALL_RPM}" ]; then
     echo "Preparing to install RPMs..."
     cd "${RPM_BUILD_DIR}/RPMS/x86_64"
-    sudo rpm -Uvh --force "*${BLD_DATE}git${BLD_REVISION}*.rpm"
+    sudo rpm -Uvh --force "*${BLD_DATE}git${SHORTCOMMIT}*.rpm"
 fi
 
 echo "Done."
