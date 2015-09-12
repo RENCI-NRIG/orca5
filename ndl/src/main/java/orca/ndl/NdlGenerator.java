@@ -380,14 +380,19 @@ public class NdlGenerator {
 	}
 	
 	/**
-	 * Declare a ComputeElement that will be modified. Modifies always require a guid.
-	 * @param name
+	 * Declare a ComputeElement with existing url (from manifest) that will be modified. Modifies always require a guid.
+	 * @param url
 	 * @param guid
 	 * @return
 	 * @throws NdlException
 	 */
-	public Individual declareModifiedComputeElement(String name, String guid) throws NdlException {
-		Individual in = addIndividual(requestId + "#" + massageName(name), "compute", "ComputeElement");
+	public Individual declareModifiedComputeElement(String url, String guid) throws NdlException {
+		OntClass cls = ref.getOntClass(ref.getNsPrefixUri("compute") + "ComputeElement");
+		
+		if (null == cls)
+			throw new NdlException("Unable to find class compute:ComputeElement");
+
+		Individual in = blank.createIndividual(url, cls);
 		
 		addGuid(in, guid);
 		addTypedProperty(in, "modify-schema", "isModify", "true", XSDDatatype.XSDboolean);
