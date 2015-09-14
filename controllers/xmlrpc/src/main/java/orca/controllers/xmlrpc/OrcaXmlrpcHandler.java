@@ -12,13 +12,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.Properties;
 import java.util.zip.DataFormatException;
 
 import javax.security.auth.login.CredentialException;
@@ -28,10 +23,6 @@ import orca.controllers.OrcaControllerException;
 import orca.controllers.xmlrpc.SliceStateMachine.SliceCommand;
 import orca.controllers.xmlrpc.geni.GeniAmV2Handler;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
-import orca.controllers.xmlrpc.pubsub.PublishManager;
-import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
-import orca.controllers.xmlrpc.statuswatch.ReservationIDWithModifyIndex;
-import orca.controllers.xmlrpc.statuswatch.ReservationStatusUpdateThread;
 import orca.controllers.xmlrpc.x509util.Credential;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
@@ -63,7 +54,6 @@ import orca.shirako.common.meta.ResourcePoolDescriptor;
 import orca.shirako.common.meta.ResourcePoolsDescriptor;
 import orca.shirako.common.meta.ResourceProperties;
 import orca.shirako.common.meta.UnitProperties;
-import orca.shirako.container.Globals;
 import orca.util.CompressEncode;
 import orca.util.ID;
 import orca.util.ResourceType;
@@ -786,7 +776,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						result_str = "Failed to close reservation"+ex;
-						throw new RuntimeException("Failed to close reservation", ex);
+						throw new Exception("Failed to close reservation", ex);
 					}
 				}
 			}       
@@ -812,7 +802,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						ndlSlice.addComputedReservations((TicketReservationMng) rr);
 					} catch (Exception ex) {
 						result_str = "Failed to redeem reservation"+ex;
-						throw new RuntimeException("Failed to redeem reservation", ex);
+						throw new Exception("Failed to redeem reservation", ex);
 					}
 				}
 			}
@@ -890,7 +880,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						
 					} catch (Exception ex) {
 							result_str = "Failed to redeem reservation"+ex;
-							throw new RuntimeException("Failed to redeem reservation", ex);
+							throw new Exception("Failed to redeem reservation", ex);
 					}
 				}
 				
@@ -1266,7 +1256,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							failedToExtend.add(r);
 					} catch (Exception ex) {
 						result = false;
-						throw new RuntimeException("Failed to extend reservation", ex);
+						throw new Exception("Failed to extend reservation", ex);
 					}
 				}
 				
@@ -1428,20 +1418,20 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
     }
 		
-	protected void discoverTypes(IOrcaServiceManager sm) {
+	protected void discoverTypes(IOrcaServiceManager sm) throws Exception {
 		typesMap = new HashMap<String, SiteResourceTypes>();
 		abstractModels = new ArrayList<String>();
 		
 		ID broker = instance.getController().getBroker(sm);
 		if (broker == null){
-			throw new RuntimeException("Unable to determine broker proxy for this controller. Please check SM container configuration and logs.");
+			throw new Exception("Unable to determine broker proxy for this controller. Please check SM container configuration and logs.");
 		}
 
         instance.setBroker(broker.toString());
 
 		List<PoolInfoMng> mypools = sm.getPoolInfo(broker);
 		if (mypools == null){
-			throw new RuntimeException("Could not discover types: " + sm.getLastError(), sm.getLastError().getException());
+			throw new Exception("Could not discover types: " + sm.getLastError(), sm.getLastError().getException());
 		}
 		
 		pools = new ResourcePoolsDescriptor();
@@ -1451,7 +1441,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ResourceType type = rpd.getResourceType();
 	    		ResourcePoolAttributeDescriptor a = rpd.getAttribute(ResourceProperties.ResourceDomain);
 	    		if (a == null) {
-	    			throw new RuntimeException("Missing domain information for resource pool:  " + type);
+	    			throw new Exception("Missing domain information for resource pool:  " + type);
 	    		}
 	    		pools.add(rpd);
 	    		String domain = a.getValue();
