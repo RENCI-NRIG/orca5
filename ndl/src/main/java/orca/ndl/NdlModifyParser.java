@@ -188,18 +188,13 @@ public class NdlModifyParser extends NdlCommons {
 							if (tmpR.hasProperty(modifyAddElementProperty)){ 
 								modType = ModifyType.ADD;
 								obj = tmpR.getProperty(modifyAddElementProperty).getResource();
-							}
-							if (tmpR.hasProperty(modifyElementProperty)){ 
+							} else if (tmpR.hasProperty(modifyElementProperty)){ 
 								modType = ModifyType.MODIFY;
 								obj = tmpR.getProperty(modifyElementProperty).getResource();
-							}
-
-							if (tmpR.hasProperty(modifyRemoveElementProperty)){
+							} else if (tmpR.hasProperty(modifyRemoveElementProperty)){
 								modType = ModifyType.REMOVE;
 								obj = tmpR.getProperty(modifyRemoveElementProperty).getResource();
-							}
-							
-							if (tmpR.hasProperty(modifyIncreaseByProperty)){
+							} else if (tmpR.hasProperty(modifyIncreaseByProperty)){
 								modType = ModifyType.INCREASE;
 								n = tmpR.getProperty(modifyIncreaseByProperty).getInt();
 							}
