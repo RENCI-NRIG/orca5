@@ -964,14 +964,17 @@ public class NdlGenerator {
 	 * @return
 	 * @throws NdlException
 	 */
-	public Individual declareModifyElementRemoveNode(Individual mresI, String elUrl) throws NdlException {
+	public Individual declareModifyElementRemoveNode(Individual mresI, String elUrl, String guid) throws NdlException {
 		
 		// retrieve or create an individual
 		Individual el = blank.getIndividual(elUrl);
 		if (el == null) {
 			OntClass cls = ref.getOntClass(ref.getNsPrefixUri("compute") + "ComputeElement");
-			blank.createIndividual(elUrl, cls);
+			el = blank.createIndividual(elUrl, cls);
 		}
+		
+		if (guid != null)
+			addGuid(el, guid);
 		
 		Individual melI = null;
 		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
@@ -990,14 +993,17 @@ public class NdlGenerator {
 	 * @return
 	 * @throws NdlException
 	 */
-	public Individual declareModifyElementRemoveLink(Individual mresI, String elUrl) throws NdlException {
+	public Individual declareModifyElementRemoveLink(Individual mresI, String elUrl, String guid) throws NdlException {
 		
 		// retrieve or create an individual
 		Individual el = blank.getIndividual(elUrl);
 		if (el == null) {
 			OntClass cls = ref.getOntClass(ref.getNsPrefixUri("topology") + "NetworkConnection");
-			blank.createIndividual(elUrl, cls);
+			el = blank.createIndividual(elUrl, cls);
 		}
+		
+		if (guid != null)
+			addGuid(el, guid);
 		
 		Individual melI = null;
 		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
