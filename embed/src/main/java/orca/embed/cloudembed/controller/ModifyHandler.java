@@ -566,14 +566,19 @@ public class ModifyHandler extends UnboundRequestHandler {
 			int i = n.lastIndexOf("#");
 			String group = i>=0 ? n.substring(i+1):n;
 			Collection <DomainElement> cde = nodeGroupMap.get(group);
-			cde.remove(device);
+			if(cde!=null)
+				cde.remove(device);
 		}
 		
 		//remove from domainInConnectionList and deviceList
 		name=device.getName();			
 		device_ont = manifestOntModel.getOntResource(name);
-		logger.debug("device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
-		boolean inDomainList = this.domainInConnectionList.remove(device_ont);
+		boolean inDomainList = false;
+		if(device_ont!=null){
+			logger.debug("device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
+			inDomainList = this.domainInConnectionList.remove(device_ont);
+		}else
+			logger.error("Modify remove:Not in the domainInConnectionList:"+name);
 		boolean inDeviceList = deviceList.remove(device); 
 		if( (!inDomainList) && (!inDeviceList)){
 			error = new SystemNativeError();
@@ -622,7 +627,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 	}
 	
     public OntModel createManifest(RequestReservation request,OntModel manifestModel, OntResource manifest){ 
-		String domain,connectionName;
+		if(request==null)
+			return null;
+    	String domain,connectionName;
 		RequestReservation rr;
 		HashMap <String, RequestReservation> dRR = request.getDomainRequestReservation();
 		Collection <NetworkElement> elements;

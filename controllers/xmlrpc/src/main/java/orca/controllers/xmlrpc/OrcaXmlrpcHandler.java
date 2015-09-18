@@ -747,7 +747,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								request.remove(site_host_interface_uuid);
 								resource.remove(site_host_interface_uuid);
 							}
-							
+							System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 							ModifyHelper.enqueueModify(rr.getReservationID().toString(), modifySubcommand, modifyProperties);
 							
 							rr.setLocalProperties(OrcaConverter.unset(local, rr.getLocalProperties()));
