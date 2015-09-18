@@ -102,6 +102,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		Iterator<NetworkElement> it = elements.iterator();
 		while(it.hasNext()){
 			NetworkConnection element = (NetworkConnection) it.next();
+			logger.debug("Interdomain connection:"+element.getName()+";"
+					+element.getNe1().getName()+":"+element.getNe1().getInDomain()+":"
+					+element.getNe2()+":"+element.getNe2().getInDomain());
 			if((element.getNe1()==null) || (element.getNe2()==null)){
 				logger.error("This request connection misses the end point(s):nc="+element.getName()+":ne1="+element.getNe1()+";ne2="+element.getNe2());
 				continue;
@@ -858,6 +861,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		String link_url,link_name,domain_name;
 		OntResource link_ont,intf_start,intf_next,intf_next_next;
 		Resource domain_rs=null;
+
 		for (int i = 1; i < domainList.size(); i++) {
             next_Hop = domainList.get(i);
             intf_start = start.getDownNeighbour(start.getModel());

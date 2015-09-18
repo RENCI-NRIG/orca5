@@ -341,7 +341,7 @@ public class DomainElement extends Device {
 						child_de=child.getKey();
 						child_intf_ont = child.getValue();
 						if(child_de==dd){
-							parent_de.setFollowedBy(dd, child_intf_ont);
+							parent_de.setFollowedBy(this, child_intf_ont);
 							break;
 						}
 					}

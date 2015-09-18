@@ -15,12 +15,10 @@ public class ModifyParserListener implements INdlModifyModelListener {
 	protected Collection <ModifyElement> modifyElements = new LinkedList <ModifyElement>();
 
 	public void ndlModifyReservation(Resource i, Literal name, OntModel m) {
-		System.out.println("See modify " + i + " by name " + name);
 		model=m;
 	}
 
 	public void ndlModifyElement(Resource i, Resource subject, ModifyType t,Resource object, int unit, OntModel m) {
-		System.out.println("See modify element " + i + " with subject " + subject + " of type " + t); 
 		
 		ModifyElement me = new ModifyElement(subject,t,object,unit);
 		

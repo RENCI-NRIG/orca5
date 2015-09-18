@@ -60,6 +60,7 @@ import orca.util.ResourceType;
 import orca.util.VersionUtils;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.util.log.Log;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
@@ -513,7 +514,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		
 		try {
 			String result_str = null;
-			logger.info("ORCA API modifySlice() invoked");
+			logger.info("ORCA API modifySlice() invoked for " + slice_urn);
 
 			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, verifyCredentials, logger);
 			
@@ -617,6 +618,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ih.modifyComplete(); //clear the modify data.
 			}
 			
+			logger.info("modifySlice(): processing removed reservations");
 			//modifyRemove reserations (remove a interface)
 			List <ReservationMng> a_r = m_map.get(ModifyType.MODIFYREMOVE.toString());	
 			List <ReservationMng> p_r = m_map.get(ModifyType.REMOVE.toString());
@@ -781,6 +783,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				}
 			}       
 			
+			logger.info("modifySlice(): processing add reservations");
 			//add reservations
 			a_r=m_map.get(ModifyType.ADD.toString());
 			if (a_r == null) {
@@ -813,13 +816,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			// or put on deferred queue
 			XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 			
+			logger.debug("modifySlice(): modifying existing reservations");
 			//modify existing reservations
 			a_r=m_map.get(ModifyType.MODIFY.toString());
 			if (a_r == null) {
 				result_str ="No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
-				System.out.println("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+				logger.debug("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
 			} else {
-				System.out.println("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+				logger.debug("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
 				for (ReservationMng rr: a_r){
 					try{
 						//instance.releaseAddressAssignment(rr);
@@ -827,7 +831,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						if (userDN != null) 
 							OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
 
-						System.out.println("Issuing modify demand for reservation: " + rr.getReservationID().toString());
+						logger.debug("Issuing modify demand for reservation: " + rr.getReservationID().toString());
 						if(AbacUtil.verifyCredentials)
 							setAbacAttributes(rr, logger);
 						String sliver_guid = rr.getReservationID();
@@ -839,7 +843,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			            // for testing - add a status watch for this reservation
 			            //List<ReservationIDWithModifyIndex> actList = 
 			            //		Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), Integer.valueOf(modify_ver)));
-						local.list(System.out);
+						//local.list(System.out);
 						
 			            ReservationDependencyStatusUpdate rr_depend = new ReservationDependencyStatusUpdate();
 			            rr_depend.setReservation(rr);
@@ -870,7 +874,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									rr_d_list.add(new ReservationID(r_id));
 							}
 						}
-			            System.out.println("addActiveStatuWatch:"+rr_d_list+";;self="+rr_l);
+			            logger.debug("addActiveStatuWatch:"+rr_d_list+";;self="+rr_l);
 						XmlrpcOrcaState.getSUT().addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
 			            
 						//String modifySubcommand = null;
@@ -931,7 +935,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (result.length() == 0)
 				result.append("No result available");
 				
-			return setReturn(result);
+			logger.debug("modifySlice(): returning result " + result);
+			return setReturn(result.toString());
 		} catch (CredentialException ce) {
 			logger.error("modifySlice(): Credential Exception: " + ce.getMessage());
 			return setError("ERROR: CredentialException encountered: " + ce.getMessage());

@@ -432,7 +432,7 @@ public class CloudHandler extends MappingHandler{
 			if(device.getCastType()!=null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				mpDevice=true;
 			}
-			if(!deviceList.contains(device) || this.isModify()){
+			if(!deviceList.contains(device) || device.isModify()){
 				setModifyFlag(device);
 				deviceList.add(device);
 				if(!mpDevice){

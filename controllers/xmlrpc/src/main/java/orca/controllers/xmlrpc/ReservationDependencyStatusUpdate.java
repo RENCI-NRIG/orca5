@@ -49,6 +49,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			ReservationMng p_r = null;
 			if(p_str!=null){
 				p=Integer.valueOf(p_str);
+				System.out.println("Number of parent reservations:"+p);
 				for(int i=0;i<p;i++){
 					String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
 					r_id=local.getProperty(key);
@@ -57,8 +58,8 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 						pr_local=OrcaConverter.fill(p_r.getLocalProperties());
 						if(p_r!=null){
 							isWhat = pr_local.getProperty(ReservationConverter.PropertyIsNetwork);
-							System.out.println("Extracting property of parent: isWhat="+isWhat );
-							pr_local.list(System.out);
+							//System.out.println("Extracting property of parent: isWhat="+isWhat );
+							//pr_local.list(System.out);
 							pr_local.clear();
 							if(isWhat!=null && isWhat.equals("1")){	//Parent is a networking reservation
 								String unit_tag = null;
@@ -93,6 +94,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									if(local.getProperty(site_host_interface_uuid)!=null)
 										modifyProperties.setProperty(site_host_interface_uuid,local.getProperty(site_host_interface_uuid));
 									
+									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
 									System.out.println("Parent doesnot return the unit tag:"+pr_local);

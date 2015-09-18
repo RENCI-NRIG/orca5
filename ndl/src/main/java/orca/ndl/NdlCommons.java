@@ -100,7 +100,8 @@ public class NdlCommons {
     	"PREFIX ethernet:<http://geni-orca.renci.org/owl/ethernet.owl#>"+
     	"PREFIX compute:<http://geni-orca.renci.org/owl/compute.owl#>"+
     	"PREFIX storage:<http://geni-orca.renci.org/owl/storage.owl#>"+
-    	"PREFIX orca:<http://geni-orca.renci.org/owl/storage.owl#>"+
+    	"PREFIX exogeni:<http://geni-orca.renci.org/owl/exogeni.owl#>"+
+    	"PREFIX orca:<http://geni-orca.renci.org/owl/orca.rdf#>"+
     	"PREFIX domain:<http://geni-orca.renci.org/owl/domain.owl#>"+
     	"PREFIX ip4:<http://geni-orca.renci.org/owl/ip4.owl#>"+
     	"PREFIX geni:<http://geni-orca.renci.org/owl/geni.owl#>" +
@@ -2569,7 +2570,8 @@ public class NdlCommons {
 	    model.setNsPrefix("request-schema", ORCA_NS + "request.owl#");
 	    model.setNsPrefix("ip4", ORCA_NS + "ip4.owl#");
 	    model.setNsPrefix("compute", ORCA_NS + "compute.owl#");
-	    model.setNsPrefix("orca", ORCA_NS + "orca.owl#");
+	    model.setNsPrefix("exogeni", ORCA_NS + "exogeni.owl#");
+	    model.setNsPrefix("orca", ORCA_NS + "orca.rdf#");
 	    model.setNsPrefix("domain", ORCA_NS + "domain.owl#");
 	    model.setNsPrefix("eucalyptus", ORCA_NS + "eucalyptus.owl#");
 	    model.setNsPrefix("ec2", ORCA_NS + "ec2.owl#" );

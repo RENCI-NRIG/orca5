@@ -161,11 +161,12 @@ public class NdlRequestParser extends NdlCommons {
 		PrintUtil.registerPrefix("topo", "http://geni-orca.renci.org/owl/topology.owl#");
 		PrintUtil.registerPrefix("comp", "http://geni-orca.renci.org/owl/compute.owl#");
 		PrintUtil.registerPrefix("xo", "http://geni-orca.renci.org/owl/exogeni.owl#");
+		PrintUtil.registerPrefix("exogeni", "http://geni-orca.renci.org/owl/exogeni.owl#");
 		PrintUtil.registerPrefix("storage", "http://geni-orca.renci.org/owl/storage.owl#");
 		PrintUtil.registerPrefix("geni", "http://geni-orca.renci.org/owl/geni.owl#");
 		PrintUtil.registerPrefix("dom", "http://geni-orca.renci.org/owl/domain.owl#");
 		PrintUtil.registerPrefix("req", "http://geni-orca.renci.org/owl/request.owl#");
-		PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.owl#");
+		PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.rdf#");
 		PrintUtil.registerPrefix("euca", "http://geni-orca.renci.org/owl/eucalyptus.owl#");
 		PrintUtil.registerPrefix("pl", "http://geni-orca.renci.org/owl/planetlab.owl#");
 		PrintUtil.registerPrefix("col", "http://geni-orca.renci.org/owl/collections.owl#");
