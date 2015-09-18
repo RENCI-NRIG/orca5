@@ -57,8 +57,8 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 						pr_local=OrcaConverter.fill(p_r.getLocalProperties());
 						if(p_r!=null){
 							isWhat = pr_local.getProperty(ReservationConverter.PropertyIsNetwork);
-							System.out.println("Extracting property of parent: isWhat="+isWhat );
-							pr_local.list(System.out);
+							//System.out.println("Extracting property of parent: isWhat="+isWhat );
+							//pr_local.list(System.out);
 							pr_local.clear();
 							if(isWhat!=null && isWhat.equals("1")){	//Parent is a networking reservation
 								String unit_tag = null;

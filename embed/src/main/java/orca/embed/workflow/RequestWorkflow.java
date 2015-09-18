@@ -1,6 +1,9 @@
 package orca.embed.workflow;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.BitSet;
 import java.util.Collection;
@@ -15,6 +18,7 @@ import net.jwhoisserver.utils.InetNetworkException;
 import orca.embed.cloudembed.MappingHandler;
 import orca.embed.cloudembed.controller.CloudHandler;
 import orca.embed.cloudembed.controller.InterDomainHandler;
+import orca.embed.cloudembed.controller.ModifyHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.ModifyElement;
 import orca.embed.policyhelpers.RequestReservation;
@@ -272,6 +276,10 @@ public class RequestWorkflow {
 		}
 		if (((MappingHandler) this.embedderAlgorithm).getIdm() != null) 
 			closeModel();
+		
+		if (((ModifyHandler) this.embedderAlgorithm).getModifyRequestModelList() != null) 
+			for(OntModel model:((ModifyHandler) this.embedderAlgorithm).getModifyRequestModelList())
+				NdlModel.closeModel(model);
 	}
 	
 	public void modifyGlobalControllerAssignedLabel(){

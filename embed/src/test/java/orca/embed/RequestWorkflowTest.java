@@ -1,6 +1,9 @@
 package orca.embed;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,9 +64,9 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		
 		requestFileRenciVMSVlan= "src/test/resources/orca/embed/TS3-3.rdf";  // a vlan connected 3-node cluster in renci vmsite
 		
-		requestFileGPO = "src/test/resources/orca/embed/mod-ori.rdf"; 
+		requestFileGPO = "src/test/resources/orca/embed/request.rdf"; 
 		
-		requestFileGush = "src/test/resources/orca/embed/mod.rdf"; 
+		requestFileGush = "src/test/resources/orca/embed/modify-inter-request.rdf"; 
 		
 		requestFileDukeUHouston = "src/main/resources/orca/ndl/request/idRequest-dukeEuca-uhoustonEuca.rdf";
 		requestFileDukeRice = "orca/ndl/request/idRequest-dukeEuca-riceEuca.rdf";
@@ -92,7 +95,14 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		DomainResourcePools drp = new DomainResourcePools(); 
 		drp.getDomainResourcePools(pools);
 		workflow.run(drp, abstractModels, reqStr, null,null, "slice-id");
-		
+		String fileName =  "/home/geni-orca//workspace-orca5/orca5/embed/src/test/resources/orca/embed/request-manifest.rdf";
+		try {
+			OutputStream fsw = new FileOutputStream(fileName);
+			workflow.getManifestModel().write(fsw);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		LinkedList<NetworkElement> connection = (LinkedList<NetworkElement>) workflow.getBoundElements();
 		
 		print(connection);
@@ -146,6 +156,8 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		print(connection);
 		
 		//workflow.getManifestModel().write(System.out);
+		workflow.closeModel();
+		workflow.close();
 	}
 	
 	class ReservationElementCollection {
