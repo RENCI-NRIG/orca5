@@ -762,7 +762,6 @@ public class ReservationConverter implements LayerConstant {
 	public Properties formInterfaceProperties(OntModel manifestModel,DomainElement dd,Entry<DomainElement, OntResource> parent, int num_parent, int num){		
 		Properties property=new Properties();
 		String ip_addr = null, mac_addr=null, host_interface = null, intf_name=null;
-		String parent_tag_name = "unit.eth";
 		String parent_ip_addr = "unit.eth";
 		String parent_mac_addr = "unit.eth";
 		String parent_quantum_uuid = "unit.eth";
@@ -795,10 +794,8 @@ public class ReservationConverter implements LayerConstant {
 		parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
 			
 		property.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
-		if (num_parent >= 1) {
-			parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
-			parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
-		}
+
+		parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 
 		if(parent.getKey().getNetUUID()!=null)
 			property.setProperty(parent_quantum_uuid,parent.getKey().getNetUUID());
@@ -1542,6 +1539,7 @@ public class ReservationConverter implements LayerConstant {
 				+";ip="+intf_ont.getProperty(NdlCommons.layerLabelIdProperty)
 				+";id="+intf_ont.getProperty(NdlCommons.ip4LocalIPAddressProperty));
 	}
+	
 	public boolean existingParent(OntResource c_ont,OntResource p_ont){
 		boolean e=false;
 		Resource parent_rs=null,parent_e_rs=null;
@@ -1653,20 +1651,20 @@ public class ReservationConverter implements LayerConstant {
 					//Parented by an existing reservation: joining a existing shared link
 					ReservationMng p_rmg = r_map.get(p_uri);
 					if(p_rmg!=null){
+						logger.debug("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);	
 						p++;
 						p_r.add(p_rmg);
-					}
-					logger.debug("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);		
+					}	
 					
 					//Parented by an added reservation: new link
 					p_rmg = m_r_map.get(p_uri);
 					if(p_rmg!=null){
+						logger.debug("ModifiedReservation Parent new:"+p_uri+";p_rmg="+p_rmg);
 						m_p++;
 						m_p_r.add(p_rmg);
-						Properties property = formInterfaceProperties(manifestModel, dd, parent, num_interface, num);
+						Properties property = formInterfaceProperties(manifestModel, dd, parent, num_interface, m_p);
 						rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
-					}
-					logger.debug("ModifiedReservation Parent new:"+p_uri+";p_rmg="+p_rmg);		
+					}		
 				}
 				//create properties to remember its parent reservations
 				if(p>0){
