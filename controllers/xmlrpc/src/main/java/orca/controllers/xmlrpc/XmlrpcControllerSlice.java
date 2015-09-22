@@ -23,6 +23,7 @@ import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
+import orca.manage.beans.ReservationStateMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.manage.beans.UnitMng;
@@ -190,10 +191,28 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	public List<UnitMng> getUnits(IOrcaServiceManager sm, String res) {
 		try {
 			return sm.getUnits(new ReservationID(res));
-		} catch(RuntimeException re) {
-			throw re;
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to get units for reservation " + res + " due to " + e);
+		}
+	}
+	
+	/**
+	 * Get reservation states, both actual and pending
+	 * @param sm
+	 * @param res
+	 * @return
+	 */
+	public List<ReservationStateMng> getReservationStates(IOrcaServiceManager sm, List<String> res) {
+		try {
+			List<ReservationID> resIds = new ArrayList<>();
+			if (res == null)
+				return null;
+			for(String srid: res) {
+				resIds.add(new ReservationID(srid.trim()));
+			}
+			return sm.getReservationState(resIds);
+		} catch(Exception e) {
+			throw new RuntimeException("Unable to get state for reservations " + res + " due to " + e);
 		}
 	}
 	

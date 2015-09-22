@@ -36,6 +36,7 @@ import orca.manage.beans.PoolInfoMng;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
+import orca.manage.beans.ReservationStateMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.manage.beans.UnitMng;
@@ -60,7 +61,6 @@ import orca.util.ResourceType;
 import orca.util.VersionUtils;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.util.log.Log;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
@@ -1304,6 +1304,71 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		}
 	}
     
+     /**
+      * Return unit properties of a sliver in a list of maps of pName, pValue. One map per unit. 
+      * @param slice_urn
+      * @param sliver_guid - list of guids
+      * @param credentials
+      * @return
+      */
+     public Map<String, Object> getReservationStates(String slice_urn, List<String> sliver_guids, Object[] credentials) {
+    	 IOrcaServiceManager sm = null;
+    	 XmlrpcControllerSlice ndlSlice = null;
+
+    	 logger.info("ORCA API getReservationStates() invoked for " + sliver_guids + " of slice " + slice_urn);
+
+    	 if (sliver_guids == null) 
+    		 return setError("ERROR: getReservationStates() sliver_guids is null");
+
+    	 try {
+    		 String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
+
+    		 // check the whitelist
+    		 if (verifyCredentials && !checkWhitelist(userDN)) 
+    			 return setError(WHITELIST_ERROR);
+    		 sm = instance.getSM();
+
+    		 // find this slice and lock it
+    		 ndlSlice = instance.getSlice(slice_urn);
+    		 if (ndlSlice == null) {
+    			 logger.error("getSliverProperties(): unable to find slice " + slice_urn + " among active slices");
+    			 return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
+    		 }
+    		 // lock the slice
+    		 ndlSlice.lock();
+
+    		 List<ReservationStateMng> resStates = ndlSlice.getReservationStates(sm, sliver_guids);
+    		 if (resStates == null) {
+    			 return setError("ERROR: getReservationStates(): unable to get states for " + sliver_guids);
+    		 }
+
+    		 Map<String, Map<String, String>> res = new HashMap<>();
+    		 Iterator<String> resId = sliver_guids.iterator();
+    		 Iterator<ReservationStateMng> resState = resStates.iterator();
+    		 while(resId.hasNext() && resState.hasNext()) {
+    			 Map<String, String> el = new HashMap<>();
+    			 ReservationStateMng elState = resState.next();
+    			 el.put("reservation.state", OrcaConstants.getReservationStateName(elState.getState()));
+    			 el.put("reservation.pending", OrcaConstants.getReservationPendingStateName(elState.getPending()));
+    			 res.put(resId.next(), el);
+    		 }
+
+    		 return setReturn(res);
+    	 } catch (Exception e) {
+    		 logger.error("getReservationStates(): Exception encountered: " + e.getMessage());	
+    		 e.printStackTrace();
+    		 return setError("ERROR: getReservationStates(): Exception encountered: " + e.getMessage());
+    	 } finally {
+    		 if (sm != null){
+    			 instance.returnSM(sm);
+    		 }
+    		 if (ndlSlice != null)
+    			 ndlSlice.unlock();
+    	 }
+
+     }
+     
+     
     /**
      * Return unit properties of a sliver in a list of maps of pName, pValue. One map per unit. 
      * @param slice_urn
