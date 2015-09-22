@@ -526,10 +526,13 @@ public class ModifyHandler extends UnboundRequestHandler {
 		HashMap<DomainElement, OntResource> preds = de.getPrecededBy();
 		DomainElement pe = null;
 		LinkedList <DomainElement> pes = new LinkedList <DomainElement> ();
+		LinkedList <DomainElement> pes_single = new LinkedList <DomainElement> ();
 		if (preds != null) {  
 			for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
 				pe = parent.getKey();
 				pes.add(pe);
+				if( pe.getFollowedBySet()!=null && (pe.getFollowedBySet().size()==1) ) //if only parent, removed too
+					pes_single.add(pe);
 			}
 			Iterator <DomainElement> pes_it = pes.iterator();
 			while(pes_it.hasNext()){
@@ -571,24 +574,47 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 		
 		//remove from domainInConnectionList and deviceList
-		name=device.getName();			
-		device_ont = manifestOntModel.getOntResource(name);
-		boolean inDomainList = false;
-		if(device_ont!=null){
-			logger.debug("device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
-			inDomainList = this.domainInConnectionList.remove(device_ont);
-		}else
-			logger.error("Modify remove:Not in the domainInConnectionList:"+name);
-		boolean inDeviceList = deviceList.remove(device); 
-		if( (!inDomainList) && (!inDeviceList)){
-			error = new SystemNativeError();
-			error.setErrno(7);
-			error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
-			logger.error(error.toString());
-		}else{
-			logger.debug("to be removed ont:"+device_ont.getURI());
-			modifies.addRemovedElement(device_ont);
+		pes_single.add((DomainElement) device);
+		for(DomainElement device_s:pes_single){
+			name=device_s.getName();			
+			device_ont = manifestOntModel.getOntResource(name);
+			boolean inDomainList = false;
+			if(device_ont!=null){
+				logger.debug("device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
+				inDomainList = this.domainInConnectionList.remove(device_ont);
+			}else
+				logger.error("Modify remove:Not in the domainInConnectionList:"+name);
+			boolean inDeviceList = deviceList.remove(device_s); 
+			if(!inDeviceList){
+				error = new SystemNativeError();
+				error.setErrno(7);
+				error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
+				logger.error(error.toString());
+			}else{
+				logger.debug("to be removed ont:"+device_ont.getURI());
+				modifies.addRemovedElement(device_ont);
+			}
+			//remove from 
+			String domainName = device_s.getInDomain();
+		
+			LinkedList <Device> domainList = this.domainConnectionList.get(domainName);
+			boolean inDomainConnectionList = false;
+			if(domainList!=null)	//CloudHandler
+				inDomainConnectionList = domainList.remove(device_s);
+			else{
+				for(LinkedList <Device> list:this.domainConnectionList.values()){
+					inDomainConnectionList = list.remove(device);
+				}
+			}
+			logger.debug("Modify remove:"+domainName+":inDomainConnectionList="+inDomainConnectionList);
+			if(!inDomainConnectionList){
+				//error = new SystemNativeError();
+				//error.setErrno(7);
+				//error.setMessage("Removed device doesn't exist in domainConnectionList: name: "+device.getName()+";url=" + device.getURI());
+				logger.error(error.toString());
+			}
 		}
+		pes_single.clear();
 		//close reservation and modify manifest will be done in ReservationConverter in the controller.
 		
 		return error;

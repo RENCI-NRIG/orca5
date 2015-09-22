@@ -685,6 +685,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 										unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
 								}
 							}
+							if(unit_tag==null){
+								logger.error("No unit_tag found for the parent:"+name+":reservation_id:"+p_r_m.getReservationID());
+								continue;
+							}
 							String tag_key=null;
 							for(Entry<?,?> entry:config.entrySet()){
 								String tag = (String) entry.getValue();
@@ -695,6 +699,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								logger.error("No this tag:"+unit_tag);
 								continue;
 							}
+							if(tag_key.indexOf(parent_prefix)<0){
+								logger.error("tag key not right?:"+tag_key);
+								continue;
+							}
+								
 							String index=tag_key.split(parent_prefix)[1];
 							host_interface = index.split(".vlan.tag")[0];
 							logger.debug("ModifiedRemove: host_interface="+host_interface+";tag="+unit_tag+";tag_key="+tag_key);

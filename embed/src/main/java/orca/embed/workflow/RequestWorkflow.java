@@ -234,6 +234,7 @@ public class RequestWorkflow {
 		modifyGlobalControllerAssignedLabel();
 		boundElements = ((CloudHandler) embedderAlgorithm).getDeviceList();
 		staticLabelDependency();
+		domainInConnectionList = ((CloudHandler) embedderAlgorithm).getDomainInConnectionList();
 		
 		nmp.freeModel();
 		TDB.sync(manifestModel);
