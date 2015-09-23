@@ -262,6 +262,7 @@ public class CloudHandler extends MappingHandler{
 		}else
 			domainConnectionList.put(domainName, newDomainList);
 		
+		logger.debug("domainName="+domainName+":newDomainList.size="+newDomainList.size());
 		nodeGroupDependency(newDomainList);
 		
 		return error;
@@ -432,7 +433,8 @@ public class CloudHandler extends MappingHandler{
 			if(device.getCastType()!=null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				mpDevice=true;
 			}
-			if(!deviceList.contains(device) || device.isModify()){
+	
+			if(!deviceList.contains(device)){
 				setModifyFlag(device);
 				deviceList.add(device);
 				if(!mpDevice){
@@ -447,7 +449,7 @@ public class CloudHandler extends MappingHandler{
 					}
 				}
 			}
-			if(!mpDevice)
+			if(!mpDevice && !newDomainList.contains(device))
 				newDomainList.add(device);
 		}
 		return error;
@@ -491,7 +493,7 @@ public class CloudHandler extends MappingHandler{
 		edge_device.setGUID(device_guid);
 		
 		DomainElement existing_ce = (DomainElement) existingDevice(edge_device, deviceList);
-		if(existing_ce!=null){
+		if( (existing_ce!=null) && (!element.isModify()) ){
 			logger.info("Existing ce="+existing_ce.getName());
 			edge_device = existing_ce;
 		}
@@ -1004,7 +1006,9 @@ public class CloudHandler extends MappingHandler{
            	link_url=next_Hop.getURI();
             link_name = next_Hop.getName();
             
-            DomainElement d = (DomainElement) next_Hop;
+			logger.debug("CloudHandler createManifest:"+i+"."+link_name+":"+next_Hop.getType());
+            
+			DomainElement d = (DomainElement) next_Hop;
             ComputeElement ce = d.getCe();
             
             if(ce!=null && ce.isModify())
@@ -1064,7 +1068,7 @@ public class CloudHandler extends MappingHandler{
             if(!domainInConnectionList.contains(link_ont))
             	domainInConnectionList.add(link_ont);
             
-            logger.debug(i+":create individual url:"+next_Hop.getURI()+" :Name="+next_Hop.getName() +" :Individual="+link_ont);
+            logger.debug(i+":created individual url:"+next_Hop.getURI()+" :Name="+next_Hop.getName() +" :Individual="+link_ont);
         }   
         return null;
 	}

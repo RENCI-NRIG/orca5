@@ -149,6 +149,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			if(de.getCe()!=null)
 				nodeGroupAddedDevices.add(device);
 		}
+		logger.debug("modify final manifest:addedDevice="+addedDevices.size()+"ng Size="+nodeGroupAddedDevices.size());
 		this.createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
 		return error;
 	}
@@ -156,26 +157,53 @@ public class ModifyHandler extends UnboundRequestHandler {
 	public void modifyComplete(){
 		this.modifies.clear();
 		this.addedDevices.clear();
-		
+		logger.debug("ModifiedDevice:"+modifiedDevices.size()+";deviceList:"+deviceList.size());
 		for(Device dd:modifiedDevices){
+			logger.debug("Modified device:"+dd.getURI()+";"+dd.getGUID()+";"+deviceList.contains(dd)+";isModify="+dd.isModify());
 			if(this.deviceList.contains(dd)){
 				LinkedList <NetworkElement> existingDevice = new LinkedList<NetworkElement>();
 				for(NetworkElement dd_ori:this.deviceList){
-					if(dd_ori.getGUID()==null)
-						continue;
-					if(dd_ori.getGUID().equals(dd.getGUID()) && (dd_ori!=dd) ){
-						DomainElement dd_ori_de = (DomainElement) dd_ori;
-						DomainElement dd_de=(DomainElement) dd;
+					DomainElement dd_ori_de = (DomainElement) dd_ori;
+					DomainElement dd_de=(DomainElement) dd;
+					//if(dd_ori.getGUID()==null)
+					//	continue;
+					//if( dd_ori.getGUID().equals(dd.getGUID()) && (dd_ori!=dd) ){
+					logger.debug("Modified device:"+dd_ori.getURI()+";"+dd_ori.getGUID() +";"+dd_ori_de.isModify());
+					if( dd_ori_de.getURI().equals(dd_de.getURI()) && (!dd_ori_de.isModify()) ){
 						//dd_ori_de.copyDependency(dd_de);
 						dd_de.copyDependency(dd_ori_de);
 						existingDevice.add(dd_ori);
 					}		
 				}
 				//this.deviceList.remove(dd);
+				logger.debug("existingDevice size:"+existingDevice.size());
 				this.deviceList.removeAll(existingDevice);
+				for(NetworkElement d_s:existingDevice){
+					String domainName = d_s.getInDomain();
+					LinkedList <Device> domainList = this.domainConnectionList.get(domainName);
+					boolean inDomainConnectionList = false;
+					if(domainList!=null){	//CloudHandler
+						inDomainConnectionList = domainList.remove(d_s);
+						logger.debug("Modify complete remove:"+domainName+";flag="+inDomainConnectionList);
+					}
+					else{
+						for(LinkedList <Device> list:this.domainConnectionList.values()){
+							logger.debug("Modify complete remove, list size="+list.size());
+							inDomainConnectionList = list.remove(d_s);
+						}
+					}
+					logger.debug("Modify complete remove:"+domainName+":inDomainConnectionList="+inDomainConnectionList);
+				}
 			}else
 				logger.error("ERROR:Modified device not in the list:"+dd.getName());
 		}
+		
+		//resume all the isModify flag to flase
+		for(NetworkElement d_s:deviceList)
+			d_s.setModify(false);
+		
+		for(LinkedList <Device> list:this.domainConnectionList.values())
+			logger.debug("Modify complete, list size="+list.size()+";deviceList size="+deviceList.size());
 		
 		this.modifiedDevices.clear();
 		this.isModify=false;
@@ -512,10 +540,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 		
 		if(remove!=true){
-			error = new SystemNativeError();
-			error.setErrno(7);
-			error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
-			logger.error(error.toString());
+			//error = new SystemNativeError();
+			//error.setErrno(7);
+			//error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
+			logger.error("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
 			return error;
 		}
 		
@@ -526,13 +554,11 @@ public class ModifyHandler extends UnboundRequestHandler {
 		HashMap<DomainElement, OntResource> preds = de.getPrecededBy();
 		DomainElement pe = null;
 		LinkedList <DomainElement> pes = new LinkedList <DomainElement> ();
-		LinkedList <DomainElement> pes_single = new LinkedList <DomainElement> ();
+
 		if (preds != null) {  
 			for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
 				pe = parent.getKey();
 				pes.add(pe);
-				if( pe.getFollowedBySet()!=null && (pe.getFollowedBySet().size()==1) ) //if only parent, removed too
-					pes_single.add(pe);
 			}
 			Iterator <DomainElement> pes_it = pes.iterator();
 			while(pes_it.hasNext()){
@@ -574,47 +600,43 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 		
 		//remove from domainInConnectionList and deviceList
-		pes_single.add((DomainElement) device);
-		for(DomainElement device_s:pes_single){
-			name=device_s.getName();			
-			device_ont = manifestOntModel.getOntResource(name);
-			boolean inDomainList = false;
-			if(device_ont!=null){
-				logger.debug("device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
-				inDomainList = this.domainInConnectionList.remove(device_ont);
-			}else
-				logger.error("Modify remove:Not in the domainInConnectionList:"+name);
-			boolean inDeviceList = deviceList.remove(device_s); 
-			if(!inDeviceList){
-				error = new SystemNativeError();
-				error.setErrno(7);
-				error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
-				logger.error(error.toString());
-			}else{
-				logger.debug("to be removed ont:"+device_ont.getURI());
-				modifies.addRemovedElement(device_ont);
-			}
-			//remove from 
-			String domainName = device_s.getInDomain();
-		
-			LinkedList <Device> domainList = this.domainConnectionList.get(domainName);
-			boolean inDomainConnectionList = false;
-			if(domainList!=null)	//CloudHandler
-				inDomainConnectionList = domainList.remove(device_s);
-			else{
-				for(LinkedList <Device> list:this.domainConnectionList.values()){
-					inDomainConnectionList = list.remove(device);
-				}
-			}
-			logger.debug("Modify remove:"+domainName+":inDomainConnectionList="+inDomainConnectionList);
-			if(!inDomainConnectionList){
-				//error = new SystemNativeError();
-				//error.setErrno(7);
-				//error.setMessage("Removed device doesn't exist in domainConnectionList: name: "+device.getName()+";url=" + device.getURI());
-				logger.error(error.toString());
+
+		name=device.getName();			
+		device_ont = manifestOntModel.getOntResource(name);
+		boolean inDomainList = false;
+		if(device_ont!=null){
+			logger.debug("Modify remove: device_ont:"+device_ont.getURI()+";device domain="+device_ont.getProperty(NdlCommons.hasURLProperty));
+			inDomainList = this.domainInConnectionList.remove(device_ont);
+		}else
+			logger.error("Modify remove:Not in the domainInConnectionList:"+name);
+		boolean inDeviceList = deviceList.remove(device); 
+		if(!inDeviceList){
+			//error = new SystemNativeError();
+			//error.setErrno(7);
+			//error.setMessage("Removed element doesn't exist: name: "+device_s.getName()+";url=" + device_s.getURI());
+			logger.error("Removed device doesn't exist: name: "+device.getName()+";url=" + device.getURI());
+		}else{
+			logger.debug("to be removed ont:"+device_ont.getURI());
+			modifies.addRemovedElement(device_ont);
+		}
+		//remove from 
+		String domainName = device.getInDomain();
+		LinkedList <Device> domainList = this.domainConnectionList.get(domainName);
+		boolean inDomainConnectionList = false;
+		if(domainList!=null)	//CloudHandler
+			inDomainConnectionList = domainList.remove(device);
+		else{
+			for(LinkedList <Device> list:this.domainConnectionList.values()){
+				inDomainConnectionList = list.remove(device);
 			}
 		}
-		pes_single.clear();
+		logger.debug("Modify remove:"+domainName+":inDomainConnectionList="+inDomainConnectionList);
+		if(!inDomainConnectionList){
+			//error = new SystemNativeError();
+			//error.setErrno(7);
+			//error.setMessage("Removed device doesn't exist in domainConnectionList: name: "+device_s.getName()+";url=" + device_s.getURI());
+			logger.error("Removed device doesn't exist in domainConnectionList: name: "+device.getName()+";url=" + device.getURI());
+		}
 		//close reservation and modify manifest will be done in ReservationConverter in the controller.
 		
 		return error;
@@ -675,7 +697,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				Entry<String, LinkedList<Device>> domainEntry = domainConnectionListIt.next();
 		        connectionName = domainEntry.getKey();
 		        domainList = domainEntry.getValue();
-		        logger.info("CreateManifest:connectionName=" + connectionName 
+		        logger.info("Modify CreateManifest:connectionName=" + connectionName 
 		        		+ " ;num hops=" + domainList.size()+";request Domain:"+domain);
 
 		        if(domain.equals(request.Interdomain_Domain) || domain.equals(request.MultiPoint_Domain)){
@@ -683,7 +705,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        	while(elementIt.hasNext()){
 		        		element = elementIt.next();
 		        		if(element.getName().equals(connectionName) || element.getURI().equals(connectionName)){
-		        			logger.info("CreateManifest InterDomain:element name ="+element.getName());
+		        			logger.info("Modify CreateManifest InterDomain:element name ="+element.getName());
 		        			this.createManifest(element, manifestModel, manifest, domainList);
 		        		}
 		        	}
@@ -691,7 +713,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        }else if(domain.equals(request.Unbound_Domain)){
 		        	if(rr.getReservationDomain()!=null){
 		        		if(rr.getReservationDomain().contains(connectionName)){
-		        			logger.info("CreateManifest unbound cloud name ="+connectionName);
+		        			logger.info("Modify CreateManifest unbound cloud name ="+connectionName);
 		        			createManifest(manifestModel,manifest, domainList);
 		        		}
 		        		else{
@@ -700,7 +722,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				        		element = elementIt.next();
 				        		
 				        		if(element.getName().equals(connectionName)){
-				        			logger.debug("create manifest unbound: element name="+element.getName()+":connectionName="+connectionName);
+				        			logger.debug("Modify Create manifest unbound: element name="+element.getName()+":connectionName="+connectionName);
 				        			this.createManifest(element, manifestModel, manifest, domainList);
 				        		}
 				        	}
@@ -710,7 +732,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        }
 		        else{   //@cloud
 		        	if(domain.equals(connectionName)){
-		        		logger.info("CreateManifest cloud name ="+connectionName);
+		        		logger.info("Modify CreateManifest cloud name ="+connectionName);
 		        		createManifest(manifestModel,manifest, domainList);
 		        	}
 		        }

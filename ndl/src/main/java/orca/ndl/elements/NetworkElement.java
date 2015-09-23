@@ -85,7 +85,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	
 	/**
 	 * Comparison of networkelements limited to comparing URIs and names
-	 */
+	 *
 	public boolean equals(Object o) {
 		if ((o instanceof NetworkElement) && (uri != null)) {
 			NetworkElement neNew = (NetworkElement)o;
@@ -95,7 +95,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 				return uri.equals(neNew.uri);
 		}
 		return false;
-	}
+	}*/
 	
 	public int compareTo(Object o) {
 		int compare=0;
