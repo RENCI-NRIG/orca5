@@ -583,6 +583,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			// to XmlrpcControllerSlice objects. These slice objects are locked within each call
 			// using a fair semaphore. 
 			List<ReservationMng> allRes = null;
+			HashMap <String, ReservationMng> allRes_map = null;
 			HashMap <String, List<ReservationMng>> m_map = null;
 			logger.info("ORCA API modifySlice() started...");
 
@@ -599,6 +600,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				return setError(result_str);
 			}
 			else {
+				allRes_map = new HashMap <String, ReservationMng>();
+				for(ReservationMng aRes:allRes)
+					allRes_map.put(aRes.getReservationID(), aRes);
+				if(ndlSlice.getComputedReservations()!=null)
+					for(TicketReservationMng cRes:ndlSlice.getComputedReservations())
+						cRes.setState(allRes_map.get(cRes.getReservationID()).getState());
+				
 				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
 				orc.updateGeniStates(ndlSlice.getWorkflow().getManifestModel(), geniStates);
 				OntModel manifestModel=orc.getManifestModel(workflow.getManifestModel(),
@@ -776,13 +784,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (a_r == null) {
 				result_str ="No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
 				logger.debug("No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
-			} else {
-				logger.debug("There are " + a_r.size() + " reservations to be removed in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+			} else {			
 				for (ReservationMng rr: a_r){
 					try{
 						instance.releaseAddressAssignment(rr);
-						// not really needed /ib 08/05/14
-						ndlSlice.removeComputedReservations((TicketReservationMng)rr);
+						ndlSlice.removeComputedReservations(rr.getReservationID());
 						sm.closeReservation(new ReservationID(rr.getReservationID()));
 					} catch (Exception ex) {
 						ex.printStackTrace();
@@ -790,6 +796,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						throw new Exception("Failed to close reservation", ex);
 					}
 				}
+				logger.debug("There are " + a_r.size() 
+						+ " reservations to be removed in the slice with urn=" + slice_urn 
+						+ " sliceId = " + ndlSlice.getSliceID()
+						+ "reservations "+ndlSlice.getComputedReservations().size());
 			}       
 			
 			logger.info("modifySlice(): processing add reservations");

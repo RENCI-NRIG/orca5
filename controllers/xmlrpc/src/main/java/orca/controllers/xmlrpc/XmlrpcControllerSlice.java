@@ -129,9 +129,18 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		return (lock.availablePermits() == 0);
 	}
 	
-	public void removeComputedReservations(TicketReservationMng l) {
+	public void removeComputedReservations(String l) {
 		if(computedReservations != null)
-			computedReservations.remove(l);
+		{
+			TicketReservationMng r = null;	
+			for(TicketReservationMng r_l:computedReservations){
+				if(r_l.getReservationID().equalsIgnoreCase(l)){
+					r=r_l;
+					break;
+				}
+			}
+			computedReservations.remove(r);
+		}
 	}
 	
 	/**
