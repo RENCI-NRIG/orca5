@@ -782,7 +782,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					try{
 						instance.releaseAddressAssignment(rr);
 						// not really needed /ib 08/05/14
-						//ndlSlice.removeComputedReservations(rr);
+						ndlSlice.removeComputedReservations((TicketReservationMng)rr);
 						sm.closeReservation(new ReservationID(rr.getReservationID()));
 					} catch (Exception ex) {
 						ex.printStackTrace();

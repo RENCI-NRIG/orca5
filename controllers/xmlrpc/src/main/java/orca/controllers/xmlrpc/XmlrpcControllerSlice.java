@@ -129,6 +129,11 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		return (lock.availablePermits() == 0);
 	}
 	
+	public void removeComputedReservations(TicketReservationMng l) {
+		if(computedReservations != null)
+			computedReservations.remove(l);
+	}
+	
 	/**
 	 * Set a list of computed reservations for this slice
 	 * @param l
