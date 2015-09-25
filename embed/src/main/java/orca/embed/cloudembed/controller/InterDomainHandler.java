@@ -104,7 +104,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			NetworkConnection element = (NetworkConnection) it.next();
 			logger.debug("Interdomain connection:"+element.getName()+";"
 					+element.getNe1().getName()+":"+element.getNe1().getInDomain()+":"
-					+element.getNe2()+":"+element.getNe2().getInDomain());
+					+element.getNe2().getName()+":"+element.getNe2().getInDomain());
 			if((element.getNe1()==null) || (element.getNe2()==null)){
 				logger.error("This request connection misses the end point(s):nc="+element.getName()+":ne1="+element.getNe1()+";ne2="+element.getNe2());
 				continue;
@@ -593,7 +593,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		Resource startDownLocal = start.getDownLocal(next.getModel());
 		
 		DomainElement device = (DomainElement) mapper.getDevice(start,dependList);
-		if((device!=null) && (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
+		if((device!=null) && (!device.isModify()) &&  (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
 			start=device;
 		}
 		else{
@@ -606,7 +606,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		device = (DomainElement) mapper.getDevice(next,dependList);
 
 		//if((device!=null) && (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
-		if(device!=null){ 
+		if( (device!=null) && (!next.isModify()) ){ 
 			String castType = device.getCastType();
 			if(castType==null)
 				castType="";

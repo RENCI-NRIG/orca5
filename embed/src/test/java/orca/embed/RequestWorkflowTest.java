@@ -66,7 +66,7 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		
 		requestFileGPO = "src/test/resources/orca/embed/request.rdf"; 
 		
-		requestFileGush = "src/test/resources/orca/embed/modify-inter-request.rdf"; 
+		requestFileGush = "src/test/resources/orca/embed/modify.rdf"; 
 		
 		requestFileDukeUHouston = "src/main/resources/orca/ndl/request/idRequest-dukeEuca-uhoustonEuca.rdf";
 		requestFileDukeRice = "orca/ndl/request/idRequest-dukeEuca-riceEuca.rdf";

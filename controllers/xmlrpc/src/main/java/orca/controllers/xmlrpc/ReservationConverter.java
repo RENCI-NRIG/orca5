@@ -1341,7 +1341,7 @@ public class ReservationConverter implements LayerConstant {
 												Formatter fmt = new Formatter(); 
 												// like Twitter 
 												fmt.format("%.140s", p.getProperty(key)); 
-												logger.debug("{Property key: " + key + " | Property value: " + fmt + "}"); 
+												//logger.debug("{Property key: " + key + " | Property value: " + fmt + "}"); 
 												fmt.close(); 											
 											}                           
 										}
@@ -1607,11 +1607,11 @@ public class ReservationConverter implements LayerConstant {
 			Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 			String unit_url = local.getProperty(UNIT_URL_RES);
 			String element_guid = local.getProperty(this.PropertyElementGUID);
-			logger.debug("Reservation.UNIT_URL_RES="+unit_url+";guid="+element_guid);
-			if(element_guid!=null)
-				r_map.put(element_guid,rmg);
-			else if(unit_url!=null)
+			if(unit_url!=null)
 				r_map.put(unit_url,rmg);
+			else if(element_guid!=null)
+				r_map.put(element_guid,rmg);
+			logger.debug("ReservationConverter.modifyReservation:"+unit_url+";guid"+element_guid);
 		}
 		
 		HashMap <String, ReservationMng> m_r_map = new HashMap <String, ReservationMng> ();
@@ -1619,19 +1619,22 @@ public class ReservationConverter implements LayerConstant {
 			for(ReservationMng rmg:added_reservations){
 				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				String unit_url = local.getProperty(UNIT_URL_RES);
-				logger.debug("Added Reservation.UNIT_URL_RES="+unit_url);
+				String element_guid = local.getProperty(this.PropertyElementGUID);
 				if(unit_url!=null)
 					m_r_map.put(unit_url,rmg);
+				else if(element_guid!=null)
+					m_r_map.put(element_guid,rmg);
 			}
 		}	
+		logger.debug("Modify reservations:r_map="+r_map.size()+":m_r_map="+m_r_map.size());
 		ArrayList<ReservationMng> reservations = new ArrayList<ReservationMng> ();
 		for(NetworkElement ne:modifiedDevices){
 			DomainElement dd = (DomainElement) ne;
-			String d_uri=dd.getURI();
+			String d_uri=dd.getName();
 			ReservationMng rmg = r_map.get(d_uri);
 			if(rmg==null && dd.getGUID()!=null)
 				rmg = r_map.get(dd.getGUID());
-			logger.debug("ModifiedReservation:d_uri="+d_uri+"reservation="+rmg);
+			logger.debug("ModifiedReservation:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg);
 			if(rmg!=null){
 				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
@@ -1639,8 +1642,10 @@ public class ReservationConverter implements LayerConstant {
 				String num_interface_str=local.getProperty(ReservationConverter.parent_num_interface);
 				int num_interface = Integer.valueOf(num_interface_str);
 				HashMap<DomainElement, OntResource> preds = dd.getPrecededBy();
-				if (preds == null)
+				if (preds == null){
+					logger.warn("Modify reservations, No parent:"+dd);
 					continue;
+				}
 				int p=0,m_p=0,num=0;	
 				ArrayList<ReservationMng> p_r = new ArrayList<ReservationMng> ();
 				ArrayList<ReservationMng> m_p_r = new ArrayList<ReservationMng> ();

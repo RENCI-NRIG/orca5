@@ -238,9 +238,9 @@ try {
 							DomainElement d = (DomainElement) device;
 							d.setCe(ne1);
 							if(ne1!=null){
-								
 								d.getCe().setNodeGroupName(ne1.getNodeGroupName());
 								d.getCe().setGroup(ne1.getGroup());
+								d.setModify(ne1.isModify());
 							}
 						}
 						else
@@ -270,6 +270,7 @@ try {
 								if(ne2!=null){	
 									d.getCe().setNodeGroupName(ne2.getNodeGroupName());
 									d.getCe().setGroup(ne2.getGroup());
+									d.setModify(ne2.isModify());
 								}
 							}
 						}

@@ -140,6 +140,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		logger.debug(debug_str());
+		
 		//modify the manifest
 		OntResource manifest=NdlCommons.getOntOfType(manifestOnt, "request:Manifest");
 		this.createManifest(addedRequest, manifestOnt, manifest); //
@@ -149,7 +152,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			if(de.getCe()!=null)
 				nodeGroupAddedDevices.add(device);
 		}
-		logger.debug("modify final manifest:addedDevice="+addedDevices.size()+"ng Size="+nodeGroupAddedDevices.size());
+		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
 		this.createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
 		return error;
 	}
@@ -157,7 +160,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 	public void modifyComplete(){
 		this.modifies.clear();
 		this.addedDevices.clear();
-		logger.debug("ModifiedDevice:"+modifiedDevices.size()+";deviceList:"+deviceList.size());
+
 		for(Device dd:modifiedDevices){
 			logger.debug("Modified device:"+dd.getURI()+";"+dd.getGUID()+";"+deviceList.contains(dd)+";isModify="+dd.isModify());
 			if(this.deviceList.contains(dd)){
@@ -168,7 +171,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 					//if(dd_ori.getGUID()==null)
 					//	continue;
 					//if( dd_ori.getGUID().equals(dd.getGUID()) && (dd_ori!=dd) ){
-					logger.debug("Modified device:"+dd_ori.getURI()+";"+dd_ori.getGUID() +";"+dd_ori_de.isModify());
 					if( dd_ori_de.getURI().equals(dd_de.getURI()) && (!dd_ori_de.isModify()) ){
 						//dd_ori_de.copyDependency(dd_de);
 						dd_de.copyDependency(dd_ori_de);
@@ -188,11 +190,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 					}
 					else{
 						for(LinkedList <Device> list:this.domainConnectionList.values()){
-							logger.debug("Modify complete remove, list size="+list.size());
 							inDomainConnectionList = list.remove(d_s);
+							logger.debug("Modify complete remove:"+domainName+":inDomainConnectionList="+inDomainConnectionList);
 						}
 					}
-					logger.debug("Modify complete remove:"+domainName+":inDomainConnectionList="+inDomainConnectionList);
 				}
 			}else
 				logger.error("ERROR:Modified device not in the list:"+dd.getName());
@@ -291,20 +292,22 @@ public class ModifyHandler extends UnboundRequestHandler {
 					}
 				}else{
 					modifies.addAddedElement(device.getResource());
-					//if(!addedDevices.contains(dd))  //added by the add operation
-						addedDevices.add(dd);
+					//added by the add operation
+					addedDevices.add(dd);
 				}
 			}
 		}
 		
-		logger.debug("ModifyHandler:devicelist="+this.getDeviceList().size()
-				+";addedDevice="+addedDevices.size()
-				+";modifies.addedElement="+modifies.getAddedElements().size()
-				+";modifiedDevice="+modifiedDevices.size()
-				+";modifies.modifiedElement="+modifies.getModifiedElements().size());
-		
 		TDB.sync(modifyModel);
 		return request;
+	}
+	
+	private String debug_str(){
+		return "ModifyHandler:devicelist="+this.getDeviceList().size()
+				+";addedDevice="+(addedDevices==null?null:addedDevices.size())
+				+";modifies.addedElement="+(modifies.getAddedElements()==null?null:modifies.getAddedElements().size())
+				+";modifiedDevice="+ (modifiedDevices==null?null:modifiedDevices.size())
+				+";modifies.modifiedElement="+(modifies.getModifiedElements()==null?null:modifies.getModifiedElements().size());
 	}
 	
 	private void copyProperty(OntModel domainRequestModel, Resource me_rs){

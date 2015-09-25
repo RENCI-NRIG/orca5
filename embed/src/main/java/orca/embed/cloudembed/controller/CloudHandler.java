@@ -433,9 +433,8 @@ public class CloudHandler extends MappingHandler{
 			if(device.getCastType()!=null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				mpDevice=true;
 			}
-	
+			setModifyFlag(device);
 			if(!deviceList.contains(device)){
-				setModifyFlag(device);
 				deviceList.add(device);
 				if(!mpDevice){
 					dType = domainResourcePools.getDomainResourceType(domain_name);
@@ -492,10 +491,14 @@ public class CloudHandler extends MappingHandler{
 		}
 		edge_device.setGUID(device_guid);
 		
-		DomainElement existing_ce = (DomainElement) existingDevice(edge_device, deviceList);
-		if( (existing_ce!=null) && (!element.isModify()) ){
-			logger.info("Existing ce="+existing_ce.getName());
-			edge_device = existing_ce;
+		for(NetworkElement existing_ce: deviceList){
+			if(existing_ce.getName().equalsIgnoreCase(edge_device.getName())){
+				if(!element.isModify() || isInterdomain(((DomainElement) existing_ce).getCe(),ce_element, link_device)){
+					logger.info("Existing ce="+existing_ce.getName());
+					edge_device = (DomainElement) existing_ce;
+					break;
+				}
+			}
 		}
 		edge_device.setModify(element.isModify());
 		if(ce.getGroup()==null){
@@ -572,6 +575,31 @@ public class CloudHandler extends MappingHandler{
 		return edge_device;
 	}
 	
+	public boolean isInterdomain(ComputeElement ce_element,ComputeElement ce, DomainElement link_device){
+		boolean isInter = false;
+		if(link_device==null)
+			return isInter;
+		LinkedList <Interface> interfaces = ce_element.getClientInterface();
+		NetworkConnection ncByInterface=null;
+		if(interfaces==null)
+			return isInter;
+		Interface ce_intf=null;
+		for(Interface intf:interfaces){
+			ncByInterface = ce_element.getConnectionByInterfaceName(intf);
+			if(ncByInterface==null){
+				logger.warn("No connection associated with this interface"+intf.getName());
+				continue;
+			}
+			if(!ncByInterface.getName().equals(link_device.getName())){                      //inter-site topology request: link != connection
+                ce_intf=ce.getInterfaceByName(ncByInterface.getName()); 
+                if(ce_intf!=null && ce_intf==intf){
+                	isInter=true;
+                	break;
+                }
+			}
+		}
+		return isInter;
+	}
 	public void createInterface(ComputeElement element,DomainElement edge_device,int hole,DomainElement link_device) throws InetNetworkException, UnknownHostException{
 		if(link_device==null)
 			return;
