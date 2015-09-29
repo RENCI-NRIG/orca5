@@ -327,8 +327,9 @@ public class DomainElement extends Device {
 		DomainElement parent_de=null,child_de=null;
 		OntResource intf_ont=null,child_intf_ont=null;
 		
-		for(Interface intf:dd.getClientInterface())
-			this.addClientInterface(intf);
+		if(dd.getClientInterface()!=null)
+			for(Interface intf:dd.getClientInterface())
+				this.addClientInterface(intf);
 		
 		if(dd.getPrecededBySet()!=null){
 			for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {

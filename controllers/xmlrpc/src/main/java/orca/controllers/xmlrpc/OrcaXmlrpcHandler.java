@@ -635,9 +635,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				logger.debug("No modifyremoved reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID()+";"+a_r+";"+p_r);
 			} else {				
 				logger.debug("There are " + a_r.size() + " reservations to be modifyremoved in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());				
-				String parent_prefix = "unit.eth";
-				String modifySubcommand = "removeiface";
-				
+
+				String modifySubcommand = "removeiface";				
 				LinkedList <NetworkElement> d_list = ih.getDeviceList();
 				HashMap <String, NetworkElement> d_list_guid_map = new HashMap <String, NetworkElement>();
 				for(NetworkElement ne:d_list){
@@ -673,6 +672,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							continue;
 						for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()){
 							Properties modifyProperties=new Properties();
+							String parent_prefix = "unit.eth";
 							
 							DomainElement pe = parent.getKey();
 							String name = pe.getName();
@@ -681,7 +681,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								logger.error("no this parent reservation:"+name);
 								continue;
 							}
-							logger.debug("modifyremove:found parent reservation="+name);
+							
 							num_interface_int++;
 							String host_interface=String.valueOf(num_interface_int);
 							String unit_tag = null;
@@ -697,9 +697,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								logger.error("No unit_tag found for the parent:"+name+":reservation_id:"+p_r_m.getReservationID());
 								continue;
 							}
+							logger.debug("modifyremove:found parent reservation="+name + ";parent unit tag="+unit_tag);
 							String tag_key=null;
 							for(Entry<?,?> entry:config.entrySet()){
-								String tag = (String) entry.getValue();
+								String tag = (String) entry.getValue();	
 								if(tag.equals(unit_tag))
 									tag_key = (String) entry.getKey();	
 							}
@@ -707,17 +708,32 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								logger.error("No this tag:"+unit_tag);
 								continue;
 							}
-							if(tag_key.indexOf(parent_prefix)<0){
+								
+							int index = tag_key.indexOf(parent_prefix);
+							String index_str=null;
+							if(index>=0){
+								index_str=tag_key.split(parent_prefix)[1];
+							}
+							else{
+								index=tag_key.indexOf(OrcaConstants.MODIFY_PROPERTY_PREFIX);
+								if(index>=0){
+									index_str=tag_key.split(OrcaConstants.MODIFY_PROPERTY_PREFIX)[1];
+									parent_prefix=	OrcaConstants.MODIFY_PROPERTY_PREFIX;
+								}
+							}
+							if(index<0){
 								logger.error("tag key not right?:"+tag_key);
 								continue;
 							}
-								
-							String index=tag_key.split(parent_prefix)[1];
-							host_interface = index.split(".vlan.tag")[0];
-							logger.debug("ModifiedRemove: host_interface="+host_interface+";tag="+unit_tag+";tag_key="+tag_key);
 							
-							String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
-							modifyProperties.setProperty(parent_tag_name,unit_tag);
+							host_interface = index_str.split(".vlan.tag")[0];
+							logger.debug("ModifiedRemove: host_interface="+host_interface
+									+";tag="+unit_tag
+									+";tag_key="+tag_key
+									+";parent_prefix="+parent_prefix);
+							
+							String parent_tag_name = parent_prefix+host_interface+".vlan.tag";
+							modifyProperties.setProperty("vlan.tag",unit_tag);
 							local.remove(parent_tag_name);
 							config.remove(parent_tag_name);
 							request.remove(parent_tag_name);
@@ -727,50 +743,50 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							String parent_ip_addr = parent_prefix+host_interface+".ip";
 							String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
 							String parent_interface_uuid = parent_prefix+host_interface+".uuid";
-							String site_host_interface_uuid = parent_prefix + host_interface + ".hosteth";
+							String site_host_interface = parent_prefix + host_interface + ".hosteth";
 							
-							if(local.getProperty(parent_mac_addr)!=null){
-								modifyProperties.setProperty(parent_mac_addr,local.getProperty(parent_mac_addr));
+							if(config.getProperty(parent_mac_addr)!=null){
+								modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
 								local.remove(parent_mac_addr);
 								config.remove(parent_mac_addr);
 								request.remove(parent_mac_addr);
 								resource.remove(parent_mac_addr);
 							}
-							if(local.getProperty(parent_ip_addr)!=null){
-								modifyProperties.setProperty(parent_ip_addr,local.getProperty(parent_ip_addr));
+							if(config.getProperty(parent_ip_addr)!=null){
+								modifyProperties.setProperty("ip",local.getProperty(parent_ip_addr));
 								local.remove(parent_ip_addr);
 								config.remove(parent_ip_addr);
 								request.remove(parent_ip_addr);
 								resource.remove(parent_ip_addr);
 							}
-							if(local.getProperty(parent_quantum_uuid)!=null){
-								modifyProperties.setProperty(parent_quantum_uuid,local.getProperty(parent_quantum_uuid));
+							if(config.getProperty(parent_quantum_uuid)!=null){
+								modifyProperties.setProperty("net.uuid",local.getProperty(parent_quantum_uuid));
 								local.remove(parent_quantum_uuid);
 								config.remove(parent_quantum_uuid);
 								request.remove(parent_quantum_uuid);
 								resource.remove(parent_quantum_uuid);
 							}
-							if(local.getProperty(parent_interface_uuid)!=null){
-								modifyProperties.setProperty(parent_interface_uuid,local.getProperty(parent_interface_uuid));
+							if(config.getProperty(parent_interface_uuid)!=null){
+								modifyProperties.setProperty("uuid",local.getProperty(parent_interface_uuid));
 								local.remove(parent_interface_uuid);
 								config.remove(parent_interface_uuid);
 								request.remove(parent_interface_uuid);
 								resource.remove(parent_interface_uuid);
 							}
-							if(local.getProperty(site_host_interface_uuid)!=null){
-								modifyProperties.setProperty(site_host_interface_uuid,local.getProperty(site_host_interface_uuid));
-								local.remove(site_host_interface_uuid);
-								config.remove(site_host_interface_uuid);
-								request.remove(site_host_interface_uuid);
-								resource.remove(site_host_interface_uuid);
+							if(config.getProperty(site_host_interface)!=null){
+								modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
+								local.remove(site_host_interface);
+								config.remove(site_host_interface);
+								request.remove(site_host_interface);
+								resource.remove(site_host_interface);
 							}
 							System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 							ModifyHelper.enqueueModify(rr.getReservationID().toString(), modifySubcommand, modifyProperties);
 							
 							rr.setLocalProperties(OrcaConverter.unset(local, rr.getLocalProperties()));
-							rr.setConfigurationProperties(OrcaConverter.unset(local, rr.getConfigurationProperties()));
-							rr.setRequestProperties(OrcaConverter.unset(local, rr.getRequestProperties()));
-							rr.setResourceProperties(OrcaConverter.unset(local, rr.getResourceProperties()));
+							rr.setConfigurationProperties(OrcaConverter.unset(config, rr.getConfigurationProperties()));
+							rr.setRequestProperties(OrcaConverter.unset(request, rr.getRequestProperties()));
+							rr.setResourceProperties(OrcaConverter.unset(resource, rr.getResourceProperties()));
 						}
 						
 					} catch (Exception ex) {

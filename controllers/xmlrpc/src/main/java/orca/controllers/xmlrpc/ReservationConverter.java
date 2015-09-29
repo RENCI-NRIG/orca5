@@ -1640,6 +1640,8 @@ public class ReservationConverter implements LayerConstant {
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
 				//modify properties for adding/deleting interfaces from links
 				String num_interface_str=local.getProperty(ReservationConverter.parent_num_interface);
+				if(num_interface_str==null)
+					num_interface_str="0";
 				int num_interface = Integer.valueOf(num_interface_str);
 				HashMap<DomainElement, OntResource> preds = dd.getPrecededBy();
 				if (preds == null){
