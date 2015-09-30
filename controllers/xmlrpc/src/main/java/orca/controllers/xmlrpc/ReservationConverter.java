@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -287,7 +286,7 @@ public class ReservationConverter implements LayerConstant {
 			local.setProperty(UnitProperties.UnitHostName,getDomainLocalName(device_name));
 			config.setProperty(UnitProperties.UnitDomain,device.getURI());
 			if (resrequest.isVM) {
-				config.setProperty("unit.hostname.url", device_name);
+				config.setProperty(UnitProperties.UnitHostNameUrl, device_name);
 						
 				ComputeElement ce = de.getCe();
 				if (ce.getVMImageURL() != null) {
@@ -311,7 +310,7 @@ public class ReservationConverter implements LayerConstant {
 			if(resrequest.isLUN){
 				ComputeElement ce = de.getCe();
 				
-				config.setProperty("unit.hostname.url", device_name);
+				config.setProperty(UnitProperties.UnitHostNameUrl, device_name);
 	
 				config.setProperty(UnitProperties.UnitTargetPrefix+".segment_size","128");   
 				config.setProperty(UnitProperties.UnitISCSIInitiatorIQNPrefix,ISCSI_Initiator_Iqn_prefix);
@@ -348,7 +347,7 @@ public class ReservationConverter implements LayerConstant {
 					throw new RuntimeException("getReservations: ndlRequest is null or zero-length");
 				}
 				config.setProperty(PropertyRequestNdl, ndlRequest);
-				config.setProperty("unit.vlan.url", device_name);
+				config.setProperty(UnitProperties.UnitVlanUrl, device_name);
 
 				int staticLabel = (int) de.getStaticLabel();
 				if(staticLabel>0){
@@ -512,9 +511,9 @@ public class ReservationConverter implements LayerConstant {
 						logger.debug("Generating postbootscript for " + device.getName());
 						bootScript = scriptConstructor.constructScript(bootScript, device.getName());
 						if (bootScript != null) {
-							logger.debug("unit.instance.config=\n" + bootScript);
-							config.setProperty("unit.instance.config", bootScript);
-							local.setProperty("unit.instance.config", bootScript);
+							logger.debug(UnitProperties.UnitInstanceConfig + "\n" + bootScript);
+							config.setProperty(UnitProperties.UnitInstanceConfig, bootScript);
+							local.setProperty(UnitProperties.UnitInstanceConfig, bootScript);
 							de.getCe().setPostBootScript(bootScript);
 						}
 					}
@@ -535,11 +534,11 @@ public class ReservationConverter implements LayerConstant {
 			int num_interface=0;
 			for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
 				String intf_name = null;
-				String parent_tag_name = "unit.eth";
-				String parent_ip_addr = "unit.eth";
-				String parent_mac_addr = "unit.eth";
-				String parent_quantum_uuid = "unit.eth";
-				String parent_interface_uuid = "unit.eth";
+				String parent_tag_name = UnitProperties.UnitEthPrefix;
+				String parent_ip_addr = UnitProperties.UnitEthPrefix;
+				String parent_mac_addr = UnitProperties.UnitEthPrefix;
+				String parent_quantum_uuid = UnitProperties.UnitEthPrefix;
+				String parent_interface_uuid = UnitProperties.UnitEthPrefix;
 				DomainElement parent_de = parent.getKey();
 				ReservationRequest pr = map.get(parent_de.getName());
 				if (pr == null) {
@@ -658,8 +657,8 @@ public class ReservationConverter implements LayerConstant {
 								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
 								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
 								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
-								config.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
-								local.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
+								config.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
+								local.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
 								if (de.getPrecededBySet().size() >= 1) {
 									parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
 									parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
@@ -671,8 +670,8 @@ public class ReservationConverter implements LayerConstant {
 								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
 								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
 								if (de.getPrecededBySet().size() >= 1) {
-									config.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
-									local.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
+									config.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
+									local.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
 									parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
 									parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 									if(pr!=null){
@@ -694,7 +693,7 @@ public class ReservationConverter implements LayerConstant {
 								local.setProperty(parent_quantum_uuid,parent.getKey().getNetUUID());
 							}
 							else
-								filter.setProperty("unit.quantum.net.uuid",parent_quantum_uuid);
+								filter.setProperty(UnitProperties.UnitQuantumNetUUID,parent_quantum_uuid);
 							
 							if(parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)!=null)
 								mac_addr=parent.getValue().getProperty(NdlCommons.ipMacAddressProperty).getString();
@@ -762,10 +761,10 @@ public class ReservationConverter implements LayerConstant {
 	public Properties formInterfaceProperties(OntModel manifestModel,DomainElement dd,Entry<DomainElement, OntResource> parent, int num_parent, int num){		
 		Properties property=new Properties();
 		String ip_addr = null, mac_addr=null, host_interface = null, intf_name=null;
-		String parent_ip_addr = "unit.eth";
-		String parent_mac_addr = "unit.eth";
-		String parent_quantum_uuid = "unit.eth";
-		String parent_interface_uuid = "unit.eth";
+		String parent_ip_addr = UnitProperties.UnitEthPrefix;
+		String parent_mac_addr = UnitProperties.UnitEthPrefix;
+		String parent_quantum_uuid = UnitProperties.UnitEthPrefix;
+		String parent_interface_uuid = UnitProperties.UnitEthPrefix;
 		
 		if(parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)!=null)
 			intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
@@ -793,7 +792,7 @@ public class ReservationConverter implements LayerConstant {
 		parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
 		parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
 			
-		property.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
+		property.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
 
 		parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 
@@ -1235,26 +1234,26 @@ public class ReservationConverter implements LayerConstant {
 											logger.info("getManifest: unit.vlan.url="+vlan_url);
 											if (vlan_url == null) {
 												logger.error("unit.vlan.url is null");
-												vlan_url = domain_ont.getURI() + "/" + p.getProperty("unit.rid");
+												vlan_url = domain_ont.getURI() + "/" + p.getProperty(UnitProperties.UnitReservationID);
 											}
 										
-											if (p.getProperty("unit.vlan.tag") != null) {
-												domain_ont.addProperty(NdlCommons.RDFS_Label, p.getProperty("unit.vlan.tag"));
+											if (p.getProperty(UnitProperties.UnitVlanTag) != null) {
+												domain_ont.addProperty(NdlCommons.RDFS_Label, p.getProperty(UnitProperties.UnitVlanTag));
 											} else {
-												logger.error("unit.vlan.tag is null");
+												logger.error(UnitProperties.UnitVlanTag + " is null");
 											}
-											if (p.getProperty("unit.vlan.qos.rate") != null) {
+											if (p.getProperty(UnitProperties.UnitVlanQoSRate) != null) {
 												Statement st_bw = domain_ont.getProperty(NdlCommons.layerBandwidthProperty);
-												long bw = Long.valueOf(p.getProperty("unit.vlan.qos.rate"));
+												long bw = Long.valueOf(p.getProperty(UnitProperties.UnitVlanQoSRate));
 												if(st_bw!=null)
 													st_bw.changeLiteralObject(bw);
 												else
 													domain_ont.addLiteral(NdlCommons.layerBandwidthProperty,bw);
 											} else {
-												logger.error("unit.vlan.qos.rate is null");
+												logger.error(UnitProperties.UnitVlanQoSRate + " is null");
 											}
-											if(p.getProperty("unit.quantum.net.uuid")!=null){
-												domain_ont.addProperty(NdlCommons.quantumNetUUIDProperty,p.getProperty("unit.quantum.net.uuid"));
+											if(p.getProperty(UnitProperties.UnitQuantumNetUUID)!=null){
+												domain_ont.addProperty(NdlCommons.quantumNetUUIDProperty,p.getProperty(UnitProperties.UnitQuantumNetUUID));
 											}
 											updateState(manifestModel,domain_ont,NdlCommons.requestMessage, notice);
 											updateState(manifestModel,domain_ont,NdlCommons.requestHasReservationState,reservationState);
@@ -1267,7 +1266,7 @@ public class ReservationConverter implements LayerConstant {
 											String vm_url = unit_url;
 											if (vm_url == null) {
 												logger.error("unit.hostname.url is null");
-												vm_url = domain_ont.getURI() + "/" + p.getProperty("unit.rid");
+												vm_url = domain_ont.getURI() + "/" + p.getProperty(UnitProperties.UnitReservationID);
 											}
 											logger.debug("getManifest:domain_ont_url="+domain_ont_url+";vm_url="+vm_url); 
 									
@@ -1309,26 +1308,26 @@ public class ReservationConverter implements LayerConstant {
 											String user_login = ndlSlice.getLoginsAsString();
 											if(user_login!=null)
 												service_ont.addProperty(NdlCommons.topologyHasLogin, user_login);
-											String unitManagementIP = p.getProperty("unit.manage.ip");
-											String unitManagementPort = p.getProperty("unit.manage.port");
+											String unitManagementIP = p.getProperty(UnitProperties.UnitManagementIP);
+											String unitManagementPort = p.getProperty(UnitProperties.UnitManagementPort);
 											if (unitManagementIP != null) {
 												//vm_IP.addProperty(NdlCommons.layerLabelIdProperty, unitManagementIP);
 												service_ont.addProperty(NdlCommons.topologyManagementIP, unitManagementIP);
 												if(unitManagementPort!=null){
 													service_ont.addProperty(NdlCommons.topologyManagementPort, unitManagementPort);
 												} else {
-													logger.error("unit.manage.port is null");
+													logger.error(UnitProperties.UnitManagementIP + " is null");
 												}
 												//if( (unitManagementPort==null) || (unitManagementPort.equals("22")) ){  //No DNAT
 												//	vm_ont.addProperty(NdlCommons.ip4LocalIPAddressProperty, vm_IP);
 												//}
 											} else {
-												logger.error("unit.manage.ip is null");
+												logger.error(UnitProperties.UnitManagementIP + " is null");
 											}
-											if (p.getProperty("unit.instance.config") != null) {
-												vm_ont.addProperty(NdlCommons.requestPostBootScriptProperty, p.getProperty("unit.instance.config"));
+											if (p.getProperty(UnitProperties.UnitInstanceConfig) != null) {
+												vm_ont.addProperty(NdlCommons.requestPostBootScriptProperty, p.getProperty(UnitProperties.UnitInstanceConfig));
 											} else {
-												logger.error("unit.instance.config is null");
+												logger.error(UnitProperties.UnitInstanceConfig + " is null");
 											}
 												
 											updateState(manifestModel,vm_ont,NdlCommons.requestMessage, notice);

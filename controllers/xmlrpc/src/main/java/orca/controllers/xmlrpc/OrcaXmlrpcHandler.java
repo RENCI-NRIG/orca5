@@ -635,7 +635,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				logger.debug("No modifyremoved reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID()+";"+a_r+";"+p_r);
 			} else {				
 				logger.debug("There are " + a_r.size() + " reservations to be modifyremoved in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());				
-				String parent_prefix = "unit.eth";
+				String parent_prefix = UnitProperties.UnitEthPrefix;
 				String modifySubcommand = "removeiface";
 				
 				LinkedList <NetworkElement> d_list = ih.getDeviceList();
@@ -689,7 +689,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							if (un != null) {
 								for (UnitMng u : un) {
 									Properties pr_local = OrcaConverter.fill(u.getProperties());										
-									if (pr_local.getProperty("unit.vlan.tag") != null)
+									if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
 										unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
 								}
 							}

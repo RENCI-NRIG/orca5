@@ -20,7 +20,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 	public void success(List<ReservationID> ok, List<ReservationID> actOn)
 			throws StatusCallbackException {
 		
-		String parent_prefix = "unit.eth";
+		String parent_prefix = UnitProperties.UnitEthPrefix;
 		String host_interface=null;
 		String reservation_id = null;
 		if(reservation!=null)
@@ -69,7 +69,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 								if (un != null) {
 									for (UnitMng u : un) {
 										pr_local = OrcaConverter.fill(u.getProperties());										
-										if (pr_local.getProperty("unit.vlan.tag") != null)
+										if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
 											unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
 									}
 								}

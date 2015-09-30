@@ -269,7 +269,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	 public void releaseAddressAssignment(ReservationMng r){
 		 // mac address on the VM data interfaces
 		 String parent_num_interface = "unit.number.interface";
-		 String parent_mac_addr = "unit.eth";
+		 String parent_mac_addr = UnitProperties.UnitEthPrefix;
 
 		 String num_interface_str = OrcaConverter.getLocalProperty(r, parent_num_interface);
 		 if(num_interface_str!=null){
