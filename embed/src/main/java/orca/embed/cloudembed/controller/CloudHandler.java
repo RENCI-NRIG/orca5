@@ -559,6 +559,7 @@ public class CloudHandler extends MappingHandler{
 					setEdgeNeighbourhood(edge_device,link_device, intf, ncByInterface);
 					edge_device.addClientInterface(intf);
 					ce.addClientInterface(intf);
+					logger.debug("Intf ip:"+intf.getResource()+";ip="+intf.getResource().getProperty(NdlCommons.layerLabelIdProperty));
 				}
 			}
 		}else{				

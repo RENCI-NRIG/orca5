@@ -20,8 +20,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 	public void success(List<ReservationID> ok, List<ReservationID> actOn)
 			throws StatusCallbackException {
 		
-		//String parent_prefix = "unit.eth";
-		String parent_prefix = "";
+		String parent_prefix = "unit.eth";
 		String host_interface=null;
 		String reservation_id = null;
 		if(reservation!=null)
@@ -78,26 +77,24 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 								if(unit_tag!=null){
 									num_interface_int++;
 									host_interface=String.valueOf(num_interface_int);
-									modifyProperties.setProperty("interface",host_interface);
-									host_interface="";
-									String parent_tag_name = "vlan.tag";
-									modifyProperties.setProperty(parent_tag_name,unit_tag);
-									String parent_mac_addr = "mac";
-									String parent_ip_addr = "ip";
-									String parent_quantum_uuid = "net.uuid";
-									String parent_interface_uuid = "uuid";
-									String site_host_interface_uuid = "hosteth";
+									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
+									modifyProperties.setProperty("vlan.tag",unit_tag);
+									String parent_mac_addr = parent_prefix+host_interface+".mac";
+									String parent_ip_addr = parent_prefix+host_interface+".ip";
+									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
+									String parent_interface_uuid = parent_prefix+host_interface+".uuid";
+									String site_host_interface = parent_prefix + host_interface + ".hosteth";
 									
 									if(local.getProperty(parent_mac_addr)!=null)
-										modifyProperties.setProperty(parent_mac_addr,local.getProperty(parent_mac_addr));
+										modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
 									if(local.getProperty(parent_ip_addr)!=null)
-										modifyProperties.setProperty(parent_ip_addr,local.getProperty(parent_ip_addr));
+										modifyProperties.setProperty("ip",local.getProperty(parent_ip_addr));
 									if(local.getProperty(parent_quantum_uuid)!=null)
-										modifyProperties.setProperty(parent_quantum_uuid,local.getProperty(parent_quantum_uuid));
+										modifyProperties.setProperty("net.uuid",local.getProperty(parent_quantum_uuid));
 									if(local.getProperty(parent_interface_uuid)!=null)
-										modifyProperties.setProperty(parent_interface_uuid,local.getProperty(parent_interface_uuid));
-									if(local.getProperty(site_host_interface_uuid)!=null)
-										modifyProperties.setProperty(site_host_interface_uuid,local.getProperty(site_host_interface_uuid));
+										modifyProperties.setProperty("uuid",local.getProperty(parent_interface_uuid));
+									if(local.getProperty(site_host_interface)!=null)
+										modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
 									
 									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
