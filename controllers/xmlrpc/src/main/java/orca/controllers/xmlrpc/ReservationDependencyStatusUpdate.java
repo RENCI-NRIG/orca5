@@ -43,7 +43,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			Properties local = OrcaConverter.fill(reservation.getLocalProperties());
 			String  p_str = local.getProperty(ReservationConverter.PropertyNumNewParentReservations);
 			String num_interface=local.getProperty(ReservationConverter.parent_num_interface);
-			int num_interface_int = Integer.valueOf(num_interface);
+			int num_interface_int = 0;
+			if(num_interface!=null)
+				num_interface_int = Integer.valueOf(num_interface);
 			Properties pr_local=null;
 			int p = 0;
 			String r_id=null,isWhat=null;
