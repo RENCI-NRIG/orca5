@@ -108,6 +108,11 @@
 					</then>
 				</if>
 
+				<echo message="********************************* ec2 join (ALL PROPERTIES) *********************************" />
+				<echoproperties/>
+				<echo message="**********************************************************************************" />
+
+
 				<!-- image proxy (optional) -->
 				<if>
 					<!-- statically specified in ec2.site.properties -->
@@ -735,7 +740,8 @@
 				        <!-- Actually do it... no emulation -->
 				        <echo message="adding interfaces to instance" />
 					<var name="message" unset="true" />
-           
+
+				           
 					<echo message="vlan.tag = ${modify.@{seqnum}.vlan.tag}" />
 					<echo message="ip = ${modify.@{seqnum}.ip}" />
 					<echo message="mode = ${modify.@{seqnum}.mode}" />
@@ -745,8 +751,7 @@
 					<echo message="ipversion = ${modify.@{seqnum}.ipversion}" />
 					
 					<!-- Get old userdata -->
-					<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-                                        <echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
+					<echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
                                         <echo message="LoginProperty : ${loginProperty}" />
                                         <echo message="KeysProperty : ${keysProperty}" />
                                         <echo message="SudoProperty : ${sudoProperty}" />
@@ -789,8 +794,49 @@
 					<echo>result code: ${code}</echo>
 					<echo>output: ${add.iface.output}</echo>
 					      
-					<!-- add property to userdata file TODO: add actual config values -->
-					<ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${modify.@{seqnum}.mac}" value="${modify.@{seqnum}.state}:${modify.@{seqnum}.ipversion}:${modify.@{seqnum}.ip}" /> 
+					<!-- add property to userdata file -->
+					<!-- set defaults for unset properties -->
+                                        <if>
+                                          <not>
+                                            <isset property="${modify.@{seqnum}.ip}" />
+                                          </not>
+                                          <then>
+                                            <property name="ip" value="" />
+                                          </then>
+                                          <else>
+                                            <property name="ip" value="${modify.@{seqnum}.ip}" />
+                                          </else>
+                                        </if>
+
+                                        <if>
+                                          <not>
+                                            <isset property="${modify.@{seqnum}.state}" />
+                                          </not>
+                                          <then>
+                                            <property name="state" value="up" />
+                                          </then>
+					  <else>
+                                            <property name="state" value="${modify.@{seqnum}.state}" />
+                                          </else>
+                                        </if>
+
+                                        <if>
+                                          <not>
+                                            <isset property="${modify.@{seqnum}.ipversion}" />
+                                          </not>
+                                          <then>
+                                            <property name="ipversion" value="ipv4" />
+                                          </then>
+					  <else>
+                                            <property name="ipversion" value="${modify.@{seqnum}.ipversion}" />
+                                          </else>
+                                        </if>
+
+					<!--
+					<ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${modify.@{seqnum}.mac}" value="${modify.@{seqnum}.state}:${modify.@{seqnum}.ipversion}:${modify.@{seqnum}.ip}" />
+					-->
+
+					<ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${modify.@{seqnum}.mac}" value="${state}:${ipversion}:${ip}" /> 
                                         <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
 					      
 									
@@ -822,7 +868,8 @@
         <!-- add network interface -->
         <target name="modify.addiface"  depends="resolve.configuration">
                 <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-                <echo message="ec2.site.properties path is ${ec2.site.properties}" />
+
+		<echo message="ec2.site.properties path is ${ec2.site.properties}" />
 
                 <if>
                         <isset property="ec2.site.properties" />
@@ -836,12 +883,20 @@
 		<var name="message" unset="true" />
 
 
+
+
                 <tstamp prefix="start">
                         <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
                 </tstamp>
 
                 <echo message="EC2 HANDLER: MODIFY.ADDIFACE on ${start.TIME}" />
                 <echo message="modify.addiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
+
+		<echo message="********************************* modify.addiface (ALL PROPERTIES) *********************************" />
+                <echoproperties/>
+                <echo message="**********************************************************************************" />
+
+		
 
                 <modify.addiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
 
