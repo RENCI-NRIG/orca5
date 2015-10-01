@@ -758,7 +758,7 @@ public class ReservationConverter implements LayerConstant {
 		return smReservations;
 	}
 	
-	public Properties formInterfaceProperties(OntModel manifestModel,DomainElement dd,Entry<DomainElement, OntResource> parent, int num_parent, int num){		
+	public Properties formInterfaceProperties(OntModel manifestModel,DomainElement dd,Entry<DomainElement, OntResource> parent,String site_host_interface, int num_parent, int num){		
 		Properties property=new Properties();
 		String ip_addr = null, mac_addr=null, host_interface = null, intf_name=null;
 		String parent_ip_addr = UnitProperties.UnitEthPrefix;
@@ -770,7 +770,7 @@ public class ReservationConverter implements LayerConstant {
 			intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
 		int index=0;
 		
-		String site_host_interface = getSiteHostInterface(parent);
+		//String site_host_interface = getSiteHostInterface(parent);
 
 		if (site_host_interface == null) {
 			logger.error("Host Interface Definition not here: neither up neighbor or down neighbor!!");
@@ -1668,7 +1668,14 @@ public class ReservationConverter implements LayerConstant {
 						logger.debug("ModifiedReservation Parent new:"+p_uri+";p_rmg="+p_rmg);
 						m_p++;
 						m_p_r.add(p_rmg);
-						Properties property = formInterfaceProperties(manifestModel, dd, parent, num_interface, m_p);
+						String site_host_interface = getSiteHostInterface(parent);
+						if(site_host_interface!=null){
+							Properties p_property = new Properties();
+							p_property.setProperty(UnitProperties.UnitQuantumNetname,site_host_interface);	
+							p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
+							p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
+						}	
+						Properties property = formInterfaceProperties(manifestModel, dd, parent,site_host_interface, num_interface, m_p);
 						rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
 					}		
 				}
