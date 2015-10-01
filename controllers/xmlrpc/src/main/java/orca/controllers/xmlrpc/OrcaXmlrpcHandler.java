@@ -707,62 +707,67 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								logger.error("No this tag:"+unit_tag);
 								continue;
 							}
-							if(tag_key.indexOf(parent_prefix)<0){
-								logger.error("tag key not right?:"+tag_key);
-								continue;
+							int index = tag_key.indexOf(parent_prefix);
+							if(index<0){
+								index = tag_key.indexOf(OrcaConstants.MODIFY_PROPERTY_PREFIX);
+								if(index<0){
+									logger.error("tag key not right?:"+tag_key);
+									continue;
+								}
+								parent_prefix=OrcaConstants.MODIFY_PROPERTY_PREFIX;
 							}
 								
-							String index=tag_key.split(parent_prefix)[1];
-							host_interface = index.split(".vlan.tag")[0];
+							String index_str=tag_key.split(parent_prefix)[1];
+							host_interface = index_str.split(".vlan.tag")[0];
 							logger.debug("ModifiedRemove: host_interface="+host_interface+";tag="+unit_tag+";tag_key="+tag_key);
 							
-							String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
+							String parent_tag_name = parent_prefix+host_interface+".vlan.tag";
 							modifyProperties.setProperty("vlan.tag",unit_tag);
-							local.remove(parent_tag_name);
+							/*local.remove(parent_tag_name);
 							config.remove(parent_tag_name);
 							request.remove(parent_tag_name);
 							resource.remove(parent_tag_name);
-							
+							*/
 							String parent_mac_addr = parent_prefix+host_interface+".mac";
 							String parent_ip_addr = parent_prefix+host_interface+".ip";
 							String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
 							String parent_interface_uuid = parent_prefix+host_interface+".uuid";
 							String site_host_interface = parent_prefix + host_interface + ".hosteth";
 							
-							if(local.getProperty(parent_mac_addr)!=null){
-								modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
-								local.remove(parent_mac_addr);
+							if(config.getProperty(parent_mac_addr)!=null){
+								modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
+								/*local.remove(parent_mac_addr);
 								config.remove(parent_mac_addr);
 								request.remove(parent_mac_addr);
-								resource.remove(parent_mac_addr);
+								resource.remove(parent_mac_addr);*/
 							}
-							if(local.getProperty(parent_ip_addr)!=null){
-								modifyProperties.setProperty("ip",local.getProperty(parent_ip_addr));
-								local.remove(parent_ip_addr);
+							if(config.getProperty(parent_ip_addr)!=null){
+								modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
+								/*local.remove(parent_ip_addr);
 								config.remove(parent_ip_addr);
 								request.remove(parent_ip_addr);
-								resource.remove(parent_ip_addr);
+								resource.remove(parent_ip_addr);*/
 							}
-							if(local.getProperty(parent_quantum_uuid)!=null){
-								modifyProperties.setProperty("net.uuid",local.getProperty(parent_quantum_uuid));
-								local.remove(parent_quantum_uuid);
+							if(config.getProperty(parent_quantum_uuid)!=null){
+								modifyProperties.setProperty("net.uuid",config.getProperty(parent_quantum_uuid));
+								/*local.remove(parent_quantum_uuid);
 								config.remove(parent_quantum_uuid);
 								request.remove(parent_quantum_uuid);
-								resource.remove(parent_quantum_uuid);
+								resource.remove(parent_quantum_uuid);*/
 							}
-							if(local.getProperty(parent_interface_uuid)!=null){
-								modifyProperties.setProperty("uuid",local.getProperty(parent_interface_uuid));
-								local.remove(parent_interface_uuid);
+							if(config.getProperty(parent_interface_uuid)!=null){
+								modifyProperties.setProperty("uuid",config.getProperty(parent_interface_uuid));
+								/*local.remove(parent_interface_uuid);
 								config.remove(parent_interface_uuid);
 								request.remove(parent_interface_uuid);
-								resource.remove(parent_interface_uuid);
+								resource.remove(parent_interface_uuid);*/
 							}
-							if(local.getProperty(site_host_interface)!=null){
-								modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
-								local.remove(site_host_interface);
+							if(config.getProperty(site_host_interface)!=null){
+								modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
+								/*local.remove(site_host_interface);
 								config.remove(site_host_interface);
 								request.remove(site_host_interface);
-								resource.remove(site_host_interface);
+								resource.remove(site_host_interface);*/
 							}
 							System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 							ModifyHelper.enqueueModify(rr.getReservationID().toString(), modifySubcommand, modifyProperties);
