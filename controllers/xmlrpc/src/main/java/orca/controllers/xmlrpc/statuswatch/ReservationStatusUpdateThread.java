@@ -99,8 +99,8 @@ public class ReservationStatusUpdateThread implements Runnable {
 	private abstract static class StatusChecker<ID> {
 		public enum Status {OK, NOTOK, NOTREADY};
 		
-		public Status check(ID o, List<ID> ok, List<ID> notok) {
-			Status resSt = check_(o);
+		public Status check(IOrcaServiceManager sm, ID o, List<ID> ok, List<ID> notok) {
+			Status resSt = check_(sm, o);
 			
 			switch(resSt) {
 			case OK:
@@ -119,7 +119,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 		 * @param o
 		 * @return
 		 */
-		protected abstract Status check_(ID o);
+		protected abstract Status check_(IOrcaServiceManager sm, ID o);
 	}
 	
 	private static class ModifyStatusChecker extends StatusChecker<ReservationIDWithModifyIndex> {
@@ -128,17 +128,13 @@ public class ReservationStatusUpdateThread implements Runnable {
 		private static final String UNIT_MODIFY_PROP_CODE_SUFFIX = ".code";
 		private static final String UNIT_MODIFY_PROP_PREFIX = "unit.modify.";
 		
-		protected StatusChecker.Status check_(ReservationIDWithModifyIndex l) {
+		protected StatusChecker.Status check_(IOrcaServiceManager sm, ReservationIDWithModifyIndex l) {
 			if (!(l instanceof ReservationIDWithModifyIndex))
 				return StatusChecker.Status.NOTREADY;
 			
 			ReservationIDWithModifyIndex rid = (ReservationIDWithModifyIndex)l;
 			
-			IOrcaServiceManager sm = null;
-
 			try {
-				sm = XmlrpcOrcaState.getInstance().getSM();
-
 				// check state for active, closed or failed
 				ReservationMng rm = sm.getReservation(rid.getReservationID());
 				if (rm == null)
@@ -187,10 +183,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 					return StatusChecker.Status.NOTOK;
 				}
 			} catch (Exception e) {
-				logger.error("ModifyStatusChecker: Unable to get SM or other exception " + e);
-			} finally {
-				if (sm != null)
-					XmlrpcOrcaState.getInstance().returnSM(sm);
+				logger.error("ModifyStatusChecker: " + e);
 			}
 			return StatusChecker.Status.NOTREADY;
 		}
@@ -198,15 +191,12 @@ public class ReservationStatusUpdateThread implements Runnable {
 	
 	private static class ActiveStatusChecker extends StatusChecker<ReservationID> {
 		
-		protected StatusChecker.Status check_(ReservationID l) {
+		protected StatusChecker.Status check_(IOrcaServiceManager sm, ReservationID l) {
 			if (!(l instanceof ReservationID)) 
 				return StatusChecker.Status.NOTREADY;
 			ReservationID rid = (ReservationID)l;
 			
-			IOrcaServiceManager sm = null;
-
 			try {
-				sm = XmlrpcOrcaState.getInstance().getSM();
 
 				// check state for active, closed or failed
 				ReservationMng rm = sm.getReservation(rid);
@@ -221,11 +211,8 @@ public class ReservationStatusUpdateThread implements Runnable {
 					return StatusChecker.Status.NOTOK;
 				}
 			} catch (Exception e) {
-				logger.error("ActiveStatusChecker: Unable to get SM or other exception " + e);
-			} finally {
-				if (sm != null)
-					XmlrpcOrcaState.getInstance().returnSM(sm);
-			}
+				logger.error("ActiveStatusChecker: " + e);
+			} 
 			return StatusChecker.Status.NOTREADY;
 		}
 	}
@@ -279,7 +266,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 	 * @param st
 	 * @return TriggeredWatchEntry or null if it didn't trigger
 	 */
-	private <ID> TriggeredWatchEntry<ID> checkWatchEntry(WatchEntry<ID> we, StatusChecker<ID> sc) {
+	private <ID> TriggeredWatchEntry<ID> checkWatchEntry(IOrcaServiceManager sm, WatchEntry<ID> we, StatusChecker<ID> sc) {
 		// scan through the list 
 		// if any reservations are in NOTREADY, skip
 		// if all are OK, not OK - split into two lists if necessary
@@ -290,7 +277,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 		
 		boolean ready = true;
 		for(ID rid: we.watch) {
-			StatusChecker.Status st = sc.check(rid, ok, notok);
+			StatusChecker.Status st = sc.check(sm, rid, ok, notok);
 			if (st == StatusChecker.Status.NOTREADY)
 				ready = false;
 		}
@@ -323,7 +310,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 		}
 	}
 	
-	private <ID> void processWatchList(List<WatchEntry<ID>> watchList, String watchType, StatusChecker<ID> sc) {
+	private <ID> void processWatchList(IOrcaServiceManager sm, List<WatchEntry<ID>> watchList, String watchType, StatusChecker<ID> sc) {
 		List<WatchEntry<ID>> toRemove = new ArrayList<>();
 		
 		logger.info("run(): Scanning " + watchType + " watch list");
@@ -331,7 +318,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 		synchronized(watchList) {
 			toProcess = new ArrayList<>();
 			for(WatchEntry<ID> we: watchList) {
-				TriggeredWatchEntry<ID> twe = this.<ID>checkWatchEntry(we, sc);
+				TriggeredWatchEntry<ID> twe = this.<ID>checkWatchEntry(sm, we, sc);
 				if (twe != null) {
 					// watch entry triggered, add to process list 
 					toProcess.add(twe);
@@ -369,8 +356,18 @@ public class ReservationStatusUpdateThread implements Runnable {
 		// we must make this code re-entrant hence the need to change the watch list 
 		// and only then call the callbacks
 		try {
-			this.<ReservationID>processWatchList(activeWatch, "active", new ActiveStatusChecker());
-			this.<ReservationIDWithModifyIndex>processWatchList(modifyWatch, "modify", new ModifyStatusChecker());
+			IOrcaServiceManager sm = null;
+
+			try {
+				sm = XmlrpcOrcaState.getInstance().getSM();
+				this.<ReservationID>processWatchList(sm, activeWatch, "active", new ActiveStatusChecker());
+				this.<ReservationIDWithModifyIndex>processWatchList(sm, modifyWatch, "modify", new ModifyStatusChecker());
+			} catch (Exception e) {
+				throw new RuntimeException("Unable to acquire connection to SM: " + e);
+			} finally {
+				if (sm != null)
+					XmlrpcOrcaState.getInstance().returnSM(sm);
+			}
 		} catch (RuntimeException re) {
 			logger.error("run(): RuntimeException " + re + ", continuing");
 		}
