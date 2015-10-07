@@ -45,7 +45,7 @@ do
 	        exit 1
 	    fi
 	
-	    nodeset $NODENAME osimage="$XCAT_IMAGE_NAME $NODENAME" >/dev/null 2>&1
+	    nodeset $NODENAME osimage="$XCAT_IMAGE_NAME" >/dev/null 2>&1
 	    if [ "$?" != "0" ]; then
 	        echo "start.sh: Attempt to nodeset bare metal node $NODENAME with osimage $XCAT_IMAGE_NAME failed. Please ensure that the image name is correct, and has been made available in xCAT."
 	        exit 1
