@@ -345,6 +345,8 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264">
         <rdf:type rdf:resource="&topology;Device"/>
         <topology:hasSwitchMatrix rdf:resource="&CIENANet;IBM/G8264/EthernetSwitchMatrix"/>
+        <topology:hasInterface rdf:resource="&CIENANet;IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&CIENANet;IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet"/>
         <topology:hasInterface rdf:resource="&CIENANet;IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <topology:hasInterface rdf:resource="&CIENANet;IBM/G8264/TenGigabitEthernet/1/1/ethernet"/>
         <topology:hasInterface rdf:resource="&CIENANet;IBM/G8264/TenGigabitEthernet/3/17/ethernet"/>
@@ -363,6 +365,37 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/EthernetSwitchMatrix">
         <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
         <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>1/1,2/1,2/2</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
+        <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>
+        <topology:linkTo rdf:resource="&cienavmsite;CIENA/BareMetal/FourtyGigabitEthernet/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;40G"/>
+        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>1/1,2/1,2/2</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
+        <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>
+        <topology:linkTo rdf:resource="&cienavmsite;CIENA/BareMetal/FourtyGigabitEthernet/2/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;40G"/>
     </owl:NamedIndividual>
     
 
@@ -387,7 +420,7 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>1</rdfs:label>
+        <rdfs:label>4/1</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="&xsd;string">InstaGeni-CIENA</topology:hasName>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
@@ -511,6 +544,24 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/1779 -->
+
+    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/1779">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1779.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/1799 -->
+
+    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/1799">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1799.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/1870 -->
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/1870">
@@ -538,29 +589,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/940 -->
-
-    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/940">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">940.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/949 -->
-
-    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/949">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">949.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/availableVLANSet -->
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">11</collections:size>
+        <collections:size rdf:datatype="&xsd;int">32</collections:size>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/VLANLabel/3300"/>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/AL2S/1"/>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
@@ -593,7 +626,7 @@
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/availableVLANSet/InstaGeni">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <collections:size rdf:datatype="&xsd;int">21</collections:size>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
     </owl:NamedIndividual>
@@ -604,8 +637,8 @@
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/availableVLANSet/InstaGeni/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/940"/>
-        <layer:upperBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/949"/>
+        <layer:lowerBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/1779"/>
+        <layer:upperBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/1799"/>
     </owl:NamedIndividual>
     
 
@@ -639,6 +672,18 @@
         <domain:hasService rdf:resource="&CIENANet;Domain/NetworkService/1"/>
         <collections:element rdf:resource="&CIENANet;PoP"/>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/cienavmsite.rdf#CIENA/BareMetal/FourtyGigabitEthernet/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/BareMetal/FourtyGigabitEthernet/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/cienavmsite.rdf#CIENA/BareMetal/FourtyGigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/BareMetal/FourtyGigabitEthernet/2/ethernet"/>
     
 
 

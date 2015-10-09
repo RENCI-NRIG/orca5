@@ -37,17 +37,15 @@
      xmlns:topology="&owl2;topology.owl#"
      xmlns:compute2="&owl2;compute.owl#64"
      xmlns:storage="&owl2;storage.owl#">
-    <owl:Ontology rdf:about="">
-        <rdfs:comment
-            >Compute element ontology</rdfs:comment>
-        <rdfs:isDefinedBy
-            >RENCI
+    <owl:Ontology rdf:about="&owl2;compute.owl">
+        <rdfs:comment>Compute element ontology</rdfs:comment>
+        <rdfs:isDefinedBy>RENCI
 UNC-Chapel Hill
 2009-2011
 yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
-        <dc:contributor
-            >Yufeng Xin, Ilia Baldine</dc:contributor>
+        <dc:contributor>Yufeng Xin, Ilia Baldine</dc:contributor>
         <owl:imports rdf:resource="&owl2;collections.owl"/>
+        <owl:versionIRI rdf:resource="&owl2;compute-v2.owl"/>
         <owl:imports rdf:resource="&owl2;domain.owl"/>
         <owl:imports rdf:resource="&owl2;layer.owl"/>
         <owl:imports rdf:resource="&owl2;location.owl"/>
@@ -63,6 +61,11 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
     //
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
+
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/contributor -->
 
     <owl:AnnotationProperty rdf:about="&dc;contributor"/>
     
@@ -81,9 +84,9 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VM-in-Server -->
 
-    <owl:ObjectProperty rdf:about="#VM-in-Server">
-        <rdfs:range rdf:resource="#ClassifiedComputeElement"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#VM-in-Server">
+        <rdfs:range rdf:resource="&owl2;compute.owl#ClassifiedComputeElement"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#AdaptationProperty"/>
     </owl:ObjectProperty>
     
@@ -91,7 +94,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#availablePortLabelSet -->
 
-    <owl:ObjectProperty rdf:about="#availablePortLabelSet">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#availablePortLabelSet">
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#availableLabelSet"/>
     </owl:ObjectProperty>
     
@@ -99,8 +102,8 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#availableVMLabelSet -->
 
-    <owl:ObjectProperty rdf:about="#availableVMLabelSet">
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#availableVMLabelSet">
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#availableLabelSet"/>
     </owl:ObjectProperty>
     
@@ -108,12 +111,11 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#computeElementType -->
 
-    <owl:ObjectProperty rdf:about="#computeElementType">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#computeElementType">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:comment
-            >A blade, a mote, a server, a laptop?</rdfs:comment>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
-        <rdfs:range rdf:resource="#ComputeElementType"/>
+        <rdfs:comment>A blade, a mote, a server, a laptop?</rdfs:comment>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
+        <rdfs:range rdf:resource="&owl2;compute.owl#ComputeElementType"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -121,10 +123,10 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#cpu -->
 
-    <owl:ObjectProperty rdf:about="#cpu">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#cpu">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:range rdf:resource="#CPU"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+        <rdfs:range rdf:resource="&owl2;compute.owl#CPU"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -132,12 +134,11 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#cpuArchitecture -->
 
-    <owl:ObjectProperty rdf:about="#cpuArchitecture">
-        <rdfs:comment
-            >x86, x86-64 or other</rdfs:comment>
-        <rdfs:domain rdf:resource="#CPU"/>
-        <rdfs:range rdf:resource="#CPUArchitecture"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#cpuArchitecture">
+        <rdfs:comment>x86, x86-64 or other</rdfs:comment>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#CPU"/>
+        <rdfs:range rdf:resource="&owl2;compute.owl#CPUArchitecture"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -145,8 +146,8 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#diskImage -->
 
-    <owl:ObjectProperty rdf:about="#diskImage">
-        <rdfs:range rdf:resource="#DiskImage"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#diskImage">
+        <rdfs:range rdf:resource="&owl2;compute.owl#DiskImage"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -154,10 +155,10 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#hasHost -->
 
-    <owl:ObjectProperty rdf:about="#hasHost">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#hasHost">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
-        <rdfs:range rdf:resource="#ComputeElement"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
+        <rdfs:range rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -165,8 +166,8 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#hasServerSize -->
 
-    <owl:ObjectProperty rdf:about="#hasServerSize">
-        <rdfs:domain rdf:resource="#ClassifiedComputeElement"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#hasServerSize">
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ClassifiedComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -174,7 +175,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#hasUnitServer -->
 
-    <owl:ObjectProperty rdf:about="#hasUnitServer">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#hasUnitServer">
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -182,16 +183,16 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#inRequestNetworkConnection -->
 
-    <owl:ObjectProperty rdf:about="#inRequestNetworkConnection"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#inRequestNetworkConnection"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#memory -->
 
-    <owl:ObjectProperty rdf:about="#memory">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#memory">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
-        <rdfs:range rdf:resource="#RAM"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
+        <rdfs:range rdf:resource="&owl2;compute.owl#RAM"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -199,14 +200,14 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#os -->
 
-    <owl:ObjectProperty rdf:about="#os">
-        <rdfs:range rdf:resource="#OS"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#os">
+        <rdfs:range rdf:resource="&owl2;compute.owl#OS"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="#ComputeElement"/>
-                    <rdf:Description rdf:about="#DiskImage"/>
+                    <rdf:Description rdf:about="&owl2;compute.owl#ComputeElement"/>
+                    <rdf:Description rdf:about="&owl2;compute.owl#DiskImage"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
@@ -216,10 +217,10 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ram -->
 
-    <owl:ObjectProperty rdf:about="#ram">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#ram">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
-        <rdfs:range rdf:resource="#RAMInstance"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
+        <rdfs:range rdf:resource="&owl2;compute.owl#RAMInstance"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -227,10 +228,10 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ramType -->
 
-    <owl:ObjectProperty rdf:about="#ramType">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#ramType">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
-        <rdfs:range rdf:resource="#RAMTypeInstance"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
+        <rdfs:range rdf:resource="&owl2;compute.owl#RAMTypeInstance"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -238,12 +239,11 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#specificCE -->
 
-    <owl:ObjectProperty rdf:about="#specificCE">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#specificCE">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:comment
-            >Allows specify what specific CE this is e.g. in a request - a ComputeElement &lt;ceInstance specificCE EucaC1Medium&gt;</rdfs:comment>
-        <rdfs:range rdf:resource="#ClassifiedComputeElementInstance"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+        <rdfs:comment>Allows specify what specific CE this is e.g. in a request - a ComputeElement &lt;ceInstance specificCE EucaC1Medium&gt;</rdfs:comment>
+        <rdfs:range rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -251,8 +251,8 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#storage -->
 
-    <owl:ObjectProperty rdf:about="#storage">
-        <rdfs:range rdf:resource="#Storage"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#storage">
+        <rdfs:range rdf:resource="&owl2;compute.owl#Storage"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -260,7 +260,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#usedVMLabelSet -->
 
-    <owl:ObjectProperty rdf:about="#usedVMLabelSet">
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#usedVMLabelSet">
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#usedLabelSet"/>
     </owl:ObjectProperty>
     
@@ -268,8 +268,8 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#vendor -->
 
-    <owl:ObjectProperty rdf:about="#vendor">
-        <rdfs:range rdf:resource="#Vendor"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#vendor">
+        <rdfs:range rdf:resource="&owl2;compute.owl#Vendor"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -277,17 +277,17 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#virtualize -->
 
-    <owl:ObjectProperty rdf:about="#virtualize">
-        <rdfs:range rdf:resource="#ClassifiedComputeElementInstance"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#virtualize">
+        <rdfs:range rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#vmLabel -->
 
-    <owl:ObjectProperty rdf:about="#vmLabel">
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#vmLabel">
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#label"/>
     </owl:ObjectProperty>
     
@@ -295,8 +295,8 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#vmm -->
 
-    <owl:ObjectProperty rdf:about="#vmm">
-        <rdfs:range rdf:resource="#VMM"/>
+    <owl:ObjectProperty rdf:about="&owl2;compute.owl#vmm">
+        <rdfs:range rdf:resource="&owl2;compute.owl#VMM"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#feature"/>
     </owl:ObjectProperty>
     
@@ -351,9 +351,9 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#clockFrequency -->
 
-    <owl:DatatypeProperty rdf:about="#clockFrequency">
-        <rdfs:domain rdf:resource="#CPU"/>
-        <rdfs:domain rdf:resource="#RAM"/>
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#clockFrequency">
+        <rdfs:domain rdf:resource="&owl2;compute.owl#CPU"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#RAM"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#metric"/>
         <rdfs:range rdf:resource="&rdfs;Literal"/>
     </owl:DatatypeProperty>
@@ -362,9 +362,9 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#cpuFamily -->
 
-    <owl:DatatypeProperty rdf:about="#cpuFamily">
-        <rdfs:domain rdf:resource="#CPU"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#cpuFamily">
+        <rdfs:domain rdf:resource="&owl2;compute.owl#CPU"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:range rdf:resource="&rdfs;Literal"/>
     </owl:DatatypeProperty>
     
@@ -372,27 +372,27 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#cpuModel -->
 
-    <owl:DatatypeProperty rdf:about="#cpuModel"/>
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#cpuModel"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#hasRequestGroupURL -->
 
-    <owl:DatatypeProperty rdf:about="#hasRequestGroupURL"/>
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#hasRequestGroupURL"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#memoryCapacity -->
 
-    <owl:DatatypeProperty rdf:about="#memoryCapacity">
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#memoryCapacity">
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#metric"/>
         <rdfs:range rdf:resource="&rdfs;Literal"/>
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="#ClassifiedComputeElement"/>
-                    <rdf:Description rdf:about="#ComputeElement"/>
-                    <rdf:Description rdf:about="#RAM"/>
+                    <rdf:Description rdf:about="&owl2;compute.owl#ClassifiedComputeElement"/>
+                    <rdf:Description rdf:about="&owl2;compute.owl#ComputeElement"/>
+                    <rdf:Description rdf:about="&owl2;compute.owl#RAM"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
@@ -402,9 +402,9 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#numCPUCores -->
 
-    <owl:DatatypeProperty rdf:about="#numCPUCores">
-        <rdfs:domain rdf:resource="#CPU"/>
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#numCPUCores">
+        <rdfs:domain rdf:resource="&owl2;compute.owl#CPU"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#metric"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
@@ -413,8 +413,8 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#numCPUs -->
 
-    <owl:DatatypeProperty rdf:about="#numCPUs">
-        <rdfs:domain rdf:resource="#ComputeElement"/>
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#numCPUs">
+        <rdfs:domain rdf:resource="&owl2;compute.owl#ComputeElement"/>
         <rdfs:subPropertyOf rdf:resource="&owl2;layer.owl#metric"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
@@ -423,9 +423,9 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#osDistribution -->
 
-    <owl:DatatypeProperty rdf:about="#osDistribution">
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#osDistribution">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#OS"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#OS"/>
         <rdfs:range rdf:resource="&rdfs;Literal"/>
     </owl:DatatypeProperty>
     
@@ -433,9 +433,9 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#osVersion -->
 
-    <owl:DatatypeProperty rdf:about="#osVersion">
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#osVersion">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#OS"/>
+        <rdfs:domain rdf:resource="&owl2;compute.owl#OS"/>
         <rdfs:range rdf:resource="&rdfs;Literal"/>
     </owl:DatatypeProperty>
     
@@ -443,7 +443,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#serverSize -->
 
-    <owl:DatatypeProperty rdf:about="#serverSize">
+    <owl:DatatypeProperty rdf:about="&owl2;compute.owl#serverSize">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
@@ -459,8 +459,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
     <!-- http://geni-orca.renci.org/owl/layer.owl#metric -->
 
     <owl:DatatypeProperty rdf:about="&owl2;layer.owl#metric">
-        <rdfs:comment
-            >Individual performance metrics</rdfs:comment>
+        <rdfs:comment>Individual performance metrics</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -484,37 +483,36 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#BareMetalCE -->
 
-    <owl:Class rdf:about="#BareMetalCE">
+    <owl:Class rdf:about="&owl2;compute.owl#BareMetalCE">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#vmm"/>
-                <owl:hasValue rdf:resource="#None"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#vmm"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#None"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#ClassifiedComputeElement"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ClassifiedComputeElement"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#CPU -->
 
-    <owl:Class rdf:about="#CPU">
-        <rdfs:subClassOf rdf:resource="#ComputeElementComponent"/>
+    <owl:Class rdf:about="&owl2;compute.owl#CPU">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElementComponent"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#cpuArchitecture"/>
-                <owl:someValuesFrom rdf:resource="#CPUArchitecture"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#cpuArchitecture"/>
+                <owl:someValuesFrom rdf:resource="&owl2;compute.owl#CPUArchitecture"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment
-            >Parent class of various CPU types</rdfs:comment>
+        <rdfs:comment>Parent class of various CPU types</rdfs:comment>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#CPUArchitecture -->
 
-    <owl:Class rdf:about="#CPUArchitecture">
+    <owl:Class rdf:about="&owl2;compute.owl#CPUArchitecture">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
     </owl:Class>
     
@@ -522,37 +520,37 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#CPUInstance -->
 
-    <owl:Class rdf:about="#CPUInstance">
-        <rdfs:subClassOf rdf:resource="#ComputeElementComponent"/>
+    <owl:Class rdf:about="&owl2;compute.owl#CPUInstance">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElementComponent"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElement -->
 
-    <owl:Class rdf:about="#ClassifiedComputeElement">
-        <rdfs:subClassOf rdf:resource="#ComputeElement"/>
+    <owl:Class rdf:about="&owl2;compute.owl#ClassifiedComputeElement">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElement"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ClassifiedComputeElementInstance -->
 
-    <owl:Class rdf:about="#ClassifiedComputeElementInstance">
-        <rdfs:subClassOf rdf:resource="#ComputeElement"/>
+    <owl:Class rdf:about="&owl2;compute.owl#ClassifiedComputeElementInstance">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElement"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ClassifiedServer -->
 
-    <owl:Class rdf:about="#ClassifiedServer"/>
+    <owl:Class rdf:about="&owl2;compute.owl#ClassifiedServer"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ClassifiedServerInstance -->
 
-    <owl:Class rdf:about="#ClassifiedServerInstance">
+    <owl:Class rdf:about="&owl2;compute.owl#ClassifiedServerInstance">
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
     </owl:Class>
     
@@ -560,7 +558,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ComputeElement -->
 
-    <owl:Class rdf:about="#ComputeElement">
+    <owl:Class rdf:about="&owl2;compute.owl#ComputeElement">
         <rdfs:subClassOf rdf:resource="&owl2;topology.owl#NetworkElement"/>
     </owl:Class>
     
@@ -568,7 +566,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ComputeElementComponent -->
 
-    <owl:Class rdf:about="#ComputeElementComponent">
+    <owl:Class rdf:about="&owl2;compute.owl#ComputeElementComponent">
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
     </owl:Class>
     
@@ -576,7 +574,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ComputeElementType -->
 
-    <owl:Class rdf:about="#ComputeElementType">
+    <owl:Class rdf:about="&owl2;compute.owl#ComputeElementType">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
     </owl:Class>
     
@@ -584,84 +582,84 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR1066 -->
 
-    <owl:Class rdf:about="#DDR1066">
+    <owl:Class rdf:about="&owl2;compute.owl#DDR1066">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#clockFrequency"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#clockFrequency"/>
                 <owl:hasValue>1066MHz</owl:hasValue>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#DDRRam"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#DDRRam"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR2-1066 -->
 
-    <owl:Class rdf:about="#DDR2-1066">
+    <owl:Class rdf:about="&owl2;compute.owl#DDR2-1066">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#clockFrequency"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#clockFrequency"/>
                 <owl:hasValue>1066MHz</owl:hasValue>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#DDR2Ram"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#DDR2Ram"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR2-400 -->
 
-    <owl:Class rdf:about="#DDR2-400">
+    <owl:Class rdf:about="&owl2;compute.owl#DDR2-400">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#clockFrequency"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#clockFrequency"/>
                 <owl:hasValue>400MHz</owl:hasValue>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#DDR2Ram"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#DDR2Ram"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR266 -->
 
-    <owl:Class rdf:about="#DDR266">
+    <owl:Class rdf:about="&owl2;compute.owl#DDR266">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#clockFrequency"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#clockFrequency"/>
                 <owl:hasValue>266MHz</owl:hasValue>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#DDRRam"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#DDRRam"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR2Ram -->
 
-    <owl:Class rdf:about="#DDR2Ram">
-        <rdfs:subClassOf rdf:resource="#RAMType"/>
+    <owl:Class rdf:about="&owl2;compute.owl#DDR2Ram">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#RAMType"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDRRam -->
 
-    <owl:Class rdf:about="#DDRRam">
-        <rdfs:subClassOf rdf:resource="#RAMType"/>
+    <owl:Class rdf:about="&owl2;compute.owl#DDRRam">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#RAMType"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DiskImage -->
 
-    <owl:Class rdf:about="#DiskImage">
-        <rdfs:subClassOf rdf:resource="#ComputeElementComponent"/>
+    <owl:Class rdf:about="&owl2;compute.owl#DiskImage">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElementComponent"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#os"/>
-                <owl:someValuesFrom rdf:resource="#OS"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#os"/>
+                <owl:someValuesFrom rdf:resource="&owl2;compute.owl#OS"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -674,67 +672,83 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
     
 
 
+    <!-- http://geni-orca.renci.org/owl/compute.owl#FourtyGBareMetalCE -->
+
+    <owl:Class rdf:about="&owl2;compute.owl#FourtyGBareMetalCE">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#BareMetalCE"/>
+    </owl:Class>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/compute.owl#GenericX86 -->
 
-    <owl:Class rdf:about="#GenericX86">
+    <owl:Class rdf:about="&owl2;compute.owl#GenericX86">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#cpuArchitecture"/>
-                <owl:hasValue rdf:resource="#x86"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#cpuArchitecture"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#x86"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#CPU"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#CPU"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#GenericX86-64 -->
 
-    <owl:Class rdf:about="#GenericX86-64">
+    <owl:Class rdf:about="&owl2;compute.owl#GenericX86-64">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#cpuArchitecture"/>
-                <owl:hasValue rdf:resource="#x86-64"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#cpuArchitecture"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#x86-64"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#CPU"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#CPU"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#HundredGBareMetalCE -->
+
+    <owl:Class rdf:about="&owl2;compute.owl#HundredGBareMetalCE">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#BareMetalCE"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#KVMCE -->
 
-    <owl:Class rdf:about="#KVMCE">
+    <owl:Class rdf:about="&owl2;compute.owl#KVMCE">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#vmm"/>
-                <owl:hasValue rdf:resource="#KVM"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#vmm"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#KVM"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#VM"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#VM"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Linux -->
 
-    <owl:Class rdf:about="#Linux">
-        <rdfs:subClassOf rdf:resource="#OS"/>
+    <owl:Class rdf:about="&owl2;compute.owl#Linux">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#OS"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#MacOS -->
 
-    <owl:Class rdf:about="#MacOS">
-        <rdfs:subClassOf rdf:resource="#OS"/>
+    <owl:Class rdf:about="&owl2;compute.owl#MacOS">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#OS"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#MemoryLabel -->
 
-    <owl:Class rdf:about="#MemoryLabel">
+    <owl:Class rdf:about="&owl2;compute.owl#MemoryLabel">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Label"/>
     </owl:Class>
     
@@ -742,57 +756,65 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#OS -->
 
-    <owl:Class rdf:about="#OS">
+    <owl:Class rdf:about="&owl2;compute.owl#OS">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#OneGBareMetalCE -->
+
+    <owl:Class rdf:about="&owl2;compute.owl#OneGBareMetalCE">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#BareMetalCE"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#OpenVZCE -->
 
-    <owl:Class rdf:about="#OpenVZCE">
+    <owl:Class rdf:about="&owl2;compute.owl#OpenVZCE">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#vmm"/>
-                <owl:hasValue rdf:resource="#OpenVZ"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#vmm"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#OpenVZ"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#VM"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#VM"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#PC133-SDRAM -->
 
-    <owl:Class rdf:about="#PC133-SDRAM">
+    <owl:Class rdf:about="&owl2;compute.owl#PC133-SDRAM">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#clockFrequency"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#clockFrequency"/>
                 <owl:hasValue>133MHz</owl:hasValue>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#SDRAM"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#SDRAM"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Pentium3 -->
 
-    <owl:Class rdf:about="#Pentium3">
+    <owl:Class rdf:about="&owl2;compute.owl#Pentium3">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#cpuArchitecture"/>
-                <owl:hasValue rdf:resource="#x86"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#cpuArchitecture"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#x86"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#CPU"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#CPU"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Port -->
 
-    <owl:Class rdf:about="#Port">
+    <owl:Class rdf:about="&owl2;compute.owl#Port">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Label"/>
     </owl:Class>
     
@@ -800,63 +822,62 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#QuadNehalem24 -->
 
-    <owl:Class rdf:about="#QuadNehalem24">
+    <owl:Class rdf:about="&owl2;compute.owl#QuadNehalem24">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#cpuArchitecture"/>
-                        <owl:hasValue rdf:resource="#x86-64"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#cpuArchitecture"/>
+                        <owl:hasValue rdf:resource="&owl2;compute.owl#x86-64"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#vendor"/>
-                        <owl:hasValue rdf:resource="#Intel"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#vendor"/>
+                        <owl:hasValue rdf:resource="&owl2;compute.owl#Intel"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#clockFrequency"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#clockFrequency"/>
                         <owl:hasValue>2.4GHz</owl:hasValue>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#cpuFamily"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#cpuFamily"/>
                         <owl:hasValue>Xeon</owl:hasValue>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#cpuModel"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#cpuModel"/>
                         <owl:hasValue>Nehalem</owl:hasValue>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#numCPUCores"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#numCPUCores"/>
                         <owl:hasValue rdf:datatype="&xsd;integer">4</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#CPU"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#CPU"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#RAM -->
 
-    <owl:Class rdf:about="#RAM">
-        <rdfs:subClassOf rdf:resource="#ComputeElementComponent"/>
-        <rdfs:comment
-            >Parent class of various RAMs</rdfs:comment>
+    <owl:Class rdf:about="&owl2;compute.owl#RAM">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElementComponent"/>
+        <rdfs:comment>Parent class of various RAMs</rdfs:comment>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#RAMInstance -->
 
-    <owl:Class rdf:about="#RAMInstance">
-        <rdfs:subClassOf rdf:resource="#ComputeElementComponent"/>
+    <owl:Class rdf:about="&owl2;compute.owl#RAMInstance">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElementComponent"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#RAMType -->
 
-    <owl:Class rdf:about="#RAMType">
+    <owl:Class rdf:about="&owl2;compute.owl#RAMType">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
     </owl:Class>
     
@@ -864,7 +885,7 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#RAMTypeInstance -->
 
-    <owl:Class rdf:about="#RAMTypeInstance">
+    <owl:Class rdf:about="&owl2;compute.owl#RAMTypeInstance">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
     </owl:Class>
     
@@ -872,55 +893,62 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#SDRAM -->
 
-    <owl:Class rdf:about="#SDRAM">
-        <rdfs:subClassOf rdf:resource="#RAMType"/>
+    <owl:Class rdf:about="&owl2;compute.owl#SDRAM">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#RAMType"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ServerCloud -->
 
-    <owl:Class rdf:about="#ServerCloud">
-        <rdfs:subClassOf rdf:resource="#ComputeElement"/>
+    <owl:Class rdf:about="&owl2;compute.owl#ServerCloud">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElement"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Storage -->
 
-    <owl:Class rdf:about="#Storage">
-        <rdfs:subClassOf rdf:resource="#ComputeElementComponent"/>
-        <rdfs:comment
-            >See storage.owl for details</rdfs:comment>
+    <owl:Class rdf:about="&owl2;compute.owl#Storage">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElementComponent"/>
+        <rdfs:comment>See storage.owl for details</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#TenGBareMetalCE -->
+
+    <owl:Class rdf:about="&owl2;compute.owl#TenGBareMetalCE">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#BareMetalCE"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Testbed -->
 
-    <owl:Class rdf:about="#Testbed">
-        <rdfs:subClassOf rdf:resource="#ComputeElement"/>
+    <owl:Class rdf:about="&owl2;compute.owl#Testbed">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ComputeElement"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VM -->
 
-    <owl:Class rdf:about="#VM">
+    <owl:Class rdf:about="&owl2;compute.owl#VM">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#os"/>
-                <owl:someValuesFrom rdf:resource="#OS"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#os"/>
+                <owl:someValuesFrom rdf:resource="&owl2;compute.owl#OS"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#ClassifiedComputeElement"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#ClassifiedComputeElement"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VMM -->
 
-    <owl:Class rdf:about="#VMM">
+    <owl:Class rdf:about="&owl2;compute.owl#VMM">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
     </owl:Class>
     
@@ -928,21 +956,21 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VServerCE -->
 
-    <owl:Class rdf:about="#VServerCE">
+    <owl:Class rdf:about="&owl2;compute.owl#VServerCE">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#vmm"/>
-                <owl:hasValue rdf:resource="#VServer"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#vmm"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#VServer"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#VM"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#VM"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Vendor -->
 
-    <owl:Class rdf:about="#Vendor">
+    <owl:Class rdf:about="&owl2;compute.owl#Vendor">
         <rdfs:subClassOf rdf:resource="&owl2;layer.owl#Feature"/>
     </owl:Class>
     
@@ -950,60 +978,60 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Windows -->
 
-    <owl:Class rdf:about="#Windows">
-        <rdfs:subClassOf rdf:resource="#OS"/>
+    <owl:Class rdf:about="&owl2;compute.owl#Windows">
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#OS"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#XenCE -->
 
-    <owl:Class rdf:about="#XenCE">
+    <owl:Class rdf:about="&owl2;compute.owl#XenCE">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#vmm"/>
-                <owl:hasValue rdf:resource="#Xen"/>
+                <owl:onProperty rdf:resource="&owl2;compute.owl#vmm"/>
+                <owl:hasValue rdf:resource="&owl2;compute.owl#Xen"/>
             </owl:Restriction>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#VM"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#VM"/>
     </owl:Class>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Xeon3 -->
 
-    <owl:Class rdf:about="#Xeon3">
+    <owl:Class rdf:about="&owl2;compute.owl#Xeon3">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#cpuArchitecture"/>
-                        <owl:hasValue rdf:resource="#x86-64"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#cpuArchitecture"/>
+                        <owl:hasValue rdf:resource="&owl2;compute.owl#x86-64"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#vendor"/>
-                        <owl:hasValue rdf:resource="#Intel"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#vendor"/>
+                        <owl:hasValue rdf:resource="&owl2;compute.owl#Intel"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#clockFrequency"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#clockFrequency"/>
                         <owl:hasValue>3.0GHz</owl:hasValue>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#cpuFamily"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#cpuFamily"/>
                         <owl:hasValue>Xeon</owl:hasValue>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#cpuModel"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#cpuModel"/>
                         <owl:hasValue>Xeon</owl:hasValue>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="#numCPUCores"/>
+                        <owl:onProperty rdf:resource="&owl2;compute.owl#numCPUCores"/>
                         <owl:hasValue rdf:datatype="&xsd;integer">1</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="#CPU"/>
+        <rdfs:subClassOf rdf:resource="&owl2;compute.owl#CPU"/>
     </owl:Class>
     
 
@@ -1055,64 +1083,50 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/compute-v2.owl -->
-
-    <rdf:Description rdf:about="&owl2;compute-v2.owl"/>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/compute.owl -->
-
-    <rdf:Description rdf:about="">
-        <owl:versionIRI rdf:resource="&owl2;compute-v2.owl"/>
-    </rdf:Description>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/compute.owl#AMD -->
 
-    <owl:NamedIndividual rdf:about="#AMD">
-        <rdf:type rdf:resource="#Vendor"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#AMD">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ARM2 -->
 
-    <CPUArchitecture rdf:about="#ARM2">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </CPUArchitecture>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#ARM2">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUArchitecture"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ARM6 -->
 
-    <owl:NamedIndividual rdf:about="#ARM6">
-        <rdf:type rdf:resource="#CPUArchitecture"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#ARM6">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUArchitecture"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#AppleInc -->
 
-    <Vendor rdf:about="#AppleInc">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </Vendor>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#AppleInc">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Atmel -->
 
-    <owl:NamedIndividual rdf:about="#Atmel">
-        <rdf:type rdf:resource="#Vendor"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Atmel">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#BareMetalCE -->
 
-    <owl:NamedIndividual rdf:about="#BareMetalCE">
-        <rdf:type rdf:resource="#ClassifiedComputeElementInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#BareMetalCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
         <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
         <domain:resourceTypeRank rdf:datatype="&xsd;int">9</domain:resourceTypeRank>
     </owl:NamedIndividual>
@@ -1121,279 +1135,318 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Blade -->
 
-    <owl:NamedIndividual rdf:about="#Blade">
-        <rdf:type rdf:resource="#ComputeElementType"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Blade">
+        <rdf:type rdf:resource="&owl2;compute.owl#ComputeElementType"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#CentOS-5.5 -->
 
-    <Linux rdf:about="#CentOS-5.5">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#CentOS-5.5">
+        <rdf:type rdf:resource="&owl2;compute.owl#Linux"/>
         <osVersion>5.5</osVersion>
         <osDistribution>CentOS</osDistribution>
-        <vendor rdf:resource="#CentOSFoundation"/>
-    </Linux>
+        <vendor rdf:resource="&owl2;compute.owl#CentOSFoundation"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#CentOSFoundation -->
 
-    <owl:NamedIndividual rdf:about="#CentOSFoundation">
-        <rdf:type rdf:resource="#Vendor"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#CentOSFoundation">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR1066 -->
 
-    <RAMTypeInstance rdf:about="#DDR1066">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </RAMTypeInstance>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#DDR1066">
+        <rdf:type rdf:resource="&owl2;compute.owl#RAMTypeInstance"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR2-1066 -->
 
-    <owl:NamedIndividual rdf:about="#DDR2-1066">
-        <rdf:type rdf:resource="#RAMTypeInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#DDR2-1066">
+        <rdf:type rdf:resource="&owl2;compute.owl#RAMTypeInstance"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR2-400 -->
 
-    <RAMTypeInstance rdf:about="#DDR2-400">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </RAMTypeInstance>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#DDR2-400">
+        <rdf:type rdf:resource="&owl2;compute.owl#RAMTypeInstance"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#DDR266 -->
 
-    <owl:NamedIndividual rdf:about="#DDR266">
-        <rdf:type rdf:resource="#RAMTypeInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#DDR266">
+        <rdf:type rdf:resource="&owl2;compute.owl#RAMTypeInstance"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Debian -->
 
-    <owl:NamedIndividual rdf:about="#Debian">
-        <rdf:type rdf:resource="#Vendor"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Debian">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#ESX -->
 
-    <VMM rdf:about="#ESX">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </VMM>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#ESX">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#FourtyGBareMetalCE -->
+
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#FourtyGBareMetalCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
+        <domain:resourceTypeRank rdf:datatype="&xsd;int">9</domain:resourceTypeRank>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#GenericRam -->
 
-    <owl:NamedIndividual rdf:about="#GenericRam">
-        <rdf:type rdf:resource="#RAMType"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#GenericRam">
+        <rdf:type rdf:resource="&owl2;compute.owl#RAMType"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#GenericX86 -->
 
-    <owl:NamedIndividual rdf:about="#GenericX86">
-        <rdf:type rdf:resource="#CPUInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#GenericX86">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUInstance"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#GenericX86-64 -->
 
-    <CPUInstance rdf:about="#GenericX86-64">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </CPUInstance>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#GenericX86-64">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUInstance"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#HundredGBareMetalCE -->
+
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#HundredGBareMetalCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
+        <domain:resourceTypeRank rdf:datatype="&xsd;int">9</domain:resourceTypeRank>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#IA-64 -->
 
-    <CPUArchitecture rdf:about="#IA-64">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-        <rdfs:comment
-            >Server-class 64-bit x64 from Intel</rdfs:comment>
-    </CPUArchitecture>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#IA-64">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUArchitecture"/>
+        <rdfs:comment>Server-class 64-bit x64 from Intel</rdfs:comment>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Intel -->
 
-    <Vendor rdf:about="#Intel">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </Vendor>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Intel">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#KVM -->
 
-    <VMM rdf:about="#KVM">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </VMM>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#KVM">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#KVMCE -->
 
-    <domain:ResourceType rdf:about="#KVMCE">
-        <rdf:type rdf:resource="#ClassifiedComputeElementInstance"/>
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </domain:ResourceType>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#KVMCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Laptop -->
 
-    <ComputeElementType rdf:about="#Laptop">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </ComputeElementType>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Laptop">
+        <rdf:type rdf:resource="&owl2;compute.owl#ComputeElementType"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Microsoft -->
 
-    <owl:NamedIndividual rdf:about="#Microsoft">
-        <rdf:type rdf:resource="#Vendor"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Microsoft">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#None -->
 
-    <owl:NamedIndividual rdf:about="#None">
-        <rdf:type rdf:resource="#VMM"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#None">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#OneGBareMetalCE -->
+
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#OneGBareMetalCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
+        <domain:resourceTypeRank rdf:datatype="&xsd;int">9</domain:resourceTypeRank>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#OpenVZ -->
 
-    <owl:NamedIndividual rdf:about="#OpenVZ">
-        <rdf:type rdf:resource="#VMM"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#OpenVZ">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#OpenVZCE -->
 
-    <ClassifiedComputeElementInstance rdf:about="#OpenVZCE">
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#OpenVZCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
         <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </ClassifiedComputeElementInstance>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#PC133-SDRAM -->
 
-    <RAMTypeInstance rdf:about="#PC133-SDRAM">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </RAMTypeInstance>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#PC133-SDRAM">
+        <rdf:type rdf:resource="&owl2;compute.owl#RAMTypeInstance"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Pentium3 -->
 
-    <owl:NamedIndividual rdf:about="#Pentium3">
-        <rdf:type rdf:resource="#CPUInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Pentium3">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUInstance"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#QuadNehalem24 -->
 
-    <owl:NamedIndividual rdf:about="#QuadNehalem24">
-        <rdf:type rdf:resource="#CPUInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#QuadNehalem24">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUInstance"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#RackedServer -->
 
-    <ComputeElementType rdf:about="#RackedServer">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </ComputeElementType>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#RackedServer">
+        <rdf:type rdf:resource="&owl2;compute.owl#ComputeElementType"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#RedHat-6 -->
 
-    <owl:NamedIndividual rdf:about="#RedHat-6">
-        <rdf:type rdf:resource="#Linux"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#RedHat-6">
+        <rdf:type rdf:resource="&owl2;compute.owl#Linux"/>
         <osDistribution>RHEL</osDistribution>
         <osVersion>6</osVersion>
-        <vendor rdf:resource="#RedHatInc"/>
+        <vendor rdf:resource="&owl2;compute.owl#RedHatInc"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#RedHatInc -->
 
-    <Vendor rdf:about="#RedHatInc">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </Vendor>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#RedHatInc">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#TenGBareMetalCE -->
+
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#TenGBareMetalCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
+        <domain:resourceTypeRank rdf:datatype="&xsd;int">9</domain:resourceTypeRank>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Ubuntu-10.04 -->
 
-    <Linux rdf:about="#Ubuntu-10.04">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Ubuntu-10.04">
+        <rdf:type rdf:resource="&owl2;compute.owl#Linux"/>
         <osVersion>10.04</osVersion>
         <osDistribution>Ubuntu</osDistribution>
-        <vendor rdf:resource="#UbuntuFoundation"/>
-    </Linux>
+        <vendor rdf:resource="&owl2;compute.owl#UbuntuFoundation"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#UbuntuFoundation -->
 
-    <Vendor rdf:about="#UbuntuFoundation">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </Vendor>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#UbuntuFoundation">
+        <rdf:type rdf:resource="&owl2;compute.owl#Vendor"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VM -->
 
-    <domain:ResourceType rdf:about="#VM">
-        <rdf:type rdf:resource="#ClassifiedComputeElementInstance"/>
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#VM">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
         <domain:resourceTypeRank rdf:datatype="&xsd;int">10</domain:resourceTypeRank>
-    </domain:ResourceType>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VMWare -->
 
-    <owl:NamedIndividual rdf:about="#VMWare">
-        <rdf:type rdf:resource="#VMM"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#VMWare">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VServer -->
 
-    <VMM rdf:about="#VServer">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </VMM>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#VServer">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VServerCE -->
 
-    <owl:NamedIndividual rdf:about="#VServerCE">
-        <rdf:type rdf:resource="#ClassifiedComputeElementInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#VServerCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
         <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
     </owl:NamedIndividual>
     
@@ -1401,70 +1454,70 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#VirtualBox -->
 
-    <owl:NamedIndividual rdf:about="#VirtualBox">
-        <rdf:type rdf:resource="#VMM"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#VirtualBox">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Windows7 -->
 
-    <owl:NamedIndividual rdf:about="#Windows7">
-        <rdf:type rdf:resource="#Windows"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Windows7">
+        <rdf:type rdf:resource="&owl2;compute.owl#Windows"/>
         <osVersion>7</osVersion>
         <osDistribution>Windows</osDistribution>
-        <vendor rdf:resource="#Microsoft"/>
+        <vendor rdf:resource="&owl2;compute.owl#Microsoft"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Xen -->
 
-    <VMM rdf:about="#Xen">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </VMM>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Xen">
+        <rdf:type rdf:resource="&owl2;compute.owl#VMM"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#XenCE -->
 
-    <domain:ResourceType rdf:about="#XenCE">
-        <rdf:type rdf:resource="#ClassifiedComputeElementInstance"/>
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
-    </domain:ResourceType>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#XenCE">
+        <rdf:type rdf:resource="&owl2;compute.owl#ClassifiedComputeElementInstance"/>
+        <rdf:type rdf:resource="&owl2;domain.owl#ResourceType"/>
+    </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#Xeon3 -->
 
-    <owl:NamedIndividual rdf:about="#Xeon3">
-        <rdf:type rdf:resource="#CPUInstance"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#Xeon3">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUInstance"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#d710RAM -->
 
-    <owl:NamedIndividual rdf:about="#d710RAM"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#d710RAM"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#pc3000RAM -->
 
-    <owl:NamedIndividual rdf:about="#pc3000RAM"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#pc3000RAM"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#pc850RAM -->
 
-    <owl:NamedIndividual rdf:about="#pc850RAM"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#pc850RAM"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#x86 -->
 
-    <owl:NamedIndividual rdf:about="#x86">
-        <rdf:type rdf:resource="#CPUArchitecture"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#x86">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUArchitecture"/>
         <rdfs:comment>32-bit x86</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -1472,13 +1525,13 @@ yxin@renci.org, ibaldin@renci.org</rdfs:isDefinedBy>
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#x86-64 -->
 
-    <CPUArchitecture rdf:about="#x86-64">
-        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+    <owl:NamedIndividual rdf:about="&owl2;compute.owl#x86-64">
+        <rdf:type rdf:resource="&owl2;compute.owl#CPUArchitecture"/>
         <rdfs:comment>64-bit x86</rdfs:comment>
-    </CPUArchitecture>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
 
-<!-- Generated by the OWL API (version 2.2.1.1101) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
 
