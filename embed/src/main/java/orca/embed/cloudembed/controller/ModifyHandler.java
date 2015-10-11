@@ -217,7 +217,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 
 		Resource me=meList.element().getObj();
 		String ns_str=me.getNameSpace();
-		OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM, true);
+		OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true);
 		if(modifyRequestModelList == null)
 			modifyRequestModelList = new ArrayList<OntModel>();
 		modifyRequestModelList.add(modifyRequestModel);
@@ -226,6 +226,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			me = mee.getObj();
 			OntResource connection_rs = modifyRequestModel.createIndividual(me.getURI(),NdlCommons.getResourceType(me));
 			modifyRequestModel.add(reservation,NdlCommons.collectionElementProperty, connection_rs);
+			logger.debug("me="+mee.getObj().getURI()+";isModify="+NdlCommons.isModify(me));
 			copyProperty(modifyRequestModel, me);
 			//add inDomain property from the manifest model
 			if(!me.hasProperty(NdlCommons.inDomainProperty)){
@@ -285,6 +286,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		for(NetworkElement device:this.getDeviceList()){
 			DomainElement dd = (DomainElement) device;
 			if(dd.getModifyVersion() == this.modifyVersion){
+				logger.debug("MOdifyHandler:dd="+dd.getName()+";isModify="+dd.isModify());
 				if(dd.isModify()){
 					if(!modifiedDevices.contains(dd)){
 						modifies.addModifedElement(device.getResource());

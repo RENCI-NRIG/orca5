@@ -195,11 +195,21 @@ public class CloudHandler extends MappingHandler{
 		//go form the reservation domainElement
 		DomainElement link_device = null;
 		for(NetworkElement element:elements){
+			logger.debug("element:"+element.getName()+";isModify="+element.isModify());
 			if(element instanceof NetworkConnection){
 				NetworkConnection nc = (NetworkConnection) element;
-				
-				link_device = createLinkDevice(nc,domainName, deviceList,domainResourcePools);
-
+				if(!element.isModify())
+					link_device = createLinkDevice(nc,domainName, deviceList,domainResourcePools);
+				else{
+					for(NetworkElement existing_ce: deviceList){
+						if(existing_ce.getName().equalsIgnoreCase(element.getName())){
+							link_device = (DomainElement) existing_ce;
+							link_device.setModify(true);
+							setModifyFlag(link_device);
+							break;
+						}
+					}
+				}
 				if(link_device == null){
 					error = new SystemNativeError();
 					error.setErrno(1);
@@ -457,7 +467,7 @@ public class CloudHandler extends MappingHandler{
 	private DomainElement createNewNode(NetworkElement element,int i,DomainElement link_device, String domainName, 
 			OntModel requestModel, LinkedList<NetworkElement> deviceList, int num){
 		
-		logger.info("Creating new node:hole="+i+"domainName="+domainName);
+		logger.info("Creating new node:hole="+i+"domainName="+domainName+";link_device="+link_device);
 		
 		DomainResourceType dType = new DomainResourceType(element.getResourceType().getResourceType(),element.getResourceType().getCount());
 		dType.setCount(1);
@@ -502,6 +512,7 @@ public class CloudHandler extends MappingHandler{
 		}
 		edge_device.setModify(element.isModify());
 		if(ce.getGroup()==null){
+			logger.debug("Adding a single node");
 			LinkedList <Interface> interfaces = ce_element.getClientInterface();
 			NetworkConnection ncByInterface=null;
 			Interface new_intf = null;
@@ -614,7 +625,7 @@ public class CloudHandler extends MappingHandler{
 		LinkedList <Interface> interfaces = element.getClientInterface();
 		NetworkConnection ncByInterface=null;
 		Interface current_intf=null;
-		
+		logger.debug("createInterface:"+interfaces);
 		if(interfaces!=null){
 			for(Interface intf:interfaces){
 				ncByInterface = element.getConnectionByInterfaceName(intf);

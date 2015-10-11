@@ -230,6 +230,7 @@ public class RequestParserListener implements INdlRequestModelListener {
 		if ( (l == null) || (interfaces.size()==0))
 			return;
 		NetworkConnection ol = new NetworkConnection(om,l);
+		ol.setModify(NdlCommons.isModify(l));
 		ol.setBandwidth(bandwidth);
 		ol.setLatency(latency);
 		//ol.setOpenflowCapable(NdlCommons.getOpenFlowVersion(l));
