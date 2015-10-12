@@ -578,6 +578,25 @@ public class NdlGenerator {
 	}
 	
 	/**
+	 * Declare a broadcast connection that already exists and will be modified
+	 * @param url
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifiedBroadcastConnection(String url) throws NdlException {
+		OntClass cls = ref.getOntClass(ref.getNsPrefixUri("topology") + "BroadcastConnection");
+		
+		if (null == cls)
+			throw new NdlException("Unable to find class topology:BroadcastConnection");
+
+		Individual in = blank.createIndividual(url, cls);
+		
+		addTypedProperty(in, "modify-schema", "isModify", "true", XSDDatatype.XSDboolean);
+		
+		return in;
+	}
+	
+	/**
 	 * Add a layer:Label to an individual (e.g. VLAN tag to connection)
 	 * @param c
 	 * @param label
