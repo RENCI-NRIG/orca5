@@ -2376,7 +2376,7 @@ public class NdlCommons {
 	public static boolean isBareMetal(Resource r) {
 		if (r.hasProperty(domainHasResourceTypeProperty)) {
 			Statement st = r.getProperty(domainHasResourceTypeProperty);
-			if (st.getResource().equals(bmResourceTypeClass)) 
+			if (st.getResource().equals(bmResourceTypeClass) || (st.getResource().equals(fourtygbmResourceTypeClass))) 
 				return true;
 		}
 		return false;
