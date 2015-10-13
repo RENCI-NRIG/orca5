@@ -375,7 +375,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>1/1,2/1,2/2</rdfs:label>
-        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <layer:bandwidth rdf:datatype="&xsd;long">40000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>
         <topology:linkTo rdf:resource="&cienavmsite;CIENA/BareMetal/FourtyGigabitEthernet/1/ethernet"/>
@@ -391,7 +391,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>1/1,2/1,2/2</rdfs:label>
-        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
+        <layer:bandwidth rdf:datatype="&xsd;long">40000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet"/>
         <topology:linkTo rdf:resource="&cienavmsite;CIENA/BareMetal/FourtyGigabitEthernet/2/ethernet"/>
@@ -421,7 +421,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>4/1</rdfs:label>
-        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="&xsd;string">InstaGeni-CIENA</topology:hasName>
         <topology:interfaceOf rdf:resource="&CIENANet;IBM/G8264"/>
         <ethernet:availableVLANSet rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/InstaGeni"/>

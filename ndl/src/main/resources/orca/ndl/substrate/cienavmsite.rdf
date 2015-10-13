@@ -574,15 +574,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/cienavmsite.rdf#CIENA/ExoGeni//VLANLabel/2000 -->
-
-    <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni//VLANLabel/2000">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">2000.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/cienavmsite.rdf#CIENA/ExoGeni/EthernetSwitchMatrix -->
 
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/EthernetSwitchMatrix">
@@ -735,6 +726,15 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/cienavmsite.rdf#CIENA/ExoGeni/VLANLabel/2000 -->
+
+    <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/VLANLabel/2000">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">2000.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/cienavmsite.rdf#CIENA/ExoGeni/VLANLabel/2499 -->
 
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/VLANLabel/2499">
@@ -781,7 +781,7 @@
 
     <owl:NamedIndividual rdf:about="&cienavmsite;CIENA/ExoGeni/availableVLANSet/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&cienavmsite;CIENA/ExoGeni//VLANLabel/2000"/>
+        <layer:lowerBound rdf:resource="&cienavmsite;CIENA/ExoGeni/VLANLabel/2000"/>
         <layer:upperBound rdf:resource="&cienavmsite;CIENA/ExoGeni/VLANLabel/2499"/>
     </owl:NamedIndividual>
     
@@ -853,6 +853,12 @@
     <!-- http://geni-orca.renci.org/owl/compute.owl#BareMetalCE -->
 
     <owl:NamedIndividual rdf:about="&compute;BareMetalCE"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#FourtyGBareMetalCE -->
+
+    <owl:NamedIndividual rdf:about="&compute;FourtyGBareMetalCE"/>
     
 
 
