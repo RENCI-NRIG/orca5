@@ -98,7 +98,8 @@ public class NdlManifestParser extends NdlCommons {
 					//if (resourceElement.hasProperty(RDF_TYPE, computeElementClass) || resourceElement.hasProperty(RDF_TYPE, serverCloudClass)) {
 					if (resourceElement.hasProperty(RDF_TYPE, computeElementClass) &&
 							(resourceElement.hasProperty(domainHasResourceTypeProperty, vmResourceTypeClass) ||
-							 resourceElement.hasProperty(domainHasResourceTypeProperty, bmResourceTypeClass))) {
+							 resourceElement.hasProperty(domainHasResourceTypeProperty, bmResourceTypeClass) ||
+							 resourceElement.hasProperty(domainHasResourceTypeProperty, fourtygbmResourceTypeClass))) {
 									// resourceElement.hasProperty(specificCEProperty))) {
 						Resource ceClass = getResourceType(resourceElement);  // CE, ServerCloud etc
 						if (ceClass == null)
