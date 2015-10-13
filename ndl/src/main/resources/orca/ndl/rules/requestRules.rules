@@ -2,13 +2,17 @@
 # This file describes prolog rules used for validating NDL requests
 #
 
-# node validation
-# commenting out for now - need to support multiple bare metal node types
-# [validateNode: (?v rb:validation on()) -> 
-#	[ (?Z rb:violation error('Node Validation', 'Node must have an image', ?X)) 
-#		<- (?R rdf:type req:Reservation), (?R col:element ?X), 
-#		(?X rdf:type comp:ComputeElement) noValue(?X, dom:hasResourceType, comp:BareMetalCE) 
-#		noValue(?X, comp:diskImage) ] ] 
+# node that is 40G is also baremetal
+#[transform:
+#	(?X dom:hasResourceType comp:FourtyGBareMetalCE) -> 
+#		(?X dom:hasResourceType comp:BareMetalCE) ]
+
+# node validation - VMs must provide an image
+[validateNode: (?v rb:validation on()) -> 
+	[ (?Z rb:violation error('Node Validation', 'Node must have an image', ?X)) 
+		<- (?R rdf:type req:Reservation), (?R col:element ?X), 
+		(?X rdf:type comp:ComputeElement),  (?X dom:hasResourceType comp:VM), 
+		noValue(?X, comp:diskImage) ] ] 
 
 # can't have link by itself/must have incident interfaces
 [validateLink: (?v rb:validation on()) ->
