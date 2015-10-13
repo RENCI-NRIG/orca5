@@ -660,8 +660,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						Properties request = OrcaConverter.fill(rr.getRequestProperties());
 						Properties resource = OrcaConverter.fill(rr.getResourceProperties());
 						
-						String num_interface=local.getProperty(ReservationConverter.parent_num_interface);
-						int num_interface_int=Integer.valueOf(num_interface);
+						String num_interface=local.getProperty(ReservationConverter.PropertyParentNumInterface);
+						int num_interface_int = 0;
+						if (num_interface != null)
+							num_interface_int=Integer.valueOf(num_interface);
+						
 						String rr_guid = local.getProperty(ReservationConverter.PropertyElementGUID);
 						if(rr_guid==null){
 							logger.error("No element guid found in the reservation:"+rr.getReservationID());

@@ -101,7 +101,7 @@ public class ReservationConverter implements LayerConstant {
 	public static final String PropertyUnitEC2Instance = UnitProperties.UnitEC2Instance;
 	public static final String PropertyUnitEC2Host = "unit.ec2.host";
 	public static final String PropertyUnitSliceName = UnitProperties.UnitSliceName;
-	public static final String parent_num_interface = "unit.number.interface";
+	public static final String PropertyParentNumInterface = "unit.number.interface";
 	
 	public static final String PropertyModifyVersion = "modify.version";
 	public static final String PropertyNumExistParentReservations = "num.parent.exist";
@@ -738,7 +738,7 @@ public class ReservationConverter implements LayerConstant {
 				}
 			}
 			if(r.isVM){
-                local.setProperty(parent_num_interface,String.valueOf(num_interface));
+                local.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
 			}
 			
 			// update the local properties
@@ -1638,7 +1638,7 @@ public class ReservationConverter implements LayerConstant {
 				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
 				//modify properties for adding/deleting interfaces from links
-				String num_interface_str=local.getProperty(ReservationConverter.parent_num_interface);
+				String num_interface_str=local.getProperty(ReservationConverter.PropertyParentNumInterface);
 				int num_interface = 0;
 				if(num_interface_str!=null)
 					num_interface = Integer.valueOf(num_interface_str);

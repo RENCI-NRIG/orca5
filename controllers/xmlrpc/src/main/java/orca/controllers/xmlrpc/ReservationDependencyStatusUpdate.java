@@ -41,7 +41,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			// use the queueing version to avoid collisions with modified performed by the controller itself
 			Properties local = OrcaConverter.fill(reservation.getLocalProperties());
 			String  p_str = local.getProperty(ReservationConverter.PropertyNumNewParentReservations);
-			String num_interface=local.getProperty(ReservationConverter.parent_num_interface);
+			String num_interface=local.getProperty(ReservationConverter.PropertyParentNumInterface);
 			int num_interface_int = 0;
 			if(num_interface!=null)
 				num_interface_int = Integer.valueOf(num_interface);
@@ -122,7 +122,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 					}
 				}
 			}
-			local.setProperty(ReservationConverter.parent_num_interface,String.valueOf(num_interface));
+			local.setProperty(ReservationConverter.PropertyParentNumInterface,String.valueOf(num_interface));
 			reservation.setLocalProperties(OrcaConverter.merge(local, reservation.getLocalProperties()));
 
 		} catch (Exception e) {
