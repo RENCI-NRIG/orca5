@@ -596,6 +596,7 @@
         <collections:size rdf:datatype="&xsd;int">32</collections:size>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/VLANLabel/3300"/>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/AL2S/1"/>
+        <collections:element rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
     </owl:NamedIndividual>
     
