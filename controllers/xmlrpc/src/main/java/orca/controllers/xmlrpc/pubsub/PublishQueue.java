@@ -94,16 +94,22 @@ public final class PublishQueue implements Serializable{
      * Add a new slices for processing
      * @param slice
      */
-    public synchronized void addToNewSlicesQ(SliceState slice){
-    	newSlices.add(slice);
+    public void addToNewSlicesQ(SliceState slice) {
+    	// locking this separately from the main object monitor /ib
+    	synchronized(newSlices) {
+    		newSlices.add(slice);
+    	}
     }
 
     /**
      * Flag slice as deleted
      * @param sliceUrn
      */
-    public synchronized void addToDeletedSlicesQ(String sliceUrn){
-    	deletedSlices.add(sliceUrn);
+    public void addToDeletedSlicesQ(String sliceUrn) {
+    	// locking this separately from main object monitor /ib
+    	synchronized(deletedSlices) {
+    		deletedSlices.add(sliceUrn);
+    	}
     }
 
     /**
@@ -111,9 +117,11 @@ public final class PublishQueue implements Serializable{
      * get dealt with here
      */
     public synchronized void drainDeleted() {
-    	for(String ss: deletedSlices) {
-    		Globals.Log.debug("PublishQueue: Deleting slice " + ss);
-    		deleteFromPubQ(ss);
+    	synchronized(deletedSlices) {
+    		for(String ss: deletedSlices) {
+    			Globals.Log.debug("PublishQueue: Deleting slice " + ss);
+    			deleteFromPubQ(ss);
+    		}
     	}
     }
     
@@ -122,9 +130,11 @@ public final class PublishQueue implements Serializable{
      * get dealt with here
      */
     public synchronized void drainNew() {
-    	for(SliceState ss: newSlices) {
-    		Globals.Log.debug("PublishQueue: Adding slice " + ss.getSlice_urn());
-    		addToPubQ(ss);
+    	synchronized(newSlices) {
+    		for(SliceState ss: newSlices) {
+    			Globals.Log.debug("PublishQueue: Adding slice " + ss.getSlice_urn());
+    			addToPubQ(ss);
+    		}
     	}
     }
     

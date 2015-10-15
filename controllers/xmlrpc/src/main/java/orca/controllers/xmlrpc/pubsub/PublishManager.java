@@ -146,6 +146,8 @@ public class PublishManager {
 
 				PublishQueue pubQ = PublishQueue.getInstance();
 
+				// notice this reaches deep into the pubQ object to get slice list and allows
+				// modifying individual slice states in it directly (as done below) /ib
 				ArrayList<SliceState> currSliceStateQ = pubQ.getCurrentQ();
 				ArrayList<SliceState> toRemoveSliceStateQ = new ArrayList<SliceState>();
 
