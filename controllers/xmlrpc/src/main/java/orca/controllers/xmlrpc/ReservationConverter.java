@@ -80,9 +80,9 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.Collections;
 
 public class ReservationConverter implements LayerConstant {
-	private static final String SUDO_NO = "no";
-	private static final String SUDO_YES = "yes";
-	private static final String OPENSTACK_MAC_PREFIX = "fe:16:3e:00:";
+	static final String SUDO_NO = "no";
+	static final String SUDO_YES = "yes";
+	static final String OPENSTACK_MAC_PREFIX = "fe:16:3e:00:";
 	public static final String UNIT_URL_RES = UnitProperties.UnitURL;
 	private static final long TWO_WEEKS = (14*24*3600*1000);
 	private static final long ONE_DAY = (24*3600*1000);
@@ -102,6 +102,7 @@ public class ReservationConverter implements LayerConstant {
 	public static final String PropertyUnitEC2Host = "unit.ec2.host";
 	public static final String PropertyUnitSliceName = UnitProperties.UnitSliceName;
 	public static final String PropertyParentNumInterface = "unit.number.interface";
+	public static final String PropertyParentNumStorage = "unit.number.storage";
 	
 	public static final String PropertyModifyVersion = "modify.version";
 	public static final String PropertyNumExistParentReservations = "num.parent.exist";
@@ -258,7 +259,7 @@ public class ReservationConverter implements LayerConstant {
 			resrequest.reservation = r;
 			resrequest.domain = domain;
 			resrequest.domain_url = device.getName();
-
+			
 			if(de.getCe()==null){
 				resrequest.isNetwork = true;
 				local.setProperty(this.PropertyIsNetwork,"1");
@@ -451,6 +452,7 @@ public class ReservationConverter implements LayerConstant {
 			r.setRequestProperties(OrcaConverter.fill(request));
 			r.setBroker(orca_state_instance.getBroker());
 			// register the reservation with Orca, so that it is assigned an id
+			
 			if (sm.addReservation(r) == null) {
 				throw new RuntimeException("Could not add reservations " + sm.getLastError());
 			}
@@ -532,6 +534,7 @@ public class ReservationConverter implements LayerConstant {
 			}            
 			boolean prNetwork=false;
 			int num_interface=0;
+			r.networkDependencies = de.getNumInterface();
 			for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
 				String intf_name = null;
 				String parent_tag_name = UnitProperties.UnitEthPrefix;
@@ -619,6 +622,7 @@ public class ReservationConverter implements LayerConstant {
 						if(pr!=null){
 							if(pr.isLUN){//now do it latter when all reservations are collected
 								r.numStorageDependencies++;
+								num_interface--;
 								ComputeElement parent_ce = parent_de.getCe();
 								if(parent_ce!=null){
 									setVMISCSIParam(config, parent_ce,r.numStorageDependencies);
@@ -666,6 +670,7 @@ public class ReservationConverter implements LayerConstant {
 							} else {
 								ip_addr = intf_name;
 								host_interface = String.valueOf(r.networkDependencies);
+								logger.debug("setDependency:host_interface="+host_interface);
 								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
 								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
 								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
@@ -739,6 +744,10 @@ public class ReservationConverter implements LayerConstant {
 			}
 			if(r.isVM){
                 local.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
+                config.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
+                
+                local.setProperty(PropertyParentNumStorage,String.valueOf(r.numStorageDependencies));
+                config.setProperty(PropertyParentNumStorage,String.valueOf(r.numStorageDependencies));
 			}
 			
 			// update the local properties
@@ -1668,16 +1677,18 @@ public class ReservationConverter implements LayerConstant {
 						logger.debug("ModifiedReservation Parent new:"+p_uri+";p_rmg="+p_rmg);
 						m_p++;
 						m_p_r.add(p_rmg);
-						String site_host_interface = getSiteHostInterface(parent);
-						if(site_host_interface!=null){
-							Properties p_property = new Properties();
-							p_property.setProperty(UnitProperties.UnitQuantumNetname,site_host_interface);	
-							p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
-							p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
-						}	
-						Properties property = formInterfaceProperties(manifestModel, dd, parent,site_host_interface, num_interface, m_p);
-						rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
-					}		
+						if(!parent_de.getResourceType().getResourceType().endsWith("lun")){
+							String site_host_interface = getSiteHostInterface(parent);
+							if(site_host_interface!=null){
+								Properties p_property = new Properties();
+								p_property.setProperty(UnitProperties.UnitQuantumNetname,site_host_interface);	
+								p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
+								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
+							}	
+							Properties property = formInterfaceProperties(manifestModel, dd, parent,site_host_interface, num_interface, m_p);
+							rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
+						}
+					}
 				}
 				//create properties to remember its parent reservations
 				if(p>0){

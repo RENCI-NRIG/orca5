@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -22,12 +24,15 @@ import orca.embed.policyhelpers.RequestReservation;
 import orca.embed.policyhelpers.SystemNativeError;
 import orca.embed.workflow.ModifyReservations;
 import orca.embed.workflow.RequestParserListener;
+import orca.manage.OrcaConverter;
+import orca.manage.beans.ReservationMng;
 import orca.ndl.DomainResourceType;
 import orca.ndl.INdlModifyModelListener;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlModel;
 import orca.ndl.NdlRequestParser;
+import orca.ndl.INdlModifyModelListener.ModifyType;
 import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.Device;
 import orca.ndl.elements.DomainElement;
@@ -37,6 +42,7 @@ import orca.ndl.elements.Interface;
 import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
 import orca.ndl.elements.RequestSlice;
+import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.container.Globals;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -149,7 +155,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		LinkedList <Device> nodeGroupAddedDevices = new LinkedList <Device> ();
 		for(Device device:addedDevices){
 			DomainElement de = (DomainElement) device;
-			if(de.getCe()!=null)
+			if(de.getCe()!=null && !de.isModify())
 				nodeGroupAddedDevices.add(device);
 		}
 		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
@@ -157,10 +163,56 @@ public class ModifyHandler extends UnboundRequestHandler {
 		return error;
 	}
 	
+	public List <ReservationMng> modifyStorage(HashMap <String, List<ReservationMng>> m_map){
+		List <ReservationMng> a_r=m_map.get(ModifyType.ADD.toString());
+		List <ReservationMng> m_r=m_map.get(ModifyType.MODIFY.toString());
+		if(a_r==null || m_r==null){
+			logger.debug("No added or modified r");
+			return null;
+		}
+		logger.debug("Start modifying storage:a_r.size="+a_r.size()+";m_r size="+m_r.size());
+		List <ReservationMng> extra_ar = new ArrayList <ReservationMng> ();
+		Properties config_ar=null,config_mr=null,local_ar=null,local_mr=null;
+		for(ReservationMng ar: a_r){
+			config_ar = OrcaConverter.fill(ar.getConfigurationProperties());
+			local_ar = OrcaConverter.fill(ar.getLocalProperties());
+			String url_ar=config_ar.getProperty(UnitProperties.UnitDomain);
+			logger.debug("url_al="+url_ar+";");
+			logger.debug(config_ar.toString());
+			if(url_ar==null){
+				logger.error("ar reservation no url property:"+ar.getReservationID());
+				continue;
+			}
+			for(ReservationMng mr: m_r){
+				config_mr = OrcaConverter.fill(mr.getConfigurationProperties());
+				local_mr = OrcaConverter.fill(mr.getLocalProperties());
+				String url_mr=config_mr.getProperty(UnitProperties.UnitDomain);
+				logger.debug(";url_ml="+url_mr);
+				logger.debug(config_mr.toString());
+				if(url_mr==null){
+					logger.error("mr reservation no url property:"+mr.getReservationID());
+					continue;
+				}
+				if(url_ar.equals(url_mr)){
+					logger.debug("Modifying via adding storage:"+url_ar);
+					mr.setConfigurationProperties(OrcaConverter.merge(config_ar, mr.getConfigurationProperties()));
+					mr.setLocalProperties(OrcaConverter.merge(local_ar, mr.getLocalProperties()));
+					extra_ar.add(ar);
+				}
+			}
+		}
+		
+		a_r.removeAll(extra_ar);
+			
+		logger.debug("After modifying storage:a_r.size="+a_r.size()+";m_r size="+m_r.size());
+		return extra_ar;
+	}
+	
 	public void modifyComplete(){
 		this.modifies.clear();
 		this.addedDevices.clear();
 
+		//delete extra added device 
 		for(Device dd:modifiedDevices){
 			logger.debug("Modified device:"+dd.getURI()+";"+dd.getGUID()+";"+deviceList.contains(dd)+";isModify="+dd.isModify());
 			if(this.deviceList.contains(dd)){
@@ -286,11 +338,22 @@ public class ModifyHandler extends UnboundRequestHandler {
 		for(NetworkElement device:this.getDeviceList()){
 			DomainElement dd = (DomainElement) device;
 			if(dd.getModifyVersion() == this.modifyVersion){
-				logger.debug("MOdifyHandler:dd="+dd.getName()+";isModify="+dd.isModify());
+				logger.debug("ModifyHandler:dd="+dd.getName()+";isModify="+dd.isModify());
 				if(dd.isModify()){
 					if(!modifiedDevices.contains(dd)){
 						modifies.addModifedElement(device.getResource());
-						modifiedDevices.add(dd);
+						modifiedDevices.add(dd);		
+						//if it is adding storage modifying
+						for(Entry <DomainElement,OntResource> parent:dd.getPrecededBySet()){
+							DomainElement p_de = parent.getKey();
+							if(p_de.getResourceType().getResourceType().endsWith("lun")){
+								logger.debug("ModifyHandler: parent storage=");
+								modifies.addAddedElement(device.getResource());
+								//added by the add operation
+								addedDevices.add(dd);
+								break;
+							}
+						}
 					}
 				}else{
 					modifies.addAddedElement(device.getResource());
