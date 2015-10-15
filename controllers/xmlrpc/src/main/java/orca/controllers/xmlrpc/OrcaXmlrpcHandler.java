@@ -623,6 +623,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				for(int i=0;i<modifiedDevices.size();i++)
 					l_M.add((NetworkElement)modifiedDevices.get(i) );		
 				m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D,l_M);
+				List <ReservationMng> extra_ar = ih.modifyStorage(m_map);
+				for(ReservationMng ar: extra_ar){
+					ReservationID r_id=new ReservationID(ar.getReservationID());
+					logger.debug("redundant reservation:"+r_id);
+					sm.closeReservation(r_id);
+					sm.removeReservation(r_id);
+				}
 				ih.modifyComplete(); //clear the modify data.
 			}
 			
@@ -660,8 +667,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						Properties request = OrcaConverter.fill(rr.getRequestProperties());
 						Properties resource = OrcaConverter.fill(rr.getResourceProperties());
 						
-						String num_interface=local.getProperty(ReservationConverter.parent_num_interface);
-						int num_interface_int=Integer.valueOf(num_interface);
+						String num_interface=local.getProperty(ReservationConverter.PropertyParentNumInterface);
+						int num_interface_int = 0;
+						if (num_interface != null)
+							num_interface_int=Integer.valueOf(num_interface);
+						
 						String rr_guid = local.getProperty(ReservationConverter.PropertyElementGUID);
 						if(rr_guid==null){
 							logger.error("No element guid found in the reservation:"+rr.getReservationID());

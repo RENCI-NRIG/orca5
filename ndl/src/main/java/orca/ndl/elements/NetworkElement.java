@@ -41,10 +41,16 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	
 	@Persistent // DONE
 	protected DomainResourceType resourceType;
+	
+	@Persistent // used for modifying, exisitng #interface
+	protected int numInterface;
+	
 	@Persistent // recursive
 	protected LinkedList<Interface> clientInterface;
+	
 	@Persistent // recursive
 	protected HashMap<String, DomainResource> map;  //interfaces, bandwidth
+	
 	@Persistent
 	protected String castType;
 	
@@ -382,6 +388,14 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 
 	public void setModifyVersion(int modifyVersion) {
 		this.modifyVersion = modifyVersion;
+	}
+	
+	public int getNumInterface() {
+		return numInterface;
+	}
+
+	public void setNumInterface(int numInterface) {
+		this.numInterface = numInterface;
 	}
 
 	public String getGUID() {
