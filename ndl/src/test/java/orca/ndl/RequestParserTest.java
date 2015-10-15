@@ -12,8 +12,18 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.sparql.core.ResultBinding;
+import com.hp.hpl.jena.util.PrintUtil;
 
 public class RequestParserTest implements INdlRequestModelListener {
 
@@ -99,12 +109,41 @@ public class RequestParserTest implements INdlRequestModelListener {
 		assert(is != null);
 		String r = new Scanner(is).useDelimiter("\\A").next();
 		
-		RequestParserTest rpt = new RequestParserTest();
-		NdlRequestParser nrp = new NdlRequestParser(r, rpt);
+		NdlRequestParser nrp = new NdlRequestParser(r, this);
+
 		nrp.processRequest();
 		nrp.freeModel();
 	}
 
+	
+	private void tempQuery(InfModel om) {
+		String selectStr = "SELECT ?node";
+		String fromStr = "";
+		String whereStr = " WHERE {?node domain:hasResourceType compute:BareMetalCE.}";
+		
+		String queryString = NdlCommons.createQueryString(selectStr, fromStr, whereStr);
+		
+        Query query = QueryFactory.create(queryString);
+
+        // Execute the query and obtain results
+        QueryExecution qe = QueryExecutionFactory.create(query, om);
+        ResultSet rs = qe.execSelect();
+		
+		while(rs.hasNext()) {
+			ResultBinding result = (ResultBinding)rs.next();
+			Resource node = (Resource)result.get("node");
+			System.out.println("Found node " + node.getURI());
+		}
+		System.out.println("DONE");
+	}
+	
+	private void printModel(InfModel om) {
+		for (StmtIterator i = om.listStatements(); i.hasNext(); ) {
+			Statement stmt = i.nextStatement();
+			System.out.println(" - " + PrintUtil.print(stmt));
+		} 
+	}
+	
 	private static String[] requests={ "/test-color-extension.rdf", "/large-osg-request.rdf" };
 	
 	@Test
@@ -118,6 +157,7 @@ public class RequestParserTest implements INdlRequestModelListener {
 	
 	public static void main(String[] argv) {
 		try {
+			System.out.println("Reading " + argv[0]);
 			new RequestParserTest().run_(argv[0]);
 		} catch (Exception e) {
 			System.err.println("Error: " + e);
