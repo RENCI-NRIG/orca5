@@ -624,11 +624,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					l_M.add((NetworkElement)modifiedDevices.get(i) );		
 				m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D,l_M);
 				List <ReservationMng> extra_ar = ih.modifyStorage(m_map);
-				for(ReservationMng ar: extra_ar){
-					ReservationID r_id=new ReservationID(ar.getReservationID());
-					logger.debug("redundant reservation:"+r_id);
-					sm.closeReservation(r_id);
-					sm.removeReservation(r_id);
+				if(extra_ar!=null){
+					for(ReservationMng ar: extra_ar){
+						ReservationID r_id=new ReservationID(ar.getReservationID());
+						logger.debug("redundant reservation:"+r_id);
+						sm.closeReservation(r_id);
+						sm.removeReservation(r_id);
+					}
 				}
 				ih.modifyComplete(); //clear the modify data.
 			}

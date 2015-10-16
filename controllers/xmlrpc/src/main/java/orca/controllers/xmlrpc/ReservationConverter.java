@@ -1636,6 +1636,9 @@ public class ReservationConverter implements LayerConstant {
 		}	
 		logger.debug("Modify reservations:r_map="+r_map.size()+":m_r_map="+m_r_map.size());
 		ArrayList<ReservationMng> reservations = new ArrayList<ReservationMng> ();
+		//since each modify was created as a new device, but same ORCA reservation, need to distinguish......
+		HashMap <ReservationMng,Integer> existMap = new HashMap <ReservationMng,Integer>();
+		HashMap <ReservationMng,Integer> newMap = new HashMap <ReservationMng,Integer>();
 		for(NetworkElement ne:modifiedDevices){
 			DomainElement dd = (DomainElement) ne;
 			String d_uri=dd.getName();
@@ -1659,6 +1662,11 @@ public class ReservationConverter implements LayerConstant {
 				int p=0,m_p=0,num=0;	
 				ArrayList<ReservationMng> p_r = new ArrayList<ReservationMng> ();
 				ArrayList<ReservationMng> m_p_r = new ArrayList<ReservationMng> ();
+				if(existMap.containsKey(rmg))
+					p=existMap.get(rmg);
+				if(newMap.containsKey(rmg))
+					m_p=newMap.get(rmg);
+				num=p+m_p;
 				for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
 					DomainElement parent_de = parent.getKey();
 					String p_uri = parent_de.getName();
@@ -1691,22 +1699,32 @@ public class ReservationConverter implements LayerConstant {
 					}
 				}
 				//create properties to remember its parent reservations
-				if(p>0){
+				int ori_p=0;
+				if(p_r.size()>0){
+					if(existMap.containsKey(rmg))
+						ori_p=existMap.get(rmg);
 					local.setProperty(this.PropertyNumExistParentReservations, String.valueOf(p));
-					for(int i=0;i<p;i++){
-						String key=this.PropertyExistParent + String.valueOf(i);
+					for(int i=0;i<p-ori_p;i++){
+						String key=this.PropertyExistParent + String.valueOf(i+ori_p);
 						local.setProperty(key, p_r.get(i).getReservationID());
 					}
+					existMap.put(rmg, p);
 				}
-				if(m_p>0){
+				ori_p=0;
+				if(m_p_r.size()>0){
+					if(newMap.containsKey(rmg))
+						ori_p=newMap.get(rmg);
 					local.setProperty(this.PropertyNumNewParentReservations, String.valueOf(m_p));
-					for(int i=0;i<m_p;i++){
-						String key=this.PropertyNewParent + String.valueOf(i);
+					for(int i=0;i<m_p-ori_p;i++){
+						String key=this.PropertyNewParent + String.valueOf(i+ori_p);
 						local.setProperty(key, m_p_r.get(i).getReservationID());
+						logger.debug("ModifiedReservation Parent new property:"+key+";p_r="+m_p_r.get(i).getReservationID());
 					}
+					newMap.put(rmg, m_p);
 				}
 				rmg.setLocalProperties(OrcaConverter.merge(local, rmg.getLocalProperties()));
-				reservations.add(rmg);
+				if(!reservations.contains(rmg))
+					reservations.add(rmg);
 			}
 		}
 		
