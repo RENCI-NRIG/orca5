@@ -98,13 +98,13 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask{
             if (file == null) {
                 throw new Exception("Missing file parameter");
             }
-	    if (cloudType == null) {
-		throw new Exception("Missing cloudType parameter");
-	    }
+	    	if (cloudType == null) {
+				throw new Exception("Missing cloudType parameter");
+	    	}
             
 	    
 
-            System.out.println("file: " + file + ", cloudType: " +cloudType);
+	        System.out.println("file: " + file + ", cloudType: " +cloudType);
 	  
 
 	    System.out.println("PRUTH: this.section = " + this.section + ", this.key = " + this.key + ", this.value = " + this.value);
@@ -157,8 +157,8 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask{
 			}
 			
 			//check to see if we checked all the existing interfaces.  if so, add the new one.
-			if(!processedKey && prev_section.equals("interfaces")){
-			    System.out.println("Adding new interface to userdata: " + this.key.trim());
+			if(!processedKey && prev_section.equals(this.section)){
+			    System.out.println("Adding new key to " + prev_section + " section of userdata: " + this.key.trim());
 			    sb.append(this.key.trim() + "=" +  this.value.trim() + "\n");
 			    processedKey = true;
 			} 
