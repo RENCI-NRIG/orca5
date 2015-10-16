@@ -36,7 +36,6 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			//ok-parents
 			//actOn-to be modified reservation
 			String modifySubcommand = "addiface";
-			Properties modifyProperties=new Properties();
 
 			// use the queueing version to avoid collisions with modified performed by the controller itself
 			Properties local = OrcaConverter.fill(reservation.getLocalProperties());
@@ -56,8 +55,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			String unit_tag = null;
 			if(p_str!=null){
 				p=Integer.valueOf(p_str);
-				System.out.println("Number of parent reservations:"+p);
+				System.out.println("Number of parent reservations:"+p+";num_interface="+num_interface_int+";num_storage="+num_storage_int);
 				for(int i=0;i<p;i++){
+					Properties modifyProperties=new Properties();
 					String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
 					r_id=local.getProperty(key);
 					if(r_id!=null){
@@ -115,9 +115,12 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										pr_local = OrcaConverter.fill(u.getProperties());
 										if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
 											unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
+										System.out.println(pr_local.toString());
 									}
 								}
-								System.out.println("parent unit lun tag:"+unit_tag+";host intf="+num_interface_int);
+								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
+										+";host intf="+num_interface_int
+										+";r_id="+r_id+";p_r_id="+p_r.getReservationID());
 								System.out.println(local.toString());
 								if(unit_tag!=null){
 									modifyProperties.setProperty("target.lun.num",unit_tag);
@@ -195,9 +198,8 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									System.out.println("Parent doesnot return the unit lun tag:"+pr_local);
 									continue;
 								}
-								num_interface_int--;
+								//num_interface_int--;
 							}
-							
 						}
 					}
 				}
