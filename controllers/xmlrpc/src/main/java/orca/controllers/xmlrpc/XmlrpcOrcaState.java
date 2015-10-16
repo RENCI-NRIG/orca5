@@ -438,7 +438,7 @@ public final class XmlrpcOrcaState implements Serializable {
      /**
       * Recover by querying the SM
       */
-     public synchronized void recover() {
+     public synchronized void recover() throws Exception {
     	 logger.info("Recovering XmlrpcOrcaState");
     	 IOrcaServiceManager sm = null;
     	 try {
@@ -527,7 +527,7 @@ public final class XmlrpcOrcaState implements Serializable {
     		 }
     	 } catch (Exception e) {
     		 logger.error("Unable to recover XmlrpcOrcaState due to: " + e);
-    		 return;
+    		 throw new Exception("Unable to recover XmlrpcOrcaState due to: " + e);
     	 } finally {
     		 if (sm != null)
     			 returnSM(sm);
