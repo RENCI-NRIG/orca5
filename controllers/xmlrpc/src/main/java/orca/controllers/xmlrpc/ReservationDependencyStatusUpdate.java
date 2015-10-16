@@ -115,13 +115,11 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										pr_local = OrcaConverter.fill(u.getProperties());
 										if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
 											unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
-										System.out.println(pr_local.toString());
 									}
 								}
 								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
 										+";host intf="+num_interface_int
 										+";r_id="+r_id+";p_r_id="+p_r.getReservationID());
-								System.out.println(local.toString());
 								if(unit_tag!=null){
 									modifyProperties.setProperty("target.lun.num",unit_tag);
 									host_interface=String.valueOf(num_interface_int);
@@ -154,9 +152,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										modifyProperties.setProperty("lun.guid",local.getProperty(storageTargetPrefix+".lun.guid"));
 									
 									if(local.getProperty(storageFSPrefix+".type")!=null)
-										modifyProperties.setProperty("type",local.getProperty(storageFSPrefix+".type"));
+										modifyProperties.setProperty("fs.type",local.getProperty(storageFSPrefix+".type"));
 									else
-										modifyProperties.setProperty("type","ext3");
+										modifyProperties.setProperty("fs.type","ext3");
 									
 									if(local.getProperty(storageTargetPrefix+".options")!=null)
 										modifyProperties.setProperty("options",local.getProperty(storageTargetPrefix+".options"));
