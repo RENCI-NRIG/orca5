@@ -1511,8 +1511,10 @@ public class ReservationConverter implements LayerConstant {
 		String parent_url = parent_device.getName();
 		OntResource parent_ont = manifestModel.createOntResource(parent_url);
 		
-		if(existingParent(child_ont,parent_ont))
+		if(existingParent(child_ont,parent_ont)){
+			logger.warn("addDependencyProperty:Existing parent:child="+child_ont.getURI()+";parent="+parent_url);
 			return;
+		}
 		if(child_ont.getURI().indexOf("#")>0)
 			local_name=child_ont.getURI().split("#")[1];
 		else 
