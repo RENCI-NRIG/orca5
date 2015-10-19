@@ -435,8 +435,9 @@ public class Domain implements IDomainAbstractor{
 			set = setStm.getResource();
 
 			typeStm=set.getProperty(NdlCommons.domainHasResourceTypeProperty);
-			type_rs=typeStm.getResource();			
-			if(type_rs.getLocalName().equalsIgnoreCase(rType)) {
+			type_rs=typeStm.getResource();	
+			String local_rType = type_rs.getLocalName();
+			if(local_rType.equalsIgnoreCase(rType)) {
 				abstractModel.add(setStm);
 				if(set.hasProperty(NdlCommons.domainIsAllocatable)){
 					abstractModel.add(set.getProperty(NdlCommons.domainIsAllocatable));
@@ -561,7 +562,7 @@ public class Domain implements IDomainAbstractor{
 			boolean intf_type=false;
 			if(rType!=null){
 				if(!intf.listProperties(NdlCommons.availableLabelSet).hasNext()){
-					if((rType.equalsIgnoreCase("vm")) || (rType.equalsIgnoreCase("baremetalce")) || (rType.equalsIgnoreCase("lun"))){
+					if((rType.equalsIgnoreCase("vm")) || (rType.endsWith("baremetalce")) || (rType.equalsIgnoreCase("lun"))){
 						if(isBorderInterface(intf,rType)){
 							intf_type=true;
 						}else{

@@ -18,24 +18,20 @@ import orca.util.ResourceType;
 
 public class MappingHandlerTest extends TestCase {
 	String [] inputFileName={
-			"orca/ndl/substrate/osgvmsite.rdf"
-			,"orca/ndl/substrate/mass.rdf","orca/ndl/substrate/nictavmsite.rdf",
+			"orca/ndl/substrate/osgvmsite.rdf","orca/ndl/substrate/mass.rdf","orca/ndl/substrate/nictavmsite.rdf",
 			"orca/ndl/substrate/rcivmsite.rdf"
 			,"orca/ndl/substrate/bbnvmsite.rdf"
 			,"orca/ndl/substrate/fiuvmsite.rdf"
 			,"orca/ndl/substrate/uhvmsite.rdf"
 			,"orca/ndl/substrate/dukevmsite.rdf"
 			,"orca/ndl/substrate/rencivmsite.rdf"
-			,"orca/ndl/substrate/uncvmsite.rdf","orca/ndl/substrate/uvanlvmsite.rdf",
-	"orca/ndl/substrate/ben-6509.rdf","orca/ndl/substrate/nlr.rdf"
-	,"orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf"
-	,"orca/ndl/substrate/uvanlNet.rdf",
-	"orca/ndl/substrate/renciNet.rdf","orca/ndl/substrate/uncNet.rdf"
-	,"orca/ndl/substrate/dukeNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
+			,"orca/ndl/substrate/cienavmsite.rdf","orca/ndl/substrate/uvanlvmsite.rdf",
+	"orca/ndl/substrate/ben-6509.rdf",
+	"orca/ndl/substrate/nlr.rdf","orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf","orca/ndl/substrate/uvanlNet.rdf",
+	"orca/ndl/substrate/renciNet.rdf","orca/ndl/substrate/uncNet.rdf","orca/ndl/substrate/dukeNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
 	"orca/ndl/substrate/rciNet.rdf","orca/ndl/substrate/bbnNet.rdf",
-	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/uhNet.rdf",
-	"orca/ndl/substrate/learnNet.rdf","orca/ndl/substrate/learn.rdf"
-	,"orca/ndl/substrate/nictaNet.rdf"
+	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/cienaNet.rdf",
+	"orca/ndl/substrate/learnNet.rdf","orca/ndl/substrate/learn.rdf","orca/ndl/substrate/nictaNet.rdf"
 	};
 
 	String requestFile,requestFileDuke,requestFile33,requestFileVMSDuke,requestFileUNC,requestFileRenci,requestFileDukeUnc;
@@ -68,14 +64,15 @@ public class MappingHandlerTest extends TestCase {
 		pools=new ResourcePoolsDescriptor();
 		String abstractModel=null;
 		int numDomain=inputFileName.length;
-		String [] type = {"site.vm","site.GEPort","site.TenGEPort","site.vlan"};
+		String [] type = {"site.vm","site.vlan"};
 		String [] vmvlantype = {"site.vm","site.vlan","site.baremetalce"};
-		String [] lunvmvlantype = {"site.vm","site.vlan","site.lun"};
+		String [] lunvmvlantype = {"site.vm","site.vlan","site.baremetalce","site.lun"};
 		DomainResources domainResources=null;
 
 		ResourcePoolDescriptor pool=null;
 
 		for(int i=0;i<numDomain;i++){	
+			System.out.println("Abstracting domain:"+i);
 			if( (i<3) || (i==7) || (i==8)){
 				Domain d = new Domain(inputFileName[i]);
 				abstractModel = d.delegateDomainModelToString("site.vm");
@@ -94,7 +91,7 @@ public class MappingHandlerTest extends TestCase {
 					Domain d = new Domain(inputFileName[i]);
 					abstractModel = d.delegateDomainModelToString(j);
 					try{
-						domainResources=d.getDomainResources(abstractModel,10);
+						domainResources=d.getDomainResources(abstractModel,2);
 					}catch(Exception e){
 						e.printStackTrace();
 						continue;

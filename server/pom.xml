@@ -173,6 +173,7 @@
 								<resolveArtifact groupId="orca.plugins" artifactId="ben" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.plugins.ben.tar.gz" />
 								<resolveArtifact groupId="orca.handlers" artifactId="ibm_ds" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.ibm_ds.tar.gz" />
 								<resolveArtifact groupId="orca.handlers" artifactId="storage_service" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.storage_service.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="nodeagent2" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.nodeagent2.tar.gz" />
 								<resolveArtifact groupId="orca.handlers" artifactId="slurm" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.slurm.tar.gz" />
 								</tasks>
 						</configuration>

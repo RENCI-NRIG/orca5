@@ -72,10 +72,10 @@ try:
     
     stdOut, rtncode = storage_service.delete(os.environ['UNIT_LUN_GUID'])
 
-    LOG.info("RESULT: " + str(rtncode))
+    LOG.info("RESULT: " + stdOut + str(rtncode))
 
     if rtncode != 0:
-        print 'Delete LUN failed!'
+        print 'Delete LUN failed: ' + stdOut
         sys.exit(1)
 
     print 'OK'
