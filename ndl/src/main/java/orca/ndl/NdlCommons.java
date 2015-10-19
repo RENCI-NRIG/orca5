@@ -136,7 +136,7 @@ public class NdlCommons {
 	public static final Property hasColorAttribute, hasColorBlob, hasColorKey, hasColorLabel, hasColorValue, hasColorXMLBlob, hasColorXMLCompressedBlob;
 	
 	public static final Resource networkStorageClass, computeElementClass, serverCloudClass, topologyNetworkConnectionClass, topologyBroadcastConnectionClass, 
-	vmResourceTypeClass,bmResourceTypeClass,lunResourceTypeClass,ethernetNetworkElementClass, multicastOntClass,
+	vmResourceTypeClass,bmResourceTypeClass,fourtygbmResourceTypeClass,lunResourceTypeClass,ethernetNetworkElementClass, multicastOntClass,
 	topologyCrossConnectClass, topologyLinkConnectionClass,deviceOntClass, switchingMatrixOntClass,interfaceOntClass,vlanResourceTypeClass,
 	networkDomainOntClass, networkServiceClass, domainSSHServiceClass, reservationOntClass, manifestOntClass, domainAggregateManagerClass,domainControllerClass,
 	requestReservationStateClass, requestActiveState, requestActiveTicketedState, topologyLinkClass, 
@@ -291,6 +291,7 @@ public class NdlCommons {
 		computeElementClass = new ResourceImpl(ORCA_NS + "compute.owl#ComputeElement");
 		vmResourceTypeClass = new ResourceImpl(ORCA_NS + "compute.owl#VM");
 		bmResourceTypeClass = new ResourceImpl(ORCA_NS + "compute.owl#BareMetalCE");
+		fourtygbmResourceTypeClass = new ResourceImpl(ORCA_NS + "compute.owl#FourtyGBareMetalCE");
 		lunResourceTypeClass = new ResourceImpl(ORCA_NS + "storage.owl#LUN");
 		
 		serverCloudClass = new ResourceImpl(ORCA_NS + "compute.owl#ServerCloud");
@@ -2394,7 +2395,7 @@ public class NdlCommons {
 	public static boolean isBareMetal(Resource r) {
 		if (r.hasProperty(domainHasResourceTypeProperty)) {
 			Statement st = r.getProperty(domainHasResourceTypeProperty);
-			if (st.getResource().equals(bmResourceTypeClass)) 
+			if (st.getResource().equals(bmResourceTypeClass) || (st.getResource().equals(fourtygbmResourceTypeClass))) 
 				return true;
 		}
 		return false;

@@ -18,6 +18,7 @@ import junit.framework.TestCase;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.RequestMappingException;
+import orca.embed.policyhelpers.SystemNativeError;
 import orca.embed.workflow.Domain;
 import orca.embed.workflow.RequestWorkflow;
 import orca.ndl.DomainResourceType;

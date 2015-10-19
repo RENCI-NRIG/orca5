@@ -16,7 +16,6 @@ import orca.shirako.plugins.config.OrcaAntTask;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -57,44 +56,6 @@ public abstract class RestTask extends OrcaAntTask {
 
 	protected String getHost() {
 		return asUrl.getHost();
-	}
-
-	/**
-	 * Generate HTTP post object for the plugin join/leave/modify
-	 * @param pluginName
-	 * @return
-	 * @throws BuildException
-	 */
-	protected HttpPost getPostObject(String pluginName) throws BuildException {
-		DefaultHttpClient client = new DefaultHttpClient();
-
-		client.getCredentialsProvider().
-		setCredentials(
-				new AuthScope(getHost(), getPort()),
-				new UsernamePasswordCredentials(USERNAME, password));
-
-		HttpPost post = new HttpPost(na2Url + "/" + pluginName);
-
-		return post;
-	}
-
-	/**
-	 * Generate HttpGet for the plugin status and other GET operations
-	 * @param pluginName
-	 * @return
-	 * @throws BuildException
-	 */
-	protected HttpGet getGetObject(String pluginName) throws BuildException {
-		DefaultHttpClient client = new DefaultHttpClient();
-
-		client.getCredentialsProvider().
-		setCredentials(
-				new AuthScope(getHost(), getPort()),
-				new UsernamePasswordCredentials(USERNAME, password));
-
-		HttpGet get = new HttpGet(na2Url + "/" + pluginName);
-
-		return get;
 	}
 
 	/*
@@ -174,7 +135,7 @@ public abstract class RestTask extends OrcaAntTask {
 	protected void doPost() throws BuildException {
 		DefaultHttpClient client = new DefaultHttpClient();
 
-		System.out.println("Executing " + rop + " for " + na2Url);
+		//System.out.println("Executing " + rop + " for " + na2Url);
 		try {
 			client.getCredentialsProvider().
 			setCredentials(new AuthScope(getHost(), getPort()),
@@ -213,13 +174,17 @@ public abstract class RestTask extends OrcaAntTask {
 			// set return properties
 			getProject().setProperty(statusProperty, pr.getStatus() + "");
 			getProject().setProperty(errorMsgProperty, pr.getErrorMsg());
-			getProject().setProperty(reservationIdProperty, pr.getResId().getId());
+
+			if (pr.getResId() != null) 
+				getProject().setProperty(reservationIdProperty, pr.getResId().getId());
+			else
+				getProject().setProperty(reservationIdProperty, "Not available");
 
 			if (pr.getProperties() != null) {
 				// 	set properties returned by the plugin
 				for(Map.Entry<String, String> me: pr.getProperties().entrySet()) {
 					getProject().setProperty(returnPrefix + "." + me.getKey(), me.getValue());
-					System.out.println("Adding property " + returnPrefix + "." + me.getKey() + "=" + me.getValue());
+					//System.out.println("Adding property " + returnPrefix + "." + me.getKey() + "=" + me.getValue());
 				}
 			}
 
@@ -252,8 +217,14 @@ public abstract class RestTask extends OrcaAntTask {
 				props = new Properties();
 				props.putAll((JSONObject)o.get("properties"));
 			}
-
-			PluginReturn pr = new PluginReturn(st, (String)o.get("errorMsg"), rid, props);
+			
+			/**
+			 * If HTTP error is returned, then it is 'message', if plugin error, it is 'errorMsg'
+			 */
+			String msg = (String)o.get("errorMsg");
+			if (msg == null)
+				msg = (String)o.get("message");
+			PluginReturn pr = new PluginReturn(st, msg, rid, props);
 			return pr;
 		} catch (Exception e) {
 			throw new BuildException("Unable to convert plugin status " + o);

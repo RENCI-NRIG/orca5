@@ -1271,7 +1271,7 @@ public class ReservationConverter implements LayerConstant {
 												domain_ont.removeAll(NdlCommons.topologyHasInterfaceProperty);
 										}
 										//VM reservation, need to generate new resources when multiple units.
-										if (rType.equalsIgnoreCase("vm") || rType.equalsIgnoreCase("baremetalce")  || rType.equalsIgnoreCase("lun")) {
+										if (rType.equalsIgnoreCase("vm") || rType.endsWith("baremetalce")  || rType.equalsIgnoreCase("lun")) {
 											String vm_url = unit_url;
 											if (vm_url == null) {
 												logger.error("unit.hostname.url is null");
@@ -1364,7 +1364,7 @@ public class ReservationConverter implements LayerConstant {
 												domain_ont.removeAll(NdlCommons.topologyHasInterfaceProperty);
 										}
 									}
-									if (rType.equalsIgnoreCase("vm") || rType.equalsIgnoreCase("baremetalce") || rType.equalsIgnoreCase("lun")) {
+									if (rType.equalsIgnoreCase("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {
 										if(domain_ont.getURI().equals(unit_url))  //
 											inConnection = true;
 										if(inConnection==true){

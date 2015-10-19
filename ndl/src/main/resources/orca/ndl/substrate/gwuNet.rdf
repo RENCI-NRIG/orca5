@@ -309,12 +309,52 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/VLANLabel/720 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/VLANLabel/720">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">720.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/VLANLabel/734 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/VLANLabel/734">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">734.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/availableVLANSet/InstaGeni -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/availableVLANSet/InstaGeni">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">15</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/availableVLANSet/InstaGeni/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/availableVLANSet/InstaGeni/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/availableVLANSet/InstaGeni/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/VLANLabel/720"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/VLANLabel/734"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI -->
 
     <owl:NamedIndividual rdf:about="&gwuNet;Cisco/UCSFI">
         <rdf:type rdf:resource="&topology;Device"/>
         <topology:hasSwitchMatrix rdf:resource="&gwuNet;Cisco/UCSFI/EthernetSwitchMatrix"/>
         <topology:hasInterface rdf:resource="&gwuNet;Cisco/UCSFI/TenGigabitEthernet/0/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&gwuNet;Cisco/UCSFI/TenGigabitEthernet/0/2/ethernet"/>
         <topology:hasInterface rdf:resource="&gwuNet;Cisco/UCSFI/TenGigabitEthernet/1/1/ethernet"/>
         <topology:hasInterface rdf:resource="&gwuNet;Cisco/UCSFI/TenGigabitEthernet/1/2/ethernet"/>
         <topology:hasInterface rdf:resource="&gwuNet;Cisco/UCSFI/TenGigabitEthernet/1/3/ethernet"/>
@@ -339,9 +379,25 @@
         <rdfs:label>64</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">100000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&gwuNet;Cisco/UCSFI"/>
-        <ethernet:availableVLANSet rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet"/>
+        <ethernet:availableVLANSet rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet/AL2S"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/TenGigabitEthernet/0/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&gwuNet;Cisco/UCSFI/TenGigabitEthernet/0/2/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <rdfs:label>64</rdfs:label>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">InstaGeni-GWU</topology:hasName>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/availableVLANSet/InstaGeni"/>
+        <topology:interfaceOf rdf:resource="&gwuNet;Cisco/UCSFI"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/GWU/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;1G"/>
     </owl:NamedIndividual>
     
 
@@ -354,7 +410,7 @@
         <rdfs:label>41-50</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&gwuNet;Cisco/UCSFI"/>
-        <ethernet:availableVLANSet rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet"/>
+        <ethernet:availableVLANSet rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet/AL2S"/>
         <topology:linkTo rdf:resource="&gwuvmsite;GWU/ExoGeni/TenGigabitEthernet/1/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
     </owl:NamedIndividual>
@@ -369,7 +425,7 @@
         <rdfs:label>41-50</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:interfaceOf rdf:resource="&gwuNet;Cisco/UCSFI"/>
-        <ethernet:availableVLANSet rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet"/>
+        <ethernet:availableVLANSet rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet/AL2S"/>
         <topology:linkTo rdf:resource="&gwuvmsite;GWU/ExoGeni/TengigabitEthernet/2/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
     </owl:NamedIndividual>
@@ -434,16 +490,28 @@
 
     <owl:NamedIndividual rdf:about="&gwuNet;Cisco/UCSFI/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">20</collections:size>
+        <collections:size rdf:datatype="&xsd;int">25</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
-        <collections:element rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/gwuNet.rdf#GWUNet/IBM/G8264/availableVLANSet/InstaGeni/1"/>
+        <collections:element rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet/AL2S/1"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/availableVLANSet/1 -->
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/availableVLANSet/AL2S -->
 
-    <owl:NamedIndividual rdf:about="&gwuNet;Cisco/UCSFI/availableVLANSet/1">
+    <owl:NamedIndividual rdf:about="&gwuNet;Cisco/UCSFI/availableVLANSet/AL2S">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&gwuNet;Cisco/UCSFI/availableVLANSet/AL2S/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/availableVLANSet/AL2S/1 -->
+
+    <owl:NamedIndividual rdf:about="&gwuNet;Cisco/UCSFI/availableVLANSet/AL2S/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&gwuNet;Cisco/UCSFI/VLANLabel/710"/>
         <layer:upperBound rdf:resource="&gwuNet;Cisco/UCSFI/VLANLabel/719"/>
@@ -508,6 +576,14 @@
         <rdf:type rdf:resource="&location;Location"/>
         <wgs84_pos:long>-77.048942</wgs84_pos:long>
         <wgs84_pos:lat>38.901451</wgs84_pos:lat>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/GWU/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/GWU/Cisco/6509/GigabitEthernet/1/1/ethernet">
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.wash.net.internet2.edu:eth7/2:gwu-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 

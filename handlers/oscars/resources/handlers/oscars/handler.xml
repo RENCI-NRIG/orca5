@@ -30,16 +30,6 @@
 				<property file="${oscars.site.properties}" />
 			</then>
 		</if>
-
-		<!-- default to OSCARS v06 (other option is v05) -->
-		<if>
-			<not>
-				<isset property="oscars.version" />
-			</not>
-			<then>
-				<property name="oscars.version" value="v06" />
-			</then>
-		</if>
 	
 		<if>
 			<not>
@@ -178,7 +168,9 @@
 				<echo message="unit.vlan.tag=${shirako.save.unit.vlan.tag} unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
 				<property name="shirako.target.code" value="0" />
 			</then>
-			<else>				
+			<else>			
+				<echo message="Invoking JOIN on NA2 plugin ${na2.oscars.plugin} at ${na2.url}"/>
+	
 				<var name="oscars.join.reservation" unset="true" />
 				<var name="code" unset="true" />
 				<var name="message" unset="true" />
@@ -193,14 +185,14 @@
 						<equals arg1="${code}" arg2="0" />
 					</not>
 					<then>
-						<echo message="NodeAgent unable to create OSCARS circuit: ${message}" />
+						<echo message="NA2 unable to create OSCARS circuit: ${message}" />
 						<property name="message" value="NodeAgent unable to create OSCARS circuit: ${message}" />
 					</then>
 					<else>
 						<property name="shirako.save.unit.vlan.reservation" value="${oscars.join.reservation}" />
 						<property name="shirako.save.unit.vlan.tag" value="${unit.vlan.tag}" />
 						<property name="shirako.save.unit.status" value="ACTIVE" />
-						<echo message="NodeAgent created reservation unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
+						<echo message="NA2 created reservation unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
 					</else>
 				</if>
 			<property name="shirako.target.code" value="${code}" />
@@ -225,6 +217,8 @@
 	<target name="leave" depends="resolve.configuration,ben.load.tasks">
 	
 		<taskdef resource="orca/handlers/nodeagent2/nodeagent2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+		<taskdef resource="orca/handlers/network/oscars/oscars.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	
 		<echo message="OSCARS/ION NA2 HANDLER: LEAVE" />
 
 		<if>
@@ -255,16 +249,16 @@
 				<property name="shirako.target.code" value="0" />
 			</then>
 			<else>
+				<echo message="Invoking LEAVE on NA2 plugin ${na2.oscars.plugin} at ${na2.url} for reservation ${unit.vlan.reservation}"/>
 				<var name="code" unset="true" />	
 				<var name="message" unset="true" />
-				<echo message="terminating OSCARS circuit: ${unit.vlan.reservation}" />
 	
 				<!-- na2 does its own locking -->
 				<!-- this collects all properties that start with "unit" and sends them to the NA2 OSCARS plugin -->
 				<nodeagent2.leave baseUrl="${na2.url}" prefix="unit" returnPrefix="oscars.return" password="${na2.password}" plugin="${na2.oscars.plugin}" 
 					reservationId="${unit.vlan.reservation}" statusProperty="code" errorMsgProperty="message" reservationIdProperty="oscars.leave.reservation" />
 	
-				<echo message="NodeAgent exit code: ${code} with message ${message}" />	
+				<echo message="NA2 exit code: ${code} with message ${message}" />	
 				<property name="shirako.target.code" value="${code}" />
 			</else>
 		</if>

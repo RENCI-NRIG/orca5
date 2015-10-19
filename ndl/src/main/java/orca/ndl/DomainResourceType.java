@@ -10,6 +10,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class DomainResourceType implements LayerConstant, Comparable<DomainResourceType>, Persistable {
 	// Define more resource types here as needed
 	public static String BM_RESOURCE_TYPE="baremetalce";
+	public static String FourtyGBM_RESOURCE_TYPE="fourtygbaremetalce";
 	public static String VM_RESOURCE_TYPE="vm";
 	public static String VLAN_RESOURCE_TYPE="vlan";
 	public static String LUN_RESOURCE_TYPE="lun";	
@@ -40,6 +41,8 @@ public class DomainResourceType implements LayerConstant, Comparable<DomainResou
 			return NdlCommons.vmResourceTypeClass;	
 		if(this.resourceType.toLowerCase().endsWith(DomainResourceType.BM_RESOURCE_TYPE))
 			return NdlCommons.bmResourceTypeClass;
+		if(this.resourceType.toLowerCase().endsWith(DomainResourceType.FourtyGBM_RESOURCE_TYPE))
+			return NdlCommons.fourtygbmResourceTypeClass;
 		if(this.resourceType.toLowerCase().endsWith(DomainResourceType.LUN_RESOURCE_TYPE))
 			return NdlCommons.lunResourceTypeClass;
 		if(this.resourceType.toLowerCase().endsWith(DomainResourceType.VLAN_RESOURCE_TYPE))

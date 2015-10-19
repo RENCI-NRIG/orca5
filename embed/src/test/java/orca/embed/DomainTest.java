@@ -34,7 +34,7 @@ public class DomainTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		inputFileNameTest="orca/ndl/substrate/dukevmsite.rdf";
+		inputFileNameTest="orca/ndl/substrate/cienavmsite.rdf";
 		domainTest=new Domain(inputFileNameTest);
 	}
 
@@ -92,8 +92,8 @@ public class DomainTest extends TestCase {
 	
 	public void testGetDomainResources() throws IOException, NdlException {
 		//System.out.println(domainTest.delegateDomainModelToString("site.baremetalce"));
-		String abstractModel_str = domainTest.delegateDomainModelToString("lun");
-		DomainResources res = domainTest.getDomainResources(abstractModel_str, 4);
+		String abstractModel_str = domainTest.delegateDomainModelToString("fourtygbaremetalce");
+		DomainResources res = domainTest.getDomainResources(abstractModel_str, 3);
 		System.out.println(res.toString());
 	}
 	

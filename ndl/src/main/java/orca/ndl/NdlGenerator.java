@@ -1356,6 +1356,10 @@ public class NdlGenerator {
 		addProperty(cluster, "domain", "hasResourceType", NdlCommons.ORCA_NS + "compute.owl#BareMetalCE");
 	}
 	
+	public void addFourtyGBareMetalDomainProperty(Individual cluster) throws NdlException {
+		addProperty(cluster, "domain", "hasResourceType", NdlCommons.ORCA_NS + "compute.owl#FourtyGBareMetalCE");
+	}
+	
 	/**
 	 * Add OpenFlow-relevant properties to a slice individual
 	 * @param userEmail

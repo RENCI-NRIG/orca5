@@ -124,6 +124,10 @@
 									classifier="package" type="tar.gz"
 									tofile="startup/package-orca.handlers.storage_service.tar.gz" />
 								<resolveArtifact groupId="orca.handlers"
+									artifactId="nodeagent2" version="${project.version}"
+									classifier="package" type="tar.gz"
+									tofile="startup/package-orca.handlers.nodeagent2.tar.gz" />
+								<resolveArtifact groupId="orca.handlers"
 									artifactId="slurm" version="${project.version}" classifier="package"
 									type="tar.gz" tofile="startup/package-orca.handlers.slurm.tar.gz" />
 							</tasks>
