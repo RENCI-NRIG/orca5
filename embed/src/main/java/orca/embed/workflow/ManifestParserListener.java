@@ -153,6 +153,10 @@ public class ManifestParserListener implements INdlManifestModelListener,
 				List<Resource> ifs = new ArrayList<Resource>();
 		    	for (StmtIterator sti = ce_rs.listProperties(NdlCommons.manifestHasParent); sti.hasNext();) {
 		    		parent_rs=sti.next().getResource();
+		    		if(parent_rs.getProperty(NdlCommons.collectionElementProperty)==null){
+		    			logger.error("Parent element missed: ce_rs="+ce_rs.getURI()+";parent="+parent_rs.getURI());
+		    			continue;
+		    		}
 		    		parent_domain_rs=parent_rs.getPropertyResourceValue(NdlCommons.collectionElementProperty);
 		    		interface_rs=NdlCommons.parentGetInterface(model,ce_rs.getURI(),parent_domain_rs.getURI());
 		    		if(storageSharedLink(parent_domain_rs)){

@@ -181,12 +181,19 @@ public class RequestReservation {
 			requestConnection = (NetworkConnection) element;
 			links.put(requestConnection.getResource().getLocalName(), requestConnection);
 			setPureType(requestConnection.getResourceType(),typeTotalUnits);
-			if(reservationDomain==null){	
+			if( (reservationDomain==null) 
+					|| (requestConnection.getCastType().equalsIgnoreCase("Multicast")) ){	
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
-					String connection_domain = ifMPConnection(requestConnection);
+					String connection_domain = null;
+					if(requestConnection.getCastType().equalsIgnoreCase("Multicast")){
+						connection_domain=this.MultiPoint_Domain;
+					}
+					else
+						connection_domain=ifMPConnection(requestConnection);
 					element.setInDomain(connection_domain);
 					setDomainRequestReservation(element,domainRequestReservation);
+					reservationDomain=null;
 					continue;
 				}
 			}

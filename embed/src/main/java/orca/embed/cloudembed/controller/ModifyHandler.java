@@ -344,14 +344,16 @@ public class ModifyHandler extends UnboundRequestHandler {
 						modifies.addModifedElement(device.getResource());
 						modifiedDevices.add(dd);		
 						//if it is adding storage modifying
-						for(Entry <DomainElement,OntResource> parent:dd.getPrecededBySet()){
-							DomainElement p_de = parent.getKey();
-							if(p_de.getResourceType().getResourceType().endsWith("lun")){
-								logger.debug("ModifyHandler: parent storage=");
-								modifies.addAddedElement(device.getResource());
-								//added by the add operation
-								addedDevices.add(dd);
-								break;
+						if(dd.getPrecededBy()!=null){
+							for(Entry <DomainElement,OntResource> parent:dd.getPrecededBySet()){
+								DomainElement p_de = parent.getKey();
+								if(p_de.getResourceType().getResourceType().endsWith("lun")){
+									logger.debug("ModifyHandler: parent storage=");
+									modifies.addAddedElement(device.getResource());
+									//added by the add operation
+									addedDevices.add(dd);
+									break;
+								}
 							}
 						}
 					}

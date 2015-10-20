@@ -89,10 +89,11 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			NetworkConnection element = (NetworkConnection) it.next();
 			if(element.getResource()!=null && element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty)!=null){
 				multicastDomain = element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty);
-			}
-			
-			domainCount = ifMPConnection(element);
-			if(domainCount.size()==2){	//in-rack broadcasting
+			}else if(element.getCastType().equalsIgnoreCase("Multicast") && element.isModify()){
+				multicastDomain=element.getResource();
+			}else
+				domainCount = ifMPConnection(element);
+			if((domainCount!=null)&&(domainCount.size()==2) && !element.isModify()){	//in-rack broadcasting
 					
 			}else{	
 				if(multicastDomain==null){
@@ -104,6 +105,8 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 				OntResource root_rs=requestModel.createIndividual(multicastDomain.getURI(),NdlCommons.computeElementClass);
 				root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
 				root = new ComputeElement(requestModel,multicastDomain);
+				root.setModify(element.isModify());
+				logger.debug("MultiPointHandler:root="+root.getName()+";isModify="+root.isModify());
 			}
 			if(root!=null)
 				mpRequest = generateConnectionRequest(requestModel, element, rr,root);
