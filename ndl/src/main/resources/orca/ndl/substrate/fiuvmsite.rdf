@@ -11,7 +11,7 @@
     <!ENTITY wgs84_pos "http://www.w3.org/2003/01/geo/wgs84_pos#" >
     <!ENTITY orca "http://geni-orca.renci.org/owl/orca.owl#" >
     <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
-    <!ENTITY orca2 "https://geni-orca.renci.org/owl/orca.rdf#" >
+    <!ENTITY orca2 "http://geni-orca.renci.org/owl/orca.rdf#" >
     <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
     <!ENTITY storage "http://geni-orca.renci.org/owl/storage.owl#" >
     <!ENTITY compute "http://geni-orca.renci.org/owl/compute.owl#" >
@@ -44,7 +44,7 @@
      xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
      xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
-     xmlns:orca2="https://geni-orca.renci.org/owl/orca.rdf#"
+     xmlns:orca2="http://geni-orca.renci.org/owl/orca.rdf#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:TengigabitEthernet2="&fiuvmsite;Fiu/ExoGeni/TengigabitEthernet/2/"
      xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
@@ -69,7 +69,7 @@
      xmlns:storage="http://geni-orca.renci.org/owl/storage.owl#">
     <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/fiuvmsite.rdf">
         <owl:imports rdf:resource="http://geni-orca.renci.org/owl/openflow.owl"/>
-        <owl:imports rdf:resource="https://geni-orca.renci.org/owl/orca.rdf"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/orca.rdf"/>
     </owl:Ontology>
     
 

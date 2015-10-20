@@ -8,7 +8,7 @@
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY wgs84_pos "http://www.w3.org/2003/01/geo/wgs84_pos#" >
     <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
-    <!ENTITY orca "https://geni-orca.renci.org/owl/orca.rdf#" >
+    <!ENTITY orca "http://geni-orca.renci.org/owl/orca.rdf#" >
     <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
     <!ENTITY layer2 "http://geni-orca.renci.org/owl/layer.owl#10" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
@@ -56,7 +56,7 @@
      xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
      xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
-     xmlns:orca="https://geni-orca.renci.org/owl/orca.rdf#"
+     xmlns:orca="http://geni-orca.renci.org/owl/orca.rdf#"
      xmlns:BbnNet="http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:TenGigabitEthernet9="&BbnNet;BM/G8052/TenGigabitEthernet/1/2/"
@@ -71,7 +71,7 @@
      xmlns:bbnvmsite="http://geni-orca.renci.org/owl/bbnvmsite.rdf#">
     <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/bbnNet.rdf">
         <owl:imports rdf:resource="http://geni-orca.renci.org/owl/openflow.owl"/>
-        <owl:imports rdf:resource="https://geni-orca.renci.org/owl/orca.rdf"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/orca.rdf"/>
     </owl:Ontology>
     
 
@@ -780,7 +780,7 @@
     
 
 
-    <!-- https://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker -->
+    <!-- http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker -->
 
     <owl:NamedIndividual rdf:about="&orca;ExoGENIBroker"/>
 </rdf:RDF>
