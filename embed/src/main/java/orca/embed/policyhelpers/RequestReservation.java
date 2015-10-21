@@ -182,7 +182,7 @@ public class RequestReservation {
 			links.put(requestConnection.getResource().getLocalName(), requestConnection);
 			setPureType(requestConnection.getResourceType(),typeTotalUnits);
 			if( (reservationDomain==null) 
-					|| (requestConnection.getCastType().equalsIgnoreCase("Multicast")) ){	
+					|| (requestConnection.getCastType()!=null && requestConnection.getCastType().equalsIgnoreCase("Multicast") && requestConnection.isModify()) ){	
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
 					String connection_domain = null;
