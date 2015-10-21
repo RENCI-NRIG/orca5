@@ -106,6 +106,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 				root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
 				root = new ComputeElement(requestModel,multicastDomain);
 				root.setModify(element.isModify());
+				root.setCastType(element.getCastType());
 				logger.debug("MultiPointHandler:root="+root.getName()+";isModify="+root.isModify());
 			}
 			if(root!=null)
@@ -242,6 +243,8 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
         		rType.setDomainURL(root.getURI());
         		root.setResourceType(rType);
         		c_e.setNe2(root);
+        		c_e.setModify(root.isModify());
+        		c_e.setCastType(root.getCastType());
         		request.setRequest(m,c_e,t,reservationD,r, r_rs);
         	}
         }

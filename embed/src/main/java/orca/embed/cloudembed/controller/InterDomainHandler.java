@@ -855,8 +855,26 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	//add to the manifestModel
 	public void createManifest(NetworkElement requestElement,OntModel manifestModel,OntResource manifest, LinkedList <Device> domainList){
 		OntResource rc_ont = requestElement.getResource();
-		rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
-		manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
+		if(requestElement.isModify()){
+			rc_ont = manifestModel.getOntResource(rc_ont.getURI());
+			if(requestElement.getCastType().equalsIgnoreCase("multicast")){ //go one level above
+				for (StmtIterator j=manifest.listProperties(NdlCommons.collectionElementProperty);j.hasNext();){
+					Resource nc = j.next().getResource();
+					for (StmtIterator i=nc.listProperties(NdlCommons.collectionItemProperty);i.hasNext();){
+						Resource md=i.next().getResource();
+						if(md.getURI().equalsIgnoreCase(rc_ont.getURI())){
+							rc_ont=manifestModel.getOntResource(nc);
+							break;		
+						}
+							
+					}
+				}
+			}
+		}
+		else{
+			rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
+			manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
+		}
 		Device start= domainList.get(0), next_Hop, next_next_Hop = null;
 		String link_url,link_name,domain_name;
 		OntResource link_ont,intf_start,intf_next,intf_next_next;

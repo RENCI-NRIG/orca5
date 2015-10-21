@@ -156,7 +156,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 		for(Device device:addedDevices){
 			DomainElement de = (DomainElement) device;
 			if(de.getCe()!=null && !de.isModify())
-				nodeGroupAddedDevices.add(device);
+				if(de.getCe().getDependencies().size()==0) //not part of a interdomain link
+					nodeGroupAddedDevices.add(device);
 		}
 		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
 		this.createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
@@ -775,7 +776,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        	while(elementIt.hasNext()){
 		        		element = elementIt.next();
 		        		if(element.getName().equals(connectionName) || element.getURI().equals(connectionName)){
-		        			logger.info("Modify CreateManifest InterDomain:element name ="+element.getName());
+		        			logger.info("Modify CreateManifest InterDomain:element url ="+element.getURI()+";isModify="+element.isModify());
 		        			this.createManifest(element, manifestModel, manifest, domainList);
 		        		}
 		        	}

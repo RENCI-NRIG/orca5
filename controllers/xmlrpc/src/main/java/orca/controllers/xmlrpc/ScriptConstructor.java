@@ -208,7 +208,10 @@ public class ScriptConstructor {
     			if(group_url.equals("NotInGroup"))
     				continue;
     			Group group = new Group(reservations.group_getName(group_url));
-    			//System.out.println("XXXXXX-PRUTH:  ScriptConstructor:    group="+group_url+" (" + reservations.group_getName(group_url) + ")\n");
+    			if(reservations.group_getVMsInGroup(group.name)==null){
+    				logger.error("ScriptConstructor:    group="+group_url+" (" + reservations.group_getName(group_url) + ")\n");
+    				continue;
+    			}
     			Iterator<String> i_vms = reservations.group_getVMsInGroup(group.name).iterator();
     			while(i_vms.hasNext()){
     				String vm_url = i_vms.next();

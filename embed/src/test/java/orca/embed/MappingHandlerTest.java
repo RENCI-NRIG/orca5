@@ -30,7 +30,7 @@ public class MappingHandlerTest extends TestCase {
 	"orca/ndl/substrate/nlr.rdf","orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf","orca/ndl/substrate/uvanlNet.rdf",
 	"orca/ndl/substrate/renciNet.rdf","orca/ndl/substrate/uncNet.rdf","orca/ndl/substrate/dukeNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
 	"orca/ndl/substrate/rciNet.rdf","orca/ndl/substrate/bbnNet.rdf",
-	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/cienaNet.rdf",
+	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/cienaNet.rdf","orca/ndl/substrate/uhNet.rdf",
 	"orca/ndl/substrate/learnNet.rdf","orca/ndl/substrate/learn.rdf","orca/ndl/substrate/nictaNet.rdf"
 	};
 
