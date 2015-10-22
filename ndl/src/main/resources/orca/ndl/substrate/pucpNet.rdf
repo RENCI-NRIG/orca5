@@ -8,7 +8,7 @@
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY wgs84_pos "http://www.w3.org/2003/01/geo/wgs84_pos#" >
     <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
-    <!ENTITY orca "https://geni-orca.renci.org/owl/orca.rdf#" >
+    <!ENTITY orca "http://geni-orca.renci.org/owl/orca.rdf#" >
     <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
     <!ENTITY layer2 "http://geni-orca.renci.org/owl/layer.owl#10" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
@@ -55,7 +55,7 @@
      xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
      xmlns:PUCPNet="http://geni-orca.renci.org/owl/pucpNet.rdf#PUCPNet/"
      xmlns:ExoGeni="&PUCPNet;IBM/G8264/TenGigabitEthernet/ExoGeni/1/"
-     xmlns:orca="https://geni-orca.renci.org/owl/orca.rdf#"
+     xmlns:orca="http://geni-orca.renci.org/owl/orca.rdf#"
      xmlns:pucpvmsite="http://geni-orca.renci.org/owl/pucpvmsite.rdf#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
@@ -69,7 +69,7 @@
      xmlns:TenGigabitEthernet4="&pucpvmsite;PUCP/ExoGeni/TenGigabitEthernet/1/">
     <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/pucpNet.rdf">
         <owl:imports rdf:resource="http://geni-orca.renci.org/owl/openflow.owl"/>
-        <owl:imports rdf:resource="https://geni-orca.renci.org/owl/orca.rdf"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/orca.rdf"/>
     </owl:Ontology>
     
 

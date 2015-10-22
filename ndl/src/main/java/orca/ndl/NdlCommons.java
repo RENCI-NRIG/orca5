@@ -383,7 +383,7 @@ public class NdlCommons {
 	};
 	
 	public static final String[] orcaSubstrateFiles = {
-		"orca.rdf"
+		"orca.rdf", "ben.rdf", "ben-dtn.rdf", "ben-6509.rdf"
 	};
 	
 	public static final Map<String, String> externalSchemas; 

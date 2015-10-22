@@ -60,7 +60,7 @@
      xmlns:TenGigabitEthernet3="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/TenGigabitEthernet/3/6/"
      xmlns:TenGigabitEthernet4="&NictaNet;Pronto/3290/TenGigabitEthernet/1/0/">
     <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/nictaNet.rdf">
-        <owl:imports rdf:resource="https://geni-orca.renci.org/owl/orca.rdf"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/orca.rdf"/>
     </owl:Ontology>
     
 
