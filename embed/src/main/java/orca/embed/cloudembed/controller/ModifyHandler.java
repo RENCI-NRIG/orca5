@@ -189,7 +189,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				local_mr = OrcaConverter.fill(mr.getLocalProperties());
 				String url_mr=config_mr.getProperty(UnitProperties.UnitDomain);
 				logger.debug(";url_ml="+url_mr);
-				logger.debug(config_mr.toString());
+				//logger.debug(config_mr.toString());
 				if(url_mr==null){
 					logger.error("mr reservation no url property:"+mr.getReservationID());
 					continue;

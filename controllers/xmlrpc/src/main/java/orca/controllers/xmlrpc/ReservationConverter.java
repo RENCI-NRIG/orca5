@@ -210,6 +210,8 @@ public class ReservationConverter implements LayerConstant {
 			return null;
 		}
 		
+		List <ReservationMng> extra_ar = new ArrayList <ReservationMng> ();//redundant due to modify, not added to SM
+		
 		for(NetworkElement device:boundElements){
 			DomainElement de = (DomainElement) device;
 			if(de.isAllocatable()==false)
@@ -274,7 +276,10 @@ public class ReservationConverter implements LayerConstant {
 				local.setProperty(this.PropertyIsVM,"1");
             }
 
-			map.put(device.getName(), resrequest);
+			if(map.containsKey(device.getName()))
+				extra_ar.add(r);
+			else
+				map.put(device.getName(), resrequest);
 			
 			if(this.ndlSlice.getSliceUrn()!=null){
 				config.setProperty(PropertyUnitSliceName, this.ndlSlice.getSliceUrn());
@@ -453,9 +458,10 @@ public class ReservationConverter implements LayerConstant {
 			r.setBroker(orca_state_instance.getBroker());
 			// register the reservation with Orca, so that it is assigned an id
 			
-			if (sm.addReservation(r) == null) {
-				throw new RuntimeException("Could not add reservations " + sm.getLastError());
-			}
+			if(!extra_ar.contains(r))
+				if (sm.addReservation(r) == null) {
+					throw new RuntimeException("Could not add reservations " + sm.getLastError());
+				}
 		}
 		
 		return map;
