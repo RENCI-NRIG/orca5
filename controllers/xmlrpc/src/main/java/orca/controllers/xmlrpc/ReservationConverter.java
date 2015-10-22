@@ -276,7 +276,7 @@ public class ReservationConverter implements LayerConstant {
 				local.setProperty(this.PropertyIsVM,"1");
             }
 
-			if(map.containsKey(device.getName()))
+			if(map.containsKey(device.getName()) && resrequest.isVM)
 				extra_ar.add(r);
 			else
 				map.put(device.getName(), resrequest);

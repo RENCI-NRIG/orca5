@@ -559,7 +559,7 @@ public class CloudHandler extends MappingHandler{
 									new_ip = base_ip;
 								else
 									new_ip = base_ip.getNewIpAddress(intf.getModel(),network_str,netmask, base_ip.getURI(),hole);
-								String intf_url = new_ip.getURI()+"/intf";
+								String intf_url = new_ip.getURI()+"/intf/"+link_device.getResource().getLocalName();
 								new_intf = new Interface(intf.getModel(),intf_url,intf_url);
 								new_intf.getResource().addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(intf.getModel()));
 								if(new_ip.cidr!=null)
