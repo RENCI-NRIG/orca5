@@ -1,0 +1,90 @@
+<rdf:RDF
+    xmlns:ec2="http://geni-orca.renci.org/owl/ec2.owl#"
+    xmlns:kansei="http://geni-orca.renci.org/owl/kansei.owl#"
+    xmlns:app-color="http://geni-orca.renci.org/owl/app-color.owl#"
+    xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
+    xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
+    xmlns:eucalyptus="http://geni-orca.renci.org/owl/eucalyptus.owl#"
+    xmlns:j.0="http://geni-orca.renci.org/owl/storage.owl#"
+    xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
+    xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:exogeni="http://geni-orca.renci.org/owl/exogeni.owl#"
+    xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:request-schema="http://geni-orca.renci.org/owl/request.owl#"
+    xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
+    xmlns:planetlab="http://geni-orca.renci.org/owl/planetlab.owl#"
+    xmlns:request="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#"
+    xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
+    xmlns:dtn="http://geni-orca.renci.org/owl/dtn.owl#"
+    xmlns:time="http://www.w3.org/2006/time#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:modify-schema="http://geni-orca.renci.org/owl/modify.owl#"
+    xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
+    xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
+    xmlns:orca="http://geni-orca.renci.org/owl/orca.rdf#" > 
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0-NodeGroup0">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Centos+6.7+v1.0.0">
+    <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Centos 6.7 v1.0.0</topology:hasName>
+    <topology:hasURL>http://geni-images.renci.org/images/standard/centos/centos6.7-v1.0.0/centos6.7-v1.0.0.xml</topology:hasURL>
+    <topology:hasGUID>dceedc1e70bd4d8d95bb4e92197f64217d17eea0</topology:hasGUID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0-Storage0"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0-NodeGroup0"/>
+    <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000000</layer:bandwidth>
+    <topology:hasGUID>6e862d44-c8c4-4d03-9eb4-a978552c9080</topology:hasGUID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Storage0">
+    <j.0:doFormat rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.0:doFormat>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/bbnvmsite.rdf#bbnvmsite/Domain"/>
+    <j.0:hasFSType rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ext4</j.0:hasFSType>
+    <j.0:hasMntPoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">/mnt/target</j.0:hasMntPoint>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/storage.owl#ISCSI"/>
+    <j.0:hasFSParam rdf:datatype="http://www.w3.org/2001/XMLSchema#string">-F -b 2048</j.0:hasFSParam>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0-Storage0"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/storage.owl#LUN"/>
+    <j.0:storageCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</j.0:storageCapacity>
+    <topology:hasGUID>a51e9f0d-87c5-4842-a2e6-c5dcd3061e72</topology:hasGUID>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#NodeGroup0">
+    <request-schema:groupName>NodeGroup0</request-schema:groupName>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0-NodeGroup0"/>
+    <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
+    <layer:numCE rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</layer:numCE>
+    <request-schema:dependOn rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Storage0"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
+    <topology:hasGUID>4ff79613-fa07-41d7-be68-55f55c21ede7</topology:hasGUID>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/bbnvmsite.rdf#bbnvmsite/Domain"/>
+    <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Centos+6.7+v1.0.0"/>
+    <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/bbnvmsite.rdf#bbnvmsite/Domain">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#">
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#NodeGroup0"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Storage0"/>
+    <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Term"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Link0-Storage0">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#TermDuration">
+    <time:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</time:days>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#Term">
+    <time:hasDurationDescription rdf:resource="http://geni-orca.renci.org/owl/e43144db-6a7f-44f6-b079-501e046ea6ed#TermDuration"/>
+    <rdf:type rdf:resource="http://www.w3.org/2006/time#Interval"/>
+  </rdf:Description>
+</rdf:RDF>

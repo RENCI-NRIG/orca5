@@ -144,21 +144,40 @@ public class RequestParserTest implements INdlRequestModelListener {
 		} 
 	}
 	
-	private static String[] requests={ "/test-color-extension.rdf", "/large-osg-request.rdf" };
+	private static String[] validRequests={ "/test-color-extension.rdf", "/large-osg-request.rdf", "/group-storage.rdf", "/node-storage.rdf" };
+	private static String[] invalidRequests={ "/broadcast-storage-invalid.rdf", "/node-storage-bound-invalid.rdf" };
 	
 	@Test
 	public void run() throws NdlException, IOException {
-		for(String r: requests) {
+		System.out.println("Running valid requests");
+		for(String r: validRequests) {
 			System.out.println("++++++++++");
 			System.out.println("Running request " + r);
 			run_(r);
 		}
+		System.out.println("Running invalid requests");
+		for(String r: invalidRequests) {
+			System.out.println("++++++++++");
+			System.out.println("Running request " + r);
+			try {
+				run_(r);
+				throw new NdlException("Expected validation failure for " + r);
+			} catch (NdlException ne) {
+				if (!ne.toString().contains("Request validation failed"))
+					throw ne;
+			}
+		}
 	}
 	
 	public static void main(String[] argv) {
+//		try {
+//			System.out.println("Reading " + argv[0]);
+//			new RequestParserTest().run_(argv[0]);
+//		} catch (Exception e) {
+//			System.err.println("Error: " + e);
+//		}
 		try {
-			System.out.println("Reading " + argv[0]);
-			new RequestParserTest().run_(argv[0]);
+			new RequestParserTest().run();
 		} catch (Exception e) {
 			System.err.println("Error: " + e);
 		}
