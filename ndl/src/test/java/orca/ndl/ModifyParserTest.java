@@ -1,5 +1,6 @@
 package orca.ndl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
@@ -32,15 +33,13 @@ public class ModifyParserTest implements INdlModifyModelListener {
 		
 	}
 	
-	@Test
-	public void runTest() throws NdlException  {
-		InputStream is = this.getClass().getResourceAsStream("/modify-request.rdf");
+	public void runTest(String reqName) throws NdlException  {
+		InputStream is = this.getClass().getResourceAsStream(reqName);
 		assert(is != null);
+		
 		String r = new Scanner(is).useDelimiter("\\A").next();
 
-		ModifyParserTest t = new ModifyParserTest();
-
-		NdlModifyParser p = new NdlModifyParser(r, t);
+		NdlModifyParser p = new NdlModifyParser(r, this);
 		System.out.println("Processing");
 		p.processModifyRequest();
 
@@ -55,5 +54,40 @@ public class ModifyParserTest implements INdlModifyModelListener {
 		System.out.println("Processing again");
 		p.processModifyRequest();
 
+	}
+	
+	private static String[] validRequests={ "/modify-request.rdf", "/modify-test-request-valid.rdf" };
+	private static String[] invalidRequests={ "/mp-modify-delete-mp.rdf", "/ub-storage.rdf" };
+	
+	@Test
+	public void run() throws Exception, NdlException, IOException {
+		System.out.println("Running valid reuqests");
+		for(String r: validRequests) {
+			System.out.println("++++++++++");
+			System.out.println("Running request " + r);
+			runTest(r);
+		}
+		System.out.println("Running invalid requets");
+		for(String r: invalidRequests) {
+			System.out.println("++++++++++");
+			System.out.println("Running request " + r);
+			try {
+				runTest(r);
+				throw new Exception("Expected validation exception, nothing happened for " + r);
+			} catch(NdlException ne) {
+				if (!ne.toString().contains("Request validation failed"))
+					throw new Exception("Expected validation exception, got " + ne);
+			}
+		}
+	}
+	
+	public static void main(String[] argv) {
+		ModifyParserTest mpt = new ModifyParserTest();
+		
+		try {
+			mpt.run();
+		} catch (Exception e) {
+			System.err.println(e);
+		}
 	}
 }

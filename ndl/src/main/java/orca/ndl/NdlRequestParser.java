@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -19,8 +18,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.reasoner.Reasoner;
-import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.reasoner.ValidityReport;
 import com.hp.hpl.jena.reasoner.ValidityReport.Report;
 import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
@@ -41,7 +38,7 @@ public class NdlRequestParser extends NdlCommons {
 	OntModel requestModel;
 	Set<Resource> interfaces = new HashSet<Resource>();
 	Set<Resource> nodesAndLinks = new HashSet<Resource>();
-	private boolean lessStrictChecking = true;
+	private boolean lessStrictChecking = false;
 	
 	protected String[] inferenceModels = { "topology.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
 	
@@ -172,6 +169,7 @@ public class NdlRequestParser extends NdlCommons {
 		PrintUtil.registerPrefix("col", "http://geni-orca.renci.org/owl/collections.owl#");
 		PrintUtil.registerPrefix("color", "http://geni-orca.renci.org/owl/app-color.owl#");
 		PrintUtil.registerPrefix("ip4", "http://geni-orca.renci.org/owl/ip4.owl#");
+		PrintUtil.registerPrefix("modify", "http://geni-orca.renci.org/owl/modify.owl#");
 		
 		ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
 

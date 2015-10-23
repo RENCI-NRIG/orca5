@@ -73,11 +73,15 @@
 		(?X topo:hasInterface ?I2), (?Y topo:hasInterface ?I2), notEqual(?I1, ?I2) ] ]  
 		 
 # Stitchport interface can't have IP address
-
 [validateStitchPort1: (?v rb:validation on()) ->
 	[ (?Z rb:violation error('Stitchport cannot have an IP address assigned', 'Stitchport cannot have an IP address assigned', ?X))
 		<- (?X req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), 
 		(?X topo:hasInterface ?Y), (?Y ip4:localIPAddress ?Z) ] ]
+		
+# Storage must be bound
+[validateBoundStorage: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Storage must be bound to a site', 'Storage must be bound to a site', ?S))
+		<- (?S rdf:type storage:ISCSI), noValue(?S, req:inDomain) ] ]
 		
 # validating e.g. that network connections can only have 2 or more interfaces
 # currently isn't possible due to OWL inability to put cardinality restrictions
