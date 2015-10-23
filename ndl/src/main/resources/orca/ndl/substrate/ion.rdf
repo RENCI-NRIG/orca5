@@ -1155,7 +1155,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hasURN>urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ae0:link=bbn</topology:hasURN>
+        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.newy32aoa.net.internet2.edu:port=eth5/2:link=NOX</topology:hasURN>
         <topology:interfaceOf rdf:resource="&ION;BBN/Juniper/MX"/>
         <ethernet:availableVLANSet rdf:resource="&ION;Domain/UMass/availableVLANSet"/>
     </owl:NamedIndividual>
@@ -1167,10 +1167,10 @@
     <owl:NamedIndividual rdf:about="&ION;BBN/Juniper/MX/TenGigabitEthernet/1/2/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ae0:link=bbn</rdfs:label>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.newy32aoa.net.internet2.edu:port=eth5/2:link=NOX</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="&xsd;string">UMass</topology:hasName>
-        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=ion.internet2.edu:node=rtr.newy:port=ae0:link=bbn</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.newy32aoa.net.internet2.edu:port=eth5/2:link=NOX</topology:hasURN>
         <topology:interfaceOf rdf:resource="&ION;BBN/Juniper/MX"/>
         <ethernet:availableVLANSet rdf:resource="&ION;Domain/UMass/availableVLANSet"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/mass.rdf#UMass/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
