@@ -929,34 +929,36 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			// What do we return in the manifest ? reservation Id, type, units ? slice ?
 			StringBuilder result = new StringBuilder("Here are the leases: \n");
 
-			Iterator<TicketReservationMng> it = ndlSlice.getComputedReservations().iterator();
 			result.append("Request id: ");
 			result.append(ndlSlice.getSliceID());
 			result.append("\n");
+			if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+				Iterator<TicketReservationMng> it = ndlSlice.getComputedReservations().iterator();
 
-			while(it.hasNext()){
-				LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
+				while(it.hasNext()){
+					LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
 
-				result.append("[ ");
+					result.append("[ ");
 
-				result.append("  Slice UID: ");
-				result.append(currRes.getSliceID().toString());
+					result.append("  Slice UID: ");
+					result.append(currRes.getSliceID().toString());
 
-				result.append(" | Reservation UID: ");
-				result.append(currRes.getReservationID().toString());
+					result.append(" | Reservation UID: ");
+					result.append(currRes.getReservationID().toString());
 
-				result.append(" | Resource Type: ");
-				result.append(currRes.getResourceType().toString());
+					result.append(" | Resource Type: ");
+					result.append(currRes.getResourceType().toString());
 
-				result.append(" | Resource Units: ");
-				result.append(currRes.getUnits());
+					result.append(" | Resource Units: ");
+					result.append(currRes.getUnits());
 
-				result.append(" ] \n");
-			}
+					result.append(" ] \n");
+				}
 
-			// call publishManifest if there are reservations in the slice
-			if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+				// call publishManifest if there are reservations in the slice
 				ndlSlice.publishManifest(logger);
+			} else {
+				result.append("No new reservations were computed in modifySlice() call\n");
 			}
 
 			result.append(workflow.getErrorMsg());
