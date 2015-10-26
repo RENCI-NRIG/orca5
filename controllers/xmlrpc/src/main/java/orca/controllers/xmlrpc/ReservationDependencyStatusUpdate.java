@@ -2,6 +2,7 @@ package orca.controllers.xmlrpc;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
@@ -52,7 +53,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			int p = 0;
 			String r_id=null,isNetwork=null,isLun=null;
 			ReservationMng p_r = null;
-			String unit_tag = null;
+			String unit_tag = null,unit_parent_url=null;
 			if(p_str!=null){
 				p=Integer.valueOf(p_str);
 				System.out.println("Number of parent reservations:"+p+";num_interface="+num_interface_int+";num_storage="+num_storage_int);
@@ -75,12 +76,18 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										pr_local = OrcaConverter.fill(u.getProperties());										
 										if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
 											unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+										if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
+											unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
 									}
 								}
-								System.out.println("parent unit tag:"+unit_tag+";host intf="+(num_interface_int+1));
+								System.out.println("parent r_id="+r_id+";unit tag:"+unit_tag+";unit_parent_url:"+unit_parent_url);
 								if(unit_tag!=null){
-									num_interface_int++;
-									host_interface=String.valueOf(num_interface_int);
+									host_interface=getHostInterface(local,unit_parent_url);
+									if(host_interface==null){
+										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
+										continue;
+									}
+										
 									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
 									modifyProperties.setProperty("vlan.tag",unit_tag);
 									String parent_mac_addr = parent_prefix+host_interface+".mac";
@@ -118,11 +125,14 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									}
 								}
 								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
-										+";host intf="+num_interface_int
 										+";r_id="+r_id+";p_r_id="+p_r.getReservationID());
 								if(unit_tag!=null){
 									modifyProperties.setProperty("target.lun.num",unit_tag);
-									host_interface=String.valueOf(num_interface_int);
+									host_interface=getHostInterface(local,p_r);
+									if(host_interface==null){
+										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
+										continue;
+									}
 									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
 									String parent_mac_addr = parent_prefix+host_interface+".mac";
 									String parent_ip_addr = parent_prefix+host_interface+".ip";
@@ -196,7 +206,6 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									System.out.println("Parent doesnot return the unit lun tag:"+pr_local);
 									continue;
 								}
-								//num_interface_int--;
 							}
 						}
 					}
@@ -211,7 +220,44 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 		}
 
 	}
+	
+	public String getHostInterface(Properties local,String unit_parent_url){
+		String key=null,value=null,host_interface=null;
+		if(local.isEmpty() || !local.containsValue(unit_parent_url))
+			return null;
+		for(Entry<Object, Object> entry:local.entrySet()){
+			key=(String) entry.getKey();
+			value=(String) entry.getValue();
+			if(value.equals(unit_parent_url)){
+				String url = key.split(UnitProperties.UnitEthPrefix)[1];
+				int index=url.indexOf(".parent.url");
+				host_interface=url.substring(0, index);
+				break;
+			}
+		}
+		return host_interface;
+	}
 
+	public String getHostInterface(Properties local,ReservationMng p_r){
+		String p_key=null,p_value=null,host_interface=null;
+		Properties p_r_local = OrcaConverter.fill(p_r.getLocalProperties());
+		if(local.isEmpty() || p_r_local.isEmpty())
+			return null;
+		//System.out.println("local:"+local.toString());
+		//System.out.println("p_r local:"+p_r_local.toString());
+		for(Entry<Object, Object> entry:p_r_local.entrySet()){
+			p_key=(String) entry.getKey();
+			p_value=(String) entry.getValue();
+			
+			if(p_key.endsWith(".parent.url")){
+				//System.out.println("p_key="+p_key+"p_value="+p_value);
+				host_interface=getHostInterface(local,p_value);
+				break;
+			}
+				
+		}
+		return host_interface;
+	}
 	@Override
 	public void failure(List<ReservationID> failed, List<ReservationID> ok,
 			List<ReservationID> actOn) throws StatusCallbackException {

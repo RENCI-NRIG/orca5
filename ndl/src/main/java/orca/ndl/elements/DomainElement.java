@@ -328,13 +328,18 @@ public class DomainElement extends Device {
 		OntResource intf_ont=null,child_intf_ont=null;
 		
 		if(dd.getClientInterface()!=null)
-			for(Interface intf:dd.getClientInterface())
+			for(Interface intf:dd.getClientInterface()){
+				if(this.getClientInterface()!=null && this.getClientInterface().contains(intf))
+					continue;
 				this.addClientInterface(intf);
+			}
 		
 		if(dd.getPrecededBySet()!=null){
 			for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
 				parent_de=parent.getKey();
 				intf_ont = parent.getValue();
+				if(this.getPrecededBy()!=null && this.getPrecededBySetByElement(parent_de.getURI())!=null)
+					continue;
 				this.setPrecededBy(parent_de, intf_ont);
 				
 				if(parent_de.getFollowedBySet()!=null){
@@ -356,6 +361,8 @@ public class DomainElement extends Device {
 			for (Entry<DomainElement, OntResource> parent : dd.getFollowedBySet()) {
 				parent_de=parent.getKey();
 				intf_ont = parent.getValue();
+				if(this.getFollowedBy()!=null && this.getFollowedBy().get(parent_de)!=null)
+					continue;
 				this.setFollowedBy(parent_de, intf_ont);
 				
 				if(parent_de.getPrecededBySet()!=null){

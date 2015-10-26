@@ -178,8 +178,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 			config_ar = OrcaConverter.fill(ar.getConfigurationProperties());
 			local_ar = OrcaConverter.fill(ar.getLocalProperties());
 			String url_ar=config_ar.getProperty(UnitProperties.UnitDomain);
-			logger.debug("url_al="+url_ar+";");
-			logger.debug(config_ar.toString());
 			if(url_ar==null){
 				logger.error("ar reservation no url property:"+ar.getReservationID());
 				continue;
@@ -188,14 +186,14 @@ public class ModifyHandler extends UnboundRequestHandler {
 				config_mr = OrcaConverter.fill(mr.getConfigurationProperties());
 				local_mr = OrcaConverter.fill(mr.getLocalProperties());
 				String url_mr=config_mr.getProperty(UnitProperties.UnitDomain);
-				logger.debug(";url_ml="+url_mr);
-				//logger.debug(config_mr.toString());
 				if(url_mr==null){
 					logger.error("mr reservation no url property:"+mr.getReservationID());
 					continue;
 				}
 				if(url_ar.equals(url_mr)){
-					logger.debug("Modifying via adding storage:"+url_ar);
+					logger.debug("Modifying via adding storage url_al="+url_ar+";"+";url_ml="+url_mr);
+					logger.debug("config:"+config_ar.toString());
+					logger.debug("local:"+local_ar.toString());
 					mr.setConfigurationProperties(OrcaConverter.merge(config_ar, mr.getConfigurationProperties()));
 					mr.setLocalProperties(OrcaConverter.merge(local_ar, mr.getLocalProperties()));
 					extra_ar.add(ar);
@@ -345,6 +343,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 						modifies.addModifedElement(device.getResource());
 						modifiedDevices.add(dd);		
 						//if it is adding storage modifying
+						if(addedDevices.contains(dd))
+							continue;
 						if(dd.getPrecededBy()!=null){
 							for(Entry <DomainElement,OntResource> parent:dd.getPrecededBySet()){
 								DomainElement p_de = parent.getKey();
