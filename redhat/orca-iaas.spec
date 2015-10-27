@@ -358,16 +358,7 @@ exit 0
 
 %changelog
 *Tue Oct 27 2016 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Testing GitHub RPM builds, on CentOS 5 and 6.
+- Re-build for preparation to deploy fixes.
 
 *Thu Apr 09 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Re-build to integrate missing patch for controller and extended reservation recovery.
-
-*Fri Mar 27 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Re-build, with fixed OSCARS and NSI handlers
-
-*Wed Mar 18 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Re-build, with fixed BEN handler tasks.
-
-*Mon Feb 11 2013 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Initial packaging
