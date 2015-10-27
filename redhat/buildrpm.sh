@@ -99,7 +99,7 @@ sed -i -e "s;@@SHORTCOMMIT@@;${SHORTCOMMIT};" "${BASE_SRC_DIRPATH}/redhat/orca-i
 cd "${ORCA_BLD}"
 
 # Create tarball
-rm -rf ${BASE_SRC_DIR}-${SHORTCOMMIT} ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
+rm -rf ${BASE_SRC_DIR}-*
 mv ${BASE_SRC_DIR} ${BASE_SRC_DIR}-${SHORTCOMMIT}
 tar -czf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz ${BASE_SRC_DIR}-${SHORTCOMMIT}
 
