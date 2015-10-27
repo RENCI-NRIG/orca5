@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Oct 27 2016 Victor J. Orlikowski <vjo@cs.duke.edu>
+- Testing GitHub payload parsing, take 4
+
 *Thu Apr 09 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Re-build to integrate missing patch for controller and extended reservation recovery.
 
