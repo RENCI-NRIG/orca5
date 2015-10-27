@@ -358,7 +358,7 @@ exit 0
 
 %changelog
 *Tue Oct 27 2016 Victor J. Orlikowski <vjo@cs.duke.edu>
-- Testing GitHub payload parsing, take 6
+- Testing GitHub RPM builds, on CentOS 5 and 6.
 
 *Thu Apr 09 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Re-build to integrate missing patch for controller and extended reservation recovery.
