@@ -506,6 +506,12 @@ public class CloudHandler extends MappingHandler{
 				if(!element.isModify() || isInterdomain(((DomainElement) existing_ce).getCe(),ce_element, link_device)){
 					logger.info("Existing ce="+existing_ce.getName());
 					edge_device = (DomainElement) existing_ce;
+					break;
+				}
+				if(element.isModify() && existing_ce.isModify()){
+					logger.info("Existing ce="+existing_ce.getName());
+					edge_device = (DomainElement) existing_ce;
+					break;
 				}
 				logger.debug("isModify:"+existing_ce.getName()
 						+";numInterface="+existing_ce.getNumInterface()
@@ -513,7 +519,6 @@ public class CloudHandler extends MappingHandler{
 				if(element.isModify()){
 					edge_device.setNumInterface(existing_ce.getNumInterface());
 				}
-				break;
 			}
 		}
 		edge_device.setModify(element.isModify());

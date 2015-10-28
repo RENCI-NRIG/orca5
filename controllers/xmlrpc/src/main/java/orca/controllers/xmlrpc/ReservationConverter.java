@@ -504,7 +504,7 @@ public class ReservationConverter implements LayerConstant {
 				logger.error("Missing reservation from domain " + device.getName());
                 continue;
 			}
-			logger.debug("from " + r.domain + " units=" + r.reservation.getUnits() + " type=" + r.reservation.getResourceType());
+			logger.debug("from "+ device.getName() + r.domain + " units=" + r.reservation.getUnits() + " type=" + r.reservation.getResourceType());
 			ComputeElement ce = de.getCe();
 
 			Properties config = new Properties();
@@ -539,7 +539,7 @@ public class ReservationConverter implements LayerConstant {
 				continue;
 			}            
 			boolean prNetwork=false;
-			int num_interface=0;
+			int num_interface=de.getNumInterface();
 			r.networkDependencies = de.getNumInterface();
 			for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
 				String intf_name = null;
@@ -729,6 +729,8 @@ public class ReservationConverter implements LayerConstant {
 							}
 							logger.debug("ReservationConverter: parent_ip_addr="+parent_ip_addr+"="+ip_addr);
 						
+							local.setProperty(UnitProperties.UnitEthPrefix+ host_interface + ".parent.url", parent_de.getName());
+							
 							config.setProperty(parent_interface_uuid,element_guid);
 							local.setProperty(parent_interface_uuid,element_guid);
 							
@@ -834,6 +836,8 @@ public class ReservationConverter implements LayerConstant {
 		} catch (UnknownHostException e) {
 			logger.error("Not a Valid IP address:" + parent_ip_addr + ":" + ip_addr);
 		}
+		
+		property.setProperty(UnitProperties.UnitEthPrefix+ host_interface + ".parent.url", parent.getKey().getName());
 		
 		String type="request:Manifest";
 		OntResource manifest=NdlCommons.getOntOfType(manifestModel, type);
@@ -1647,6 +1651,34 @@ public class ReservationConverter implements LayerConstant {
 		//since each modify was created as a new device, but same ORCA reservation, need to distinguish......
 		HashMap <ReservationMng,Integer> existMap = new HashMap <ReservationMng,Integer>();
 		HashMap <ReservationMng,Integer> newMap = new HashMap <ReservationMng,Integer>();
+		ArrayList<ReservationMng> p_r = null;
+		ArrayList<ReservationMng> m_p_r = null;
+		HashMap <ReservationMng,ArrayList<ReservationMng>> p_r_Map = new HashMap <ReservationMng,ArrayList<ReservationMng>>();
+		HashMap <ReservationMng,ArrayList<ReservationMng>> m_p_r_Map = new HashMap <ReservationMng,ArrayList<ReservationMng>>();
+		//count the number of storage parent
+		HashMap <ReservationMng,Integer> m_p_storage_Map = new HashMap <ReservationMng,Integer> ();
+		for(NetworkElement ne:modifiedDevices){
+			DomainElement dd = (DomainElement) ne;
+			String d_uri=dd.getName();
+			ReservationMng rmg = r_map.get(d_uri);
+			if(rmg==null && dd.getGUID()!=null)
+				rmg = r_map.get(dd.getGUID());
+			int numStorage=0;
+			logger.debug("ModifiedReservation storage:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg);
+			if(rmg!=null){
+				if(m_p_storage_Map.containsKey(rmg))
+					numStorage=m_p_storage_Map.get(rmg);
+					
+				for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
+					DomainElement parent_de = parent.getKey();
+					if(!parent_de.getResourceType().getResourceType().endsWith("lun")){
+						numStorage++;
+					}
+				}
+				m_p_storage_Map.put(rmg, numStorage);
+			}
+		}
+		//form dependency properties		
 		for(NetworkElement ne:modifiedDevices){
 			DomainElement dd = (DomainElement) ne;
 			String d_uri=dd.getName();
@@ -1667,9 +1699,19 @@ public class ReservationConverter implements LayerConstant {
 					logger.warn("Modify reservations, No parent:"+dd);
 					continue;
 				}
+				int numStorage=m_p_storage_Map.get(rmg);
+				num_interface=num_interface+numStorage;
 				int p=0,m_p=0,num=0;	
-				ArrayList<ReservationMng> p_r = new ArrayList<ReservationMng> ();
-				ArrayList<ReservationMng> m_p_r = new ArrayList<ReservationMng> ();
+				p_r=p_r_Map.get(rmg);
+				if(p_r==null){
+					p_r = new ArrayList<ReservationMng> ();
+					p_r_Map.put(rmg, p_r);
+				}
+				m_p_r=m_p_r_Map.get(rmg);
+				if(m_p_r==null){
+					m_p_r = new ArrayList<ReservationMng> ();
+					m_p_r_Map.put(rmg, m_p_r);
+				}
 				if(existMap.containsKey(rmg))
 					p=existMap.get(rmg);
 				if(newMap.containsKey(rmg))
@@ -1681,7 +1723,7 @@ public class ReservationConverter implements LayerConstant {
 					num++;
 					//Parented by an existing reservation: joining a existing shared link
 					ReservationMng p_rmg = r_map.get(p_uri);
-					if(p_rmg!=null){
+					if(p_rmg!=null  && !p_r.contains(p_rmg)){
 						logger.debug("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);	
 						p++;
 						p_r.add(p_rmg);
@@ -1689,7 +1731,7 @@ public class ReservationConverter implements LayerConstant {
 					
 					//Parented by an added reservation: new link
 					p_rmg = m_r_map.get(p_uri);
-					if(p_rmg!=null){
+					if(p_rmg!=null && !m_p_r.contains(p_rmg)){
 						logger.debug("ModifiedReservation Parent new:"+p_uri+";p_rmg="+p_rmg);
 						m_p++;
 						m_p_r.add(p_rmg);
@@ -1708,23 +1750,23 @@ public class ReservationConverter implements LayerConstant {
 				}
 				//create properties to remember its parent reservations
 				int ori_p=0;
-				if(p_r.size()>0){
-					if(existMap.containsKey(rmg))
-						ori_p=existMap.get(rmg);
+				if(existMap.containsKey(rmg))
+					ori_p=existMap.get(rmg);
+				if(p>ori_p){
 					local.setProperty(this.PropertyNumExistParentReservations, String.valueOf(p));
-					for(int i=0;i<p-ori_p;i++){
-						String key=this.PropertyExistParent + String.valueOf(i+ori_p);
+					for(int i=ori_p;i<p;i++){
+						String key=this.PropertyExistParent + String.valueOf(i);
 						local.setProperty(key, p_r.get(i).getReservationID());
 					}
 					existMap.put(rmg, p);
 				}
 				ori_p=0;
-				if(m_p_r.size()>0){
-					if(newMap.containsKey(rmg))
-						ori_p=newMap.get(rmg);
+				if(newMap.containsKey(rmg))
+					ori_p=newMap.get(rmg);
+				if(m_p>ori_p){
 					local.setProperty(this.PropertyNumNewParentReservations, String.valueOf(m_p));
-					for(int i=0;i<m_p-ori_p;i++){
-						String key=this.PropertyNewParent + String.valueOf(i+ori_p);
+					for(int i=ori_p;i<m_p;i++){
+						String key=this.PropertyNewParent + String.valueOf(i);
 						local.setProperty(key, m_p_r.get(i).getReservationID());
 						logger.debug("ModifiedReservation Parent new property:"+key+";p_r="+m_p_r.get(i).getReservationID());
 					}

@@ -26,6 +26,7 @@ import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
 import orca.controllers.xmlrpc.x509util.Credential;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
+import orca.embed.policyhelpers.StringProcessor;
 import orca.embed.workflow.Domain;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
@@ -669,11 +670,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						Properties request = OrcaConverter.fill(rr.getRequestProperties());
 						Properties resource = OrcaConverter.fill(rr.getResourceProperties());
 						
-						String num_interface=local.getProperty(ReservationConverter.PropertyParentNumInterface);
-						int num_interface_int = 0;
-						if (num_interface != null)
-							num_interface_int=Integer.valueOf(num_interface);
-						
 						String rr_guid = local.getProperty(ReservationConverter.PropertyElementGUID);
 						if(rr_guid==null){
 							logger.error("No element guid found in the reservation:"+rr.getReservationID());
@@ -689,105 +685,136 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							DomainElement pe = parent.getKey();
 							String name = pe.getName();
 							ReservationMng p_r_m = p_r_map.get(name);
+							
 							if(p_r_m==null){
 								logger.error("no this parent reservation:"+name);
 								continue;
 							}
 							logger.debug("modifyremove:found parent reservation="+name);
-							num_interface_int++;
-							String host_interface=String.valueOf(num_interface_int);
-							String unit_tag = null;
-							List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
-							if (un != null) {
-								for (UnitMng u : un) {
-									Properties pr_local = OrcaConverter.fill(u.getProperties());										
-									if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
-										unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+							Properties pr_local=null;
+							String isNetwork=null,isLun=null;
+							pr_local=OrcaConverter.fill(p_r_m.getLocalProperties());
+							
+							isNetwork = pr_local.getProperty(ReservationConverter.PropertyIsNetwork);
+							isLun = pr_local.getProperty(ReservationConverter.PropertyIsLUN);
+							
+							pr_local=null;
+							String host_interface=null;
+							String unit_tag = null,unit_parent_url=null;
+							if(isNetwork!=null && isNetwork.equals("1")){	//Parent is a networking reservation
+								List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
+								if (un != null) {
+									for (UnitMng u : un) {
+										pr_local = OrcaConverter.fill(u.getProperties());										
+										if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
+											unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+										if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
+											unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
+									}
 								}
-							}
-							if(unit_tag==null){
-								logger.error("No unit_tag found for the parent:"+name+":reservation_id:"+p_r_m.getReservationID());
-								continue;
-							}
-							String tag_key=null;
-							for(Entry<?,?> entry:config.entrySet()){
-								String tag = (String) entry.getValue();
-								if(tag.equals(unit_tag))
-									tag_key = (String) entry.getKey();	
-							}
-							if(tag_key==null){
-								logger.error("No this tag:"+unit_tag);
-								continue;
-							}
-							int index = tag_key.indexOf(parent_prefix);
-							if(index<0){
-								index = tag_key.indexOf(OrcaConstants.MODIFY_PROPERTY_PREFIX);
-								if(index<0){
-									logger.error("tag key not right?:"+tag_key);
+
+								host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
+								if(host_interface==null){
+									logger.warn("Not find the parent interace index:unit_tag="+unit_tag);
 									continue;
 								}
-								parent_prefix=OrcaConstants.MODIFY_PROPERTY_PREFIX;
-							}
+
+								logger.debug("ModifiedRemove: host_interface="+host_interface+";tag="+unit_tag+";parent url="+unit_parent_url);
+							
+								String parent_tag_name = parent_prefix+host_interface+".vlan.tag";
+								modifyProperties.setProperty("vlan.tag",unit_tag);
+								/*local.remove(parent_tag_name);
+								config.remove(parent_tag_name);
+								request.remove(parent_tag_name);
+								resource.remove(parent_tag_name);
+								*/
+								String parent_mac_addr = parent_prefix+host_interface+".mac";
+								String parent_ip_addr = parent_prefix+host_interface+".ip";
+								String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
+								String parent_interface_uuid = parent_prefix+host_interface+".uuid";
+								String site_host_interface = parent_prefix + host_interface + ".hosteth";
 								
-							String index_str=tag_key.split(parent_prefix)[1];
-							host_interface = index_str.split(".vlan.tag")[0];
-							logger.debug("ModifiedRemove: host_interface="+host_interface+";tag="+unit_tag+";tag_key="+tag_key);
+								if(config.getProperty(parent_mac_addr)!=null){
+									modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
+									/*local.remove(parent_mac_addr);
+									config.remove(parent_mac_addr);
+									request.remove(parent_mac_addr);
+									resource.remove(parent_mac_addr);*/
+								}
+								if(config.getProperty(parent_ip_addr)!=null){
+									modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
+									/*local.remove(parent_ip_addr);
+									config.remove(parent_ip_addr);
+									request.remove(parent_ip_addr);
+									resource.remove(parent_ip_addr);*/
+								}
+								if(config.getProperty(parent_quantum_uuid)!=null){
+									modifyProperties.setProperty("net.uuid",config.getProperty(parent_quantum_uuid));
+									/*local.remove(parent_quantum_uuid);
+									config.remove(parent_quantum_uuid);
+									request.remove(parent_quantum_uuid);
+									resource.remove(parent_quantum_uuid);*/
+								}
+								if(config.getProperty(parent_interface_uuid)!=null){
+									modifyProperties.setProperty("uuid",config.getProperty(parent_interface_uuid));
+									/*local.remove(parent_interface_uuid);
+									config.remove(parent_interface_uuid);
+									request.remove(parent_interface_uuid);
+									resource.remove(parent_interface_uuid);*/
+								}
+								if(config.getProperty(site_host_interface)!=null){
+									modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
+									/*local.remove(site_host_interface);
+									config.remove(site_host_interface);
+									request.remove(site_host_interface);
+									resource.remove(site_host_interface);*/
+								}
+							}
 							
-							String parent_tag_name = parent_prefix+host_interface+".vlan.tag";
-							modifyProperties.setProperty("vlan.tag",unit_tag);
-							/*local.remove(parent_tag_name);
-							config.remove(parent_tag_name);
-							request.remove(parent_tag_name);
-							resource.remove(parent_tag_name);
-							*/
-							String parent_mac_addr = parent_prefix+host_interface+".mac";
-							String parent_ip_addr = parent_prefix+host_interface+".ip";
-							String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
-							String parent_interface_uuid = parent_prefix+host_interface+".uuid";
-							String site_host_interface = parent_prefix + host_interface + ".hosteth";
-							
-							if(config.getProperty(parent_mac_addr)!=null){
-								modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
-								/*local.remove(parent_mac_addr);
-								config.remove(parent_mac_addr);
-								request.remove(parent_mac_addr);
-								resource.remove(parent_mac_addr);*/
-							}
-							if(config.getProperty(parent_ip_addr)!=null){
-								modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
-								/*local.remove(parent_ip_addr);
-								config.remove(parent_ip_addr);
-								request.remove(parent_ip_addr);
-								resource.remove(parent_ip_addr);*/
-							}
-							if(config.getProperty(parent_quantum_uuid)!=null){
-								modifyProperties.setProperty("net.uuid",config.getProperty(parent_quantum_uuid));
-								/*local.remove(parent_quantum_uuid);
-								config.remove(parent_quantum_uuid);
-								request.remove(parent_quantum_uuid);
-								resource.remove(parent_quantum_uuid);*/
-							}
-							if(config.getProperty(parent_interface_uuid)!=null){
-								modifyProperties.setProperty("uuid",config.getProperty(parent_interface_uuid));
-								/*local.remove(parent_interface_uuid);
-								config.remove(parent_interface_uuid);
-								request.remove(parent_interface_uuid);
-								resource.remove(parent_interface_uuid);*/
-							}
-							if(config.getProperty(site_host_interface)!=null){
-								modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
-								/*local.remove(site_host_interface);
-								config.remove(site_host_interface);
-								request.remove(site_host_interface);
-								resource.remove(site_host_interface);*/
+							//parent is lun 
+							if(isLun!=null && isLun.equals("1")){	//Parent is a storage reservation
+								List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
+								if (un != null) {
+									for (UnitMng u : un) {
+										pr_local = OrcaConverter.fill(u.getProperties());
+										if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
+											unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
+									}
+								}
+								logger.debug("isLun="+isLun+";parent unit lun tag:"+unit_tag);
+								if(unit_tag!=null){
+									modifyProperties.setProperty("target.lun.num",unit_tag);
+									host_interface=StringProcessor.getHostInterface(local,p_r_m);
+									if(host_interface==null){
+										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
+										continue;
+									}
+									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
+									String parent_mac_addr = parent_prefix+host_interface+".mac";
+									String parent_ip_addr = parent_prefix+host_interface+".ip";
+									String site_host_interface = parent_prefix + host_interface + ".hosteth";
+										
+									if(local.getProperty(parent_tag_name)!=null)
+										modifyProperties.setProperty("vlan.tag",local.getProperty(parent_tag_name));
+									if(local.getProperty(parent_mac_addr)!=null)
+										modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
+									if(local.getProperty(parent_ip_addr)!=null)
+										modifyProperties.setProperty("ip",local.getProperty(parent_ip_addr));
+									if(local.getProperty(site_host_interface)!=null)
+										modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
+								}else{	//no need to go futher
+									logger.error("Parent doesnot return the unit lun tag:"+pr_local);
+									continue;
+								}
 							}
 							System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 							ModifyHelper.enqueueModify(rr.getReservationID().toString(), modifySubcommand, modifyProperties);
-							
-							rr.setLocalProperties(OrcaConverter.unset(local, rr.getLocalProperties()));
-							rr.setConfigurationProperties(OrcaConverter.unset(config, rr.getConfigurationProperties()));
-							rr.setRequestProperties(OrcaConverter.unset(request, rr.getRequestProperties()));
-							rr.setResourceProperties(OrcaConverter.unset(resource, rr.getResourceProperties()));
+								
+							//rr.setLocalProperties(OrcaConverter.unset(local, rr.getLocalProperties()));
+							//rr.setConfigurationProperties(OrcaConverter.unset(config, rr.getConfigurationProperties()));
+							//rr.setRequestProperties(OrcaConverter.unset(request, rr.getRequestProperties()));
+							//rr.setResourceProperties(OrcaConverter.unset(resource, rr.getResourceProperties()));
+						
 						}
 						
 					} catch (Exception ex) {
@@ -889,6 +916,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			            //get properties to get its parent reservations
 					
 						String  p_str = local.getProperty(ReservationConverter.PropertyNumExistParentReservations);
+						logger.debug("addActiveStatuWatch:numExistParent="+p_str);
 						int p = 0;
 						String r_id=null;
 						if(p_str!=null){
@@ -901,6 +929,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							}
 						}
 						p_str = local.getProperty(ReservationConverter.PropertyNumNewParentReservations);
+						System.out.println("addActiveStatuWatch:numNewParent="+p_str);
 						if(p_str!=null){
 							p=Integer.valueOf(p_str);
 							for(int i=0;i<p;i++){
