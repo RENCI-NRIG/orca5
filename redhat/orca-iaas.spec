@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Thu Oct 29 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for another NPE fix
+
+*Thu Oct 29 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for NPE fix 
 
 *Wed Oct 28 2015 Ilya Baldin <ibaldin@renci.org>
