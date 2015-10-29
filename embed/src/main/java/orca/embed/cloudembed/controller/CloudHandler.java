@@ -503,7 +503,8 @@ public class CloudHandler extends MappingHandler{
 		
 		for(NetworkElement existing_ce: deviceList){
 			if(existing_ce.getName().equalsIgnoreCase(edge_device.getName())){
-				if(!element.isModify() || isInterdomain(((DomainElement) existing_ce).getCe(),ce_element, link_device)){
+				boolean isInter = isInterdomain(((DomainElement) existing_ce).getCe(),ce_element, link_device);
+				if(!element.isModify() || isInter){
 					logger.info("Existing ce="+existing_ce.getName());
 					edge_device = (DomainElement) existing_ce;
 					break;
@@ -515,7 +516,8 @@ public class CloudHandler extends MappingHandler{
 				}
 				logger.debug("isModify:"+existing_ce.getName()
 						+";numInterface="+existing_ce.getNumInterface()
-						+";isModify="+element.isModify());
+						+";isModify="+element.isModify()
+						+"isInter="+isInter);
 				if(element.isModify()){
 					edge_device.setNumInterface(existing_ce.getNumInterface());
 				}
@@ -580,6 +582,7 @@ public class CloudHandler extends MappingHandler{
 						intf=new_intf;
 					setEdgeNeighbourhood(edge_device,link_device, intf, ncByInterface);
 					edge_device.addClientInterface(intf);
+					edge_device.setNumInterface(edge_device.getNumInterface()+1);
 					ce.addClientInterface(intf);
 					logger.debug("Intf ip:"+intf.getResource()+";ip="+intf.getResource().getProperty(NdlCommons.layerLabelIdProperty));
 				}
@@ -613,6 +616,9 @@ public class CloudHandler extends MappingHandler{
 				logger.warn("No connection associated with this interface"+intf.getName());
 				continue;
 			}
+			logger.debug("isInterdomain:ncByInterface="+ncByInterface.getName()
+					+"intf="+intf.getName()
+					+"ce_intf="+ce.getInterfaceByName(ncByInterface.getName()));
 			if(!ncByInterface.getName().equals(link_device.getName())){                      //inter-site topology request: link != connection
                 ce_intf=ce.getInterfaceByName(ncByInterface.getName()); 
                 if(ce_intf!=null && ce_intf==intf){

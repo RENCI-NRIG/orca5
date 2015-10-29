@@ -593,13 +593,14 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		Resource startDownLocal = start.getDownLocal(next.getModel());
 		
 		DomainElement device = (DomainElement) mapper.getDevice(start,dependList);
-		if((device!=null) && (!device.isModify()) &&  (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
+		if((device!=null) && (!start.isModify()) &&  (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
 			start=device;
 		}
 		else{
 			if(hop==1){
 				setModifyFlag(start);
 				dependList.add(start);
+				logger.debug("modified device, new start:"+start.getName());
 			}
 		}
 		
@@ -624,6 +625,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		else{
 			setModifyFlag(next);
 			dependList.add(next);
+			logger.debug("modified device, new next:"+next.getName());
 		}
 		if(flag){//start depends on next
 			if( (hop==1) && (rs1_ont!=null)){   //First device should be the VM and check if IP is given from the request
