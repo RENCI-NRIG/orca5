@@ -593,7 +593,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		Resource startDownLocal = start.getDownLocal(next.getModel());
 		
 		DomainElement device = (DomainElement) mapper.getDevice(start,dependList);
-		if((device!=null) && (!start.isModify()) &&  (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
+		if((device!=null) && (!start.isModify()) &&  mapper.isCe(device)){
 			start=device;
 		}
 		else{
@@ -611,7 +611,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			String castType = device.getCastType();
 			if(castType==null)
 				castType="";
-			if((device.getResourceType().getResourceType().toLowerCase().endsWith("vm")) || 
+			if((mapper.isCe(device)) || 
 						(NdlCommons.isStitchingNodeInManifest(next.getResource())) || 
 						(castType.equalsIgnoreCase(NdlCommons.multicast) && (hop==path_len-1)) ){
 							device.setStaticLabel(next.getStaticLabel()); 

@@ -11,8 +11,10 @@ import java.util.ListIterator;
 import java.util.Queue;
 
 import orca.ndl.elements.Device;
+import orca.ndl.elements.DomainElement;
 import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
+import orca.util.persistence.Persistable;
 
 import org.apache.log4j.Logger;
 
@@ -1229,6 +1231,17 @@ public class OntProcessor extends NdlCommons implements LayerConstant
         return device;
     }
 
+    public boolean isCe(DomainElement device){
+    	boolean isCe=false;
+		String rType = device.getResourceType().getResourceType().toLowerCase();
+    	if(rType.endsWith(DomainResourceType.VM_RESOURCE_TYPE) 
+    			|| rType.endsWith(DomainResourceType.BM_RESOURCE_TYPE)
+    			|| rType.endsWith(DomainResourceType.FourtyGBM_RESOURCE_TYPE))
+    		isCe=true;
+    	
+    	return isCe;
+    }
+    
     public Device getDevice(Device d, LinkedList<NetworkElement> list)
     {
         if (list == null)
