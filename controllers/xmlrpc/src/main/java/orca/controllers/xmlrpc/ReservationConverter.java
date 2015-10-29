@@ -1703,7 +1703,9 @@ public class ReservationConverter implements LayerConstant {
 					logger.warn("Modify reservations, No parent:"+dd);
 					continue;
 				}
-				int numStorage=m_p_storage_Map.get(rmg);
+				int numStorage=0;
+				if(m_p_storage_Map.containsKey(rmg))
+					numStorage=m_p_storage_Map.get(rmg);
 				num_interface=num_interface+numStorage;
 				int p=0,m_p=0,num=0;	
 				p_r=p_r_Map.get(rmg);
