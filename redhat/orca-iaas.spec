@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Oct 28 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for modify distributed testing
+
 *Thu Apr 09 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Re-build to integrate missing patch for controller and extended reservation recovery.
 
