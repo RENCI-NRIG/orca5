@@ -1668,7 +1668,11 @@ public class ReservationConverter implements LayerConstant {
 			if(rmg!=null){
 				if(m_p_storage_Map.containsKey(rmg))
 					numStorage=m_p_storage_Map.get(rmg);
-					
+				else
+					continue;
+				
+				if(dd.getPrecededBySet()==null)
+					continue;
 				for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
 					DomainElement parent_de = parent.getKey();
 					if(!parent_de.getResourceType().getResourceType().endsWith("lun")){
