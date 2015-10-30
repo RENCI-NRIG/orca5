@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Fri Oct 30 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for MP fix
+
 *Thu Oct 29 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for another NPE fix
 
