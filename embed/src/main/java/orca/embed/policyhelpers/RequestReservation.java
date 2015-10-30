@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.LinkedList;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import orca.ndl.DomainResourceType;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
@@ -134,12 +136,19 @@ public class RequestReservation {
 	}
 	
 	//convert the request topology into graph with node numbered by sn.
-	public boolean generateGraph(Collection<NetworkElement> requestElements) throws  NdlException, IOException{       
+	public boolean generateGraph(Collection<NetworkElement> rElements) throws  NdlException, IOException{       
 		boolean requestBounded = true, intraSite = true, mixDomain = false;
 		int numNode=-1;
-		if((requestElements==null) || (requestElements.isEmpty())) 
+		if((rElements==null) || (rElements.isEmpty())) 
 			return false;
 		
+		LinkedList<NetworkElement> requestElements = new LinkedList<NetworkElement>();
+		for(NetworkElement ne:rElements){
+			if(ne instanceof NetworkConnection)
+				requestElements.addLast(ne);
+			else
+				requestElements.addFirst(ne);
+		}
 		HashMap <Integer,String> nodeMap = new HashMap <Integer, String> ();
 		Map<String, NetworkConnection> links = new HashMap<String, NetworkConnection>();
 		String rs1_str = null,rs2_str = null;
@@ -148,6 +157,7 @@ public class RequestReservation {
     	//numbering the nodes using the integer stqrting from 1
 		for(Iterator <NetworkElement> j=requestElements.iterator();j.hasNext();){	
 			element=j.next();
+			System.out.println("generateGraph: element="+element.getURI());
 			//System.out.println("Doamin--element:"+element.getName()+":inDomain="+element.getInDomain()+";reservation domain="+reservationDomain);
 			if(!(element instanceof NetworkConnection)){
 				if(element instanceof ComputeElement){  //out of the request parser, compute elements are always added first
@@ -177,12 +187,13 @@ public class RequestReservation {
 				}
 				continue;
 			}
+			System.out.println("reservationDomain="+reservationDomain);
 			numNetworkConnection++;
 			requestConnection = (NetworkConnection) element;
 			links.put(requestConnection.getResource().getLocalName(), requestConnection);
 			setPureType(requestConnection.getResourceType(),typeTotalUnits);
-			if( (reservationDomain==null) 
-					|| (requestConnection.getCastType()!=null && requestConnection.getCastType().equalsIgnoreCase("Multicast") && requestConnection.isModify()) ){	
+			if( (reservationDomain==null) ){
+					//|| (requestConnection.getCastType()!=null && requestConnection.getCastType().equalsIgnoreCase("Multicast") && requestConnection.isModify()) ){	
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
 					String connection_domain = null;
