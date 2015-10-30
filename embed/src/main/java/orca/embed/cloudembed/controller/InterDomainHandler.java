@@ -2,7 +2,9 @@
 
 package orca.embed.cloudembed.controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
@@ -119,13 +121,14 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				continue;
 			}
 			
+			/*String fileName = "stitch" + "-subrequest.rdf";
+            OutputStream fsw = new FileOutputStream(fileName);
+            requestModel.write(fsw);*/
+			
 			stitching = checkStitching(element, requestModel); //requestModel being modified here
-			if(stitching){
-				if(isModify)
-					this.idm.add(this.currentModifyRequestModel);
-				else
-					this.idm.add(requestModel);
-			}
+			if(stitching)
+				this.idm.add(requestModel);
+
 			logger.debug("is stitiching="+stitching+";isModify="+isModify);
 			/*
 			String homeDir = PathGuesser.getOrcaControllerHome();

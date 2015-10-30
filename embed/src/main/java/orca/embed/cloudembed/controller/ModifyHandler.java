@@ -1,5 +1,6 @@
 package orca.embed.cloudembed.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,8 +51,11 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceRequiredException;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -272,7 +276,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 		if(modifyRequestModelList == null)
 			modifyRequestModelList = new ArrayList<OntModel>();
 		modifyRequestModelList.add(modifyRequestModel);
-		this.currentModifyRequestModel = modifyRequestModel;
 		Resource reservation = modifyRequestModel.createIndividual(ns_str,NdlCommons.reservationOntClass);
 		for(ModifyElement mee:meList){
 			me = mee.getObj();
@@ -313,8 +316,12 @@ public class ModifyHandler extends UnboundRequestHandler {
 		//parsing request
 		RequestParserListener parserListener = new RequestParserListener();		
 		// run the parser (to create Java objects)
-		NdlRequestParser nrp = new NdlRequestParser(modifyRequestModel, parserListener, NdlModel.ModelType.TdbPersistent, 
-				Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "modify-" + sliceId);
+		//NdlRequestParser nrp = new NdlRequestParser(modifyRequestModel, parserListener, NdlModel.ModelType.TdbPersistent, 
+		//		Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "modify-" + sliceId);
+		OutputStream out = null;
+		out = new  ByteArrayOutputStream();
+		modifyRequestModel.write(out);
+		NdlRequestParser nrp = new NdlRequestParser(out.toString(), parserListener);
 		nrp.processRequest();		
 		RequestReservation request = parserListener.getRequest();
 		OntModel modifyModel = request.getModel();
@@ -380,6 +387,14 @@ public class ModifyHandler extends UnboundRequestHandler {
 	}
 	
 	private void copyProperty(OntModel domainRequestModel, Resource me_rs){
+		if(me_rs.hasProperty(NdlCommons.RDF_TYPE, NdlCommons.interfaceOntClass)){
+			Model model = me_rs.getModel();
+			ResIterator it_ad = model.listResourcesWithProperty(NdlCommons.taggedEthernetProperty,me_rs);
+			while(it_ad.hasNext()){
+				Resource sub= it_ad.next();
+				domainRequestModel.add(sub, NdlCommons.taggedEthernetProperty, me_rs);
+			}
+		}
 		StmtIterator it = me_rs.listProperties();
 		if(it==null)
 			return;

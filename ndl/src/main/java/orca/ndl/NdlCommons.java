@@ -122,7 +122,7 @@ public class NdlCommons {
 
 	public static final Property hasInputInterface, connectedTo, linkTo,switchedTo,hasSwitchMatrix,
 	hasRequestGroupURL,inRequestNetworkConnection,
-    hasOutputInterface, adaptationProperty, adaptationPropertyOf, carryReservation, atLayer,hasCastType,
+    hasOutputInterface, adaptationProperty, adaptationPropertyOf, taggedEthernetProperty, carryReservation, atLayer,hasCastType,
     switchingCapability, swappingCapability, tunnelingCapability, connectionDirection, vlan, ocgLine,layerSwapLabelProperty,
     portOccupied, inConnection, visited, numHop, openflowCapableProperty, modifySubjectProperty, modifyAddElementProperty, modifyElementProperty, isModifyProperty,
     modifyRemoveElementProperty, modifyIncreaseByProperty,manifestHasParent,manifestHasChild;
@@ -171,6 +171,7 @@ public class NdlCommons {
 		layerSwapLabelProperty =  new PropertyImpl(ORCA_NS + "layer.owl#" + "swapLabel");
         adaptationPropertyOf = new PropertyImpl(ORCA_NS + "layer.owl#adaptationPropertyOf");
         adaptationProperty = new PropertyImpl(ORCA_NS + "layer.owl#adaptationProperty");
+        taggedEthernetProperty = new PropertyImpl(ORCA_NS + "ethernet.owl#Tagged-Ethernet");
         availableLabelSet = new PropertyImpl(ORCA_NS + "layer.owl#availableLabelSet");
         lowerBound = new PropertyImpl(ORCA_NS + "layer.owl#lowerBound");
         upperBound = new PropertyImpl(ORCA_NS + "layer.owl#upperBound");
