@@ -120,9 +120,13 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			}
 			
 			stitching = checkStitching(element, requestModel); //requestModel being modified here
-			if(stitching)
-				this.idm.add(requestModel);
-
+			if(stitching){
+				if(isModify)
+					this.idm.add(this.currentModifyRequestModel);
+				else
+					this.idm.add(requestModel);
+			}
+			logger.debug("is stitiching="+stitching+";isModify="+isModify);
 			/*
 			String homeDir = PathGuesser.getOrcaControllerHome();
 			String fileName = "/logs/idm.rdf";

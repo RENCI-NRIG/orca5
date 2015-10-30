@@ -1222,7 +1222,7 @@ public class ReservationConverter implements LayerConstant {
 				rDomain = type.split("\\.")[0];
 				rType = type.split("\\.")[1];
 
-				logger.info("getManifest: domain=" + domain_ont.getURI() + " ;aDomian = "+domain+" :rDomain=" + rDomain +" rType="+rType);
+				//logger.info("getManifest: domain=" + domain_ont.getURI() + " ;aDomian = "+domain+" :rDomain=" + rDomain +" rType="+rType);
 				if ((domain.equalsIgnoreCase(rDomain)) && (domain_ont_url.endsWith(rType))) {
 					Properties local = OrcaConverter.fill(r.getLocalProperties());
 					String unit_url = local.getProperty(UNIT_URL_RES);

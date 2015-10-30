@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -51,6 +53,7 @@ public class RequestReservation {
 	public static String MultiPoint_Domain = NdlCommons.ORCA_NS+"MultiPointDomain";
 	
 	SystemNativeError err;	
+	private Logger logger = NdlCommons.getNdlLogger();
 	
 	public void setError(SystemNativeError e){
 		err = e;	
@@ -157,7 +160,7 @@ public class RequestReservation {
     	//numbering the nodes using the integer stqrting from 1
 		for(Iterator <NetworkElement> j=requestElements.iterator();j.hasNext();){	
 			element=j.next();
-			System.out.println("generateGraph: element="+element.getURI());
+			logger.debug("generateGraph: element="+element.getURI()+";inDomain="+element.getInDomain());
 			//System.out.println("Doamin--element:"+element.getName()+":inDomain="+element.getInDomain()+";reservation domain="+reservationDomain);
 			if(!(element instanceof NetworkConnection)){
 				if(element instanceof ComputeElement){  //out of the request parser, compute elements are always added first
@@ -187,7 +190,7 @@ public class RequestReservation {
 				}
 				continue;
 			}
-			System.out.println("reservationDomain="+reservationDomain);
+
 			numNetworkConnection++;
 			requestConnection = (NetworkConnection) element;
 			links.put(requestConnection.getResource().getLocalName(), requestConnection);
@@ -263,7 +266,7 @@ public class RequestReservation {
 					element.setInDomain(ne_domain);
 				}
 			}
-			//System.out.println("Doamin--element:"+element.getInDomain()+";ne1 domain="+ne1_domain+";ne2 domain="+ne2_domain+";reservation domain="+reservationDomain);
+			logger.debug("Doamin--element:"+element.getInDomain()+";ne1 domain="+ne1_domain+";ne2 domain="+ne2_domain+";reservation domain="+reservationDomain);
 			setDomainRequestReservation(element,domainRequestReservation);
 		}
 		//System.out.println("RequestReservation Doamin--element:"+element.getInDomain()+";reservation domain="+reservationDomain);	

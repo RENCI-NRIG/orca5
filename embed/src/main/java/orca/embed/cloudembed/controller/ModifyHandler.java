@@ -272,6 +272,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		if(modifyRequestModelList == null)
 			modifyRequestModelList = new ArrayList<OntModel>();
 		modifyRequestModelList.add(modifyRequestModel);
+		this.currentModifyRequestModel = modifyRequestModel;
 		Resource reservation = modifyRequestModel.createIndividual(ns_str,NdlCommons.reservationOntClass);
 		for(ModifyElement mee:meList){
 			me = mee.getObj();

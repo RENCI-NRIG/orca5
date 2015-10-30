@@ -52,6 +52,9 @@ public class MappingHandler implements IRequestEmbedder {
 	@NotPersistent
 	protected boolean isModify = false;
 	
+	@NotPersistent
+	protected OntModel currentModifyRequestModel;
+	
 	protected int modifyVersion;
 	
 	
