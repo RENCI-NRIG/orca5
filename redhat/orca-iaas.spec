@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Sun Nov 01 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for stitchport adaptation fix
+
 *Fri Oct 30 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for MP fix
 
