@@ -170,16 +170,16 @@ public class RequestParserTest implements INdlRequestModelListener {
 	}
 	
 	public static void main(String[] argv) {
-//		try {
-//			System.out.println("Reading " + argv[0]);
-//			new RequestParserTest().run_(argv[0]);
-//		} catch (Exception e) {
-//			System.err.println("Error: " + e);
-//		}
 		try {
-			new RequestParserTest().run();
+			System.out.println("Reading " + argv[0]);
+			new RequestParserTest().run_(argv[0]);
 		} catch (Exception e) {
 			System.err.println("Error: " + e);
 		}
+//		try {
+//			new RequestParserTest().run();
+//		} catch (Exception e) {
+//			System.err.println("Error: " + e);
+//		}
 	}
 }

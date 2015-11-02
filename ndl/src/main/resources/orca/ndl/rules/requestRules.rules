@@ -57,7 +57,7 @@
 		(?A topo:hasInterface ?I1), (?A req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), 
 		(?B topo:hasInterface ?I2), notEqual(?A, ?B), notEqual(?A, ?X), notEqual(?B, ?X), noValue(?B, req:inDomain) ] ]
 
-# multi-domain broadcast link domains can't be repeated
+# multi-domain broadcast link domains can't be repeated (commented out since Yufeng's latest embedding code supposed to be able to do this)
 #[saneBcastLink1: (?v rb:validation on()) ->
 #	[ (?Z rb:violation error('Broadcast link Validation', 'Domains in inter-domain broadcast link cannot be repeated', ?X))
 #		<- (?X rdf:type topo:BroadcastConnection), (?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), notEqual(?I1, ?I2),

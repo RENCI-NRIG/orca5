@@ -498,6 +498,38 @@ public class NdlGenerator {
 	}
 	
 	/**
+	 * Declare a unique stitchport interface  based on URL and label with TaggedEthernet adaptation and a label
+	 * @param url
+	 * @param label
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareStitchportInterface(String url, String label) throws NdlException {
+		Individual retI = declareExistingInterface(generateStitchPortInterfaceUrl(url, label));
+		addLabelToIndividual(retI, label);
+		// declare adaptation
+		Individual intM = declareExistingInterface(url);
+		addEthernetAdaptation(intM, retI);
+		return retI;
+	}
+	
+	/**
+	 * Generate unique name for stitchport interface based on URL and label
+	 * @param osp
+	 * @return
+	 * @throws NdlException
+	 */
+	private String generateStitchPortInterfaceUrl(String url, String label) throws NdlException {
+		if ((url == null) || (label == null))
+			throw new NdlException("Stitchport does not specify URL or label");
+		
+		if (url.endsWith("/"))
+			return url + label;
+		else
+			return url + "/" + label;
+	}
+	
+	/**
 	 * declare a disk image
 	 * @param name
 	 * @param url
