@@ -159,7 +159,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		LinkedList <Device> nodeGroupAddedDevices = new LinkedList <Device> ();
 		for(Device device:addedDevices){
 			DomainElement de = (DomainElement) device;
-			if(de.getCe()!=null && !de.isModify())
+			if(de.getCe()!=null && !de.isModify() && !NdlCommons.isStitchingNodeInManifest(de.getResource()) )
 				if(de.getCe().getDependencies().size()==0) //not part of a interdomain link
 					nodeGroupAddedDevices.add(device);
 		}
