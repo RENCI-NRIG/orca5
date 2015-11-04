@@ -2,6 +2,8 @@ package orca.handlers.network.router;
 
 import orca.handlers.network.core.CommandException;
 
+import java.io.EOFException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -30,8 +32,11 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
     protected static final String singlePortPat = "^\\s*(\\d+)/(\\d+)\\s*$";
     protected static final String rangesPat = "^\\[(\\d+)-(\\d+)\\]$";
 
+    protected static final String promptPat = "^[a-zA-Z0-9]+8700\\*>";
+
     protected static final Pattern rangePortComp = Pattern.compile(rangePortPat);
     protected static final Pattern rangesComp = Pattern.compile(rangesPat);
+    protected static final Pattern promptComp = Pattern.compile(promptPat);
 
 
     protected String defaultPrompt, virtualSwitch;
@@ -40,6 +45,11 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
         super(deviceAddress, uid, password);
         this.defaultPrompt = defaultPrompt;
         basepath = "/orca/handlers/network/router/ciena/8700";
+    }
+
+    @Override
+    protected void clearOutput() throws EOFException, IOException {
+        discardUntilPattern(promptComp, 2000);
     }
 
     protected static String genSubPortName(String virtualSwitch, String parentPort, boolean tagged){
