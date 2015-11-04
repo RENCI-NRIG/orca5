@@ -1053,7 +1053,7 @@ public class ReservationConverter implements LayerConstant {
 		} else
 			logger.warn("Reservationconverter: VMISCSI: ip_range is null");
 		String storagePrefix = UnitProperties.UnitStoragePrefix+host_interface;
-		String storageTargetPrefix = storagePrefix + ".target"; 
+		//String storageTargetPrefix = storagePrefix + ".target"; 
 		//String storageFSPrefix = storagePrefix + ".fs"; 
 		
 		//Other properties 
@@ -1062,42 +1062,42 @@ public class ReservationConverter implements LayerConstant {
 		
 
 		if (base_ip_addr!=null)
-			p.setProperty(storageTargetPrefix+".ip",base_ip_addr);
+			p.setProperty(storagePrefix + UnitProperties.UnitTargetIPSuffix,base_ip_addr);
 
-		p.setProperty(storageTargetPrefix+".lun.guid",lun_uuid);
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetLunGuid,lun_uuid);
 	}
 	
 	public void setVMISCSIParam(Properties p,ComputeElement s_ce,int s_num){
 		String storagePrefix = UnitProperties.UnitStoragePrefix+s_num;
-		String storageTargetPrefix = storagePrefix + ".target"; 
-		String storageFSPrefix = storagePrefix + ".fs"; 
+		//String storageTargetPrefix = storagePrefix + ".target"; 
+		//String storageFSPrefix = storagePrefix + ".fs"; 
 		if(s_ce.getFSType()!=null)
-			p.setProperty(storageFSPrefix+".type",s_ce.getFSType());
+			p.setProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix,s_ce.getFSType());
 		else
-			p.setProperty(storageFSPrefix+".type","ext3");
+			p.setProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix,"ext3");
 		
 		if(s_ce.getFSParam()!=null)
-			p.setProperty(storageTargetPrefix+".options",s_ce.getFSParam());
+			p.setProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix,s_ce.getFSParam());
 		else
-			p.setProperty(storageTargetPrefix+".options","-F -b 1024");
+			p.setProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix,"-F -b 1024");
 		
 		if(s_ce.getMntPoint()!=null)
-			p.setProperty(storageTargetPrefix+".mount_point",s_ce.getMntPoint());
+			p.setProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix,s_ce.getMntPoint());
 		else
-			p.setProperty(storageTargetPrefix+".mount_point","/mnt/target/"+String.valueOf(s_num));
+			p.setProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix,"/mnt/target/"+String.valueOf(s_num));
 		if(s_ce.isDoFormat())
-			p.setProperty(storageTargetPrefix+".should_format",SUDO_YES);
+			p.setProperty(storagePrefix + UnitProperties.UnitFSShouldFormatSuffix,SUDO_YES);
 		else
-			p.setProperty(storageTargetPrefix+".should_format",SUDO_NO);
+			p.setProperty(storagePrefix + UnitProperties.UnitFSShouldFormatSuffix,SUDO_NO);
 		
-		p.setProperty(storageTargetPrefix+".chap_user",s_ce.getCHAP_User());
-		p.setProperty(storageTargetPrefix+".chap_password",s_ce.getCHAP_Password());
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetChapUserSuffix,s_ce.getCHAP_User());
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetChapSecretSuffix,s_ce.getCHAP_Password());
 		
-		p.setProperty(storagePrefix+".type","iscsi");
-		p.setProperty(storageTargetPrefix+".port","3260");
+		p.setProperty(storagePrefix+UnitProperties.UnitStoreTypeSuffix,"iscsi");
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetPortSuffix,"3260");
 		
-		p.setProperty(storageTargetPrefix+".should_attach",SUDO_YES);
-		logger.debug("setVMISCSIParam():"+storageTargetPrefix+".mount_point="+s_ce.getMntPoint()+":"+storageTargetPrefix+".chap_user="+s_ce.getCHAP_User());
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetShouldAttachSuffix,SUDO_YES);
+		logger.debug("setVMISCSIParam():"+storagePrefix + UnitProperties.UnitFSMountPointSuffix + "="+s_ce.getMntPoint()+":"+storagePrefix + UnitProperties.UnitTargetChapUserSuffix + "=" + s_ce.getCHAP_User());
 	}
 
 	public void processIPCollection(HashMap <DomainElement, LinkedList <ReservationRequest> > collection, DomainElement p_de, ReservationRequest r){

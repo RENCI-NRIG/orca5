@@ -148,6 +148,7 @@ public interface UnitProperties {
     public static final String UnitTargetPortSuffix          = ".target.port";
     public static final String UnitTargetNameSuffix          = ".target.name";
     public static final String UnitTargetLunSuffix           = ".target.lun.num";
+    public static final String UnitTargetLunGuid			 = ".target.lun.guid";
     public static final String UnitTargetShouldAttachSuffix  = ".target.should_attach";
     public static final String UnitTargetChapUserSuffix      = ".target.chap_user";
     public static final String UnitTargetChapSecretSuffix    = ".target.chap_password";

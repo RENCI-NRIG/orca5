@@ -89,13 +89,13 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										continue;
 									}
 										
-									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
+									String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
 									modifyProperties.setProperty("vlan.tag",unit_tag);
-									String parent_mac_addr = parent_prefix+host_interface+".mac";
-									String parent_ip_addr = parent_prefix+host_interface+".ip";
+									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
+									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
 									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
 									String parent_interface_uuid = parent_prefix+host_interface+".uuid";
-									String site_host_interface = parent_prefix + host_interface + ".hosteth";
+									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
 										
 									if(local.getProperty(parent_mac_addr)!=null)
 										modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
@@ -134,10 +134,10 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
 										continue;
 									}
-									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
-									String parent_mac_addr = parent_prefix+host_interface+".mac";
-									String parent_ip_addr = parent_prefix+host_interface+".ip";
-									String site_host_interface = parent_prefix + host_interface + ".hosteth";
+									String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
+									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
+									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
+									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
 										
 									if(local.getProperty(parent_tag_name)!=null)
 										modifyProperties.setProperty("vlan.tag",local.getProperty(parent_tag_name));
@@ -149,62 +149,62 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
 									
 									String storagePrefix = UnitProperties.UnitStoragePrefix+String.valueOf(num_storage_int);
-									String storageTargetPrefix = storagePrefix + ".target";  
-									String storageFSPrefix = storagePrefix + ".fs"; 
+									//String storageTargetPrefix = storagePrefix + ".target";  
+									//String storageFSPrefix = storagePrefix + ".fs"; 
 									
 									//Other properties 
 									if(local.getProperty(UnitProperties.UnitISCSIInitiatorIQN)!=null)
 										modifyProperties.setProperty("iscsi.initiator.iqn",local.getProperty(UnitProperties.UnitISCSIInitiatorIQN));
 
-									if(local.getProperty(storageTargetPrefix+".ip")!=null)
-										modifyProperties.setProperty("target.ip",local.getProperty(storageTargetPrefix+".ip"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitTargetIPSuffix)!=null)
+										modifyProperties.setProperty("target.ip",local.getProperty(storagePrefix + UnitProperties.UnitTargetIPSuffix));
 
-									if(local.getProperty(storageTargetPrefix+".lun.guid")!=null)
-										modifyProperties.setProperty("lun.guid",local.getProperty(storageTargetPrefix+".lun.guid"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitTargetLunGuid)!=null)
+										modifyProperties.setProperty("target.lun.guid",local.getProperty(storagePrefix + UnitProperties.UnitTargetLunGuid));
 									
-									if(local.getProperty(storageFSPrefix+".type")!=null)
-										modifyProperties.setProperty("fs.type",local.getProperty(storageFSPrefix+".type"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix)!=null)
+										modifyProperties.setProperty("fs.type",local.getProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix));
 									else
 										modifyProperties.setProperty("fs.type","ext3");
 									
-									if(local.getProperty(storageTargetPrefix+".options")!=null)
-										modifyProperties.setProperty("options",local.getProperty(storageTargetPrefix+".options"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix)!=null)
+										modifyProperties.setProperty("target.options",local.getProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix));
 									else
-										modifyProperties.setProperty("options","-F -b 1024");
+										modifyProperties.setProperty("target.options","-F -b 1024");
 									
-									if(local.getProperty(storageTargetPrefix+".mount_point")!=null)
-										modifyProperties.setProperty("mount_point",local.getProperty(storageTargetPrefix+".mount_point"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix)!=null)
+										modifyProperties.setProperty("target.mount_point",local.getProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix));
 									else
-										modifyProperties.setProperty("mount_point","/mnt/target/"+String.valueOf(host_interface));
+										modifyProperties.setProperty("target.mount_point","/mnt/target/"+String.valueOf(host_interface));
 									
-									if(local.getProperty(storageTargetPrefix+".should_format")!=null)
-										modifyProperties.setProperty("should_format",local.getProperty(storageTargetPrefix+".should_format"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitFSShouldFormatSuffix)!=null)
+										modifyProperties.setProperty("target.should_format",local.getProperty(storagePrefix + UnitProperties.UnitFSShouldFormatSuffix));
 									else
-										modifyProperties.setProperty("should_format",ReservationConverter.SUDO_NO);
+										modifyProperties.setProperty("target.should_format",ReservationConverter.SUDO_NO);
 									
-									if(local.getProperty(storageTargetPrefix+".chap_user")!=null)
-										modifyProperties.setProperty("chap_user",local.getProperty(storageTargetPrefix+".chap_user"));
-									if(local.getProperty(storageTargetPrefix+".chap_password")!=null)
-										modifyProperties.setProperty("chap_password",local.getProperty(storageTargetPrefix+".chap_password"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitTargetChapUserSuffix)!=null)
+										modifyProperties.setProperty("target.chap_user",local.getProperty(storagePrefix + UnitProperties.UnitTargetChapUserSuffix));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitTargetChapSecretSuffix)!=null)
+										modifyProperties.setProperty("target.chap_password",local.getProperty(storagePrefix + UnitProperties.UnitTargetChapSecretSuffix));
 									
-									if(local.getProperty(storagePrefix+".type")!=null)
-										modifyProperties.setProperty("type",local.getProperty(storagePrefix+".type"));
+									if(local.getProperty(storagePrefix+UnitProperties.UnitStoreTypeSuffix)!=null)
+										modifyProperties.setProperty("type",local.getProperty(storagePrefix+UnitProperties.UnitStoreTypeSuffix));
 									else	
 										modifyProperties.setProperty("type","iscsi");
-									if(local.getProperty(storageTargetPrefix+".port")!=null)
-										modifyProperties.setProperty("port",local.getProperty(storageTargetPrefix+".port"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitTargetPortSuffix)!=null)
+										modifyProperties.setProperty("target.port",local.getProperty(storagePrefix + UnitProperties.UnitTargetPortSuffix));
 									else
-										modifyProperties.setProperty("port","3260");
+										modifyProperties.setProperty("target.port","3260");
 										
-									if(local.getProperty(storageTargetPrefix+".should_attach")!=null)
-										modifyProperties.setProperty("should_attach",local.getProperty(storageTargetPrefix+".should_attach"));
+									if(local.getProperty(storagePrefix + UnitProperties.UnitTargetShouldAttachSuffix)!=null)
+										modifyProperties.setProperty("target.should_attach",local.getProperty(storagePrefix + UnitProperties.UnitTargetShouldAttachSuffix));
 									else
-										modifyProperties.setProperty("should_attach",ReservationConverter.SUDO_YES);
+										modifyProperties.setProperty("target.should_attach",ReservationConverter.SUDO_YES);
 									num_storage_int--;
 									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
-									System.out.println("Parent doesnot return the unit lun tag:"+pr_local);
+									System.out.println("Parent did not return the unit lun tag:"+pr_local);
 									continue;
 								}
 							}

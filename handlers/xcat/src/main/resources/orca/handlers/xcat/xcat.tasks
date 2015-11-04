@@ -1,1 +1,3 @@
 xcat.generate.bash.file=orca.handlers.xcat.tasks.XCatGenerateBashFileTask
+xcat.generate.bash.mod.addiface.file=orca.handlers.xcat.tasks.XCatGenerateBashFileAddIfaceTask
+xcat.generate.bash.mod.remiface.file=orca.handlers.xcat.tasks.XCatGenerateBashFileRemIfaceTask

@@ -4,7 +4,6 @@ KEY=${XCAT_CONF_DIR}/${XCAT_SSH_KEY}
 SSH_OPTS="-q -o PreferredAuthentications=publickey -o HostbasedAuthentication=no -o PasswordAuthentication=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 machine=$1
-user_key=$2
 
 if [ -z $XCAT_NODE_SCRIPT ]; then
 	echo "No script provided, exiting";

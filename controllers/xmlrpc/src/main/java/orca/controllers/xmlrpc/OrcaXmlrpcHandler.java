@@ -721,18 +721,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 								logger.debug("ModifiedRemove: host_interface="+host_interface+";tag="+unit_tag+";parent url="+unit_parent_url);
 							
-								String parent_tag_name = parent_prefix+host_interface+".vlan.tag";
+								String parent_tag_name = parent_prefix+host_interface+UnitProperties.UnitEthVlanSuffix;
 								modifyProperties.setProperty("vlan.tag",unit_tag);
 								/*local.remove(parent_tag_name);
 								config.remove(parent_tag_name);
 								request.remove(parent_tag_name);
 								resource.remove(parent_tag_name);
 								*/
-								String parent_mac_addr = parent_prefix+host_interface+".mac";
-								String parent_ip_addr = parent_prefix+host_interface+".ip";
+								String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
+								String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
 								String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
 								String parent_interface_uuid = parent_prefix+host_interface+".uuid";
-								String site_host_interface = parent_prefix + host_interface + ".hosteth";
+								String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
 								
 								if(config.getProperty(parent_mac_addr)!=null){
 									modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
@@ -789,10 +789,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
 										continue;
 									}
-									String parent_tag_name = parent_prefix.concat(host_interface).concat(".vlan.tag");
-									String parent_mac_addr = parent_prefix+host_interface+".mac";
-									String parent_ip_addr = parent_prefix+host_interface+".ip";
-									String site_host_interface = parent_prefix + host_interface + ".hosteth";
+									String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
+									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
+									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
+									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
 										
 									if(local.getProperty(parent_tag_name)!=null)
 										modifyProperties.setProperty("vlan.tag",local.getProperty(parent_tag_name));
@@ -803,7 +803,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									if(local.getProperty(site_host_interface)!=null)
 										modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
 								}else{	//no need to go futher
-									logger.error("Parent doesnot return the unit lun tag:"+pr_local);
+									logger.error("Parent did not return the unit lun tag:"+pr_local);
 									continue;
 								}
 							}
