@@ -14,6 +14,8 @@ import java.util.regex.PatternSyntaxException;
 import java.util.Properties;
 
 
+import orca.handlers.network.core.CommandException;
+
 
 
 public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterDevice, RouterConstants {
@@ -48,7 +50,7 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
     }
 
     @Override
-    protected void clearOutput() throws EOFException, IOException {
+    protected void clearOutput() throws EOFException, IOException, CommandException {
         discardUntilPattern(promptComp, 2000);
     }
 

@@ -112,6 +112,9 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
                 emulationConnected = true;
             }
             logger.debug("Connection to: " + deviceAddress + " setup successfully");
+            if (!isEmulationEnabled()) {
+                clearOutput();
+            }
         } catch (IOException e) {
         	throw new CommandException(e);
         }
@@ -132,7 +135,7 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
      * This standard implementation waits for at least 2 seconds of output.
      * You can override it to e.g. match for a specific prompt.
      */
-    protected void clearOutput() throws EOFException, IOException {
+    protected void clearOutput() throws EOFException, IOException, CommandException {
         discardOutput(2000);
     }
 
