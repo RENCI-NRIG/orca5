@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test XCAT handler on RCI rack
+
 *Mon Nov 02 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for stitchport extra node fix
 
