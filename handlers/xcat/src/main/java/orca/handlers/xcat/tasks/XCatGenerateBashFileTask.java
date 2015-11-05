@@ -293,6 +293,7 @@ public class XCatGenerateBashFileTask extends XCatGenerateBashFileBaseTask {
 			PrintWriter out = new PrintWriter(new FileWriter(new File(file)));
 
 			generateGlobal(out);
+			generateHostname(out);
 			generateInterfaces(out); 
 			generateStorage(out);
 			generateInstanceConfig(out, getProject().getProperty(UnitProperties.UnitInstanceConfig));

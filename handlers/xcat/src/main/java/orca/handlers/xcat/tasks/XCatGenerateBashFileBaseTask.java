@@ -208,4 +208,16 @@ public class XCatGenerateBashFileBaseTask extends OrcaAntTask {
 		}
 	}
 	
+	protected void generateHostname(PrintWriter out) throws Exception {
+		
+		String hname = getProject().getProperty(UnitProperties.UnitHostName);
+		
+		if (hname != null) {
+			out.println("# setting hostname to " + hname);
+			out.println("hostname " + hname);
+		} else {
+			out.println("# no hostname set");
+		}
+	}
+	
 }

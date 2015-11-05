@@ -261,13 +261,13 @@
 
 					<!-- CONSTRUCT NEW SCRIPT TO EXECUTE INTERFACE UPDATE ON BARE-METAL NODE -->
 				
-					<echo message="Generating BASH modify-removeiface script for the node" />
+					<echo message="Generating BASH modify-addiface script for the node" />
 					<var name="xcat.bash.file" unset="true" />
 					<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}"
 						prefix="xcat.bash.mod@{seqnum}" suffix=".bash" deleteonexit="true" />
 						
 					<!-- create the BASH file -->
-					<xcat.generate.bash.mod.addiface.file file="${xcat.bash.file}" modIndex="@{seqnum}"
+					<xcat.generate.bash.mod.addiface.file file="${xcat.bash.file}" modifyIndex="@{seqnum}"
 						interfaceMap="${xcat.interface.map}" />
 					<var name="xcat.bash" unset="true" />
 					
@@ -348,7 +348,7 @@
 						prefix="xcat.bash.mod@{seqnum}" suffix=".bash" deleteonexit="true" />
 						
 					<!-- create the BASH file -->
-					<xcat.generate.bash.mod.remiface.file file="${xcat.bash.file}" modIndex="@{seqnum}"
+					<xcat.generate.bash.mod.remiface.file file="${xcat.bash.file}" modifyIndex="@{seqnum}"
 						interfaceMap="${xcat.interface.map}" />
 					<var name="xcat.bash" unset="true" />
 					
