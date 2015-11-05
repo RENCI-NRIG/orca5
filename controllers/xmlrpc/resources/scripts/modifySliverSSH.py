@@ -50,7 +50,7 @@ users = {}
 f = open(options.key, 'r')
 userKey = f.read()
 if userKey != None:
-    users=[ {'login':'root',
+    users=[ {'login': options.uname,
                'keys': [ userKey ] } ]
 
 else:

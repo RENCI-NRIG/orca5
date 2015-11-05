@@ -264,7 +264,7 @@
 					<echo message="Generating BASH modify-addiface script for the node" />
 					<var name="xcat.bash.file" unset="true" />
 					<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}"
-						prefix="xcat.bash.mod@{seqnum}" suffix=".bash" deleteonexit="true" />
+						prefix="xcat.bash.mod@{seqnum}." suffix=".bash" deleteonexit="true" />
 						
 					<!-- create the BASH file -->
 					<xcat.generate.bash.mod.addiface.file file="${xcat.bash.file}" modifyIndex="@{seqnum}"
@@ -345,7 +345,7 @@
 					<echo message="Generating BASH modify-removeiface script for the node" />
 					<var name="xcat.bash.file" unset="true" />
 					<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}"
-						prefix="xcat.bash.mod@{seqnum}" suffix=".bash" deleteonexit="true" />
+						prefix="xcat.bash.mod@{seqnum}." suffix=".bash" deleteonexit="true" />
 						
 					<!-- create the BASH file -->
 					<xcat.generate.bash.mod.remiface.file file="${xcat.bash.file}" modifyIndex="@{seqnum}"
