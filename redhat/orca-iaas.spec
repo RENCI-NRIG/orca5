@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for baremetal modify fixes
+
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for minor bug in xcat task parameters
 
 *Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
