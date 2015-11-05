@@ -99,7 +99,7 @@ public class RequestReservation {
 		
 		if(e instanceof NetworkConnection){
 			NetworkConnection ne = (NetworkConnection) e;
-			if(ne.getLabel_ID()!=0)		//user specified tag doesn't count
+			if(ne.getLabel_ID()!=0 && !ne.isModify())		//user specified tag doesn't count
 				this.setPureType(e.getResourceType(),this.typeTotalUnits);
 			numNetworkConnection++;
 			NetworkConnection requestConnection = (NetworkConnection) e;
@@ -111,7 +111,8 @@ public class RequestReservation {
             	LinkedList <NetworkElement> bcNodeList = (LinkedList<NetworkElement>)requestConnection.getConnection();
             	for(int i =0;i<bcNodeList.size();i++){
             		if(!markedElements.contains(bcNodeList.get(i))){
-            			setPureType(bcNodeList.get(i).getResourceType(),typeTotalUnits);
+            			if(!bcNodeList.get(i).isModify())
+            				setPureType(bcNodeList.get(i).getResourceType(),typeTotalUnits);
             			markedElements.add(bcNodeList.get(i));
             		}
             	}
@@ -122,19 +123,22 @@ public class RequestReservation {
             edge=requestConnection.getNe1();
 			if(edge!=null){
 				if(!markedElements.contains(edge)){	
-					setPureType(edge.getResourceType(),typeTotalUnits);
+					if(!edge.isModify())
+						setPureType(edge.getResourceType(),typeTotalUnits);
 					markedElements.add(edge);
 				}
 			}
 			edge=requestConnection.getNe2();
 			if(edge!=null){
 				if(!markedElements.contains(edge)){	
-					setPureType(edge.getResourceType(),typeTotalUnits);
+					if(!edge.isModify())
+						setPureType(edge.getResourceType(),typeTotalUnits);
 					markedElements.add(edge);
 				}
 			}
 		}else{
-			this.setPureType(e.getResourceType(),this.typeTotalUnits);
+			if(!e.isModify())
+				this.setPureType(e.getResourceType(),this.typeTotalUnits);
 		}
 	}
 	
@@ -194,7 +198,8 @@ public class RequestReservation {
 			numNetworkConnection++;
 			requestConnection = (NetworkConnection) element;
 			links.put(requestConnection.getResource().getLocalName(), requestConnection);
-			setPureType(requestConnection.getResourceType(),typeTotalUnits);
+			if(!requestConnection.isModify())
+				setPureType(requestConnection.getResourceType(),typeTotalUnits);
 			if( (reservationDomain==null) ){
 					//|| (requestConnection.getCastType()!=null && requestConnection.getCastType().equalsIgnoreCase("Multicast") && requestConnection.isModify()) ){	
 				intraSite=false;

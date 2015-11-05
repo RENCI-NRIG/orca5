@@ -23,12 +23,13 @@ public class MappingHandlerTest extends TestCase {
 			,"orca/ndl/substrate/bbnvmsite.rdf"
 			,"orca/ndl/substrate/fiuvmsite.rdf"
 			,"orca/ndl/substrate/uhvmsite.rdf"
-			,"orca/ndl/substrate/dukevmsite.rdf"
-			,"orca/ndl/substrate/rencivmsite.rdf"
+			,"orca/ndl/substrate/uflvmsite.rdf"
+			,"orca/ndl/substrate/osfvmsite.rdf"
 			,"orca/ndl/substrate/cienavmsite.rdf","orca/ndl/substrate/uvanlvmsite.rdf",
 	"orca/ndl/substrate/ben-6509.rdf",
-	"orca/ndl/substrate/nlr.rdf","orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf","orca/ndl/substrate/uvanlNet.rdf",
-	"orca/ndl/substrate/renciNet.rdf","orca/ndl/substrate/uncNet.rdf","orca/ndl/substrate/dukeNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
+	"orca/ndl/substrate/nlr.rdf","orca/ndl/substrate/starlight.rdf","orca/ndl/substrate/ion.rdf",
+	"orca/ndl/substrate/uvanlNet.rdf",
+	"orca/ndl/substrate/uflNet.rdf","orca/ndl/substrate/uncNet.rdf","orca/ndl/substrate/osfNet.rdf","orca/ndl/substrate/osgrenciNet.rdf",
 	"orca/ndl/substrate/rciNet.rdf","orca/ndl/substrate/bbnNet.rdf",
 	"orca/ndl/substrate/fiuNet.rdf","orca/ndl/substrate/cienaNet.rdf","orca/ndl/substrate/uhNet.rdf",
 	"orca/ndl/substrate/learnNet.rdf","orca/ndl/substrate/learn.rdf","orca/ndl/substrate/nictaNet.rdf"

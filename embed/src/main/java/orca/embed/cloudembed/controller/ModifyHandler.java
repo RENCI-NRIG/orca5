@@ -300,6 +300,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 						}
 						logger.debug("modify domain:"+inDomain_rs.getURI());
 						connection_rs.addProperty(NdlCommons.inDomainProperty, inDomain_rs);
+						connection_rs.addProperty(NdlCommons.domainHasResourceTypeProperty, rType_rs);
 					}
 				}
 			}

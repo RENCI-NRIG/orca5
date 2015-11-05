@@ -777,9 +777,14 @@ public class CloudHandler extends MappingHandler{
 
 		LinkedList <String> edge_type=new LinkedList<String>();
 		if(element.getNe1()!=null){
-			edge_type.add(element.getNe1().getType());
-			if(element.getNe2()!=null)
-				edge_type.add(element.getNe2().getType());
+			String eType=element.getNe1().getType();
+			logger.debug("ne1 type="+eType);
+			edge_type.add(eType);
+			if(element.getNe2()!=null){
+				eType=element.getNe2().getType();
+				edge_type.add(eType);
+				logger.debug("ne2 type="+eType);
+			}
 		}
 		else{	//broadcast link 
 			Iterator <? extends NetworkElement> it = element.getConnection().iterator();
