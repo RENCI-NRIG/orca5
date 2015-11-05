@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for minor bug in xcat task structure
+
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to test XCAT handler on RCI rack
 
 *Mon Nov 02 2015 Ilya Baldin <ibaldin@renci.org>

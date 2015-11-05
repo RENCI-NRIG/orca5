@@ -178,7 +178,7 @@ public class XCatGenerateBashFileBaseTask extends OrcaAntTask {
 	}
 	
 	public void execute() throws BuildException {
-		throw new BuildException(this.getClass().getCanonicalName() + " is not meant to be used directly, please use one of its subclasses");
+		super.execute();
 	}
 
 	protected void generateGlobal(PrintWriter out) throws Exception {
