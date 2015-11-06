@@ -4,7 +4,6 @@
 	<action name="Connect">
 	  <exchange>
 	    <send>system show host-name</send>
-	    <expect>{$DefaultPrompt}</expect>
 	  </exchange>
 	</action>
 </request>

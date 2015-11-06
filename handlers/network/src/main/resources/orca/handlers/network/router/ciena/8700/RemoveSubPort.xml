@@ -5,11 +5,9 @@
     <action name="RemoveSubPort" parameter="subPort">
         <exchange>
             <send>virtual-switch interface detach sub-port {$subPort}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
         <exchange>
             <send>sub-port delete sub-port {$subPort}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
     </action>
 </script>

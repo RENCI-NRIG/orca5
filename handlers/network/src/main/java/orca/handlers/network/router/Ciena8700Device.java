@@ -1,7 +1,5 @@
 package orca.handlers.network.router;
 
-import orca.handlers.network.core.CommandException;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +16,10 @@ import orca.handlers.network.core.CommandException;
 
 
 
-public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterDevice, RouterConstants {
+public class Ciena8700Device extends RouterSSHPromptDevice implements IMappingRouterDevice, RouterConstants {
+
+    protected static final String promptPatternString = "^[a-zA-Z0-9]+8700.>";
+
 
     protected static final String PropertySubPort = "subPort"; //8700
     protected static final String PropertyQoSSubPort = "qosSubPort"; //8700
@@ -34,24 +35,21 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
     protected static final String singlePortPat = "^\\s*(\\d+)/(\\d+)\\s*$";
     protected static final String rangesPat = "^\\[(\\d+)-(\\d+)\\]$";
 
-    protected static final String promptPat = "^[a-zA-Z0-9]+8700\\*>";
 
     protected static final Pattern rangePortComp = Pattern.compile(rangePortPat);
     protected static final Pattern rangesComp = Pattern.compile(rangesPat);
-    protected static final Pattern promptComp = Pattern.compile(promptPat);
 
 
-    protected String defaultPrompt, virtualSwitch;
+    protected String virtualSwitch;
 
-    public Ciena8700Device(String deviceAddress, String uid, String password, String defaultPrompt) {
+    public Ciena8700Device(String deviceAddress, String uid, String password) {
         super(deviceAddress, uid, password);
-        this.defaultPrompt = defaultPrompt;
         basepath = "/orca/handlers/network/router/ciena/8700";
     }
 
     @Override
-    protected void clearOutput() throws EOFException, IOException, CommandException {
-        discardUntilPattern(promptComp, 2000);
+    protected String getPromptPattern() {
+        return promptPatternString;
     }
 
     protected static String genSubPortName(String virtualSwitch, String parentPort, boolean tagged){
@@ -158,13 +156,6 @@ public class Ciena8700Device extends RouterSSHDevice  implements IMappingRouterD
         }
 
         return ret;
-    }
-
-    @Override
-    protected Properties getProperties() {
-        Properties p = super.getProperties();
-        p.setProperty(PropertyDefaultPrompt, defaultPrompt);
-        return p;
     }
 
     public void createVLAN(String vlanTag, String qosRate, String qosBurstSize) throws CommandException {

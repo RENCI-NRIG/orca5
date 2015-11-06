@@ -3,15 +3,12 @@
     <action name="AddTrunkPort">
         <exchange>
             <send>sub-port create sub-port {$subPort} parent-port {$TrunkPorts} classifier-precedence {$VLANTagName}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
         <exchange>
             <send>sub-port add sub-port {$subPort} class-element {$VLANTagName} vtag-stack {$VLANTagName}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
         <exchange>
             <send>virtual-switch interface attach sub-port {$subPort} vs {$virtualSwitch}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
 	</action>
 </script>

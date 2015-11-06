@@ -5,7 +5,6 @@
 	<action name="UnmapVLANS">
         <exchange>
             <send>sub-port unset sub-port {$subPort} ingress-l2-transform egress-l2-transform</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
     </action>
 </script>

@@ -5,7 +5,6 @@
 	<action name="CreateQoSPolicy">
 		<exchange>
 			<send>traffic-services metering meter-profile create profile {$QoSPolicyName} cir {$QoSRate} cbs {$QoSBurstSize}</send>
-			<expect timeout="2000">{$DefaultPrompt}</expect>
 		</exchange>
 	</action>
 </script>

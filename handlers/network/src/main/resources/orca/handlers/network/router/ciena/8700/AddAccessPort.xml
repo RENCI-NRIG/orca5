@@ -3,19 +3,15 @@
 	<action name="AddAccessPort">
 		<exchange>
 			<send>sub-port create sub-port {$subPort} parent-port {$AccessPorts} classifier-precedence {$VLANTagName}</send>
-            <expect>{$DefaultPrompt}</expect>
 		</exchange>
 		<exchange>
 			<send>sub-port add sub-port {$subPort} vlan-untagged-data</send>
-			<expect>{$DefaultPrompt}</expect>
 		</exchange>
 		<exchange>
 			<send>sub-port set sub-port {$subPort} ingress-l2-transform push-*.{$VLANTagName}.0 egress-l2-transform pop</send>
-			<expect>{$DefaultPrompt}</expect>
 		</exchange>
 		<exchange>
 			<send>virtual-switch interface attach sub-port {$subPort} vs {$virtualSwitch}</send>
-			<expect>{$DefaultPrompt}</expect>
 		</exchange>
 	</action>
 </script>

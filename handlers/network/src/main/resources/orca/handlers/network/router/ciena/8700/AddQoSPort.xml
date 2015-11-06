@@ -3,7 +3,6 @@
     <action name="AddTrunkPort">
         <exchange>
             <send>qos-flow create qos-flow-sub-port {$qosPort} parent-sub-port {$subPort} classifier-precedence 1800 ingress-meter-profile {$QoSPolicyName}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
 	</action>
 </script>

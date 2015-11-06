@@ -5,7 +5,6 @@
 	<action name="CreateVLAN">
         <exchange>
             <send>virtual-switch create vs {$virtualSwitch}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
     </action>
 </script>
