@@ -446,7 +446,7 @@ public class CloudHandler extends MappingHandler{
 			setModifyFlag(device);
 			if(!deviceList.contains(device)){
 				deviceList.add(device);
-				if(!mpDevice){
+				if(!mpDevice && !device.isModify()){
 					dType = domainResourcePools.getDomainResourceType(domain_name);
 					int resourceCount = resourceCount(device,dType);
 					if(resourceCount<0){
@@ -882,11 +882,12 @@ public class CloudHandler extends MappingHandler{
 		int resourceCount = dType.getCount();
 		String domainName = de.getInDomain();
 		int requestResourceCount = de.getResourceType().getCount();
+		logger.debug("domainName="+domainName+";resourceCount="+resourceCount+";requestResourceCount="+requestResourceCount);
+
 		if(resourceCount-requestResourceCount<0)
 			return -1;
 		
 		dType.setCount(resourceCount-requestResourceCount);
-		logger.info("domainName="+domainName+";resourceCount="+resourceCount+";requestResourceCount="+requestResourceCount);
 
 		return dType.getCount();
 	}
