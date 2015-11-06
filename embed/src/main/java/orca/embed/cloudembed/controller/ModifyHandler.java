@@ -68,6 +68,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 	LinkedList <Device> addedDevices = new LinkedList <Device> ();
 	LinkedList <Device> modifiedDevices = new LinkedList <Device> ();
 	
+	SystemNativeError err = null;
+	
 	public ModifyHandler() throws NdlException {
 		super();
 	}
@@ -150,6 +152,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		if(err!=null)
+			return err;
 		
 		logger.debug(debug_str());
 		
@@ -328,7 +333,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		OntModel modifyModel = request.getModel();
 		RequestSlice slice=request.getSlice();
 		Collection<NetworkElement> requestElements = request.getElements();		
-		SystemNativeError err = request.getError();
+		err = request.getError();
 		if(err!=null){
 			logger.error("Ndl request parser unable to parse request:"+err.toString());
 			return null;
@@ -341,6 +346,11 @@ public class ModifyHandler extends UnboundRequestHandler {
 			err = this.runEmbedding(bound, request, domainResourcePools);
 		}else{  //intra-domain embedding
 			err = this.runEmbedding(reservationDomain,request,domainResourcePools);
+		}
+		
+		if(err!=null){
+			logger.error("Modify failed:"+err.toString());
+			return null;
 		}
 		
 		for(NetworkElement device:this.getDeviceList()){
