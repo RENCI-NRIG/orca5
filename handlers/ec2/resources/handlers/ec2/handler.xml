@@ -108,9 +108,14 @@
 					</then>
 				</if>
 
-				<echo message="********************************* ec2 join (ALL PROPERTIES) *********************************" />
-				<echoproperties/>
-				<echo message="**********************************************************************************" />
+				<if>
+					<equals arg1="${ec2.debug}" arg2="true" />
+					<then>
+						<echo message="********************************* ec2 join (ALL PROPERTIES) *********************************" />
+						<echoproperties/>
+						<echo message="**********************************************************************************" />
+					</then>
+				</if>
 
 
 				<!-- image proxy (optional) -->
@@ -1018,9 +1023,14 @@
 		<echo message="EC2 HANDLER: MODIFY.ADDIFACE on ${start.TIME}" />
 		<echo message="modify.addiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
 
-		<echo message="********************************* modify.addiface (ALL PROPERTIES) *********************************" />
-		<echoproperties/>
-		<echo message="**********************************************************************************" />
+		<if>
+			<equals arg1="${ec2.debug}" arg2="true" />
+			<then>
+				<echo message="********************************* modify.addiface (ALL PROPERTIES) *********************************" />
+				<echoproperties/>
+				<echo message="**********************************************************************************" />
+			</then>
+		</if>
 
 		<modify.addiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
 
