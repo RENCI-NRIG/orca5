@@ -2,15 +2,9 @@ package orca.handlers.network.core;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.trilead.ssh2.ChannelCondition;
-import com.trilead.ssh2.Connection;
-import com.trilead.ssh2.Session;
-import com.trilead.ssh2.StreamGobbler;
 
 /**
  * A device that shows a predictable prompt over a SSH connection.
@@ -71,7 +65,7 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
      * code is stabilized.
      */
     @Override
-    protected byte[] getOutput(int timeout) throws EOFException, IOException {
+    protected byte[] getOutput(int timeout) throws IOException {
         clearOutput();
         return null;
     }
@@ -84,7 +78,7 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
      * This standard implementation waits for at least 2 seconds of output.
      * You can override it to e.g. match for a specific prompt.
      */
-    protected void clearOutput() throws EOFException, IOException {
+    protected void clearOutput() throws IOException {
         if (isEmulationEnabled())
             return;
 
@@ -95,7 +89,7 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
     /**
      * Discard all output until a line with a pattern occurs.
      */
-    protected void discardUntilPattern(Pattern pat, int timeout) throws EOFException, IOException {
+    protected void discardUntilPattern(Pattern pat, int timeout) throws IOException {
         int conditions;
         String buffer = "";
         int offset = 0;
