@@ -191,7 +191,7 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
     /**
      * Try reading some output from stdout.
      */
-    protected String readOutput(int timeout) throws EOFException, IOException {
+    protected String readOutput(int timeout) throws IOException {
         final int BUFF_SIZE = 8192;
         byte buffer[] = new byte[BUFF_SIZE];
         int offset = 0;

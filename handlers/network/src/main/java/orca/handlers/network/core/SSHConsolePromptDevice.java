@@ -2,12 +2,11 @@ package orca.handlers.network.core;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 /**
- * A device that shows a predictable prompt over a SSH connection.
+ * A device that shows a predictable prompt over an SSH connection.
  *
  * This class makes use of the fact that while there is no mechanism in the SSH
  * protocol to determine the end of a command after a shell we can recognize
@@ -46,7 +45,7 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
 
                 // TODO: support "expect" properly for cases where it shouldn't
                 // be the prompt. This does not seem to be the case now in
-                // practices.
+                // practice.
                 if (!isEmulationEnabled())
                     discardUntilPattern(promptPattern, Integer.parseInt(timeout));
             } catch (EOFException e) {
@@ -59,6 +58,9 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
 
     /**
      * Clear initial response buffer.
+     *
+     * Waits for at least 2 seconds of output and then matches the device
+     * specific prompt.
      * 
      * XXX: this override is a compatilibity hack so that connect() does not
      * need to be modified in the parent class. This should be fixed once the
@@ -66,25 +68,11 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
      */
     @Override
     protected byte[] getOutput(int timeout) throws IOException {
-        clearOutput();
+        if (!isEmulationEnabled())
+            discardUntilPattern(promptPattern, 2000);
+
         return null;
     }
-
-
-    /**
-     * Called when the connection is established to clear any output that is
-     * produced by the SSH console, such as banners and MOTDs.
-     *
-     * This standard implementation waits for at least 2 seconds of output.
-     * You can override it to e.g. match for a specific prompt.
-     */
-    protected void clearOutput() throws IOException {
-        if (isEmulationEnabled())
-            return;
-
-        discardUntilPattern(promptPattern, 2000);
-    }
-
 
     /**
      * Discard all output until a line with a pattern occurs.
@@ -103,19 +91,15 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
                 break;
 
             buffer += read;
-            Matcher m = pat.matcher(buffer);
 
             // Skip over any existing lines
             int end = buffer.lastIndexOf('\n');
             if (end > 0) {
                 // Search/preserve partial output
-                m.region(end + 1, buffer.length());
                 buffer = buffer.substring(end + 1);
             }
 
-            if (m.matches()) {
-                found = true;
-            }
+            found = pat.matcher(buffer).matches();
         }
 
         if (!found) {
