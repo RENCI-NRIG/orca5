@@ -103,14 +103,18 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
                 break;
 
             buffer += read;
-            int end = buffer.lastIndexOf('\n');
+            Matcher m = pat.matcher(buffer);
 
+            // Skip over any existing lines
+            int end = buffer.lastIndexOf('\n');
             if (end > 0) {
-                Matcher m = pat.matcher(buffer);
+                // Search/preserve partial output
                 m.region(end + 1, buffer.length());
-                if (m.matches())
-                    found = true;
-                buffer = "";
+                buffer = buffer.substring(end + 1);
+            }
+
+            if (m.matches()) {
+                found = true;
             }
         }
 
