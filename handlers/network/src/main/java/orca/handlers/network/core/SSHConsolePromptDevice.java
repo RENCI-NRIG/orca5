@@ -94,7 +94,7 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
 
             // Skip over any existing lines
             int end = buffer.lastIndexOf('\n');
-            if (end > 0) {
+            if (end >= 0) {
                 // Search/preserve partial output
                 buffer = buffer.substring(end + 1);
             }
