@@ -5,7 +5,6 @@
 	<action name="DeleteVLAN">
         <exchange>
             <send>virtual-switch delete vs {$virtualSwitch}</send>
-            <expect>{$DefaultPrompt}</expect>
         </exchange>
 	</action>
 </script>

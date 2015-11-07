@@ -176,4 +176,36 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
 
         return buffer;
     }
+
+
+    /**
+     * Send a command over stdin
+     */
+    protected void sendCommand(String cmd) throws IOException {
+        byte[] cmdBytes = cmd.getBytes();
+        stdin.write(cmdBytes);
+        stdin.write('\n');
+        stdin.flush();
+    }
+
+    /**
+     * Try reading some output from stdout.
+     */
+    protected String readOutput(int timeout) throws IOException {
+        final int BUFF_SIZE = 8192;
+        byte buffer[] = new byte[BUFF_SIZE];
+        int offset = 0;
+        int conditions = session.waitForCondition(ChannelCondition.STDOUT_DATA | ChannelCondition.EOF, timeout);
+        if (0 != (conditions & ChannelCondition.EOF)) {
+            throw new EOFException("Connection to console lost.");
+        }
+        while (stdout.available() > 0 && offset < BUFF_SIZE) {
+            int maxLen = BUFF_SIZE - offset;
+            int result = stdout.read(buffer, offset, maxLen);
+            if (result > 0) {
+                offset += result;
+            }
+        }
+        return new String(buffer, 0, offset);
+    }
 }

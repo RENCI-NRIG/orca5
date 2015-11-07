@@ -11,14 +11,13 @@ public abstract class Ciena8700BaseTask extends SyncNetworkBaseTask {
     public static final String Ciena8700 = "ciena8700";
     protected IMappingRouterDevice router;
     protected String adminPassword;
-    protected String defaultPrompt;
 
     @Override
     protected void makeDevice() {
     	super.makeDevice();
     	
         if (deviceInstance.equalsIgnoreCase(Ciena8700)) {
-            router = new Ciena8700Device(deviceAddress, user, password, defaultPrompt);
+            router = new Ciena8700Device(deviceAddress, user, password);
         } else {
             throw new RuntimeException("Unsupported router: " + deviceInstance);
         }        
@@ -27,9 +26,5 @@ public abstract class Ciena8700BaseTask extends SyncNetworkBaseTask {
 
     public void setAdminPassword(String adminPassword) {
         this.adminPassword = adminPassword;
-    }
-
-    public void setDefaultPrompt(String prompt) {
-    	this.defaultPrompt = prompt;
     }
 }

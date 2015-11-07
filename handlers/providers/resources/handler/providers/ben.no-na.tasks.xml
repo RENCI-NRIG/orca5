@@ -148,7 +148,6 @@ This file contains definitions of tasks used by the ben package
                             <network.router.8700.create.vlan
                                 deviceInstance="${network.device.ciena8700}"
                                 exitCodeProperty="code"
-                                defaultPrompt="@{router.default.prompt}"
                                 user="@{router.user}"
                                 password="@{router.password}"
                                 adminPassword="@{router.admin.password}"
@@ -307,7 +306,6 @@ This file contains definitions of tasks used by the ben package
                         <network.router.8700.delete.vlan
                                 deviceInstance="${network.device.ciena8700}"
                                 exitCodeProperty="code"
-                                defaultPrompt="@{router.default.prompt}"
                                 user="@{router.user}"
                                 password="@{router.password}"
                                 adminPassword="@{router.admin.password}"
@@ -468,7 +466,6 @@ This file contains definitions of tasks used by the ben package
                                 deviceInstance="${network.device.ciena8700}"
                                 exitCodeProperty="code"
                                 vlanTag="@{vlan.tag}"
-                                defaultPrompt="@{router.default.prompt}"
                                 user="@{router.user}"
                                 password="@{router.password}"
                                 adminPassword="@{router.admin.password}"
@@ -627,7 +624,6 @@ This file contains definitions of tasks used by the ben package
                                 deviceInstance="${network.device.ciena8700}"
                                 exitCodeProperty="code"
                                 user="@{router.user}"
-                                defaultPrompt="@{router.default.prompt}"
                                 password="@{router.password}"
                                 adminPassword="@{router.admin.password}"
                                 deviceAddress="@{router}"
