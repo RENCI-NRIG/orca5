@@ -11,8 +11,8 @@
 [validateNode: (?v rb:validation on()) -> 
 	[ (?Z rb:violation error('Node Validation', 'Node must have an image', ?X)) 
 		<- (?R rdf:type req:Reservation), (?R col:element ?X), 
-		(?X rdf:type comp:ComputeElement),  (?X dom:hasResourceType comp:VM), 
-		noValue(?X, comp:diskImage) ] ] 
+		(?X rdf:type comp:ComputeElement), (?X dom:hasResourceType comp:VM), 
+		noValue(?X, comp:diskImage), noValue(?X, modify:isModify) ] ] 
 
 # can't have link by itself/must have incident interfaces
 [validateLink: (?v rb:validation on()) ->
