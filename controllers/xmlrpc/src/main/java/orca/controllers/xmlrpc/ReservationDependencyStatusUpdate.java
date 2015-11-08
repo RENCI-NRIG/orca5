@@ -96,7 +96,8 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
 									String parent_interface_uuid = parent_prefix+host_interface+".uuid";
 									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
-										
+									String parent_url = parent_prefix + host_interface + ".parent.url";	
+									
 									if(local.getProperty(parent_mac_addr)!=null)
 										modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
 									if(local.getProperty(parent_ip_addr)!=null)
@@ -107,6 +108,8 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										modifyProperties.setProperty("uuid",local.getProperty(parent_interface_uuid));
 									if(local.getProperty(site_host_interface)!=null)
 										modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
+									if(local.getProperty(parent_url)!=null)
+										modifyProperties.setProperty("parent.url",local.getProperty(parent_url));
 										
 									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);

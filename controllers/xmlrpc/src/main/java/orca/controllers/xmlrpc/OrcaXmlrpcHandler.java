@@ -645,14 +645,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				logger.debug("No modifyremoved reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID()+";"+a_r+";"+p_r);
 			} else {				
 				logger.debug("There are " + a_r.size() + " reservations to be modifyremoved in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());				
-				String parent_prefix = UnitProperties.UnitEthPrefix;
-				String modifySubcommand = "removeiface";
 				
 				LinkedList <NetworkElement> d_list = ih.getDeviceList();
 				HashMap <String, NetworkElement> d_list_guid_map = new HashMap <String, NetworkElement>();
 				for(NetworkElement ne:d_list){
-					if(ne.getGUID()!=null)
-						d_list_guid_map.put(ne.getGUID(), ne);
+					//if(ne.getGUID()!=null)
+						//d_list_guid_map.put(ne.getGUID(), ne);
+					d_list_guid_map.put(ne.getName(), ne);
 				}
 				HashMap <String, ReservationMng> p_r_map = new HashMap <String, ReservationMng>();
 				for(ReservationMng p_r_m:p_r){
@@ -670,16 +669,27 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						Properties request = OrcaConverter.fill(rr.getRequestProperties());
 						Properties resource = OrcaConverter.fill(rr.getResourceProperties());
 						
-						String rr_guid = local.getProperty(ReservationConverter.PropertyElementGUID);
+						String rr_guid = local.getProperty(UnitProperties.UnitURL);
 						if(rr_guid==null){
-							logger.error("No element guid found in the reservation:"+rr.getReservationID());
+							logger.error("No element url found in the reservation:"+rr.getReservationID());
 							continue;
 						}
-						logger.debug("modifyremove:rr="+rr_guid);
+						
 						DomainElement de = (DomainElement) d_list_guid_map.get(rr_guid);
-						if(de==null || de.getPrecededBy().isEmpty())
+						if(de==null){
+							logger.error("No de, guid="+rr_guid);
 							continue;
+						}
+						if(de.getPrecededBy().isEmpty()){
+							logger.error("No parent, de="+de.getName());
+							continue;
+						}
+						logger.debug("modifyremove:rr="+rr.getReservationID()+";name="+de.getName()
+								+";guid="+rr_guid+";parent size="+de.getPrecededBy().size());
 						for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()){
+							String parent_prefix = UnitProperties.UnitEthPrefix;
+							String modifySubcommand = "removeiface";
+							
 							Properties modifyProperties=new Properties();
 							
 							DomainElement pe = parent.getKey();
@@ -714,12 +724,16 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								}
 
 								host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
+								if(host_interface==null){	//modify case, properties only in config
+									host_interface=StringProcessor.getHostInterface(config,unit_parent_url);
+									parent_prefix = "modify.";
+								}
 								if(host_interface==null){
-									logger.warn("Not find the parent interace index:unit_tag="+unit_tag);
+									logger.warn("Not find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
 									continue;
 								}
 
-								logger.debug("ModifiedRemove: host_interface="+host_interface+";tag="+unit_tag+";parent url="+unit_parent_url);
+								logger.debug("modifyRemove: host_interface="+host_interface+";tag="+unit_tag+";parent url="+unit_parent_url);
 							
 								String parent_tag_name = parent_prefix+host_interface+UnitProperties.UnitEthVlanSuffix;
 								modifyProperties.setProperty("vlan.tag",unit_tag);
@@ -785,10 +799,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								if(unit_tag!=null){
 									modifyProperties.setProperty("target.lun.num",unit_tag);
 									host_interface=StringProcessor.getHostInterface(local,p_r_m);
+									if(host_interface==null){	//modify case, properties only in config
+										host_interface=StringProcessor.getHostInterface(config,p_r_m);
+										parent_prefix = "modify.";
+									}
 									if(host_interface==null){
-										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
+										logger.warn("Not find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
 										continue;
 									}
+
 									String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
 									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
 									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;

@@ -17,10 +17,16 @@ public class StringProcessor {
 			key=(String) entry.getKey();
 			value=(String) entry.getValue();
 			if(value.equals(unit_parent_url)){
-				String url = key.split(UnitProperties.UnitEthPrefix)[1];
-				int index=url.indexOf(".parent.url");
-				host_interface=url.substring(0, index);
-				break;
+				String url = null;
+				if(key.contains(UnitProperties.UnitEthPrefix))
+					url=key.split(UnitProperties.UnitEthPrefix)[1];
+				if(key.contains("modify."))
+					url=key.split("modify.")[1];
+				if(url!=null){
+					int index=url.indexOf(".parent.url");
+					host_interface=url.substring(0, index);
+					break;
+				}
 			}
 		}
 		return host_interface;

@@ -1689,7 +1689,7 @@ public class ReservationConverter implements LayerConstant {
 			ReservationMng rmg = r_map.get(d_uri);
 			if(rmg==null && dd.getGUID()!=null)
 				rmg = r_map.get(dd.getGUID());
-			logger.debug("ModifiedReservation:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg);
+			logger.debug("ModifiedReservation:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg.getReservationID()+";parent size="+dd.getPrecededBy().size());
 			if(rmg!=null){
 				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
@@ -1728,6 +1728,7 @@ public class ReservationConverter implements LayerConstant {
 					String p_uri = parent_de.getName();
 					num++;
 					//Parented by an existing reservation: joining a existing shared link
+					logger.debug("ModifiedReservation:parent="+p_uri);
 					ReservationMng p_rmg = r_map.get(p_uri);
 					if(p_rmg!=null  && !p_r.contains(p_rmg)){
 						logger.debug("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);	
@@ -1754,6 +1755,7 @@ public class ReservationConverter implements LayerConstant {
 						}
 					}
 				}
+				
 				//create properties to remember its parent reservations
 				int ori_p=0;
 				if(existMap.containsKey(rmg))
@@ -1827,7 +1829,7 @@ public class ReservationConverter implements LayerConstant {
 				domain_ont_url=domain_ont.getURI();
 			domain = getDomainName(domain_ont_url);   //e.g., ben/vlan
 			domain_ont_name = domain_ont.getURI();
-			logger.debug("ReservationConverter:domain_ont_url="+domain_ont_url+";domain="+domain+";domain_ont_name="+domain_ont_name);
+			//logger.debug("ReservationConverter:domain_ont_url="+domain_ont_url+";domain="+domain+";domain_ont_name="+domain_ont_name);
 			if(domain==null)
 				continue;
 			for (ReservationMng r: allRes) {
@@ -1836,10 +1838,11 @@ public class ReservationConverter implements LayerConstant {
 				rDomain = type.split("\\.")[0];
 				rType = type.split("\\.")[1];
 				String unit_url = local.getProperty(UNIT_URL_RES);
-				logger.debug("Modify-Remove: domain=" + domain_ont_url + " ;aDomian = "+domain+" :rDomain=" + rDomain +" :rType="+rType+" ;unit_url="+unit_url);
 				if ((domain.equalsIgnoreCase(rDomain)) && (domain_ont_url.endsWith(rType)) && (domain_ont_name.equals(unit_url))) {
-					logger.debug("Add reservation to be removed");
-					remove_reservations.add((ReservationMng) r);
+					if(!remove_reservations.contains(r)){
+						logger.debug("Add reservation to be removed:"+domain_ont_url);
+						remove_reservations.add((ReservationMng) r);
+					}
 				}
 			}
 			if(!isModify){

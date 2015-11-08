@@ -394,7 +394,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 				+";addedDevice="+(addedDevices==null?null:addedDevices.size())
 				+";modifies.addedElement="+(modifies.getAddedElements()==null?null:modifies.getAddedElements().size())
 				+";modifiedDevice="+ (modifiedDevices==null?null:modifiedDevices.size())
-				+";modifies.modifiedElement="+(modifies.getModifiedElements()==null?null:modifies.getModifiedElements().size());
+				+";modifies.modifiedElement="+(modifies.getModifiedElements()==null?null:modifies.getModifiedElements().size())
+				+";modifies.removedElement="+(modifies.getRemovedElements()==null?null:modifies.getRemovedElements().size())
+				+";modifies.modifiedRemoveElement="+(modifies.getModifiedRemoveElements()==null?null:modifies.getModifiedRemoveElements().size());
 	}
 	
 	private void copyProperty(OntModel domainRequestModel, Resource me_rs){
@@ -630,8 +632,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 		boolean remove=false;
 		while(bei.hasNext()){
 			device = (NetworkElement) bei.next();
-			logger.info("Remove Device name="+device.getName()+";url="+device.getURI()+";obj url="+me.getObj().getURI());
 			if(device.getURI().equals(me.getObj().getURI()) || device.getName().equals(me.getObj().getURI())){
+				logger.info("Remove Device name="+device.getName()+";url="+device.getURI()+";obj url="+me.getObj().getURI());
 				remove=true;
 				break;
 			}
