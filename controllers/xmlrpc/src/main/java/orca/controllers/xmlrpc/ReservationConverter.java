@@ -1689,7 +1689,7 @@ public class ReservationConverter implements LayerConstant {
 			ReservationMng rmg = r_map.get(d_uri);
 			if(rmg==null && dd.getGUID()!=null)
 				rmg = r_map.get(dd.getGUID());
-			logger.debug("ModifiedReservation:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg.getReservationID()+";parent size="+dd.getPrecededBy().size());
+			logger.debug("ModifiedReservation:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg.getReservationID());
 			if(rmg!=null){
 				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
 				local.setProperty(this.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));

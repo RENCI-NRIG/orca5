@@ -172,7 +172,8 @@ public class RequestReservation {
 					String elementDomain = element.getInDomain();
 					if(elementDomain!=null){
 						if(reservationDomain==null){
-							if(mixDomain==false && !elementDomain.contains(NdlCommons.stitching_domain_str))
+							if(mixDomain==false)
+								//&& !elementDomain.contains(NdlCommons.stitching_domain_str))
 								reservationDomain = elementDomain;
 						}			
 						else if( !(reservationDomain.equals(elementDomain)) ){
@@ -195,6 +196,8 @@ public class RequestReservation {
 				continue;
 			}
 
+			if(this.reservationDomain!=null && this.reservationDomain.contains(NdlCommons.stitching_domain_str))
+				this.reservationDomain=null;
 			numNetworkConnection++;
 			requestConnection = (NetworkConnection) element;
 			links.put(requestConnection.getResource().getLocalName(), requestConnection);

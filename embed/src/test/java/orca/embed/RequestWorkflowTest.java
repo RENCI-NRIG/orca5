@@ -65,7 +65,7 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		
 		requestFileRenciVMSVlan= "src/test/resources/orca/embed/TS3-3.rdf";  // a vlan connected 3-node cluster in renci vmsite
 		
-		requestFileGPO = "src/test/resources/orca/embed/st.rdf"; 
+		requestFileGPO = "src/test/resources/orca/embed/ndl.rdf"; 
 		
 		requestFileGush = "src/test/resources/orca/embed/st-modify.rdf"; 
 		
