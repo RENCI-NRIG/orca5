@@ -86,7 +86,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									if (unit_tag == null)
 										Thread.sleep(1000L);
 								}
-								System.out.println("parent r_id="+r_id+";unit tag:"+unit_tag+";unit_parent_url:"+unit_parent_url);
+								System.out.println("parent r_id="+r_id+";unit tag:"+unit_tag+";unit_parent_url:"+unit_parent_url+";n=" + n);
 								if(unit_tag!=null){
 									host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
 									if(host_interface==null){
@@ -140,7 +140,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										Thread.sleep(1000L);
 								}
 								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
-										+";r_id="+r_id+";p_r_id="+p_r.getReservationID());
+										+";r_id="+r_id+";p_r_id="+p_r.getReservationID()+";n=" + n);
 								if(unit_tag!=null){
 									modifyProperties.setProperty("target.lun.num",unit_tag);
 									host_interface=StringProcessor.getHostInterface(local,p_r);

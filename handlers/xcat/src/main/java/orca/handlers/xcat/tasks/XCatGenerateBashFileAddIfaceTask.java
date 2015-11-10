@@ -71,7 +71,7 @@ public class XCatGenerateBashFileAddIfaceTask extends XCatGenerateBashFileModTas
 		String temp = getProject().getProperty(modifyPrefix() + ".iscsi.initiator.iqn");
 		if (temp != null) {
 			// comment out old initiator name, write in new one, consistent with neuca-guest-tools
-			out.println("sed 's/^\\(InitiatorName=.*\\)$/##\1/' < " + INITIATOR_FILE);
+			out.println("sed -i 's/^\\(InitiatorName=.*\\)$/##\\1/' " + INITIATOR_FILE);
 			out.println("echo InitiatorName=" + temp + " >  " + INITIATOR_FILE);
 		} else {
 			// rely on the original initiator iqn
