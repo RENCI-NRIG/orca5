@@ -72,7 +72,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 							if(isNetwork!=null && isNetwork.equals("1")){	//Parent is a networking reservation
 								// seems it's possible for this to not produce a tag. Doing this in a loop with a fixed number of repetitions
 								int n = 10;
-								while ((n-->0) && (unit_tag == null)) {
+								//while ((n-->0) && (unit_tag == null)) {
 									List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
 									if (un != null) {
 										for (UnitMng u : un) {
@@ -83,9 +83,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 												unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
 										}
 									}
-									if (unit_tag == null)
-										Thread.sleep(1000L);
-								}
+									//if (unit_tag == null)
+									//	Thread.sleep(1000L);
+								//}
 								System.out.println("parent r_id="+r_id+";unit tag:"+unit_tag+";unit_parent_url:"+unit_parent_url+";n=" + n);
 								if(unit_tag!=null){
 									host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
@@ -127,7 +127,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 							if(isLun!=null && isLun.equals("1")){	//Parent is a storage reservation
 								// seems it's possible for this to not produce a tag. Doing this in a loop with a fixed number of repetitions
 								int n = 10;
-								while ((n-->0) && (unit_tag == null)) {
+								//while ((n-->0) && (unit_tag == null)) {
 									List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
 									if (un != null) {
 										for (UnitMng u : un) {
@@ -136,9 +136,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 												unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
 										}
 									}
-									if (unit_tag == null)
-										Thread.sleep(1000L);
-								}
+									//if (unit_tag == null)
+									//	Thread.sleep(1000L);
+								//}
 								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
 										+";r_id="+r_id+";p_r_id="+p_r.getReservationID()+";n=" + n);
 								if(unit_tag!=null){

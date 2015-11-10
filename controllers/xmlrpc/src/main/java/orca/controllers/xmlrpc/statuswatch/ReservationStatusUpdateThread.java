@@ -207,7 +207,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 				switch(rm.getState()) {
 				case OrcaConstants.ReservationStateActive:
 					// active reservation should have units /ib 11/10/2015
-					if (un == null)
+					if ((un == null) || (un.size() == 0))
 						return StatusChecker.Status.NOTREADY;
 				case OrcaConstants.ReservationStateClosed:
 					return StatusChecker.Status.OK;
