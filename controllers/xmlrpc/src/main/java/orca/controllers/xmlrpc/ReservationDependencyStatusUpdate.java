@@ -53,11 +53,12 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			int p = 0;
 			String r_id=null,isNetwork=null,isLun=null;
 			ReservationMng p_r = null;
-			String unit_tag = null,unit_parent_url=null;
+
 			if(p_str!=null){
 				p=Integer.valueOf(p_str);
 				System.out.println("Number of parent reservations:"+p+";num_interface="+num_interface_int+";num_storage="+num_storage_int);
 				for(int i=0;i<p;i++){
+					String unit_tag = null,unit_parent_url=null;
 					Properties modifyProperties=new Properties();
 					String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
 					r_id=local.getProperty(key);

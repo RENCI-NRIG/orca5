@@ -171,10 +171,10 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 	
 			c_e.setInDomain(RequestReservation.Interdomain_Domain);
 			//ne1
-			ComputeElement ne = createNE(m,ne1_domain_rs,ne1_elements);
+			ComputeElement ne = createNE(m,ne1_domain_rs,ne1_elements,c_e);
 			c_e.setNe1(ne);
 			//ne2
-			ne = createNE(m,ne2_domain_rs,ne2_elements);
+			ne = createNE(m,ne2_domain_rs,ne2_elements,c_e);
 			c_e.setNe2(ne);
 		}else if(domainCount.size()==1){
 			c_e.setCastType(e.getCastType());
@@ -189,7 +189,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		return request;
 	}
 	
-	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg){
+	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg,NetworkConnection c_e){
 		OntResource ne1_rs=null;
 		ComputeElement ne = null;
 		if(rs.getURI().contains(NdlCommons.stitching_domain_str))
@@ -210,6 +210,8 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			ne.setResourceType(rType);
 		
 			ne.setCeGroup(cg);
+			
+			ne.addDependency(c_e);
 		}
 		return ne;
 	}
