@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild trying to fix missing unit properties on active
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for minor fixes and testing at RCI
 
 *Sun Nov 08 2015 Ilya Baldin <ibaldin@renci.org>
