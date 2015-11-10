@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild trying to fix incorrect modify actions and better handling of missing units
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild trying to fix xcat storage handler
 
 *Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
