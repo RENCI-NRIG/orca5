@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for minor fixes and testing at RCI
+
 *Sun Nov 08 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for missing remove interface calls testing
 
