@@ -200,11 +200,15 @@ public class ReservationStatusUpdateThread implements Runnable {
 
 				// check state for active, closed or failed
 				ReservationMng rm = sm.getReservation(rid);
+				List<UnitMng> un = sm.getUnits(rid);
 				if (rm == null)
 					throw new Exception("Unable to obtain reservation information for " + rid);
 
 				switch(rm.getState()) {
 				case OrcaConstants.ReservationStateActive:
+					// active reservation should have units /ib 11/10/2015
+					if (un == null)
+						return StatusChecker.Status.NOTREADY;
 				case OrcaConstants.ReservationStateClosed:
 					return StatusChecker.Status.OK;
 				case OrcaConstants.ReservationStateFailed:

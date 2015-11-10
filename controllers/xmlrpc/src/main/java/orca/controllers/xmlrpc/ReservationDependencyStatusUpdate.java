@@ -1,8 +1,6 @@
 package orca.controllers.xmlrpc;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 
 import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
@@ -32,8 +30,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			return;
 		}
 
+		IOrcaServiceManager sm = null;
 		try {
-			IOrcaServiceManager sm = XmlrpcOrcaState.getInstance().getSM();
+			sm = XmlrpcOrcaState.getInstance().getSM();
 			System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
 			//ok-parents
 			//actOn-to be modified reservation
@@ -221,6 +220,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (sm != null)
+				XmlrpcOrcaState.getInstance().returnSM(sm);
 		}
 
 	}
