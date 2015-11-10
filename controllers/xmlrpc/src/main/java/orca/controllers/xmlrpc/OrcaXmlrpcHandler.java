@@ -568,7 +568,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("ModifySlice(): No reservations created for this request; Error:");
-				return setError("ERROR:ModifySlice Exception!");
+				return setError("ERROR:ModifySlice Exception!" + e);
 			}
 
 			if(workflow.getErrorMsg()!=null){

@@ -70,15 +70,21 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 
 							pr_local.clear();
 							if(isNetwork!=null && isNetwork.equals("1")){	//Parent is a networking reservation
-								List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
-								if (un != null) {
-									for (UnitMng u : un) {
-										pr_local = OrcaConverter.fill(u.getProperties());										
-										if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
-											unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
-										if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
-											unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
+								// seems it's possible for this to not produce a tag. Doing this in a loop with a fixed number of repetitions
+								int n = 10;
+								while ((n-->0) && (unit_tag == null)) {
+									List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
+									if (un != null) {
+										for (UnitMng u : un) {
+											pr_local = OrcaConverter.fill(u.getProperties());										
+											if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
+												unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+											if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
+												unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
+										}
 									}
+									if (unit_tag == null)
+										Thread.sleep(1000L);
 								}
 								System.out.println("parent r_id="+r_id+";unit tag:"+unit_tag+";unit_parent_url:"+unit_parent_url);
 								if(unit_tag!=null){
@@ -119,13 +125,19 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 							}
 							//parent is lun 
 							if(isLun!=null && isLun.equals("1")){	//Parent is a storage reservation
-								List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
-								if (un != null) {
-									for (UnitMng u : un) {
-										pr_local = OrcaConverter.fill(u.getProperties());
-										if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
-											unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
+								// seems it's possible for this to not produce a tag. Doing this in a loop with a fixed number of repetitions
+								int n = 10;
+								while ((n-->0) && (unit_tag == null)) {
+									List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
+									if (un != null) {
+										for (UnitMng u : un) {
+											pr_local = OrcaConverter.fill(u.getProperties());
+											if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
+												unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
+										}
 									}
+									if (unit_tag == null)
+										Thread.sleep(1000L);
 								}
 								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
 										+";r_id="+r_id+";p_r_id="+p_r.getReservationID());
