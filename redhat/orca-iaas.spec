@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Nov 11 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test unbounded group in single rack
+
 *Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild trying to fix incorrect modify actions and better handling of missing units
 
