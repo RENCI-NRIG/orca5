@@ -357,6 +357,10 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Thu Nov 12 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test manifest change in group-size change
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
 *Wed Nov 11 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to test unbounded group in single rack
 
