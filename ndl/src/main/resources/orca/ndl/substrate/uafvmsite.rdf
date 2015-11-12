@@ -407,8 +407,8 @@
 
     <owl:NamedIndividual rdf:about="&uafvmsite;UAF">
         <rdf:type rdf:resource="&location;Location"/>
-        <wgs84_pos:long>-83.065563</wgs84_pos:long>
-        <wgs84_pos:lat>42.357744</wgs84_pos:lat>
+        <wgs84_pos:long>-147.827495</wgs84_pos:long>
+        <wgs84_pos:lat>64.8570719</wgs84_pos:lat>
     </owl:NamedIndividual>
     
 

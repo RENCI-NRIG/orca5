@@ -661,8 +661,8 @@
 
     <owl:NamedIndividual rdf:about="&UAFvmsite;uafNet">
         <rdf:type rdf:resource="&location;Location"/>
-        <wgs84_pos:long>-96.338832</wgs84_pos:long>
-        <wgs84_pos:lat>30.619232</wgs84_pos:lat>
+        <wgs84_pos:lat>64.8570719</wgs84_pos:lat>
+        <wgs84_pos:long>-147.8274925</wgs84_pos:long>
     </owl:NamedIndividual>
 </rdf:RDF>
 
