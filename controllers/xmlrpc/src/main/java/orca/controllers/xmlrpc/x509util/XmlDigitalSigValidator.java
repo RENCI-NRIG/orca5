@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
 public class XmlDigitalSigValidator {
 
         
-	protected static Logger logger = OrcaController.getLogger(XmlDigitalSigValidator.class.getName());
+	protected static Logger logger = OrcaController.getLogger(XmlDigitalSigValidator.class.getSimpleName());
         //protected static Logger logger = Logger.getLogger(XmlDigitalSigValidator.class.getName());
 	
     public static void validate(Document doc) throws XMLSignatureException, MarshalException {

@@ -79,7 +79,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String MSG_RET_FIELD = "msg";
 	public static final String ERR_RET_FIELD = "err";
 	
-	protected final Logger logger = OrcaController.getLogger(this.getClass().getName());
+	protected final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	
 	protected ResourcePoolsDescriptor pools;
 	

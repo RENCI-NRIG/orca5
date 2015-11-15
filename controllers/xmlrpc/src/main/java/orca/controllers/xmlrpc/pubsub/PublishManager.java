@@ -34,7 +34,7 @@ public class PublishManager {
 	private static final int PUBLISHER_PERIOD = 30;
 
 	protected XmlrpcOrcaState instance = null;
-	protected static Logger logger = OrcaController.getLogger(PublishManager.class.getName());
+	protected static Logger logger = OrcaController.getLogger(PublishManager.class.getSimpleName());
 	protected String actor_guid = null;
 	protected String actor_name = null;
 	// scheduler that creates daemon threads

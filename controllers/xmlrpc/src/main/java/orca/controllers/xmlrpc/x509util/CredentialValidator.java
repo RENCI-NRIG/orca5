@@ -39,7 +39,7 @@ import org.bouncycastle.asn1.DERObjectIdentifier;
 public class CredentialValidator {
 
         
-	protected static Logger logger = OrcaController.getLogger(CredentialValidator.class.getName());
+	protected static Logger logger = OrcaController.getLogger(CredentialValidator.class.getSimpleName());
         //protected static Logger logger = Logger.getLogger(CredentialValidator.class.getName());
 
 	public static final String PropertyChTruststorePath = "credential.truststore.location";

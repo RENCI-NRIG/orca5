@@ -36,7 +36,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 	final List<WatchEntry<ReservationID>> activeWatch;
 	final List<WatchEntry<ReservationIDWithModifyIndex>> modifyWatch;
 	
-	final static Logger logger = OrcaController.getLogger(ReservationStatusUpdateThread.class.getName());
+	final static Logger logger = OrcaController.getLogger(ReservationStatusUpdateThread.class.getSimpleName());
 
 	public ReservationStatusUpdateThread() {
 		modifyWatch = new ArrayList<WatchEntry<ReservationIDWithModifyIndex>>();

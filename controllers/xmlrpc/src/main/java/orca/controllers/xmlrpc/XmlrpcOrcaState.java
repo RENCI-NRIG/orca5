@@ -63,7 +63,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	// restored from reservations
 	private HashMap<String, XmlrpcControllerSlice> slices = new HashMap<String, XmlrpcControllerSlice>();
 
-	private Logger logger = OrcaController.getLogger(this.getClass().getName());
+	private Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	
 	// use output compression
 	private static boolean compressOutput = true;

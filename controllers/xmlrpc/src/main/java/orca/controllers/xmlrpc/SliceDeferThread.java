@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
  */
 public class SliceDeferThread implements Runnable {
 	final Queue<XmlrpcControllerSlice> deferredSlices = new LinkedList<XmlrpcControllerSlice>();
-	final Logger logger = OrcaController.getLogger(this.getClass().getName());
+	final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	final Lock queueLock = new ReentrantLock();
 	final Condition avail = queueLock.newCondition();
 	final long THREAD_SLEEP_TIME = 10000L;
