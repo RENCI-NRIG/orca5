@@ -106,17 +106,13 @@ public class NdlVLANControl extends VlanControl {
 
             Integer staticTag = null;
             if (configTag != null) {
-            	logger.info("assigning static tag");
                 staticTag = Integer.valueOf(configTag);
-                logger.info("assigning " + staticTag);
             }
             if (tags.getFree() > 0) {
-            	logger.info("This path to static tag");
                 if (staticTag == null)
                     tag = tags.allocate();
                 else
                     tag = tags.allocate(staticTag, true);
-                logger.info("Tag set to " + tag);
                 ResourceData rd = new ResourceData();
                 PropList.setProperty(rd.getResourceProperties(), UnitVlanTag, tag);
                 UnitSet gained = new UnitSet(authority.getShirakoPlugin());
@@ -135,7 +131,6 @@ public class NdlVLANControl extends VlanControl {
                 }
                 gained.add(u);
                 r_set = new ResourceSet(gained, null, null, type, rd);
-                logger.info("in NdlVLANControl.assign, with tag " + tag);
                 if (r_set != null) {
                     convertEdgeProperties(configuration_properties, tag);
                 }
@@ -146,14 +141,12 @@ public class NdlVLANControl extends VlanControl {
         } else {
             // extend automatically
             r_set = new ResourceSet(null, null, null, type, null);
-            logger.info("found resource set" + r_set);
         }
         
         return r_set;
     }
 
     protected void convertEdgeProperties(Properties configuration_properties, Integer tag) {
-    	try {
         Properties config_properties = new Properties();
         HashSet<String> pdomainSet = new HashSet<String>();
 
@@ -204,10 +197,6 @@ public class NdlVLANControl extends VlanControl {
                 configuration_properties.put(ConfigTagSuffix + String.valueOf(i), real_tag);
             }
         }
-    	} catch (NullPointerException npe) {
-    		logger.error("Caught NPE in convertEdgeProperties()" + npe);
-    		npe.printStackTrace();
-    	}
     }
 
     public String tagSwap(String intf_url, String p_tag) {
