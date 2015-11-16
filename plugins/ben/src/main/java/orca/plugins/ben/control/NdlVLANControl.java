@@ -135,6 +135,10 @@ public class NdlVLANControl extends VlanControl {
                 }
                 gained.add(u);
                 r_set = new ResourceSet(gained, null, null, type, rd);
+                logger.info("in NdlVLANControl.assign, with tag " + tag);
+                if (r_set != null) {
+                    convertEdgeProperties(configuration_properties, tag);
+                }
             } else {
                 // no resource - delay the allocation
                 r_set = null;
@@ -144,11 +148,7 @@ public class NdlVLANControl extends VlanControl {
             r_set = new ResourceSet(null, null, null, type, null);
             logger.info("found resource set" + r_set);
         }
-
-        logger.info("in NdlVLANControl.assign, with tag " + tag);
-        if (r_set != null) {
-            convertEdgeProperties(configuration_properties, tag);
-        }
+        
         return r_set;
     }
 
