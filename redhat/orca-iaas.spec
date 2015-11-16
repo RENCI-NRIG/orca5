@@ -360,10 +360,12 @@ exit 0
 *Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
 - Figuring out NPE in NdlVLANcontrol recovery
 
+*Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
+- Figuring out NPE in NdlVLANcontrol recovery
+
 *Thu Nov 12 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to test manifest change in group-size change
 
-*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
 *Wed Nov 11 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to test unbounded group in single rack
 
