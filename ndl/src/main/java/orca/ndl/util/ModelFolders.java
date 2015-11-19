@@ -199,9 +199,11 @@ public class ModelFolders {
 	 * @param path - the path where it will be kept
 	 * @param e - whether it is ephemeral or permanent
 	 */
-	public synchronized void put(OntModel m, Dataset ds, String path, boolean e) {
+	public synchronized void put(OntModel m, Dataset ds, String path, boolean e) throws Exception {
 		assert((path != null) && (m != null) && (ds != null));
 		datasets.add(ds);
+		if (modelFolders.containsKey(m))
+			throw new Exception("ModelFolders already contain a mapping for model " + m);
 		modelFolders.put(m, new ModelFolder(path, ds, e));
 	}
 	
