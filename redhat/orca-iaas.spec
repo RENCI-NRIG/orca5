@@ -357,7 +357,7 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Thy Nov 19 2015 Ilya Baldin <ibaldin@renci.org>
+*Thu Nov 19 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to replace leaky modify controller
 
 *Tue Oct 27 2016 Victor J. Orlikowski <vjo@cs.duke.edu>
