@@ -360,7 +360,7 @@ exit 0
 *Thu Nov 19 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to replace leaky modify controller
 
-*Tue Oct 27 2016 Victor J. Orlikowski <vjo@cs.duke.edu>
+*Tue Oct 27 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
 - Re-build for preparation to deploy fixes.
 
 *Thu Apr 09 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
