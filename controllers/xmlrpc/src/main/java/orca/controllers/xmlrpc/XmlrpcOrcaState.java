@@ -557,6 +557,7 @@ public final class XmlrpcOrcaState implements Serializable {
     		 }
     	 } catch (Exception e) {
     		 logger.error("Unable to sync XmlrpcOrcaState due to: " + e);
+    		 e.printStackTrace();
     		 return;
     	 } 
     	 logger.info("Sync of XmlrpcOrcaState completed successfully");
