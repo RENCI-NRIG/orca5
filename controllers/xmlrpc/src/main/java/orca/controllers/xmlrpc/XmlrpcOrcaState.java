@@ -255,7 +255,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	  */
 	 public XmlrpcControllerSlice getSlice(String urn) {
 		 String sid = XmlrpcControllerSlice.getSliceIDForUrn(urn);
-		 logger.debug("This slice ID="+sid+" for urn="+urn);
+		 logger.debug("getSlice(): this slice ID="+sid+" for urn="+urn);
 		 if (sid != null) {
 			 //return getSlice(new SliceID(sid));
 			 synchronized (this) {
@@ -268,7 +268,7 @@ public final class XmlrpcOrcaState implements Serializable {
 
 	 public void releaseAddressAssignment(ReservationMng r){
 		 // mac address on the VM data interfaces
-		 String parent_num_interface = "unit.number.interface";
+		 String parent_num_interface = UnitProperties.UnitNumberInterface;
 		 String parent_mac_addr = UnitProperties.UnitEthPrefix;
 
 		 String num_interface_str = OrcaConverter.getLocalProperty(r, parent_num_interface);
@@ -563,7 +563,7 @@ public final class XmlrpcOrcaState implements Serializable {
      }
      
      /**
-      * Recover by querying the SM
+      * Recover tags by querying the SM
       */
      public synchronized void sync(IOrcaServiceManager sm) {
     	 logger.info("Sync global tag for domains");
@@ -586,8 +586,8 @@ public final class XmlrpcOrcaState implements Serializable {
     				 logger.info("getManifest:un.size()="+un.size());	
     				 for (UnitMng u : un) {
     					 Properties p = OrcaConverter.fill(u.getProperties());
-    					 if (p.getProperty("unit.vlan.tag") != null) {
-    						 label=p.getProperty("unit.vlan.tag");
+    					 if (p.getProperty(UnitProperties.UnitVlanTag) != null) {
+    						 label=p.getProperty(UnitProperties.UnitVlanTag);
     					 }
     				 }
     			 }
@@ -597,7 +597,8 @@ public final class XmlrpcOrcaState implements Serializable {
 
     			 if (confProps == null)
     				 continue;
-    			 XmlrpcControllerSlice s=this.getSlice(new SliceID(a.getSliceID()));
+    			 
+    			 XmlrpcControllerSlice s = getSlice(new SliceID(a.getSliceID()));
     			 if (s == null) {
     				 logger.info("Unable to sync tags from slice " + a.getSliceID() + ", slice is not available, continuing");
     				 continue;
