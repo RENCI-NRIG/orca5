@@ -575,37 +575,41 @@ public final class XmlrpcOrcaState implements Serializable {
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateActiveTicketed));
     		 //actives.addAll(sm.getReservations(OrcaConstants.ReservationStateNascent));
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateTicketed));
-    		 
+
     		 // build a list of slices we need to restore
     		 logger.debug("Searching for recoverable slices among " + actives.size() + " active/ticketed reservations");
     		 for(ReservationMng a: actives) {
-    			logger.debug("Inspecting reservation " + a.getReservationID() + " of type " + a.getResourceType() + " from slice " + a.getSliceID());
-   			 	String domain = null, label = null; 
-    			List<UnitMng> un = sm.getUnits(new ReservationID(a.getReservationID()));
-				if (un != null && un.size() > 0) {
-					logger.info("getManifest:un.size()="+un.size());	
-					for (UnitMng u : un) {
-						Properties p = OrcaConverter.fill(u.getProperties());
-						if (p.getProperty("unit.vlan.tag") != null) {
-							 label=p.getProperty("unit.vlan.tag");
-						}
-					}
-				}
-    			if(label==null)	//we only need net domains with assigned tag
-    				continue;
-    			PropertiesMng confProps = a.getConfigurationProperties();
+    			 logger.debug("Inspecting reservation " + a.getReservationID() + " of type " + a.getResourceType() + " from slice " + a.getSliceID());
+    			 String domain = null, label = null; 
+    			 List<UnitMng> un = sm.getUnits(new ReservationID(a.getReservationID()));
+    			 if (un != null && un.size() > 0) {
+    				 logger.info("getManifest:un.size()="+un.size());	
+    				 for (UnitMng u : un) {
+    					 Properties p = OrcaConverter.fill(u.getProperties());
+    					 if (p.getProperty("unit.vlan.tag") != null) {
+    						 label=p.getProperty("unit.vlan.tag");
+    					 }
+    				 }
+    			 }
+    			 if(label==null)	//we only need net domains with assigned tag
+    				 continue;
+    			 PropertiesMng confProps = a.getConfigurationProperties();
 
     			 if (confProps == null)
     				 continue;
     			 XmlrpcControllerSlice s=this.getSlice(new SliceID(a.getSliceID()));
+    			 if (s == null) {
+    				 logger.info("Unable to sync tags from slice " + a.getSliceID() + ", slice is not available, continuing");
+    				 continue;
+    			 }
     			 // walk the properties, look for interesting ones
     			 for(PropertyMng p: confProps.getProperty()) {
     				 /**
     				  * used labels
     				  */
-    				if (UnitProperties.UnitDomain.equals(p.getName())) {
-    					domain = p.getValue().trim();
-    				}
+    				 if (UnitProperties.UnitDomain.equals(p.getName())) {
+    					 domain = p.getValue().trim();
+    				 }
     				 if ((label != null) && (domain != null)) {
     					 try {
     						 int iLabel = Integer.parseInt(label);
