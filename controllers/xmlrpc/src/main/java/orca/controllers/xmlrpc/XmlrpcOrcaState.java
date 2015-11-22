@@ -595,7 +595,6 @@ public final class XmlrpcOrcaState implements Serializable {
     				continue;
     			PropertiesMng confProps = a.getConfigurationProperties();
 
-    			 // get slice name/urn and user DN from a property of one of reservations
     			 if (confProps == null)
     				 continue;
     			 XmlrpcControllerSlice s=this.getSlice(new SliceID(a.getSliceID()));
@@ -627,6 +626,7 @@ public final class XmlrpcOrcaState implements Serializable {
     		 }
     	 } catch (Exception e) {
     		 logger.error("Unable to sync XmlrpcOrcaState due to: " + e);
+    		 e.printStackTrace();
     		 return;
     	 } 
     	 logger.info("Sync of XmlrpcOrcaState completed successfully");
