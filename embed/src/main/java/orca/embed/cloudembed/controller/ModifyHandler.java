@@ -278,9 +278,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 		Resource me=meList.element().getObj();
 		String ns_str=me.getNameSpace();
 		OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true);
-		if(modifyRequestModelList == null)
-			modifyRequestModelList = new ArrayList<OntModel>();
-		modifyRequestModelList.add(modifyRequestModel);
 		Resource reservation = modifyRequestModel.createIndividual(ns_str,NdlCommons.reservationOntClass);
 		for(ModifyElement mee:meList){
 			me = mee.getObj();
@@ -321,17 +318,22 @@ public class ModifyHandler extends UnboundRequestHandler {
 		
 		//parsing request
 		RequestParserListener parserListener = new RequestParserListener();		
-		// run the parser (to create Java objects)
-		//NdlRequestParser nrp = new NdlRequestParser(modifyRequestModel, parserListener, NdlModel.ModelType.TdbPersistent, 
-		//		Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "modify-" + sliceId);
+	
 		OutputStream out = null;
 		out = new  ByteArrayOutputStream();
 		modifyRequestModel.write(out);
-		NdlRequestParser nrp = new NdlRequestParser(out.toString(), parserListener);
+		modifyRequestModel.close();
+		//NdlRequestParser nrp = new NdlRequestParser(out.toString(), parserListener);
+		// run the parser (to create Java objects)
+		NdlRequestParser nrp = new NdlRequestParser(out.toString(), parserListener, NdlModel.ModelType.TdbPersistent, 
+						Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "modify-" + sliceId);
 		nrp.processRequest();		
 		RequestReservation request = parserListener.getRequest();
 		OntModel modifyModel = request.getModel();
 		RequestSlice slice=request.getSlice();
+		if(modifyRequestModelList == null)
+			modifyRequestModelList = new ArrayList<OntModel>();
+		modifyRequestModelList.add(modifyModel);
 		Collection<NetworkElement> requestElements = request.getElements();		
 		err = request.getError();
 		if(err!=null){
@@ -385,7 +387,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 			}
 		}
 		
-		//TDB.sync(modifyModel);
 		return request;
 	}
 	

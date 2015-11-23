@@ -527,4 +527,10 @@ public class RequestWorkflow {
 		if (manifestModel != null)
 			TDB.sync(manifestModel);
 	}
+	
+	public void syncModifyModels() {
+		if (((ModifyHandler) embedderAlgorithm).getModifyRequestModelList() != null) 
+			for(OntModel model:((ModifyHandler) embedderAlgorithm).getModifyRequestModelList())
+				TDB.sync(model);
+	}
 }
