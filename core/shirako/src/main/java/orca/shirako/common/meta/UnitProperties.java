@@ -59,6 +59,7 @@ public interface UnitProperties {
     public static final String UnitVlanHostEth      = "unit.vlan.hosteth";
     public static final String UnitQuantumNetname   = "unit.quantum.netname";
     public static final String UnitQuantumNetUUID   = "unit.quantum.net.uuid";
+    public static final String UnitNumberInterface  = "unit.number.interface";
     
     
     public static final String UnitPortList = "unit.portlist";

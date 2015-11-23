@@ -93,6 +93,7 @@ public class NdlVLANControl extends VlanControl {
 
         // determine if this is a new lease or an extension request
         Integer tag = null;
+        logger.info("current resource set is " + current);
         if (current == null) {
             // this is a new request
             // how much does the client want?
@@ -104,15 +105,14 @@ public class NdlVLANControl extends VlanControl {
             String configTag = configuration_properties.getProperty(ConfigUnitTag);
 
             Integer staticTag = null;
-            if (configTag != null)
+            if (configTag != null) {
                 staticTag = Integer.valueOf(configTag);
+            }
             if (tags.getFree() > 0) {
-
                 if (staticTag == null)
                     tag = tags.allocate();
                 else
                     tag = tags.allocate(staticTag, true);
-
                 ResourceData rd = new ResourceData();
                 PropList.setProperty(rd.getResourceProperties(), UnitVlanTag, tag);
                 UnitSet gained = new UnitSet(authority.getShirakoPlugin());
@@ -131,6 +131,9 @@ public class NdlVLANControl extends VlanControl {
                 }
                 gained.add(u);
                 r_set = new ResourceSet(gained, null, null, type, rd);
+                if (r_set != null) {
+                    convertEdgeProperties(configuration_properties, tag);
+                }
             } else {
                 // no resource - delay the allocation
                 r_set = null;
@@ -139,10 +142,7 @@ public class NdlVLANControl extends VlanControl {
             // extend automatically
             r_set = new ResourceSet(null, null, null, type, null);
         }
-
-        if (r_set != null) {
-            convertEdgeProperties(configuration_properties, tag);
-        }
+        
         return r_set;
     }
 

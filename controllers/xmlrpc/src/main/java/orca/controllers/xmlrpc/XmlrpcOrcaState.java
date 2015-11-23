@@ -63,7 +63,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	// restored from reservations
 	private HashMap<String, XmlrpcControllerSlice> slices = new HashMap<String, XmlrpcControllerSlice>();
 
-	private Logger logger = OrcaController.getLogger(this.getClass().getName());
+	private Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	
 	// use output compression
 	private static boolean compressOutput = true;
@@ -255,7 +255,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	  */
 	 public XmlrpcControllerSlice getSlice(String urn) {
 		 String sid = XmlrpcControllerSlice.getSliceIDForUrn(urn);
-		 logger.debug("This slice ID="+sid+" for urn="+urn);
+		 logger.debug("getSlice(): this slice ID="+sid+" for urn="+urn);
 		 if (sid != null) {
 			 //return getSlice(new SliceID(sid));
 			 synchronized (this) {
@@ -268,7 +268,7 @@ public final class XmlrpcOrcaState implements Serializable {
 
 	 public void releaseAddressAssignment(ReservationMng r){
 		 // mac address on the VM data interfaces
-		 String parent_num_interface = "unit.number.interface";
+		 String parent_num_interface = UnitProperties.UnitNumberInterface;
 		 String parent_mac_addr = UnitProperties.UnitEthPrefix;
 
 		 String num_interface_str = OrcaConverter.getLocalProperty(r, parent_num_interface);
@@ -563,7 +563,7 @@ public final class XmlrpcOrcaState implements Serializable {
      }
      
      /**
-      * Recover by querying the SM
+      * Recover tags by querying the SM
       */
      public synchronized void sync(IOrcaServiceManager sm) {
     	 logger.info("Sync global tag for domains");
@@ -575,38 +575,42 @@ public final class XmlrpcOrcaState implements Serializable {
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateActiveTicketed));
     		 //actives.addAll(sm.getReservations(OrcaConstants.ReservationStateNascent));
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateTicketed));
-    		 
+
     		 // build a list of slices we need to restore
     		 logger.debug("Searching for recoverable slices among " + actives.size() + " active/ticketed reservations");
     		 for(ReservationMng a: actives) {
-    			logger.debug("Inspecting reservation " + a.getReservationID() + " of type " + a.getResourceType() + " from slice " + a.getSliceID());
-   			 	String domain = null, label = null; 
-    			List<UnitMng> un = sm.getUnits(new ReservationID(a.getReservationID()));
-				if (un != null && un.size() > 0) {
-					logger.info("getManifest:un.size()="+un.size());	
-					for (UnitMng u : un) {
-						Properties p = OrcaConverter.fill(u.getProperties());
-						if (p.getProperty("unit.vlan.tag") != null) {
-							 label=p.getProperty("unit.vlan.tag");
-						}
-					}
-				}
-    			if(label==null)	//we only need net domains with assigned tag
-    				continue;
-    			PropertiesMng confProps = a.getConfigurationProperties();
+    			 logger.debug("Inspecting reservation " + a.getReservationID() + " of type " + a.getResourceType() + " from slice " + a.getSliceID());
+    			 String domain = null, label = null; 
+    			 List<UnitMng> un = sm.getUnits(new ReservationID(a.getReservationID()));
+    			 if (un != null && un.size() > 0) {
+    				 logger.info("getManifest:un.size()="+un.size());	
+    				 for (UnitMng u : un) {
+    					 Properties p = OrcaConverter.fill(u.getProperties());
+    					 if (p.getProperty(UnitProperties.UnitVlanTag) != null) {
+    						 label=p.getProperty(UnitProperties.UnitVlanTag);
+    					 }
+    				 }
+    			 }
+    			 if(label==null)	//we only need net domains with assigned tag
+    				 continue;
+    			 PropertiesMng confProps = a.getConfigurationProperties();
 
-    			 // get slice name/urn and user DN from a property of one of reservations
     			 if (confProps == null)
     				 continue;
-    			 XmlrpcControllerSlice s=this.getSlice(new SliceID(a.getSliceID()));
+    			 
+    			 XmlrpcControllerSlice s = getSlice(new SliceID(a.getSliceID()));
+    			 if (s == null) {
+    				 logger.info("Unable to sync tags from slice " + a.getSliceID() + ", slice is not available, continuing");
+    				 continue;
+    			 }
     			 // walk the properties, look for interesting ones
     			 for(PropertyMng p: confProps.getProperty()) {
     				 /**
     				  * used labels
     				  */
-    				if (UnitProperties.UnitDomain.equals(p.getName())) {
-    					domain = p.getValue().trim();
-    				}
+    				 if (UnitProperties.UnitDomain.equals(p.getName())) {
+    					 domain = p.getValue().trim();
+    				 }
     				 if ((label != null) && (domain != null)) {
     					 try {
     						 int iLabel = Integer.parseInt(label);
@@ -627,6 +631,7 @@ public final class XmlrpcOrcaState implements Serializable {
     		 }
     	 } catch (Exception e) {
     		 logger.error("Unable to sync XmlrpcOrcaState due to: " + e);
+    		 e.printStackTrace();
     		 return;
     	 } 
     	 logger.info("Sync of XmlrpcOrcaState completed successfully");

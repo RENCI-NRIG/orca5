@@ -816,8 +816,11 @@ public class XmlrpcHandlerHelper {
 			if (sm != null){
 				instance.returnSM(sm);
 			}
-			if (ndlSlice != null)
+			if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
+			}
 		}
 	}
 	

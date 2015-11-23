@@ -160,7 +160,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		
 		//modify the manifest
 		OntResource manifest=NdlCommons.getOntOfType(manifestOnt, "request:Manifest");
-		this.createManifest(addedRequest, manifestOnt, manifest); //
+		createManifest(addedRequest, manifestOnt, manifest); //
 		LinkedList <Device> nodeGroupAddedDevices = new LinkedList <Device> ();
 		for(Device device:addedDevices){
 			DomainElement de = (DomainElement) device;
@@ -385,7 +385,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			}
 		}
 		
-		TDB.sync(modifyModel);
+		//TDB.sync(modifyModel);
 		return request;
 	}
 	
@@ -753,7 +753,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			manifestModel = NdlModel.createModel(s, true, NdlModel.ModelType.TdbPersistent,
 	        		Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "manifest-" + sliceId);
 		} catch (NdlException e1) {
-			logger.error("InterCloudHandler.createManifest(): Unable to create a persistent model of manifest");
+			logger.error("ModifyHandler.createManifest(): Unable to create a persistent model of manifest");
 		}
         
         manifestModel.add(request.getModel().getBaseModel());
@@ -800,7 +800,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        logger.info("Modify CreateManifest:connectionName=" + connectionName 
 		        		+ " ;num hops=" + domainList.size()+";request Domain:"+domain);
 
-		        if(domain.equals(request.Interdomain_Domain) || domain.equals(request.MultiPoint_Domain)){
+		        if(domain.equals(RequestReservation.Interdomain_Domain) || domain.equals(RequestReservation.MultiPoint_Domain)){
 		        	Iterator<NetworkElement> elementIt = elements.iterator();
 		        	while(elementIt.hasNext()){
 		        		element = elementIt.next();
@@ -810,7 +810,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        		}
 		        	}
 				
-		        }else if(domain.equals(request.Unbound_Domain)){
+		        }else if(domain.equals(RequestReservation.Unbound_Domain)){
 		        	if(rr.getReservationDomain()!=null){
 		        		if(rr.getReservationDomain().contains(connectionName)){
 		        			logger.info("Modify CreateManifest unbound cloud name ="+connectionName);
@@ -841,7 +841,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			}
 		}
         
-		TDB.sync(manifestModel);
+		//TDB.sync(manifestModel);
 		return manifestModel;
 	}
 

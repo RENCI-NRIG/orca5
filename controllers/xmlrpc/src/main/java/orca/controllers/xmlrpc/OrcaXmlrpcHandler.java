@@ -79,7 +79,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String MSG_RET_FIELD = "msg";
 	public static final String ERR_RET_FIELD = "err";
 	
-	protected final Logger logger = OrcaController.getLogger(this.getClass().getName());
+	protected final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	
 	protected ResourcePoolsDescriptor pools;
 	
@@ -433,8 +433,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				if (sm != null){
 					instance.returnSM(sm);
 				}
-				if (ndlSlice != null)
+				if (ndlSlice != null) {
+					ndlSlice.getWorkflow().syncManifestModel();
+					ndlSlice.getWorkflow().syncRequestModel();
 					ndlSlice.unlock();
+				}
 			}
 		}
 	}
@@ -1035,8 +1038,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (sm != null)
 				instance.returnSM(sm);
 
-			if (ndlSlice != null)
+			if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
+			}
 		}
 
 
@@ -1146,8 +1152,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (sm != null){
 				instance.returnSM(sm);
 			}
-			if (ndlSlice != null)
+			if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
+			}
 		}
 	}
 
@@ -1320,8 +1329,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (sm != null){
 				instance.returnSM(sm);
 			}
-			if (ndlSlice != null)
+			if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
+			}
 		}
 	}
     
@@ -1383,8 +1395,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     		 if (sm != null){
     			 instance.returnSM(sm);
     		 }
-    		 if (ndlSlice != null)
-    			 ndlSlice.unlock();
+    		 if (ndlSlice != null){
+ 				ndlSlice.getWorkflow().syncManifestModel();
+ 				ndlSlice.getWorkflow().syncRequestModel();
+ 				ndlSlice.unlock();
+    		 }
     	 }
 
      }
@@ -1447,8 +1462,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (sm != null){
 				instance.returnSM(sm);
 			}
-			if (ndlSlice != null)
+			if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
+			}
     	}
     	
     }
@@ -1503,8 +1521,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     		if (sm != null){
     			instance.returnSM(sm);
     		}
-    		if (ndlSlice != null)
+    		if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
     			ndlSlice.unlock();
+    		}
     	}
 
     }

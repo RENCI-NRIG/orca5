@@ -357,6 +357,15 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
+- Figuring out NPE in NdlVLANcontrol recovery
+
+*Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
+- Figuring out NPE in NdlVLANcontrol recovery
+
+*Thu Nov 12 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test manifest change in group-size change
+
 *Wed Nov 11 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to test unbounded group in single rack
 
