@@ -1,10 +1,6 @@
 package orca.embed.cloudembed.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.UUID;
 
 import net.jwhoisserver.utils.InetNetwork;
@@ -29,11 +25,12 @@ import orca.manage.OrcaConverter;
 import orca.manage.beans.ReservationMng;
 import orca.ndl.DomainResourceType;
 import orca.ndl.INdlModifyModelListener;
+import orca.ndl.INdlModifyModelListener.ModifyType;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlModel;
+import orca.ndl.NdlModel.ModelType;
 import orca.ndl.NdlRequestParser;
-import orca.ndl.INdlModifyModelListener.ModifyType;
 import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.Device;
 import orca.ndl.elements.DomainElement;
@@ -52,18 +49,15 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceRequiredException;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.tdb.TDB;
 
 public class ModifyHandler extends UnboundRequestHandler {
-	ArrayList <OntModel> modifyRequestModelList;
+	private static final String EPHEMERAL_MODEL_FOLDER = "/tmp";
 	ModifyReservations modifies = new ModifyReservations();
 	LinkedList <Device> addedDevices = new LinkedList <Device> ();
 	LinkedList <Device> modifiedDevices = new LinkedList <Device> ();
@@ -147,7 +141,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 					error = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
 			}
-			addedRequest = this.addElement(domainResourcePools,addList,manifestOnt,sliceId);
+			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -161,6 +155,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 		//modify the manifest
 		OntResource manifest=NdlCommons.getOntOfType(manifestOnt, "request:Manifest");
 		createManifest(addedRequest, manifestOnt, manifest); //
+		// delete model on added request
+		if (addedRequest != null)
+			NdlModel.closeModel(addedRequest.getModel());
+		
 		LinkedList <Device> nodeGroupAddedDevices = new LinkedList <Device> ();
 		for(Device device:addedDevices){
 			DomainElement de = (DomainElement) device;
@@ -169,7 +167,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 					nodeGroupAddedDevices.add(device);
 		}
 		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
-		this.createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
+		createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
 		return error;
 	}
 	
@@ -277,7 +275,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 
 		Resource me=meList.element().getObj();
 		String ns_str=me.getNameSpace();
-		OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true);
+		//OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true);
+		OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true, ModelType.TdbEphemeral, EPHEMERAL_MODEL_FOLDER);
 		Resource reservation = modifyRequestModel.createIndividual(ns_str,NdlCommons.reservationOntClass);
 		for(ModifyElement mee:meList){
 			me = mee.getObj();
@@ -319,21 +318,13 @@ public class ModifyHandler extends UnboundRequestHandler {
 		//parsing request
 		RequestParserListener parserListener = new RequestParserListener();		
 	
-		OutputStream out = null;
-		out = new  ByteArrayOutputStream();
-		modifyRequestModel.write(out);
-		modifyRequestModel.close();
 		//NdlRequestParser nrp = new NdlRequestParser(out.toString(), parserListener);
 		// run the parser (to create Java objects)
-		NdlRequestParser nrp = new NdlRequestParser(out.toString(), parserListener, NdlModel.ModelType.TdbPersistent, 
-						Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "modify-" + sliceId);
+		NdlRequestParser nrp = new NdlRequestParser(modifyRequestModel, parserListener);
 		nrp.processRequest();		
 		RequestReservation request = parserListener.getRequest();
-		OntModel modifyModel = request.getModel();
 		RequestSlice slice=request.getSlice();
-		if(modifyRequestModelList == null)
-			modifyRequestModelList = new ArrayList<OntModel>();
-		modifyRequestModelList.add(modifyModel);
+
 		Collection<NetworkElement> requestElements = request.getElements();		
 		err = request.getError();
 		if(err!=null){
@@ -345,9 +336,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 		String reservationDomain = request.getReservationDomain();
 
 		if(reservationDomain == null){// invoke the embedding code
-			err = this.runEmbedding(bound, request, domainResourcePools);
+			err = runEmbedding(bound, request, domainResourcePools);
 		}else{  //intra-domain embedding
-			err = this.runEmbedding(reservationDomain,request,domainResourcePools);
+			err = runEmbedding(reservationDomain,request,domainResourcePools);
 		}
 		
 		if(err!=null){
@@ -807,7 +798,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        		element = elementIt.next();
 		        		if(element.getName().equals(connectionName) || element.getURI().equals(connectionName)){
 		        			logger.info("Modify CreateManifest InterDomain:element url ="+element.getURI()+";isModify="+element.isModify());
-		        			this.createManifest(element, manifestModel, manifest, domainList);
+		        			createManifest(element, manifestModel, manifest, domainList);
 		        		}
 		        	}
 				
@@ -824,7 +815,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				        		
 				        		if(element.getName().equals(connectionName)){
 				        			logger.debug("Modify Create manifest unbound: element name="+element.getName()+":connectionName="+connectionName);
-				        			this.createManifest(element, manifestModel, manifest, domainList);
+				        			createManifest(element, manifestModel, manifest, domainList);
 				        		}
 				        	}
 		        		}
@@ -857,10 +848,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 
 	public LinkedList<Device> getModifiedDevices() {
 		return modifiedDevices;
-	}
-
-	public ArrayList<OntModel> getModifyRequestModelList() {
-		return modifyRequestModelList;
 	}
 
 }

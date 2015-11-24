@@ -1041,7 +1041,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (ndlSlice != null) {
 				ndlSlice.getWorkflow().syncManifestModel();
 				ndlSlice.getWorkflow().syncRequestModel();
-				ndlSlice.getWorkflow().syncModifyModels();
 				ndlSlice.unlock();
 			}
 		}

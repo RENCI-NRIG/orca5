@@ -280,9 +280,9 @@ public class RequestWorkflow {
 		if (((MappingHandler) embedderAlgorithm).getIdm() != null) 
 			closeModel();
 		
-		if (((ModifyHandler) embedderAlgorithm).getModifyRequestModelList() != null) 
-			for(OntModel model:((ModifyHandler) embedderAlgorithm).getModifyRequestModelList())
-				NdlModel.closeModel(model);
+//		if (((ModifyHandler) embedderAlgorithm).getModifyRequestModelList() != null) 
+//			for(OntModel model:((ModifyHandler) embedderAlgorithm).getModifyRequestModelList())
+//				NdlModel.closeModel(model);
 	}
 	
 	public void modifyGlobalControllerAssignedLabel(){
@@ -526,11 +526,5 @@ public class RequestWorkflow {
 	public void syncManifestModel() {
 		if (manifestModel != null)
 			TDB.sync(manifestModel);
-	}
-	
-	public void syncModifyModels() {
-		if (((ModifyHandler) embedderAlgorithm).getModifyRequestModelList() != null) 
-			for(OntModel model:((ModifyHandler) embedderAlgorithm).getModifyRequestModelList())
-				TDB.sync(model);
 	}
 }
