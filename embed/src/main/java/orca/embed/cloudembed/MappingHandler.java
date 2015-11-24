@@ -118,7 +118,7 @@ public class MappingHandler implements IRequestEmbedder {
 	public SystemNativeError modifySlice(
 			DomainResourcePools domainResourcePools, Collection<ModifyElement> modifyElements, OntModel manifestOnt, 
 			String sliceId, HashMap <String,Collection <DomainElement>> nodeGroupMap, 
-			HashMap<String, DomainElement> firstGroupElement, OntModel requestModel) throws UnknownHostException, InetNetworkException {
+			HashMap<String, DomainElement> firstGroupElement, OntModel requestModel, OntModel modifyRequestModel) throws UnknownHostException, InetNetworkException {
 		return null;
 	}
 	

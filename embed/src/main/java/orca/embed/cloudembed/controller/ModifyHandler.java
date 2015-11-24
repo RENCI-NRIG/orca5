@@ -57,10 +57,10 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 public class ModifyHandler extends UnboundRequestHandler {
-	private static final String EPHEMERAL_MODEL_FOLDER = "/tmp";
 	ModifyReservations modifies = new ModifyReservations();
 	LinkedList <Device> addedDevices = new LinkedList <Device> ();
 	LinkedList <Device> modifiedDevices = new LinkedList <Device> ();
+	OntModel tmpModifyModel = null;
 	
 	SystemNativeError err = null;
 	
@@ -109,7 +109,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 	public SystemNativeError modifySlice(DomainResourcePools domainResourcePools,
 			Collection <ModifyElement> modifyElements, OntModel manifestOnt, String sliceId,
 			HashMap <String,Collection <DomainElement>> nodeGroupMap,
-			HashMap <String,DomainElement> firstGroupElement, OntModel requestModel) throws UnknownHostException, InetNetworkException{
+			HashMap <String,DomainElement> firstGroupElement, OntModel requestModel, OntModel modifyRequestModel) throws UnknownHostException, InetNetworkException{
 		this.modifyVersion++;
 		this.isModify=true;
 		
@@ -141,7 +141,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 					error = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
 			}
-			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId);
+			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId, modifyRequestModel);
+			tmpModifyModel = addedRequest.getModel();
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -165,10 +166,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
 		createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
-		
-		// delete model on added request
-		if (addedRequest != null)
-			NdlModel.closeModel(addedRequest.getModel());
 		
 		return error;
 	}
@@ -270,7 +267,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		this.isModify=false;
 	}
 	
-	public RequestReservation addElement(DomainResourcePools domainResourcePools,LinkedList <ModifyElement> meList,OntModel manifestOntModel, String sliceId) throws NdlException, IOException{
+	public RequestReservation addElement(DomainResourcePools domainResourcePools,LinkedList <ModifyElement> meList,OntModel manifestOntModel, String sliceId, OntModel modifyRequestModel) throws NdlException, IOException{
 		//generating new reservation in the format of a request RDF model
 		if(meList.isEmpty())
 			return null;
@@ -278,7 +275,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 		Resource me=meList.element().getObj();
 		String ns_str=me.getNameSpace();
 		//OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true);
-		OntModel modifyRequestModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true, ModelType.TdbEphemeral, EPHEMERAL_MODEL_FOLDER);
 		Resource reservation = modifyRequestModel.createIndividual(ns_str,NdlCommons.reservationOntClass);
 		for(ModifyElement mee:meList){
 			me = mee.getObj();
@@ -851,5 +847,4 @@ public class ModifyHandler extends UnboundRequestHandler {
 	public LinkedList<Device> getModifiedDevices() {
 		return modifiedDevices;
 	}
-
 }

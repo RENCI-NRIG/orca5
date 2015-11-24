@@ -27,6 +27,6 @@ public interface IRequestEmbedder {
 	public SystemNativeError runEmbedding(String domainName, RequestReservation request,DomainResourcePools domainResourcePools);
 	
 	public SystemNativeError modifySlice(DomainResourcePools domainResourcePools,Collection <ModifyElement> modifyElements, OntModel manifestOnt, String sliceId,
-			HashMap <String,Collection <DomainElement>> nodeGroupMap,HashMap<String, DomainElement> firstGroupElement, OntModel requestModel) throws UnknownHostException, InetNetworkException;
+			HashMap <String,Collection <DomainElement>> nodeGroupMap,HashMap<String, DomainElement> firstGroupElement, OntModel requestModel, OntModel modifyRequestModel) throws UnknownHostException, InetNetworkException;
 
 }

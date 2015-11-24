@@ -1,9 +1,6 @@
 package orca.embed.workflow;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.BitSet;
 import java.util.Collection;
@@ -18,7 +15,6 @@ import net.jwhoisserver.utils.InetNetworkException;
 import orca.embed.cloudembed.MappingHandler;
 import orca.embed.cloudembed.controller.CloudHandler;
 import orca.embed.cloudembed.controller.InterDomainHandler;
-import orca.embed.cloudembed.controller.ModifyHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.ModifyElement;
 import orca.embed.policyhelpers.RequestReservation;
@@ -26,12 +22,11 @@ import orca.embed.policyhelpers.SystemNativeError;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlModel;
+import orca.ndl.NdlModel.ModelType;
 import orca.ndl.NdlModifyParser;
 import orca.ndl.NdlRequestParser;
 import orca.ndl.OntProcessor;
-import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.DomainElement;
-import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
 import orca.ndl.elements.OrcaReservationTerm;
 import orca.ndl.elements.RequestSlice;
@@ -67,7 +62,7 @@ public class RequestWorkflow {
 	// done
 	protected RequestSlice slice;
 	// TDB - done
-	protected OntModel requestModel, manifestModel;
+	protected OntModel requestModel = null, manifestModel = null, tmpModifyModel = null;
 	// restored from manifest model
 	protected OrcaReservationTerm term;
 	// typically InterCloudHandler, no need to restore, except it has idm
@@ -231,7 +226,14 @@ public class RequestWorkflow {
 		((CloudHandler) embedderAlgorithm).setShared_IP_set(shared_IP_set);
 		
 		Collection <ModifyElement> modifyElements = pl.getModifyElements();
-		err=((MappingHandler) embedderAlgorithm).modifySlice(domainResourcePools,modifyElements, manifestModel,sliceId, nodeGroupMap, firstGroupElement, requestModel);
+		
+		// delete previous modify model (if any)
+		if (tmpModifyModel != null)
+			NdlModel.closeModel(tmpModifyModel);
+		
+		// create new  ephemeral modify request model in Java tmp space
+		tmpModifyModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true, ModelType.TdbEphemeral, null);
+		err=((MappingHandler) embedderAlgorithm).modifySlice(domainResourcePools,modifyElements, manifestModel,sliceId, nodeGroupMap, firstGroupElement, requestModel, tmpModifyModel);
 		
 		modifyGlobalControllerAssignedLabel();
 		boundElements = ((CloudHandler) embedderAlgorithm).getDeviceList();

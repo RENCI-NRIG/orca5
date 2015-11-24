@@ -130,7 +130,7 @@ public class NdlModel {
 		try {
 			switch(t) {
 			case TdbEphemeral:
-				if (globalTDB && (folderName != null)) {
+				if (globalTDB) {
 					File dir = null;
 					dir = ModelFolders.getInstance().createTempDirectory(folderName);
 					if (dir == null)
@@ -249,7 +249,7 @@ public class NdlModel {
 		
 		switch(t) {
 		case TdbEphemeral:
-			if (globalTDB && (folderName != null)) {
+			if (globalTDB) {
 				dir = ModelFolders.getInstance().createTempDirectory(folderName);
 				if (dir == null)
 					throw new NdlException("Unable to create temporary model folder in " + folderName);
@@ -366,7 +366,7 @@ public class NdlModel {
 		try {
 			switch(t) {
 			case TdbEphemeral:
-				if (globalTDB && (folderName != null)) {
+				if (globalTDB) {
 					File dir = null;
 					dir = ModelFolders.getInstance().createTempDirectory(folderName);
 					if (dir == null) 
