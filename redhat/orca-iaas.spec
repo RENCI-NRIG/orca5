@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Nov 24 2015 Ilya Baldin <ibaldin@renci.org>
+- Fixing model leak in modify
+
 *Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
 - Figuring out NPE in NdlVLANcontrol recovery
 
