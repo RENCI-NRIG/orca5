@@ -155,9 +155,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 		//modify the manifest
 		OntResource manifest=NdlCommons.getOntOfType(manifestOnt, "request:Manifest");
 		createManifest(addedRequest, manifestOnt, manifest); //
-		// delete model on added request
-		if (addedRequest != null)
-			NdlModel.closeModel(addedRequest.getModel());
 		
 		LinkedList <Device> nodeGroupAddedDevices = new LinkedList <Device> ();
 		for(Device device:addedDevices){
@@ -168,6 +165,11 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
 		createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
+		
+		// delete model on added request
+		if (addedRequest != null)
+			NdlModel.closeModel(addedRequest.getModel());
+		
 		return error;
 	}
 	
