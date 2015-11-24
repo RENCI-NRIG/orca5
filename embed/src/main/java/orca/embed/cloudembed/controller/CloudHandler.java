@@ -1112,6 +1112,10 @@ public class CloudHandler extends MappingHandler{
             		if(ce.getVMImageHash()!=null)
             			image.addProperty(NdlCommons.hasGUIDProperty,ce.getVMImageHash());
             	}
+            	if(ce.getResource()!=null && ce.getResource().getProperty(NdlCommons.specificCEProperty)!=null){
+               		link_ont.addProperty(NdlCommons.specificCEProperty,ce.getResource().getProperty(NdlCommons.specificCEProperty).getResource());
+               	}
+
             	if(ce.getPostBootScript()!=null)
             		link_ont.addProperty(NdlCommons.requestPostBootScriptProperty, ce.getPostBootScript());
             }
