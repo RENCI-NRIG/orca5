@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Tue Nov 24 2015 Ilya Baldin <ibaldin@renci.org>
+- Moving model deletion to later
+
+*Tue Nov 24 2015 Ilya Baldin <ibaldin@renci.org>
 - Fixing model leak in modify
 
 *Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
