@@ -44,6 +44,9 @@ public class ComputeElement extends NetworkElement {
 	protected String specificCEType;
 	
 	@Persistent
+	protected String specificCETypeurl;
+	
+	@Persistent
 	protected boolean isSplittable;
 	
 	@NotPersistent
@@ -230,8 +233,20 @@ public class ComputeElement extends NetworkElement {
 	public String getSpecificCEType() {
 		return specificCEType;
 	}
+	
+	public String getSpecificCETypeurl() {
+		return specificCETypeurl;
+	}
 
 	public void setSpecificCEType(String specificCEType) {
+		this.specificCEType = specificCEType;
+	}
+	
+	public void setSpecificCEType(Resource rs) {
+		Resource ceType_rs=NdlCommons.getSpecificCE(rs);
+		if(ceType_rs!=null)
+			this.specificCETypeurl=ceType_rs.getURI();
+		String specificCEType=NdlCommons.getEC2VMSize(rs);
 		this.specificCEType = specificCEType;
 	}
 

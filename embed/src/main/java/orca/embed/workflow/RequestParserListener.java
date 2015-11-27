@@ -406,7 +406,7 @@ public class RequestParserListener implements INdlRequestModelListener {
 			node.setModify(NdlCommons.isModify(ce));
 			node.setGUID(NdlCommons.getGuidProperty(ce));
 			
-			node.setSpecificCEType(NdlCommons.getEC2VMSize(ce));
+			node.setSpecificCEType(ce);
 			// disk image
 			Resource di = NdlCommons.getDiskImage(ce);
 			if (di != null) {

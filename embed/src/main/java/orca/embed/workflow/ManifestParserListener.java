@@ -283,7 +283,7 @@ public class ManifestParserListener implements INdlManifestModelListener,
 		c_e.setPostBootScript(NdlCommons.getPostBootScript(ce_rs));
 		c_e.setSplittable(NdlCommons.isSplittable(ce_rs));
 
-		c_e.setSpecificCEType(NdlCommons.getEC2VMSize(ce_rs));
+		c_e.setSpecificCEType(ce_rs);
 
 		// disk image
 		Resource di = NdlCommons.getDiskImage(ce_rs);

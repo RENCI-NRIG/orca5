@@ -1436,10 +1436,10 @@ public class ReservationConverter implements LayerConstant {
 		            		if(ce.getVMImageHash()!=null)
 		            			image.addProperty(NdlCommons.hasGUIDProperty,ce.getVMImageHash());
 		            	}
-						if(ce.getResource()!=null && ce.getResource().hasProperty(NdlCommons.specificCEProperty))
-							vm_reservation_ont.addProperty(NdlCommons.specificCEProperty, 
-									ce.getResource().getProperty(NdlCommons.specificCEProperty).getResource());
-						
+						if(ce.getSpecificCETypeurl()!=null){
+							Resource ceType_rs=vm_reservation_ont.getModel().createResource(ce.getSpecificCETypeurl());
+							vm_reservation_ont.addProperty(NdlCommons.specificCEProperty,ceType_rs);
+						}
 						if(ce.getPostBootScript()!=null){
 							if(vm_reservation_ont.hasProperty(NdlCommons.requestPostBootScriptProperty)){
 								vm_reservation_ont.setPropertyValue(NdlCommons.requestPostBootScriptProperty, manifestModel.createLiteral(ce.getPostBootScript()));
