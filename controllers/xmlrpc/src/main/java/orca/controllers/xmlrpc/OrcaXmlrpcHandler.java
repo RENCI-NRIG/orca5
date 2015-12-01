@@ -241,6 +241,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			return setError("ERROR: low system memory, please try later");
 		}
 		
+		if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
+			return setError("ERROR: system is busy, please try again in a few minutes");
+		}
+		
 		synchronized(createLock) {
 
 			try {
@@ -311,7 +315,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 				instance.addSlice(ndlSlice);
 
-				instance.sync(sm);
+				// now done on separate thread LabelSyncThread /ib 11/30/15
+				//instance.syncTags(sm);
 				
 				instance.getController();
 				String controller_url = OrcaController.getProperty(PropertyXmlrpcControllerUrl);
@@ -438,6 +443,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					ndlSlice.getWorkflow().syncRequestModel();
 					ndlSlice.unlock();
 				}
+				LabelSyncThread.releaseLock();
 			}
 		}
 	}
@@ -515,6 +521,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public Map<String, Object> modifySlice(String slice_urn, Object[] credentials, String modReq) {
 		XmlrpcControllerSlice ndlSlice = null;
 		IOrcaServiceManager sm = null;
+		
+		if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
+			return setError("ERROR: system is busy, please try again in a few minutes");
+		}
 		
 		try {
 			String result_str = null;
@@ -1043,6 +1053,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
 			}
+			
+			LabelSyncThread.releaseLock();
 		}
 
 

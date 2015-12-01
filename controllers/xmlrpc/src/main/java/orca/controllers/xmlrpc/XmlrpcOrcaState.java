@@ -80,7 +80,10 @@ public final class XmlrpcOrcaState implements Serializable {
 	// thread for processing status updates (modify and state)
 	protected static ReservationStatusUpdateThread sut = null;
 	protected static ScheduledFuture<?> sutFuture = null;
-	public static final int MODIFY_CHECK_PERIOD=5; //seconds
+	
+	// thread for syncing tags from existing reservations
+	protected static LabelSyncThread lst = null;
+	protected static ScheduledFuture<?> lstFuture = null;
 	
 	// PublishManager
 	protected static PublishManager pubManager = null;
@@ -88,24 +91,36 @@ public final class XmlrpcOrcaState implements Serializable {
 	// start the threads (called from the controller startup code)
 	public static void startThreads () {
 		// slice defer thread
-		Globals.Log.info("Starting slice defer thread");
+		Globals.Log.info("Starting SliceDeferThread");
 		sdt = new SliceDeferThread();
 		sdtThread = new Thread(sdt);
 		sdtThread.setDaemon(true);
 		sdtThread.setName("SliceDeferThread");
 		sdtThread.start();
 		
-		// modify status thread
-		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
+
+		// create service for various periodic threads that are daemon threads
+		// that way we don't have to kill them on exit
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2, new ThreadFactory() {
 			   public Thread newThread(Runnable runnable) {
 			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
 			      thread.setDaemon(true);
+			      thread.setName("PeriodicPoolThread");
 			      return thread;
 			   }
 		});
+		
+		// modify status thread
+		Globals.Log.info("Scheduling periodic ReservationStatusUpdateThread at " + ReservationStatusUpdateThread.getPeriod() + " sec.");
 		sut = new ReservationStatusUpdateThread();
-		sutFuture = scheduler.scheduleAtFixedRate(sut, MODIFY_CHECK_PERIOD, 
-				MODIFY_CHECK_PERIOD, TimeUnit.SECONDS);
+		sutFuture = scheduler.scheduleAtFixedRate(sut, ReservationStatusUpdateThread.getPeriod(), 
+				ReservationStatusUpdateThread.getPeriod(), TimeUnit.SECONDS);
+		
+		// label sync thread
+		Globals.Log.info("Scheduling periodic LabelSyncThread at " + LabelSyncThread.getPeriod() + " sec.");
+		lst = new LabelSyncThread();
+		lstFuture = scheduler.scheduleAtFixedRate(lst, LabelSyncThread.getPeriod(), 
+				LabelSyncThread.getPeriod(), TimeUnit.SECONDS);
 		
 		// Pubsub thread
 		if ("true".equalsIgnoreCase(OrcaController.getProperty(OrcaXmlrpcHandler.PropertyPublishManifest))) {
@@ -565,7 +580,7 @@ public final class XmlrpcOrcaState implements Serializable {
      /**
       * Recover tags by querying the SM
       */
-     public synchronized void sync(IOrcaServiceManager sm) {
+     public synchronized void syncTags(IOrcaServiceManager sm) {
     	 logger.info("Sync global tag for domains");
     	 try {
     		 logger.debug("Querying SM for active reservations");

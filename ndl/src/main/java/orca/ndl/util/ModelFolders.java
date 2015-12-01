@@ -266,8 +266,10 @@ public class ModelFolders {
 	public void closeDatasets() {
 		for(Map.Entry<OntModel, ModelFolder> entry: modelFolders.entrySet()) {
 			//entry.getValue().closeDataset();
-			System.out.println("Syncing dataset " + entry.getValue().getFolderPath());
-			TDB.sync(entry.getValue().getDataset());
+			if (!entry.getValue().isEphemeral()) {
+				System.out.println("Syncing dataset " + entry.getValue().getFolderPath());
+				TDB.sync(entry.getValue().getDataset());
+			}
 		}
 	}
 }

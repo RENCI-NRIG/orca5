@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class ReservationStatusUpdateThread implements Runnable {
+	public static final int MODIFY_CHECK_PERIOD=5; //seconds
 	final List<WatchEntry<ReservationID>> activeWatch;
 	final List<WatchEntry<ReservationIDWithModifyIndex>> modifyWatch;
 	
@@ -375,6 +376,10 @@ public class ReservationStatusUpdateThread implements Runnable {
 		} catch (RuntimeException re) {
 			logger.error("run(): RuntimeException " + re + ", continuing");
 		}
+	}
+	
+	public static int getPeriod() {
+		return MODIFY_CHECK_PERIOD;
 	}
 
 }
