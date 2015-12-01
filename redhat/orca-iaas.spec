@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>
+- Adding a label sync thread to controller
+
 *Tue Nov 24 2015 Ilya Baldin <ibaldin@renci.org>
 - Dealing with model deletion differently
 
