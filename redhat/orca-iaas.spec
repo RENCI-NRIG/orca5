@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>
+- Fixing premature model close
+
+*Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>
 - Tracking premature model close
 
 *Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>

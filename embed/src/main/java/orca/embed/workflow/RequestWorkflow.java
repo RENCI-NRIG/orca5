@@ -229,7 +229,6 @@ public class RequestWorkflow {
 		
 		// delete previous modify model (if any)
 		if (tmpModifyModel != null) {
-			System.out.println("Closing temporary modify model " + tmpModifyModel);
 			NdlModel.closeModel(tmpModifyModel);
 		}
 		
