@@ -838,7 +838,7 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 		property.setProperty(UnitProperties.UnitEthPrefix+ host_interface + ".parent.url", parent.getKey().getName());
-		
+		/*
 		String type="request:Manifest";
 		OntResource manifest=NdlCommons.getOntOfType(manifestModel, type);
 		String element_guid=dd.getGUID();
@@ -864,7 +864,7 @@ public class ReservationConverter implements LayerConstant {
 			addDependencyProperty(parent.getKey(),parent.getValue(), manifestModel.getOntResource(ob), manifestModel);
 		}
 		logger.debug("ReservationConverter: parent_ip_addr="+parent_ip_addr+"="+ip_addr);
-		
+		*/
 		return property;
 	}
 	
