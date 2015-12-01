@@ -273,6 +273,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	}
 	
 	public OntResource getResource() {
+		System.out.println("Trying to fetch NE " + uri + "/" + name + " from model " + model);
 		if (uri != null)
 			return model.getOntResource(uri);
 		return null;

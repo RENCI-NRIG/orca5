@@ -228,8 +228,10 @@ public class RequestWorkflow {
 		Collection <ModifyElement> modifyElements = pl.getModifyElements();
 		
 		// delete previous modify model (if any)
-		if (tmpModifyModel != null)
+		if (tmpModifyModel != null) {
+			System.out.println("Closing temporary modify model " + tmpModifyModel);
 			NdlModel.closeModel(tmpModifyModel);
+		}
 		
 		// create new  ephemeral modify request model in Java tmp space
 		tmpModifyModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true, ModelType.TdbEphemeral, null);
