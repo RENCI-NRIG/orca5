@@ -29,7 +29,6 @@ import orca.ndl.INdlModifyModelListener.ModifyType;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlModel;
-import orca.ndl.NdlModel.ModelType;
 import orca.ndl.NdlRequestParser;
 import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.Device;
@@ -60,7 +59,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 	ModifyReservations modifies = new ModifyReservations();
 	LinkedList <Device> addedDevices = new LinkedList <Device> ();
 	LinkedList <Device> modifiedDevices = new LinkedList <Device> ();
-	OntModel tmpModifyModel = null;
 	
 	SystemNativeError err = null;
 	
@@ -142,7 +140,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 				}
 			}
 			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId, modifyRequestModel);
-			tmpModifyModel = addedRequest.getModel();
 		}
 		catch(Exception e){
 			e.printStackTrace();
