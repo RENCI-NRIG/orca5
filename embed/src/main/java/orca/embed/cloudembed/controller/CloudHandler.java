@@ -1112,9 +1112,6 @@ public class CloudHandler extends MappingHandler{
             		if(ce.getVMImageHash()!=null)
             			image.addProperty(NdlCommons.hasGUIDProperty,ce.getVMImageHash());
             	}
-            	if(ce.getResource()!=null && ce.getResource().getProperty(NdlCommons.specificCEProperty)!=null){
-               		link_ont.addProperty(NdlCommons.specificCEProperty,ce.getResource().getProperty(NdlCommons.specificCEProperty).getResource());
-               	}
             	if(ce.getSpecificCETypeurl()!=null){
 					Resource ceType_rs=manifestModel.createResource(ce.getSpecificCETypeurl());
 					link_ont.addProperty(NdlCommons.specificCEProperty,ceType_rs);
