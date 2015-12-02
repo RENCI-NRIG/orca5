@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Dec 02 2015 Ilya Baldin <ibaldin@renci.org>
+- Premature close again
+
 *Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>
 - Fixing premature model close
 
