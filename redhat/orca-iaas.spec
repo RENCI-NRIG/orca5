@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Thu Dec 03 2015 Ilya Baldin <ibaldin@renci.org>
+- Making label sync more robust to slice recovery
+
 *Wed Dec 02 2015 Ilya Baldin <ibaldin@renci.org>
 - Premature close again
 
