@@ -319,7 +319,7 @@ public class SliceDeferThread implements Runnable {
 								(r.getState() != OrcaConstants.ReservationStateClosed) &&
 								(r.getState() != OrcaConstants.ReservationStateCloseWait) &&
 								(r.getState() != OrcaConstants.ReservationStateFailed)) {
-							logger.info("SliceDeferThread: Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has domain " + drt + " that is not yet done");
+							logger.info("SliceDeferThread: Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has domain " + drt + " with reservation " + r.getReservationID() + " that is not yet done");
 							return true;
 						}
 					}
