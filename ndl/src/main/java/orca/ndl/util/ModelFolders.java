@@ -268,7 +268,17 @@ public class ModelFolders {
 			//entry.getValue().closeDataset();
 			if (!entry.getValue().isEphemeral()) {
 				System.out.println("Syncing dataset " + entry.getValue().getFolderPath());
-				TDB.sync(entry.getValue().getDataset());
+				try {
+					TDB.sync(entry.getValue().getDataset());
+				} catch (Exception e) {
+					System.out.println("Failed to sync " + entry.getValue().getFolderPath() + ", trying again in .5s ");
+					try {
+						Thread.sleep(500);
+						TDB.sync(entry.getValue().getDataset());
+					} catch (Exception ee) {
+						System.out.println("Failed again to sync " + entry.getValue().getFolderPath() + ", continuing");
+					}
+				}
 			}
 		}
 	}

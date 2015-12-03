@@ -150,14 +150,12 @@ public class ScriptConstructor {
     	}
     }	
     
-    public ScriptConstructor(ReservationElementCollection reservations, XmlrpcControllerSlice ndlSlice, Logger l){
+    public ScriptConstructor(ReservationElementCollection reservations, XmlrpcControllerSlice ndlSlice){
     	try {
     		//System.out.println("XXXXXX-PRUTH: ScriptConstructor");
     		//System.out.println("XXXXXX-PRUTH: ScriptConstructor: reservations = " + reservations);
     	
-    		logger = l;
-    		if (logger == null)
-    			logger = NdlCommons.getNdlLogger();
+    		logger = OrcaController.getLogger("velocity");
     		
     		tmpDir = OrcaController.getProperty(XmlRpcController.PropertyVelocityTmpdir);
     		if (tmpDir == null)
@@ -209,7 +207,7 @@ public class ScriptConstructor {
     				continue;
     			Group group = new Group(reservations.group_getName(group_url));
     			if(reservations.group_getVMsInGroup(group.name)==null){
-    				logger.error("ScriptConstructor:    group="+group_url+" (" + reservations.group_getName(group_url) + ")\n");
+    				logger.error("ScriptConstructor:    group="+group_url+" (" + reservations.group_getName(group_url) + ")");
     				continue;
     			}
     			Iterator<String> i_vms = reservations.group_getVMsInGroup(group.name).iterator();

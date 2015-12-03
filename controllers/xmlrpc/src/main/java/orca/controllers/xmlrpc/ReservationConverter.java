@@ -485,7 +485,7 @@ public class ReservationConverter implements LayerConstant {
 
 	public ArrayList<TicketReservationMng> setDependency(Collection<NetworkElement> boundElements,HashMap<String, ReservationRequest> map){		
 		
-		ScriptConstructor scriptConstructor = new ScriptConstructor(elementCollection, ndlSlice, logger);
+		ScriptConstructor scriptConstructor = new ScriptConstructor(elementCollection, ndlSlice);
 		
 		HashMap <DomainElement, LinkedList <ReservationRequest> > ip_r_collection = new HashMap <DomainElement, LinkedList <ReservationRequest> >();
 		
