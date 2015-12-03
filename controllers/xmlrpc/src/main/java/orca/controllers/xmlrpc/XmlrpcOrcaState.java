@@ -598,7 +598,7 @@ public final class XmlrpcOrcaState implements Serializable {
     			 String domain = null, label = null; 
     			 List<UnitMng> un = sm.getUnits(new ReservationID(a.getReservationID()));
     			 if (un != null && un.size() > 0) {
-    				 logger.info("getManifest:un.size()="+un.size());	
+    				 logger.debug("getManifest:un.size()="+un.size());	
     				 for (UnitMng u : un) {
     					 Properties p = OrcaConverter.fill(u.getProperties());
     					 if (p.getProperty(UnitProperties.UnitVlanTag) != null) {
@@ -606,18 +606,16 @@ public final class XmlrpcOrcaState implements Serializable {
     					 }
     				 }
     			 }
-    			 if(label==null)	//we only need net domains with assigned tag
+    			 if (label == null)	//we only need net domains with assigned tag
     				 continue;
+
+    			 XmlrpcControllerSlice s = getSlice(new SliceID(a.getSliceID()));
+    			 
     			 PropertiesMng confProps = a.getConfigurationProperties();
 
     			 if (confProps == null)
     				 continue;
     			 
-    			 XmlrpcControllerSlice s = getSlice(new SliceID(a.getSliceID()));
-    			 if (s == null) {
-    				 logger.info("Unable to sync tags from slice " + a.getSliceID() + ", slice is not available, continuing");
-    				 continue;
-    			 }
     			 // walk the properties, look for interesting ones
     			 for(PropertyMng p: confProps.getProperty()) {
     				 /**
@@ -629,9 +627,10 @@ public final class XmlrpcOrcaState implements Serializable {
     				 if ((label != null) && (domain != null)) {
     					 try {
     						 int iLabel = Integer.parseInt(label);
-    						 logger.debug("Setting XmlrpcOrcaState.controllerAssignedLabel " + label + " for domain " + domain+";slice="+s.sliceUrn);
+    						 logger.debug("Setting XmlrpcOrcaState.controllerAssignedLabel " + label + " for domain " + domain+";slice="+ (s != null ? s.sliceUrn : "slice not recovered"));
     						 RequestWorkflow.setBitsetLabel(controllerAssignedLabel, domain, iLabel);
-    						 s.workflow.setControllerLabel(domain, iLabel);
+    						 if (s != null)
+    							 s.workflow.setControllerLabel(domain, iLabel);
     						 domain = null;
     						 label = null;
     						 continue;
