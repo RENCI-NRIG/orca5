@@ -467,7 +467,7 @@ public class CloudHandler extends MappingHandler{
 	private DomainElement createNewNode(NetworkElement element,int i,DomainElement link_device, String domainName, 
 			OntModel requestModel, LinkedList<NetworkElement> deviceList, int num){
 		
-		logger.info("Creating new node:hole="+i+"domainName="+domainName+";link_device="+link_device);
+		logger.info("Creating new node:hole="+i+"domainName="+domainName);
 		
 		DomainResourceType dType = new DomainResourceType(element.getResourceType().getResourceType(),element.getResourceType().getCount());
 		dType.setCount(1);
@@ -482,7 +482,12 @@ public class CloudHandler extends MappingHandler{
 				name = name.concat("/")+String.valueOf(i);
 		}
 		
-		ComputeElement ce = ce_element.copy(element.getModel(), requestModel,url,name);
+		OntModel device_model = element.getModel();
+		if(this.manifestModel!=null)
+			device_model=this.manifestModel;
+		if(device_model.getOntResource(element.getName())==null)
+			device_model.createIndividual(element.getName(), element.getResource().getRDFType(true));
+		ComputeElement ce = ce_element.copy(device_model, requestModel,url,name);
 		ce.setResourceType(dType);
 		ce.setNodeGroupName(ce_element.getNodeGroupName());
 		ce.setPostBootScript(ce_element.getPostBootScript());
@@ -491,7 +496,7 @@ public class CloudHandler extends MappingHandler{
 			logger.debug("CloudHandler: no constraint 1!"); 
 		ce.setResourcesMap(map);	
 		
-		DomainElement edge_device=new DomainElement(element.getModel(),url,name) ;
+		DomainElement edge_device=new DomainElement(device_model,url,name) ;
 		edge_device.setCe(ce);
 		edge_device.setResourceType(dType);
 		String device_guid=element.getGUID();
@@ -529,6 +534,7 @@ public class CloudHandler extends MappingHandler{
 			LinkedList <Interface> interfaces = ce_element.getClientInterface();
 			NetworkConnection ncByInterface=null;
 			Interface new_intf = null;
+			
 			if(interfaces!=null){
 				for(Interface intf:interfaces){
 					ncByInterface = ce_element.getConnectionByInterfaceName(intf);
@@ -565,10 +571,11 @@ public class CloudHandler extends MappingHandler{
 								if(dType.getResourceType().equals("lun"))
 									new_ip = base_ip;
 								else
-									new_ip = base_ip.getNewIpAddress(intf.getModel(),network_str,netmask, base_ip.getURI(),hole);
+									new_ip = base_ip.getNewIpAddress(device_model,network_str,netmask, base_ip.getURI(),hole);
+
 								String intf_url = new_ip.getURI()+"/intf/"+link_device.getResource().getLocalName();
-								new_intf = new Interface(intf.getModel(),intf_url,intf_url);
-								new_intf.getResource().addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(intf.getModel()));
+								new_intf = new Interface(device_model,intf_url,intf_url);
+								new_intf.getResource().addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(device_model));
 								if(new_ip.cidr!=null)
 									new_intf.getResource().addProperty(NdlCommons.layerLabelIdProperty,new_ip.cidr);
 								new_intf.setLabel(new_ip);
@@ -674,7 +681,9 @@ public class CloudHandler extends MappingHandler{
 		if(current_intf==null)
 			return;
 			
-		OntResource intf_ont = current_intf.getResource();
+		OntModel device_model = element.getModel();
+		if(this.manifestModel!=null)
+			device_model=this.manifestModel;
 		
 		IPAddressRange ip_range = link_device.getIp_range();
 		
@@ -702,13 +711,13 @@ public class CloudHandler extends MappingHandler{
 		netmask=base_ip.netmask;
 		String url = null;
 		try {
-			new_ip = base_ip.getNewIpAddress(current_intf.getModel(),network_str,netmask, base_ip.getURI(),hole);
+			new_ip = base_ip.getNewIpAddress(device_model,network_str,netmask, base_ip.getURI(),hole);
 			url = new_ip.getURI()+"/intf";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Interface new_intf = new Interface(current_intf.getModel(),url,url);
-		new_intf.getResource().addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(current_intf.getModel()));
+		Interface new_intf = new Interface(device_model,url,url);
+		new_intf.getResource().addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(device_model));
 		if(new_ip.cidr!=null)
 			new_intf.getResource().addProperty(NdlCommons.layerLabelIdProperty,new_ip.cidr);
 		new_intf.setLabel(new_ip);
@@ -771,7 +780,12 @@ public class CloudHandler extends MappingHandler{
 		String domain_name = domainName+"/"+dType.getResourceType();
 		
 		dType.setDomainURL(domain_name);
-		DomainElement link_device = new DomainElement(element.getModel(),element.getName(),element.getName());
+		OntModel device_model = element.getModel();
+		if(this.manifestModel!=null)
+			device_model=this.manifestModel;
+		DomainElement link_device = new DomainElement(device_model,element.getName(),element.getName());
+		if(device_model.getOntResource(element.getName())==null)
+			device_model.createIndividual(element.getName(), element.getResource().getRDFType(true));
 		link_device.setResourceType(dType);
 		logger.info("CloudHandler:"+domainName+" link_device: url=" +link_device.getURI()+":name="+link_device.getName()+" BW="+element.getBandwidth());
 
@@ -837,7 +851,7 @@ public class CloudHandler extends MappingHandler{
 					return null;
 				}
 			}
-			action=new SwitchingAction(element.getModel());
+			action=new SwitchingAction(device_model);
 			action.setAtLayer(action_layer);
 			action.setDefaultAction("VLANtag");
 			action.setBw(element.getBandwidth());
@@ -981,9 +995,9 @@ public class CloudHandler extends MappingHandler{
 							parent_name = parent.getNodeGroupName();
 						else
 							parent_name = parent.getName();
-						logger.debug("Master-Slave:"+child.getResource()+":"+parent_name+":"+parent_ne.getName());
+
 						if(parent_name.equals(parent_ne.getName())){
-							logger.info("Added master-slave!");
+							logger.info("Added master-slave!"+child.getResource()+":"+parent_name+":"+parent_ne.getName());
 							if(child.getDefaultClientInterfaceIPAddressRS()!=null)
 								parent_de.setFollowedBy(de,child.getDefaultClientInterfaceIPAddressRS());
 							else{

@@ -560,6 +560,11 @@ public class ReservationConverter implements LayerConstant {
 				
 				logger.debug("child is VM:"+r.isVM+";parent is network:"+prNetwork);
 
+				if(pr!=null && pr.isLUN)
+					r.numStorageDependencies++;
+				if (prNetwork)
+					r.networkDependencies++;
+				
 				String pdomain = getDomainName(parent_de);
 				if(pdomain==null){
 					logger.error("Parent domain name is null:"+ parent_de.getURI());
@@ -627,7 +632,7 @@ public class ReservationConverter implements LayerConstant {
 						//depending on storage
 						if(pr!=null){
 							if(pr.isLUN){//now do it latter when all reservations are collected
-								r.numStorageDependencies++;
+								//r.numStorageDependencies++;
 								num_interface--;
 								ComputeElement parent_ce = parent_de.getCe();
 								if(parent_ce!=null){
@@ -643,7 +648,7 @@ public class ReservationConverter implements LayerConstant {
 							intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
 						int index=0;
 						if (prNetwork) {
-							r.networkDependencies++;
+							//r.networkDependencies++;
 
 							String ip_addr = null, mac_addr=null, host_interface = null;
 							
@@ -1473,10 +1478,10 @@ public class ReservationConverter implements LayerConstant {
 								k++;
 								DomainElement parentDevice = parent.getKey();
 								if(parentDevice.isAllocatable()==false){
-									Resource parentDevice_rs=manifestModel.getResource(parentDevice.getResource().getURI());
-									logger.error("Remove interface:"+parentDevice.getName()
-											+";uri="+parentDevice.getResource().getURI()
-											+";rs="+parentDevice_rs);
+									//Resource parentDevice_rs=manifestModel.getResource(parentDevice.getResource().getURI());
+									//logger.error("Remove interface:"+parentDevice.getName()
+									//		+";uri="+parentDevice.getResource().getURI()
+									//		+";rs="+parentDevice_rs);
 									//if(parentDevice_rs!=null)
 									//	parentDevice_rs.removeAll(NdlCommons.topologyHasInterfaceProperty);
 									//parentDevice.getResource().addProperty(NdlCommons.topologyHasInterfaceProperty, parent.getValue());
@@ -2012,7 +2017,7 @@ public class ReservationConverter implements LayerConstant {
 	public static String getDomainName(NetworkElement d) {
 		String temp = null;
 
-		if((d.getResource()!=null) && !d.getResource().getOntModel().isClosed() && NdlCommons.isStitchingNodeInManifest(d.getResource())){
+		if((d.getResource()!=null) && NdlCommons.isStitchingNodeInManifest(d.getResource())){
 			if(d.getResource().hasProperty(NdlCommons.topologyHasName)){
 				temp = d.getResource().getProperty(NdlCommons.topologyHasName).getString();
 			}

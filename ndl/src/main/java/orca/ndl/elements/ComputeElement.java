@@ -123,7 +123,7 @@ public class ComputeElement extends NetworkElement {
 	public OntResource getDefaultClientInterfaceIPAddressRS(){
 		OntResource ip_ont=null;
         IPAddress ip = getDefaultClientInterfaceIP();
-        if(ip!=null)
+        if(ip!=null && !model.isClosed())
         	// NOTE: I'm assuming that 'model' is the right place to look for the label resource /ib
         	ip_ont = ip.getResource(model);
         return ip_ont;

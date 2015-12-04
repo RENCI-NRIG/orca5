@@ -55,7 +55,7 @@ public class DomainElement extends Device {
 		sb.append("followedBy: \n");
 		if (followedBy != null) {
 			for(Entry<DomainElement, OntResource> ee: followedBy.entrySet()) {
-				sb.append(ee.getKey().getURI() + " <> " + ee.getValue().getURI());
+				sb.append(ee.getKey().getURI() + " <> " + ee.getValue());
 			}
 			sb.append("\n");
 		}
@@ -63,7 +63,7 @@ public class DomainElement extends Device {
 		sb.append("precededBy: \n");
 		if (precededBy != null) {
 			for(Entry<DomainElement, OntResource> ee: precededBy.entrySet()) {
-				sb.append(ee.getKey().getURI() + " <> " + ee.getValue().getURI());
+				sb.append(ee.getKey().getURI() + " <> " + ee.getValue());
 			}
 			sb.append("\n");
 		}

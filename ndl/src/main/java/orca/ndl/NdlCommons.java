@@ -848,8 +848,8 @@ public class NdlCommons {
         String s = "SELECT ?r ";
         String f = "";
         String w = "WHERE {" + 
-        	"{?r ?p "+ "<" + rsURI + ">" +"." + " ?p rdf:type layer:AdaptationProperty} UNION{" +
-        	"?r layer:AdaptationProperty " +"<" + rsURI + ">}"+
+        	"{?r ?p "+ "<" + rsURI + ">" +"." + " ?p rdf:type layer:AdaptationProperty.} "
+        			+ "UNION{" + "?r layer:AdaptationProperty " +"<" + rsURI + ">}"+
         	"      }";
         String queryPhrase = createQueryString(s, f, w);
 

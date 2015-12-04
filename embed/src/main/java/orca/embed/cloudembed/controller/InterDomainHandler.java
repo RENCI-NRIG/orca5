@@ -102,6 +102,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
         LinkedList <Device> domainList=null;
 		SystemNativeError error=null;
 		Iterator<NetworkElement> it = elements.iterator();
+		boolean idmContainsRequest=false;
 		while(it.hasNext()){
 			NetworkConnection element = (NetworkConnection) it.next();
 			logger.debug("Interdomain connection:"+element.getName()+";"
@@ -121,13 +122,15 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				continue;
 			}
 			
-			/*String fileName = "stitch" + "-subrequest.rdf";
+			String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
             OutputStream fsw = new FileOutputStream(fileName);
-            requestModel.write(fsw);*/
+            requestModel.write(fsw);
 			
 			stitching = checkStitching(element, requestModel); //requestModel being modified here
-			if(stitching)
+			if(stitching && !idmContainsRequest){
 				this.idm.add(requestModel);
+				idmContainsRequest=true;
+			}
 
 			logger.debug("is stitiching="+stitching+";isModify="+isModify);
 			/*
@@ -222,8 +225,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 						}
 					}
 				}
-			}
-			
+			}			
 			domainConnectionList.put(element.getName(), domainList);
 		}			
 		return error;
@@ -284,12 +286,18 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			intf_rs_base=results.nextSolution().getResource(varName);				
 		}
 		Resource idm_intf_rs = null;
-		if(intf_rs_base==null)
-			idm_intf_rs =idm.getResource(intf_rs.getURI());
+		if(intf_rs_base==null){
+			String intf_str=intf_rs.getURI();
+			int index = intf_str.lastIndexOf('/');
+			String intf_base_str = intf_str.substring(0, index);
+			if(intf_base_str!=null)
+				idm_intf_rs =idm.getResource(intf_base_str);
+		}
 		else
 			idm_intf_rs =idm.getResource(intf_rs_base.getURI());
 		String stitching_intf_label = null;
 		if(idm_intf_rs!=null){
+			System.out.println("idmintfrs="+idm_intf_rs.getURI());
 			if(idm_intf_rs.getProperty(NdlCommons.topologyHasName)!=null){
 				String stitching_domain_name = idm_intf_rs.getProperty(NdlCommons.topologyHasName).getString();
 				domain_rs.addProperty(NdlCommons.topologyHasName,stitching_domain_name);

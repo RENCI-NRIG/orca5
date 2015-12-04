@@ -40,6 +40,9 @@ public class MappingHandler implements IRequestEmbedder {
 	protected OntModel idm;  // only getters and setters here - has to be TDB-backed by the original owner
 	
 	@NotPersistent
+	protected OntModel manifestModel;
+	
+	@NotPersistent
 	protected Logger logger = NdlCommons.getNdlLogger();
 
 	// Recreated in revisit of the owner
@@ -269,6 +272,14 @@ public class MappingHandler implements IRequestEmbedder {
 		return idm;
 	}
 	
+	public OntModel getManifestModel() {
+		return manifestModel;
+	}
+
+	public void setManifestModel(OntModel manifestModel) {
+		this.manifestModel = manifestModel;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("requestMap: \n");

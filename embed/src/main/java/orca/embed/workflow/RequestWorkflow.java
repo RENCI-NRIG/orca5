@@ -159,6 +159,8 @@ public class RequestWorkflow {
 		manifestModel = ((CloudHandler) embedderAlgorithm).createManifest(boundElements, request, userDN, controller_url, sliceId);
 		domainInConnectionList = ((CloudHandler) embedderAlgorithm).getDomainInConnectionList();
 		
+		((CloudHandler) embedderAlgorithm).setManifestModel(manifestModel);
+		
 		//TDB.sync(requestModel);
 		//closeCreateModel();
 		
@@ -234,6 +236,7 @@ public class RequestWorkflow {
 		
 		// create new  ephemeral modify request model in Java tmp space
 		tmpModifyModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true, ModelType.TdbEphemeral, null);
+		manifestModel.add(tmpModifyModel);
 		err=((MappingHandler) embedderAlgorithm).modifySlice(domainResourcePools,modifyElements, manifestModel,sliceId, nodeGroupMap, firstGroupElement, requestModel, tmpModifyModel);
 		
 		modifyGlobalControllerAssignedLabel();
@@ -417,6 +420,7 @@ public class RequestWorkflow {
 			logger.debug("Slice bound elements are " + sb);
 			
 			((CloudHandler)embedderAlgorithm).setDeviceList(boundElements);
+			((CloudHandler) embedderAlgorithm).setManifestModel(manifestModel);
 			
 			// recover term
 			term = new OrcaReservationTerm();
