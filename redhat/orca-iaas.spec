@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Fri Dec 04 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for testing new approach to modify model handling
+
 *Thu Dec 03 2015 Ilya Baldin <ibaldin@renci.org>
 - Making label sync more robust to slice recovery
 
