@@ -588,9 +588,14 @@ public final class XmlrpcOrcaState implements Serializable {
     		 List<ReservationMng> actives = new ArrayList<ReservationMng>();
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateActive));
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateActiveTicketed));
-    		 //actives.addAll(sm.getReservations(OrcaConstants.ReservationStateNascent));
+    		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateNascent));
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateTicketed));
 
+    		 // clear existing global labels
+    		 // don't need to clear slice-local label set - it is only used to remove from the global
+    		 // set on slice close
+    		 controllerAssignedLabel.clear();
+    		 
     		 // build a list of slices we need to restore
     		 logger.debug("Searching for recoverable slices among " + actives.size() + " active/ticketed reservations");
     		 for(ReservationMng a: actives) {

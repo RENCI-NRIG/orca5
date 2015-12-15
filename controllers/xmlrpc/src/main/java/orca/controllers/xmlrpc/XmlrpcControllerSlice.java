@@ -528,7 +528,15 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		if (ss == SliceStateMachine.SliceState.STABLE_ERROR) 
 			return true;
 		return false;
-
+	}
+	
+	public boolean isStable() throws SliceStateMachine.SliceTransitionException {
+		SliceStateMachine.SliceState ss = reevaluate();
+		
+		if ((ss == SliceStateMachine.SliceState.STABLE_ERROR) || 
+				(ss == SliceStateMachine.SliceState.STABLE_OK))
+			return true;
+		return false;
 	}
 	
 	public boolean isDeadOrClosing() throws SliceStateMachine.SliceTransitionException {

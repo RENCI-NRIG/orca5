@@ -101,7 +101,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	protected boolean verifyCredentials = true;
 
 	// lock to create slice
-	protected static Integer createLock = 0;
+	protected static Integer globalStateLock = 0;
 		
 	/** manage the xmlrpc return structure
 	 * 
@@ -245,7 +245,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			return setError("ERROR: system is busy, please try again in a few minutes");
 		}
 		
-		synchronized(createLock) {
+		synchronized(globalStateLock) {
 
 			try {
 				logger.info("ORCA API createSlice() invoked");
@@ -533,7 +533,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			return setError("ERROR: system is busy, please try again in a few minutes");
 		}
 
-		synchronized(createLock) {
+		synchronized(globalStateLock) {
 			try {
 				String result_str = null;
 				logger.info("ORCA API modifySlice() invoked for " + slice_urn);
@@ -1077,105 +1077,120 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public Map<String, Object> deleteSlice(String slice_urn, Object[] credentials) {
 		IOrcaServiceManager sm = null;
 		XmlrpcControllerSlice ndlSlice = null;
+
 		
-		try {
-			Boolean result = false;
-			logger.info("ORCA API deleteSlice() invoked");
-			
-			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, verifyCredentials, logger);
+		if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
+			return setError("ERROR: system is busy, please try again in a few minutes");
+		}
+		
+		synchronized(globalStateLock) {
+			try {
+				Boolean result = false;
+				logger.info("ORCA API deleteSlice() invoked");
 
-			// check the whitelist
-			if (verifyCredentials && !checkWhitelist(userDN)) 
-				return setError(WHITELIST_ERROR);
-			
-            // find this slice and lock it
-            ndlSlice = instance.getSlice(slice_urn);
-            if (ndlSlice == null) {
-            	logger.error("deleteSlice(): unable to find slice " + slice_urn + " among active slices");
-            	return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
-            }
-            
-            // it is safe to close reservations even in the defer queue /ib 10/29/15
-//            if (XmlrpcOrcaState.getSDT().inDeferredQueue(ndlSlice)) {
-//            	logger.error("deleteSlice(): unable to delete slice " + slice_urn + ", it is waiting in the defer queue");
-//            	return setError("ERROR: unable to delete deferred slice " + slice_urn + ", please try some time later");
-//            }
-            
-            // lock the slice
-            ndlSlice.lock();
+				String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, verifyCredentials, logger);
 
-			sm = instance.getSM();
-			
-			List<ReservationMng> allRes = ndlSlice.getAllReservations(sm);
-			int failCount = 0;
-			if(allRes == null){
-				 result = false;
-				 ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
-                 logger.debug("No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
-			} else {
-				logger.debug("There are " + allRes.size() + " reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
-				for (ReservationMng r : allRes){
-					try {
-						logger.debug("Closing reservation with reservation GUID: " + r.getReservationID());
-						if (userDN != null) {
-							if (!userDN.equals(OrcaConverter.getLocalProperty(r, XmlrpcOrcaState.XMLRPC_USER_DN))) {
-								logger.error("User " + userDN + " is trying to close reservation " + 
-										r.getReservationID() + " of which it is not the owner (real owner: " + 
-										OrcaConverter.getLocalProperty(r, XmlrpcOrcaState.XMLRPC_USER_DN) + ")");
-								failCount++;
-							} else {
-								// FIXME: this should be redundant, since we just validated the user_dn and
-								// setAbacAttributes is called on createSlice. Moreover, closeReservation uses only the
-								// reservationId, not the whole object
-								if(AbacUtil.verifyCredentials){
-									setAbacAttributes(r, logger);
+				// check the whitelist
+				if (verifyCredentials && !checkWhitelist(userDN)) 
+					return setError(WHITELIST_ERROR);
+
+				// find this slice and lock it
+				ndlSlice = instance.getSlice(slice_urn);
+				if (ndlSlice == null) {
+					logger.error("deleteSlice(): unable to find slice " + slice_urn + " among active slices");
+					return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
+				}
+
+				// it is safe to close reservations even in the defer queue /ib 10/29/15
+				//            if (XmlrpcOrcaState.getSDT().inDeferredQueue(ndlSlice)) {
+				//            	logger.error("deleteSlice(): unable to delete slice " + slice_urn + ", it is waiting in the defer queue");
+				//            	return setError("ERROR: unable to delete deferred slice " + slice_urn + ", please try some time later");
+				//            }
+
+				// lock the slice
+				ndlSlice.lock();
+
+				if (ndlSlice.isDeadOrClosing())
+					return setError("ERROR: slice already closed");
+				
+				//if (!ndlSlice.isStable())
+				//	return setError("ERROR: slice is still in transition and cannot be closed");
+				
+				sm = instance.getSM();
+
+				List<ReservationMng> allRes = ndlSlice.getAllReservations(sm);
+				int failCount = 0;
+				if(allRes == null){
+					result = false;
+					ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
+					logger.debug("No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+				} else {
+					logger.debug("There are " + allRes.size() + " reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+					for (ReservationMng r : allRes){
+						try {
+							logger.debug("Closing reservation with reservation GUID: " + r.getReservationID());
+							if (userDN != null) {
+								if (!userDN.equals(OrcaConverter.getLocalProperty(r, XmlrpcOrcaState.XMLRPC_USER_DN))) {
+									logger.error("User " + userDN + " is trying to close reservation " + 
+											r.getReservationID() + " of which it is not the owner (real owner: " + 
+											OrcaConverter.getLocalProperty(r, XmlrpcOrcaState.XMLRPC_USER_DN) + ")");
+									failCount++;
+								} else {
+									// FIXME: this should be redundant, since we just validated the user_dn and
+									// setAbacAttributes is called on createSlice. Moreover, closeReservation uses only the
+									// reservationId, not the whole object
+									if(AbacUtil.verifyCredentials){
+										setAbacAttributes(r, logger);
+									}
+									sm.closeReservation(new ReservationID(r.getReservationID()));
+									instance.releaseAddressAssignment(r);
 								}
-								sm.closeReservation(new ReservationID(r.getReservationID()));
-								instance.releaseAddressAssignment(r);
 							}
+						} catch (Exception ex) {
+							result = false;
+							return setError("ERROR: Failed to close reservation due to " + ex);
 						}
-					} catch (Exception ex) {
-						result = false;
-						return setError("ERROR: Failed to close reservation due to " + ex);
 					}
-				}
-				result = true;
-			}
-	
-			if (failCount == 0) {
-				ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
-				//FixME: needs to reset typeMaps for each domain.........
-				try {
-					sm.removeSlice(new SliceID(ndlSlice.getSliceID()));
-				} catch (Exception e) {
-					// FIXME: what should we do here?
-					logger.error("deleteSlice(): Unable to unregister slice " + ndlSlice.getSliceID() + " for urn " + slice_urn);
+					result = true;
 				}
 
-				instance.removeSlice(ndlSlice);
-			
-				// delete this slice from publish queue;
-				ndlSlice.deleteFromPublishQ(logger);
-			} else {
-				result = false;
-			}
-			
-			return setReturn(result);
-		} catch (CredentialException ce) {
-			logger.error("deleteSlice(): Credential Exception: " + ce.getMessage());
-			return setError("ERROR: deleteSlice(): Credential Exception: " + ce.getMessage());
-		} catch (Exception oe) {
-			logger.error("ERROR: deleteSlice(): Exception encountered: " + oe.getMessage());	
-			oe.printStackTrace();
-			return setError("ERROR: deleteSlice(): Exception encountered: " + oe.getMessage());
-		} finally {
-			if (sm != null){
-				instance.returnSM(sm);
-			}
-			if (ndlSlice != null) {
-				ndlSlice.getWorkflow().syncManifestModel();
-				ndlSlice.getWorkflow().syncRequestModel();
-				ndlSlice.unlock();
+				if (failCount == 0) {
+					ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
+					//FixME: needs to reset typeMaps for each domain.........
+					try {
+						sm.removeSlice(new SliceID(ndlSlice.getSliceID()));
+					} catch (Exception e) {
+						// FIXME: what should we do here?
+						logger.error("deleteSlice(): Unable to unregister slice " + ndlSlice.getSliceID() + " for urn " + slice_urn);
+					}
+
+					instance.removeSlice(ndlSlice);
+
+					// delete this slice from publish queue;
+					ndlSlice.deleteFromPublishQ(logger);
+				} else {
+					result = false;
+				}
+
+				return setReturn(result);
+			} catch (CredentialException ce) {
+				logger.error("deleteSlice(): Credential Exception: " + ce.getMessage());
+				return setError("ERROR: deleteSlice(): Credential Exception: " + ce.getMessage());
+			} catch (Exception oe) {
+				logger.error("ERROR: deleteSlice(): Exception encountered: " + oe.getMessage());	
+				oe.printStackTrace();
+				return setError("ERROR: deleteSlice(): Exception encountered: " + oe.getMessage());
+			} finally {
+				if (sm != null){
+					instance.returnSM(sm);
+				}
+				if (ndlSlice != null) {
+					ndlSlice.getWorkflow().syncManifestModel();
+					ndlSlice.getWorkflow().syncRequestModel();
+					ndlSlice.unlock();
+				}
+				
+				LabelSyncThread.releaseLock();
 			}
 		}
 	}

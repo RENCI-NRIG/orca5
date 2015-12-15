@@ -1,5 +1,6 @@
 package orca.controllers.xmlrpc;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -18,8 +19,10 @@ import orca.manage.IOrcaServiceManager;
 public class LabelSyncThread implements Runnable {
 	public static final String PropertyMaxXmlrpcWaitTime = "xmlrpc.controller.label.sync.max.wait.time";
 	public static final String PropertySyncThreadPeriod = "xmlrpc.controller.label.sync.period";
+	public static final String PropertyRunSyncFile = "xmlrpc.controller.label.sync.enable.file";
+	public static final String DEFAULT_SYNC_THREAD_ENABLE_FILE=OrcaController.ConfigDirectory + "enable-label-sync";
 	public static final int MAX_DEFAULT_WAIT_TIME = 60; //seconds
-	public static final int DEFAULT_SYNC_THREAD_PERIOD=900; // seconds
+	public static final int DEFAULT_SYNC_THREAD_PERIOD=60; // seconds
 	final static Logger logger = OrcaController.getLogger(LabelSyncThread.class.getSimpleName());
 	protected static Lock syncLock = new ReentrantLock();
 	protected static int waitTimeInt = 0;
@@ -40,6 +43,24 @@ public class LabelSyncThread implements Runnable {
 			running = true;
 		}
 		logger.info("LabelSyncThread executing cycle");
+		
+		// this thread needs to be run with caution and in general a better solution is needed
+		// if it comes in on the heels of a deleteSlice operation, some labels just taken
+		// off the global controller list may end up being put back on because the reservations
+		// haven't closed yet, so it may take another run of the thread to actually sync the state. 
+		
+		// therefore it is best not to run it in general, but enable only if problems arise /ib 11/15/15
+		String patFileName = OrcaController.getProperty(PropertyRunSyncFile);
+		if (patFileName == null){
+			patFileName = DEFAULT_SYNC_THREAD_ENABLE_FILE;
+		} 
+		
+		File rf = new File(patFileName);
+		if (!rf.exists()) {
+			logger.info("LabelSync thread enable file " + patFileName + " doesn't exist, skipping");
+			return;
+		}
+		
 		IOrcaServiceManager sm = null;
 		XmlrpcOrcaState instance = XmlrpcOrcaState.getInstance();
 
@@ -54,8 +75,8 @@ public class LabelSyncThread implements Runnable {
 		} finally {
 			if (sm != null)
 				instance.returnSM(sm);
-			running = false;
 			releaseLock();
+			running = false;
 		}
 	}
 	
