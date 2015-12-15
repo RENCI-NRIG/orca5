@@ -522,298 +522,231 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		XmlrpcControllerSlice ndlSlice = null;
 		IOrcaServiceManager sm = null;
 		
+		//Check existing slices, remove the closed ones from XmlrpcOrcaState
+		instance.closeDeadSlices();
+		
+		if (!checkMemory(null)) {
+			return setError("ERROR: low system memory, please try later");
+		}
+		
 		if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
 			return setError("ERROR: system is busy, please try again in a few minutes");
 		}
-		
-		try {
-			String result_str = null;
-			logger.info("ORCA API modifySlice() invoked for " + slice_urn);
 
-			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, verifyCredentials, logger);
-			
-			// check the whitelist
-			if (verifyCredentials && !checkWhitelist(userDN)) 
-				return setError(WHITELIST_ERROR);
-
-			if ((modReq == null) || (modReq.length() == 0)) {
-				logger.error("modifySlice(): modification request for slice " + slice_urn + " is empty");
-				return setError("ERROR: modification request is empty for slice " + slice_urn);
-			}
-
-			// find this slice and lock it
-			ndlSlice = instance.getSlice(slice_urn);
-			if (ndlSlice == null) {
-				logger.error("modifySlice(): unable to find slice " + slice_urn + " among active slices");
-				return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
-			}
-			// lock the slice
-			ndlSlice.lock();
-			ndlSlice.getStateMachine().transitionSlice(SliceCommand.MODIFY);
-
-			RequestWorkflow workflow = ndlSlice.getWorkflow();
-
-			sm = instance.getSM();
-			
-			//populate typesMap and abstractModels
+		synchronized(createLock) {
 			try {
-				discoverTypes(sm);
-			} catch (Exception ex) {
-				logger.error("modifySlice(): discoverTypes() failed to populate typesMap and abstractModels: " + ex);
-				return setError("ERROR: discoverTypes() failed to populate typesMap and abstractModels");
-			}
-			DomainResourcePools drp = new DomainResourcePools(); 
-			drp.getDomainResourcePools(pools);
-			ReservationConverter orc = ndlSlice.getOrc();
-			ReservationElementCollection r_collection = orc.getElementCollection();
-			if(r_collection==null){
-				logger.error("ModifySlice(): No reservations created for this request; Error:no r_collection");
-				return setError("ERROR:ModifySlice Exception! no r_coolection");
-			}else if(r_collection.NodeGroupMap==null){
-				logger.error("ModifySlice(): No reservations created for this request; Error:no NodeGroupMap");
-				return setError("ERROR:ModifySlice Exception! no NodeGroupMap");
-			}else if(r_collection.firstGroupElement==null){
-				logger.error("ModifySlice(): No reservations created for this request; Error:no firstGroupElement");
-				return setError("ERROR:ModifySlice Exception! no firstGroupElement");
-			}
-			try{
-				workflow.modify(drp, modReq,ndlSlice.getSliceID(), r_collection.NodeGroupMap, r_collection.firstGroupElement);
-			}catch(Exception e){
-				e.printStackTrace();
-				logger.error("ModifySlice(): No reservations created for this request; Error:");
-				return setError("ERROR:ModifySlice Exception!" + e);
-			}
+				String result_str = null;
+				logger.info("ORCA API modifySlice() invoked for " + slice_urn);
 
-			if(workflow.getErrorMsg()!=null){
-				logger.error("modifySlice(): No reservations created for this request; Error:"+workflow.getErrorMsg());
-				return setError("ERROR: " + workflow.getErrorMsg());
-			}
-			
-			InterCloudHandler ih =  (InterCloudHandler) workflow.getEmbedderAlgorithm();
-			
-			// See createSlice() and XmlrpcControllerSlice object for methods.
-			// remapping between urn's and slice ids is done by using static methods on
-			// XmlrpcControllerSlice object. XmlrpcOrcaState only has one map from slice IDs
-			// to XmlrpcControllerSlice objects. These slice objects are locked within each call
-			// using a fair semaphore. 
-			List<ReservationMng> allRes = null;
-			HashMap <String, ReservationMng> allRes_map = null;
-			HashMap <String, List<ReservationMng>> m_map = null;
-			logger.info("ORCA API modifySlice() started...");
+				String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, verifyCredentials, logger);
 
-			try {
-				allRes = ndlSlice.getAllReservations(sm);
-			} catch (Exception e) {
-				logger.error("modifySlice(): Exception encountered for " + slice_urn + ": " + e);
-				return setError("ERROR: unable to get reservations in slice status for " + slice_urn);
-			} 
+				// check the whitelist
+				if (verifyCredentials && !checkWhitelist(userDN)) 
+					return setError(WHITELIST_ERROR);
 
-			if (allRes == null){
-				result_str = "ERROR: Empty slice " + slice_urn + ", slice status can't be determined";
-				logger.error("modifySlice(): Invalid slice " + slice_urn  + ", slice status can't be determined");
-				return setError(result_str);
-			}
-			else {
-				allRes_map = new HashMap <String, ReservationMng>();
-				for(ReservationMng aRes:allRes)
-					allRes_map.put(aRes.getReservationID(), aRes);
-				if(ndlSlice.getComputedReservations()!=null)
-					for(TicketReservationMng cRes:ndlSlice.getComputedReservations())
-						cRes.setState(allRes_map.get(cRes.getReservationID()).getState());
-				
-				GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
-				orc.updateGeniStates(ndlSlice.getWorkflow().getManifestModel(), geniStates);
-				OntModel manifestModel=orc.getManifestModel(workflow.getManifestModel(),
-						workflow.getDomainInConnectionList(),
-						workflow.getBoundElements(),
-						allRes);
+				if ((modReq == null) || (modReq.length() == 0)) {
+					logger.error("modifySlice(): modification request for slice " + slice_urn + " is empty");
+					return setError("ERROR: modification request is empty for slice " + slice_urn);
+				}
 
-				LinkedList <Device> addedDevices = ih.getAddedDevices();
-				LinkedList<NetworkElement> l_D = new LinkedList<NetworkElement>();
-				for(int i=0;i<addedDevices.size();i++)
-					l_D.add((NetworkElement)addedDevices.get(i) );
-				LinkedList <Device> modifiedDevices = ih.getModifiedDevices(); 
-				LinkedList<NetworkElement> l_M = new LinkedList<NetworkElement>();
-				for(int i=0;i<modifiedDevices.size();i++)
-					l_M.add((NetworkElement)modifiedDevices.get(i) );		
-				m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D,l_M);
-				List <ReservationMng> extra_ar = ih.modifyStorage(m_map);
-				if(extra_ar!=null){
-					for(ReservationMng ar: extra_ar){
-						ReservationID r_id=new ReservationID(ar.getReservationID());
-						logger.debug("redundant reservation:"+r_id);
-						sm.closeReservation(r_id);
-						sm.removeReservation(r_id);
+				// find this slice and lock it
+				ndlSlice = instance.getSlice(slice_urn);
+				if (ndlSlice == null) {
+					logger.error("modifySlice(): unable to find slice " + slice_urn + " among active slices");
+					return setError("ERROR: unable to find slice " + slice_urn + " among active slices");
+				}
+				// lock the slice
+				ndlSlice.lock();
+				ndlSlice.getStateMachine().transitionSlice(SliceCommand.MODIFY);
+
+				RequestWorkflow workflow = ndlSlice.getWorkflow();
+
+				sm = instance.getSM();
+
+				//populate typesMap and abstractModels
+				try {
+					discoverTypes(sm);
+				} catch (Exception ex) {
+					logger.error("modifySlice(): discoverTypes() failed to populate typesMap and abstractModels: " + ex);
+					return setError("ERROR: discoverTypes() failed to populate typesMap and abstractModels");
+				}
+				DomainResourcePools drp = new DomainResourcePools(); 
+				drp.getDomainResourcePools(pools);
+				ReservationConverter orc = ndlSlice.getOrc();
+				ReservationElementCollection r_collection = orc.getElementCollection();
+				if(r_collection==null){
+					logger.error("ModifySlice(): No reservations created for this request; Error:no r_collection");
+					return setError("ERROR:ModifySlice Exception! no r_coolection");
+				}else if(r_collection.NodeGroupMap==null){
+					logger.error("ModifySlice(): No reservations created for this request; Error:no NodeGroupMap");
+					return setError("ERROR:ModifySlice Exception! no NodeGroupMap");
+				}else if(r_collection.firstGroupElement==null){
+					logger.error("ModifySlice(): No reservations created for this request; Error:no firstGroupElement");
+					return setError("ERROR:ModifySlice Exception! no firstGroupElement");
+				}
+				try{
+					workflow.modify(drp, modReq,ndlSlice.getSliceID(), r_collection.NodeGroupMap, r_collection.firstGroupElement);
+				}catch(Exception e){
+					e.printStackTrace();
+					logger.error("ModifySlice(): No reservations created for this request; Error:");
+					return setError("ERROR:ModifySlice Exception!" + e);
+				}
+
+				if(workflow.getErrorMsg()!=null){
+					logger.error("modifySlice(): No reservations created for this request; Error:"+workflow.getErrorMsg());
+					return setError("ERROR: " + workflow.getErrorMsg());
+				}
+
+				InterCloudHandler ih =  (InterCloudHandler) workflow.getEmbedderAlgorithm();
+
+				// See createSlice() and XmlrpcControllerSlice object for methods.
+				// remapping between urn's and slice ids is done by using static methods on
+				// XmlrpcControllerSlice object. XmlrpcOrcaState only has one map from slice IDs
+				// to XmlrpcControllerSlice objects. These slice objects are locked within each call
+				// using a fair semaphore. 
+				List<ReservationMng> allRes = null;
+				HashMap <String, ReservationMng> allRes_map = null;
+				HashMap <String, List<ReservationMng>> m_map = null;
+				logger.info("ORCA API modifySlice() started...");
+
+				try {
+					allRes = ndlSlice.getAllReservations(sm);
+				} catch (Exception e) {
+					logger.error("modifySlice(): Exception encountered for " + slice_urn + ": " + e);
+					return setError("ERROR: unable to get reservations in slice status for " + slice_urn);
+				} 
+
+				if (allRes == null){
+					result_str = "ERROR: Empty slice " + slice_urn + ", slice status can't be determined";
+					logger.error("modifySlice(): Invalid slice " + slice_urn  + ", slice status can't be determined");
+					return setError(result_str);
+				}
+				else {
+					allRes_map = new HashMap <String, ReservationMng>();
+					for(ReservationMng aRes:allRes)
+						allRes_map.put(aRes.getReservationID(), aRes);
+					if(ndlSlice.getComputedReservations()!=null)
+						for(TicketReservationMng cRes:ndlSlice.getComputedReservations())
+							cRes.setState(allRes_map.get(cRes.getReservationID()).getState());
+
+					GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
+					orc.updateGeniStates(ndlSlice.getWorkflow().getManifestModel(), geniStates);
+					OntModel manifestModel=orc.getManifestModel(workflow.getManifestModel(),
+							workflow.getDomainInConnectionList(),
+							workflow.getBoundElements(),
+							allRes);
+
+					LinkedList <Device> addedDevices = ih.getAddedDevices();
+					LinkedList<NetworkElement> l_D = new LinkedList<NetworkElement>();
+					for(int i=0;i<addedDevices.size();i++)
+						l_D.add((NetworkElement)addedDevices.get(i) );
+					LinkedList <Device> modifiedDevices = ih.getModifiedDevices(); 
+					LinkedList<NetworkElement> l_M = new LinkedList<NetworkElement>();
+					for(int i=0;i<modifiedDevices.size();i++)
+						l_M.add((NetworkElement)modifiedDevices.get(i) );		
+					m_map=orc.modifyReservations(manifestModel, allRes, typesMap, workflow.getslice(), ih.getModifies(),l_D,l_M);
+					List <ReservationMng> extra_ar = ih.modifyStorage(m_map);
+					if(extra_ar!=null){
+						for(ReservationMng ar: extra_ar){
+							ReservationID r_id=new ReservationID(ar.getReservationID());
+							logger.debug("redundant reservation:"+r_id);
+							sm.closeReservation(r_id);
+							sm.removeReservation(r_id);
+						}
 					}
+					ih.modifyComplete(); //clear the modify data.
 				}
-				ih.modifyComplete(); //clear the modify data.
-			}
-			
-			logger.info("modifySlice(): processing removed reservations");
-			//modifyRemove reserations (remove a interface)
-			List <ReservationMng> a_r = m_map.get(ModifyType.MODIFYREMOVE.toString());	
-			List <ReservationMng> p_r = m_map.get(ModifyType.REMOVE.toString());
-			if (a_r == null || p_r==null) {
-				result_str ="No modifyremoved reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID()+";"+a_r+";"+p_r;
-				logger.debug("No modifyremoved reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID()+";"+a_r+";"+p_r);
-			} else {				
-				logger.debug("There are " + a_r.size() + " reservations to be modifyremoved in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());				
-				
-				LinkedList <NetworkElement> d_list = ih.getDeviceList();
-				HashMap <String, NetworkElement> d_list_guid_map = new HashMap <String, NetworkElement>();
-				for(NetworkElement ne:d_list){
-					//if(ne.getGUID()!=null)
+
+				logger.info("modifySlice(): processing removed reservations");
+				//modifyRemove reserations (remove a interface)
+				List <ReservationMng> a_r = m_map.get(ModifyType.MODIFYREMOVE.toString());	
+				List <ReservationMng> p_r = m_map.get(ModifyType.REMOVE.toString());
+				if (a_r == null || p_r==null) {
+					result_str ="No modifyremoved reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID()+";"+a_r+";"+p_r;
+					logger.debug("No modifyremoved reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID()+";"+a_r+";"+p_r);
+				} else {				
+					logger.debug("There are " + a_r.size() + " reservations to be modifyremoved in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());				
+
+					LinkedList <NetworkElement> d_list = ih.getDeviceList();
+					HashMap <String, NetworkElement> d_list_guid_map = new HashMap <String, NetworkElement>();
+					for(NetworkElement ne:d_list){
+						//if(ne.getGUID()!=null)
 						//d_list_guid_map.put(ne.getGUID(), ne);
-					d_list_guid_map.put(ne.getName(), ne);
-				}
-				HashMap <String, ReservationMng> p_r_map = new HashMap <String, ReservationMng>();
-				for(ReservationMng p_r_m:p_r){
-					Properties local = OrcaConverter.fill(p_r_m.getLocalProperties());
-					String url=local.getProperty(ReservationConverter.UNIT_URL_RES);
-					if(url==null)
-						logger.error("No url:"+p_r_m);
-					else
-						p_r_map.put(url, p_r_m);
-				}
-				for (ReservationMng rr: a_r){
-					try{
-						Properties local = OrcaConverter.fill(rr.getLocalProperties());
-						Properties config = OrcaConverter.fill(rr.getConfigurationProperties());
-						Properties request = OrcaConverter.fill(rr.getRequestProperties());
-						Properties resource = OrcaConverter.fill(rr.getResourceProperties());
-						
-						String rr_guid = local.getProperty(UnitProperties.UnitURL);
-						if(rr_guid==null){
-							logger.error("No element url found in the reservation:"+rr.getReservationID());
-							continue;
-						}
-						
-						DomainElement de = (DomainElement) d_list_guid_map.get(rr_guid);
-						if(de==null){
-							logger.error("No de, guid="+rr_guid);
-							continue;
-						}
-						if(de.getPrecededBy().isEmpty()){
-							logger.error("No parent, de="+de.getName());
-							continue;
-						}
-						logger.debug("modifyremove:rr="+rr.getReservationID()+";name="+de.getName()
-								+";guid="+rr_guid+";parent size="+de.getPrecededBy().size());
-						for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()){
-							String parent_prefix = UnitProperties.UnitEthPrefix;
-							String modifySubcommand = "removeiface";
-							
-							Properties modifyProperties=new Properties();
-							
-							DomainElement pe = parent.getKey();
-							String name = pe.getName();
-							ReservationMng p_r_m = p_r_map.get(name);
-							
-							if(p_r_m==null){
-								logger.error("no this parent reservation:"+name);
+						d_list_guid_map.put(ne.getName(), ne);
+					}
+					HashMap <String, ReservationMng> p_r_map = new HashMap <String, ReservationMng>();
+					for(ReservationMng p_r_m:p_r){
+						Properties local = OrcaConverter.fill(p_r_m.getLocalProperties());
+						String url=local.getProperty(ReservationConverter.UNIT_URL_RES);
+						if(url==null)
+							logger.error("No url:"+p_r_m);
+						else
+							p_r_map.put(url, p_r_m);
+					}
+					for (ReservationMng rr: a_r){
+						try{
+							Properties local = OrcaConverter.fill(rr.getLocalProperties());
+							Properties config = OrcaConverter.fill(rr.getConfigurationProperties());
+							Properties request = OrcaConverter.fill(rr.getRequestProperties());
+							Properties resource = OrcaConverter.fill(rr.getResourceProperties());
+
+							String rr_guid = local.getProperty(UnitProperties.UnitURL);
+							if(rr_guid==null){
+								logger.error("No element url found in the reservation:"+rr.getReservationID());
 								continue;
 							}
-							logger.debug("modifyremove:found parent reservation="+name);
-							Properties pr_local=null;
-							String isNetwork=null,isLun=null;
-							pr_local=OrcaConverter.fill(p_r_m.getLocalProperties());
-							
-							isNetwork = pr_local.getProperty(ReservationConverter.PropertyIsNetwork);
-							isLun = pr_local.getProperty(ReservationConverter.PropertyIsLUN);
-							
-							pr_local=null;
-							String host_interface=null;
-							String unit_tag = null,unit_parent_url=null;
-							if(isNetwork!=null && isNetwork.equals("1")){	//Parent is a networking reservation
-								List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
-								if (un != null) {
-									for (UnitMng u : un) {
-										pr_local = OrcaConverter.fill(u.getProperties());										
-										if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
-											unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
-										if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
-											unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
-									}
-								}
 
-								host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
-								if(host_interface==null){	//modify case, properties only in config
-									host_interface=StringProcessor.getHostInterface(config,unit_parent_url);
-									parent_prefix = "modify.";
-								}
-								if(host_interface==null){
-									logger.warn("Not find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
+							DomainElement de = (DomainElement) d_list_guid_map.get(rr_guid);
+							if(de==null){
+								logger.error("No de, guid="+rr_guid);
+								continue;
+							}
+							if(de.getPrecededBy().isEmpty()){
+								logger.error("No parent, de="+de.getName());
+								continue;
+							}
+							logger.debug("modifyremove:rr="+rr.getReservationID()+";name="+de.getName()
+									+";guid="+rr_guid+";parent size="+de.getPrecededBy().size());
+							for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()){
+								String parent_prefix = UnitProperties.UnitEthPrefix;
+								String modifySubcommand = "removeiface";
+
+								Properties modifyProperties=new Properties();
+
+								DomainElement pe = parent.getKey();
+								String name = pe.getName();
+								ReservationMng p_r_m = p_r_map.get(name);
+
+								if(p_r_m==null){
+									logger.error("no this parent reservation:"+name);
 									continue;
 								}
+								logger.debug("modifyremove:found parent reservation="+name);
+								Properties pr_local=null;
+								String isNetwork=null,isLun=null;
+								pr_local=OrcaConverter.fill(p_r_m.getLocalProperties());
 
-								logger.debug("modifyRemove: host_interface="+host_interface+";tag="+unit_tag+";parent url="+unit_parent_url);
-							
-								String parent_tag_name = parent_prefix+host_interface+UnitProperties.UnitEthVlanSuffix;
-								modifyProperties.setProperty("vlan.tag",unit_tag);
-								/*local.remove(parent_tag_name);
-								config.remove(parent_tag_name);
-								request.remove(parent_tag_name);
-								resource.remove(parent_tag_name);
-								*/
-								String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
-								String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
-								String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
-								String parent_interface_uuid = parent_prefix+host_interface+".uuid";
-								String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
-								
-								if(config.getProperty(parent_mac_addr)!=null){
-									modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
-									/*local.remove(parent_mac_addr);
-									config.remove(parent_mac_addr);
-									request.remove(parent_mac_addr);
-									resource.remove(parent_mac_addr);*/
-								}
-								if(config.getProperty(parent_ip_addr)!=null){
-									modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
-									/*local.remove(parent_ip_addr);
-									config.remove(parent_ip_addr);
-									request.remove(parent_ip_addr);
-									resource.remove(parent_ip_addr);*/
-								}
-								if(config.getProperty(parent_quantum_uuid)!=null){
-									modifyProperties.setProperty("net.uuid",config.getProperty(parent_quantum_uuid));
-									/*local.remove(parent_quantum_uuid);
-									config.remove(parent_quantum_uuid);
-									request.remove(parent_quantum_uuid);
-									resource.remove(parent_quantum_uuid);*/
-								}
-								if(config.getProperty(parent_interface_uuid)!=null){
-									modifyProperties.setProperty("uuid",config.getProperty(parent_interface_uuid));
-									/*local.remove(parent_interface_uuid);
-									config.remove(parent_interface_uuid);
-									request.remove(parent_interface_uuid);
-									resource.remove(parent_interface_uuid);*/
-								}
-								if(config.getProperty(site_host_interface)!=null){
-									modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
-									/*local.remove(site_host_interface);
-									config.remove(site_host_interface);
-									request.remove(site_host_interface);
-									resource.remove(site_host_interface);*/
-								}
-							}
-							
-							//parent is lun 
-							if(isLun!=null && isLun.equals("1")){	//Parent is a storage reservation
-								List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
-								if (un != null) {
-									for (UnitMng u : un) {
-										pr_local = OrcaConverter.fill(u.getProperties());
-										if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
-											unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
+								isNetwork = pr_local.getProperty(ReservationConverter.PropertyIsNetwork);
+								isLun = pr_local.getProperty(ReservationConverter.PropertyIsLUN);
+
+								pr_local=null;
+								String host_interface=null;
+								String unit_tag = null,unit_parent_url=null;
+								if(isNetwork!=null && isNetwork.equals("1")){	//Parent is a networking reservation
+									List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
+									if (un != null) {
+										for (UnitMng u : un) {
+											pr_local = OrcaConverter.fill(u.getProperties());										
+											if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
+												unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
+											if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
+												unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
+										}
 									}
-								}
-								logger.debug("isLun="+isLun+";parent unit lun tag:"+unit_tag);
-								if(unit_tag!=null){
-									modifyProperties.setProperty("target.lun.num",unit_tag);
-									host_interface=StringProcessor.getHostInterface(local,p_r_m);
+
+									host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
 									if(host_interface==null){	//modify case, properties only in config
-										host_interface=StringProcessor.getHostInterface(config,p_r_m);
+										host_interface=StringProcessor.getHostInterface(config,unit_parent_url);
 										parent_prefix = "modify.";
 									}
 									if(host_interface==null){
@@ -821,242 +754,317 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 										continue;
 									}
 
-									String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
+									logger.debug("modifyRemove: host_interface="+host_interface+";tag="+unit_tag+";parent url="+unit_parent_url);
+
+									String parent_tag_name = parent_prefix+host_interface+UnitProperties.UnitEthVlanSuffix;
+									modifyProperties.setProperty("vlan.tag",unit_tag);
+									/*local.remove(parent_tag_name);
+								config.remove(parent_tag_name);
+								request.remove(parent_tag_name);
+								resource.remove(parent_tag_name);
+									 */
 									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
 									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
+									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
+									String parent_interface_uuid = parent_prefix+host_interface+".uuid";
 									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
-										
-									if(local.getProperty(parent_tag_name)!=null)
-										modifyProperties.setProperty("vlan.tag",local.getProperty(parent_tag_name));
-									if(local.getProperty(parent_mac_addr)!=null)
-										modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
-									if(local.getProperty(parent_ip_addr)!=null)
-										modifyProperties.setProperty("ip",local.getProperty(parent_ip_addr));
-									if(local.getProperty(site_host_interface)!=null)
-										modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
-								}else{	//no need to go futher
-									logger.error("Parent did not return the unit lun tag:"+pr_local);
-									continue;
+
+									if(config.getProperty(parent_mac_addr)!=null){
+										modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
+										/*local.remove(parent_mac_addr);
+									config.remove(parent_mac_addr);
+									request.remove(parent_mac_addr);
+									resource.remove(parent_mac_addr);*/
+									}
+									if(config.getProperty(parent_ip_addr)!=null){
+										modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
+										/*local.remove(parent_ip_addr);
+									config.remove(parent_ip_addr);
+									request.remove(parent_ip_addr);
+									resource.remove(parent_ip_addr);*/
+									}
+									if(config.getProperty(parent_quantum_uuid)!=null){
+										modifyProperties.setProperty("net.uuid",config.getProperty(parent_quantum_uuid));
+										/*local.remove(parent_quantum_uuid);
+									config.remove(parent_quantum_uuid);
+									request.remove(parent_quantum_uuid);
+									resource.remove(parent_quantum_uuid);*/
+									}
+									if(config.getProperty(parent_interface_uuid)!=null){
+										modifyProperties.setProperty("uuid",config.getProperty(parent_interface_uuid));
+										/*local.remove(parent_interface_uuid);
+									config.remove(parent_interface_uuid);
+									request.remove(parent_interface_uuid);
+									resource.remove(parent_interface_uuid);*/
+									}
+									if(config.getProperty(site_host_interface)!=null){
+										modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
+										/*local.remove(site_host_interface);
+									config.remove(site_host_interface);
+									request.remove(site_host_interface);
+									resource.remove(site_host_interface);*/
+									}
 								}
+
+								//parent is lun 
+								if(isLun!=null && isLun.equals("1")){	//Parent is a storage reservation
+									List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
+									if (un != null) {
+										for (UnitMng u : un) {
+											pr_local = OrcaConverter.fill(u.getProperties());
+											if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
+												unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
+										}
+									}
+									logger.debug("isLun="+isLun+";parent unit lun tag:"+unit_tag);
+									if(unit_tag!=null){
+										modifyProperties.setProperty("target.lun.num",unit_tag);
+										host_interface=StringProcessor.getHostInterface(local,p_r_m);
+										if(host_interface==null){	//modify case, properties only in config
+											host_interface=StringProcessor.getHostInterface(config,p_r_m);
+											parent_prefix = "modify.";
+										}
+										if(host_interface==null){
+											logger.warn("Not find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
+											continue;
+										}
+
+										String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
+										String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
+										String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
+										String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
+
+										if(local.getProperty(parent_tag_name)!=null)
+											modifyProperties.setProperty("vlan.tag",local.getProperty(parent_tag_name));
+										if(local.getProperty(parent_mac_addr)!=null)
+											modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
+										if(local.getProperty(parent_ip_addr)!=null)
+											modifyProperties.setProperty("ip",local.getProperty(parent_ip_addr));
+										if(local.getProperty(site_host_interface)!=null)
+											modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
+									}else{	//no need to go futher
+										logger.error("Parent did not return the unit lun tag:"+pr_local);
+										continue;
+									}
+								}
+								System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
+								ModifyHelper.enqueueModify(rr.getReservationID().toString(), modifySubcommand, modifyProperties);
+
+								//rr.setLocalProperties(OrcaConverter.unset(local, rr.getLocalProperties()));
+								//rr.setConfigurationProperties(OrcaConverter.unset(config, rr.getConfigurationProperties()));
+								//rr.setRequestProperties(OrcaConverter.unset(request, rr.getRequestProperties()));
+								//rr.setResourceProperties(OrcaConverter.unset(resource, rr.getResourceProperties()));
+
 							}
-							System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
-							ModifyHelper.enqueueModify(rr.getReservationID().toString(), modifySubcommand, modifyProperties);
-								
-							//rr.setLocalProperties(OrcaConverter.unset(local, rr.getLocalProperties()));
-							//rr.setConfigurationProperties(OrcaConverter.unset(config, rr.getConfigurationProperties()));
-							//rr.setRequestProperties(OrcaConverter.unset(request, rr.getRequestProperties()));
-							//rr.setResourceProperties(OrcaConverter.unset(resource, rr.getResourceProperties()));
-						
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							result_str = "Failed to modifyremove reservation"+ex;
 						}
-						
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						result_str = "Failed to modifyremove reservation"+ex;
 					}
 				}
-			}
-			//remove reservations
-			a_r = m_map.get(ModifyType.REMOVE.toString());
-			if (a_r == null) {
-				result_str ="No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
-				logger.debug("No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
-			} else {			
-				for (ReservationMng rr: a_r){
-					try{
-						instance.releaseAddressAssignment(rr);
-						ndlSlice.removeComputedReservations(rr.getReservationID());
-						sm.closeReservation(new ReservationID(rr.getReservationID()));
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						result_str = "Failed to close reservation"+ex;
-						throw new Exception("Failed to close reservation", ex);
-					}
-				}
-				logger.debug("There are " + a_r.size() 
-						+ " reservations to be removed in the slice with urn=" + slice_urn 
-						+ " sliceId = " + ndlSlice.getSliceID()
-						+ "reservations "+ndlSlice.getComputedReservations().size());
-			}       
-			
-			logger.info("modifySlice(): processing add reservations");
-			//add reservations
-			a_r=m_map.get(ModifyType.ADD.toString());
-			if (a_r == null) {
-				result_str ="No added reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
-				logger.debug("No added reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
-			}else{ 
-				logger.debug("There are " + a_r.size() + " new reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
-				for (ReservationMng rr: a_r){
-					try{
-						instance.releaseAddressAssignment(rr);
-
-						if (userDN != null) 
-							OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
-
-						logger.debug("Issuing demand for reservation: " + rr.getReservationID().toString());
-						if(AbacUtil.verifyCredentials)
-							setAbacAttributes(rr, logger);
-						
-						ndlSlice.addComputedReservations((TicketReservationMng) rr);
-					} catch (Exception ex) {
-						result_str = "Failed to redeem reservation"+ex;
-						throw new Exception("Failed to redeem reservation", ex);
-					}
-				}
-			}
-
-			orc.updateTerm(workflow.getManifestModel());
-
-			// call on slicedeferthread to either demand immediately
-			// or put on deferred queue
-			XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
-			
-			logger.debug("modifySlice(): modifying existing reservations");
-			//modify existing reservations
-			a_r=m_map.get(ModifyType.MODIFY.toString());
-			if (a_r == null) {
-				result_str ="No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
-				logger.debug("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
-			} else {
-				logger.debug("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
-				for (ReservationMng rr: a_r){
-					try{
-						//instance.releaseAddressAssignment(rr);
-
-						if (userDN != null) 
-							OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
-
-						logger.debug("Issuing modify demand for reservation: " + rr.getReservationID().toString());
-						if(AbacUtil.verifyCredentials)
-							setAbacAttributes(rr, logger);
-						String sliver_guid = rr.getReservationID();
-			            
-						Properties local = OrcaConverter.fill(rr.getLocalProperties());
-						//String unit_url = local.getProperty(ReservationConverter.UNIT_URL_RES);
-						//String modify_ver = local.getProperty(ReservationConverter.PropertyModifyVersion);
-						//String element_guid = local.getProperty(ReservationConverter.PropertyElementGUID);
-			            // for testing - add a status watch for this reservation
-			            //List<ReservationIDWithModifyIndex> actList = 
-			            //		Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), Integer.valueOf(modify_ver)));
-						//local.list(System.out);
-						
-			            ReservationDependencyStatusUpdate rr_depend = new ReservationDependencyStatusUpdate();
-			            rr_depend.setReservation(rr);
-			            List <ReservationID> rr_l = Collections.<ReservationID>singletonList(new ReservationID(sliver_guid));
-			            List <ReservationID> rr_d_list = new ArrayList<ReservationID>();
-			            
-			            //get properties to get its parent reservations
-					
-						String  p_str = local.getProperty(ReservationConverter.PropertyNumExistParentReservations);
-						logger.debug("addActiveStatuWatch:numExistParent="+p_str);
-						int p = 0;
-						String r_id=null;
-						if(p_str!=null){
-							p=Integer.valueOf(p_str);
-							for(int i=0;i<p;i++){
-								String key=ReservationConverter.PropertyExistParent + String.valueOf(i);
-								r_id=local.getProperty(key);
-								if(r_id!=null)
-									rr_d_list.add(new ReservationID(r_id));
-							}
+				//remove reservations
+				a_r = m_map.get(ModifyType.REMOVE.toString());
+				if (a_r == null) {
+					result_str ="No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
+					logger.debug("No removed reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+				} else {			
+					for (ReservationMng rr: a_r){
+						try{
+							instance.releaseAddressAssignment(rr);
+							ndlSlice.removeComputedReservations(rr.getReservationID());
+							sm.closeReservation(new ReservationID(rr.getReservationID()));
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							result_str = "Failed to close reservation"+ex;
+							throw new Exception("Failed to close reservation", ex);
 						}
-						p_str = local.getProperty(ReservationConverter.PropertyNumNewParentReservations);
-						System.out.println("addActiveStatuWatch:numNewParent="+p_str);
-						if(p_str!=null){
-							p=Integer.valueOf(p_str);
-							for(int i=0;i<p;i++){
-								String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
-								r_id=local.getProperty(key);
-								if(r_id!=null)
-									rr_d_list.add(new ReservationID(r_id));
-							}
-						}
-			            logger.debug("addActiveStatuWatch:"+rr_d_list+";;self="+rr_l);
-						XmlrpcOrcaState.getSUT().addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
-			            
-						//String modifySubcommand = null;
-						//List<Map<String, ?>> modifyProperties=null;
-						//ret = modifySliver(slice_urn, sliver_guid, credentials, 
-				    	//	modifySubcommand, modifyProperties);
-						
-					} catch (Exception ex) {
+					}
+					logger.debug("There are " + a_r.size() 
+							+ " reservations to be removed in the slice with urn=" + slice_urn 
+							+ " sliceId = " + ndlSlice.getSliceID()
+							+ "reservations "+ndlSlice.getComputedReservations().size());
+				}       
+
+				logger.info("modifySlice(): processing add reservations");
+				//add reservations
+				a_r=m_map.get(ModifyType.ADD.toString());
+				if (a_r == null) {
+					result_str ="No added reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
+					logger.debug("No added reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+				}else{ 
+					logger.debug("There are " + a_r.size() + " new reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+					for (ReservationMng rr: a_r){
+						try{
+							instance.releaseAddressAssignment(rr);
+
+							if (userDN != null) 
+								OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
+
+							logger.debug("Issuing demand for reservation: " + rr.getReservationID().toString());
+							if(AbacUtil.verifyCredentials)
+								setAbacAttributes(rr, logger);
+
+							ndlSlice.addComputedReservations((TicketReservationMng) rr);
+						} catch (Exception ex) {
 							result_str = "Failed to redeem reservation"+ex;
 							throw new Exception("Failed to redeem reservation", ex);
+						}
 					}
 				}
-				
-			}
 
-			// What do we return in the manifest ? reservation Id, type, units ? slice ?
-			StringBuilder result = new StringBuilder("Here are the leases: \n");
+				orc.updateTerm(workflow.getManifestModel());
 
-			result.append("Request id: ");
-			result.append(ndlSlice.getSliceID());
-			result.append("\n");
-			if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
-				Iterator<TicketReservationMng> it = ndlSlice.getComputedReservations().iterator();
+				// call on slicedeferthread to either demand immediately
+				// or put on deferred queue
+				XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 
-				while(it.hasNext()){
-					LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
+				logger.debug("modifySlice(): modifying existing reservations");
+				//modify existing reservations
+				a_r=m_map.get(ModifyType.MODIFY.toString());
+				if (a_r == null) {
+					result_str ="No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID();
+					logger.debug("No modified reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+				} else {
+					logger.debug("There are " + a_r.size() + " modified reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
+					for (ReservationMng rr: a_r){
+						try{
+							//instance.releaseAddressAssignment(rr);
 
-					result.append("[ ");
+							if (userDN != null) 
+								OrcaConverter.setLocalProperty(rr, XmlrpcOrcaState.XMLRPC_USER_DN, userDN.trim());
 
-					result.append("  Slice UID: ");
-					result.append(currRes.getSliceID().toString());
+							logger.debug("Issuing modify demand for reservation: " + rr.getReservationID().toString());
+							if(AbacUtil.verifyCredentials)
+								setAbacAttributes(rr, logger);
+							String sliver_guid = rr.getReservationID();
 
-					result.append(" | Reservation UID: ");
-					result.append(currRes.getReservationID().toString());
+							Properties local = OrcaConverter.fill(rr.getLocalProperties());
+							//String unit_url = local.getProperty(ReservationConverter.UNIT_URL_RES);
+							//String modify_ver = local.getProperty(ReservationConverter.PropertyModifyVersion);
+							//String element_guid = local.getProperty(ReservationConverter.PropertyElementGUID);
+							// for testing - add a status watch for this reservation
+							//List<ReservationIDWithModifyIndex> actList = 
+							//		Collections.<ReservationIDWithModifyIndex>singletonList(new ReservationIDWithModifyIndex(new ReservationID(sliver_guid), Integer.valueOf(modify_ver)));
+							//local.list(System.out);
 
-					result.append(" | Resource Type: ");
-					result.append(currRes.getResourceType().toString());
+							ReservationDependencyStatusUpdate rr_depend = new ReservationDependencyStatusUpdate();
+							rr_depend.setReservation(rr);
+							List <ReservationID> rr_l = Collections.<ReservationID>singletonList(new ReservationID(sliver_guid));
+							List <ReservationID> rr_d_list = new ArrayList<ReservationID>();
 
-					result.append(" | Resource Units: ");
-					result.append(currRes.getUnits());
+							//get properties to get its parent reservations
 
-					result.append(" ] \n");
+							String  p_str = local.getProperty(ReservationConverter.PropertyNumExistParentReservations);
+							logger.debug("addActiveStatuWatch:numExistParent="+p_str);
+							int p = 0;
+							String r_id=null;
+							if(p_str!=null){
+								p=Integer.valueOf(p_str);
+								for(int i=0;i<p;i++){
+									String key=ReservationConverter.PropertyExistParent + String.valueOf(i);
+									r_id=local.getProperty(key);
+									if(r_id!=null)
+										rr_d_list.add(new ReservationID(r_id));
+								}
+							}
+							p_str = local.getProperty(ReservationConverter.PropertyNumNewParentReservations);
+							System.out.println("addActiveStatuWatch:numNewParent="+p_str);
+							if(p_str!=null){
+								p=Integer.valueOf(p_str);
+								for(int i=0;i<p;i++){
+									String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
+									r_id=local.getProperty(key);
+									if(r_id!=null)
+										rr_d_list.add(new ReservationID(r_id));
+								}
+							}
+							logger.debug("addActiveStatuWatch:"+rr_d_list+";;self="+rr_l);
+							XmlrpcOrcaState.getSUT().addActiveStatusWatch(rr_d_list,rr_l, rr_depend);
+
+							//String modifySubcommand = null;
+							//List<Map<String, ?>> modifyProperties=null;
+							//ret = modifySliver(slice_urn, sliver_guid, credentials, 
+							//	modifySubcommand, modifyProperties);
+
+						} catch (Exception ex) {
+							result_str = "Failed to redeem reservation"+ex;
+							throw new Exception("Failed to redeem reservation", ex);
+						}
+					}
+
 				}
 
+				// What do we return in the manifest ? reservation Id, type, units ? slice ?
+				StringBuilder result = new StringBuilder("Here are the leases: \n");
+
+				result.append("Request id: ");
+				result.append(ndlSlice.getSliceID());
+				result.append("\n");
+				if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+					Iterator<TicketReservationMng> it = ndlSlice.getComputedReservations().iterator();
+
+					while(it.hasNext()){
+						LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
+
+						result.append("[ ");
+
+						result.append("  Slice UID: ");
+						result.append(currRes.getSliceID().toString());
+
+						result.append(" | Reservation UID: ");
+						result.append(currRes.getReservationID().toString());
+
+						result.append(" | Resource Type: ");
+						result.append(currRes.getResourceType().toString());
+
+						result.append(" | Resource Units: ");
+						result.append(currRes.getUnits());
+
+						result.append(" ] \n");
+					}
+
+					// call publishManifest if there are reservations in the slice
+					ndlSlice.publishManifest(logger);
+				} else {
+					result.append("No new reservations were computed in modifySlice() call\n");
+				}
+
+				result.append(workflow.getErrorMsg());
+
 				// call publishManifest if there are reservations in the slice
-				ndlSlice.publishManifest(logger);
-			} else {
-				result.append("No new reservations were computed in modifySlice() call\n");
-			}
+				List<ReservationMng> sliceRes = ndlSlice.getReservationsByState(sm, OrcaConstants.ReservationStateActive, 
+						OrcaConstants.ReservationStateActiveTicketed, OrcaConstants.ReservationStateTicketed);
+				if ((sliceRes != null) && (sliceRes.size() > 0)){
+					ndlSlice.publishManifest(logger);
+				}
 
-			result.append(workflow.getErrorMsg());
-			
-			// call publishManifest if there are reservations in the slice
-			List<ReservationMng> sliceRes = ndlSlice.getReservationsByState(sm, OrcaConstants.ReservationStateActive, 
-					OrcaConstants.ReservationStateActiveTicketed, OrcaConstants.ReservationStateTicketed);
-			if ((sliceRes != null) && (sliceRes.size() > 0)){
-				ndlSlice.publishManifest(logger);
-			}
+				if (result.length() == 0)
+					result.append("No result available");
 
-			if (result.length() == 0)
-				result.append("No result available");
-				
-			logger.debug("modifySlice(): returning result " + result);
-			return setReturn(result.toString());
-		} catch (CredentialException ce) {
-			logger.error("modifySlice(): Credential Exception: " + ce.getMessage());
-			return setError("ERROR: CredentialException encountered: " + ce.getMessage());
-		} catch (Exception oe) {
-			logger.error("modifySlice(): Exception encountered: " + oe.getMessage());       
-			oe.printStackTrace();
-			return setError("ERROR: Exception encountered: " + oe);
+				logger.debug("modifySlice(): returning result " + result);
+				return setReturn(result.toString());
+			} catch (CredentialException ce) {
+				logger.error("modifySlice(): Credential Exception: " + ce.getMessage());
+				return setError("ERROR: CredentialException encountered: " + ce.getMessage());
+			} catch (Exception oe) {
+				logger.error("modifySlice(): Exception encountered: " + oe.getMessage());       
+				oe.printStackTrace();
+				return setError("ERROR: Exception encountered: " + oe);
+			}
+			finally {
+				if (sm != null)
+					instance.returnSM(sm);
+
+				if (ndlSlice != null) {
+					ndlSlice.getWorkflow().syncManifestModel();
+					ndlSlice.getWorkflow().syncRequestModel();
+					ndlSlice.unlock();
+				}
+
+				LabelSyncThread.releaseLock();
+			}
 		}
-		finally {
-			if (sm != null)
-				instance.returnSM(sm);
-
-			if (ndlSlice != null) {
-				ndlSlice.getWorkflow().syncManifestModel();
-				ndlSlice.getWorkflow().syncRequestModel();
-				ndlSlice.unlock();
-			}
-			
-			LabelSyncThread.releaseLock();
-		}
-
 
 	}
 	

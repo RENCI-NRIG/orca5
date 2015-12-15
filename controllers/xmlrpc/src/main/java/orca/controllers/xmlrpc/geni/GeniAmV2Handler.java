@@ -195,8 +195,11 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 			return getStandardApiReturn(ApiReturnCodes.ERROR.code, null,
 					"ERROR: unable to get slice manifest for " + slice_urn);
 		} finally {
-			if (ndlSlice != null)
+			if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
+			}
 		}
 	}
 	
@@ -837,8 +840,11 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 			if (sm != null){
 				instance.returnSM(sm);
 			}
-			if (ndlSlice != null)
+			if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
+			}
 		}
 
 	}
