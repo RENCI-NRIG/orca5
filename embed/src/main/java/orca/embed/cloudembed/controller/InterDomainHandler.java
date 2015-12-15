@@ -122,9 +122,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				continue;
 			}
 			
-			String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
-            OutputStream fsw = new FileOutputStream(fileName);
-            requestModel.write(fsw);
+			//String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
+            //OutputStream fsw = new FileOutputStream(fileName);
+            //requestModel.write(fsw);
 			
 			stitching = checkStitching(element, requestModel); //requestModel being modified here
 			if(stitching && !idmContainsRequest){
@@ -783,7 +783,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		if(this.globalControllerAssignedLabel!=null){
 			startBitSet = this.globalControllerAssignedLabel.get(domain_str);
 		}	
-		logger.debug("globalAssignedLabel="+startBitSet);
+		logger.debug("getAvailableBitSet(): globalAssignedLabel(" + domain_str + ")="+startBitSet);
 		if(this.controllerAssignedLabel!=null){
 			controllerStartBitSet = this.controllerAssignedLabel.get(domain_str);
 		}

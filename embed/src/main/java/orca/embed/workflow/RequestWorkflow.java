@@ -291,7 +291,7 @@ public class RequestWorkflow {
 //				NdlModel.closeModel(model);
 	}
 	
-	public void modifyGlobalControllerAssignedLabel(){
+	protected void modifyGlobalControllerAssignedLabel(){
 		if(globalControllerAssignedLabel==null){
 			logger.error("modifyGlobalControllerAssignedLabel: the map variable not set");
 			return;
