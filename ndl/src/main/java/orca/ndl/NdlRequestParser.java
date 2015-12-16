@@ -40,7 +40,7 @@ public class NdlRequestParser extends NdlCommons {
 	Set<Resource> nodesAndLinks = new HashSet<Resource>();
 	private boolean lessStrictChecking = false;
 	
-	protected String[] inferenceModels = { "topology.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
+	protected String[] inferenceModels = { "topology.owl", "layer.owl", "ethernet.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
 	
 	/**
 	 * Create a parser on existing model

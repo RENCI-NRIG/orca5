@@ -473,6 +473,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 */
 	public void publishManifest(Logger logger){
 		// if pubsub property is set, push the slice_urn to the publish Q
+		// commented out to use previously read controller properties /ib 12/16/15
+		/*
 		Properties orcaPubsubProps = new Properties();
 		File f = new File(OrcaController.ConfigDirectory + OrcaXmlrpcHandler.PUBSUB_PROPS_FILE_NAME);
 		if (f.exists()) {
@@ -492,8 +494,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 			logger.error("Unable to load properties file. Make sure orcapubsub properties is in $ORCA_HOME/config; Can't publish manifest");
 			return;
 		}
-
-		String pubManifestEnabled = orcaPubsubProps.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
+		*/
+		
+		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
 		if(pubManifestEnabled == null){
 			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");
 			return;

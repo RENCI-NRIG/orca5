@@ -44,11 +44,11 @@ public class ManifestPublisher {
 	 * prepare XMPP publisher object
 	 * @param args
 	 */
-	static XMPPPubSub prepareXMPP(Properties orcaPubsubProps) {
+	static XMPPPubSub prepareXMPP() {
 
-            String xmppServerPort = orcaPubsubProps.getProperty(PUBSUB_SERVER_PROP);
-            String xmppLogin = orcaPubsubProps.getProperty(PUBSUB_LOGIN_PROP);
-            String xmppPassword = orcaPubsubProps.getProperty(PUBSUB_PASSWORD_PROP);
+            String xmppServerPort = OrcaController.getProperty(PUBSUB_SERVER_PROP);
+            String xmppLogin = OrcaController.getProperty(PUBSUB_LOGIN_PROP);
+            String xmppPassword = OrcaController.getProperty(PUBSUB_PASSWORD_PROP);
 
             XMPPPubSub xps = null;
 
@@ -61,15 +61,15 @@ public class ManifestPublisher {
 
             int port = Integer.parseInt(xmppServerPort.split(":")[1]);
 
-            String xmppUseCertificate = orcaPubsubProps.getProperty(PUBSUB_USECERTIFICATE_PROP);
+            String xmppUseCertificate = OrcaController.getProperty(PUBSUB_USECERTIFICATE_PROP);
             if((xmppUseCertificate == null) || (xmppUseCertificate.equalsIgnoreCase("false"))) {
                 xps = new XMPPPubSub(xmppServerPort.split(":")[0], port, xmppLogin, xmppPassword, logger, null);
             }
             else if((xmppUseCertificate.equalsIgnoreCase("true"))){
 
-                String kspath = orcaPubsubProps.getProperty(PUBSUB_KEYSTOREPATH_PROP);
-                String kstype = orcaPubsubProps.getProperty(PUBSUB_KEYSTORETYPE_PROP);
-                String tspath = orcaPubsubProps.getProperty(PUBSUB_TRUSTSTOREPATH_PROP);
+                String kspath = OrcaController.getProperty(PUBSUB_KEYSTOREPATH_PROP);
+                String kstype = OrcaController.getProperty(PUBSUB_KEYSTORETYPE_PROP);
+                String tspath = OrcaController.getProperty(PUBSUB_TRUSTSTOREPATH_PROP);
                 // Remember xmppPassword == truststorepass (when using certificates)
                 String tspass = xmppPassword;
 
@@ -96,11 +96,11 @@ public class ManifestPublisher {
 	 * prepare XMPP publisher object
 	 * @param args
 	 */
-	static XMPPPubSub prepareXMPPForAcctCreation(Properties orcaPubsubProps) {
+	static XMPPPubSub prepareXMPPForAcctCreation() {
 
-            String xmppServerPort = orcaPubsubProps.getProperty(PUBSUB_SERVER_PROP);
-            String xmppLogin = orcaPubsubProps.getProperty(PUBSUB_LOGIN_PROP);
-            String xmppPassword = orcaPubsubProps.getProperty(PUBSUB_PASSWORD_PROP);
+            String xmppServerPort = OrcaController.getProperty(PUBSUB_SERVER_PROP);
+            String xmppLogin = OrcaController.getProperty(PUBSUB_LOGIN_PROP);
+            String xmppPassword = OrcaController.getProperty(PUBSUB_PASSWORD_PROP);
 
             XMPPPubSub xps = null;
 
@@ -133,7 +133,8 @@ public class ManifestPublisher {
                 logger.info("At least one of actor_id, slice_id, manifest is null; Can't publish manifest");
                 return;
             }
-
+            // commented out to use previoiusly read controller properties
+            /*
             logger.info("Loading orca pubsub properties");
 
             Properties orcaPubsubProps = new Properties();
@@ -155,10 +156,10 @@ public class ManifestPublisher {
                     logger.error("Unable to load properties file. Make sure orcapubsub properties is at $ORCA_HOME/config; Can't publish manifest");
                     return;
             }
-            
+            */
             // create new account if required
             logger.info("Creating XMPP connection for new account creation");
-            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation(orcaPubsubProps);
+            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation();
             if (xmppAcctCreation == null) {
                     logger.info("Unable to create XMPP object for creating new accounts; Can't publish manifest");
                     return;
@@ -167,13 +168,13 @@ public class ManifestPublisher {
 
             // create a pubsub object
             logger.info("Creating XMPP connection");
-            XMPPPubSub xmpp = prepareXMPP(orcaPubsubProps);
+            XMPPPubSub xmpp = prepareXMPP();
             if (xmpp == null) {
                     logger.error("Unable to create XMPPPublisher object ; Can't publish manifest");
                     return;
             }
 
-            String pubsubRoot = orcaPubsubProps.getProperty(PUBSUB_ROOT_PROP); // for example ORCA.pubsub.root=orca/sm
+            String pubsubRoot = OrcaController.getProperty(PUBSUB_ROOT_PROP); // for example ORCA.pubsub.root=orca/sm
             String node = "/" + pubsubRoot + "/" + actor_id + "/" + slice_id + "/" + "manifest" ;
 
             logger.info("ManifestPublisher: publishing manifest for node: " + node);
@@ -229,7 +230,7 @@ public class ManifestPublisher {
             
             // create new account if required
             logger.info("Creating XMPP connection for new account creation");
-            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation(orcaPubsubProps);
+            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation();
             if (xmppAcctCreation == null) {
                     logger.info("Unable to create XMPP object for creating new accounts; Can't publish sliceList");
                     return;
@@ -238,7 +239,7 @@ public class ManifestPublisher {
 
             // create a pubsub object
             logger.info("Creating XMPP connection");
-            XMPPPubSub xmpp = prepareXMPP(orcaPubsubProps);
+            XMPPPubSub xmpp = prepareXMPP();
             if (xmpp == null) {
                     logger.error("Unable to create XMPPPublisher object ; Can't publish sliceList");
                     return;
@@ -266,6 +267,8 @@ public class ManifestPublisher {
                 return;
             }
 
+            // commented out to use previously read controller properties /ib 12/16/15
+            /*
             logger.info("Loading orca pubsub properties");
 
             Properties orcaPubsubProps = new Properties();
@@ -287,10 +290,10 @@ public class ManifestPublisher {
                     logger.error("Unable to load properties file. Make sure orcapubsub properties is at $ORCA_HOME/config; Can't expunge xmpp pubsub node");
                     return;
             }
-            
+            */
             // create new account if required
             logger.info("Creating XMPP connection for new account creation");
-            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation(orcaPubsubProps);
+            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation();
             if (xmppAcctCreation == null) {
                     logger.info("Unable to create XMPP object for creating new accounts; Can't expunge xmpp pubsub node");
                     return;
@@ -299,13 +302,13 @@ public class ManifestPublisher {
 
             // create a pubsub object
             logger.info("Creating XMPP connection");
-            XMPPPubSub xmpp = prepareXMPP(orcaPubsubProps);
+            XMPPPubSub xmpp = prepareXMPP();
             if (xmpp == null) {
                     logger.error("Unable to create XMPPPublisher object ; Can't expunge xmpp pubsub node");
                     return;
             }
 
-            String pubsubRoot = orcaPubsubProps.getProperty(PUBSUB_ROOT_PROP); // for example ORCA.pubsub.root=orca/sm
+            String pubsubRoot = OrcaController.getProperty(PUBSUB_ROOT_PROP); // for example ORCA.pubsub.root=orca/sm
             String node = "/" + pubsubRoot + "/" + actor_id + "/" + slice_id + "/" + suffix ;
 
             xmpp.deleteNode(node);
@@ -325,7 +328,8 @@ public class ManifestPublisher {
                 logger.info("nodePath is null; Can't expunge xmpp pubsub node");
                 return;
             }
-
+            // commented out to use previously read controller properties /ib 12/16/15
+            /*
             logger.info("Loading orca pubsub properties");
 
             Properties orcaPubsubProps = new Properties();
@@ -347,10 +351,10 @@ public class ManifestPublisher {
                     logger.error("Unable to load properties file. Make sure orcapubsub properties is at $ORCA_HOME/config; Can't expunge xmpp pubsub node");
                     return;
             }
-            
+            */
             // create new account if required
             logger.info("Creating XMPP connection for new account creation");
-            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation(orcaPubsubProps);
+            XMPPPubSub xmppAcctCreation = prepareXMPPForAcctCreation();
             if (xmppAcctCreation == null) {
                     logger.info("Unable to create XMPP object for creating new accounts; Can't expunge xmpp pubsub node");
                     return;
@@ -359,13 +363,13 @@ public class ManifestPublisher {
 
             // create a pubsub object
             logger.info("Creating XMPP connection");
-            XMPPPubSub xmpp = prepareXMPP(orcaPubsubProps);
+            XMPPPubSub xmpp = prepareXMPP();
             if (xmpp == null) {
                     logger.error("Unable to create XMPPPublisher object ; Can't expunge xmpp pubsub node");
                     return;
             }
 
-            String pubsubRoot = orcaPubsubProps.getProperty(PUBSUB_ROOT_PROP); // for example ORCA.pubsub.root=orca/sm
+            String pubsubRoot = OrcaController.getProperty(PUBSUB_ROOT_PROP); // for example ORCA.pubsub.root=orca/sm
             String node = "/" + pubsubRoot + "/" + nodePath ;
 
             xmpp.deleteNode(node);

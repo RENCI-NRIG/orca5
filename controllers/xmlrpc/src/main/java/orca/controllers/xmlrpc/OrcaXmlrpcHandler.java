@@ -414,12 +414,20 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					result.append(" ] \n");
 				}
 
+				// call getManifest to fully form it (otherwise recovery will fail) /ib
+				List<ReservationMng> allRes = ndlSlice.getAllReservations(sm);
+				orc.getManifest(workflow.getManifestModel(),
+						workflow.getDomainInConnectionList(),
+						workflow.getBoundElements(),
+						allRes);
+				
 				// call publishManifest if there are reservations in the slice
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
 					ndlSlice.publishManifest(logger);
 				}
 
-				result.append(workflow.getErrorMsg());
+				String errMsg = workflow.getErrorMsg();
+				result.append((errMsg == null ? "No errors reported" : errMsg));
 				
 				//workflow.closeModel(); //close the substrate model, but would break modifying now
 				
@@ -1025,21 +1033,19 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 						result.append(" ] \n");
 					}
-
-					// call publishManifest if there are reservations in the slice
-					ndlSlice.publishManifest(logger);
+					
+					// call getManifest to fully form it (otherwise recovery will fail) /ib
+					allRes = ndlSlice.getAllReservations(sm);
+					orc.getManifest(workflow.getManifestModel(),
+							workflow.getDomainInConnectionList(),
+							workflow.getBoundElements(),
+							allRes);
 				} else {
 					result.append("No new reservations were computed in modifySlice() call\n");
 				}
 
-				result.append(workflow.getErrorMsg());
-
-				// call publishManifest if there are reservations in the slice
-				List<ReservationMng> sliceRes = ndlSlice.getReservationsByState(sm, OrcaConstants.ReservationStateActive, 
-						OrcaConstants.ReservationStateActiveTicketed, OrcaConstants.ReservationStateTicketed);
-				if ((sliceRes != null) && (sliceRes.size() > 0)){
-					ndlSlice.publishManifest(logger);
-				}
+				String errMsg = workflow.getErrorMsg();
+				result.append((errMsg == null ? "No errors reported" : errMsg));
 
 				if (result.length() == 0)
 					result.append("No result available");

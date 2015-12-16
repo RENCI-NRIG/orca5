@@ -57,7 +57,8 @@ public class LabelSyncThread implements Runnable {
 		
 		File rf = new File(patFileName);
 		if (!rf.exists()) {
-			logger.info("LabelSync thread enable file " + patFileName + " doesn't exist, skipping");
+			logger.info("LabelSyncThread enable file " + patFileName + " doesn't exist, skipping");
+			running = false;
 			return;
 		}
 		
