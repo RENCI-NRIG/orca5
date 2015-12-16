@@ -52,4 +52,30 @@ public class StringProcessor {
 		}
 		return host_interface;
 	}
+	
+	public static String getParentURL(Properties local,Properties pr_local){
+		String key=null,value=null,p_key=null,p_value=null,parent_url=null;
+		
+		if(local.isEmpty() || pr_local.isEmpty())
+			return null;
+		//System.out.println("local:"+local.toString());
+		//System.out.println("p_r local:"+p_r_local.toString());
+		for(Entry<Object, Object> pr_entry:pr_local.entrySet()){
+			p_key=(String) pr_entry.getKey();
+			p_value=(String) pr_entry.getValue();
+			if(p_key.endsWith(".parent.url")){
+				for(Entry<Object, Object> entry:local.entrySet()){
+					key=(String) entry.getKey();
+					value=(String) entry.getValue();
+					if(value.equals(p_value)){
+						parent_url=value;
+						break;
+					}
+				}
+				if(parent_url!=null)
+					break;
+			}
+		}
+		return parent_url;
+	}
 }

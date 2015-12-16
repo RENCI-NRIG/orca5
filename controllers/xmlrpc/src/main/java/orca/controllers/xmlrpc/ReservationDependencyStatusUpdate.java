@@ -49,7 +49,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 			if(num_storage!=null)
 				num_storage_int = Integer.valueOf(num_storage);
 			
-			Properties pr_local=null;
+			Properties pr_local=null,pr_u=null;
 			int p = 0;
 			String r_id=null,isNetwork=null,isLun=null;
 			ReservationMng p_r = null;
@@ -69,7 +69,6 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 							isNetwork = pr_local.getProperty(ReservationConverter.PropertyIsNetwork);
 							isLun = pr_local.getProperty(ReservationConverter.PropertyIsLUN);
 
-							pr_local.clear();
 							if(isNetwork!=null && isNetwork.equals("1")){	//Parent is a networking reservation
 								// seems it's possible for this to not produce a tag. Doing this in a loop with a fixed number of repetitions
 								int n = 10;
@@ -77,11 +76,11 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
 									if (un != null) {
 										for (UnitMng u : un) {
-											pr_local = OrcaConverter.fill(u.getProperties());										
-											if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
-												unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
-											if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
-												unit_parent_url = pr_local.getProperty(UnitProperties.UnitVlanUrl);
+											pr_u = OrcaConverter.fill(u.getProperties());										
+											if (pr_u.getProperty(UnitProperties.UnitVlanTag) != null)
+												unit_tag = pr_u.getProperty(UnitProperties.UnitVlanTag);
+											if (pr_u.getProperty(UnitProperties.UnitVlanUrl) != null)
+												unit_parent_url = pr_u.getProperty(UnitProperties.UnitVlanUrl);
 										}
 									}
 									//if (unit_tag == null)
@@ -120,7 +119,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
-									System.out.println("Parent doesnot return the unit tag:"+pr_local);
+									System.out.println("Parent doesnot return the unit tag:"+pr_u);
 									continue;
 								}
 							}
@@ -132,18 +131,22 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
 									if (un != null) {
 										for (UnitMng u : un) {
-											pr_local = OrcaConverter.fill(u.getProperties());
-											if (pr_local.getProperty(UnitProperties.UnitLUNTag) != null)
-												unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
+											pr_u = OrcaConverter.fill(u.getProperties());
+											if (pr_u.getProperty(UnitProperties.UnitLUNTag) != null)
+												unit_tag = pr_u.getProperty(UnitProperties.UnitLUNTag);
 										}
 									}
 									//if (unit_tag == null)
 									//	Thread.sleep(1000L);
 								//}
+								
+								String parent_url=StringProcessor.getParentURL(local,pr_local);
 								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
-										+";r_id="+r_id+";p_r_id="+p_r.getReservationID()+";n=" + n);
+										+";r_id="+r_id+";p_r_id="+p_r.getReservationID()+";parent_url=" + parent_url);
 								if(unit_tag!=null){
 									modifyProperties.setProperty("target.lun.num",unit_tag);
+									if(parent_url!=null)
+										modifyProperties.setProperty("parent.url", parent_url);
 									host_interface=StringProcessor.getHostInterface(local,p_r);
 									if(host_interface==null){
 										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
@@ -219,7 +222,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
-									System.out.println("Parent did not return the unit lun tag:"+pr_local);
+									System.out.println("Parent did not return the unit lun tag:"+pr_u);
 									continue;
 								}
 							}

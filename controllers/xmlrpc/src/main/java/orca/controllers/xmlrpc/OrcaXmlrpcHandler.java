@@ -816,7 +816,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 												unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
 										}
 									}
-									logger.debug("isLun="+isLun+";parent unit lun tag:"+unit_tag);
+									
 									if(unit_tag!=null){
 										modifyProperties.setProperty("target.lun.num",unit_tag);
 										host_interface=StringProcessor.getHostInterface(local,p_r_m);
@@ -828,20 +828,22 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 											logger.warn("Not find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
 											continue;
 										}
-
+										logger.debug("isLun="+isLun+";parent unit lun tag:"+unit_tag
+												+";parent_prefix:"+parent_prefix
+												+";host_interface:"+host_interface);
 										String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
 										String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
 										String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
 										String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
 
-										if(local.getProperty(parent_tag_name)!=null)
-											modifyProperties.setProperty("vlan.tag",local.getProperty(parent_tag_name));
-										if(local.getProperty(parent_mac_addr)!=null)
-											modifyProperties.setProperty("mac",local.getProperty(parent_mac_addr));
-										if(local.getProperty(parent_ip_addr)!=null)
-											modifyProperties.setProperty("ip",local.getProperty(parent_ip_addr));
-										if(local.getProperty(site_host_interface)!=null)
-											modifyProperties.setProperty("hosteth",local.getProperty(site_host_interface));
+										if(config.getProperty(parent_tag_name)!=null)
+											modifyProperties.setProperty("vlan.tag",config.getProperty(parent_tag_name));
+										if(config.getProperty(parent_mac_addr)!=null)
+											modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
+										if(config.getProperty(parent_ip_addr)!=null)
+											modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
+										if(config.getProperty(site_host_interface)!=null)
+											modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
 									}else{	//no need to go futher
 										logger.error("Parent did not return the unit lun tag:"+pr_local);
 										continue;

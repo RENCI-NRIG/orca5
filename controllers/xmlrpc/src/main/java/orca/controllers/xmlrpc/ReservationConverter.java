@@ -560,10 +560,11 @@ public class ReservationConverter implements LayerConstant {
 				
 				logger.debug("child is VM:"+r.isVM+";parent is network:"+prNetwork);
 
-				if(pr!=null && pr.isLUN)
+				/*if(pr!=null && pr.isLUN)
 					r.numStorageDependencies++;
 				if (prNetwork)
 					r.networkDependencies++;
+				*/
 				
 				String pdomain = getDomainName(parent_de);
 				if(pdomain==null){
@@ -632,7 +633,7 @@ public class ReservationConverter implements LayerConstant {
 						//depending on storage
 						if(pr!=null){
 							if(pr.isLUN){//now do it latter when all reservations are collected
-								//r.numStorageDependencies++;
+								r.numStorageDependencies++;
 								num_interface--;
 								ComputeElement parent_ce = parent_de.getCe();
 								if(parent_ce!=null){
@@ -648,7 +649,7 @@ public class ReservationConverter implements LayerConstant {
 							intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
 						int index=0;
 						if (prNetwork) {
-							//r.networkDependencies++;
+							r.networkDependencies++;
 
 							String ip_addr = null, mac_addr=null, host_interface = null;
 							
