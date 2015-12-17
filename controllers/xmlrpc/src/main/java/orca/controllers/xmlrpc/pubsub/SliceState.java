@@ -51,6 +51,10 @@ public class SliceState {
     public String getSlice_urn() {
         return slice.getSliceUrn();
     }
+    
+    public String getSlice_ID() {
+    	return slice.getSliceID();
+    }
 
     public PubSubState getState() {
         return state;

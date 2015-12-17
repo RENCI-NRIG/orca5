@@ -1040,6 +1040,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							workflow.getDomainInConnectionList(),
 							workflow.getBoundElements(),
 							allRes);
+					
+					// update published manifest
+					ndlSlice.updatePublishedManifest(logger);
 				} else {
 					result.append("No new reservations were computed in modifySlice() call\n");
 				}

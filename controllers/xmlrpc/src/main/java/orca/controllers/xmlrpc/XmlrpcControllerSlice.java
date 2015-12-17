@@ -427,43 +427,16 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 */
 	public void deleteFromPublishQ(Logger logger){
 		// check if publish is enabled in xmlrpc.controller.properties
-		Properties orcaPubsubProps = new Properties();
-		File f = new File(OrcaController.ConfigDirectory + OrcaXmlrpcHandler.PUBSUB_PROPS_FILE_NAME);
-		if (f.exists()) {
-			try {
-				orcaPubsubProps.load(new FileInputStream(f));
-				logger.info("Successfully loaded orcapubsub properties");
-			} catch (IOException ex) {
-				logger.info("Error loading orcapubsub properties file; Can't delete slice from publish Q");
-				return;
-			}
-		} else {
-			logger.info("No orcapubsub properties; Can't delete slice from publish Q");
+
+		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
+		if ((pubManifestEnabled == null) || !pubManifestEnabled.equalsIgnoreCase("true")) {
+			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't delete from publish queue");
 			return;
 		}
-
-		if (orcaPubsubProps.isEmpty()) {
-			logger.error("Unable to load properties file. Make sure orcapubsub properties is in $ORCA_HOME/config; Can't delete slice from publish Q");
-			return;
-		}
-
-		String pubManifestEnabled = orcaPubsubProps.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
-		if (pubManifestEnabled == null){
-			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");
-			return;
-		}
-
-		if(pubManifestEnabled.equalsIgnoreCase("true")){
-			//logger.info("Deleting " + sliceUrn + " from PubQ");
-			logger.info("Adding " + sliceUrn + " to DeletedSlicesQ");
-			//PublishQueue.getInstance().deleteFromPubQ(sliceUrn);
-			PublishQueue.getInstance().addToDeletedSlicesQ(sliceUrn);
-		}
-		else {
-			logger.info("ORCA.publish.manifest property needs to be set to true; Can't delete slice from publish Q ");
-			return;
-		}
-
+		//logger.info("Deleting " + sliceUrn + " from PubQ");
+		logger.info("Adding " + sliceUrn + "/" + getSliceID() + " to DeletedSlicesQ");
+		//PublishQueue.getInstance().deleteFromPubQ(sliceUrn);
+		PublishQueue.getInstance().addToDeletedSlicesQ(getSliceID());
 	}
 
 	/**
@@ -472,48 +445,30 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @param logger
 	 */
 	public void publishManifest(Logger logger){
-		// if pubsub property is set, push the slice_urn to the publish Q
-		// commented out to use previously read controller properties /ib 12/16/15
-		/*
-		Properties orcaPubsubProps = new Properties();
-		File f = new File(OrcaController.ConfigDirectory + OrcaXmlrpcHandler.PUBSUB_PROPS_FILE_NAME);
-		if (f.exists()) {
-			try {
-				orcaPubsubProps.load(new FileInputStream(f));
-				logger.info("Successfully loaded orcapubsub properties");
-			} catch (IOException ex) {
-				logger.info("Error loading orcapubsub properties file; Can't publish manifest");
-				return;
-			}
-		} else {
-			logger.info("No orcapubsub properties; Can't publish manifest");
-			return;
-		}
 
-		if (orcaPubsubProps.isEmpty()) {
-			logger.error("Unable to load properties file. Make sure orcapubsub properties is in $ORCA_HOME/config; Can't publish manifest");
-			return;
-		}
-		*/
-		
 		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
-		if(pubManifestEnabled == null){
+		if ((pubManifestEnabled == null) || !pubManifestEnabled.equalsIgnoreCase("true")) {
 			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");
 			return;
 		}
 
-		if(pubManifestEnabled.equalsIgnoreCase("true")){
-			Date start = workflow.getTerm().getStart(), end = workflow.getTerm().getEnd();
-			logger.info("Adding " + sliceUrn + " to newSlicesQ");
-			PublishQueue.getInstance().addToNewSlicesQ(new SliceState(this,
-					SliceState.PubSubState.SUBMITTED, start, end, 0));
-		}
-		else {
-			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");
-			return;
-		}
+		Date start = workflow.getTerm().getStart(), end = workflow.getTerm().getEnd();
+		logger.info("Adding " + sliceUrn + " to newSlicesQ");
+		PublishQueue.getInstance().addToNewSlicesQ(new SliceState(this,
+				SliceState.PubSubState.SUBMITTED, start, end, 0));
 	}
 
+	public void updatePublishedManifest(Logger logger) {
+		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
+		if ((pubManifestEnabled == null) || !pubManifestEnabled.equalsIgnoreCase("true")) {
+			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't re-publish manifest");
+			return;
+		}
+
+		logger.info("Adding " + sliceUrn + " to modifiedSliceQ");
+		PublishQueue.getInstance().addToModifiedSlicesQ(getSliceID());
+	}
+	
 	//
 	// Helper functions to evaluate state
 	//
