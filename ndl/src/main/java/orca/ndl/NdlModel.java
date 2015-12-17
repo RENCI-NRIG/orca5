@@ -127,39 +127,39 @@ public class NdlModel {
 		// create file-backed TDB storage if requested
 		OntModel model = null;
 		
-		switch(t) {
-		case TdbEphemeral:
-			if (globalTDB && (folderName != null)) {
-				File dir = null;
-				dir = ModelFolders.getInstance().createTempDirectory(folderName);
-				if (dir == null)
-					throw new NdlException("Unable to create temporary model folder in " + folderName);
-				Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
-				Model fileModel = ds.getDefaultModel();
-				model = ModelFactory.createOntologyModel(s, fileModel);
-				ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), true);
-			} else
-				model = ModelFactory.createOntologyModel(s);
-			break;
-		case TdbPersistent: 
-			if (globalTDB && (folderName != null)) {
-				File dir = null;
-				dir = ModelFolders.getInstance().createNamedDirectory(folderName);
-				if (dir == null)
-					throw new NdlException("Unable to create persistent model folder in " + folderName);
-				Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
-				Model fileModel = ds.getDefaultModel();
-				model = ModelFactory.createOntologyModel(s, fileModel);
-				ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), false);
-			} else
-				model = ModelFactory.createOntologyModel(s);
-			break;
-		case InMemory: 
-			model = ModelFactory.createOntologyModel(s);
-			break;
-		}
-	
 		try {
+			switch(t) {
+			case TdbEphemeral:
+				if (globalTDB) {
+					File dir = null;
+					dir = ModelFolders.getInstance().createTempDirectory(folderName);
+					if (dir == null)
+						throw new NdlException("Unable to create temporary model folder in " + folderName);
+					Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
+					Model fileModel = ds.getDefaultModel();
+					model = ModelFactory.createOntologyModel(s, fileModel);
+					ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), true);
+				} else
+					model = ModelFactory.createOntologyModel(s);
+				break;
+			case TdbPersistent: 
+				if (globalTDB && (folderName != null)) {
+					File dir = null;
+					dir = ModelFolders.getInstance().createNamedDirectory(folderName);
+					if (dir == null)
+						throw new NdlException("Unable to create persistent model folder in " + folderName);
+					Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
+					Model fileModel = ds.getDefaultModel();
+					model = ModelFactory.createOntologyModel(s, fileModel);
+					ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), false);
+				} else
+					model = ModelFactory.createOntologyModel(s);
+				break;
+			case InMemory: 
+				model = ModelFactory.createOntologyModel(s);
+				break;
+			}
+
 			model.read(modelStream, "");
 		} catch (Exception e) {
 			closeModel(model);
@@ -249,7 +249,7 @@ public class NdlModel {
 		
 		switch(t) {
 		case TdbEphemeral:
-			if (globalTDB && (folderName != null)) {
+			if (globalTDB) {
 				dir = ModelFolders.getInstance().createTempDirectory(folderName);
 				if (dir == null)
 					throw new NdlException("Unable to create temporary model folder in " + folderName);
@@ -307,15 +307,17 @@ public class NdlModel {
 		}
 		
 		OntModel requestModel = ModelFactory.createOntologyModel(s, schemaModel);
-		
-		if (dir != null) {
-			ModelFolders.getInstance().put(requestModel, ds, dir.getAbsolutePath(), (t == ModelType.TdbPersistent ? false: true));
-		}
+
 		
 		try {
+			if (dir != null) {
+				ModelFolders.getInstance().put(requestModel, ds, dir.getAbsolutePath(), (t == ModelType.TdbPersistent ? false: true));
+			}
 			modelStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			throw new NdlException("Unable to get request model from stream due to: " + e);
 		}
 		return requestModel;
 	}
@@ -361,39 +363,41 @@ public class NdlModel {
 		
 		// create file-backed TDB storage if requested
 		OntModel model = null;
-		
-		switch(t) {
-		case TdbEphemeral:
-			if (globalTDB && (folderName != null)) {
-				File dir = null;
-				dir = ModelFolders.getInstance().createTempDirectory(folderName);
-				if (dir == null) 
-					throw new NdlException("Unable to create temporary model folder in " + folderName);
-				Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
-				Model fileModel = ds.getDefaultModel();
-				model = ModelFactory.createOntologyModel(s, fileModel);
-				ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), true);
-			} else
+		try {
+			switch(t) {
+			case TdbEphemeral:
+				if (globalTDB) {
+					File dir = null;
+					dir = ModelFolders.getInstance().createTempDirectory(folderName);
+					if (dir == null) 
+						throw new NdlException("Unable to create temporary model folder in " + folderName);
+					Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
+					Model fileModel = ds.getDefaultModel();
+					model = ModelFactory.createOntologyModel(s, fileModel);
+					ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), true);
+				} else
+					model = ModelFactory.createOntologyModel(s);
+				break;
+			case TdbPersistent:
+				if (globalTDB && (folderName != null)) {
+					File dir = null;
+					dir = ModelFolders.getInstance().createNamedDirectory(folderName);
+					if (dir == null) 
+						throw new NdlException("Unable to create persistent model folder in " + folderName);
+					Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
+					Model fileModel = ds.getDefaultModel();
+					model = ModelFactory.createOntologyModel(s, fileModel);
+					ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), false);
+				} else
+					model = ModelFactory.createOntologyModel(s);
+				break;
+			case InMemory:
 				model = ModelFactory.createOntologyModel(s);
-			break;
-		case TdbPersistent:
-			if (globalTDB && (folderName != null)) {
-				File dir = null;
-				dir = ModelFolders.getInstance().createNamedDirectory(folderName);
-				if (dir == null) 
-					throw new NdlException("Unable to create persistent model folder in " + folderName);
-				Dataset ds = TDBFactory.createDataset(dir.getAbsolutePath());
-				Model fileModel = ds.getDefaultModel();
-				model = ModelFactory.createOntologyModel(s, fileModel);
-				ModelFolders.getInstance().put(model, ds, dir.getAbsolutePath(), false);
-			} else
-				model = ModelFactory.createOntologyModel(s);
-			break;
-		case InMemory:
-			model = ModelFactory.createOntologyModel(s);
-			break;
+				break;
+			}
+		} catch (Exception e) {
+			throw new NdlException("Unable to create blank model due to: " + e);
 		}
-	
 		return model;
 	}
 
@@ -409,8 +413,9 @@ public class NdlModel {
 	}
 
 	/**
-	 * Initialize and return an in-memory model from RDF/XML String. If spec is null, OntModelSpec.OWL_MEM - simple in memory model will be built.
-	 * For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager.
+	 * Initialize and return an in-memory model from RDF/XML String. If spec is null, OntModelSpec.OWL_MEM - 
+	 * simple in memory model will be built. For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally 
+	 * create a model with a new DocumentManager.
 	 * @param s
 	 * @param uniqueDM - use a unique DM
 	 * @return
@@ -424,8 +429,8 @@ public class NdlModel {
 	}
 	
 	/**
-	 * Initialize and return a model from RDF/XML String. If spec is null, OntModelSpec.OWL_MEM - simple in memory model will be built.
-	 * For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager.
+	 * Initialize and return a model from RDF/XML String. If spec is null, OntModelSpec.OWL_MEM - simple in memory model 
+	 * will be built. For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager.
 	 * @param s
 	 * @param spec
 	 * @param uniqueDM - use a unique DM
@@ -459,7 +464,7 @@ public class NdlModel {
 			return mm;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new NdlException(e.getMessage());
+			throw new NdlException("Unable to get model from TDB: " + e);
 		}
 	}
 

@@ -45,6 +45,9 @@ public class FailedRPCEvent implements IActorEvent {
             case UpdateTicket:
             case Redeem:
             case ExtendLease:
+            case ModifyLease:
+            	System.out.println("Failed RPC for ModifyLease: in FailedRPCEvent.process()");
+            	break;
             case Close: {
                 ReservationID rid;
                 try {

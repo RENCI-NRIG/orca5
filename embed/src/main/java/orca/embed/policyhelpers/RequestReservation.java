@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,9 +15,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import orca.ndl.DomainResourceType;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
@@ -49,6 +53,7 @@ public class RequestReservation {
 	public static String MultiPoint_Domain = NdlCommons.ORCA_NS+"MultiPointDomain";
 	
 	SystemNativeError err;	
+	private Logger logger = NdlCommons.getNdlLogger();
 	
 	public void setError(SystemNativeError e){
 		err = e;	
@@ -94,7 +99,7 @@ public class RequestReservation {
 		
 		if(e instanceof NetworkConnection){
 			NetworkConnection ne = (NetworkConnection) e;
-			if(ne.getLabel_ID()!=0)		//user specified tag doesn't count
+			if(ne.getLabel_ID()!=0 && !ne.isModify())		//user specified tag doesn't count
 				this.setPureType(e.getResourceType(),this.typeTotalUnits);
 			numNetworkConnection++;
 			NetworkConnection requestConnection = (NetworkConnection) e;
@@ -106,7 +111,8 @@ public class RequestReservation {
             	LinkedList <NetworkElement> bcNodeList = (LinkedList<NetworkElement>)requestConnection.getConnection();
             	for(int i =0;i<bcNodeList.size();i++){
             		if(!markedElements.contains(bcNodeList.get(i))){
-            			setPureType(bcNodeList.get(i).getResourceType(),typeTotalUnits);
+            			if(!bcNodeList.get(i).isModify())
+            				setPureType(bcNodeList.get(i).getResourceType(),typeTotalUnits);
             			markedElements.add(bcNodeList.get(i));
             		}
             	}
@@ -117,29 +123,39 @@ public class RequestReservation {
             edge=requestConnection.getNe1();
 			if(edge!=null){
 				if(!markedElements.contains(edge)){	
-					setPureType(edge.getResourceType(),typeTotalUnits);
+					if(!edge.isModify())
+						setPureType(edge.getResourceType(),typeTotalUnits);
 					markedElements.add(edge);
 				}
 			}
 			edge=requestConnection.getNe2();
 			if(edge!=null){
 				if(!markedElements.contains(edge)){	
-					setPureType(edge.getResourceType(),typeTotalUnits);
+					if(!edge.isModify())
+						setPureType(edge.getResourceType(),typeTotalUnits);
 					markedElements.add(edge);
 				}
 			}
 		}else{
-			this.setPureType(e.getResourceType(),this.typeTotalUnits);
+			if(!e.isModify())
+				this.setPureType(e.getResourceType(),this.typeTotalUnits);
 		}
 	}
 	
 	//convert the request topology into graph with node numbered by sn.
-	public boolean generateGraph(Collection<NetworkElement> requestElements) throws  NdlException, IOException{       
+	public boolean generateGraph(Collection<NetworkElement> rElements) throws  NdlException, IOException{       
 		boolean requestBounded = true, intraSite = true, mixDomain = false;
 		int numNode=-1;
-		if((requestElements==null) || (requestElements.isEmpty())) 
+		if((rElements==null) || (rElements.isEmpty())) 
 			return false;
 		
+		LinkedList<NetworkElement> requestElements = new LinkedList<NetworkElement>();
+		for(NetworkElement ne:rElements){
+			if(ne instanceof NetworkConnection)
+				requestElements.addLast(ne);
+			else
+				requestElements.addFirst(ne);
+		}
 		HashMap <Integer,String> nodeMap = new HashMap <Integer, String> ();
 		Map<String, NetworkConnection> links = new HashMap<String, NetworkConnection>();
 		String rs1_str = null,rs2_str = null;
@@ -148,6 +164,7 @@ public class RequestReservation {
     	//numbering the nodes using the integer stqrting from 1
 		for(Iterator <NetworkElement> j=requestElements.iterator();j.hasNext();){	
 			element=j.next();
+			logger.debug("generateGraph: element="+element.getURI()+";inDomain="+element.getInDomain());
 			//System.out.println("Doamin--element:"+element.getName()+":inDomain="+element.getInDomain()+";reservation domain="+reservationDomain);
 			if(!(element instanceof NetworkConnection)){
 				if(element instanceof ComputeElement){  //out of the request parser, compute elements are always added first
@@ -155,7 +172,8 @@ public class RequestReservation {
 					String elementDomain = element.getInDomain();
 					if(elementDomain!=null){
 						if(reservationDomain==null){
-							if(mixDomain==false && !elementDomain.contains(NdlCommons.stitching_domain_str))
+							if(mixDomain==false)
+								//&& !elementDomain.contains(NdlCommons.stitching_domain_str))
 								reservationDomain = elementDomain;
 						}			
 						else if( !(reservationDomain.equals(elementDomain)) ){
@@ -177,16 +195,28 @@ public class RequestReservation {
 				}
 				continue;
 			}
+
+			if(this.reservationDomain!=null && this.reservationDomain.contains(NdlCommons.stitching_domain_str))
+				this.reservationDomain=null;
 			numNetworkConnection++;
 			requestConnection = (NetworkConnection) element;
 			links.put(requestConnection.getResource().getLocalName(), requestConnection);
-			setPureType(requestConnection.getResourceType(),typeTotalUnits);
-			if(reservationDomain==null){	
+			if(!requestConnection.isModify())
+				setPureType(requestConnection.getResourceType(),typeTotalUnits);
+			if( (reservationDomain==null) ){
+					//|| (requestConnection.getCastType()!=null && requestConnection.getCastType().equalsIgnoreCase("Multicast") && requestConnection.isModify()) ){	
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
-					String connection_domain = ifMPConnection(requestConnection);
+					String connection_domain = null;
+					//if(requestConnection.getCastType().equalsIgnoreCase("Multicast"))
+					//	connection_domain=this.MultiPoint_Domain;
+					//else
+					connection_domain=ifMPConnection(requestConnection);
+					if(connection_domain.equals(RequestReservation.Unbound_Domain))
+						requestBounded = false;
 					element.setInDomain(connection_domain);
 					setDomainRequestReservation(element,domainRequestReservation);
+					reservationDomain=null;
 					continue;
 				}
 			}
@@ -245,7 +275,7 @@ public class RequestReservation {
 					element.setInDomain(ne_domain);
 				}
 			}
-			//System.out.println("Doamin--element:"+element.getInDomain()+";ne1 domain="+ne1_domain+";ne2 domain="+ne2_domain+";reservation domain="+reservationDomain);
+			logger.debug("Doamin--element:"+element.getInDomain()+";ne1 domain="+ne1_domain+";ne2 domain="+ne2_domain+";reservation domain="+reservationDomain);
 			setDomainRequestReservation(element,domainRequestReservation);
 		}
 		//System.out.println("RequestReservation Doamin--element:"+element.getInDomain()+";reservation domain="+reservationDomain);	

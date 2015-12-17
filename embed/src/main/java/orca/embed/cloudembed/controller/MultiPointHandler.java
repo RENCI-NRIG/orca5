@@ -89,10 +89,11 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			NetworkConnection element = (NetworkConnection) it.next();
 			if(element.getResource()!=null && element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty)!=null){
 				multicastDomain = element.getResource().getPropertyResourceValue(NdlCommons.inDomainProperty);
-			}
-			
-			domainCount = ifMPConnection(element);
-			if(domainCount.size()==2){	//in-rack broadcasting
+			}else if(element.getCastType().equalsIgnoreCase("Multicast") && element.isModify()){
+				multicastDomain=element.getResource();
+			}else
+				domainCount = ifMPConnection(element);
+			if((domainCount!=null)&&(domainCount.size()<=2) && !element.isModify()){	//in-rack broadcasting
 					
 			}else{	
 				if(multicastDomain==null){
@@ -104,13 +105,26 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 				OntResource root_rs=requestModel.createIndividual(multicastDomain.getURI(),NdlCommons.computeElementClass);
 				root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
 				root = new ComputeElement(requestModel,multicastDomain);
+				root.setModify(element.isModify());
+				root.setCastType(element.getCastType());
+				logger.debug("MultiPointHandler:root="+root.getName()+";isModify="+root.isModify());
 			}
+			RequestReservation request=null;
 			if(root!=null)
-				mpRequest = generateConnectionRequest(requestModel, element, rr,root);
+				request = generateConnectionRequest(requestModel, element, rr,root);
 			else
-				mpRequest = generateConnectionRequest(requestModel, domainCount, element, rr);
+				request = generateConnectionRequest(requestModel, domainCount, element, rr);
+			if(this.mpRequest==null)
+				this.mpRequest=request;
+			else{
+				for(NetworkElement ne:request.getElements())
+					this.mpRequest.setRequest(ne);
+			}
 			try {
-				error=runEmbedding(mpRequest, domainResourcePools);
+				if(domainCount.size()>1)
+					error=runEmbedding(request, domainResourcePools);
+				else if(domainCount.size()==1)
+					error=runEmbedding(domainCount.keySet().iterator().next(),request, domainResourcePools);
 				if(root!=null)
 					setCastType(root, deviceList);
 			} catch (IOException e) {
@@ -129,16 +143,6 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		Resource r_rs=rr.getReservation_rs();
 		
 		RequestReservation request = new RequestReservation();
-		LinkedList<NetworkElement> ne1_elements = null,ne2_elements = null;
-		String ne1_domain_str = null,ne2_domain_str = null;
-		Resource ne1_domain_rs=null,ne2_domain_rs=null;
-
-		ne1_elements = (LinkedList<NetworkElement>) domainCount.values().toArray()[0];
-		ne2_elements = (LinkedList<NetworkElement>) domainCount.values().toArray()[1];
-		ne1_domain_str = (String) domainCount.keySet().toArray()[0];
-		ne2_domain_str = (String) domainCount.keySet().toArray()[1];
-		ne1_domain_rs = m.getResource(ne1_domain_str);
-		ne2_domain_rs = m.getResource(ne2_domain_str);
 
 		//new request network connection
 		NetworkConnection c_e = new NetworkConnection(m,e.getURI(),e.getName());
@@ -153,20 +157,39 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		if(layer==null)
 			layer = "EthernetNetworkElement";
 		c_e.setAtLayer(layer);
-		c_e.setInDomain(RequestReservation.Interdomain_Domain);
-		//ne1
-		ComputeElement ne = createNE(m,ne1_domain_rs,ne1_elements);
-		c_e.setNe1(ne);
-		//ne2
-		ne = createNE(m,ne2_domain_rs,ne2_elements);
-		c_e.setNe2(ne);
+		
+		LinkedList<NetworkElement> ne1_elements = null,ne2_elements = null;
+		String ne1_domain_str = null,ne2_domain_str = null;
+		Resource ne1_domain_rs=null,ne2_domain_rs=null;
+		if(domainCount.size()==2){
+			ne1_elements = (LinkedList<NetworkElement>) domainCount.values().toArray()[0];
+			ne2_elements = (LinkedList<NetworkElement>) domainCount.values().toArray()[1];
+			ne1_domain_str = (String) domainCount.keySet().toArray()[0];
+			ne2_domain_str = (String) domainCount.keySet().toArray()[1];
+			ne1_domain_rs = m.getResource(ne1_domain_str);
+			ne2_domain_rs = m.getResource(ne2_domain_str);
+	
+			c_e.setInDomain(RequestReservation.Interdomain_Domain);
+			//ne1
+			ComputeElement ne = createNE(m,ne1_domain_rs,ne1_elements,c_e);
+			c_e.setNe1(ne);
+			//ne2
+			ne = createNE(m,ne2_domain_rs,ne2_elements,c_e);
+			c_e.setNe2(ne);
+		}else if(domainCount.size()==1){
+			c_e.setCastType(e.getCastType());
+			for(NetworkElement e_e:e.getConnection()){
+				c_e.addConnection(e_e);
+				c_e.setInDomain(e_e.getInDomain());
+			}
+		}
 		
 		request.setRequest(m,c_e,t,reservationD,r, r_rs);
 		
 		return request;
 	}
 	
-	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg){
+	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg,NetworkConnection c_e){
 		OntResource ne1_rs=null;
 		ComputeElement ne = null;
 		if(rs.getURI().contains(NdlCommons.stitching_domain_str))
@@ -187,6 +210,8 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			ne.setResourceType(rType);
 		
 			ne.setCeGroup(cg);
+			
+			ne.addDependency(c_e);
 		}
 		return ne;
 	}
@@ -239,6 +264,8 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
         		rType.setDomainURL(root.getURI());
         		root.setResourceType(rType);
         		c_e.setNe2(root);
+        		c_e.setModify(root.isModify());
+        		c_e.setCastType(root.getCastType());
         		request.setRequest(m,c_e,t,reservationD,r, r_rs);
         	}
         }

@@ -27,6 +27,13 @@
 	</message>
 	<message name="extendLeaseResponse" />
 
+	<message name="modifyLeaseRequest">
+		<part name="messageID" type="xsd:string" />
+		<part name="reservation" type="types:reservation" />
+		<part name="callbackURL" type="xsd:string" />
+	</message>
+	<message name="modifyLeaseResponse" />
+
 	<message name="closeRequest">
 		<part name="messageID" type="xsd:string" />
 		<part name="reservation" type="types:reservation" />
@@ -115,6 +122,10 @@
 			<input message="tns:extendLeaseRequest" />
 			<output message="tns:extendLeaseResponse" />
 		</operation>
+		<operation name="modifyLease">
+			<input message="tns:modifyLeaseRequest" />
+			<output message="tns:modifyLeaseResponse" />
+		</operation>
 		<operation name="close">
 			<input message="tns:closeRequest" />
 			<output message="tns:closeResponse" />
@@ -181,6 +192,15 @@
 				<soap:body use="literal" />
 			</input>
 			<output name="extendLeaseResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="modifyLease">
+			<soap:operation soapAction="modifyLease" />
+			<input name="modifyLeaseRequest">
+				<soap:body use="literal" />
+			</input>
+			<output name="modifyLeaseResponse">
 				<soap:body use="literal" />
 			</output>
 		</operation>

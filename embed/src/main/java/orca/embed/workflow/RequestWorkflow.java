@@ -22,12 +22,11 @@ import orca.embed.policyhelpers.SystemNativeError;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlModel;
+import orca.ndl.NdlModel.ModelType;
 import orca.ndl.NdlModifyParser;
 import orca.ndl.NdlRequestParser;
 import orca.ndl.OntProcessor;
-import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.DomainElement;
-import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
 import orca.ndl.elements.OrcaReservationTerm;
 import orca.ndl.elements.RequestSlice;
@@ -63,7 +62,7 @@ public class RequestWorkflow {
 	// done
 	protected RequestSlice slice;
 	// TDB - done
-	protected OntModel requestModel, manifestModel;
+	protected OntModel requestModel = null, manifestModel = null, tmpModifyModel = null;
 	// restored from manifest model
 	protected OrcaReservationTerm term;
 	// typically InterCloudHandler, no need to restore, except it has idm
@@ -113,7 +112,7 @@ public class RequestWorkflow {
 	}
 
 	public String getErrorMsg(){
-		if(this.err!=null)
+		if(err!=null)
 			return "Embedding workflow ERROR: " + err.getErrno()+":"+err.getMessage();
 				
 		return null;
@@ -142,12 +141,12 @@ public class RequestWorkflow {
 		// TODO: check if the request is already fully bound in one domain, preparing for topology splitting 				
 		boolean bound = request.generateGraph(requestElements);
 		String reservationDomain = request.getReservationDomain();
-		this.term=request.getTerm();
+		term=request.getTerm();
 		((CloudHandler)embedderAlgorithm).addSubstrateModel(abstractModels);
 		
-		((CloudHandler) embedderAlgorithm).setControllerAssignedLabel(this.controllerAssignedLabel);
-		((CloudHandler) embedderAlgorithm).setGlobalControllerAssignedLabel(this.globalControllerAssignedLabel);	
-		((CloudHandler) embedderAlgorithm).setShared_IP_set(this.shared_IP_set);
+		((CloudHandler) embedderAlgorithm).setControllerAssignedLabel(controllerAssignedLabel);
+		((CloudHandler) embedderAlgorithm).setGlobalControllerAssignedLabel(globalControllerAssignedLabel);	
+		((CloudHandler) embedderAlgorithm).setShared_IP_set(shared_IP_set);
 		if(reservationDomain == null){// invoke the embedding code
 			err = embedderAlgorithm.runEmbedding(bound, request, domainResourcePools);
 		}else{  //intra-domain embedding
@@ -160,7 +159,9 @@ public class RequestWorkflow {
 		manifestModel = ((CloudHandler) embedderAlgorithm).createManifest(boundElements, request, userDN, controller_url, sliceId);
 		domainInConnectionList = ((CloudHandler) embedderAlgorithm).getDomainInConnectionList();
 		
-		TDB.sync(requestModel);
+		((CloudHandler) embedderAlgorithm).setManifestModel(manifestModel);
+		
+		//TDB.sync(requestModel);
 		//closeCreateModel();
 		
 		return err;
@@ -213,19 +214,38 @@ public class RequestWorkflow {
 		return;
 	}
 	
-	public synchronized void modify(DomainResourcePools domainResourcePools, String modReq, 
+	public synchronized void modify(DomainResourcePools domainResourcePools, String modReq, String sliceId,
 			HashMap <String,Collection <DomainElement>> nodeGroupMap, 
 			HashMap<String, DomainElement> firstGroupElement) throws NdlException, UnknownHostException, InetNetworkException{
 		logger.info("workflow:modify(); starts...");
 		ModifyParserListener pl = new ModifyParserListener();
 		NdlModifyParser nmp = new NdlModifyParser(modReq,pl);
-		nmp.rewriteModifyRequest();
+		//nmp.rewriteModifyRequest();
 		nmp.processModifyRequest();
 		
+		((CloudHandler) embedderAlgorithm).setControllerAssignedLabel(controllerAssignedLabel);
+		((CloudHandler) embedderAlgorithm).setGlobalControllerAssignedLabel(globalControllerAssignedLabel);	
+		((CloudHandler) embedderAlgorithm).setShared_IP_set(shared_IP_set);
+		
 		Collection <ModifyElement> modifyElements = pl.getModifyElements();
-		err=((MappingHandler) embedderAlgorithm).modifySlice(modifyElements, manifestModel, nodeGroupMap, firstGroupElement, requestModel);
+		
+		// delete previous modify model (if any)
+		if (tmpModifyModel != null) {
+			NdlModel.closeModel(tmpModifyModel);
+		}
+		
+		// create new  ephemeral modify request model in Java tmp space
+		tmpModifyModel = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true, ModelType.TdbEphemeral, null);
+		manifestModel.add(tmpModifyModel);
+		err=((MappingHandler) embedderAlgorithm).modifySlice(domainResourcePools,modifyElements, manifestModel,sliceId, nodeGroupMap, firstGroupElement, requestModel, tmpModifyModel);
+		
+		modifyGlobalControllerAssignedLabel();
+		boundElements = ((CloudHandler) embedderAlgorithm).getDeviceList();
+		staticLabelDependency();
+		domainInConnectionList = ((CloudHandler) embedderAlgorithm).getDomainInConnectionList();
+		
 		nmp.freeModel();
-		TDB.sync(manifestModel);
+		//TDB.sync(manifestModel);
 	}
 	
 	public void setSliceName(String urn, String uuid,String dn){
@@ -244,13 +264,13 @@ public class RequestWorkflow {
 	
 	//close the Jena models
 	public void closeModel(){		
-		HashMap <String,OntModel> domainModelMap = ((CloudHandler) this.embedderAlgorithm).getDomainModel();
+		HashMap <String,OntModel> domainModelMap = ((CloudHandler) embedderAlgorithm).getDomainModel();
 		if(domainModelMap!=null){
 			for(Entry <String,OntModel> entry:domainModelMap.entrySet())
 				NdlModel.closeModel(entry.getValue());
 		}
 		
-		NdlModel.closeModel(((MappingHandler) this.embedderAlgorithm).getIdm());
+		NdlModel.closeModel(((MappingHandler) embedderAlgorithm).getIdm());
 	}
 	
 	//close the Jena models
@@ -263,42 +283,46 @@ public class RequestWorkflow {
 			NdlModel.closeModel(manifestModel);
 			manifestModel = null;
 		}
-		if (((MappingHandler) this.embedderAlgorithm).getIdm() != null) 
+		if (((MappingHandler) embedderAlgorithm).getIdm() != null) 
 			closeModel();
+		
+//		if (((ModifyHandler) embedderAlgorithm).getModifyRequestModelList() != null) 
+//			for(OntModel model:((ModifyHandler) embedderAlgorithm).getModifyRequestModelList())
+//				NdlModel.closeModel(model);
 	}
 	
-	public void modifyGlobalControllerAssignedLabel(){
-		if(this.globalControllerAssignedLabel==null){
+	protected void modifyGlobalControllerAssignedLabel(){
+		if(globalControllerAssignedLabel==null){
 			logger.error("modifyGlobalControllerAssignedLabel: the map variable not set");
 			return;
 		}
 		String domain=null;
 		BitSet bitSet=null,globalBitSet=null;
-		for(Entry<String, BitSet> entry:this.controllerAssignedLabel.entrySet()){
+		for(Entry<String, BitSet> entry:controllerAssignedLabel.entrySet()){
 			domain = entry.getKey();
 			bitSet=entry.getValue();
-			if(this.globalControllerAssignedLabel.containsKey(domain)){
+			if(globalControllerAssignedLabel.containsKey(domain)){
 				bitSet = entry.getValue();
 				globalBitSet=globalControllerAssignedLabel.get(domain);
 				globalBitSet.or(bitSet);
 			}else{
 				globalBitSet= new BitSet(InterDomainHandler.max_vlan_tag);
 				globalBitSet.or(bitSet);
-				this.globalControllerAssignedLabel.put(domain, globalBitSet);
+				globalControllerAssignedLabel.put(domain, globalBitSet);
 			}
-			logger.debug("modifyGlobalLabel:"+domain+":assignedLabel="+this.globalControllerAssignedLabel.get(domain)+":controllerLabel="+this.controllerAssignedLabel.get(domain));
+			logger.debug("modifyGlobalLabel:"+domain+":assignedLabel="+globalControllerAssignedLabel.get(domain)+":controllerLabel="+controllerAssignedLabel.get(domain));
 		}
 	}
 	
 	public void clearGlobalControllerAssignedLabel(){
 		String domain=null;
 		BitSet bitSet=null,globalBitSet=null;
-		for(Entry<String, BitSet> entry:this.controllerAssignedLabel.entrySet()){
+		for(Entry<String, BitSet> entry: controllerAssignedLabel.entrySet()){
 			domain = entry.getKey();
 			bitSet = entry.getValue();
 			logger.debug("ClearGlobalLabel:"+domain+";controller bitset="+bitSet);
-			if(this.globalControllerAssignedLabel.containsKey(domain)){
-				globalBitSet = this.globalControllerAssignedLabel.get(domain);
+			if(globalControllerAssignedLabel.containsKey(domain)){
+				globalBitSet = globalControllerAssignedLabel.get(domain);
 				globalBitSet.andNot(bitSet);
 				logger.debug("ClearGlobalLabel:assignedLabel="+globalControllerAssignedLabel.get(domain)+":removed controllerLabel="+controllerAssignedLabel.get(domain));
 			}
@@ -306,10 +330,10 @@ public class RequestWorkflow {
 	}	
 	
 	public void clearSharedIPSet(){
-		if(this.controller_shared_IP_set==null || this.shared_IP_set==null)
+		if(controller_shared_IP_set==null || shared_IP_set==null)
 			return;
-		for(Entry<String,LinkedList<String>> entry:this.controller_shared_IP_set.entrySet()){
-			LinkedList<String> shared_set = this.shared_IP_set.get(entry.getKey());
+		for(Entry<String,LinkedList<String>> entry:controller_shared_IP_set.entrySet()){
+			LinkedList<String> shared_set = shared_IP_set.get(entry.getKey());
 			if(shared_set!=null)
 				shared_set.removeAll(entry.getValue());
 		}
@@ -396,6 +420,7 @@ public class RequestWorkflow {
 			logger.debug("Slice bound elements are " + sb);
 			
 			((CloudHandler)embedderAlgorithm).setDeviceList(boundElements);
+			((CloudHandler) embedderAlgorithm).setManifestModel(manifestModel);
 			
 			// recover term
 			term = new OrcaReservationTerm();
@@ -424,13 +449,13 @@ public class RequestWorkflow {
 			//recover IP address assignment on the shared vlan (storage LUN)
 			HashMap <String,LinkedList<String>> IP_set = parserListener.getShared_IP_set();
 			if(IP_set!=null){
-				this.controller_shared_IP_set=new HashMap <String,LinkedList<String>>();
+				controller_shared_IP_set=new HashMap <String,LinkedList<String>>();
 				for(Entry<String,LinkedList<String>> entry:IP_set.entrySet()){
 					logger.debug("workflow recover:domain="+entry.getKey());
 					for(String shared_ip_str:entry.getValue()){
 						logger.debug("workflow recover:ip="+shared_ip_str);
 					}
-					this.controller_shared_IP_set.put(entry.getKey(),entry.getValue());
+					controller_shared_IP_set.put(entry.getKey(),entry.getValue());
 					if(shared_IP_set.get(entry.getKey())!=null){
 						shared_IP_set.get(entry.getKey()).addAll(entry.getValue());
 					}else{
@@ -498,5 +523,15 @@ public class RequestWorkflow {
 			nbs.set(label);
 			cal.put(domain, nbs);
 		}
+	}
+	
+	public void syncRequestModel() {
+		if (requestModel != null)
+			TDB.sync(requestModel);
+	}
+	
+	public void syncManifestModel() {
+		if (manifestModel != null)
+			TDB.sync(manifestModel);
 	}
 }

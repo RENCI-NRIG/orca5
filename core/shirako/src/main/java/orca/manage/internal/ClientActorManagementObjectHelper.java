@@ -544,21 +544,33 @@ public class ClientActorManagementObjectHelper implements IClientActorManagement
 					if (newResourceType == null) {
 						rset.setType(r.getResources().getType());
 					}
+					
+					//configProperties.setProperty("shirako.modify.key1", "value1");
+					
 					rset.setConfigurationProperties(configProperties);
 					rset.setRequestProperties(requestProperties);
 					// FIXME: not setting local/resource properties, but should
 					// we?
-					//Term newTerm = r.getTerm().extend();
-					//newTerm.setEndTime(newEndTime);
 					
-					// resetting start time so extend can take place immediately /ib 04/2015
 					Date tmpStartTime = r.getTerm().getStartTime();
-					Term newTerm = r.getTerm().extend();
-					newTerm.setEndTime(newEndTime);
-					newTerm.setNewStartTime(tmpStartTime);
-					newTerm.setStartTime(tmpStartTime);
+                    Term newTerm = r.getTerm().extend();
+
+                    //newTerm.setNewStartTime(r.getTerm().getStartTime());
+                    newTerm.setEndTime(newEndTime);
+                    newTerm.setNewStartTime(tmpStartTime);
+                    newTerm.setStartTime(tmpStartTime);
+					
+					/*
+					Properties modifyProps = new Properties();
+					modifyProps.setProperty("new-modify-property1", "value1");
+					System.out.println("Before calling client.modify()");
+					client.modify(reservation, modifyProps);
+					System.out.println("After calling client.modify()");
+					*/
+					
 					
 					client.extend(reservation, rset, newTerm);
+					
 					return null;
 				}
 			});
@@ -570,5 +582,40 @@ public class ClientActorManagementObjectHelper implements IClientActorManagement
 
 		return result;
 	}
+	
+	public ResultMng modifyReservation(final ReservationID reservation, final Properties modifyProperties, AuthToken caller) {
+		final ResultMng result = new ResultMng();
+		if (reservation == null || modifyProperties == null) {
+			result.setCode(OrcaConstants.ErrorInvalidArguments);
+			return result;
+		}
+		logger.debug("ClientActorManagementObjectHelper: modifyReservation(): reservation:" + reservation + " | modifyProperties = " + modifyProperties);
+		try {
+			client.executeOnActorThreadAndWait(new IActorRunnable() {
+				public Object run() throws Exception {
+					IReservation r = client.getReservation(reservation);
+					if (r == null) {
+						result.setCode(OrcaConstants.ErrorNoSuchReservation);
+						return null;
+					}
+					
+					// Shipping the modifyProperties to the core and have ServiceManager.modify()
+					// handle the properties
+					
+					client.modify(reservation, modifyProperties);
+					
+					return null;
+				}
+			});			
+		} catch (Exception e) {
+			logger.error("modifyReservation", e);
+			result.setCode(OrcaConstants.ErrorInternalError);
+			ManagementObject.setExceptionDetails(result, e);
+		}
+
+		return result;
+	}
+	
+	
 
 }

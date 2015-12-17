@@ -84,4 +84,25 @@ public class SemaphoreMap {
     		throw new BuildException("Exception encountered releasing semaphore " + semName + ": " + e);
     	}
 	}
+	
+	/**
+	 * Delete the semaphore from map (garbage collection)
+	 * @param semName
+	 */
+	public void delete(String semName) {
+		Semaphore sem = null;
+
+		synchronized(sems) {
+			sem = sems.get(semName);
+			if (sem == null)
+				return;
+			try {
+				sem.acquire();
+				sems.remove(semName);
+				sem.release();
+			} catch(Exception e) {
+				throw new BuildException("Exception encountered clearing semaphore " + semName + ": " + e);
+			}
+		}
+	}
 }

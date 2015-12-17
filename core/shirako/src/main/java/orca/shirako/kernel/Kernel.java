@@ -306,6 +306,34 @@ class Kernel
     }
 
     /**
+     * Handles a modify lease operation for the reservation.
+     * <p>
+     * Client: issue a modify lease request.
+     * </p>
+     * <p>
+     * Authority: process a request for a modifying a lease.
+     * </p>
+     * @param reservation reservation for which to perform modify lease
+     * @throws Exception
+     */
+    protected void modifyLease(final IKernelReservation reservation) throws Exception
+    {
+        try {
+            reservation.modifyLease();
+            plugin.getDatabase().updateReservation(reservation);
+            if (!reservation.isFailed()) {
+                reservation.serviceModifyLease();
+            }
+        } catch (TestException e) {
+            throw e;
+        } catch (Exception e) {
+            error("An error occurred during modifying lease for reservation #" + reservation.getReservationID().toHashString(), e);
+        }
+    }
+    
+    
+    
+    /**
      * Extends the reservation with the given resources and term.
      * @param reservation reservation to extend
      * @param resources resources to use for the extension
@@ -345,7 +373,7 @@ class Kernel
 
         /* check if this reservation is managed by us */
         real = (IKernelReservation) reservations.get(rid);
-
+        
         if (real == null) {
             throw new RuntimeException("Unknown reservation: rid=" + rid);
         }

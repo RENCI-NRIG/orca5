@@ -192,6 +192,16 @@ public class RPCManager {
                 (IServiceManagerCallbackProxy) reservation.getClientCallbackProxy(),
                 reservation.getSlice().getOwner());
     }
+    
+    public static void modifyLease(IAuthorityProxy proxy, IServiceManagerReservation reservation,
+            AuthToken caller) {
+        validate(reservation, true);
+        instance.doModifyLease(reservation.getActor(),
+                reservation.getAuthority(),
+                reservation,
+                (IServiceManagerCallbackProxy) reservation.getClientCallbackProxy(),
+                reservation.getSlice().getOwner());
+    }
 
     public static void close(IServiceManagerReservation reservation) {
         validate(reservation, false);
@@ -450,6 +460,25 @@ public class RPCManager {
         enqueue(rpc);
     }
 
+    private void doModifyLease(IActor actor, IAuthorityProxy proxy,
+            IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback,
+            AuthToken caller) {
+        proxy.getLogger().info("Outbound modifyLease request from <" + caller.getName() + ">: "
+                + reservation.toLogString());
+        // call the proxy to prepare the state for the RPC request.
+        IRPCRequestState state = proxy.prepareModifyLease(reservation, callback, caller);
+        // create the request object
+        state.setCaller(caller);
+        state.setType(RPCRequestType.ModifyLease);
+        RPCRequest rpc = new RPCRequest(state,
+                actor,
+                proxy,
+                reservation,
+                reservation.getLeaseSequenceOut());
+        // schedule this RPC call for execution
+        enqueue(rpc);
+    }
+    
     private void doClose(IActor actor, IAuthorityProxy proxy,
             IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback,
             AuthToken caller) {

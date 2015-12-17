@@ -396,6 +396,12 @@ abstract class Reservation implements IKernelReservation {
     /**
      * {@inheritDoc}
      */
+    public void modifyLease() throws Exception {
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public void extendTicket(final IActor actor) throws Exception {
         internalError("abstract extendTicket trap");
     }
@@ -1060,6 +1066,13 @@ abstract class Reservation implements IKernelReservation {
         // default no-op
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void serviceModifyLease() throws Exception {
+        // default no-op
+    }    
+    
     /**
      * {@inheritDoc}
      */

@@ -86,6 +86,8 @@ public class Label implements Persistable {
 	 * @return
 	 */
 	public OntResource getResource(OntModel m) {
+		if(m.isClosed())
+			return null;
 		return m.getOntResource(label_uri);
 	}
 	

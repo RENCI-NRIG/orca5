@@ -57,6 +57,10 @@
         <echo message="Sleeping for ${sleeptime} milliseconds"/>
         <sleep milliseconds="${sleeptime}"/>
     	
+	<var name="shirako.save.unit.test1" unset="true" />
+        <echo message="Saving unit.test1" />
+        <property name="shirako.save.unit.test1" value="Test 1" />
+
         <property name="shirako.target.code" value="0" />
     </target>
 
@@ -79,6 +83,10 @@
     </target>
 
     <target name="modify" depends="merge.properties,resolve.configuration">
+        <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="modify.restart" depends="merge.properties,resolve.configuration">
         <property name="shirako.target.code" value="0" />
     </target>
 

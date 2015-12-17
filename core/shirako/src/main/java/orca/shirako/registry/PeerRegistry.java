@@ -114,7 +114,7 @@ public class PeerRegistry implements Initializable
     protected void loadFromDB() throws Exception
     {
         Vector v = spi.getDatabase().getBrokers();
-
+        
         if (v != null) {
             for (int i = 0; i < v.size(); i++) {
                 Properties p = (Properties) v.get(i);

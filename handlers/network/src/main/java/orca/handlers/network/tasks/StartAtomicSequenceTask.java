@@ -1,7 +1,5 @@
 package orca.handlers.network.tasks;
 
-import java.util.concurrent.TimeUnit;
-
 import orca.shirako.plugins.config.OrcaAntTask;
 import orca.shirako.plugins.config.SliceProject;
 import orca.shirako.util.SemaphoreMap;
@@ -15,10 +13,10 @@ import org.apache.tools.ant.Project;
  * @author ibaldin
  *
  */
-@SuppressWarnings("unchecked")
 public class StartAtomicSequenceTask extends OrcaAntTask {
 	// get semaphore map from config
 	protected String exclusiveDevice;
+	protected int timeout;
 	
 	@Override
     public void execute() throws BuildException {
@@ -39,7 +37,7 @@ public class StartAtomicSequenceTask extends OrcaAntTask {
 		SemaphoreMap sems = (SemaphoreMap)pr.getSemaphoreMap();
 		
 		try {
-    		sems.tryAcquire(exclusiveDevice, 900, TimeUnit.SECONDS);
+    		sems.acquire(exclusiveDevice);
     	} catch (Exception e) {
     		throw new BuildException("Exception encountered waiting for sequence lock " + exclusiveDevice + ": " + e);
     	}

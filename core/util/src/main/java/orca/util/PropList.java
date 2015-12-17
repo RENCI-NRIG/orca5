@@ -12,11 +12,11 @@ package orca.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
 import java.net.InetAddress;
-
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -423,6 +423,11 @@ public class PropList
         }
     }
 
+    /**
+     * Merge two non-null lists (if either is null, nothing happens)
+     * @param from
+     * @param to
+     */
     public static void mergePropertiesPriority(Properties from, Properties to)
     {
         // no merging if the same list
@@ -442,7 +447,7 @@ public class PropList
             }
         }
     }
-
+    
     /**
      * Reads the value of the given property. It is expected that the
      * value is of boolean type.
@@ -731,5 +736,57 @@ public class PropList
         }
 
         return sb.toString();
+    }
+    
+    /**
+     * Find the highest index of the property name of a pattern 
+     * keyStartWith.[index]. Character '.' can be used as a separator
+     * inside the keyStartsWith pattern.
+     * @param p
+     * @param keyStartsWith
+     * @return
+     */
+    public static int highestModifyIndex(Properties p, String keyStartsWith) {
+        int highestIndex = 0;
+        int countSeparators = keyStartsWith.split("\\.").length;
+        for(String key : p.stringPropertyNames()) {        	
+        	if(key.startsWith(keyStartsWith)){
+        		String indexString = key.split("\\.")[countSeparators];
+        		int index = Integer.parseInt(indexString);
+        		if(index >= highestIndex){
+        			highestIndex = index;
+        		}
+        	}
+        }
+        return highestIndex;
+    }
+    
+    /**
+     * Prepend string to all property names
+     * @param p
+     * @param prefix
+     */
+    public static void renamePropertyNames(Properties p, String prefix) {
+    	Iterator<Map.Entry<Object,Object>> i = p.entrySet().iterator();
+
+    	List<String> toRemove = new ArrayList<String>();
+    	Properties tmp = new Properties();
+        while (i.hasNext()) {
+            Map.Entry<Object,Object> entry = i.next();
+            String name = (String) entry.getKey();
+            String value = (String) entry.getValue();
+            tmp.setProperty(prefix + name, value);
+            toRemove.add(name);
+        }
+        i = tmp.entrySet().iterator();
+        while(i.hasNext()) {
+            Map.Entry<Object,Object> entry = i.next();
+            String name = (String) entry.getKey();
+            String value = (String) entry.getValue();
+            p.setProperty(name, value);
+        }
+        for(String rem: toRemove) {
+        	p.remove(rem);
+        }
     }
 }

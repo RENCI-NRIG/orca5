@@ -1,86 +1,46 @@
 <!-- This file was auto-generated from WSDL -->
 <!-- by the Apache Axis2 version: #axisVersion# #today# -->
 
-  <service name="BrokerService">
-    <messageReceivers>
-      <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
-      class="orca.shirako.proxies.soapaxis2.services.BrokerServiceMessageReceiverInOut" />
-    </messageReceivers>
-
-    <parameter locked="false" name="ServiceClass">
-    orca.shirako.proxies.soapaxis2.services.BrokerServiceSkeleton</parameter>
-
-    <operation name="updateLease"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateLease</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateLeaseResponse</outputActionMapping>
-    </operation>
-
-    <operation name="updateTicket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>updateTicket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateTicketResponse</outputActionMapping>
-    </operation>
-
-    <operation name="ticket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>ticket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/ticketResponse</outputActionMapping>
-    </operation>
-
-    <operation name="query"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>query</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResponse</outputActionMapping>
-    </operation>
-
-    <operation name="relinquish"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>relinquish</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/relinquishResponse</outputActionMapping>
-    </operation>
-
-    <operation name="failedRPC"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>failedRPC</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/failedRPCResponse</outputActionMapping>
-    </operation>
-
-    <operation name="claim"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>claim</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/claimResponse</outputActionMapping>
-    </operation>
-
-    <operation name="queryResult"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>queryResult</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResultResponse</outputActionMapping>
-    </operation>
-
-    <operation name="extendTicket"
-    mep="http://www.w3.org/2004/08/wsdl/in-out">
-      <actionMapping>extendTicket</actionMapping>
-
-      <outputActionMapping>
-      http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/extendTicketResponse</outputActionMapping>
-    </operation>
-  </service>
-
+<service name="BrokerService">
+<messageReceivers>
+<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="orca.shirako.proxies.soapaxis2.services.BrokerServiceMessageReceiverInOut"/>
+</messageReceivers>
+<parameter locked="false" name="ServiceClass">orca.shirako.proxies.soapaxis2.services.BrokerServiceSkeleton</parameter>
+<operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateLease</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateLeaseResponse</outputActionMapping>
+</operation>
+<operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/updateTicketResponse</outputActionMapping>
+</operation>
+<operation name="ticket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>ticket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/ticketResponse</outputActionMapping>
+</operation>
+<operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>query</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResponse</outputActionMapping>
+</operation>
+<operation name="relinquish" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>relinquish</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/relinquishResponse</outputActionMapping>
+</operation>
+<operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>failedRPC</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/failedRPCResponse</outputActionMapping>
+</operation>
+<operation name="claim" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>claim</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/claimResponse</outputActionMapping>
+</operation>
+<operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>queryResult</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/queryResultResponse</outputActionMapping>
+</operation>
+<operation name="extendTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>extendTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/BrokerServicePortType/extendTicketResponse</outputActionMapping>
+</operation>
+</service>
 

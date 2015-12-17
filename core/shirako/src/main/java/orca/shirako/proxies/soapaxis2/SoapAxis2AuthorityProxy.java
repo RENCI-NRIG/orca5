@@ -24,6 +24,7 @@ import orca.shirako.proxies.soapaxis2.beans.Plist;
 import orca.shirako.proxies.soapaxis2.services.AuthorityServiceStub;
 import orca.shirako.proxies.soapaxis2.services.Close;
 import orca.shirako.proxies.soapaxis2.services.ExtendLease;
+import orca.shirako.proxies.soapaxis2.services.ModifyLease;
 import orca.shirako.proxies.soapaxis2.services.Redeem;
 import orca.shirako.proxies.soapaxis2.util.Translate;
 import orca.shirako.util.RPCError;
@@ -87,6 +88,24 @@ public class SoapAxis2AuthorityProxy extends SoapAxis2BrokerProxy implements IAu
             }
                 break;
 
+            case ModifyLease: {
+                try {
+                    AuthorityServiceStub stub = (AuthorityServiceStub) getServiceStub(soap.getCaller());
+                    ModifyLease request = new ModifyLease();
+                    request.setMessageID(soap.getMessageID());
+                    request.setReservation(soap.reservation);
+                    request.setCallbackURL(soap.callbackUrl);
+                    stub.modifyLease(request, soap.getCaller());
+                } catch (SoapAxis2StubException e) {
+                    throw new RPCException(RPCError.LocalError, e);
+                } catch (AxisFault e) {
+                    throw new RPCException(getRPCError(e), e);
+                } catch (RemoteException e) {
+                    throw new RPCException(RPCError.Unknown, e);
+                }
+            }
+                break;    
+                
             case Close: {
                 try {
                     AuthorityServiceStub stub = (AuthorityServiceStub) getServiceStub(soap.getCaller());
@@ -125,6 +144,13 @@ public class SoapAxis2AuthorityProxy extends SoapAxis2BrokerProxy implements IAu
         return state;
     }
 
+    public IRPCRequestState prepareModifyLease(IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback, AuthToken caller) {
+        SoapAxis2ProxyRequestState state = new SoapAxis2ProxyRequestState();
+        state.reservation = passAuthorityReservation(reservation, caller);
+        state.callbackUrl = ((SoapAxis2Proxy) callback).getServiceEndpoint();
+        return state;
+    }
+    
     public IRPCRequestState prepareClose(IServiceManagerReservation reservation, IServiceManagerCallbackProxy callback, AuthToken caller) {
         SoapAxis2ProxyRequestState state = new SoapAxis2ProxyRequestState();
         state.reservation = passAuthorityReservation(reservation, caller);

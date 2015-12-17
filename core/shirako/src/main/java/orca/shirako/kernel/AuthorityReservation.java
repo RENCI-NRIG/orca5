@@ -22,6 +22,7 @@ import orca.shirako.time.Term;
 import orca.shirako.util.Notice;
 import orca.shirako.util.TestException;
 import orca.util.OrcaException;
+import orca.util.PropList;
 import orca.util.persistence.NotPersistent;
 import orca.util.persistence.Persistent;
 import orca.util.persistence.RecoverParent;
@@ -137,6 +138,7 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
 
     @Override
     public void extendLease() throws Exception {
+    	
         nothingPending();
         incomingRequest();
 
@@ -155,10 +157,27 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
     }
 
     @Override
+    public void modifyLease() throws Exception {
+    	
+        nothingPending();
+        incomingRequest();
+
+        if (!isActive()) {
+            error("reservation does not yet hold a lease");
+        }
+
+        // anirban@ 04/07/15: If we decide to call a modify policy at some later point of time, set approved to false
+        approved = true;
+        bidPending = true;
+        pendingRecover = false;
+        mapAndUpdateModifyLease();
+    }
+    
+    @Override
     public void serviceExtendLease() throws Exception {
         assert ((state == ReservationStates.Failed) && (pending == ReservationStates.None))
                 || ((pending == ReservationStates.ExtendingLease) || (pending == ReservationStates.Priming));
-
+        
         try {
             if (pending == ReservationStates.Priming) {
                 resources.serviceExtend();
@@ -171,6 +190,24 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         }
     }
 
+    @Override
+    public void serviceModifyLease() throws Exception {
+    	
+        assert ((state == ReservationStates.Failed) && (pending == ReservationStates.None))
+                || ((pending == ReservationStates.ModifyingLease) || (pending == ReservationStates.Priming));
+
+        try {
+            if (pending == ReservationStates.Priming) {
+                resources.serviceModify();
+            }
+        } catch (TestException e) {
+            throw e;
+        } catch (Exception e) {
+            logException("authority failed servicing modifyLease", e);
+            failNotify(e.toString());
+        }
+    }
+    
     @Override
     public void close() {
         if (logger.isDebugEnabled()) {
@@ -205,6 +242,11 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                 generateUpdate();
             }
             break;
+        case RequestTypes.RequestModifyLease:
+            if ((pending == ReservationStates.None) && !bidPending && !pendingRecover) {
+                generateUpdate();
+            }
+            break;    
         default:
             throw new OrcaException("Unsupported operation: " + operation);
         }
@@ -321,6 +363,84 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         return success;
     }
 
+    /**
+     * Calls the policy to fill a request, with associated state transitions.
+     * 
+     * @param modify
+     *            true iff this request is an modify
+     * @return boolean success
+     */
+    protected boolean mapAndUpdateModifyLease() {
+    	
+        boolean success = false;
+        boolean granted = false;
+
+        switch (state) {
+        case ReservationStates.Failed:
+            /*
+             * Must be a previous failure, or policy marked it as failed. Send
+             * update to reset client.
+             */
+            generateUpdate();
+            break;
+
+        case ReservationStates.Active:
+            try {
+                transition("modifying lease",
+                        ReservationStates.Active,
+                        ReservationStates.ModifyingLease);
+//                /*
+//                 * If the policy has processed this reservation, set granted to
+//                 * true so that we can start priming the resources. If the
+//                 * policy has not yet processed this reservation (binPending is
+//                 * true) then call the policy. The policy may choose to process
+//                 * the request immediately (true) or to defer it (false). In
+//                 * case of a deferred request, we will eventually come back to
+//                 * this method after the policy has done its job.
+//                 */
+//                if (isBidPending()) {
+//                    granted = ((IAuthorityPolicy) policy).extend(this);
+//                } else {
+//                    granted = true;
+//                }
+                
+                // anirban@ 04/07/15: If we decide to have a modify policy, call policy here, as above
+            	// For now, assume modify is always granted
+                granted = true;
+
+                if (granted) {
+                    success = true;
+                    ticket = requestedResources;
+                    // attach the configuration properties to the approved resources
+                    // requestedResources.getConfigurationProperties() contains the modifyProperties
+                    
+                    // TODO: merge the configuration properties of approved and requested resources and put it in approved resources instead ?
+                    logger.debug("requestedResources.getConfigurationProperties() = " + requestedResources.getConfigurationProperties());
+                    logger.debug("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
+                    if (requestedResources.getConfigurationProperties() != null) {
+                    	if (approvedResources.getConfigurationProperties() == null)
+                    		approvedResources.setConfigurationProperties(requestedResources.getConfigurationProperties());
+                    	else
+                    		PropList.mergePropertiesPriority(requestedResources.getConfigurationProperties(), approvedResources.getConfigurationProperties());
+                    }
+                    logger.debug("approvedResources.getConfigurationProperties() = " + approvedResources.getConfigurationProperties());
+                    resources.updateProps(this, approvedResources);
+                    // transition to priming
+                    transition("modify lease", ReservationStates.Active, ReservationStates.Priming);
+                }
+            } catch (Exception e) {
+                logException("authority mapper modify", e);
+                failNotify(e.toString());
+            }
+            break;
+        default:
+            fail("mapAndUpdateModifyLease: unexpected state");
+        }
+
+        return success;
+    }
+    
+    
     @Override
     protected void generateUpdate() {
         if (callback == null) {
@@ -358,6 +478,10 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         requestedResources.validateIncomingTicket(requestedTerm);
     }
 
+    public void prepareModifyLease() throws Exception {
+        requestedResources.validateIncomingTicket(requestedTerm);
+    }
+    
     @Override
     public void prepareProbe() throws Exception {
         try {
@@ -374,7 +498,7 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
 //        if (logger.isDebugEnabled()) {
 //            logger.debug("AuthorityReservation probePending: " + this.toLogString());
 //        }
-
+    	
         if (servicePending != ReservationStates.None) {
             logError("service overrun in probePending");
             return;
@@ -389,6 +513,7 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                 generateUpdate();
                 notifiedAboutFailure = true;
             }
+            
             break;
 
         case ReservationStates.Redeeming:
@@ -398,7 +523,7 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
              */
             assert state == ReservationStates.Ticketed;
             if (!bidPending && mapAndUpdate(false)) {
-                logger.debug("Resource assignment for #" + rid.toHashString() + " completed");
+                logger.debug("Resource assignment (redeem) for #" + rid.toHashString() + " completed");
                 servicePending = ReservationStates.Redeeming;
             }
             break;
@@ -406,11 +531,21 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
         case ReservationStates.ExtendingLease:
             assert state == ReservationStates.Active;
             if (!bidPending && mapAndUpdate(true)) {
-                logger.debug("Resource assignment for #" + rid.toHashString() + " completed");
+                logger.debug("Resource assignment (extend) for #" + rid.toHashString() + " completed");
                 servicePending = ReservationStates.ExtendingLease;
             }
             break;
 
+        // This case will not arise if there are no modify policies, which might defer modify    
+        case ReservationStates.ModifyingLease:
+            assert state == ReservationStates.Active;
+            logger.info("In AuthorityReservation.probePending(): pending state is ModifyingLease and res state is Active");
+            if (!bidPending && mapAndUpdateModifyLease()) {
+                logger.debug("Resource assignment (modify) for #" + rid.toHashString() + " completed");
+                servicePending = ReservationStates.ModifyingLease;
+            }
+            break;
+            
         case ReservationStates.Closing:
             if ((resources == null) || resources.isClosed()) {
                 transition("close complete", ReservationStates.Closed, ReservationStates.None);
@@ -427,6 +562,7 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
              * something succeeded, then we report what we got as active, else
              * it's a complete bust.
              */
+        	
             if (resources.isActive()) {
                 /*
                  * If something failed or we are recovering, we need to correct
@@ -482,6 +618,8 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                     generateUpdate();
                 }
             }
+            
+            // If no unit is priming or closing, but modification is in process
 
             break;
         }
@@ -504,7 +642,12 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
             case ReservationStates.ExtendingLease:
                 serviceExtendLease();
                 break;
+             
+            case ReservationStates.ModifyingLease:
+                serviceModifyLease();
+                break;                    
             }
+            
         } catch (TestException e) {
             throw e;
         } catch (Exception e) {

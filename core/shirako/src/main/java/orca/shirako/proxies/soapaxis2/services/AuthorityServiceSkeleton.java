@@ -158,4 +158,21 @@ public class AuthorityServiceSkeleton extends BrokerServiceSkeleton {
         doDispatch(rpc);
         return new ExtendLeaseResponse();
     }
+    
+    public orca.shirako.proxies.soapaxis2.services.ModifyLeaseResponse modifyLease(orca.shirako.proxies.soapaxis2.services.ModifyLease request) throws RemoteException {
+        AuthToken authToken = doAuthorize();
+        IncomingRPC rpc;
+        try {
+            // recreate the reservation
+            IAuthorityReservation pr = passAuthority(request.getReservation());
+            rpc = new IncomingReservationRPC(request.getMessageID(), RPCRequestType.ModifyLease, pr, authToken);
+        } catch (Exception e) {
+            String msg = "Invalid modifyLease request";
+            logger.error(msg, e);
+            throw new AxisFault(msg, getFaultCode(RPCError.InvalidRequest), e);
+        }
+        doDispatch(rpc);
+        return new ModifyLeaseResponse();
+    }
+    
 }

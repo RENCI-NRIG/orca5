@@ -25,4 +25,5 @@ public interface IKernelAuthorityReservation extends IKernelServerReservation, I
      * @throws Exception thrown if request is rejected (e.g., ticket not valid)
      */
     public void prepareExtendLease() throws Exception;
+    public void prepareModifyLease() throws Exception;
 }

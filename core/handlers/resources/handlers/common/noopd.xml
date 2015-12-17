@@ -51,7 +51,33 @@
     </target>
 
     <target name="modify" depends="merge.properties,resolve.configuration">
+	<echo message="**** modify handler start..."/>
+	<echo message="Sleeping for 5000 milliseconds"/>
+        <sleep milliseconds="5000"/>
         <property name="shirako.target.code" value="0" />
+    </target>
+
+    <target name="modify.restart" depends="merge.properties,resolve.configuration">
+	<echo message="**** modify.restart handler start..."/>
+	<echo message="Sleeping for 4000 milliseconds"/>
+        <sleep milliseconds="4000"/>
+	<!--
+	<var name="shirako.save.unit.modify1.message" unset="true" />
+        <echo message="Setting modify message notice" />
+        <property name="shirako.save.unit.modify1.message" value="modify action succeeded" />
+	-->
+	<if>
+                <isset property="unit.modify.sequencenum" />
+                <then>
+                        <var name="shirako.save.unit.modify.sequencenum" unset="true" />
+                        <echo message="Setting modify sequence number as ${unit.modify.sequencenum}" />
+                        <property name="shirako.save.unit.modify.sequencenum" value="${unit.modify.sequencenum}" />
+                </then>
+        </if>
+
+        <property name="shirako.target.code.message" value="modify success" />
+        <property name="shirako.target.code" value="0" />
+
     </target>
 
     <target name="recover">

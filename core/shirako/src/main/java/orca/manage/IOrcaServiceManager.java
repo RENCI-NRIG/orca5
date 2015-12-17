@@ -11,10 +11,12 @@
 package orca.manage;
 
 import java.util.List;
+import java.util.Properties;
 
 import orca.manage.beans.UnitMng;
 import orca.shirako.common.ReservationID;
 
 public interface IOrcaServiceManager extends IOrcaActor, IOrcaClientActor {
 	public List<UnitMng> getUnits(ReservationID reservationID) throws Exception;
+	public boolean modifyReservation(ReservationID reservation, Properties modifyProperties);
 }

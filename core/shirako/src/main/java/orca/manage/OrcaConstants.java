@@ -204,10 +204,11 @@ public class OrcaConstants
     public static final int ReservationPendingStateClosing = 8;
     public static final int ReservationPendingStateProbing = 9;
     public static final int ReservationPendingStateClosingJoining = 10;
+    public static final int ReservationPendingStateModifyingLease = 11;
     public static final String[] pendings = {
                                                 "", "None", "Ticketing", "Redeeming",
                                                 "ExtendingTicket", "ExtendingLease", "Priming",
-                                                "Blocked", "Closing", "Probing", "ClosingJoining"
+                                                "Blocked", "Closing", "Probing", "ClosingJoining", "ModifyingLease"
                                             };
 
     public static String getReservationPendingStateName(int state){
@@ -252,4 +253,6 @@ public class OrcaConstants
 
 	public static final int ExtendSameUnits = -1;
 
+	public static final String MODIFY_SUBCOMMAND_PROPERTY="modify.subcommand.";
+	public static final String MODIFY_PROPERTY_PREFIX="modify.";
 }

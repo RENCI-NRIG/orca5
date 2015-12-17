@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -81,9 +80,9 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.Collections;
 
 public class ReservationConverter implements LayerConstant {
-	private static final String SUDO_NO = "no";
-	private static final String SUDO_YES = "yes";
-	private static final String OPENSTACK_MAC_PREFIX = "fe:16:3e:00:";
+	static final String SUDO_NO = "no";
+	static final String SUDO_YES = "yes";
+	static final String OPENSTACK_MAC_PREFIX = "fe:16:3e:00:";
 	public static final String UNIT_URL_RES = UnitProperties.UnitURL;
 	private static final long TWO_WEEKS = (14*24*3600*1000);
 	private static final long ONE_DAY = (24*3600*1000);
@@ -102,6 +101,18 @@ public class ReservationConverter implements LayerConstant {
 	public static final String PropertyUnitEC2Instance = UnitProperties.UnitEC2Instance;
 	public static final String PropertyUnitEC2Host = "unit.ec2.host";
 	public static final String PropertyUnitSliceName = UnitProperties.UnitSliceName;
+	public static final String PropertyParentNumInterface = "unit.number.interface";
+	public static final String PropertyParentNumStorage = "unit.number.storage";
+	
+	public static final String PropertyModifyVersion = "modify.version";
+	public static final String PropertyNumExistParentReservations = "num.parent.exist";
+	public static final String PropertyNumNewParentReservations = "num.parent.new";
+	public static final String PropertyExistParent = "parent.exist.";
+	public static final String PropertyNewParent = "parent.new.";
+	public static final String PropertyIsNetwork= "local.isNetwork";
+	public static final String PropertyIsLUN= "local.isLUN";
+	public static final String PropertyIsVM= "local.isVM";
+	public static final String PropertyElementGUID= "element.GUID";
 	
 	public static final String LOGIN_FIELD = "login";
 	public static final String KEYS_FIELD = "keys";
@@ -138,16 +149,16 @@ public class ReservationConverter implements LayerConstant {
 	HashMap <String,DomainElement> firstGroupElement;
 
 	public ReservationConverter() {
-		this.logger = NdlCommons.getNdlLogger();
+		logger = NdlCommons.getNdlLogger();
 	}
 
 	public ReservationConverter(List<Map<String, ?>> u, IOrcaServiceManager asm, XmlrpcControllerSlice sl) throws ReservationConverterException {
 		
 		// convert list of logins/keys to properties
-		usersSSHProperties = generateSSHProperties(u, sl);
+		usersSSHProperties = generateSSHProperties(u);
 		sm = asm;
 		ndlSlice=sl;
-		this.logger = NdlCommons.getNdlLogger();
+		logger = NdlCommons.getNdlLogger();
 	}
 
 	public ReservationElementCollection getElementCollection() {
@@ -199,6 +210,8 @@ public class ReservationConverter implements LayerConstant {
 			return null;
 		}
 		
+		List <ReservationMng> extra_ar = new ArrayList <ReservationMng> ();//redundant due to modify, not added to SM
+		
 		for(NetworkElement device:boundElements){
 			DomainElement de = (DomainElement) device;
 			if(de.isAllocatable()==false)
@@ -248,22 +261,29 @@ public class ReservationConverter implements LayerConstant {
 			resrequest.reservation = r;
 			resrequest.domain = domain;
 			resrequest.domain_url = device.getName();
-
+			
 			if(de.getCe()==null){
 				resrequest.isNetwork = true;
+				local.setProperty(PropertyIsNetwork,"1");
 			}else if(de.getCastType()!=null && de.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				resrequest.isNetwork = true;
+				local.setProperty(PropertyIsNetwork,"1");
 			}else if(type.getResourceType().toString().endsWith("lun")){
 				resrequest.isLUN=true;
+				local.setProperty(PropertyIsLUN,"1");
 			}else{
 				resrequest.isVM=true;
+				local.setProperty(PropertyIsVM,"1");
             }
 
-			map.put(device.getName(), resrequest);
+			if(map.containsKey(device.getName()) && resrequest.isVM)
+				extra_ar.add(r);
+			else
+				map.put(device.getName(), resrequest);
 			
-			if(this.ndlSlice.getSliceUrn()!=null){
-				config.setProperty(PropertyUnitSliceName, this.ndlSlice.getSliceUrn());
-				local.setProperty(PropertyUnitSliceName, this.ndlSlice.getSliceUrn());
+			if(ndlSlice.getSliceUrn()!=null){
+				config.setProperty(PropertyUnitSliceName, ndlSlice.getSliceUrn());
+				local.setProperty(PropertyUnitSliceName, ndlSlice.getSliceUrn());
 			}
 
 			String device_name=device.getName();
@@ -272,7 +292,7 @@ public class ReservationConverter implements LayerConstant {
 			local.setProperty(UnitProperties.UnitHostName,getDomainLocalName(device_name));
 			config.setProperty(UnitProperties.UnitDomain,device.getURI());
 			if (resrequest.isVM) {
-				config.setProperty("unit.hostname.url", device_name);
+				config.setProperty(UnitProperties.UnitHostNameUrl, device_name);
 						
 				ComputeElement ce = de.getCe();
 				if (ce.getVMImageURL() != null) {
@@ -282,17 +302,21 @@ public class ReservationConverter implements LayerConstant {
 					config.setProperty(ConfigurationProperties.ConfigImageGuid,ce.getVMImageHash());
 				}
 				if (ce.getSpecificCEType() != null) {
-					config.setProperty(this.PropertyUnitEC2InstanceType,ce.getSpecificCEType());
+					config.setProperty(PropertyUnitEC2InstanceType,ce.getSpecificCEType());
+				}
+				if(de.getGUID()!=null){
+					local.setProperty(PropertyElementGUID,de.getGUID());
+					config.setProperty(PropertyElementGUID,de.getGUID());
 				}
 				
 				//set reconstraints
-				this.setRequestConstraints(request, ce);
+				setRequestConstraints(request, ce);
 			}
 
 			if(resrequest.isLUN){
 				ComputeElement ce = de.getCe();
 				
-				config.setProperty("unit.hostname.url", device_name);
+				config.setProperty(UnitProperties.UnitHostNameUrl, device_name);
 	
 				config.setProperty(UnitProperties.UnitTargetPrefix+".segment_size","128");   
 				config.setProperty(UnitProperties.UnitISCSIInitiatorIQNPrefix,ISCSI_Initiator_Iqn_prefix);
@@ -309,7 +333,7 @@ public class ReservationConverter implements LayerConstant {
 				logger.debug("lun_r:hostName="+device_name+";chap="+CHAP_User);
 				
 				//set reconstraints
-				this.setRequestConstraints(request, ce);
+				setRequestConstraints(request, ce);
 			}
 			
 			if (resrequest.isNetwork) {
@@ -329,7 +353,7 @@ public class ReservationConverter implements LayerConstant {
 					throw new RuntimeException("getReservations: ndlRequest is null or zero-length");
 				}
 				config.setProperty(PropertyRequestNdl, ndlRequest);
-				config.setProperty("unit.vlan.url", device_name);
+				config.setProperty(UnitProperties.UnitVlanUrl, device_name);
 
 				int staticLabel = (int) de.getStaticLabel();
 				if(staticLabel>0){
@@ -433,9 +457,11 @@ public class ReservationConverter implements LayerConstant {
 			r.setRequestProperties(OrcaConverter.fill(request));
 			r.setBroker(orca_state_instance.getBroker());
 			// register the reservation with Orca, so that it is assigned an id
-			if (sm.addReservation(r) == null) {
-				throw new RuntimeException("Could not add reservations " + sm.getLastError());
-			}
+			
+			if(!extra_ar.contains(r))
+				if (sm.addReservation(r) == null) {
+					throw new RuntimeException("Could not add reservations " + sm.getLastError());
+				}
 		}
 		
 		return map;
@@ -459,12 +485,11 @@ public class ReservationConverter implements LayerConstant {
 
 	public ArrayList<TicketReservationMng> setDependency(Collection<NetworkElement> boundElements,HashMap<String, ReservationRequest> map){		
 		
-		ScriptConstructor scriptConstructor = new ScriptConstructor(elementCollection, ndlSlice, logger);
+		ScriptConstructor scriptConstructor = new ScriptConstructor(elementCollection, ndlSlice);
 		
 		HashMap <DomainElement, LinkedList <ReservationRequest> > ip_r_collection = new HashMap <DomainElement, LinkedList <ReservationRequest> >();
 		
-		OntModel idm = ((InterCloudHandler)this.ndlSlice.getWorkflow().getEmbedderAlgorithm()).getIdm();
-		OntModel manifestModel = this.ndlSlice.getWorkflow().getManifestModel();
+		OntModel manifestModel = ndlSlice.getWorkflow().getManifestModel();
 		for(NetworkElement device:boundElements){
 			DomainElement de = (DomainElement) device;
 			String de_domain = getDomainName(de);
@@ -479,7 +504,7 @@ public class ReservationConverter implements LayerConstant {
 				logger.error("Missing reservation from domain " + device.getName());
                 continue;
 			}
-			logger.debug("from " + r.domain + " units=" + r.reservation.getUnits() + " type=" + r.reservation.getResourceType());
+			logger.debug("from "+ device.getName() + r.domain + " units=" + r.reservation.getUnits() + " type=" + r.reservation.getResourceType());
 			ComputeElement ce = de.getCe();
 
 			Properties config = new Properties();
@@ -494,9 +519,9 @@ public class ReservationConverter implements LayerConstant {
 						logger.debug("Generating postbootscript for " + device.getName());
 						bootScript = scriptConstructor.constructScript(bootScript, device.getName());
 						if (bootScript != null) {
-							logger.debug("unit.instance.config=\n" + bootScript);
-							config.setProperty("unit.instance.config", bootScript);
-							local.setProperty("unit.instance.config", bootScript);
+							logger.debug(UnitProperties.UnitInstanceConfig + "\n" + bootScript);
+							config.setProperty(UnitProperties.UnitInstanceConfig, bootScript);
+							local.setProperty(UnitProperties.UnitInstanceConfig, bootScript);
 							de.getCe().setPostBootScript(bootScript);
 						}
 					}
@@ -514,14 +539,15 @@ public class ReservationConverter implements LayerConstant {
 				continue;
 			}            
 			boolean prNetwork=false;
-			int num_interface=0;
-            String parent_num_interface = "unit.number.interface";
+			int num_interface=de.getNumInterface();
+			r.networkDependencies = de.getNumInterface();
 			for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
 				String intf_name = null;
-				String parent_tag_name = "unit.eth";
-				String parent_ip_addr = "unit.eth";
-				String parent_mac_addr = "unit.eth";
-				String parent_quantum_uuid = "unit.eth";
+				String parent_tag_name = UnitProperties.UnitEthPrefix;
+				String parent_ip_addr = UnitProperties.UnitEthPrefix;
+				String parent_mac_addr = UnitProperties.UnitEthPrefix;
+				String parent_quantum_uuid = UnitProperties.UnitEthPrefix;
+				String parent_interface_uuid = UnitProperties.UnitEthPrefix;
 				DomainElement parent_de = parent.getKey();
 				ReservationRequest pr = map.get(parent_de.getName());
 				if (pr == null) {
@@ -534,6 +560,12 @@ public class ReservationConverter implements LayerConstant {
 				
 				logger.debug("child is VM:"+r.isVM+";parent is network:"+prNetwork);
 
+				/*if(pr!=null && pr.isLUN)
+					r.numStorageDependencies++;
+				if (prNetwork)
+					r.networkDependencies++;
+				*/
+				
 				String pdomain = getDomainName(parent_de);
 				if(pdomain==null){
 					logger.error("Parent domain name is null:"+ parent_de.getURI());
@@ -596,10 +628,13 @@ public class ReservationConverter implements LayerConstant {
 					if (parent.getValue() == null) {
 						logger.error("Edge interface name is unknown!"+parent.getValue().getURI());
 					}else{
+						String element_guid = UUID.randomUUID().toString();
+						parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
 						//depending on storage
 						if(pr!=null){
 							if(pr.isLUN){//now do it latter when all reservations are collected
 								r.numStorageDependencies++;
+								num_interface--;
 								ComputeElement parent_ce = parent_de.getCe();
 								if(parent_ce!=null){
 									setVMISCSIParam(config, parent_ce,r.numStorageDependencies);
@@ -616,37 +651,9 @@ public class ReservationConverter implements LayerConstant {
 						if (prNetwork) {
 							r.networkDependencies++;
 
-							String ip_addr = null, mac_addr=null, host_interface = null, site_host_interface = null;
-							if (parent.getValue() != null) {
-								if (parent.getValue().getProperty(NdlCommons.hostInterfaceName) != null) {
-									site_host_interface = parent.getValue().getProperty(NdlCommons.hostInterfaceName).getString();
-								}
-							}
-							if (site_host_interface == null) {
-								logger.debug("Host Interface Definition not here, "
-										+ "because IP address is used as the parent value or its neighbors are network domains!!");
-								logger.debug("parent="+parent.getKey().getURI()
-										+";parent intf="+parent.getValue().getURI()
-										+";downNeighbour="+parent.getKey().getDownNeighbourUri()
-										+";upNeighbour="+parent.getKey().getUpNeighbourUri());
-								if (parent.getKey().getDownNeighbour(idm) != null) {
-									if (parent.getKey().getDownNeighbour(idm).getProperty(NdlCommons.hostInterfaceName) != null) {
-										site_host_interface = parent.getKey().getDownNeighbour(idm).getProperty(NdlCommons.hostInterfaceName).getString();
-									} else {
-										if (parent.getKey().getUpNeighbour(idm) != null) {
-											if (parent.getKey().getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName) != null) {
-												site_host_interface = parent.getKey().getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName).getString();
-											}
-										}
-									}
-								} else {
-									if (parent.getKey().getUpNeighbour(idm) != null) {
-										if (parent.getKey().getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName) != null) {
-											site_host_interface = parent.getKey().getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName).getString();
-										}
-									}
-								}
-							}
+							String ip_addr = null, mac_addr=null, host_interface = null;
+							
+							String site_host_interface = getSiteHostInterface(parent);
 
 							if (site_host_interface == null) {
 								logger.error("Host Interface Definition not here: neither up neighbor or down neighbor!!");
@@ -665,8 +672,9 @@ public class ReservationConverter implements LayerConstant {
 								host_interface = String.valueOf(Integer.valueOf(intf_name.substring(index + 1)).intValue() + 1);
 								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
 								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
-								config.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
-								local.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
+								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
+								config.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
+								local.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
 								if (de.getPrecededBySet().size() >= 1) {
 									parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
 									parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
@@ -674,11 +682,13 @@ public class ReservationConverter implements LayerConstant {
 							} else {
 								ip_addr = intf_name;
 								host_interface = String.valueOf(r.networkDependencies);
+								logger.debug("setDependency:host_interface="+host_interface);
 								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
 								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
+								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
 								if (de.getPrecededBySet().size() >= 1) {
-									config.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
-									local.setProperty("unit.eth" + host_interface + ".hosteth", site_host_interface);
+									config.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
+									local.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
 									parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
 									parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 									if(pr!=null){
@@ -700,12 +710,12 @@ public class ReservationConverter implements LayerConstant {
 								local.setProperty(parent_quantum_uuid,parent.getKey().getNetUUID());
 							}
 							else
-								filter.setProperty("unit.quantum.net.uuid",parent_quantum_uuid);
+								filter.setProperty(UnitProperties.UnitQuantumNetUUID,parent_quantum_uuid);
 							
 							if(parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)!=null)
 								mac_addr=parent.getValue().getProperty(NdlCommons.ipMacAddressProperty).getString();
 							else
-								mac_addr = this.generateNewMAC();
+								mac_addr = generateNewMAC();
 							if(mac_addr!=null){
 								parent.getValue().addProperty(NdlCommons.ipMacAddressProperty, mac_addr);
 								logger.debug("ReservationConverter:mac property:"+parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)); 
@@ -725,6 +735,11 @@ public class ReservationConverter implements LayerConstant {
 							}
 							logger.debug("ReservationConverter: parent_ip_addr="+parent_ip_addr+"="+ip_addr);
 						
+							local.setProperty(UnitProperties.UnitEthPrefix+ host_interface + ".parent.url", parent_de.getName());
+							
+							config.setProperty(parent_interface_uuid,element_guid);
+							local.setProperty(parent_interface_uuid,element_guid);
+							
 							if(parent_de.getIp_range()!=null){		//means a storage network vlan link
 								parent_de.getIp_range().setHostInterface(host_interface);
 								processIPCollection(ip_r_collection,parent_de,r);
@@ -742,7 +757,11 @@ public class ReservationConverter implements LayerConstant {
 				}
 			}
 			if(r.isVM){
-                local.setProperty(parent_num_interface,String.valueOf(num_interface));
+                local.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
+                config.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
+                
+                local.setProperty(PropertyParentNumStorage,String.valueOf(r.numStorageDependencies));
+                config.setProperty(PropertyParentNumStorage,String.valueOf(r.numStorageDependencies));
 			}
 			
 			// update the local properties
@@ -760,6 +779,136 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 		return smReservations;
+	}
+	
+	public Properties formInterfaceProperties(OntModel manifestModel,DomainElement dd,Entry<DomainElement, OntResource> parent,String site_host_interface, int num_parent, int num){		
+		Properties property=new Properties();
+		String ip_addr = null, mac_addr=null, host_interface = null, intf_name=null;
+		String parent_ip_addr = UnitProperties.UnitEthPrefix;
+		String parent_mac_addr = UnitProperties.UnitEthPrefix;
+		String parent_quantum_uuid = UnitProperties.UnitEthPrefix;
+		String parent_interface_uuid = UnitProperties.UnitEthPrefix;
+		
+		if(parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)!=null)
+			intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
+		int index=0;
+		
+		//String site_host_interface = getSiteHostInterface(parent);
+
+		if (site_host_interface == null) {
+			logger.error("Host Interface Definition not here: neither up neighbor or down neighbor!!");
+			site_host_interface = "none";
+		}
+			
+		logger.debug("Site host interface:" + site_host_interface+";intf="+parent.getValue().getProperty(NdlCommons.hostInterfaceName));
+		if(intf_name!=null)	                            
+			index = intf_name.indexOf("@");
+		logger.debug("$$$$$$$$$$$$$$$$$ intf_name:" + intf_name + ", index: " + index);
+		if (index > 0) {
+			ip_addr = intf_name.substring(0, index);
+			host_interface = String.valueOf(Integer.valueOf(intf_name.substring(index + 1)).intValue() + 1);
+		} else {
+			ip_addr = intf_name;
+			host_interface = String.valueOf(num_parent+num);
+		}
+		parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
+		parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
+		parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
+			
+		property.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
+
+		parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
+
+		if(parent.getKey().getNetUUID()!=null)
+			property.setProperty(parent_quantum_uuid,parent.getKey().getNetUUID());
+		
+		if(parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)!=null)
+			mac_addr=parent.getValue().getProperty(NdlCommons.ipMacAddressProperty).getString();
+		else
+			mac_addr = generateNewMAC();
+		if(mac_addr!=null){
+			parent.getValue().addProperty(NdlCommons.ipMacAddressProperty, mac_addr);
+			logger.debug("ReservationConverter:mac property:"+parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)); 
+			property.setProperty(parent_mac_addr, mac_addr);
+		}
+		else
+			logger.error("No available MAC address:"+parent_mac_addr);
+		try {
+			if(ip_addr!=null){
+				InetAddress addr1 = InetAddress.getByName(ip_addr.split("/")[0]);  //this is only for throwing an exception for a mal-formated IP address.
+				logger.debug("ReservationConverter:ip property:"+parent_ip_addr+"="+ip_addr); 
+				property.setProperty(parent_ip_addr, ip_addr);
+			}
+		} catch (UnknownHostException e) {
+			logger.error("Not a Valid IP address:" + parent_ip_addr + ":" + ip_addr);
+		}
+		
+		property.setProperty(UnitProperties.UnitEthPrefix+ host_interface + ".parent.url", parent.getKey().getName());
+		/*
+		String type="request:Manifest";
+		OntResource manifest=NdlCommons.getOntOfType(manifestModel, type);
+		String element_guid=dd.getGUID();
+		Resource ob =null;
+		for (StmtIterator j=manifest.listProperties(NdlCommons.collectionElementProperty);j.hasNext();){
+			ob = j.next().getResource();
+			if(ob.hasProperty(NdlCommons.hasGUIDProperty)){
+				String guid = ob.getProperty(NdlCommons.hasGUIDProperty).getString();
+				if(element_guid!=null && guid.equals(element_guid))
+					break;
+			}
+		}
+		if(ob==null)
+			logger.warn("No modified in manifest:"+dd.getName()+",element_guid="+element_guid);
+		else{
+			if(parent.getValue().hasProperty(NdlCommons.hasGUIDProperty))
+				property.setProperty(PropertyElementGUID, parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getString());
+			else{
+				element_guid = UUID.randomUUID().toString();
+				parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
+			}
+			property.setProperty(parent_interface_uuid,element_guid);
+			addDependencyProperty(parent.getKey(),parent.getValue(), manifestModel.getOntResource(ob), manifestModel);
+		}
+		logger.debug("ReservationConverter: parent_ip_addr="+parent_ip_addr+"="+ip_addr);
+		*/
+		return property;
+	}
+	
+	public String getSiteHostInterface(Entry<DomainElement, OntResource> parent){
+		String site_host_interface=null;
+		DomainElement p_de=parent.getKey();
+		OntResource parent_intf_ont=parent.getValue();
+		OntModel idm = ((InterCloudHandler)ndlSlice.getWorkflow().getEmbedderAlgorithm()).getIdm();
+		
+		if (parent_intf_ont.getProperty(NdlCommons.hostInterfaceName) != null) {
+			site_host_interface = parent_intf_ont.getProperty(NdlCommons.hostInterfaceName).getString();
+		}
+		if (site_host_interface == null) {
+			logger.debug("Host Interface Definition not here, "
+					+ "because IP address is used as the parent value or its neighbors are network domains!!");
+			logger.debug("parent="+p_de.getURI()
+					+";parent intf="+parent_intf_ont.getURI()
+					+";downNeighbour="+p_de.getDownNeighbourUri()
+					+";upNeighbour="+p_de.getUpNeighbourUri());
+			if (p_de.getDownNeighbour(idm) != null) {
+				if (p_de.getDownNeighbour(idm).getProperty(NdlCommons.hostInterfaceName) != null) {
+					site_host_interface = p_de.getDownNeighbour(idm).getProperty(NdlCommons.hostInterfaceName).getString();
+				} else {
+					if (p_de.getUpNeighbour(idm) != null) {
+						if (p_de.getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName) != null) {
+							site_host_interface = p_de.getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName).getString();
+						}
+					}
+				}
+			} else {
+				if (p_de.getUpNeighbour(idm) != null) {
+					if (p_de.getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName) != null) {
+						site_host_interface = p_de.getUpNeighbour(idm).getProperty(NdlCommons.hostInterfaceName).getString();
+					}
+				}
+			}
+		}
+		return site_host_interface;	
 	}
 	
 	public void processIPCollectionProperty(HashMap <DomainElement, LinkedList <ReservationRequest> > collection){
@@ -905,12 +1054,12 @@ public class ReservationConverter implements LayerConstant {
 		if(ip_range!=null){
 			if(ip_range.getBase_IP()!=null){
 				base_ip_addr = ip_range.getBase_ip_addr().address;
-			}else
-				System.out.println("Reservationconverter: VMISCSI: base_ip_addr is null");
-		}else
-			System.out.println("Reservationconverter: VMISCSI: ip_range is null");
+			} else
+				logger.warn("Reservationconverter: VMISCSI: base_ip_addr is null");
+		} else
+			logger.warn("Reservationconverter: VMISCSI: ip_range is null");
 		String storagePrefix = UnitProperties.UnitStoragePrefix+host_interface;
-		String storageTargetPrefix = storagePrefix + ".target"; 
+		//String storageTargetPrefix = storagePrefix + ".target"; 
 		//String storageFSPrefix = storagePrefix + ".fs"; 
 		
 		//Other properties 
@@ -919,42 +1068,42 @@ public class ReservationConverter implements LayerConstant {
 		
 
 		if (base_ip_addr!=null)
-			p.setProperty(storageTargetPrefix+".ip",base_ip_addr);
+			p.setProperty(storagePrefix + UnitProperties.UnitTargetIPSuffix,base_ip_addr);
 
-		p.setProperty(storageTargetPrefix+".lun.guid",lun_uuid);
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetLunGuid,lun_uuid);
 	}
 	
 	public void setVMISCSIParam(Properties p,ComputeElement s_ce,int s_num){
 		String storagePrefix = UnitProperties.UnitStoragePrefix+s_num;
-		String storageTargetPrefix = storagePrefix + ".target"; 
-		String storageFSPrefix = storagePrefix + ".fs"; 
+		//String storageTargetPrefix = storagePrefix + ".target"; 
+		//String storageFSPrefix = storagePrefix + ".fs"; 
 		if(s_ce.getFSType()!=null)
-			p.setProperty(storageFSPrefix+".type",s_ce.getFSType());
+			p.setProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix,s_ce.getFSType());
 		else
-			p.setProperty(storageFSPrefix+".type","ext3");
+			p.setProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix,"ext3");
 		
 		if(s_ce.getFSParam()!=null)
-			p.setProperty(storageTargetPrefix+".options",s_ce.getFSParam());
+			p.setProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix,s_ce.getFSParam());
 		else
-			p.setProperty(storageTargetPrefix+".options","-F -b 1024");
+			p.setProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix,"-F -b 1024");
 		
 		if(s_ce.getMntPoint()!=null)
-			p.setProperty(storageTargetPrefix+".mount_point",s_ce.getMntPoint());
+			p.setProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix,s_ce.getMntPoint());
 		else
-			p.setProperty(storageTargetPrefix+".mount_point","/mnt/target/"+String.valueOf(s_num));
+			p.setProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix,"/mnt/target/"+String.valueOf(s_num));
 		if(s_ce.isDoFormat())
-			p.setProperty(storageTargetPrefix+".should_format",SUDO_YES);
+			p.setProperty(storagePrefix + UnitProperties.UnitFSShouldFormatSuffix,SUDO_YES);
 		else
-			p.setProperty(storageTargetPrefix+".should_format",SUDO_NO);
+			p.setProperty(storagePrefix + UnitProperties.UnitFSShouldFormatSuffix,SUDO_NO);
 		
-		p.setProperty(storageTargetPrefix+".chap_user",s_ce.getCHAP_User());
-		p.setProperty(storageTargetPrefix+".chap_password",s_ce.getCHAP_Password());
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetChapUserSuffix,s_ce.getCHAP_User());
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetChapSecretSuffix,s_ce.getCHAP_Password());
 		
-		p.setProperty(storagePrefix+".type","iscsi");
-		p.setProperty(storageTargetPrefix+".port","3260");
+		p.setProperty(storagePrefix+UnitProperties.UnitStoreTypeSuffix,"iscsi");
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetPortSuffix,"3260");
 		
-		p.setProperty(storageTargetPrefix+".should_attach",SUDO_YES);
-		logger.debug("setVMISCSIParam():"+storageTargetPrefix+".mount_point="+s_ce.getMntPoint()+":"+storageTargetPrefix+".chap_user="+s_ce.getCHAP_User());
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetShouldAttachSuffix,SUDO_YES);
+		logger.debug("setVMISCSIParam():"+storagePrefix + UnitProperties.UnitFSMountPointSuffix + "="+s_ce.getMntPoint()+":"+storagePrefix + UnitProperties.UnitTargetChapUserSuffix + "=" + s_ce.getCHAP_User());
 	}
 
 	public void processIPCollection(HashMap <DomainElement, LinkedList <ReservationRequest> > collection, DomainElement p_de, ReservationRequest r){
@@ -1014,9 +1163,9 @@ public class ReservationConverter implements LayerConstant {
 	
 	public String getManifest(OntModel manifestModel,LinkedList <OntResource> domainInConnectionList,Collection<NetworkElement> deviceList,
 			List<ReservationMng> allRes) {
-		OntModel mm= this.getManifestModel(manifestModel, domainInConnectionList, deviceList, allRes);
+		OntModel mm= getManifestModel(manifestModel, domainInConnectionList, deviceList, allRes);
 		OutputStream out = new ByteArrayOutputStream();
-		TDB.sync(manifestModel);
+		//TDB.sync(manifestModel);
 		manifestModel.write(out);
 		return out.toString();
 	}
@@ -1079,7 +1228,7 @@ public class ReservationConverter implements LayerConstant {
 				rDomain = type.split("\\.")[0];
 				rType = type.split("\\.")[1];
 
-				logger.info("getManifest: domain=" + domain_ont.getURI() + " ;aDomian = "+domain+" :rDomain=" + rDomain +" rType="+rType);
+				//logger.info("getManifest: domain=" + domain_ont.getURI() + " ;aDomian = "+domain+" :rDomain=" + rDomain +" rType="+rType);
 				if ((domain.equalsIgnoreCase(rDomain)) && (domain_ont_url.endsWith(rType))) {
 					Properties local = OrcaConverter.fill(r.getLocalProperties());
 					String unit_url = local.getProperty(UNIT_URL_RES);
@@ -1110,26 +1259,26 @@ public class ReservationConverter implements LayerConstant {
 											logger.info("getManifest: unit.vlan.url="+vlan_url);
 											if (vlan_url == null) {
 												logger.error("unit.vlan.url is null");
-												vlan_url = domain_ont.getURI() + "/" + p.getProperty("unit.rid");
+												vlan_url = domain_ont.getURI() + "/" + p.getProperty(UnitProperties.UnitReservationID);
 											}
 										
-											if (p.getProperty("unit.vlan.tag") != null) {
-												domain_ont.addProperty(NdlCommons.RDFS_Label, p.getProperty("unit.vlan.tag"));
+											if (p.getProperty(UnitProperties.UnitVlanTag) != null) {
+												domain_ont.addProperty(NdlCommons.RDFS_Label, p.getProperty(UnitProperties.UnitVlanTag));
 											} else {
-												logger.error("unit.vlan.tag is null");
+												logger.error(UnitProperties.UnitVlanTag + " is null");
 											}
-											if (p.getProperty("unit.vlan.qos.rate") != null) {
+											if (p.getProperty(UnitProperties.UnitVlanQoSRate) != null) {
 												Statement st_bw = domain_ont.getProperty(NdlCommons.layerBandwidthProperty);
-												long bw = Long.valueOf(p.getProperty("unit.vlan.qos.rate"));
+												long bw = Long.valueOf(p.getProperty(UnitProperties.UnitVlanQoSRate));
 												if(st_bw!=null)
 													st_bw.changeLiteralObject(bw);
 												else
 													domain_ont.addLiteral(NdlCommons.layerBandwidthProperty,bw);
 											} else {
-												logger.error("unit.vlan.qos.rate is null");
+												logger.error(UnitProperties.UnitVlanQoSRate + " is null");
 											}
-											if(p.getProperty("unit.quantum.net.uuid")!=null){
-												domain_ont.addProperty(NdlCommons.quantumNetUUIDProperty,p.getProperty("unit.quantum.net.uuid"));
+											if(p.getProperty(UnitProperties.UnitQuantumNetUUID)!=null){
+												domain_ont.addProperty(NdlCommons.quantumNetUUIDProperty,p.getProperty(UnitProperties.UnitQuantumNetUUID));
 											}
 											updateState(manifestModel,domain_ont,NdlCommons.requestMessage, notice);
 											updateState(manifestModel,domain_ont,NdlCommons.requestHasReservationState,reservationState);
@@ -1142,7 +1291,7 @@ public class ReservationConverter implements LayerConstant {
 											String vm_url = unit_url;
 											if (vm_url == null) {
 												logger.error("unit.hostname.url is null");
-												vm_url = domain_ont.getURI() + "/" + p.getProperty("unit.rid");
+												vm_url = domain_ont.getURI() + "/" + p.getProperty(UnitProperties.UnitReservationID);
 											}
 											logger.debug("getManifest:domain_ont_url="+domain_ont_url+";vm_url="+vm_url); 
 									
@@ -1163,13 +1312,13 @@ public class ReservationConverter implements LayerConstant {
 											
 											vmReservationList.put(vm_url, vm_ont);
 											
-											if (p.getProperty(this.PropertyUnitEC2Instance) != null) {
-												vm_ont.addProperty(NdlCommons.hasInstanceIDProperty, p.getProperty(this.PropertyUnitEC2Instance));
+											if (p.getProperty(PropertyUnitEC2Instance) != null) {
+												vm_ont.addProperty(NdlCommons.hasInstanceIDProperty, p.getProperty(PropertyUnitEC2Instance));
 											} else {
 												logger.warn("unit.ec2.instance is null");
 											}
-											if (p.getProperty(this.PropertyUnitEC2Host) != null) {
-												vm_ont.addProperty(NdlCommons.workerNodeIDProperty, p.getProperty(this.PropertyUnitEC2Host));
+											if (p.getProperty(PropertyUnitEC2Host) != null) {
+												vm_ont.addProperty(NdlCommons.workerNodeIDProperty, p.getProperty(PropertyUnitEC2Host));
 											} else {
 												logger.warn("unit.ec2.host is null");
 											}
@@ -1184,26 +1333,26 @@ public class ReservationConverter implements LayerConstant {
 											String user_login = ndlSlice.getLoginsAsString();
 											if(user_login!=null)
 												service_ont.addProperty(NdlCommons.topologyHasLogin, user_login);
-											String unitManagementIP = p.getProperty("unit.manage.ip");
-											String unitManagementPort = p.getProperty("unit.manage.port");
+											String unitManagementIP = p.getProperty(UnitProperties.UnitManagementIP);
+											String unitManagementPort = p.getProperty(UnitProperties.UnitManagementPort);
 											if (unitManagementIP != null) {
 												//vm_IP.addProperty(NdlCommons.layerLabelIdProperty, unitManagementIP);
 												service_ont.addProperty(NdlCommons.topologyManagementIP, unitManagementIP);
 												if(unitManagementPort!=null){
 													service_ont.addProperty(NdlCommons.topologyManagementPort, unitManagementPort);
 												} else {
-													logger.error("unit.manage.port is null");
+													logger.error(UnitProperties.UnitManagementIP + " is null");
 												}
 												//if( (unitManagementPort==null) || (unitManagementPort.equals("22")) ){  //No DNAT
 												//	vm_ont.addProperty(NdlCommons.ip4LocalIPAddressProperty, vm_IP);
 												//}
 											} else {
-												logger.error("unit.manage.ip is null");
+												logger.error(UnitProperties.UnitManagementIP + " is null");
 											}
-											if (p.getProperty("unit.instance.config") != null) {
-												vm_ont.addProperty(NdlCommons.requestPostBootScriptProperty, p.getProperty("unit.instance.config"));
+											if (p.getProperty(UnitProperties.UnitInstanceConfig) != null) {
+												vm_ont.addProperty(NdlCommons.requestPostBootScriptProperty, p.getProperty(UnitProperties.UnitInstanceConfig));
 											} else {
-												logger.error("unit.instance.config is null");
+												logger.error(UnitProperties.UnitInstanceConfig + " is null");
 											}
 												
 											updateState(manifestModel,vm_ont,NdlCommons.requestMessage, notice);
@@ -1216,7 +1365,7 @@ public class ReservationConverter implements LayerConstant {
 												Formatter fmt = new Formatter(); 
 												// like Twitter 
 												fmt.format("%.140s", p.getProperty(key)); 
-												logger.debug("{Property key: " + key + " | Property value: " + fmt + "}"); 
+												//logger.debug("{Property key: " + key + " | Property value: " + fmt + "}"); 
 												fmt.close(); 											
 											}                           
 										}
@@ -1293,10 +1442,10 @@ public class ReservationConverter implements LayerConstant {
 		            		if(ce.getVMImageHash()!=null)
 		            			image.addProperty(NdlCommons.hasGUIDProperty,ce.getVMImageHash());
 		            	}
-						if(ce.getResource()!=null && ce.getResource().hasProperty(NdlCommons.specificCEProperty))
-							vm_reservation_ont.addProperty(NdlCommons.specificCEProperty, 
-									ce.getResource().getProperty(NdlCommons.specificCEProperty).getResource());
-						
+						if(ce.getSpecificCETypeurl()!=null){
+							Resource ceType_rs=vm_reservation_ont.getModel().createResource(ce.getSpecificCETypeurl());
+							vm_reservation_ont.addProperty(NdlCommons.specificCEProperty,ceType_rs);
+						}
 						if(ce.getPostBootScript()!=null){
 							if(vm_reservation_ont.hasProperty(NdlCommons.requestPostBootScriptProperty)){
 								vm_reservation_ont.setPropertyValue(NdlCommons.requestPostBootScriptProperty, manifestModel.createLiteral(ce.getPostBootScript()));
@@ -1330,10 +1479,10 @@ public class ReservationConverter implements LayerConstant {
 								k++;
 								DomainElement parentDevice = parent.getKey();
 								if(parentDevice.isAllocatable()==false){
-									Resource parentDevice_rs=manifestModel.getResource(parentDevice.getResource().getURI());
-									logger.error("Remove interface:"+parentDevice.getName()
-											+";uri="+parentDevice.getResource().getURI()
-											+";rs="+parentDevice_rs);
+									//Resource parentDevice_rs=manifestModel.getResource(parentDevice.getResource().getURI());
+									//logger.error("Remove interface:"+parentDevice.getName()
+									//		+";uri="+parentDevice.getResource().getURI()
+									//		+";rs="+parentDevice_rs);
 									//if(parentDevice_rs!=null)
 									//	parentDevice_rs.removeAll(NdlCommons.topologyHasInterfaceProperty);
 									//parentDevice.getResource().addProperty(NdlCommons.topologyHasInterfaceProperty, parent.getValue());
@@ -1366,7 +1515,7 @@ public class ReservationConverter implements LayerConstant {
 				}
 			}
 		}
-		TDB.sync(manifestModel);
+		//TDB.sync(manifestModel);
 		return manifestModel;
 	}
 	
@@ -1378,8 +1527,10 @@ public class ReservationConverter implements LayerConstant {
 		String parent_url = parent_device.getName();
 		OntResource parent_ont = manifestModel.createOntResource(parent_url);
 		
-		if(existingParent(child_ont,parent_ont))
+		if(existingParent(child_ont,parent_ont)){
+			logger.warn("addDependencyProperty:Existing parent:child="+child_ont.getURI()+";parent="+parent_url);
 			return;
+		}
 		if(child_ont.getURI().indexOf("#")>0)
 			local_name=child_ont.getURI().split("#")[1];
 		else 
@@ -1403,6 +1554,9 @@ public class ReservationConverter implements LayerConstant {
 				ip_ind.addProperty(NdlCommons.layerLabelIdProperty, ip_rs.getProperty(NdlCommons.layerLabelIdProperty).getString());
 		}
 		
+		if(intf_ont.hasProperty(NdlCommons.hasGUIDProperty))
+			intf_ind.addProperty(NdlCommons.hasGUIDProperty, intf_ont.getProperty(NdlCommons.hasGUIDProperty).getString());
+		
 		child_ont.addProperty(NdlCommons.manifestHasParent, parent_device_ont);
 		logger.debug("Add parent: child="+child_ont.getURI()
 				+";parent="+parent_device_ont.getURI()
@@ -1411,6 +1565,7 @@ public class ReservationConverter implements LayerConstant {
 				+";ip="+intf_ont.getProperty(NdlCommons.layerLabelIdProperty)
 				+";id="+intf_ont.getProperty(NdlCommons.ip4LocalIPAddressProperty));
 	}
+	
 	public boolean existingParent(OntResource c_ont,OntResource p_ont){
 		boolean e=false;
 		Resource parent_rs=null,parent_e_rs=null;
@@ -1427,19 +1582,27 @@ public class ReservationConverter implements LayerConstant {
 		return e;
 	}
 	
-	//Modify reservations
-	public HashMap<String, List<ReservationMng>> modifyReservations(OntModel manifestModel,List<ReservationMng>  allRes,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice,ModifyReservations modifies, LinkedList <NetworkElement> addedDevices) throws Exception{
+	//Modify slice reservations: add, remove, or modify
+	public HashMap<String, List<ReservationMng>> modifyReservations(OntModel manifestModel,List<ReservationMng>  allRes
+			,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice, ModifyReservations modifies
+			, LinkedList <NetworkElement> addedDevices,LinkedList <NetworkElement> modifiedDevices) throws Exception{
 		HashMap <String, List<ReservationMng>> m_map = new HashMap <String, List<ReservationMng>> ();
 		LinkedList <OntResource> reservations = modifies.getRemovedElements();	
 		List<ReservationMng> m_reservations=null;
 		if(reservations!=null){
-			m_reservations = removeReservations(manifestModel,allRes,reservations);
+			m_reservations = removeReservations(manifestModel,allRes,reservations,false);
 			m_map.put(ModifyType.REMOVE.toString(), m_reservations);
+		}
+		reservations = modifies.getModifiedRemoveElements();
+		if(reservations!=null){
+			m_reservations = removeReservations(manifestModel,allRes,reservations,true);
+			m_map.put(ModifyType.MODIFYREMOVE.toString(), m_reservations);
 		}
 		if(addedDevices!=null){
 			for(int i=0;i<addedDevices.size();i++){
-				NetworkElement ne = addedDevices.get(i);
-				elementCollection.add_vm((DomainElement) ne);
+				DomainElement ne = (DomainElement) addedDevices.get(i);
+				if(ne.getCe()!=null && (ne.getCe().isModify()==false))
+					elementCollection.add_vm((DomainElement) ne);
 			}	
 			reservations = modifies.getAddedElements();	
 			m_reservations = addReservations(manifestModel,allRes,typesMap,slice,reservations,addedDevices);
@@ -1447,13 +1610,195 @@ public class ReservationConverter implements LayerConstant {
 		}else{
 			logger.warn("No added reservation!");
 		}
-		TDB.sync(manifestModel);
+		if(modifiedDevices!=null){	
+			//reservations = modifies.getAddedElements();	//for possible dependency 
+			m_reservations = modifyReservations(manifestModel,allRes,m_reservations,modifiedDevices);
+			m_map.put(ModifyType.MODIFY.toString(), m_reservations);
+		}else{
+			logger.warn("No modified reservation!");
+		}
+		//TDB.sync(manifestModel);
 		return m_map;
 	}
+	//Modify existing reservations: dependencies.
+	public List<ReservationMng> modifyReservations(OntModel manifestModel,List<ReservationMng> allRes
+			,List<ReservationMng> added_reservations, LinkedList <NetworkElement> modifiedDevices) throws Exception{
+		if(modifiedDevices==null)
+			return null;
+		
+		HashMap <String, ReservationMng> r_map = new HashMap <String, ReservationMng> ();
+		for(ReservationMng rmg:allRes){
+			if (rmg.getState() != OrcaConstants.ReservationStateActive) 
+				continue;
+			Properties local = OrcaConverter.fill(rmg.getLocalProperties());
+			String unit_url = local.getProperty(UNIT_URL_RES);
+			String element_guid = local.getProperty(PropertyElementGUID);
+			if(unit_url!=null)
+				r_map.put(unit_url,rmg);
+			else if(element_guid!=null)
+				r_map.put(element_guid,rmg);
+			logger.debug("ReservationConverter.modifyReservation:"+unit_url+";guid"+element_guid);
+		}
+		
+		HashMap <String, ReservationMng> m_r_map = new HashMap <String, ReservationMng> ();
+		if(added_reservations!=null){
+			for(ReservationMng rmg:added_reservations){
+				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
+				String unit_url = local.getProperty(UNIT_URL_RES);
+				String element_guid = local.getProperty(PropertyElementGUID);
+				if(unit_url!=null)
+					m_r_map.put(unit_url,rmg);
+				else if(element_guid!=null)
+					m_r_map.put(element_guid,rmg);
+			}
+		}	
+		logger.debug("Modify reservations:r_map="+r_map.size()+":m_r_map="+m_r_map.size());
+		ArrayList<ReservationMng> reservations = new ArrayList<ReservationMng> ();
+		//since each modify was created as a new device, but same ORCA reservation, need to distinguish......
+		HashMap <ReservationMng,Integer> existMap = new HashMap <ReservationMng,Integer>();
+		HashMap <ReservationMng,Integer> newMap = new HashMap <ReservationMng,Integer>();
+		ArrayList<ReservationMng> p_r = null;
+		ArrayList<ReservationMng> m_p_r = null;
+		HashMap <ReservationMng,ArrayList<ReservationMng>> p_r_Map = new HashMap <ReservationMng,ArrayList<ReservationMng>>();
+		HashMap <ReservationMng,ArrayList<ReservationMng>> m_p_r_Map = new HashMap <ReservationMng,ArrayList<ReservationMng>>();
+		//count the number of storage parent
+		HashMap <ReservationMng,Integer> m_p_storage_Map = new HashMap <ReservationMng,Integer> ();
+		for(NetworkElement ne:modifiedDevices){
+			DomainElement dd = (DomainElement) ne;
+			String d_uri=dd.getName();
+			ReservationMng rmg = r_map.get(d_uri);
+			if(rmg==null && dd.getGUID()!=null)
+				rmg = r_map.get(dd.getGUID());
+			int numStorage=0;
+			logger.debug("ModifiedReservation storage:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg);
+			if(rmg!=null){
+				if(m_p_storage_Map.containsKey(rmg))
+					numStorage=m_p_storage_Map.get(rmg);
+				else
+					continue;
+				
+				if(dd.getPrecededBySet()==null)
+					continue;
+				for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
+					DomainElement parent_de = parent.getKey();
+					if(!parent_de.getResourceType().getResourceType().endsWith("lun")){
+						numStorage++;
+					}
+				}
+				m_p_storage_Map.put(rmg, numStorage);
+			}
+		}
+		//form dependency properties		
+		for(NetworkElement ne:modifiedDevices){
+			DomainElement dd = (DomainElement) ne;
+			String d_uri=dd.getName();
+			ReservationMng rmg = r_map.get(d_uri);
+			if(rmg==null && dd.getGUID()!=null)
+				rmg = r_map.get(dd.getGUID());
+			if(rmg!=null){
+				logger.debug("ModifiedReservation:d_uri="+d_uri+";"+dd.getGUID()+";reservation="+rmg.getReservationID());
+				Properties local = OrcaConverter.fill(rmg.getLocalProperties());
+				local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
+				//modify properties for adding/deleting interfaces from links
+				String num_interface_str=local.getProperty(ReservationConverter.PropertyParentNumInterface);
+				int num_interface = 0;
+				if(num_interface_str!=null)
+					num_interface = Integer.valueOf(num_interface_str);
+				HashMap<DomainElement, OntResource> preds = dd.getPrecededBy();
+				if (preds == null){
+					logger.warn("Modify reservations, No parent:"+dd);
+					continue;
+				}
+				int numStorage=0;
+				if(m_p_storage_Map.containsKey(rmg))
+					numStorage=m_p_storage_Map.get(rmg);
+				num_interface=num_interface+numStorage;
+				int p=0,m_p=0,num=0;	
+				p_r=p_r_Map.get(rmg);
+				if(p_r==null){
+					p_r = new ArrayList<ReservationMng> ();
+					p_r_Map.put(rmg, p_r);
+				}
+				m_p_r=m_p_r_Map.get(rmg);
+				if(m_p_r==null){
+					m_p_r = new ArrayList<ReservationMng> ();
+					m_p_r_Map.put(rmg, m_p_r);
+				}
+				if(existMap.containsKey(rmg))
+					p=existMap.get(rmg);
+				if(newMap.containsKey(rmg))
+					m_p=newMap.get(rmg);
+				num=p+m_p;
+				for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
+					DomainElement parent_de = parent.getKey();
+					String p_uri = parent_de.getName();
+					num++;
+					//Parented by an existing reservation: joining a existing shared link
+					logger.debug("ModifiedReservation:parent="+p_uri);
+					ReservationMng p_rmg = r_map.get(p_uri);
+					if(p_rmg!=null  && !p_r.contains(p_rmg)){
+						logger.debug("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);	
+						p++;
+						p_r.add(p_rmg);
+					}	
+					
+					//Parented by an added reservation: new link
+					p_rmg = m_r_map.get(p_uri);
+					if(p_rmg!=null && !m_p_r.contains(p_rmg)){
+						logger.debug("ModifiedReservation Parent new:"+p_uri+";p_rmg="+p_rmg);
+						m_p++;
+						m_p_r.add(p_rmg);
+						if(!parent_de.getResourceType().getResourceType().endsWith("lun")){
+							String site_host_interface = getSiteHostInterface(parent);
+							if(site_host_interface!=null){
+								Properties p_property = new Properties();
+								p_property.setProperty(UnitProperties.UnitQuantumNetname,site_host_interface);	
+								p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
+								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
+							}	
+							Properties property = formInterfaceProperties(manifestModel, dd, parent,site_host_interface, num_interface, m_p);
+							rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
+						}
+					}
+				}
+				
+				//create properties to remember its parent reservations
+				int ori_p=0;
+				if(existMap.containsKey(rmg))
+					ori_p=existMap.get(rmg);
+				if(p>ori_p){
+					local.setProperty(ReservationConverter.PropertyNumExistParentReservations, String.valueOf(p));
+					for(int i=ori_p;i<p;i++){
+						String key=ReservationConverter.PropertyExistParent + String.valueOf(i);
+						local.setProperty(key, p_r.get(i).getReservationID());
+					}
+					existMap.put(rmg, p);
+				}
+				ori_p=0;
+				if(newMap.containsKey(rmg))
+					ori_p=newMap.get(rmg);
+				if(m_p>ori_p){
+					local.setProperty(ReservationConverter.PropertyNumNewParentReservations, String.valueOf(m_p));
+					for(int i=ori_p;i<m_p;i++){
+						String key=ReservationConverter.PropertyNewParent + String.valueOf(i);
+						local.setProperty(key, m_p_r.get(i).getReservationID());
+						logger.debug("ModifiedReservation Parent new property:"+key+";p_r="+m_p_r.get(i).getReservationID());
+					}
+					newMap.put(rmg, m_p);
+				}
+				rmg.setLocalProperties(OrcaConverter.merge(local, rmg.getLocalProperties()));
+				if(!reservations.contains(rmg))
+					reservations.add(rmg);
+			}else
+				logger.error("No reservation:"+dd.getName());
+		}
+		
+		return reservations;
+	}
 	
-	public List<ReservationMng> addReservations(OntModel manifestModel,List<ReservationMng> allRes,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice,LinkedList <OntResource>addedReservations, LinkedList <NetworkElement> addedDevices) throws Exception{
-		//Remove reservations
-		//Remove reservations
+	public List<ReservationMng> addReservations(OntModel manifestModel,List<ReservationMng> allRes
+			,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice,LinkedList <OntResource>addedReservations
+			, LinkedList <NetworkElement> addedDevices) throws Exception{
 		if(addedReservations==null)
 			return null;
 		Collection <NetworkElement> boundElements = addedDevices;
@@ -1464,13 +1809,16 @@ public class ReservationConverter implements LayerConstant {
 		ArrayList<ReservationMng> reservations = new ArrayList<ReservationMng> ();
 		reservations.addAll(add_reservations);
 
+		logger.debug("ReservationConverter addReservations:"+boundElements.size()+";"+map.size()+";"+reservations.size());
+		
 		return reservations;
 	}
 	
-	public List<ReservationMng> removeReservations(OntModel manifestModel,List<ReservationMng> allRes,LinkedList <OntResource>removedReservations) throws Exception{
+	public List<ReservationMng> removeReservations(OntModel manifestModel
+			,List<ReservationMng> allRes,LinkedList <OntResource>removedReservations, boolean isModify) throws Exception{
 		//Remove reservations
 		if(removedReservations==null){
-			System.out.println("remove collection is null!");
+			logger.warn("remove collection is null!");
 			return null;
 		}
 		
@@ -1488,7 +1836,7 @@ public class ReservationConverter implements LayerConstant {
 				domain_ont_url=domain_ont.getURI();
 			domain = getDomainName(domain_ont_url);   //e.g., ben/vlan
 			domain_ont_name = domain_ont.getURI();
-			System.out.println("ReservationConverter:domain_ont_url="+domain_ont_url+";domain="+domain+";domain_ont_name="+domain_ont_name);
+			//logger.debug("ReservationConverter:domain_ont_url="+domain_ont_url+";domain="+domain+";domain_ont_name="+domain_ont_name);
 			if(domain==null)
 				continue;
 			for (ReservationMng r: allRes) {
@@ -1497,22 +1845,25 @@ public class ReservationConverter implements LayerConstant {
 				rDomain = type.split("\\.")[0];
 				rType = type.split("\\.")[1];
 				String unit_url = local.getProperty(UNIT_URL_RES);
-				logger.debug("Modify-Remove: domain=" + domain_ont_url + " ;aDomian = "+domain+" :rDomain=" + rDomain +" :rType="+rType+" ;unit_url="+unit_url);
 				if ((domain.equalsIgnoreCase(rDomain)) && (domain_ont_url.endsWith(rType)) && (domain_ont_name.equals(unit_url))) {
-					logger.debug("Add reservation to be removed");
-					remove_reservations.add((ReservationMng) r);
+					if(!remove_reservations.contains(r)){
+						logger.debug("Add reservation to be removed:"+domain_ont_url);
+						remove_reservations.add((ReservationMng) r);
+					}
 				}
 			}
-			modifyManifest(domain_ont,manifestModel);			
-			//remove it from the postboot scipt constructor
-			elementCollection.remove_vm(domain_ont.getURI());
+			if(!isModify){
+				removeManifest(domain_ont,manifestModel);			
+				//remove it from the postboot scipt constructor
+				elementCollection.remove_vm(domain_ont.getURI());
+			}
 		}
 			
 		return remove_reservations;
 	}
 
 	
-	public void modifyManifest(OntResource e_ont,OntModel manifestOntModel){
+	public void removeManifest(OntResource e_ont,OntModel manifestOntModel){
 		LinkedList <OntResource> removed_rs = new LinkedList<OntResource>(); 
 		ResIterator r_it = manifestOntModel.listResourcesWithProperty(NdlCommons.collectionElementProperty);
 		Resource p_rs=null,o_rs=null;
@@ -1601,13 +1952,13 @@ public class ReservationConverter implements LayerConstant {
 			Resource duration_rs = (Resource)result.get("duration");
 			if(duration_rs!=null){
 				OntResource duration_ont = manifestModel.getOntResource(duration_rs);
-				this.clearProperty(manifestModel, duration_ont, NdlCommons.daysProperty);
+				clearProperty(manifestModel, duration_ont, NdlCommons.daysProperty);
 				duration_ont.addProperty(NdlCommons.daysProperty, String.valueOf(term.getDurationDays()),XSDDatatype.XSDdecimal);
-				this.clearProperty(manifestModel, duration_ont, NdlCommons.hoursProperty);
+				clearProperty(manifestModel, duration_ont, NdlCommons.hoursProperty);
 				duration_ont.addProperty(NdlCommons.hoursProperty, String.valueOf(term.getDurationHours()),XSDDatatype.XSDdecimal);
-				this.clearProperty(manifestModel, duration_ont, NdlCommons.minutesProperty);
+				clearProperty(manifestModel, duration_ont, NdlCommons.minutesProperty);
 				duration_ont.addProperty(NdlCommons.minutesProperty, String.valueOf(term.getDurationMins()), XSDDatatype.XSDdecimal);
-				this.clearProperty(manifestModel, duration_ont, NdlCommons.secondsProperty);
+				clearProperty(manifestModel, duration_ont, NdlCommons.secondsProperty);
 				duration_ont.addProperty(NdlCommons.secondsProperty, String.valueOf(term.getDurationSecs()), XSDDatatype.XSDdecimal);
 			}
 			
@@ -1615,14 +1966,14 @@ public class ReservationConverter implements LayerConstant {
 			Resource ed = (Resource)result.get("end");
 			if(ed!=null){
 				OntResource ed_ont = manifestModel.getOntResource(ed);
-				this.clearProperty(manifestModel, ed_ont, NdlCommons.inXSDDateTime);
+				clearProperty(manifestModel, ed_ont, NdlCommons.inXSDDateTime);
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(term.getEnd());
 				ed_ont.addProperty(NdlCommons.inXSDDateTime,DatatypeConverter.printDateTime(cal),XSDDatatype.XSDdateTime);
 			}
 
 		}
-		TDB.sync(manifestModel);
+		//TDB.sync(manifestModel);
 	}
 	
 	/**
@@ -1667,7 +2018,7 @@ public class ReservationConverter implements LayerConstant {
 	public static String getDomainName(NetworkElement d) {
 		String temp = null;
 
-		if((d.getResource()!=null) && !d.getResource().getOntModel().isClosed() && NdlCommons.isStitchingNodeInManifest(d.getResource())){
+		if((d.getResource()!=null) && NdlCommons.isStitchingNodeInManifest(d.getResource())){
 			if(d.getResource().hasProperty(NdlCommons.topologyHasName)){
 				temp = d.getResource().getProperty(NdlCommons.topologyHasName).getString();
 			}
@@ -1758,7 +2109,7 @@ public class ReservationConverter implements LayerConstant {
      * @return
      */
     @SuppressWarnings("unchecked")
-	private static Properties generateSSHProperties(List<Map<String, ?>> users, XmlrpcControllerSlice sl) throws ReservationConverterException {
+	public static Properties generateSSHProperties(List<Map<String, ?>> users) throws ReservationConverterException {
     	Properties sshProperties = new Properties();
     	
     	int loginCount = 1;
@@ -1926,7 +2277,7 @@ public class ReservationConverter implements LayerConstant {
     	// 
     	logger.info("Recovering ReservationConverter for workflow");
     	try {
-			this.setLeaseTerm(w.getTerm(), true);
+			setLeaseTerm(w.getTerm(), true);
 		} catch (ReservationConverterException e) {
 			e.printStackTrace();
 		}

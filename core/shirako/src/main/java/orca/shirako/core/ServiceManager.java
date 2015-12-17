@@ -10,8 +10,10 @@
 package orca.shirako.core;
 
 import java.util.Iterator;
+import java.util.Properties;
 
 import orca.manage.OrcaConstants;
+import orca.manage.beans.ReservationMng;
 import orca.manage.internal.ServiceManagerManagementObject;
 import orca.security.AuthToken;
 import orca.shirako.api.IBrokerProxy;
@@ -32,6 +34,7 @@ import orca.shirako.util.TestException;
 import orca.shirako.util.UpdateData;
 import orca.util.ID;
 import orca.util.OrcaException;
+import orca.util.PropList;
 import orca.util.persistence.NotPersistent;
 
 /**
@@ -63,6 +66,12 @@ public class ServiceManager extends Actor implements IServiceManager {
     @NotPersistent
     protected ReservationSet extendingLease = new ReservationSet();
 
+    /**
+     * Recovered reservations that need to modify leases.
+     */
+    @NotPersistent
+    protected ReservationSet modifyingLease = new ReservationSet();
+    
     /**
      * Peer registry.
      */
@@ -449,8 +458,106 @@ public class ServiceManager extends Actor implements IServiceManager {
         wrapper.updateTicket(reservation, udd, caller);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void modify(final ReservationID rid, final Properties modifyProps) throws Exception{
+    	
+        if (rid == null || modifyProps == null) { // When it arrives at the SM, modifyProps can't be null
+        	logger.error("ServiceManager.modify(): modifyProperties argument is null or non-existing reservation");
+            throw new IllegalArgumentException();
+        }
+        
+        IServiceManagerReservation rc = null;
+        try {
+        	rc = (IServiceManagerReservation) getReservation(rid);
+        } catch (Exception e) {
+        	
+        }
+        
+        if (rc == null) {
+            throw new Exception("Unknown reservation: " + rid);
+        }
+
+        // Copy modify properties onto approvedResources (for the AM) and onto leasedResources (so SM has access to them)
+        if(rc.getApprovedResources() != null){
+        	
+        	// All client-side property manipulation happens here
+
+        	// Merging modifyProperties into ConfigurationProperties
+        	Properties currConfigProps = rc.getApprovedResources().getConfigurationProperties();        	
+        	PropList.mergePropertiesPriority(modifyProps, currConfigProps);
+        	
+        	//rc.getApprovedResources().setConfigurationProperties(modifyProps);
+        	rc.getApprovedResources().setConfigurationProperties(currConfigProps);
+;
+        	
+        	// After this point the new modifyProperties are a part of the configuration properties 
+        	// of the resource set associated with the reservation; These properties flow from the SM
+        	// to the AM as part of the reservation, and land up as part of requestedResources.getConfigurationProperties()
+        	// which is processed in AuthorityReservation.mapAndUpdateModifyLease()
+        	
+			// now same for Leased resources, because look at Converter.attachProperties(ReservationMng mng, IReservation r) /ib - 
+			// Controller or pequod won't see it otherwise 
+			if (rc.getLeasedResources() != null) {
+				currConfigProps = rc.getLeasedResources().getConfigurationProperties();
+				PropList.mergePropertiesPriority(modifyProps, currConfigProps);
+				rc.getLeasedResources().setConfigurationProperties(currConfigProps);
+			} else {
+				logger.warn("ServiceManager.modify(): There were no leased resources for " + rid + ", no modify properties will be added");
+			}
+        } else {
+        	logger.warn("ServiceManager.modify(): There are no approved resources for " + rid + ", no modify properties will be added");
+        }
+        
+        if (!recovered) {
+            modifyingLease.add((IServiceManagerReservation) rc);
+        }else {
+            wrapper.modifyLease((IServiceManagerReservation) rc);
+        }
+        
+          	
+    }
+    
+    
     public String getManagementObjectClass() {
         return ServiceManagerManagementObject.class.getName();
+    }
+    
+    /**
+     * For recovery, mark extending reservations renewable or the opposite
+     * and save this, then restore afterwards
+     * @param t
+     */
+    static ReservationSet savedExtendedRenewable = new ReservationSet();
+    private void saveExtendingRenewable() {
+    	 for (IReservation r: extendingTicket) {
+             try {
+                 if (r instanceof IClientReservation) {
+                	 if (!((IClientReservation) r).getRenewable()) {
+                		 ((IClientReservation) r).setRenewable(true);
+                		 savedExtendedRenewable.add(r);
+                	 }
+                 }else {
+                     logger.warn("Reservation #" + r.getReservationID() + " cannot be re-marked");
+                 }
+             } catch (Exception e) {
+                 logger.error("Could not mark ticket renewable for #" + r.getReservationID().toHashString());
+             }
+         }
+    }
+    
+    /**
+     * Restore the value of renewable field after recovery if we changed it
+     */
+    private void restoreExtendingRenewable() {
+    	for (IReservation r: savedExtendedRenewable) {
+    		try {
+    			((IClientReservation) r).setRenewable(false);
+    		} catch (Exception e) {
+    			logger.error("Could not re-mark ticket nonrenewable for #" + r.getReservationID().toHashString());
+    		}
+    	}
     }
     
     @Override
@@ -460,7 +567,9 @@ public class ServiceManager extends Actor implements IServiceManager {
         ticket(ticketing);
         ticketing.clear();
         
+        saveExtendingRenewable();
         extendTicket(extendingTicket);
+        restoreExtendingRenewable();
         extendingTicket.clear();
         
         redeem(redeeming);
@@ -468,5 +577,8 @@ public class ServiceManager extends Actor implements IServiceManager {
         
         extendLease(extendingLease);
         extendingLease.clear();
+        
+        // TODO: Do something about the modifyingLease actions
+        
     }
 }

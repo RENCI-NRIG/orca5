@@ -9,10 +9,11 @@ This file contains definitions of tasks used by the ben package
     <property resource="orca/handlers/network/network.properties" classpathref="run.classpath" />
 </target>
 
-<macrodef name="atomic.sequence.start.macro" description="starts configuration sequence that should execute atomically on this device">
+<macrodef name="atomic.sequence.start.macro" description="marks the beginning of the critical section on this device">
 	<attribute name="device" description="the target device" />
+	<attribute name="timeout" default="300"/>
 	<sequential>
-	<limit maxwait="300" failonerror="false">
+	<limit maxwait="@{timeout}" failonerror="false">
 		<echo message="Starting atomic sequence for @{device}" />
 		<atomic.sequence.start 
 			device="@{device}"
@@ -22,12 +23,26 @@ This file contains definitions of tasks used by the ben package
 	</sequential>
 </macrodef>
 
-<macrodef name="atomic.sequence.stop.macro" description="stops configuration sequence that should execute atomically on this device">
+<macrodef name="atomic.sequence.stop.macro" description="marks the end of the critical section on this device">
 	<attribute name="device" description="the target device" />
+	<attribute name="timeout" default="300" />
 	<sequential>
-	<limit maxwait="300" failonerror="false">
+	<limit maxwait="@{timeout}" failonerror="false">
 		<echo message="Stopping atomic sequence for @{device}" />
 		<atomic.sequence.stop 
+			device="@{device}"
+			/>
+	</limit>
+	</sequential>
+</macrodef>
+
+<macrodef name="atomic.sequence.clear.macro" description="deletes semaphore from a map for this device">
+	<attribute name="device" description="the name of the device semaphore" />
+	<attribute name="timeout" default="300" />
+	<sequential>
+	<limit maxwait="@{timeout}" failonerror="false">
+		<echo message="Deleting semaphore for for @{device}" />
+		<atomic.sequence.clear
 			device="@{device}"
 			/>
 	</limit>

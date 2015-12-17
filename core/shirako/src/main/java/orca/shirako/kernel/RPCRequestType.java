@@ -8,6 +8,7 @@ public enum RPCRequestType {
     Relinquish,
     Redeem,
     ExtendLease,
+    ModifyLease,
     UpdateTicket,
     UpdateLease,
     Close,

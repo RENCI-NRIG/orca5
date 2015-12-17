@@ -90,6 +90,12 @@ public class OrcaConverter {
 		return rpd;
 	}
 	
+	public static PropertiesMng unset(Properties from, PropertiesMng into){
+		Properties dest = fill(into);
+		PropList.unsetProperties(from, dest);
+		return fill(dest);
+	}
+	
 	public static PropertiesMng merge(Properties from, PropertiesMng into){
 		Properties dest = fill(into);
 		PropList.mergeProperties(from, dest);

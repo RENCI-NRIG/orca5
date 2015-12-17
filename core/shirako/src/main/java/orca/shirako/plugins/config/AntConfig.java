@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
+import orca.manage.OrcaConstants;
 import orca.shirako.api.IActorIdentity;
 import orca.shirako.api.IServiceManagerReservation;
 import orca.shirako.common.meta.ConfigurationProperties;
@@ -53,7 +54,7 @@ public class AntConfig extends Config {
     public static final String PropertyNodeAgentProtocol = "na.protocol";
     public static final String PropertyNodeAgentUri = "na.uri";
     public static final String PropertyStartTime = "start.time";
-    public static final String PropertyEndTime = "stop.time";	
+    public static final String PropertyEndTime = "stop.time";
 	
     public static final int DefaultCapacity = 1000;
     public static final int DefaultThreads = 10;
@@ -294,7 +295,7 @@ public class AntConfig extends Config {
 
         RunConfig task = new RunConfig(TargetJoin, p, token);
         enqueueBlocking(task);
-
+        
         if (isSynchronous) {
             while (!task.isFinished()) {
                 Thread.sleep(DefaultPollInterval);
@@ -307,7 +308,7 @@ public class AntConfig extends Config {
 
         RunConfig task = new RunConfig(TargetLeave, p, token);
         enqueueBlocking(task);
-
+        
         if (isSynchronous) {
             // FIXME: replace with wait / notify
             while (!task.isFinished()) {
@@ -319,7 +320,22 @@ public class AntConfig extends Config {
     public void modify(ConfigToken token, Properties p) throws Exception {
         preprocess(p);
 
-        RunConfig task = new RunConfig(TargetModify, p, token);
+        // Get the modify subcommand from the property "modify.subcommand.<index>" and pass the one with the highest index as target
+        // For modify to work, the modify.subcommand.<index> property needs to be present, and needs to be a string that starts with "modify."
+        // Else it will default to a target called "modify"
+        // If there is no "modify.*" or "modify" target in the handler, it will fail in the same way as it will fail when a specified ant target does not exist
+        
+        int highestIndex = PropList.highestModifyIndex(p, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY);
+        String modifyTarget = p.getProperty(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + highestIndex);
+        
+        if(modifyTarget == null){
+        	modifyTarget = TargetModify;
+        }
+        
+        p.setProperty(Config.PropertyModifySequenceNumber, Integer.toString(highestIndex));
+        
+        //RunConfig task = new RunConfig(TargetModify, p, token);
+        RunConfig task = new RunConfig(modifyTarget, p, token);
         enqueueBlocking(task);
 
         if (isSynchronous) {
@@ -461,6 +477,7 @@ public class AntConfig extends Config {
         }
 
         private Properties executeTarget() throws Exception {
+        	
             File buildFile = new File(getFileName());
             SliceProject project = new SliceProject(token, actorConfigurationLock, handlerSemaphoreMap, secureRandom);
 
@@ -492,7 +509,12 @@ public class AntConfig extends Config {
             } catch (BuildException e) {
                 project.fireBuildFinished(e);
                 throw e;
+            } catch (Exception ex){
+            	// TODO: Fix catchall exception
+            	project.fireBuildFinished(ex);
+                throw ex;
             }
+            
         }
 
         public void execute() {
@@ -552,6 +574,14 @@ public class AntConfig extends Config {
             if (rtype != null) {
                 result.setProperty(Config.PropertyResourceType, rtype);
             }
+            
+            // required for passing in the modify sequence number so that Substrate:processModifyComplete() 
+            // can populate the index for code/message for the modify actions
+            String modifySeqNum = properties.getProperty(Config.PropertyModifySequenceNumber);
+            if(modifySeqNum != null){
+            	result.setProperty(Config.PropertyModifySequenceNumber, modifySeqNum);
+            }
+            
             plugin.configurationComplete(token, result);
         }
     }
@@ -593,4 +623,5 @@ public class AntConfig extends Config {
             }
         }
     }
+
 }

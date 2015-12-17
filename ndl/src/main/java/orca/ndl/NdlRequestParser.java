@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -19,8 +18,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.reasoner.Reasoner;
-import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.reasoner.ValidityReport;
 import com.hp.hpl.jena.reasoner.ValidityReport.Report;
 import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
@@ -43,7 +40,7 @@ public class NdlRequestParser extends NdlCommons {
 	Set<Resource> nodesAndLinks = new HashSet<Resource>();
 	private boolean lessStrictChecking = false;
 	
-	protected String[] inferenceModels = { "topology.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
+	protected String[] inferenceModels = { "topology.owl", "layer.owl", "ethernet.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
 	
 	/**
 	 * Create a parser on existing model
@@ -55,6 +52,27 @@ public class NdlRequestParser extends NdlCommons {
 		listener = l;
 		requestModel = reqModel;
 		
+		// need some imports for inference to work
+		for (String model: inferenceModels)
+			requestModel.read(ORCA_NS + model);
+	}
+	
+	/**
+	 * Create a parser with a model that is explicitly in-memory or TDB persistent or ephemeral
+	 * @param ndlRequest
+	 * @param l
+	 * @param t
+	 * @param folderName
+	 * @throws NdlException
+	 */
+	public NdlRequestParser(OntModel reqModel, INdlRequestModelListener l, NdlModel.ModelType t, String folderName) throws NdlException {
+		
+		if (l == null)
+			throw new NdlException("Null parameters to the NdlRequestParser constructor");
+		
+		listener = l;
+		
+		requestModel = reqModel;
 		// need some imports for inference to work
 		for (String model: inferenceModels)
 			requestModel.read(ORCA_NS + model);
@@ -140,16 +158,18 @@ public class NdlRequestParser extends NdlCommons {
 		PrintUtil.registerPrefix("topo", "http://geni-orca.renci.org/owl/topology.owl#");
 		PrintUtil.registerPrefix("comp", "http://geni-orca.renci.org/owl/compute.owl#");
 		PrintUtil.registerPrefix("xo", "http://geni-orca.renci.org/owl/exogeni.owl#");
+		PrintUtil.registerPrefix("exogeni", "http://geni-orca.renci.org/owl/exogeni.owl#");
 		PrintUtil.registerPrefix("storage", "http://geni-orca.renci.org/owl/storage.owl#");
 		PrintUtil.registerPrefix("geni", "http://geni-orca.renci.org/owl/geni.owl#");
 		PrintUtil.registerPrefix("dom", "http://geni-orca.renci.org/owl/domain.owl#");
 		PrintUtil.registerPrefix("req", "http://geni-orca.renci.org/owl/request.owl#");
-		PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.owl#");
+		PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.rdf#");
 		PrintUtil.registerPrefix("euca", "http://geni-orca.renci.org/owl/eucalyptus.owl#");
 		PrintUtil.registerPrefix("pl", "http://geni-orca.renci.org/owl/planetlab.owl#");
 		PrintUtil.registerPrefix("col", "http://geni-orca.renci.org/owl/collections.owl#");
 		PrintUtil.registerPrefix("color", "http://geni-orca.renci.org/owl/app-color.owl#");
 		PrintUtil.registerPrefix("ip4", "http://geni-orca.renci.org/owl/ip4.owl#");
+		PrintUtil.registerPrefix("modify", "http://geni-orca.renci.org/owl/modify.owl#");
 		
 		ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
 

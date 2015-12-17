@@ -14,7 +14,7 @@ public interface INdlModifyModelListener extends INdlSimpleModelListener {
 	public void ndlModifyReservation(Resource i, Literal name, OntModel m);
 	
 	public static enum ModifyType {
-		ADD, REMOVE, INCREASE
+		ADD, MODIFY, REMOVE, MODIFYREMOVE, INCREASE
 	}
 	
 	/**

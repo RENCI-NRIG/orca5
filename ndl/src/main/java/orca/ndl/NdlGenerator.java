@@ -380,6 +380,27 @@ public class NdlGenerator {
 	}
 	
 	/**
+	 * Declare a ComputeElement with existing url (from manifest) that will be modified. Modifies always require a guid.
+	 * @param url
+	 * @param guid
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifiedComputeElement(String url, String guid) throws NdlException {
+		OntClass cls = ref.getOntClass(ref.getNsPrefixUri("compute") + "ComputeElement");
+		
+		if (null == cls)
+			throw new NdlException("Unable to find class compute:ComputeElement");
+
+		Individual in = blank.createIndividual(url, cls);
+		
+		addGuid(in, guid);
+		addTypedProperty(in, "modify-schema", "isModify", "true", XSDDatatype.XSDboolean);
+		
+		return in;
+	}
+	
+	/**
 	 * declare a stitching node 
 	 * @param name
 	 * @return
@@ -477,6 +498,38 @@ public class NdlGenerator {
 	}
 	
 	/**
+	 * Declare a unique stitchport interface  based on URL and label with TaggedEthernet adaptation and a label
+	 * @param url
+	 * @param label
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareStitchportInterface(String url, String label) throws NdlException {
+		Individual retI = declareExistingInterface(generateStitchPortInterfaceUrl(url, label));
+		addLabelToIndividual(retI, label);
+		// declare adaptation
+		Individual intM = declareExistingInterface(url);
+		addEthernetAdaptation(intM, retI);
+		return retI;
+	}
+	
+	/**
+	 * Generate unique name for stitchport interface based on URL and label
+	 * @param osp
+	 * @return
+	 * @throws NdlException
+	 */
+	private String generateStitchPortInterfaceUrl(String url, String label) throws NdlException {
+		if ((url == null) || (label == null))
+			throw new NdlException("Stitchport does not specify URL or label");
+		
+		if (url.endsWith("/"))
+			return url + label;
+		else
+			return url + "/" + label;
+	}
+	
+	/**
 	 * declare a disk image
 	 * @param name
 	 * @param url
@@ -506,6 +559,8 @@ public class NdlGenerator {
 		Individual vmIm = addIndividual(requestId + "#" + massageName(shortName), "compute", "DiskImage");
 		addSimpleProperty(vmIm, "topology", "hasGUID", guid);
 		addSimpleProperty(vmIm, "topology", "hasURL", url);
+		addTypedProperty(vmIm, "topology", "hasName", shortName, XSDDatatype.XSDstring);
+
 		return vmIm;
 	}
 	/**
@@ -552,6 +607,25 @@ public class NdlGenerator {
 	public Individual declareBroadcastConnection(String name) throws NdlException {
 		Individual conn = addIndividual(requestId + "#" + massageName(name), "topology", "BroadcastConnection");
 		return conn;
+	}
+	
+	/**
+	 * Declare a broadcast connection that already exists and will be modified
+	 * @param url
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifiedBroadcastConnection(String url) throws NdlException {
+		OntClass cls = ref.getOntClass(ref.getNsPrefixUri("topology") + "BroadcastConnection");
+		
+		if (null == cls)
+			throw new NdlException("Unable to find class topology:BroadcastConnection");
+
+		Individual in = blank.createIndividual(url, cls);
+		
+		addTypedProperty(in, "modify-schema", "isModify", "true", XSDDatatype.XSDboolean);
+		
+		return in;
 	}
 	
 	/**
@@ -879,10 +953,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyReservation(String name) throws NdlException {
-		Individual mres = addIndividual(requestId + "#", "modify-schema", "ModifyReservation");
+		Individual mres = addIndividual(requestId + "#" + name, "modify-schema", "ModifyReservation");
 		
 		if (name != null)
-			addSimpleProperty(mres, "topology", "hasName", name);
+			addTypedProperty(mres, "topology", "hasName", name, XSDDatatype.XSDstring);
 		
 		return mres;
 	}
@@ -930,6 +1004,119 @@ public class NdlGenerator {
 		addProperty(melI, "modify-schema", "modifySubject", ngUrl);
 		
 		addProperty(melI, "modify-schema", "removeElement", nodeUrl);
+		
+		return melI;
+	}
+	
+	/**
+	 * Declare an element of a modify reservation that deletes a single node
+	 * @param mresI
+	 * @param link
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifyElementRemoveNode(Individual mresI, String elUrl, String guid) throws NdlException {
+		
+		// retrieve or create an individual
+		Individual el = blank.getIndividual(elUrl);
+		if (el == null) {
+			OntClass cls = ref.getOntClass(ref.getNsPrefixUri("compute") + "ComputeElement");
+			el = blank.createIndividual(elUrl, cls);
+		}
+		
+		if (guid != null)
+			addGuid(el, guid);
+		
+		Individual melI = null;
+		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
+		
+		addProperty(mresI, "collections", "element", melI.getURI());
+		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
+		addProperty(melI, "modify-schema", "removeElement", el.getURI());
+		
+		return melI;
+	}
+	
+	/**
+	 * Declare an element of a modify reservation that deletes a single link
+	 * @param mresI
+	 * @param link
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifyElementRemoveLink(Individual mresI, String elUrl, String guid) throws NdlException {
+		
+		// retrieve or create an individual
+		Individual el = blank.getIndividual(elUrl);
+		if (el == null) {
+			OntClass cls = ref.getOntClass(ref.getNsPrefixUri("topology") + "NetworkConnection");
+			el = blank.createIndividual(elUrl, cls);
+		}
+		
+		if (guid != null)
+			addGuid(el, guid);
+		
+		Individual melI = null;
+		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
+		
+		addProperty(mresI, "collections", "element", melI.getURI());
+		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
+		addProperty(melI, "modify-schema", "removeElement", el.getURI());
+		
+		return melI;
+	}
+	
+	/**
+	 * Declare an element of a modify reservation that deletes a single element individual
+	 * @param mresI
+	 * @param link
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifyElementRemoveElement(Individual mresI, Individual el) throws NdlException {
+		Individual melI = null;
+		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
+		
+		addProperty(mresI, "collections", "element", melI.getURI());
+		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
+		addProperty(melI, "modify-schema", "removeElement", el.getURI());
+		
+		return melI;
+	}
+	
+	
+	/**
+	 * Declare an element of a modify reservation that adds a single element (node or link)
+	 * @param mresI
+	 * @param el
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifyElementAddElement(Individual mresI, Individual el) throws NdlException {
+		Individual melI = null;
+		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
+		
+		addProperty(mresI, "collections", "element", melI.getURI());
+		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
+		addProperty(melI, "modify-schema", "addElement", el.getURI());
+		
+		return melI;
+	}
+	
+	/**
+	 * Declare an element to modify an existing node (add interface)
+	 * @param mresI
+	 * @param node
+	 * @return
+	 * @throws NdlException
+	 */
+	public Individual declareModifyElementModifyNode(Individual mresI, Individual node) throws NdlException {
+		Individual melI = null;
+		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
+		
+		addProperty(mresI, "collections", "element", melI.getURI());
+		addProperty(melI, "modify-schema", "modifySubject", node.getURI());
+		addProperty(melI, "modify-schema", "modifyElement", node.getURI());
 		
 		return melI;
 	}
@@ -1329,6 +1516,16 @@ public class NdlGenerator {
 	public Individual addEthernetAdaptation(Individual intf, Individual adaptTo) throws NdlException {
 		addProperty(intf, "ethernet", "Tagged-Ethernet", adaptTo);
 		return intf;
+	}
+	
+	/**
+	 * Add addGuid property to this individual
+	 * @param in
+	 * @param guid
+	 * @throws NdlException
+	 */
+	public void addGuid(Individual in, String guid) throws NdlException { 
+		addSimpleProperty(in, "topology", "hasGUID", guid);
 	}
 	
 	/**

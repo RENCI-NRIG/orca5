@@ -55,7 +55,7 @@ public class DomainElement extends Device {
 		sb.append("followedBy: \n");
 		if (followedBy != null) {
 			for(Entry<DomainElement, OntResource> ee: followedBy.entrySet()) {
-				sb.append(ee.getKey().getURI() + " <> " + ee.getValue().getURI());
+				sb.append(ee.getKey().getURI() + " <> " + ee.getValue());
 			}
 			sb.append("\n");
 		}
@@ -63,7 +63,7 @@ public class DomainElement extends Device {
 		sb.append("precededBy: \n");
 		if (precededBy != null) {
 			for(Entry<DomainElement, OntResource> ee: precededBy.entrySet()) {
-				sb.append(ee.getKey().getURI() + " <> " + ee.getValue().getURI());
+				sb.append(ee.getKey().getURI() + " <> " + ee.getValue());
 			}
 			sb.append("\n");
 		}
@@ -321,6 +321,65 @@ public class DomainElement extends Device {
 			else break;
 		}	
 		return device_rs;
+	}
+	
+	public void copyDependency(DomainElement dd){
+		DomainElement parent_de=null,child_de=null;
+		OntResource intf_ont=null,child_intf_ont=null;
+		
+		if(dd.getClientInterface()!=null)
+			for(Interface intf:dd.getClientInterface()){
+				if(this.getClientInterface()!=null && this.getClientInterface().contains(intf))
+					continue;
+				this.addClientInterface(intf);
+			}
+		
+		if(dd.getPrecededBySet()!=null){
+			for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
+				parent_de=parent.getKey();
+				intf_ont = parent.getValue();
+				if(this.getPrecededBy()!=null && this.getPrecededBySetByElement(parent_de.getURI())!=null)
+					continue;
+				this.setPrecededBy(parent_de, intf_ont);
+				
+				if(parent_de.getFollowedBySet()!=null){
+					for (Entry<DomainElement, OntResource> child : parent_de.getFollowedBySet()) {
+						child_de=child.getKey();
+						child_intf_ont = child.getValue();
+						if(child_de==dd){
+							parent_de.setFollowedBy(this, child_intf_ont);
+							break;
+						}
+					}
+					parent_de.removeFollowedByElement(child_de);
+				}else
+					logger.error("Missed follower:"+parent_de.getName());
+			}
+		}
+		
+		if(dd.getFollowedBySet()!=null){
+			for (Entry<DomainElement, OntResource> parent : dd.getFollowedBySet()) {
+				parent_de=parent.getKey();
+				intf_ont = parent.getValue();
+				if(this.getFollowedBy()!=null && this.getFollowedBy().get(parent_de)!=null)
+					continue;
+				this.setFollowedBy(parent_de, intf_ont);
+				
+				if(parent_de.getPrecededBySet()!=null){
+					for (Entry<DomainElement, OntResource> child : parent_de.getPrecededBySet()) {
+						child_de=child.getKey();
+						child_intf_ont = child.getValue();
+						if(child_de==dd){
+							parent_de.setPrecededBy(dd, child_intf_ont);
+							break;
+						}
+					}
+					parent_de.removePrecededByElement(child_de);
+				}else
+					logger.error("Missed follower:"+parent_de.getName());
+			}
+		}
+		
 	}
 	
 	public ComputeElement getCe() {

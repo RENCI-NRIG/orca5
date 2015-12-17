@@ -30,6 +30,8 @@ public interface UnitProperties {
     
     public static final String UnitHostName         = "unit.hostname";
     
+    public static final String UnitHostNameUrl      = "unit.hostname.url";
+    
     public static final String UnitDomain         = "unit.domain";
 
     /*
@@ -49,12 +51,15 @@ public interface UnitProperties {
     public static final String UnitMemory           = "unit.memory";
     public static final String UnitCPU              = "unit.cpu";
     public static final String UnitBandwidth        = "unit.bandwidth";
+    public static final String UnitVlanUrl          = "unit.vlan.url";
     public static final String UnitVlanTag          = "unit.vlan.tag";
     public static final String UnitVlanTags          = "unit.vlan.tags";
     public static final String UnitVlanQoSRate      = "unit.vlan.qos.rate";
     public static final String UnitVlanQoSBurstSize = "unit.vlan.qos.burst.size";
     public static final String UnitVlanHostEth      = "unit.vlan.hosteth";
     public static final String UnitQuantumNetname   = "unit.quantum.netname";
+    public static final String UnitQuantumNetUUID   = "unit.quantum.net.uuid";
+    public static final String UnitNumberInterface  = "unit.number.interface";
     
     
     public static final String UnitPortList = "unit.portlist";
@@ -65,6 +70,7 @@ public interface UnitProperties {
      */
     
     public static final String UnitManagementIP     = "unit.manage.ip";
+    public static final String UnitManagementPort   = "unit.manage.port";
     public static final String UnitManageSubnet     = "unit.manage.subnet";
     public static final String UnitManageGateway    = "unit.manage.gateway";
     public static final String UnitManageInterface  = "unit.manage.interface";
@@ -143,6 +149,7 @@ public interface UnitProperties {
     public static final String UnitTargetPortSuffix          = ".target.port";
     public static final String UnitTargetNameSuffix          = ".target.name";
     public static final String UnitTargetLunSuffix           = ".target.lun.num";
+    public static final String UnitTargetLunGuid			 = ".target.lun.guid";
     public static final String UnitTargetShouldAttachSuffix  = ".target.should_attach";
     public static final String UnitTargetChapUserSuffix      = ".target.chap_user";
     public static final String UnitTargetChapSecretSuffix    = ".target.chap_password";

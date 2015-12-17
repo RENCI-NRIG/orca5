@@ -199,9 +199,11 @@ public class ModelFolders {
 	 * @param path - the path where it will be kept
 	 * @param e - whether it is ephemeral or permanent
 	 */
-	public synchronized void put(OntModel m, Dataset ds, String path, boolean e) {
+	public synchronized void put(OntModel m, Dataset ds, String path, boolean e) throws Exception {
 		assert((path != null) && (m != null) && (ds != null));
 		datasets.add(ds);
+		if (modelFolders.containsKey(m))
+			throw new Exception("ModelFolders already contain a mapping for model " + m);
 		modelFolders.put(m, new ModelFolder(path, ds, e));
 	}
 	
@@ -264,8 +266,20 @@ public class ModelFolders {
 	public void closeDatasets() {
 		for(Map.Entry<OntModel, ModelFolder> entry: modelFolders.entrySet()) {
 			//entry.getValue().closeDataset();
-			System.out.println("Syncing dataset " + entry.getValue().getFolderPath());
-			TDB.sync(entry.getValue().getDataset());
+			if (!entry.getValue().isEphemeral()) {
+				System.out.println("Syncing dataset " + entry.getValue().getFolderPath());
+				try {
+					TDB.sync(entry.getValue().getDataset());
+				} catch (Exception e) {
+					System.out.println("Failed to sync " + entry.getValue().getFolderPath() + ", trying again in .5s ");
+					try {
+						Thread.sleep(500);
+						TDB.sync(entry.getValue().getDataset());
+					} catch (Exception ee) {
+						System.out.println("Failed again to sync " + entry.getValue().getFolderPath() + ", continuing");
+					}
+				}
+			}
 		}
 	}
 }

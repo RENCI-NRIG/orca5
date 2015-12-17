@@ -202,7 +202,7 @@ public class UnitSet implements IConcreteSet, CustomRecoverable {
 	public void change(IConcreteSet set, boolean configure)
 			throws Exception {
 		ensureType(set);
-
+		
 		UnitSet uset = (UnitSet) set;
 		Units lost = units.missing(uset.units);
 		Units gained = uset.units.missing(units);
@@ -211,11 +211,37 @@ public class UnitSet implements IConcreteSet, CustomRecoverable {
 		for (Unit u : gained) {
 			u.setState(UnitState.DEFAULT);
 		}
-
+		
+		// @anirban (07/17/15)
+		// When nothing has been gained or lost, it means it is an update for modify or extend, i.e. updateLease
+		// being serviced on the SM. In this case, just update the properties on the client (SM) side by 
+		// pushing updated unit properties to the Substrate database
+		// Remember that SM also keeps a substrate database; in case of join or leave, gained or lost
+		// will be non null, and then on the SM side, add/remove will trigger SM side join/leave handler
+		// During that process, for the join case, the SM side unit properties will be updated in the substrate database
+		// through getSubstrateDataBase().updateUnits() calls in substrate.transferIn and substrate.processJoinComplete
+		
+		if(gained.isEmpty() && lost.isEmpty()){
+			logger.debug("Updating properties on SM side for modify or extend");
+			update(uset.units);
+		}
+		
 		remove(lost, configure);
 		add(gained, configure);
 	}
 
+	/*
+	 * Updates unit properties in substrate database 
+	 */
+	protected void update(Units toUpdate){
+		for(Unit u: toUpdate){
+			u.setReservation(reservation);
+			u.setSliceID(reservation.getSliceID());
+			u.setActorID(substrate.getActor().getGuid());
+			substrate.updateProps(reservation, u);
+		}
+	}
+	
 	public IConcreteSet cloneEmpty() {
 		UnitSet result = new UnitSet(substrate);
 		// this is a fresh set.
@@ -307,10 +333,15 @@ public class UnitSet implements IConcreteSet, CustomRecoverable {
 		return getUnits();
 	}
 
-	protected int getPendingCount() {
+	protected int getPendingCount() { // Now only returns the count for number of units in PRIMING or CLOSING states
 		int count = 0;
 		for (Unit u : units) {
 			if (u.hasPendingAction()) {
+				// Check if pending action is a modify
+				// If pending action is not modify, increment count
+				//if(!u.isPendingModifying()){
+				//	count++;
+				//}
 				count++;
 			}
 		}

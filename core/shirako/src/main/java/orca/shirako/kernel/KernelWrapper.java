@@ -388,6 +388,73 @@ public class KernelWrapper {
     }
 
     /**
+     * Processes an incoming request for a lease modification.
+     * <p>
+     * Role: Authority
+     * </p>
+     * @param reservation reservation representing the lease modification request.
+     * @param caller caller identity
+     * @param compareSequenceNumbers if true, the incoming sequence number will
+     *            be compared to the local sequence number to detect fresh
+     *            requests, if false, no comparison will be performed.
+     * @throws Exception
+     */
+    public void modifyLeaseRequest(final IAuthorityReservation reservation, final AuthToken caller, boolean compareSequenceNumbers) throws Exception {
+        if ((reservation == null) || (caller == null)) {
+            throw new IllegalArgumentException();
+        }
+        
+        IKernelAuthorityReservation r = (IKernelAuthorityReservation) reservation;
+
+        if (compareSequenceNumbers) {
+            r.validateIncoming();
+
+            IKernelAuthorityReservation target = (IKernelAuthorityReservation) kernel.validate(reservation.getReservationID());
+            
+            Properties authProperties = reservation.getRequestedResources().getConfigurationProperties();
+            
+        	/* Check proxy */
+         	AuthToken requester = monitor.checkProxy(caller, AbacUtil.getRequesterAuthToken(authProperties));
+
+        	/* Check access */
+            monitor.checkReserve(target.getSlice().getGuard(), requester, (X509Certificate)actor.getShirakoPlugin().getKeyStore().getActorCertificate(), 
+            			actor.getShirakoPlugin().getKeyStore().getActorPrivateKey());
+            
+            //monitor.checkReserve(caller, target.getSlice().getGuard());
+
+            switch (kernel.compareAndUpdate(r, target)) {
+                case SequenceComparisonCodes.SequenceGreater:
+                    target.prepareModifyLease();
+                    kernel.modifyLease(target);
+
+                    break;
+
+                case SequenceComparisonCodes.SequenceSmaller:
+                    logger.warn("modifyLeaseRequest with a smaller sequence number");
+
+                    break;
+
+                case SequenceComparisonCodes.SequenceEqual:
+                    logger.warn("duplicate modifyLease request");
+                    kernel.handleDuplicateRequest(target, RequestTypes.RequestModifyLease);
+
+                    break;
+            }
+        } else {
+            IKernelAuthorityReservation target = (IKernelAuthorityReservation) kernel.validate(reservation.getReservationID());
+            Properties authProperties = reservation.getRequestedResources().getConfigurationProperties();
+        	/* Check proxy */
+         	AuthToken requester = monitor.checkProxy(caller, AbacUtil.getRequesterAuthToken(authProperties));
+        	/* Check access */
+            monitor.checkReserve(target.getSlice().getGuard(), requester, (X509Certificate)actor.getShirakoPlugin().getKeyStore().getActorCertificate(), 
+            			actor.getShirakoPlugin().getKeyStore().getActorPrivateKey());
+            //monitor.checkReserve(caller, target.getSlice().getGuard());
+            kernel.modifyLease(target);
+        }
+    }
+    
+    
+    /**
      * Extends the reservation with the given resources and term.
      * @param rid identifier of reservation to extend
      * @param resources resources for extension
@@ -507,6 +574,42 @@ public class KernelWrapper {
         }
     }
 
+    /**
+     * Initiates a request to modify a lease.
+     * <p>
+     * Role: Service Manager
+     * </p>
+     * @param reservation reservation describing the modify request
+     * @param modifyProps modify properties
+     * @throws Exception
+     */
+    public void modifyLease(final IServiceManagerReservation reservation) throws Exception {
+    	
+    	if (reservation == null) {
+            throw new IllegalArgumentException();
+        }
+
+        IKernelServiceManagerReservation target = (IKernelServiceManagerReservation) kernel.validate(reservation.getReservationID());
+
+        if (target == null) {
+            logger.error("modifyLease for a reservation not registered with the kernel");
+        }
+
+        Properties authProperties = reservation.getResources().getRequestProperties();
+        
+    	/* Check proxy */
+     	AuthToken requester = monitor.checkProxy(actor.getIdentity(), AbacUtil.getRequesterAuthToken(authProperties));
+
+    	/* Check access */
+        monitor.checkReserve(target.getSlice().getGuard(), requester, (X509Certificate)actor.getShirakoPlugin().getKeyStore().getActorCertificate(), 
+        			actor.getShirakoPlugin().getKeyStore().getActorPrivateKey());
+        
+        //monitor.checkReserve(actor.getIdentity(), target.getSlice().getGuard());
+        target.validateRedeem(); // checks for sanity of the reservation and the resources
+        kernel.modifyLease(target);
+    }        
+    
+    
     /**
      * {@inheritDoc}
      */

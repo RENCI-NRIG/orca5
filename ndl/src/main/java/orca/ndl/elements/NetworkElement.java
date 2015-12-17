@@ -26,6 +26,12 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	@NotPersistent 
 	protected OntModel model; // TDB
 	
+	@NotPersistent 
+	protected boolean isModify;
+	
+	@Persistent
+	protected int modifyVersion;
+	
 	@Persistent
 	protected String uri;
 	@Persistent
@@ -35,12 +41,21 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	
 	@Persistent // DONE
 	protected DomainResourceType resourceType;
+	
+	@Persistent // used for modifying, exisitng #interface
+	protected int numInterface;
+	
 	@Persistent // recursive
 	protected LinkedList<Interface> clientInterface;
+	
 	@Persistent // recursive
 	protected HashMap<String, DomainResource> map;  //interfaces, bandwidth
+	
 	@Persistent
 	protected String castType;
+	
+	@Persistent
+	protected String GUID;
 	
 	@Persistent
 	protected Integer sn;
@@ -76,7 +91,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	
 	/**
 	 * Comparison of networkelements limited to comparing URIs and names
-	 */
+	 *
 	public boolean equals(Object o) {
 		if ((o instanceof NetworkElement) && (uri != null)) {
 			NetworkElement neNew = (NetworkElement)o;
@@ -86,7 +101,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 				return uri.equals(neNew.uri);
 		}
 		return false;
-	}
+	}*/
 	
 	public int compareTo(Object o) {
 		int compare=0;
@@ -258,7 +273,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	}
 	
 	public OntResource getResource() {
-		if (uri != null)
+		if (uri != null && !model.isClosed())
 			return model.getOntResource(uri);
 		return null;
 	}
@@ -358,6 +373,38 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
     		map = new HashMap<String, DomainResource>();
         map.put(resource.getInterface(), resource);
     }
+
+	public boolean isModify() {
+		return isModify;
+	}
+
+	public void setModify(boolean isModify) {
+		this.isModify = isModify;
+	}
+
+	public int getModifyVersion() {
+		return modifyVersion;
+	}
+
+	public void setModifyVersion(int modifyVersion) {
+		this.modifyVersion = modifyVersion;
+	}
+	
+	public int getNumInterface() {
+		return numInterface;
+	}
+
+	public void setNumInterface(int numInterface) {
+		this.numInterface = numInterface;
+	}
+
+	public String getGUID() {
+		return GUID;
+	}
+
+	public void setGUID(String gUID) {
+		GUID = gUID;
+	}
 }
 
 

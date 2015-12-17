@@ -40,6 +40,9 @@ public class MappingHandler implements IRequestEmbedder {
 	protected OntModel idm;  // only getters and setters here - has to be TDB-backed by the original owner
 	
 	@NotPersistent
+	protected OntModel manifestModel;
+	
+	@NotPersistent
 	protected Logger logger = NdlCommons.getNdlLogger();
 
 	// Recreated in revisit of the owner
@@ -48,6 +51,12 @@ public class MappingHandler implements IRequestEmbedder {
 	
 	@NotPersistent
 	protected boolean debugOn = false;
+	
+	@NotPersistent
+	protected boolean isModify = false;
+	
+	protected int modifyVersion;
+	
 	
 	public void setDebugOn() {
 		debugOn = true;
@@ -110,9 +119,9 @@ public class MappingHandler implements IRequestEmbedder {
 	}
 	
 	public SystemNativeError modifySlice(
-			Collection<ModifyElement> modifyElements, OntModel manifestOnt, 
-			HashMap <String,Collection <DomainElement>> nodeGroupMap, 
-			HashMap<String, DomainElement> firstGroupElement, OntModel requestModel) throws UnknownHostException, InetNetworkException {
+			DomainResourcePools domainResourcePools, Collection<ModifyElement> modifyElements, OntModel manifestOnt, 
+			String sliceId, HashMap <String,Collection <DomainElement>> nodeGroupMap, 
+			HashMap<String, DomainElement> firstGroupElement, OntModel requestModel, OntModel modifyRequestModel) throws UnknownHostException, InetNetworkException {
 		return null;
 	}
 	
@@ -263,6 +272,14 @@ public class MappingHandler implements IRequestEmbedder {
 		return idm;
 	}
 	
+	public OntModel getManifestModel() {
+		return manifestModel;
+	}
+
+	public void setManifestModel(OntModel manifestModel) {
+		this.manifestModel = manifestModel;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("requestMap: \n");
@@ -271,4 +288,13 @@ public class MappingHandler implements IRequestEmbedder {
 		}
 		return sb.toString();
 	}
+
+	public boolean isModify() {
+		return isModify;
+	}
+
+	public void setModify(boolean isModify) {
+		this.isModify = isModify;
+	}
+
 }

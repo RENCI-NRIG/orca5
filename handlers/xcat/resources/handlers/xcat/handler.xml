@@ -12,264 +12,574 @@
   &drivertasks;	
   &bentasks;
 
-  <target name="join" depends="resolve.configuration, ben.load.tasks">
-	<taskdef resource="orca/handlers/xcat/xcat.xml"
-		classpathref="run.classpath"
-		loaderref="run.classpath.loader" />
-    <tstamp prefix="start">
-      <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-    </tstamp>
-    <echo message="XCAT HANDLER: JOIN on ${start.TIME}" />
-    <!-- see xcat.site.sample.properties and wiki for description
-	 of static properties that can be specified in xcat.site.properties
-    -->
-    <if>
-      <isset property="xcat.site.properties" />
-      <then>
-	<property file="${xcat.site.properties}" />
-      </then>
-    </if>
+	<target name="join" depends="resolve.configuration, ben.load.tasks">
+		<taskdef resource="orca/handlers/xcat/xcat.xml" classpathref="run.classpath"
+			loaderref="run.classpath.loader" />
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+		<echo message="XCAT HANDLER: JOIN on ${start.TIME}" />
+		<!-- see xcat.site.sample.properties and wiki for description of static 
+			properties that can be specified in xcat.site.properties -->
+		<if>
+			<isset property="xcat.site.properties" />
+			<then>
+				<property file="${xcat.site.properties}" />
+			</then>
+		</if>
 
-    <echo message="user ssh key: ${config.ssh.key}" />
-    <if>
-      <equals arg1="${emulation}" arg2="true" />
-      <then>
-	<echo message="running under emulation...exiting" />
-	<echo message="initiatorid=${unit.iscsi.initiator.iqn}" />
-	<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}" prefix="xcat.bash" suffix=".bash" deleteonexit="true" />
-	<xcat.generate.bash.file file="${xcat.bash.file}" interfaceMap="${xcat.interface.map}"/>
-	<loadfile property="xcat.bash" srcFile="${xcat.bash.file}" />
-	<echo message="BASH file: ${xcat.bash}" />	
-	
-	<property name="shirako.target.code" value="0" />
-      </then>
-      <else>
-	<!-- <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="true" /> -->
-	<!-- create the below as a template for installing dataplane interfaces -->
-	<!-- <ec2.generate.neuca.inf file="${neuca.ini.file}" /> -->
-
-        <!-- FIXME: Determine a way to expose what images a site has available -->
-	<echo message="Using statically specified image: ${xcat.image.name} " />
-
-        <echo message="Provisioning bare metal node ${unit.hostname.url} using image ${xcat.image.name} ... (this will take some time)" />
-        <var name="create.instance.output" unset="true" />
-        <var name="code" unset="true" />
-		<var name="message" unset="true" />
-	
-        <echo message="Running: ${xcat.scripts}/findfreenode.sh " />
-        <echo message="SLICE_ID=${unit.sliceid}" />
-        <echo message="XCAT_BAREMETAL_GROUP=${xcat.baremetal.group}" />
-
-        <atomic.sequence.start.macro device="${xcat.baremetal.group}" />
-        <exec executable="${xcat.scripts}/findfreenode.sh" resultproperty="code" outputproperty="create.instance.output">
-          <env key="SLICE_ID" value="${unit.sliceid}" />
-          <env key="XCAT_BAREMETAL_GROUP" value="${xcat.baremetal.group}" />
-        </exec>
-        <atomic.sequence.stop.macro device="${xcat.baremetal.group}" />
-
-        <if>
-          <not>
-	    <equals arg1="${code}" arg2="0" />
-          </not>
-          <then>
-            <echo message="Unable to allocate a free bare metal node: exit code ${code}, ${create.instance.output}" />
-            <property name="message" value="Unable to allocate a bare metal node: exit code ${code}, ${create.instance.output}" />
-            <property name="shirako.target.code" value="${code}" />
-          </then>
-          <else>
-	    <var name="shirako.save.unit.xcat.nodename" unset="true" />
-	    <property name="shirako.save.unit.xcat.nodename" value="${create.instance.output}" />
-
-            <echo message="Running: ${xcat.scripts}/start.sh ${shirako.save.unit.xcat.nodename}" />
-            <echo message="XCAT_IMAGE_NAME=${xcat.image.name}" />
-            <echo message="XCAT_CONF_DIR=${xcat.conf.dir}" />
-            <echo message="XCAT_SSH_KEY=${xcat.ssh.key}" />
-            <echo message="XCAT_PROVISION_MAXWAIT=${xcat.provision.maxwait}" />
-            <echo message="XCAT_PING_RETRIES=${xcat.ping.retries}" />
-            <echo message="XCAT_SSH_RETRIES=${xcat.ssh.retries}" />
-
-            <var name="create.instance.output" unset="true" />
-            <var name="code" unset="true" />
-	    	<var name="message" unset="true" />
-            <exec executable="${xcat.scripts}/start.sh" resultproperty="code" outputproperty="create.instance.output">
-	            <!-- <env key="NEUCA_INI" value="${neuca.ini.file}" /> -->
-	            <env key="XCAT_IMAGE_NAME" value="${xcat.image.name}" />
-	            <env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
-	            <env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
-	            <env key="XCAT_PROVISION_MAXWAIT" value="${xcat.provision.maxwait}" />
-	            <env key="XCAT_PING_RETRIES" value="${xcat.ping.retries}" />
-	            <env key="XCAT_SSH_RETRIES" value="${xcat.ssh.retries}" />
-	      		<arg value="${shirako.save.unit.xcat.nodename}" />
-            </exec>
-
-            <if>
-              <not>
-	        <equals arg1="${code}" arg2="0" />
-              </not>
-              <then>
-                <echo message="Unable to provision bare metal node: exit code ${code}, ${create.instance.output}" />
-                <property name="message" value="Unable to provision bare metal node: exit code ${code}, ${create.instance.output}" />
-                <property name="shirako.target.code" value="${code}" />
-
-                <var name="create.instance.output" unset="true" />
-	        	<var name="code" unset="true" />
-                <atomic.sequence.start.macro device="${xcat.baremetal.group}" />
-                <exec executable="${xcat.scripts}/returnnode.sh" resultproperty="code" outputproperty="create.instance.output">
-              	  <arg value="${shirako.save.unit.xcat.nodename}" />
-                </exec>
-                <atomic.sequence.stop.macro device="${xcat.baremetal.group}" />
-                <if>
-                  <not>
-	            <equals arg1="${code}" arg2="0" />
-                  </not>
-                  <then>
-	            <echo message="Error encountered while returning bare metal node to free node pool: exit code ${code}, ${create.instance.output}" />
-                  </then>
-                </if>
-              </then>
-              <else>
-	        <!-- hairpin the hostname property so the user sees it too -->
-	        <var name="shirako.save.unit.hostname.url" unset="true" />
-	        <property name="shirako.save.unit.hostname.url" value="${unit.hostname.url}" />
-
-	        <echo message="provision-node exit code: ${code} nodename=${shirako.save.unit.xcat.nodename}" />
-	        <echo message="Obtaining management IP address for bare metal node ${shirako.save.unit.xcat.nodename}" />
-
-	        <var name="code" unset="true" />
-	        <exec executable="${xcat.scripts}/get-ip.sh" resultproperty="code" outputproperty="shirako.save.unit.manage.ip">
-	          <arg value="${shirako.save.unit.xcat.nodename}" />
-	        </exec>
-	        <echo message="get-ip exit code: ${code} ip=${shirako.save.unit.manage.ip}" />
-                <property name="shirako.target.code" value="${code}" />
-	    
-	        <!-- set the user's private key, if needed -->
-	        <if>
-	          <isset property="shirako.save.unit.manage.ip" />
-	          <then>
-	            <echo message="Installing ${config.ssh.numlogins} user keys and accounts in the bare-metal node ${shirako.save.unit.xcat.nodename}" />
-
-	            <var name="code" unset="true" />
-	
-				<for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false" >
-					<sequential>
-						<var name="icode" unset="true" />
-
-						<var name="loginProperty" unset="true" />
-						<var name="keysProperty" unset="true" />
-
-						<property name="loginProperty" value="${config.ssh.user@{iter}.login}" />
-						<property name="keysProperty" value="${config.ssh.user@{iter}.keys}" />
-
-						<echo message="Creating account for user ${loginProperty}" />
-	
-	            		<exec executable="${xcat.scripts}/prepare-key.sh" resultproperty="icode">
-                 		 	<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
-	            		  	<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
-	          		    	<arg value="${shirako.save.unit.xcat.nodename}" />
-							<arg value="'${loginProperty}'" />
-							<arg value="'${keysProperty}'" />
-	        		    </exec>
-						<echo message="Exit code ${icode}" />
-					</sequential>
-				</for>
-
-				<echo message="Generating BASH script for the node" />
-				<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}" prefix="xcat.bash" suffix=".bash" deleteonexit="true" />
-				<!-- create the NEUCA INI file -->
-				<xcat.generate.bash.file file="${xcat.bash.file}" interfaceMap="${xcat.interface.map}"/>
+		<echo message="user ssh key: ${config.ssh.key}" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<echo message="initiatorid=${unit.iscsi.initiator.iqn}" />
+				<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}"
+					prefix="xcat.bash" suffix=".bash" deleteonexit="true" />
+				<xcat.generate.bash.file file="${xcat.bash.file}"
+					interfaceMap="${xcat.interface.map}" />
 				<loadfile property="xcat.bash" srcFile="${xcat.bash.file}" />
-				<echo message="BASH file: ${xcat.bash}" />	
-	
-				<echo message="Copying and executing the script on node ${shirako.save.unit.xcat.nodename}" />
-			    <var name="code" unset="true" />
-			    <exec executable="${xcat.scripts}/post-boot.sh" resultproperty="code">
-			      	<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
-			      	<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
-					<env key="XCAT_NODE_SCRIPT" value="${xcat.bash.file}" />
-			      	<arg value="${shirako.save.unit.xcat.nodename}" />
-			      	<arg value="'${config.ssh.key}'" />
-			    </exec>
-	
-				<delete file="${xcat.bash.file}" />
-	
-	            <!-- default port is SSH -->
-	            <property name="shirako.save.unit.manage.port" value="22" />
-                    <property name="shirako.target.code" value="${code}" />
-	          </then>
-	        </if>
-              </else>
-            </if>
-          </else>
-        </if>
-        <if>
-            <isset property="message" />
-          <then>
-	    <property name="shirako.target.code.message" value="${message}" />
-	  </then>
-	  <else>
-	    <property name="shirako.target.code.message" value="none" />
-	  </else>
-	</if>
-        <echo message="join exit code: ${shirako.target.code} with message: ${shirako.target.code.message}" />
-      </else>
-    </if>
-  </target>
+				<echo message="BASH file: ${xcat.bash}" />
 
-  <!-- Modify operation is not supported -->
-  <target name="modify" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<!-- <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" 
+					prefix="neuca" suffix=".ini" deleteonexit="true" /> -->
+				<!-- create the below as a template for installing dataplane interfaces -->
 
-  <target name="leave" depends="resolve.configuration,ben.load.tasks">
-    <tstamp prefix="start">
-      <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-    </tstamp>
+				<!-- FIXME: Determine a way to expose what images a site has available -->
+				<echo message="Using statically specified image: ${xcat.image.name} " />
 
-    <echo message="XCAT HANDLER: LEAVE on ${start.TIME}" />
-    <echo message="leave: bare metal node=${unit.xcat.nodename}" />
-    <!-- set site-specific properties like the VLAN or PHYS mode
-         and the interface to operate on
-    -->
-    <if>
-      <isset property="xcat.site.properties" />
-      <then>
-        <property file="${xcat.site.properties}" />
-      </then>
-    </if>
+				<echo
+					message="Provisioning bare metal node ${unit.hostname.url} using image ${xcat.image.name} ... (this will take some time)" />
+				<var name="create.instance.output" unset="true" />
+				<var name="code" unset="true" />
+				<var name="message" unset="true" />
 
-    <if>
-      <equals arg1="${emulation}" arg2="true" />
-      <then>
-        <echo message="running under emulation...exiting" />
-        <property name="shirako.target.code" value="0" />
-      </then>
-      <else>
-        <var name="code" unset="true" />
-        <var name="terminate.instance.output" unset="true" />
-        <echo message="De-provisioning bare metal node: ${unit.xcat.nodename}" />
-        <exec executable="${xcat.scripts}/stop.sh" resultproperty="code" outputproperty="terminate.instance.output" >
-	  <arg value="${unit.xcat.nodename}" />
-        </exec>
-        <echo message="deprovision-node exit code: ${code}; ${terminate.instance.output}" />	
-        <property name="shirako.target.code" value="${code}" />
+				<echo message="Running: ${xcat.scripts}/findfreenode.sh " />
+				<echo message="SLICE_ID=${unit.sliceid}" />
+				<echo message="XCAT_BAREMETAL_GROUP=${xcat.baremetal.group}" />
 
-        <var name="code" unset="true" />				
-        <var name="terminate.instance.output" unset="true" />
-        <atomic.sequence.start.macro device="${xcat.baremetal.group}" />
-        <exec executable="${xcat.scripts}/returnnode.sh" resultproperty="code" outputproperty="terminate.instance.output">
-          <arg value="${unit.xcat.nodename}" />
-        </exec>
-        <atomic.sequence.stop.macro device="${xcat.baremetal.group}" />
+				<atomic.sequence.start.macro device="${xcat.baremetal.group}" />
+				<exec executable="${xcat.scripts}/findfreenode.sh"
+					resultproperty="code" outputproperty="create.instance.output">
+					<env key="SLICE_ID" value="${unit.sliceid}" />
+					<env key="XCAT_BAREMETAL_GROUP" value="${xcat.baremetal.group}" />
+				</exec>
+				<atomic.sequence.stop.macro device="${xcat.baremetal.group}" />
 
-        <if>
-          <not>
-	    <equals arg1="${code}" arg2="0" />
-          </not>
-          <then>
-	    <echo message="Error encountered while returning bare metal node to free node pool: exit code ${code}, ${terminate.instance.output}" />
-            <property name="shirako.target.code" value="${code}" />
-          </then>
-        </if>
-      </else>
-    </if>
-    <echo message="leave exit code: ${shirako.target.code}" />
-  </target>
+				<if>
+					<not>
+						<equals arg1="${code}" arg2="0" />
+					</not>
+					<then>
+						<echo
+							message="Unable to allocate a free bare metal node: exit code ${code}, ${create.instance.output}" />
+						<property name="message"
+							value="Unable to allocate a bare metal node: exit code ${code}, ${create.instance.output}" />
+						<property name="shirako.target.code" value="${code}" />
+					</then>
+					<else>
+						<var name="shirako.save.unit.xcat.nodename" unset="true" />
+						<property name="shirako.save.unit.xcat.nodename" value="${create.instance.output}" />
+
+						<echo
+							message="Running: ${xcat.scripts}/start.sh ${shirako.save.unit.xcat.nodename}" />
+						<echo message="XCAT_IMAGE_NAME=${xcat.image.name}" />
+						<echo message="XCAT_CONF_DIR=${xcat.conf.dir}" />
+						<echo message="XCAT_SSH_KEY=${xcat.ssh.key}" />
+						<echo message="XCAT_PROVISION_MAXWAIT=${xcat.provision.maxwait}" />
+						<echo message="XCAT_PING_RETRIES=${xcat.ping.retries}" />
+						<echo message="XCAT_SSH_RETRIES=${xcat.ssh.retries}" />
+
+						<var name="create.instance.output" unset="true" />
+						<var name="code" unset="true" />
+						<var name="message" unset="true" />
+						<exec executable="${xcat.scripts}/start.sh" resultproperty="code"
+							outputproperty="create.instance.output">
+							<!-- <env key="NEUCA_INI" value="${neuca.ini.file}" /> -->
+							<env key="XCAT_IMAGE_NAME" value="${xcat.image.name}" />
+							<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
+							<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
+							<env key="XCAT_PROVISION_MAXWAIT" value="${xcat.provision.maxwait}" />
+							<env key="XCAT_PING_RETRIES" value="${xcat.ping.retries}" />
+							<env key="XCAT_SSH_RETRIES" value="${xcat.ssh.retries}" />
+							<arg value="${shirako.save.unit.xcat.nodename}" />
+						</exec>
+
+						<if>
+							<not>
+								<equals arg1="${code}" arg2="0" />
+							</not>
+							<then>
+								<echo
+									message="Unable to provision bare metal node: exit code ${code}, ${create.instance.output}" />
+								<property name="message"
+									value="Unable to provision bare metal node: exit code ${code}, ${create.instance.output}" />
+								<property name="shirako.target.code" value="${code}" />
+
+								<var name="create.instance.output" unset="true" />
+								<var name="code" unset="true" />
+								<atomic.sequence.start.macro device="${xcat.baremetal.group}" />
+								<exec executable="${xcat.scripts}/returnnode.sh"
+									resultproperty="code" outputproperty="create.instance.output">
+									<arg value="${shirako.save.unit.xcat.nodename}" />
+								</exec>
+								<atomic.sequence.stop.macro device="${xcat.baremetal.group}" />
+								<if>
+									<not>
+										<equals arg1="${code}" arg2="0" />
+									</not>
+									<then>
+										<echo
+											message="Error encountered while returning bare metal node to free node pool: exit code ${code}, ${create.instance.output}" />
+									</then>
+								</if>
+							</then>
+							<else>
+								<!-- hairpin the hostname property so the user sees it too -->
+								<var name="shirako.save.unit.hostname.url" unset="true" />
+								<property name="shirako.save.unit.hostname.url" value="${unit.hostname.url}" />
+
+								<echo
+									message="provision-node exit code: ${code} nodename=${shirako.save.unit.xcat.nodename}" />
+								<echo
+									message="Obtaining management IP address for bare metal node ${shirako.save.unit.xcat.nodename}" />
+
+								<var name="code" unset="true" />
+								<exec executable="${xcat.scripts}/get-ip.sh"
+									resultproperty="code" outputproperty="shirako.save.unit.manage.ip">
+									<arg value="${shirako.save.unit.xcat.nodename}" />
+								</exec>
+								<echo
+									message="get-ip exit code: ${code} ip=${shirako.save.unit.manage.ip}" />
+								<property name="shirako.target.code" value="${code}" />
+
+								<!-- set the user's private key, if needed -->
+								<if>
+									<isset property="shirako.save.unit.manage.ip" />
+									<then>
+										<echo
+											message="Installing ${config.ssh.numlogins} user keys and accounts in the bare-metal node ${shirako.save.unit.xcat.nodename}" />
+
+										<var name="code" unset="true" />
+
+										<for list="${config.ssh.numlogins}" param="iter"
+											delimiter="," parallel="false">
+											<sequential>
+												<var name="icode" unset="true" />
+
+												<var name="loginProperty" unset="true" />
+												<var name="keysProperty" unset="true" />
+
+												<property name="loginProperty" value="${config.ssh.user@{iter}.login}" />
+												<property name="keysProperty" value="${config.ssh.user@{iter}.keys}" />
+
+												<echo message="Creating account for user ${loginProperty}" />
+
+												<exec executable="${xcat.scripts}/prepare-key.sh"
+													resultproperty="icode">
+													<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
+													<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
+													<arg value="${shirako.save.unit.xcat.nodename}" />
+													<arg value="'${loginProperty}'" />
+													<arg value="'${keysProperty}'" />
+												</exec>
+												<echo message="Exit code ${icode}" />
+											</sequential>
+										</for>
+
+										<echo message="Generating BASH script for the node" />
+										<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}"
+											prefix="xcat.bash" suffix=".bash" deleteonexit="true" />
+										<!-- create the BASH file -->
+										<xcat.generate.bash.file file="${xcat.bash.file}"
+											interfaceMap="${xcat.interface.map}" />
+										<loadfile property="xcat.bash" srcFile="${xcat.bash.file}" />
+										<echo message="BASH file: ${xcat.bash}" />
+
+										<echo
+											message="Copying and executing the script on node ${shirako.save.unit.xcat.nodename}" />
+										<var name="code" unset="true" />
+										<exec executable="${xcat.scripts}/post-boot.sh"
+											resultproperty="code">
+											<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
+											<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
+											<env key="XCAT_NODE_SCRIPT" value="${xcat.bash.file}" />
+											<arg value="${shirako.save.unit.xcat.nodename}" />
+										</exec>
+
+										<delete file="${xcat.bash.file}" />
+
+										<!-- default port is SSH -->
+										<property name="shirako.save.unit.manage.port" value="22" />
+										<property name="shirako.target.code" value="${code}" />
+									</then>
+								</if>
+							</else>
+						</if>
+					</else>
+				</if>
+				<if>
+					<isset property="message" />
+					<then>
+						<property name="shirako.target.code.message" value="${message}" />
+					</then>
+					<else>
+						<property name="shirako.target.code.message" value="none" />
+					</else>
+				</if>
+				<echo
+					message="join exit code: ${shirako.target.code} with message: ${shirako.target.code.message}" />
+			</else>
+		</if>
+	</target>
+
+	<!-- add iface macro -->
+	<macrodef name="modify.addiface" description="add a new network iface via modify">
+		<attribute name="seqnum" description="sequence number" />
+
+		<sequential>
+			<if>
+				<equals arg1="${emulation}" arg2="true" />
+				<then>
+					<echo message="Running under emulation...exiting" />
+					<echoproperties/>
+					<property name="shirako.target.code" value="0" />
+				</then>
+				<else>
+					<!-- Actually do it... no emulation -->
+					<echo message="adding interfaces to instance" />
+					<var name="message" unset="true" />
+
+					<echo message="vlan.tag = ${modify.@{seqnum}.vlan.tag}" />
+					<echo message="ip = ${modify.@{seqnum}.ip}" />
+					<echo message="mode = ${modify.@{seqnum}.mode}" />
+					<echo message="state = ${modify.@{seqnum}.state}" />
+					<echo message="ipversion = ${modify.@{seqnum}.ipversion}" />
+
+					<!-- CONSTRUCT NEW SCRIPT TO EXECUTE INTERFACE UPDATE ON BARE-METAL NODE -->
+				
+					<echo message="Generating BASH modify-addiface script for the node" />
+					<var name="xcat.bash.file" unset="true" />
+					<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}"
+						prefix="xcat.bash.mod@{seqnum}." suffix=".bash" deleteonexit="true" />
+						
+					<!-- create the BASH file -->
+					<xcat.generate.bash.mod.addiface.file file="${xcat.bash.file}" modifyIndex="@{seqnum}"
+						interfaceMap="${xcat.interface.map}" />
+					<var name="xcat.bash" unset="true" />
+					
+					<loadfile property="xcat.bash" srcFile="${xcat.bash.file}" />
+					<echo message="BASH file: ${xcat.bash}" />
+				
+					<echo
+						message="Copying and executing the modify-addiface script on node ${unit.xcat.nodename} ip ${unit.manage.ip}" />
+					<var name="code" unset="true" />
+					<exec executable="${xcat.scripts}/post-boot.sh" resultproperty="code">
+						<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
+						<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
+						<env key="XCAT_NODE_SCRIPT" value="${xcat.bash.file}" />
+						<arg value="${unit.manage.ip}" />
+					</exec>
+				
+					<delete file="${xcat.bash.file}" />
+					
+					<echo>result code: ${code}</echo>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<!-- add network interface -->
+	<target name="modify.addiface" depends="resolve.configuration">
+		<taskdef resource="orca/handlers/xcat/xcat.xml" classpathref="run.classpath"
+			loaderref="run.classpath.loader" />
+
+		<if>
+			<isset property="xcat.site.properties" />
+			<then>
+				<echo message="Setting xcat.site.properties from ${xcat.site.properties}" />
+				<property file="${xcat.site.properties}" />
+			</then>
+		</if>
+
+		<var name="code" unset="true" />
+		<var name="message" unset="true" />
+
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="XCAT HANDLER: MODIFY.ADDIFACE on ${start.TIME}" />
+		<echo
+			message="modify.addiface: xcat node=${unit.xcat.nodename}, ip=${unit.manage.ip}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
+
+		<modify.addiface seqnum="${shirako.save.unit.modify.sequencenum}" />
+
+		<property name="shirako.target.code" value="0" />
+		<echo message="modify.addiface exit code: ${shirako.target.code}" />
+	</target>
+
+
+	<!-- remove iface macro -->
+	<macrodef name="modify.removeiface" description="remove a new network iface via modify">
+		<attribute name="seqnum" description="sequence number" />
+
+		<sequential>
+			<if>
+				<equals arg1="${emulation}" arg2="true" />
+				<then>
+					<echo message="Running under emulation...exiting" />
+					<echoproperties/>
+					<property name="shirako.target.code" value="0" />
+				</then>
+				<else>
+					<!-- Actually do it... no emulation -->
+					<echo message="removing interfaces to instance" />
+					<var name="message" unset="true" />
+
+					<!-- CONSTRUCT NEW SCRIPT TO EXECUTE INTERFACE UPDATE ON BARE-METAL NODE -->
+				
+					<echo message="Generating BASH modify-removeiface script for the node" />
+					<var name="xcat.bash.file" unset="true" />
+					<tempfile property="xcat.bash.file" destdir="${java.io.tmpdir}"
+						prefix="xcat.bash.mod@{seqnum}." suffix=".bash" deleteonexit="true" />
+						
+					<!-- create the BASH file -->
+					<xcat.generate.bash.mod.remiface.file file="${xcat.bash.file}" modifyIndex="@{seqnum}"
+						interfaceMap="${xcat.interface.map}" />
+					<var name="xcat.bash" unset="true" />
+					
+					<loadfile property="xcat.bash" srcFile="${xcat.bash.file}" />
+					<echo message="BASH file: ${xcat.bash}" />
+				
+					<echo
+						message="Copying and executing the modify-removeiface script on node ${unit.xcat.nodename} ip ${unit.manage.ip}" />
+					<var name="code" unset="true" />
+					<exec executable="${xcat.scripts}/post-boot.sh" resultproperty="code">
+						<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
+						<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
+						<env key="XCAT_NODE_SCRIPT" value="${xcat.bash.file}" />
+						<arg value="${unit.manage.ip}" />
+					</exec>
+				
+					<delete file="${xcat.bash.file}" />
+					
+					<echo>result code: ${code}</echo>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<!-- remove network interface -->
+	<target name="modify.removeiface" depends="resolve.configuration">
+		<taskdef resource="orca/handlers/xcat/xcat.xml" classpathref="run.classpath"
+			loaderref="run.classpath.loader" />
+			
+		<if>
+			<isset property="xcat.site.properties" />
+			<then>
+				<echo message="Setting xcat.site.properties from ${xcat.site.properties}" />
+				<property file="${xcat.site.properties}" />
+			</then>
+		</if>
+
+		<var name="code" unset="true" />
+		<var name="message" unset="true" />
+
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="XCAT HANDLER: MODIFY.REMOVEIFACE on ${start.TIME}" />
+		<echo
+			message="modify.removeiface: xcat node=${unit.xcat.nodename}, ip=${unit.manage.ip}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
+
+		<modify.removeiface seqnum="${shirako.save.unit.modify.sequencenum}" />
+
+		<property name="shirako.target.code" value="0" />
+		<echo message="modify.removeiface exit code: ${shirako.target.code}" />
+	</target>
+
+	<!-- Useful macros -->
+	<macrodef name="modify.ssh" description="install new SSH keys via modify">
+		<attribute name="seqnum" description="sequence number" />
+		<sequential>
+			<if>
+				<equals arg1="${emulation}" arg2="true" />
+				<then>
+					<for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter"
+						delimiter="," parallel="false">
+						<sequential>
+							<var name="loginProperty" unset="true" />
+							<var name="keysProperty" unset="true" />
+							<var name="sudoProperty" unset="true" />
+
+							<property name="loginProperty"
+								value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
+							<property name="keysProperty"
+								value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
+							<property name="sudoProperty"
+								value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
+
+							<echo
+								message="About to create account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+						</sequential>
+					</for>
+					<echo message="Running under emulation...exiting" />
+					<property name="shirako.target.code" value="0" />
+				</then>
+				<else>
+					<echo message="installing ${modify.@{seqnum}.config.ssh.numlogins} user keys and accounts in the instance" />
+					<var name="message" unset="true" />
+
+					<!-- add keys -->
+					<echo
+						message="Modify.ssh, numlogins : ${modify.@{seqnum}.config.ssh.numlogins} " />
+					<for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter"
+						delimiter="," parallel="false">
+
+						<sequential>
+							<var name="icode" unset="true" />
+							<var name="loginProperty" unset="true" />
+							<var name="keysProperty" unset="true" />
+							<var name="sudoProperty" unset="true" />
+
+							<property name="loginProperty"
+								value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
+							<property name="keysProperty"
+								value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
+							<property name="sudoProperty"
+								value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
+
+							<echo
+								message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+							<echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
+							<echo message="LoginProperty : ${loginProperty}" />
+							<echo message="KeysProperty : ${keysProperty}" />
+							<echo message="SudoProperty : ${sudoProperty}" />
+
+							<!-- add key to VM -->
+							<exec executable="${xcat.scripts}/prepare-key.sh"
+								resultproperty="icode">
+								<env key="XCAT_CONF_DIR" value="${xcat.conf.dir}" />
+								<env key="XCAT_SSH_KEY" value="${xcat.ssh.key}" />
+								<arg value="${unit.manage.ip}" />
+								<arg value="'${loginProperty}'" />
+								<arg value="'${keysProperty}'" />
+							</exec>
+
+							<echo message="Exit code for login ${loginProperty} is ${icode}" />
+							<if>
+								<not>
+									<equals arg1="${icode}" arg2="0" />
+								</not>
+								<then>
+									<fail message="Unable to create account ${loginProperty}, failing" />
+								</then>
+							</if>
+						</sequential>
+					</for>
+
+					<echo
+						message="after update userdata: exit code ${code}, ${update.userdata.output}" />
+
+					<delete file="${neuca.ini.file}" />
+
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<!-- add logins -->
+	<target name="modify.ssh" depends="resolve.configuration">
+		<taskdef resource="orca/handlers/xcat/xcat.xml" classpathref="run.classpath"
+			loaderref="run.classpath.loader" />
+
+		<if>
+			<isset property="xcat.site.properties" />
+			<then>
+				<echo message="Setting xcat.site.properites from ${xcat.site.properties}" />
+				<property file="${xcat.site.properties}" />
+			</then>
+		</if>
+
+		<var name="code" unset="true" />
+		<var name="message" unset="true" />
+
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="XCAT HANDLER: MODIFY.SSH on ${start.TIME}" />
+		<echo message="modify.ssh: xcat node=${unit.xcat.nodename}, ip=${unit.manage.ip}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
+
+		<modify.ssh seqnum="${shirako.save.unit.modify.sequencenum}" />
+
+		<property name="shirako.target.code" value="0" />
+		<echo message="modify.ssh exit code: ${shirako.target.code}" />
+	</target>
+
+	<!-- leave -->
+	<target name="leave" depends="resolve.configuration,ben.load.tasks">
+		<taskdef resource="orca/handlers/xcat/xcat.xml" classpathref="run.classpath"
+			loaderref="run.classpath.loader" />
+		<tstamp prefix="start">
+			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+		</tstamp>
+
+		<echo message="XCAT HANDLER: LEAVE on ${start.TIME}" />
+		<echo message="leave: bare metal node=${unit.xcat.nodename}" />
+		<!-- set site-specific properties like the VLAN or PHYS mode and the interface 
+			to operate on -->
+		<if>
+			<isset property="xcat.site.properties" />
+			<then>
+				<property file="${xcat.site.properties}" />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<var name="code" unset="true" />
+				<var name="terminate.instance.output" unset="true" />
+				<echo message="De-provisioning bare metal node: ${unit.xcat.nodename}" />
+				<exec executable="${xcat.scripts}/stop.sh" resultproperty="code"
+					outputproperty="terminate.instance.output">
+					<arg value="${unit.xcat.nodename}" />
+				</exec>
+				<echo
+					message="deprovision-node exit code: ${code}; ${terminate.instance.output}" />
+				<property name="shirako.target.code" value="${code}" />
+
+				<var name="code" unset="true" />
+				<var name="terminate.instance.output" unset="true" />
+				<atomic.sequence.start.macro device="${xcat.baremetal.group}" />
+				<exec executable="${xcat.scripts}/returnnode.sh"
+					resultproperty="code" outputproperty="terminate.instance.output">
+					<arg value="${unit.xcat.nodename}" />
+				</exec>
+				<atomic.sequence.stop.macro device="${xcat.baremetal.group}" />
+
+				<if>
+					<not>
+						<equals arg1="${code}" arg2="0" />
+					</not>
+					<then>
+						<echo
+							message="Error encountered while returning bare metal node to free node pool: exit code ${code}, ${terminate.instance.output}" />
+						<property name="shirako.target.code" value="${code}" />
+					</then>
+				</if>
+			</else>
+		</if>
+		<echo message="leave exit code: ${shirako.target.code}" />
+	</target>
 </project>

@@ -163,14 +163,16 @@ public class InterDomainHandlerTest extends MappingHandlerTest {
 	            String intf_name=null;
 	            if(d.getPrecededBy()!=null) {
 	            	for (Entry<DomainElement, OntResource> parent : d.getPrecededBySet()){
+	            		if(parent.getValue()!=null){
 	            		intf_st=parent.getValue().getProperty(NdlCommons.RDFS_Label);
 	            		intf_name=intf_st==null?parent.getValue().getURI():intf_st.getString();
 	            		/*if(parent.getKey().getDownNeighbourPortsList()!=null){
 	            			intf_name=parent.getKey().getDownNeighbourPortsList();
 	            			parent.getValue().addProperty(handler.getMapper().RDFS_Label,intf_name);
 	            		}*/	
-	            		System.out.println("Precedded By:"+parent.getKey().getURI()+":"+parent.getValue().getProperty(NdlCommons.RDFS_Label));
-	            		System.out.println(intf_name+":"+parent.getValue()+":"+parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)+"\n");
+	            		}
+	            		System.out.println("Precedded By:"+parent.getKey().getURI()+":"+parent.getValue());
+	            		System.out.println(intf_name+":"+parent.getValue()+":"+parent.getValue()+"\n");
 	            	}
 	            }
 	            if(d.getFollowedBy()!=null) {

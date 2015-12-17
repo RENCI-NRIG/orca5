@@ -2,7 +2,9 @@
 
 package orca.embed.cloudembed.controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
@@ -46,8 +48,6 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	public boolean cloudRequest=false,interDomainRequest=true,multipointRequest=false;
 	HashMap <String,LinkedList <Device> > connectionList = new HashMap <String,LinkedList<Device>> ();
 	boolean stitching = false;
-	
-	public static final int max_vlan_tag = 4095;
 	
 	public InterDomainHandler(IConnectionManager icm) throws NdlException {
 		super();
@@ -102,8 +102,12 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
         LinkedList <Device> domainList=null;
 		SystemNativeError error=null;
 		Iterator<NetworkElement> it = elements.iterator();
+		boolean idmContainsRequest=false;
 		while(it.hasNext()){
 			NetworkConnection element = (NetworkConnection) it.next();
+			logger.debug("Interdomain connection:"+element.getName()+";"
+					+element.getNe1().getName()+":"+element.getNe1().getInDomain()+":"
+					+element.getNe2().getName()+":"+element.getNe2().getInDomain());
 			if((element.getNe1()==null) || (element.getNe2()==null)){
 				logger.error("This request connection misses the end point(s):nc="+element.getName()+":ne1="+element.getNe1()+";ne2="+element.getNe2());
 				continue;
@@ -118,10 +122,17 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				continue;
 			}
 			
+			//String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
+            //OutputStream fsw = new FileOutputStream(fileName);
+            //requestModel.write(fsw);
+			
 			stitching = checkStitching(element, requestModel); //requestModel being modified here
-			if(stitching)
+			if(stitching && !idmContainsRequest){
 				this.idm.add(requestModel);
+				idmContainsRequest=true;
+			}
 
+			logger.debug("is stitiching="+stitching+";isModify="+isModify);
 			/*
 			String homeDir = PathGuesser.getOrcaControllerHome();
 			String fileName = "/logs/idm.rdf";
@@ -214,8 +225,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 						}
 					}
 				}
-			}
-			
+			}			
 			domainConnectionList.put(element.getName(), domainList);
 		}			
 		return error;
@@ -276,12 +286,18 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			intf_rs_base=results.nextSolution().getResource(varName);				
 		}
 		Resource idm_intf_rs = null;
-		if(intf_rs_base==null)
-			idm_intf_rs =idm.getResource(intf_rs.getURI());
+		if(intf_rs_base==null){
+			String intf_str=intf_rs.getURI();
+			int index = intf_str.lastIndexOf('/');
+			String intf_base_str = intf_str.substring(0, index);
+			if(intf_base_str!=null)
+				idm_intf_rs =idm.getResource(intf_base_str);
+		}
 		else
 			idm_intf_rs =idm.getResource(intf_rs_base.getURI());
 		String stitching_intf_label = null;
 		if(idm_intf_rs!=null){
+			System.out.println("idmintfrs="+idm_intf_rs.getURI());
 			if(idm_intf_rs.getProperty(NdlCommons.topologyHasName)!=null){
 				String stitching_domain_name = idm_intf_rs.getProperty(NdlCommons.topologyHasName).getString();
 				domain_rs.addProperty(NdlCommons.topologyHasName,stitching_domain_name);
@@ -382,6 +398,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			next_Hop=(DomainElement) domainList.get(i);
 			domainNoDepend(next_Hop);
 			if((i==1) && (!start.isDepend())){
+				setModifyFlag(next_Hop);
 				dependList.add(next_Hop);
 			}
 			if(start.isDepend() & next_Hop.isDepend()) {
@@ -402,6 +419,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
               		error.setMessage("Error in building the dependency tree, probably not available vlan path OR trying to reuse a stitching tag:" + rr.getReservation());
                	}
 			}else{
+				setModifyFlag(next_Hop);
 				dependList.add(next_Hop);
 			}
 			start=next_Hop;
@@ -409,6 +427,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		//last domain
 		if(!start.isDepend()){
 			if(mapper.getDevice(start,dependList)==null){
+				setModifyFlag(start);
 				dependList.add(start);
 			}else{
 				int degree = start.getDegree();
@@ -589,32 +608,39 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		Resource startDownLocal = start.getDownLocal(next.getModel());
 		
 		DomainElement device = (DomainElement) mapper.getDevice(start,dependList);
-		if((device!=null) && (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
+		if((device!=null) && (!start.isModify()) &&  mapper.isCe(device)){
 			start=device;
 		}
 		else{
-			if(hop==1)
+			if(hop==1){
+				setModifyFlag(start);
 				dependList.add(start);
+				logger.debug("modified device, new start:"+start.getName());
+			}
 		}
 		
 		device = (DomainElement) mapper.getDevice(next,dependList);
 
 		//if((device!=null) && (device.getResourceType().getResourceType().toLowerCase().endsWith("vm"))){
-		if(device!=null){ 
+		if( (device!=null) && (!next.isModify()) ){ 
 			String castType = device.getCastType();
 			if(castType==null)
 				castType="";
-			if((device.getResourceType().getResourceType().toLowerCase().endsWith("vm")) || 
+			if((mapper.isCe(device)) || 
 						(NdlCommons.isStitchingNodeInManifest(next.getResource())) || 
 						(castType.equalsIgnoreCase(NdlCommons.multicast) && (hop==path_len-1)) ){
 							device.setStaticLabel(next.getStaticLabel()); 
 							next=device;
 			}
-			else
+			else{
+				setModifyFlag(next);
 				dependList.add(next);
+			}
 		}
 		else{
+			setModifyFlag(next);
 			dependList.add(next);
+			logger.debug("modified device, new next:"+next.getName());
 		}
 		if(flag){//start depends on next
 			if( (hop==1) && (rs1_ont!=null)){   //First device should be the VM and check if IP is given from the request
@@ -757,7 +783,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		if(this.globalControllerAssignedLabel!=null){
 			startBitSet = this.globalControllerAssignedLabel.get(domain_str);
 		}	
-		logger.debug("globalAssignedLabel="+startBitSet);
+		logger.debug("getAvailableBitSet(): globalAssignedLabel(" + domain_str + ")="+startBitSet);
 		if(this.controllerAssignedLabel!=null){
 			controllerStartBitSet = this.controllerAssignedLabel.get(domain_str);
 		}
@@ -794,88 +820,6 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		return sBitSet;
 	}
 	
-	public int findCommonLabel(DomainElement start, DomainElement next){
-		BitSet startBitSet = null,controllerStartBitSet=null;
-		BitSet nextBitSet = null,controllerNextBitSet=null;
-		if(this.globalControllerAssignedLabel!=null){
-			startBitSet = this.globalControllerAssignedLabel.get(start.getURI());
-			nextBitSet =this.globalControllerAssignedLabel.get(next.getURI());
-		}	
-		if(this.controllerAssignedLabel!=null){
-            controllerStartBitSet = this.controllerAssignedLabel.get(start.getURI());
-            controllerNextBitSet =this.controllerAssignedLabel.get(next.getURI());
-		}
-		DomainResourceType sRType=start.getResourceType(),nRType=next.getResourceType();
-		LinkedList <LabelSet> sSetList = start.getLabelSet(sRType.getResourceType());
-		LinkedList <LabelSet> nSetList = next.getLabelSet(nRType.getResourceType());
-		int min=0,max=0;
-		BitSet sBitSet = new BitSet(max_vlan_tag);
-		for(LabelSet sSet:sSetList){
-			min = (int) sSet.getMinLabel_ID();
-			max = (int) sSet.getMaxLabe_ID();
-			if( (min==max) || (max==0)){
-				sBitSet.set(min);
-			}else{
-				sBitSet.set(min,max+1);
-			}
-			if((min==0) && (max==0)){
-				sBitSet.set(0,max_vlan_tag);
-			}
-			sBitSet.andNot(sSet.getUsedBitSet());
-			logger.debug("min-max-used:"+min+":"+max+":"+sSet.getUsedBitSet());
-		}
-		logger.debug("findConmmonLabel----initial Start labelSet:"+sBitSet);
-		if(startBitSet!=null)
-			sBitSet.andNot(startBitSet);
-		logger.debug("After globalAssignedLabel + Start labelSet:"+sBitSet);
-		if(controllerStartBitSet!=null)
-            sBitSet.andNot(controllerStartBitSet);
-		logger.debug("Final Start labelSet:"+sBitSet);		
-		BitSet nBitSet = new BitSet(max_vlan_tag);
-		for(LabelSet nSet:nSetList){
-			min = (int) nSet.getMinLabel_ID();
-			max = (int) nSet.getMaxLabe_ID();
-			
-			if( (min==max) || (max==0)){
-				nBitSet.set(min);
-			}else{
-				nBitSet.set(min,max+1);
-			}
-			if((min==0)&&(max==0)){
-				nBitSet.set(0,max_vlan_tag);
-			}
-			nBitSet.andNot(nSet.getUsedBitSet());
-			logger.debug("min-max-used:"+min+":"+max+":"+nSet.getUsedBitSet());
-		}
-		logger.debug("initial next labelSet:"+nBitSet);
-		if(nextBitSet!=null)
-			nBitSet.andNot(nextBitSet);
-		logger.debug("After globalAssignedLabel + next labelSet:"+nBitSet);
-		if(controllerNextBitSet!=null)
-			nBitSet.andNot(controllerNextBitSet);
-		logger.debug("final next labelSet:"+nBitSet);
-		
-		int commonLabel = -1;
-		sBitSet.and(nBitSet);
-		//in case static label carried over
-		int start_static_label = (int) start.getStaticLabel();
-		if(start_static_label>0 && sBitSet.get(start_static_label))
-			commonLabel = start_static_label;
-		else //otherwise, use the common label
-			commonLabel = sBitSet.nextSetBit(0);
-		//int commonLabel = randomSetBit(sBitSet);
-		if(commonLabel>0){
-			for(LabelSet sSet:sSetList){
-				sSet.setUsedBitSet(commonLabel);
-			}
-			for(LabelSet nSet:nSetList){
-				nSet.setUsedBitSet(commonLabel);
-			}
-		}
-		start.setAvailableLabelSet(sBitSet);
-		next.setAvailableLabelSet(sBitSet);
-		return commonLabel;
-	}
 	
 	public int randomSetBit(BitSet bs){
 		int sb=0,num=0;
@@ -928,12 +872,31 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	//add to the manifestModel
 	public void createManifest(NetworkElement requestElement,OntModel manifestModel,OntResource manifest, LinkedList <Device> domainList){
 		OntResource rc_ont = requestElement.getResource();
-		rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
-		manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
+		if(requestElement.isModify()){
+			rc_ont = manifestModel.getOntResource(rc_ont.getURI());
+			if(requestElement.getCastType().equalsIgnoreCase("multicast")){ //go one level above
+				for (StmtIterator j=manifest.listProperties(NdlCommons.collectionElementProperty);j.hasNext();){
+					Resource nc = j.next().getResource();
+					for (StmtIterator i=nc.listProperties(NdlCommons.collectionItemProperty);i.hasNext();){
+						Resource md=i.next().getResource();
+						if(md.getURI().equalsIgnoreCase(rc_ont.getURI())){
+							rc_ont=manifestModel.getOntResource(nc);
+							break;		
+						}
+							
+					}
+				}
+			}
+		}
+		else{
+			rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
+			manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
+		}
 		Device start= domainList.get(0), next_Hop, next_next_Hop = null;
 		String link_url,link_name,domain_name;
 		OntResource link_ont,intf_start,intf_next,intf_next_next;
 		Resource domain_rs=null;
+
 		for (int i = 1; i < domainList.size(); i++) {
             next_Hop = domainList.get(i);
             intf_start = start.getDownNeighbour(start.getModel());

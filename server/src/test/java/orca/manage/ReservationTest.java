@@ -169,9 +169,10 @@ public abstract class ReservationTest extends ManagementTest {
 		// create the reservation request
 		TicketReservationMng r = new LeaseReservationMng();
 		r.setStart(System.currentTimeMillis());
-		r.setEnd(System.currentTimeMillis()+1000*20);
+		r.setEnd(System.currentTimeMillis()+1000*100); // 30 seconds // 30 for extend, 100 for modify
 		r.setUnits(1);
 		r.setResourceType("foo");
+		//r.setRenewable(true);
 		r.setSliceID(id.toString());
 		
 		// add the request
@@ -184,8 +185,10 @@ public abstract class ReservationTest extends ManagementTest {
 		System.out.println("State after add: " + OrcaConverter.getState(state));
 		
 		// demand it
+		System.out.println("State before sm.demand(): " + OrcaConverter.getState(state));
 		Assert.assertTrue(sm.demand(r));
 		synchronized(testDone){
+			System.out.println("*** testDone triggered after demand");
 			testDone.wait(60000);
 		}
 		
@@ -198,9 +201,10 @@ public abstract class ReservationTest extends ManagementTest {
 		request.setProperty("new-request-property", "true");
 		Properties config = new Properties();
 		config.setProperty("new-config-property", "false");
-		Assert.assertTrue(sm.extendReservation(rid, new Date(r.getEnd() + 10000000), request, config));
+		Assert.assertTrue(sm.extendReservation(rid, new Date(r.getEnd() + 100000), request, config));
 		
 		synchronized(testDone){
+			System.out.println("*** testDone triggered after extendReservation");
 			testDone.wait(60000);
 		}
 		
@@ -219,7 +223,136 @@ public abstract class ReservationTest extends ManagementTest {
 		
 		m.stop();
 	}
+
 	
+	@Test
+	public void testModifyResources() throws Exception {
+		IOrcaContainer cont = connect();
+		IOrcaServiceManager sm = cont.getServiceManager(SM_GUID);
+		IOrcaAuthority am = cont.getAuthority(SITE_GUID);
+		
+		final Object testDone = new Object();
+				
+		IOrcaEventHandler handler = new IOrcaEventHandler() {
+			public void handle(EventMng e) {
+				System.out.println("Received an event: " + e.getClass().getName());
+				if (e instanceof ReservationStateTransitionEventMng){
+					ReservationStateTransitionEventMng ste = (ReservationStateTransitionEventMng)e;
+					System.out.println("Reservation #" + ste.getReservationId() + " transitioned into: " + OrcaConverter.getState(ste.getState()));
+					if (OrcaConverter.hasNothingPending(ste.getState()) && OrcaConverter.isActive(ste.getState()) && !OrcaConverter.isActiveTicketed(ste.getState())){
+						synchronized (testDone) {
+							System.out.println("Reservation is active.");								
+							testDone.notify();
+						}
+					}
+				}
+			}
+			
+			public void error(OrcaError error) {
+				System.err.println("An error occurred: " + error);
+			}
+		};
+	
+		LocalEventManager m = new LocalEventManager(sm, handler);
+		m.start();
+		
+		// create a new slice
+		SliceMng slice = new SliceMng();
+		slice.setName("test-slice");
+		SliceID id = sm.addSlice(slice);
+		Assert.assertNotNull(id);
+		
+		// create the reservation request
+		TicketReservationMng r = new LeaseReservationMng();
+		r.setStart(System.currentTimeMillis());
+		r.setEnd(System.currentTimeMillis()+1000*100); // 30 seconds // 30 for extend, 100 for modify
+		r.setUnits(1);
+		r.setResourceType("foo");
+		//r.setRenewable(true);
+		r.setSliceID(id.toString());
+		
+		// add the request
+		ReservationID rid = sm.addReservation(r);
+		Assert.assertNotNull(rid);
+		Assert.assertEquals(rid.toString(), r.getReservationID());
+
+		ReservationStateMng state = sm.getReservationState(rid);
+		Assert.assertNotNull(state);
+		System.out.println("State after add: " + OrcaConverter.getState(state));
+		
+		// demand it
+		System.out.println("State before sm.demand(): " + OrcaConverter.getState(state));
+		Assert.assertTrue(sm.demand(r));
+		synchronized(testDone){
+			System.out.println("*** testDone triggered after demand");
+			testDone.wait(60000);
+		}
+		
+		state = sm.getReservationState(rid);
+		Assert.assertNotNull(state);
+		System.out.println("State before modify: " + OrcaConverter.getState(state));
+
+		// modify the reservation	
+		Properties modifyProps = new Properties();
+		modifyProps.setProperty("new-modify-property1", "value1");
+		modifyProps.setProperty("modify.subcommand.0", "modify.ssh");
+		modifyProps.setProperty("modify.subcommand.1", "modify.restar");
+		modifyProps.setProperty("modify.subcommand.2", "modify.restart");
+		Assert.assertTrue(sm.modifyReservation(rid, modifyProps));
+		
+		synchronized(testDone){
+			System.out.println("*** testDone triggered after modifyReservation");
+			testDone.wait(60000);
+		}
+		
+		//System.out.println("Unit properties = " + sm.getUnits(rid).get(0).getProperties());
+		
+		ArrayList<PropertyMng> listPmngConfig = (ArrayList<PropertyMng>) sm.getReservation(rid).getConfigurationProperties().getProperty();
+	
+		System.out.println("Printing SM reservation config properties");
+		for(PropertyMng item:listPmngConfig){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
+		ArrayList<PropertyMng> listPmng = (ArrayList<PropertyMng>) sm.getUnits(rid).get(0).getProperties().getProperty();
+		
+		System.out.println("Printing SM unit properties");
+		for(PropertyMng item:listPmng){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
+		ArrayList<PropertyMng> listPmngConfigAM = (ArrayList<PropertyMng>) am.getReservation(rid).getConfigurationProperties().getProperty();
+		
+		System.out.println("Printing AM reservation config properties");
+		for(PropertyMng item:listPmngConfigAM){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
+		ArrayList<PropertyMng> listPmngAM = (ArrayList<PropertyMng>) am.getUnits(rid).get(0).getProperties().getProperty();
+		
+		System.out.println("Printing AM unit properties");
+		for(PropertyMng item:listPmngAM){
+			System.out.println(item.getName() + " = " + item.getValue());
+		}
+		
+		
+		state = sm.getReservationState(rid);
+		Assert.assertNotNull(state);
+		System.out.println("State before close: " + OrcaConverter.getState(state));
+		
+		Assert.assertTrue(sm.closeReservation(rid));
+		state = sm.getReservationState(rid);
+		System.out.println("State after close: " + OrcaConverter.getState(state));
+		
+		while (!OrcaConverter.isClosed(state)){
+			Thread.sleep(1000);
+			state = sm.getReservationState(rid);
+		}
+		
+		m.stop();
+	}
+	
+
 	
 	@Test
 	public void testRedeemPredecessorNoFilter() throws Exception {

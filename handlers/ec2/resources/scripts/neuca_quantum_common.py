@@ -321,11 +321,126 @@ class NEuca_Quantum_Network:
         return port_uuid
 
     @classmethod
-    def remove_iface_from_network(self, tenant_id, network_uuid, port_uuid):
+    def __remove_iface_from_network(self, tenant_id, network_uuid, port_uuid):
         
         self._clean_iface(tenant_id, network_uuid, port_uuid)
         
         return 'OK'
+
+
+    @classmethod
+    def __get_iface(self, tenant_id, network_id, port_id):
+        #quantum show_iface tenant_id network port                                                                                                                                               #parse output to get interface name  
+        
+        cmd = ["quantum", "show_iface", str(tenant_id), str(network_id), str(port_id) ]
+        rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60)
+
+        LOG.debug("rtncode: " + str(rtncode))
+        LOG.debug("data_stdout: " + str(data_stdout))
+        LOG.debug("data_stderr: " + str(data_stderr))
+
+        if rtncode != 0:
+            raise NEuca_Quantum_Exception, "show_iface failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+
+        lines = data_stdout.split('\n')
+        for line in lines:
+            line = line.split()
+            if len(line) >= 2 and line[0].strip() == "interface:":
+                iface_id = line[1].strip()
+                break
+              
+        return iface_id
+
+
+
+    @classmethod
+    def __get_ports(self, tenant_id, network_id):
+        #quantum list_ports tenant_id network_id
+        #parse and return list of ports
+        ports=[]
+
+        cmd = ["quantum", "list_ports", str(tenant_id), str(network_id) ]
+        rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) 
+
+        LOG.debug("rtncode: " + str(rtncode))
+        LOG.debug("data_stdout: " + str(data_stdout))
+        LOG.debug("data_stderr: " + str(data_stderr))
+
+        if rtncode != 0:
+            raise NEuca_Quantum_Exception, "list_ports failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+
+        lines = data_stdout.split('\n')
+        for line in lines:
+            line = line.split()
+            if len(line) >= 3 and line[0].strip() == "Logical" and line[1].strip() == "Port:":
+                port_uuid = line[2].strip()
+                ports.append(port_uuid)
+
+        return ports
+
+
+
+    @classmethod
+    def __get_networks(self, tenant_id):
+        networks=[]
+
+        #quantum list_nets geni-orca 
+        #parse to get each network id       
+        cmd = ["quantum", "list_nets", str(tenant_id) ]
+        rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout                                                                                                                            
+
+        LOG.debug("rtncode: " + str(rtncode))
+        LOG.debug("data_stdout: " + str(data_stdout))
+        LOG.debug("data_stderr: " + str(data_stderr))
+
+        if rtncode != 0:
+            raise NEuca_Quantum_Exception, "list_nets failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+
+        foundIt=False
+        lines = data_stdout.split('\n')
+        for line in lines:
+            line = line.split()
+            if len(line) >= 3 and line[0].strip() == "Network" and line[1].strip() == "ID:":
+                network_uuid = line[2].strip()
+                networks.append(network_uuid)
+                
+        return networks
+
+
+    @classmethod
+    def __get_network_and_port_from_iface(self, tenant_id, iface_name):
+        network_uuid=None
+        port_uuid=None
+
+        LOG.debug("PRUTH: __get_network_and_port_from_iface: start")
+        for network_id in NEuca_Quantum_Network.__get_networks(tenant_id):
+            LOG.debug("PRUTH: __get_network_and_port_from_iface: network_id: " + str(network_id))
+            for port_id in NEuca_Quantum_Network.__get_ports(tenant_id,network_id):
+                LOG.debug("PRUTH: __get_network_and_port_from_iface: port_id: " + str(port_id))
+                iface = NEuca_Quantum_Network.__get_iface(tenant_id, network_id, port_id)
+                LOG.debug("PRUTH: __get_network_and_port_from_iface: iface_name: " + str(iface_name))
+                if iface == iface_name:
+                    network_uuid = network_id
+                    port_uuid = port_id
+                    break
+            if network_uuid != None and port_uuid != None:
+                break
+            
+        return [network_uuid,port_uuid]
+        
+
+    @classmethod
+    def remove_iface(self, tenant_id, iface_name):
+        #get network_uuid and port_uuid
+        
+        network_uuid,port_uuid = NEuca_Quantum_Network.__get_network_and_port_from_iface(tenant_id, iface_name)
+        LOG.debug("PRUTH: remove_iface: network_uuid: " + str(network_uuid) + ", port_uuid: " + str(port_uuid))
+
+
+        self._clean_iface(tenant_id, network_uuid, port_uuid)
+
+        return 'OK'
+
 
     @classmethod
     def get_network_uuid_for_port(self, tenant_id, iface_uuid):
@@ -375,7 +490,7 @@ class NEuca_Quantum_Network:
         for iface_uuid in iface_uuids:
             network_uuid = NEuca_Quantum_Network.get_network_uuid_for_port(tenant_id, iface_uuid)
             if not network_uuid == None:
-                NEuca_Quantum_Network.remove_iface_from_network(tenant_id, network_uuid, iface_uuid)
+                NEuca_Quantum_Network.__remove_iface_from_network(tenant_id, network_uuid, iface_uuid)
             else:
                 LOG.debug("could not find network_uuid for iface " + iface_uuid)
                 return 'OK'

@@ -14,10 +14,17 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import orca.controllers.OrcaController;
+import orca.controllers.xmlrpc.pubsub.PublishManager;
+import orca.controllers.xmlrpc.statuswatch.ReservationStatusUpdateThread;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
@@ -30,6 +37,7 @@ import orca.manage.beans.UnitMng;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
 import orca.shirako.common.meta.UnitProperties;
+import orca.shirako.container.Globals;
 
 import org.apache.log4j.Logger;
 
@@ -55,7 +63,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	// restored from reservations
 	private HashMap<String, XmlrpcControllerSlice> slices = new HashMap<String, XmlrpcControllerSlice>();
 
-	private Logger logger = OrcaController.getLogger(this.getClass().getName());
+	private Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	
 	// use output compression
 	private static boolean compressOutput = true;
@@ -65,6 +73,81 @@ public final class XmlrpcOrcaState implements Serializable {
 	// patterns of properties to match for restoration
 	private static final Pattern macNamePattern = Pattern.compile(UnitProperties.UnitEthPrefix + "[\\d]+" + UnitProperties.UnitEthMacSuffix);
 	
+	// thread for deferred slices due to interdomain complexity
+	protected static SliceDeferThread sdt = null; 
+	protected static Thread sdtThread = null;
+	
+	// thread for processing status updates (modify and state)
+	protected static ReservationStatusUpdateThread sut = null;
+	protected static ScheduledFuture<?> sutFuture = null;
+	
+	// thread for syncing tags from existing reservations
+	protected static LabelSyncThread lst = null;
+	protected static ScheduledFuture<?> lstFuture = null;
+	
+	// PublishManager
+	protected static PublishManager pubManager = null;
+
+	// start the threads (called from the controller startup code)
+	public static void startThreads () {
+		// slice defer thread
+		Globals.Log.info("Starting SliceDeferThread");
+		sdt = new SliceDeferThread();
+		sdtThread = new Thread(sdt);
+		sdtThread.setDaemon(true);
+		sdtThread.setName("SliceDeferThread");
+		sdtThread.start();
+		
+
+		// create service for various periodic threads that are daemon threads
+		// that way we don't have to kill them on exit
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2, new ThreadFactory() {
+			   public Thread newThread(Runnable runnable) {
+			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+			      thread.setDaemon(true);
+			      thread.setName("PeriodicPoolThread");
+			      return thread;
+			   }
+		});
+		
+		// modify status thread
+		Globals.Log.info("Scheduling periodic ReservationStatusUpdateThread at " + ReservationStatusUpdateThread.getPeriod() + " sec.");
+		sut = new ReservationStatusUpdateThread();
+		sutFuture = scheduler.scheduleAtFixedRate(sut, ReservationStatusUpdateThread.getPeriod(), 
+				ReservationStatusUpdateThread.getPeriod(), TimeUnit.SECONDS);
+		
+		// label sync thread
+		Globals.Log.info("Scheduling periodic LabelSyncThread at " + LabelSyncThread.getPeriod() + " sec.");
+		lst = new LabelSyncThread();
+		lstFuture = scheduler.scheduleAtFixedRate(lst, LabelSyncThread.getPeriod(), 
+				LabelSyncThread.getPeriod(), TimeUnit.SECONDS);
+		
+		// Pubsub thread
+		if ("true".equalsIgnoreCase(OrcaController.getProperty(OrcaXmlrpcHandler.PropertyPublishManifest))) {
+			Globals.Log.info("Starting pubsub thread");
+			pubManager = new PublishManager(); // This will start the publisher thread
+		} else {
+			Globals.Log.info("Not starting pubsub thread, no configuration found");
+			pubManager = null;
+		}
+	}
+	
+	/**
+	 * Get hold of the Update Thread object
+	 * @return
+	 */
+	public static ReservationStatusUpdateThread getSUT() {
+		return sut;
+	}
+	
+	/**
+	 * Get hold of Slice Defer Thread object
+	 * @return
+	 */
+	public static SliceDeferThread getSDT() {
+		return sdt;
+	}
+	
 	private XmlrpcOrcaState(){
 		// Can't call this constructor
 	}
@@ -72,7 +155,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	// don't save
 	protected String broker;
 
-   public String getBroker() {
+	public String getBroker() {
         return broker;
     }
 
@@ -187,7 +270,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	  */
 	 public XmlrpcControllerSlice getSlice(String urn) {
 		 String sid = XmlrpcControllerSlice.getSliceIDForUrn(urn);
-		 logger.debug("This slice ID="+sid+" for urn="+urn);
+		 logger.debug("getSlice(): this slice ID="+sid+" for urn="+urn);
 		 if (sid != null) {
 			 //return getSlice(new SliceID(sid));
 			 synchronized (this) {
@@ -200,8 +283,8 @@ public final class XmlrpcOrcaState implements Serializable {
 
 	 public void releaseAddressAssignment(ReservationMng r){
 		 // mac address on the VM data interfaces
-		 String parent_num_interface = "unit.number.interface";
-		 String parent_mac_addr = "unit.eth";
+		 String parent_num_interface = UnitProperties.UnitNumberInterface;
+		 String parent_mac_addr = UnitProperties.UnitEthPrefix;
 
 		 String num_interface_str = OrcaConverter.getLocalProperty(r, parent_num_interface);
 		 if(num_interface_str!=null){
@@ -357,6 +440,8 @@ public final class XmlrpcOrcaState implements Serializable {
 	 }
 	 
      public synchronized IOrcaServiceManager getSM() throws Exception {
+    	 if (controller == null)
+    		 throw new Exception("Unable to get SM - controller not set yet.");
          return controller.orca.getServiceManager();
      }
      
@@ -368,7 +453,7 @@ public final class XmlrpcOrcaState implements Serializable {
      /**
       * Recover by querying the SM
       */
-     public synchronized void recover() {
+     public synchronized void recover() throws Exception {
     	 logger.info("Recovering XmlrpcOrcaState");
     	 IOrcaServiceManager sm = null;
     	 try {
@@ -457,7 +542,7 @@ public final class XmlrpcOrcaState implements Serializable {
     		 }
     	 } catch (Exception e) {
     		 logger.error("Unable to recover XmlrpcOrcaState due to: " + e);
-    		 return;
+    		 throw new Exception("Unable to recover XmlrpcOrcaState due to: " + e);
     	 } finally {
     		 if (sm != null)
     			 returnSM(sm);
@@ -493,9 +578,9 @@ public final class XmlrpcOrcaState implements Serializable {
      }
      
      /**
-      * Recover by querying the SM
+      * Recover tags by querying the SM
       */
-     public synchronized void sync(IOrcaServiceManager sm) {
+     public synchronized void syncTags(IOrcaServiceManager sm) {
     	 logger.info("Sync global tag for domains");
     	 try {
     		 logger.debug("Querying SM for active reservations");
@@ -503,46 +588,54 @@ public final class XmlrpcOrcaState implements Serializable {
     		 List<ReservationMng> actives = new ArrayList<ReservationMng>();
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateActive));
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateActiveTicketed));
-    		 //actives.addAll(sm.getReservations(OrcaConstants.ReservationStateNascent));
+    		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateNascent));
     		 actives.addAll(sm.getReservations(OrcaConstants.ReservationStateTicketed));
+
+    		 // clear existing global labels
+    		 // don't need to clear slice-local label set - it is only used to remove from the global
+    		 // set on slice close
+    		 controllerAssignedLabel.clear();
     		 
     		 // build a list of slices we need to restore
     		 logger.debug("Searching for recoverable slices among " + actives.size() + " active/ticketed reservations");
     		 for(ReservationMng a: actives) {
-    			logger.debug("Inspecting reservation " + a.getReservationID() + " of type " + a.getResourceType() + " from slice " + a.getSliceID());
-   			 	String domain = null, label = null; 
-    			List<UnitMng> un = sm.getUnits(new ReservationID(a.getReservationID()));
-				if (un != null && un.size() > 0) {
-					logger.info("getManifest:un.size()="+un.size());	
-					for (UnitMng u : un) {
-						Properties p = OrcaConverter.fill(u.getProperties());
-						if (p.getProperty("unit.vlan.tag") != null) {
-							 label=p.getProperty("unit.vlan.tag");
-						}
-					}
-				}
-    			if(label==null)	//we only need net domains with assigned tag
-    				continue;
-    			PropertiesMng confProps = a.getConfigurationProperties();
+    			 logger.debug("Inspecting reservation " + a.getReservationID() + " of type " + a.getResourceType() + " from slice " + a.getSliceID());
+    			 String domain = null, label = null; 
+    			 List<UnitMng> un = sm.getUnits(new ReservationID(a.getReservationID()));
+    			 if (un != null && un.size() > 0) {
+    				 logger.debug("getManifest:un.size()="+un.size());	
+    				 for (UnitMng u : un) {
+    					 Properties p = OrcaConverter.fill(u.getProperties());
+    					 if (p.getProperty(UnitProperties.UnitVlanTag) != null) {
+    						 label=p.getProperty(UnitProperties.UnitVlanTag);
+    					 }
+    				 }
+    			 }
+    			 if (label == null)	//we only need net domains with assigned tag
+    				 continue;
 
-    			 // get slice name/urn and user DN from a property of one of reservations
+    			 XmlrpcControllerSlice s = getSlice(new SliceID(a.getSliceID()));
+    			 
+    			 PropertiesMng confProps = a.getConfigurationProperties();
+
     			 if (confProps == null)
     				 continue;
-    			 XmlrpcControllerSlice s=this.getSlice(new SliceID(a.getSliceID()));
+    			 
     			 // walk the properties, look for interesting ones
     			 for(PropertyMng p: confProps.getProperty()) {
     				 /**
     				  * used labels
     				  */
-    				if (UnitProperties.UnitDomain.equals(p.getName())) {
-    					domain = p.getValue().trim();
-    				}
+    				 if (UnitProperties.UnitDomain.equals(p.getName())) {
+    					 domain = p.getValue().trim();
+    				 }
     				 if ((label != null) && (domain != null)) {
     					 try {
     						 int iLabel = Integer.parseInt(label);
-    						 logger.debug("Setting XmlrpcOrcaState.controllerAssignedLabel " + label + " for domain " + domain+";slice="+s.sliceUrn);
+    						 logger.debug("Setting XmlrpcOrcaState.controllerAssignedLabel " + label + " for domain " + domain+";slice="+ (s != null ? s.sliceUrn : "slice not recovered"));
     						 RequestWorkflow.setBitsetLabel(controllerAssignedLabel, domain, iLabel);
-    						 s.workflow.setControllerLabel(domain, iLabel);
+    						 if (s != null)
+    							 s.workflow.setControllerLabel(domain, iLabel);
     						 domain = null;
     						 label = null;
     						 continue;
@@ -562,5 +655,4 @@ public final class XmlrpcOrcaState implements Serializable {
     	 } 
     	 logger.info("Sync of XmlrpcOrcaState completed successfully");
      }
-
 }

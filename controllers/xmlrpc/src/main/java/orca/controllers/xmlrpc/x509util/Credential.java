@@ -56,7 +56,7 @@ public class Credential {
 	private Credential parent = null;
 
         
-	protected static Logger logger = OrcaController.getLogger(Credential.class.getName());
+	protected static Logger logger = OrcaController.getLogger(Credential.class.getSimpleName());
         //protected static Logger logger = Logger.getLogger(Credential.class.getName());
 	
 	

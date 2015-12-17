@@ -27,7 +27,7 @@
      xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
      xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
      xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#">
-    <owl:Ontology rdf:about="">
+    <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/modify.owl">
         <owl:imports rdf:resource="http://geni-orca.renci.org/owl/request.owl"/>
     </owl:Ontology>
     
@@ -52,17 +52,25 @@
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#addElement -->
 
-    <owl:ObjectProperty rdf:about="#addElement">
-        <rdfs:subPropertyOf rdf:resource="#modifyObjectAction"/>
+    <owl:ObjectProperty rdf:about="&modify;addElement">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyObjectAction"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#modifyElement -->
+
+    <owl:ObjectProperty rdf:about="&modify;modifyElement">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyObjectAction"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#modifyObjectAction -->
 
-    <owl:ObjectProperty rdf:about="#modifyObjectAction">
+    <owl:ObjectProperty rdf:about="&modify;modifyObjectAction">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#ModifyElement"/>
+        <rdfs:domain rdf:resource="&modify;ModifyElement"/>
         <rdfs:range rdf:resource="&topology;NetworkElement"/>
     </owl:ObjectProperty>
     
@@ -70,9 +78,9 @@
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#modifySubject -->
 
-    <owl:ObjectProperty rdf:about="#modifySubject">
+    <owl:ObjectProperty rdf:about="&modify;modifySubject">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#ModifyElement"/>
+        <rdfs:domain rdf:resource="&modify;ModifyElement"/>
         <rdfs:range rdf:resource="&topology;NetworkElement"/>
     </owl:ObjectProperty>
     
@@ -80,8 +88,8 @@
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#removeElement -->
 
-    <owl:ObjectProperty rdf:about="#removeElement">
-        <rdfs:subPropertyOf rdf:resource="#modifyObjectAction"/>
+    <owl:ObjectProperty rdf:about="&modify;removeElement">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyObjectAction"/>
     </owl:ObjectProperty>
     
 
@@ -99,25 +107,31 @@
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#decreaseBy -->
 
-    <owl:DatatypeProperty rdf:about="#decreaseBy">
-        <rdfs:subPropertyOf rdf:resource="#modifyDataAction"/>
+    <owl:DatatypeProperty rdf:about="&modify;decreaseBy">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyDataAction"/>
     </owl:DatatypeProperty>
     
 
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#increaseBy -->
 
-    <owl:DatatypeProperty rdf:about="#increaseBy">
-        <rdfs:subPropertyOf rdf:resource="#modifyDataAction"/>
+    <owl:DatatypeProperty rdf:about="&modify;increaseBy">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyDataAction"/>
     </owl:DatatypeProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#isModify -->
+
+    <owl:DatatypeProperty rdf:about="&modify;isModify"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#modifyDataAction -->
 
-    <owl:DatatypeProperty rdf:about="#modifyDataAction">
+    <owl:DatatypeProperty rdf:about="&modify;modifyDataAction">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="#ModifyElement"/>
+        <rdfs:domain rdf:resource="&modify;ModifyElement"/>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
     
@@ -154,10 +168,10 @@
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#ModifyElement -->
 
-    <owl:Class rdf:about="#ModifyElement">
+    <owl:Class rdf:about="&modify;ModifyElement">
         <owl:equivalentClass>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="#modifySubject"/>
+                <owl:onProperty rdf:resource="&modify;modifySubject"/>
                 <owl:someValuesFrom rdf:resource="&topology;NetworkElement"/>
             </owl:Restriction>
         </owl:equivalentClass>
@@ -167,18 +181,18 @@
 
     <!-- http://geni-orca.renci.org/owl/modify.owl#ModifyReservation -->
 
-    <owl:Class rdf:about="#ModifyReservation">
+    <owl:Class rdf:about="&modify;ModifyReservation">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&collections;element"/>
+                <owl:someValuesFrom rdf:resource="&modify;ModifyElement"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
         <owl:equivalentClass>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&request;startingTime"/>
                 <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;dateTime"/>
-            </owl:Restriction>
-        </owl:equivalentClass>
-        <owl:equivalentClass>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&collections;element"/>
-                <owl:someValuesFrom rdf:resource="#ModifyElement"/>
             </owl:Restriction>
         </owl:equivalentClass>
         <owl:equivalentClass>
@@ -200,5 +214,5 @@
 
 
 
-<!-- Generated by the OWL API (version 2.2.1.1101) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
 

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 
+import orca.embed.cloudembed.IConnectionManager;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.RequestReservation;
 import orca.embed.policyhelpers.SystemNativeError;
@@ -38,6 +39,9 @@ public class InterCloudHandler extends ModifyHandler {
 		super();
 	}
 
+	public InterCloudHandler(IConnectionManager icm) throws NdlException {
+		super(icm);
+	}
 	/**
 	 * Create handler with in-memory model
 	 * @param substrateFile
@@ -130,7 +134,14 @@ public class InterCloudHandler extends ModifyHandler {
 			s_rr.remove(RequestReservation.MultiPoint_Domain);
             request.getElements().removeAll(mp_elements);
             for(NetworkElement ne:this.mpRequest.getElements()){
-            	ne.setInDomain(RequestReservation.Interdomain_Domain);
+            	//ne.setInDomain(RequestReservation.Interdomain_Domain);
+            	String domainName=ne.getInDomain();
+            	String pureType=ne.getResourceType().getResourceType();
+            	if(domainName.endsWith(pureType)){
+    				String tmpType = "/"+pureType;
+    				domainName=domainName.split(tmpType)[0];
+    				ne.setInDomain(domainName);
+    			}
             	request.setDomainRequestReservation(ne,s_rr);
             }
 		}else{
@@ -140,103 +151,7 @@ public class InterCloudHandler extends ModifyHandler {
 		return error;
 	}
 	
-	public OntModel createManifest(Collection <NetworkElement> boundElements, 
-			RequestReservation request, String userDN, String controller_url, String sliceId){
-        logger.info("Creating manifest model");
-        
-        
-        OntModelSpec s = NdlModel.getOntModelSpec(OntModelSpec.OWL_MEM, true);
-        //OntModel manifestModel = ModelFactory.createOntologyModel(s);
-        OntModel manifestModel = null;
-        try {
-			manifestModel = NdlModel.createModel(s, true, NdlModel.ModelType.TdbPersistent,
-	        		Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "manifest-" + sliceId);
-		} catch (NdlException e1) {
-			logger.error("InterCloudHandler.createManifest(): Unable to create a persistent model of manifest");
-		}
-        
-        manifestModel.add(request.getModel().getBaseModel());
-        //top level manifest resource
-        Resource reservation_rs=request.getReservation_rs();
 
-        Individual manifest = manifestModel.createIndividual(reservation_rs.getNameSpace()+"manifest", NdlCommons.manifestOntClass);
-        if(controller_url!=null){
-        	Individual controller = manifestModel.createIndividual(reservation_rs.getNameSpace()+"controller", NdlCommons.domainControllerClass);
-        	controller.addProperty(NdlCommons.hasURLProperty, controller_url);
-        	manifest.addProperty(NdlCommons.domainHasController, controller);
-        }
-        // add user DN 
-        if (userDN != null)
-        	manifest.addProperty(NdlCommons.hasDNProperty, userDN, XSDDatatype.XSDstring);
-        
-		String domain,connectionName;
-		RequestReservation rr;
-		HashMap <String, RequestReservation> dRR = request.getDomainRequestReservation();
-		Collection <NetworkElement> elements;
-		NetworkElement element;
-		if(dRR==null){
-			logger.error("No RequestReservation:");	 
-			return null;
-		}
-		LinkedList <Device> domainList = null;
-		
-		for(Entry <String, RequestReservation> entry:dRR.entrySet()){
-			domain=entry.getKey();
-			rr=entry.getValue();
-			elements = rr.getElements();
-			Iterator<Entry<String, LinkedList<Device>>> domainConnectionListIt = domainConnectionList.entrySet().iterator();
-			while (domainConnectionListIt.hasNext()) {
-				Entry<String, LinkedList<Device>> domainEntry = domainConnectionListIt.next();
-		        connectionName = domainEntry.getKey();
-		        domainList = domainEntry.getValue();
-		        logger.info("CreateManifest:connectionName=" + connectionName 
-		        		+ " ;num hops=" + domainList.size()+";request Domain:"+domain);
-
-		        if(domain.equals(request.Interdomain_Domain) || domain.equals(request.MultiPoint_Domain)){
-		        	Iterator<NetworkElement> elementIt = elements.iterator();
-		        	while(elementIt.hasNext()){
-		        		element = elementIt.next();
-		        		if(element.getName().equals(connectionName) || element.getURI().equals(connectionName)){
-		        			logger.info("CreateManifest InterDomain:element name ="+element.getName());
-		        			this.createManifest(element, manifestModel, manifest, domainList);
-		        		}
-		        	}
-				
-		        }else if(domain.equals(request.Unbound_Domain)){
-		        	if(rr.getReservationDomain()!=null){
-		        		if(rr.getReservationDomain().contains(connectionName)){
-		        			logger.info("CreateManifest unbound cloud name ="+connectionName);
-		        			createManifest(manifestModel,manifest, domainList);
-		        		}
-		        		else{
-		        			Iterator<NetworkElement> elementIt = elements.iterator();
-				        	while(elementIt.hasNext()){
-				        		element = elementIt.next();
-				        		
-				        		if(element.getName().equals(connectionName)){
-				        			logger.debug("create manifest unbound: element name="+element.getName()+":connectionName="+connectionName);
-				        			this.createManifest(element, manifestModel, manifest, domainList);
-				        		}
-				        	}
-		        		}
-		        	}
-				
-		        }
-		        else{   //@cloud
-		        	if(domain.equals(connectionName)){
-		        		logger.info("CreateManifest cloud name ="+connectionName);
-		        		createManifest(manifestModel,manifest, domainList);
-		        	}
-		        }
-		       
-				 
-			}
-		}
-        
-		TDB.sync(manifestModel);
-		return manifestModel;
-	}
-	
 	//Build the ontmodel graph of edge cloud sites interconnected by interdomain paths
 	protected InfModel buildCloudOntModel(HashMap<String, DomainResourceType> domainResourcePools){
 		ArrayList <DomainResourceType> setOfCloudSite = new ArrayList <DomainResourceType> ();

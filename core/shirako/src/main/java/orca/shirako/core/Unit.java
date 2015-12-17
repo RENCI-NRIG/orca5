@@ -125,6 +125,18 @@ public class Unit implements Persistable, Cloneable, UnitProperties, ConfigToken
     public synchronized void fail(String message) {
         fail(message, null);
     }
+    
+    public synchronized void failOnModify(String message, Exception e) {
+        notices.add(message, e);
+        // transition to ACTIVE even when modify failed with non-zero exit code or an exception was raised
+        // because a particular modify target was not found
+        transition(UnitState.ACTIVE);
+        mergeProperties(modified.properties);
+    }
+
+    public synchronized void failOnModify(String message) {
+        failOnModify(message, null);
+    }
 
     public synchronized void setState(UnitState state) {
         transition(state);
@@ -173,6 +185,10 @@ public class Unit implements Persistable, Cloneable, UnitProperties, ConfigToken
         return properties.getProperty(name);
     }
 
+    public synchronized Properties getProperties() {
+        return properties;
+    }
+    
     public synchronized void setProperty(String name, String value) {
         properties.setProperty(name, value);
     }
@@ -237,6 +253,10 @@ public class Unit implements Persistable, Cloneable, UnitProperties, ConfigToken
         return UnitState.isPending(state);
     }
 
+    public synchronized boolean isPendingModifying() {
+        return UnitState.isPendingModifying(state);
+    }
+    
     public synchronized void setModified(Unit modified) {
         this.modified = modified;
     }

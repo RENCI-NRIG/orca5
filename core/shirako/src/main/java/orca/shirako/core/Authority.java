@@ -61,7 +61,12 @@ public class Authority extends Actor implements IAuthority {
      */
     @NotPersistent
     protected ReservationSet extendingLease = new ReservationSet();
-
+    /**
+     * Reservations to modifyLease for once the actor recovers.
+     */
+    @NotPersistent
+    protected ReservationSet modifyingLease = new ReservationSet();
+    
     /**
      * Creates a new instance.
      */
@@ -230,6 +235,31 @@ public class Authority extends Actor implements IAuthority {
         wrapper.extendLeaseRequest((IAuthorityReservation) reservation, caller, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void modifyLease(final IAuthorityReservation reservation) throws Exception {
+        if (!recovered) {
+            modifyingLease.add(reservation);
+        } else {
+            wrapper.modifyLeaseRequest(reservation, reservation.getClientAuthToken(), false);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void modifyLease(final IReservation reservation, final AuthToken caller)
+            throws Exception {
+    	
+        if (!isRecovered() || isStopped()) {
+            throw new Exception("This actor cannot receive calls");
+        }
+
+        wrapper.modifyLeaseRequest((IAuthorityReservation) reservation, caller, true);
+    }
+
+    
     /**
      * {@inheritDoc}
      */

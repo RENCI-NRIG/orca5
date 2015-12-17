@@ -17,6 +17,8 @@ import orca.manage.beans.TicketReservationMng;
 import orca.manage.beans.UnitMng;
 import orca.manage.proxies.soap.beans.servicemanager.GetReservationUnitsRequest;
 import orca.manage.proxies.soap.beans.servicemanager.GetReservationUnitsResponse;
+import orca.manage.proxies.soap.beans.servicemanager.ModifyReservationRequest;
+import orca.manage.proxies.soap.beans.servicemanager.ModifyReservationResponse;
 import orca.manage.proxies.soap.beans.clientactor.AddBrokerRequest;
 import orca.manage.proxies.soap.beans.clientactor.AddBrokerResponse;
 import orca.manage.proxies.soap.beans.clientactor.AddReservationRequest;
@@ -354,5 +356,30 @@ public class SoapServiceManager extends SoapActor implements IOrcaServiceManager
 			return false;
 		}
 	}
+    
+    public boolean modifyReservation(ReservationID reservation,  
+			 Properties modifyProperties){
+    	clearLast();
+    	if (reservation == null || modifyProperties == null) {
+    		lastException = new IllegalArgumentException();
+    		return false;
+    	}
+    	try {
+    		ModifyReservationRequest req = new ModifyReservationRequest();
+    		req.setGuid(managementID.toString());
+    		req.setAuth(authMng);
+    		req.setReservationID(reservation.toString());
+    		if (modifyProperties != null){
+    			req.setModifyProperties(OrcaConverter.fill(modifyProperties));
+    		}
+    		ModifyReservationResponse resp = (ModifyReservationResponse)client.marshalSendAndReceive(req);
+    		lastStatus = resp.getStatus();
+    		return lastStatus.getCode() == 0;
+    	} catch (Exception e){
+    		lastException = e;
+    		return false;
+    	}
+    }
+    
 
 }

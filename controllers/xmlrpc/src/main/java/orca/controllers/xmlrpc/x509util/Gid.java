@@ -27,7 +27,7 @@ public class Gid {
 	static final String URN_PREFIX = "urn:publicid:IDN";
 
         
-	protected static Logger logger = OrcaController.getLogger(Gid.class.getName());
+	protected static Logger logger = OrcaController.getLogger(Gid.class.getSimpleName());
         //protected static Logger logger = Logger.getLogger(Gid.class.getName());
 
 	public Gid(String gid) throws CertificateException, IOException {

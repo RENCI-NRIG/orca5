@@ -512,11 +512,16 @@ public class Term implements Cloneable, Persistable
             throw new IllegalStateException();
         }
 
+        // anirban@ 04/07/15
+        // For extend to trigger as soon as request comes to the core, we are removing the constraint 
+        // that the new start time for the reservation has to be beyond the old term's end time
+        
         //return (startTime.equals(oldTerm.startTime) && newStartTime.after(oldTerm.endTime) &&
-         //      endTime.after(newStartTime));
-        // loosening the constraints so extend can take place immediately /ib 04/2015
+        //       endTime.after(newStartTime));
+        
         return (startTime.equals(oldTerm.startTime) &&
                 endTime.after(newStartTime));
+        
     }
 
     /**

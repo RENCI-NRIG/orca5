@@ -357,8 +357,101 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Sat Nov 21 2015 Ilya Baldin <ibaldin@renci.org>
-- Rebuild with extra logging for exceptions
+*Fri Dec 04 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for testing new approach to modify model handling
+
+*Thu Dec 03 2015 Ilya Baldin <ibaldin@renci.org>
+- Making label sync more robust to slice recovery
+
+*Wed Dec 02 2015 Ilya Baldin <ibaldin@renci.org>
+- Premature close again
+
+*Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>
+- Fixing premature model close
+
+*Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>
+- Tracking premature model close
+
+*Tue Dec 01 2015 Ilya Baldin <ibaldin@renci.org>
+- Adding a label sync thread to controller
+
+*Tue Nov 24 2015 Ilya Baldin <ibaldin@renci.org>
+- Dealing with model deletion differently
+
+*Tue Nov 24 2015 Ilya Baldin <ibaldin@renci.org>
+- Moving model deletion to later
+
+*Tue Nov 24 2015 Ilya Baldin <ibaldin@renci.org>
+- Fixing model leak in modify
+
+*Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
+- Figuring out NPE in NdlVLANcontrol recovery
+
+*Sun Nov 15 2015 Ilya Baldin <ibaldin@renci.org>
+- Figuring out NPE in NdlVLANcontrol recovery
+
+*Thu Nov 12 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test manifest change in group-size change
+
+*Wed Nov 11 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test unbounded group in single rack
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild trying to fix incorrect modify actions and better handling of missing units
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild trying to fix xcat storage handler
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild trying to fix missing unit properties on active again
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild trying to fix missing unit properties on active
+
+*Tue Nov 10 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for minor fixes and testing at RCI
+
+*Sun Nov 08 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for missing remove interface calls testing
+
+*Fri Nov 06 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for resource accounting and baremetal fixes
+
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for rule validation modify fixes
+
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for baremetal modify fixes
+
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for minor bug in xcat task parameters
+
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for minor bug in xcat task structure
+
+*Thu Nov 05 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test XCAT handler on RCI rack
+
+*Mon Nov 02 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for stitchport extra node fix
+
+*Sun Nov 01 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for stitchport adaptation fix
+
+*Fri Oct 30 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for MP fix
+
+*Thu Oct 29 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for another NPE fix
+
+*Thu Oct 29 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for NPE fix 
+
+*Wed Oct 28 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for modify distributed testing
+
+*Thu Apr 09 2015 Victor J. Orlikowski <vjo@cs.duke.edu>
+- Re-build to integrate missing patch for controller and extended reservation recovery.
 
 *Thu Nov 19 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to replace leaky modify controller

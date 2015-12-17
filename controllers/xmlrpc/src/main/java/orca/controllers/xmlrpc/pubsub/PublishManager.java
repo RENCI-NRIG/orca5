@@ -9,20 +9,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import orca.controllers.OrcaController;
 import orca.controllers.OrcaControllerException;
-import orca.controllers.xmlrpc.ReservationConverter;
+import orca.controllers.xmlrpc.SliceStateMachine.SliceTransitionException;
 import orca.controllers.xmlrpc.XmlrpcControllerSlice;
 import orca.controllers.xmlrpc.XmlrpcHandlerHelper;
 import orca.controllers.xmlrpc.XmlrpcOrcaState;
-import orca.controllers.xmlrpc.SliceStateMachine.SliceTransitionException;
-import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
-import orca.manage.beans.ReservationMng;
-import orca.shirako.common.SliceID;
 
 import org.apache.log4j.Logger;
 
@@ -32,39 +31,45 @@ import org.apache.log4j.Logger;
  */
 public class PublishManager {
 
-	private static ArrayList<Timer> timers = new ArrayList<Timer>();
-	private static boolean noStart = false;
+	private static final int PUBLISHER_PERIOD = 30;
 
 	protected XmlrpcOrcaState instance = null;
-	protected PublishQueue pubQ = null;
-	protected Logger logger = OrcaController.getLogger(this.getClass().getName());
+	protected static Logger logger = OrcaController.getLogger(PublishManager.class.getSimpleName());
 	protected String actor_guid = null;
 	protected String actor_name = null;
+	// scheduler that creates daemon threads
+	protected static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
+		   public Thread newThread(Runnable runnable) {
+			      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+			      thread.setDaemon(true);
+			      return thread;
+			   }
+		});
+	protected static final List<ScheduledFuture<?>> futures = new ArrayList<>();
+	protected static boolean noStart = false;
 
 	public PublishManager(){
 
 		initialize();
 		//expunge sliceList pubsub node on startup
 		doExpungeSliceList();
-
-		Timer timer = null;
-		synchronized(timers) {
-			if (noStart)
-				return;
-			timer = new Timer("PublisherTask", true);
-			timers.add(timer);
+		
+		if (noStart)
+			return;
+		synchronized(futures) {
+			futures.add(scheduler.scheduleAtFixedRate(new PublisherTask(), PUBLISHER_PERIOD, PUBLISHER_PERIOD, TimeUnit.SECONDS));
 		}
-		timer.schedule(new PublisherTask(), 30*1000, 30*1000); // run every 30 seconds
 	}
 
-	private void allStop() {
-		logger.info("Shutting down pubsub threads");
-		synchronized(timers) {
-			noStart=true;
-			for (Timer t: timers) {
-				t.cancel();
-			}
-			timers.clear();
+	/**
+	 * Since we use daemon threads, this isn't needed /ib
+	 */
+	public static void allStop() {
+		logger.info("Shutting down pubsub thread");
+		noStart = true;
+		synchronized(futures) {
+			for(ScheduledFuture<?> f: futures)
+				f.cancel(false);
 		}
 	}
 
@@ -81,21 +86,29 @@ public class PublishManager {
 
 		while (actor_guid == null || actor_name == null){
 			try {
+				if (instance == null) 
+					throw new Exception("unable to get XMLRPCOrcaState instance");
+
 				sm = instance.getSM();
-				if (sm == null) {
-					logger.error("initialize(): SM instance is null.");
-				}
+
+				if (sm == null)
+					throw new Exception("SM is null");
+				
 				actor_guid = sm.getGuid().toString();
 				actor_name = sm.getName();
 				logger.info("SM actor name: " + actor_name + " | SM actor guid: " + actor_guid);
 			} catch (Exception e) {
-				logger.error("initialize(): unable to get a connection to SM due to: " + e);
+				logger.error("initialize(): unable to get a connection to SM due to: " + e + ", waiting 1 sec.");
+				try {
+					Thread.sleep(1000);
+				} catch (Exception ee) {
+					;
+				}
 			} finally {
 				if (sm != null)
 					instance.returnSM(sm);
 			}
 		}
-
 	}
 
 	private void doExpungeSliceList() {
@@ -110,7 +123,7 @@ public class PublishManager {
 		}
 	}
 
-	class PublisherTask extends TimerTask {
+	class PublisherTask implements Runnable {
 
 		public void run() {
 
@@ -131,73 +144,20 @@ public class PublishManager {
 
 				logger.info("Orca container is active..... Publishing thread:START");
 
-				pubQ = PublishQueue.getInstance();
+				PublishQueue pubQ = PublishQueue.getInstance();
 
+				// notice this reaches deep into the pubQ object to get slice list and allows
+				// modifying individual slice states in it directly (as done below) /ib
 				ArrayList<SliceState> currSliceStateQ = pubQ.getCurrentQ();
 				ArrayList<SliceState> toRemoveSliceStateQ = new ArrayList<SliceState>();
 
 				// Process new slices Q
-				ArrayList<SliceState> currNewSliceQ = pubQ.getNewSlicesQ();
-
-				ArrayList<SliceState> clonedCurrNewSliceQ = new ArrayList<SliceState>();
-
-				if(currNewSliceQ != null && currNewSliceQ.size() > 0){
-					synchronized(currNewSliceQ){
-						logger.info("New slices arrived...");
-						Iterator<SliceState> it3 = currNewSliceQ.iterator();
-						while(it3.hasNext()){
-							SliceState currSliceState3 = (SliceState) it3.next();
-							clonedCurrNewSliceQ.add(currSliceState3);
-						}
-						currNewSliceQ.clear();
-					}
-
-				}
-
-				if(clonedCurrNewSliceQ != null && clonedCurrNewSliceQ.size() > 0){
-					synchronized(currSliceStateQ){ // lock on slicesToWatch
-						Iterator<SliceState> it1 = clonedCurrNewSliceQ.iterator();
-						while(it1.hasNext()){
-							SliceState currSliceState1 = (SliceState) it1.next();
-							logger.info("Pushing " + currSliceState1.getSlice_urn() + "into PubQ");
-							pubQ.addToPubQ(currSliceState1);
-						}
-					}
-				}
-
+				pubQ.drainNew();
 
 				// Process deleted slices Q
-				ArrayList<String> currDeletedSliceQ = pubQ.getDeletedSlicesQ();
+				pubQ.drainDeleted();
 
-				ArrayList<String> clonedCurrDeletedSliceQ = new ArrayList<String>();
-
-				if(currDeletedSliceQ != null && currDeletedSliceQ.size() > 0){
-					synchronized(currDeletedSliceQ){
-						logger.info("Some slice(s) were deleted...");
-						Iterator<String> it4 = currDeletedSliceQ.iterator();
-						while(it4.hasNext()){
-							String currSliceUrn = (String) it4.next();
-							clonedCurrDeletedSliceQ.add(currSliceUrn);
-						}
-						currDeletedSliceQ.clear();
-					}
-
-				}
-
-				if(clonedCurrDeletedSliceQ != null && clonedCurrDeletedSliceQ.size() > 0){
-					synchronized(currSliceStateQ){ // lock on slicesToWatch == pubQ.getCurrentQ
-						Iterator<String> it2 = clonedCurrDeletedSliceQ.iterator();
-						while(it2.hasNext()){
-							String currSliceUrn = (String) it2.next();
-							logger.info("Deleting " + currSliceUrn + " from PubQ");
-							pubQ.deleteFromPubQ(currSliceUrn);
-						}
-					}
-				}
-
-
-
-				synchronized(currSliceStateQ){
+				synchronized(pubQ){
 
 					if(currSliceStateQ == null){
 						return; // nothing to do if there are no slices to watch
@@ -340,7 +300,6 @@ public class PublishManager {
 					if(!toRemoveSliceStateQ.isEmpty()){
 						for (SliceState s : toRemoveSliceStateQ){
 							logger.info("Removing " + s.getSlice_urn() + " from the PubQ after end of manifest lifecycle");
-							System.out.println("Removing " + s.getSlice_urn() + " from the PubQ after end of manifest lifecycle");
 							currSliceStateQ.remove(s);
 						}
 					}
@@ -401,10 +360,11 @@ public class PublishManager {
 
 		private String buildSliceListString(){
 
+			PublishQueue pubQ = PublishQueue.getInstance();
 			String sliceListString = null;
-			ArrayList<SliceState> currSliceStateList = PublishQueue.getInstance().getCurrentSliceList();
-
-			synchronized(currSliceStateList){
+			ArrayList<SliceState> currSliceStateList = pubQ.getCurrentSliceList();
+			
+			synchronized(pubQ){
 
 				if(currSliceStateList == null){
 					logger.error("buildSliceListString(): slicestatelist = null");

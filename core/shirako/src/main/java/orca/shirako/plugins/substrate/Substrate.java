@@ -4,7 +4,9 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
 
+import orca.manage.OrcaConstants;
 import orca.shirako.api.IDatabase;
 import orca.shirako.api.IReservation;
 import orca.shirako.common.delegation.ResourceTicket;
@@ -12,6 +14,7 @@ import orca.shirako.core.Actor;
 import orca.shirako.core.Ticket;
 import orca.shirako.core.Unit;
 import orca.shirako.plugins.ShirakoPlugin;
+import orca.shirako.plugins.config.AntConfig;
 import orca.shirako.plugins.config.Config;
 import orca.util.OrcaException;
 import orca.util.PropList;
@@ -127,6 +130,7 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
     protected void doModify(IReservation r, Unit unit) throws Exception {
         Properties p = getConfigurationProperties(r, unit);
         Config.setActionSequenceNumber(p, unit.getSequenceIncrement());
+        logger.debug("Properties in Substrate.doModify() = " + p);
         config.modify(unit, p);
     }
 
@@ -186,6 +190,16 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
         unit.fail(message, e);
     }
 
+    protected void failModifyNoUpdate(Unit unit, String message) {
+        failModifyNoUpdate(unit, message, null);
+    }
+
+    protected void failModifyNoUpdate(Unit unit, String message, Exception e) {
+        logger.error(message, e);
+        unit.failOnModify(message, e);
+    }    
+    
+    
     protected void processSavedProperties(Unit u, Properties p) {
         Properties p2 = new Properties();
 
@@ -348,6 +362,7 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
 
         Unit u = (Unit) token;
         long sequence = Config.getActionSequenceNumber(properties);
+        String notice = null;
 
         synchronized (u) {
             if (sequence != u.getSequence()) {
@@ -360,24 +375,53 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
                 }
             }
 
-            int result = getResultCode(properties);
-
+            int result = getResultCode(properties); // "shirako.target.code"
+            
+            processSavedProperties(u, properties);
+            
+            String msg = properties.getProperty(Config.PropertyExceptionMessage); // in case of ant exception
+            if (msg == null)
+            	msg = properties.getProperty(Config.PropertyTargetResultCodeMessage); // "shirako.target.code.message"
+            
+            // modify sequence number is passed from AntConfig in the "result" in AntConfig.Runconfig.execute()
+            String modifySequenceNum = properties.getProperty(Config.PropertyModifySequenceNumber);
+            if(modifySequenceNum == null){ // should never hit
+            	modifySequenceNum = "-1"; 
+            }
+            
+            logger.debug("processModifyComplete(): modifySequenceNum from AntConfig:" + modifySequenceNum);
+            
             switch (result) {
                 case 0:
                     // all went fine
                     // complete operation
-                    u.completeModify();
+                    notice = "modify action succeeded: message from handler = " + msg;
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".message", notice);
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", "0");
                     // merge properties if needed
+                    //logger.debug("Properties in processModifyComplete(): " + properties);
                     mergeUnitProperties(u, properties);
+                    u.completeModify();
                     break;
 
                 case -1:
-                    String msg = properties.getProperty(Config.PropertyExceptionMessage);
-                    failNoUpdate(u, "Exception during modify for node: " + u.getID().toHashString() + " " + msg);
+                    notice = "Exception during modify for unit: " + u.getID().toHashString() + " " + msg;  
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum + ".message", notice);
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", "-1");                    
+                    // merge properties if needed
+                    mergeUnitProperties(u, properties);
+                    failModifyNoUpdate(u, notice);
                     break;
+                    
                 default:
-                    failNoUpdate(u, "Error during modify for node: " + u.getID().toHashString() + " " + Integer.toString(result));
+                	notice = "Error during modify for node: " + u.getID().toHashString() + " " + Integer.toString(result);  
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum + ".message", notice);
+                    properties.setProperty(Config.PropertyModifyPropertySavePrefix + "." + modifySequenceNum +".code", Integer.toString(result));
+                    // merge properties if needed
+                    mergeUnitProperties(u, properties);
+                    failModifyNoUpdate(u, notice);
                     break;
+                    
             }
         }
 
@@ -399,4 +443,16 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
         }
         super.setDatabase(db);
     }
+
+	@Override
+	public void updateProps(IReservation r, Unit unit) {
+		
+		try {
+            // update the unit database record
+            ((ISubstrateDatabase) db).updateUnit(unit);
+        } catch (Exception e) {
+            failAndUpdate(unit, "update properties error", e);
+        }
+		
+	}
 }

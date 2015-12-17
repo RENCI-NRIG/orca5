@@ -145,6 +145,12 @@ public class ServiceManagerManagementObject extends ActorManagementObject implem
 			   AuthToken caller) {
 		return clientHelper.extendReservation(reservation, newEndTime, newUnits, newResourceType, requestProperties, configProperties, caller);
 	}
+	
+	public ResultMng modifyReservation(final ReservationID reservation,
+			   final Properties modifyProperties, 
+			   AuthToken caller) {
+		return clientHelper.modifyReservation(reservation, modifyProperties, caller);
+	}
 
 	public ResultUnitMng getReservationUnits(ReservationID reservationID, AuthToken caller) {
 		ResultUnitMng result = new ResultUnitMng();

@@ -34,4 +34,23 @@
 		</xsd:complexType>
 	</xsd:element>
 
+        <xsd:element name="ModifyReservationRequest">
+                <xsd:complexType>
+                        <xsd:sequence>
+                                <xsd:element name="guid" type="xsd:string" />
+                                <xsd:element name="auth" type="beans:authTokenMng" />
+                                <xsd:element name="reservationID" type="xsd:string" />
+                                <xsd:element name="modifyProperties" type="beans:propertiesMng" />
+                        </xsd:sequence>
+                </xsd:complexType>
+        </xsd:element>
+
+        <xsd:element name="ModifyReservationResponse">
+                <xsd:complexType>
+                        <xsd:sequence>
+                                <xsd:element name="status" type="beans:resultMng" />
+                        </xsd:sequence>
+                </xsd:complexType>
+        </xsd:element>
+
 </xsd:schema>

@@ -18,9 +18,12 @@ import orca.controllers.xmlrpc.pubsub.SliceState;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
+import orca.manage.OrcaConstants;
+import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
+import orca.manage.beans.ReservationStateMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.manage.beans.UnitMng;
@@ -30,6 +33,7 @@ import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
 import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.container.Globals;
+import orca.util.PropList;
 
 import org.apache.log4j.Logger;
 
@@ -124,6 +128,30 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	public boolean locked() {
 		return (lock.availablePermits() == 0);
 	}
+	
+	public void removeComputedReservations(String l) {
+		if(computedReservations != null)
+		{
+			TicketReservationMng r = null;	
+			for(TicketReservationMng r_l:computedReservations){
+				if(r_l.getReservationID().equalsIgnoreCase(l)){
+					r=r_l;
+					break;
+				}
+			}
+			computedReservations.remove(r);
+		}
+	}
+	
+	/**
+	 * Set a list of computed reservations for this slice
+	 * @param l
+	 */
+	public void addComputedReservations(TicketReservationMng l) {
+		if(computedReservations == null)
+			computedReservations = new ArrayList <TicketReservationMng> ();
+		computedReservations.add(l);
+	}
 
 	/**
 	 * Set a list of computed reservations for this slice
@@ -175,21 +203,122 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @return
 	 */
 	public List<UnitMng> getUnits(IOrcaServiceManager sm, String res) {
-		List<ReservationMng> allRes = getAllReservations(sm);
 		try {
-			if (allRes != null) {
-				for(ReservationMng r: allRes) {
-					if (r.getReservationID().trim().equals(res.trim())) {
-						return sm.getUnits(new ReservationID(res));
-					}
-				}
-			}
-			return null;
+			return sm.getUnits(new ReservationID(res));
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to get units for reservation " + res + " due to " + e);
 		}
 	}
 	
+	/**
+	 * Get reservation states, both actual and pending
+	 * @param sm
+	 * @param res
+	 * @return
+	 */
+	public List<ReservationStateMng> getReservationStates(IOrcaServiceManager sm, List<String> res) {
+		try {
+			List<ReservationID> resIds = new ArrayList<>();
+			if (res == null)
+				return null;
+			for(String srid: res) {
+				resIds.add(new ReservationID(srid.trim()));
+			}
+			return sm.getReservationState(resIds);
+		} catch(Exception e) {
+			throw new RuntimeException("Unable to get state for reservations " + res + " due to " + e);
+		}
+	}
+	
+	/**
+	 * Conversion
+	 * @param p
+	 * @return
+	 */
+	public static Map<String, String> fromProperties(Properties p) {
+		Map<String, String> m = new HashMap<String, String>();
+		
+		for(Map.Entry<Object, Object>e: p.entrySet()) {
+			m.put((String)e.getKey(), (String)e.getValue());
+		}
+		return m;
+	}
+	
+	public static Properties fromMap(Map<String, String> m) {
+		Properties p = new Properties();
+
+		for(Map.Entry<String, String>e : m.entrySet()) {
+			p.setProperty(e.getKey(), e.getValue());
+		}
+		return p;
+	}
+	
+	private boolean findProp(PropertiesMng pm, String key) {
+		for(PropertyMng pp: pm.getProperty()) {
+			if (pp.getName().equals(key))
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Modify reservation based on reservation id (or null)
+	 * @param sm
+	 * @param res
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
+		try {
+			// here we break up the semantics of different subcommands
+			
+			ReservationMng rm = sm.getReservation(new ReservationID(res));
+			if (rm == null)
+				throw new RuntimeException("modifySliver(): Unable to find reservation " + res);
+			
+			PropertiesMng psmng = rm.getConfigurationProperties();
+			if (psmng == null)
+				throw new RuntimeException("modifySliver(): unable to get configuration properties for reservation " + res);
+			
+			Properties cp = OrcaConverter.fill(psmng);
+			int index = PropList.highestModifyIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
+			
+			Properties modifyProperties = new Properties();
+			boolean implementedSubcommand = false;
+			//
+			// add more subcommands here. make sure to set implementedSubcommand to true.
+			//
+			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
+				implementedSubcommand = true;
+				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
+			} else {
+				implementedSubcommand = true;
+				// collect properties from first list entry map
+				if (modifyPropertiesList.size() == 0)
+					throw new RuntimeException("Subcommand " + modifySubcommand + " requires a list maps of size one or more");
+				
+				modifyProperties = fromMap((Map<String, String>)modifyPropertiesList.get(0));
+			}
+			
+			if (!implementedSubcommand)
+				throw new RuntimeException("Subcommand " + modifySubcommand + " is not implemented");
+			
+			//prepend all property names with modify.x.
+			PropList.renamePropertyNames(modifyProperties, OrcaConstants.MODIFY_PROPERTY_PREFIX + index + ".");
+			
+			// add the subcommand as a property after everything
+			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + index, 
+					OrcaConstants.MODIFY_PROPERTY_PREFIX + modifySubcommand);
+
+			return sm.modifyReservation(new ReservationID(res), modifyProperties);
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to modify sliver reservation " + res + " due to " + e);
+		}
+	}
+	
+
 	public RequestWorkflow getWorkflow() {
 		return workflow;
 	}
@@ -326,9 +455,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 
 		if(pubManifestEnabled.equalsIgnoreCase("true")){
 			//logger.info("Deleting " + sliceUrn + " from PubQ");
-                        logger.info("Adding " + sliceUrn + " to DeletedSlicesQ");
+			logger.info("Adding " + sliceUrn + " to DeletedSlicesQ");
 			//PublishQueue.getInstance().deleteFromPubQ(sliceUrn);
-                        PublishQueue.getInstance().addToDeletedSlicesQ(sliceUrn);
+			PublishQueue.getInstance().addToDeletedSlicesQ(sliceUrn);
 		}
 		else {
 			logger.info("ORCA.publish.manifest property needs to be set to true; Can't delete slice from publish Q ");
@@ -344,6 +473,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 */
 	public void publishManifest(Logger logger){
 		// if pubsub property is set, push the slice_urn to the publish Q
+		// commented out to use previously read controller properties /ib 12/16/15
+		/*
 		Properties orcaPubsubProps = new Properties();
 		File f = new File(OrcaController.ConfigDirectory + OrcaXmlrpcHandler.PUBSUB_PROPS_FILE_NAME);
 		if (f.exists()) {
@@ -363,8 +494,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 			logger.error("Unable to load properties file. Make sure orcapubsub properties is in $ORCA_HOME/config; Can't publish manifest");
 			return;
 		}
-
-		String pubManifestEnabled = orcaPubsubProps.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
+		*/
+		
+		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
 		if(pubManifestEnabled == null){
 			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");
 			return;
@@ -373,8 +505,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		if(pubManifestEnabled.equalsIgnoreCase("true")){
 			Date start = workflow.getTerm().getStart(), end = workflow.getTerm().getEnd();
 			logger.info("Adding " + sliceUrn + " to newSlicesQ");
-			PublishQueue.getInstance().addToNewSlicesQ(new SliceState(sliceUrn, slice.getSliceID(),
-					SliceState.PubSubState.SUBMITTED, start, end, 0, userDN));
+			PublishQueue.getInstance().addToNewSlicesQ(new SliceState(this,
+					SliceState.PubSubState.SUBMITTED, start, end, 0));
 		}
 		else {
 			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't publish manifest");
@@ -399,7 +531,15 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		if (ss == SliceStateMachine.SliceState.STABLE_ERROR) 
 			return true;
 		return false;
-
+	}
+	
+	public boolean isStable() throws SliceStateMachine.SliceTransitionException {
+		SliceStateMachine.SliceState ss = reevaluate();
+		
+		if ((ss == SliceStateMachine.SliceState.STABLE_ERROR) || 
+				(ss == SliceStateMachine.SliceState.STABLE_OK))
+			return true;
+		return false;
 	}
 	
 	public boolean isDeadOrClosing() throws SliceStateMachine.SliceTransitionException {

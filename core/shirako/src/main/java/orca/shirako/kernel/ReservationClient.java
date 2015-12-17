@@ -694,10 +694,9 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
      */
     @Override
     public boolean canRenew() {
-    	// commenting out for the transition to new way of doing extends /ib 04/09/15
-    	//if (!renewable) {
-    	//	return false;
-    	//}
+        if (!renewable) {
+            return false;
+        }
 
         if (lastTicketUpdate == null) {
             return false;
@@ -929,6 +928,37 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
      * {@inheritDoc}
      */
     @Override
+    public void modifyLease() throws Exception {
+        
+    	/*
+         * Not permitted if there is a pending operation.
+         */
+        nothingPending();
+        // validateRedeem();
+
+        switch (state) {
+        case ReservationStates.Active:
+            
+            transition("modify lease",
+                    ReservationStates.Active,
+                    ReservationStates.ModifyingLease);
+            sequenceLeaseOut++;
+
+            RPCManager.modifyLease(authority, this, slice.getOwner());
+
+            break;
+
+        default:
+            error("Wrong state to initiate modify lease: " + ReservationStates.states[state]);
+        }
+        
+    }
+    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void extendTicket(final IActor actor) throws Exception {
         /*
          * Not permitted if there is a pending operation: cannot renew while a
@@ -968,6 +998,7 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
 
         // mapper.uncommit(this);
         sequenceTicketOut++;
+        
         RPCManager.extendTicket(this);
     }
 
@@ -1916,9 +1947,21 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
         case ReservationStates.Active:
             // XXX; check for closing
 
-            // This is an unsolicited lease (unless closing).
-            acceptLeaseUpdate(incoming, udd);
+            //acceptLeaseUpdate(incoming, udd);
+            
+            if (acceptLeaseUpdate(incoming, udd)) {
+            	if (pending == ReservationStates.ModifyingLease) {
+            		if (joinstate == ReservationStates.Joining) {
+                        logger.warn("Received LeaseUpdate while in Joining");
+                    }
 
+                    transition("modified lease",
+                            ReservationStates.Active,
+                            ReservationStates.None);
+            	}
+            	
+            }
+            
             break;
 
         case ReservationStates.ActiveTicketed:

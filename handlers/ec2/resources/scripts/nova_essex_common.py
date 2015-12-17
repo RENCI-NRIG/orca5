@@ -875,6 +875,8 @@ class VM:
     def get_ip(self, id):
         return self.get_floating_ip_by_id(id)
 
+    
+
     @classmethod
     def update_userdata(self, id, userdata_file):
 
@@ -901,8 +903,36 @@ class VM:
             LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
             return False
                 
+    @classmethod
+    def get_userdata(self, id):
+
+        retries = 3
+        timeout = 10
+
+        userdata=""
+        for i in range(retries):
+            cmd = None
+            try:
+                cmd = ["nova", "get-userdata", str(id) ]
+                rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60)
                 
-                
+                if rtncode == 0:
+                    userdata=data_stdout
+                    break
+
+            except Exception as e:
+                LOG.error("get_userdata: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+                pass
+
+            LOG.warning("Failed cmd: " + str(cmd) + ", retrying (" + str(i) + ")")
+            time.sleep(timeout)
+
+        if i == retries:
+            LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
+            return "failed to get userdata: exceeded retries"
+
+        return userdata
+        
 
     @classmethod
     def prepare_key(self, instance_ip, user_ssh_key, root_ssh_key, retries=10, timeout=3):

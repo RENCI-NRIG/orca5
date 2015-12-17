@@ -1,13 +1,11 @@
 package orca.handlers.network.tasks;
 
-import java.util.concurrent.Semaphore;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-
 import orca.shirako.plugins.config.OrcaAntTask;
 import orca.shirako.plugins.config.SliceProject;
 import orca.shirako.util.SemaphoreMap;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 
 /**
  * Use file locking (so it works with Ant) to

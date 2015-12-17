@@ -1,487 +1,145 @@
-<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
-xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-xmlns:tns="http://orca/shirako/proxies/soapaxis2/services"
-xmlns:ns0="http://orca/shirako/proxies/soapaxis2/services"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-xmlns:types="http://orca/shirako/proxies/soapaxis2/beans"
-xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-targetNamespace="http://orca/shirako/proxies/soapaxis2/services">
-  <wsdl:types>
-    <xsd:schema attributeFormDefault="unqualified"
-    elementFormDefault="unqualified"
-    targetNamespace="http://orca/shirako/proxies/soapaxis2/beans">
-      <xsd:complexType name="updateData">
-        <xsd:all>
-          <xsd:element name="failed" type="xsd:boolean" />
-
-          <xsd:element minOccurs="0" name="message"
-          type="xsd:string" />
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="slice">
-        <xsd:sequence>
-          <xsd:element name="sliceName" type="xsd:string" />
-
-          <xsd:element name="guid" type="xsd:string" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="term">
-        <xsd:sequence>
-          <xsd:element name="startTime" type="xsd:long" />
-
-          <xsd:element name="endTime" type="xsd:long" />
-
-          <xsd:element name="ticketTime" type="xsd:long" />
-
-          <xsd:element name="newStartTime" type="xsd:long" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="reservation">
-        <xsd:sequence>
-          <xsd:element name="reservationID" type="xsd:string" />
-
-          <xsd:element name="slice" type="types:slice" />
-
-          <xsd:element minOccurs="0" name="resourceSet"
-          type="types:resourceSet" />
-
-          <xsd:element minOccurs="0" name="term"
-          type="types:term" />
-
-          <xsd:element name="sequence" type="xsd:long" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="resourceData">
-        <xsd:sequence>
-          <xsd:element minOccurs="0" name="requestProperties"
-          type="types:properties" />
-
-          <xsd:element minOccurs="0" name="configurationProperties"
-          type="types:properties" />
-
-          <xsd:element minOccurs="0" name="resourceProperties"
-          type="types:properties" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="resourceSet">
-        <xsd:sequence>
-          <xsd:element name="units" type="xsd:int" />
-
-          <xsd:element name="type" type="xsd:string" />
-
-          <xsd:element minOccurs="0" name="resourceData"
-          type="types:resourceData" />
-
-          <xsd:element minOccurs="0" name="concrete"
-          type="types:plist" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="plist">
-        <xsd:sequence>
-          <xsd:element maxOccurs="unbounded" minOccurs="0"
-          name="plistNode" type="types:plistNode" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="plistNode">
-        <xsd:sequence>
-          <xsd:element name="name" type="xsd:string" />
-
-          <xsd:element minOccurs="0" name="pvalue"
-          type="types:plist" />
-
-          <xsd:element minOccurs="0" name="value"
-          type="xsd:string" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="properties">
-        <xsd:sequence>
-          <xsd:element maxOccurs="unbounded" minOccurs="0"
-          name="property" type="types:property" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="property">
-        <xsd:sequence>
-          <xsd:element name="name" type="xsd:string" />
-
-          <xsd:element name="value" type="xsd:string" />
-        </xsd:sequence>
-      </xsd:complexType>
-    </xsd:schema>
-
-    <xsd:schema
-    xmlns:ns0="http://orca/shirako/proxies/soapaxis2/beans"
-    xmlns:axis2wrapped="http://orca/shirako/proxies/soapaxis2/services"
-     attributeFormDefault="unqualified"
-    elementFormDefault="unqualified"
-    targetNamespace="http://orca/shirako/proxies/soapaxis2/services">
-
-      <xsd:import
-      namespace="http://orca/shirako/proxies/soapaxis2/beans" />
-
-      <xsd:element name="updateLease">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="messageID" type="xsd:string" />
-
-            <xsd:element name="reservation"
-            type="types:reservation" />
-
-            <xsd:element name="callbackURL" type="xsd:string" />
-
-            <xsd:element name="updateData"
-            type="types:updateData" />
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="updateTicket">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="messageID" type="xsd:string" />
-
-            <xsd:element name="reservation"
-            type="types:reservation" />
-
-            <xsd:element name="callbackURL" type="xsd:string" />
-
-            <xsd:element name="updateData"
-            type="types:updateData" />
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="query">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="messageID" type="xsd:string" />
-
-            <xsd:element name="callbackURL" type="xsd:string" />
-
-            <xsd:element name="properties"
-            type="types:properties" />
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="failedRPC">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="reservationID" type="xsd:string" />
-
-            <xsd:element name="messageID" type="xsd:string" />
-
-            <xsd:element name="requestID" type="xsd:string" />
-
-            <xsd:element name="errorDetails" type="xsd:string" />
-
-            <xsd:element name="requestType" type="xsd:int" />
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="queryResult">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="messageID" type="xsd:string" />
-
-            <xsd:element name="requestID" type="xsd:string" />
-
-            <xsd:element name="properties"
-            type="types:properties" />
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="updateLeaseResponse">
-        <xsd:complexType>
-          <xsd:sequence />
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="updateTicketResponse">
-        <xsd:complexType>
-          <xsd:sequence />
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="queryResponse">
-        <xsd:complexType>
-          <xsd:sequence />
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="failedRPCResponse">
-        <xsd:complexType>
-          <xsd:sequence />
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="queryResultResponse">
-        <xsd:complexType>
-          <xsd:sequence />
-        </xsd:complexType>
-      </xsd:element>
-    </xsd:schema>
-  </wsdl:types>
-
-  <wsdl:message name="updateLeaseRequest">
-    <wsdl:part name="part1" element="tns:updateLease" />
-  </wsdl:message>
-
-  <wsdl:message name="updateLeaseResponse">
-    <wsdl:part name="part1" element="tns:updateLeaseResponse" />
-  </wsdl:message>
-
-  <wsdl:message name="updateTicketRequest">
-    <wsdl:part name="part1" element="tns:updateTicket" />
-  </wsdl:message>
-
-  <wsdl:message name="updateTicketResponse">
-    <wsdl:part name="part1" element="tns:updateTicketResponse" />
-  </wsdl:message>
-
-  <wsdl:message name="queryRequest">
-    <wsdl:part name="part1" element="tns:query" />
-  </wsdl:message>
-
-  <wsdl:message name="queryResponse">
-    <wsdl:part name="part1" element="tns:queryResponse" />
-  </wsdl:message>
-
-  <wsdl:message name="failedRPCRequest">
-    <wsdl:part name="part1" element="tns:failedRPC" />
-  </wsdl:message>
-
-  <wsdl:message name="failedRPCResponse">
-    <wsdl:part name="part1" element="tns:failedRPCResponse" />
-  </wsdl:message>
-
-  <wsdl:message name="queryResultRequest">
-    <wsdl:part name="part1" element="tns:queryResult" />
-  </wsdl:message>
-
-  <wsdl:message name="queryResultResponse">
-    <wsdl:part name="part1" element="tns:queryResultResponse" />
-  </wsdl:message>
-
-  <wsdl:portType name="ServiceManagerServicePortType">
-    <wsdl:operation name="updateLease">
-      <wsdl:input
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:updateLeaseRequest" wsaw:Action="updateLease" />
-
-      <wsdl:output
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:updateLeaseResponse"
-      wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateLeaseResponse" />
-    </wsdl:operation>
-
-    <wsdl:operation name="updateTicket">
-      <wsdl:input
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:updateTicketRequest"
-      wsaw:Action="updateTicket" />
-
-      <wsdl:output
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:updateTicketResponse"
-      wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateTicketResponse" />
-    </wsdl:operation>
-
-    <wsdl:operation name="query">
-      <wsdl:input
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:queryRequest" wsaw:Action="query" />
-
-      <wsdl:output
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:queryResponse"
-      wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResponse" />
-    </wsdl:operation>
-
-    <wsdl:operation name="failedRPC">
-      <wsdl:input
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:failedRPCRequest" wsaw:Action="failedRPC" />
-
-      <wsdl:output
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:failedRPCResponse"
-      wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/failedRPCResponse" />
-    </wsdl:operation>
-
-    <wsdl:operation name="queryResult">
-      <wsdl:input
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:queryResultRequest" wsaw:Action="queryResult" />
-
-      <wsdl:output
-      xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-      message="tns:queryResultResponse"
-      wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResultResponse" />
-    </wsdl:operation>
-  </wsdl:portType>
-
-  <wsdl:binding name="ServiceManagerServiceSOAP11Binding"
-  type="tns:ServiceManagerServicePortType">
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"
-    style="document" />
-
-    <wsdl:operation name="updateLease">
-      <soap:operation soapAction="updateLease" style="document" />
-
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="updateTicket">
-      <soap:operation soapAction="updateTicket" style="document" />
-
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="query">
-      <soap:operation soapAction="query" style="document" />
-
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="failedRPC">
-      <soap:operation soapAction="failedRPC" style="document" />
-
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="queryResult">
-      <soap:operation soapAction="queryResult" style="document" />
-
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-
-  <wsdl:binding name="ServiceManagerServiceSOAP12Binding"
-  type="tns:ServiceManagerServicePortType">
-    <soap12:binding
-    transport="http://schemas.xmlsoap.org/soap/http"
-    style="document" />
-
-    <wsdl:operation name="updateLease">
-      <soap12:operation soapAction="updateLease"
-      style="document" />
-
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="updateTicket">
-      <soap12:operation soapAction="updateTicket"
-      style="document" />
-
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="query">
-      <soap12:operation soapAction="query" style="document" />
-
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="failedRPC">
-      <soap12:operation soapAction="failedRPC" style="document" />
-
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-
-    <wsdl:operation name="queryResult">
-      <soap12:operation soapAction="queryResult"
-      style="document" />
-
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-
-  <wsdl:service name="ServiceManagerService">
-    <wsdl:port name="ServiceManagerServiceSOAP11port_http"
-    binding="tns:ServiceManagerServiceSOAP11Binding">
-      <soap:address
-      location="http://localhost:8080/axis2/services/ServiceManagerService" />
-    </wsdl:port>
-
-    <wsdl:port name="ServiceManagerServiceSOAP12port_http"
-    binding="tns:ServiceManagerServiceSOAP12Binding">
-      <soap12:address
-      location="http://localhost:8080/axis2/services/ServiceManagerService" />
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
-
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://orca/shirako/proxies/soapaxis2/services" xmlns:ns0="http://orca/shirako/proxies/soapaxis2/services" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:types="http://orca/shirako/proxies/soapaxis2/beans" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://orca/shirako/proxies/soapaxis2/services"><wsdl:types><xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://orca/shirako/proxies/soapaxis2/beans">
+<xsd:complexType name="updateData">
+<xsd:all>
+<xsd:element name="failed" type="xsd:boolean" />
+<xsd:element minOccurs="0" name="message" type="xsd:string" />
+</xsd:all>
+</xsd:complexType>
+<xsd:complexType name="slice">
+<xsd:sequence>
+<xsd:element name="sliceName" type="xsd:string" />
+<xsd:element name="guid" type="xsd:string" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="term">
+<xsd:sequence>
+<xsd:element name="startTime" type="xsd:long" />
+<xsd:element name="endTime" type="xsd:long" />
+<xsd:element name="ticketTime" type="xsd:long" />
+<xsd:element name="newStartTime" type="xsd:long" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="reservation">
+<xsd:sequence>
+<xsd:element name="reservationID" type="xsd:string" />
+<xsd:element name="slice" type="types:slice" />
+<xsd:element minOccurs="0" name="resourceSet" type="types:resourceSet" />
+<xsd:element minOccurs="0" name="term" type="types:term" />
+<xsd:element name="sequence" type="xsd:long" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="resourceData">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="requestProperties" type="types:properties" />
+<xsd:element minOccurs="0" name="configurationProperties" type="types:properties" />
+<xsd:element minOccurs="0" name="resourceProperties" type="types:properties" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="resourceSet">
+<xsd:sequence>
+<xsd:element name="units" type="xsd:int" />
+<xsd:element name="type" type="xsd:string" />
+<xsd:element minOccurs="0" name="resourceData" type="types:resourceData" />
+<xsd:element minOccurs="0" name="concrete" type="types:plist" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="plist">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="plistNode" type="types:plistNode" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="plistNode">
+<xsd:sequence>
+<xsd:element name="name" type="xsd:string" />
+<xsd:element minOccurs="0" name="pvalue" type="types:plist" />
+<xsd:element minOccurs="0" name="value" type="xsd:string" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="properties">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="property" type="types:property" />
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="property">
+<xsd:sequence>
+<xsd:element name="name" type="xsd:string" />
+<xsd:element name="value" type="xsd:string" />
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema><xsd:schema xmlns:ns0="http://orca/shirako/proxies/soapaxis2/beans" xmlns:axis2wrapped="http://orca/shirako/proxies/soapaxis2/services" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://orca/shirako/proxies/soapaxis2/services">
+<xsd:import namespace="http://orca/shirako/proxies/soapaxis2/beans" />
+<xsd:element name="updateLease">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="messageID" type="xsd:string" />
+<xsd:element name="reservation" type="types:reservation" />
+<xsd:element name="callbackURL" type="xsd:string" />
+<xsd:element name="updateData" type="types:updateData" />
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="updateTicket">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="messageID" type="xsd:string" />
+<xsd:element name="reservation" type="types:reservation" />
+<xsd:element name="callbackURL" type="xsd:string" />
+<xsd:element name="updateData" type="types:updateData" />
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="query">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="messageID" type="xsd:string" />
+<xsd:element name="callbackURL" type="xsd:string" />
+<xsd:element name="properties" type="types:properties" />
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="failedRPC">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="reservationID" type="xsd:string" />
+<xsd:element name="messageID" type="xsd:string" />
+<xsd:element name="requestID" type="xsd:string" />
+<xsd:element name="errorDetails" type="xsd:string" />
+<xsd:element name="requestType" type="xsd:int" />
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="queryResult">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="messageID" type="xsd:string" />
+<xsd:element name="requestID" type="xsd:string" />
+<xsd:element name="properties" type="types:properties" />
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="updateLeaseResponse">
+<xsd:complexType>
+<xsd:sequence />
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="updateTicketResponse">
+<xsd:complexType>
+<xsd:sequence />
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="queryResponse">
+<xsd:complexType>
+<xsd:sequence />
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="failedRPCResponse">
+<xsd:complexType>
+<xsd:sequence />
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="queryResultResponse">
+<xsd:complexType>
+<xsd:sequence />
+</xsd:complexType>
+</xsd:element>
+</xsd:schema></wsdl:types><wsdl:message name="updateLeaseRequest"><wsdl:part name="part1" element="tns:updateLease" /></wsdl:message><wsdl:message name="updateLeaseResponse"><wsdl:part name="part1" element="tns:updateLeaseResponse" /></wsdl:message><wsdl:message name="updateTicketRequest"><wsdl:part name="part1" element="tns:updateTicket" /></wsdl:message><wsdl:message name="updateTicketResponse"><wsdl:part name="part1" element="tns:updateTicketResponse" /></wsdl:message><wsdl:message name="queryRequest"><wsdl:part name="part1" element="tns:query" /></wsdl:message><wsdl:message name="queryResponse"><wsdl:part name="part1" element="tns:queryResponse" /></wsdl:message><wsdl:message name="failedRPCRequest"><wsdl:part name="part1" element="tns:failedRPC" /></wsdl:message><wsdl:message name="failedRPCResponse"><wsdl:part name="part1" element="tns:failedRPCResponse" /></wsdl:message><wsdl:message name="queryResultRequest"><wsdl:part name="part1" element="tns:queryResult" /></wsdl:message><wsdl:message name="queryResultResponse"><wsdl:part name="part1" element="tns:queryResultResponse" /></wsdl:message><wsdl:portType name="ServiceManagerServicePortType"><wsdl:operation name="updateLease"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:updateLeaseRequest" wsaw:Action="updateLease" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:updateLeaseResponse" wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateLeaseResponse" /></wsdl:operation><wsdl:operation name="updateTicket"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:updateTicketRequest" wsaw:Action="updateTicket" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:updateTicketResponse" wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateTicketResponse" /></wsdl:operation><wsdl:operation name="query"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:queryRequest" wsaw:Action="query" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:queryResponse" wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResponse" /></wsdl:operation><wsdl:operation name="failedRPC"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:failedRPCRequest" wsaw:Action="failedRPC" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:failedRPCResponse" wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/failedRPCResponse" /></wsdl:operation><wsdl:operation name="queryResult"><wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:queryResultRequest" wsaw:Action="queryResult" /><wsdl:output xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" message="tns:queryResultResponse" wsaw:Action="http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResultResponse" /></wsdl:operation></wsdl:portType><wsdl:binding name="ServiceManagerServiceSOAP11Binding" type="tns:ServiceManagerServicePortType"><soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" /><wsdl:operation name="updateLease"><soap:operation soapAction="updateLease" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="updateTicket"><soap:operation soapAction="updateTicket" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="query"><soap:operation soapAction="query" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="failedRPC"><soap:operation soapAction="failedRPC" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="queryResult"><soap:operation soapAction="queryResult" style="document" /><wsdl:input><soap:body use="literal" /></wsdl:input><wsdl:output><soap:body use="literal" /></wsdl:output></wsdl:operation></wsdl:binding><wsdl:binding name="ServiceManagerServiceSOAP12Binding" type="tns:ServiceManagerServicePortType"><soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" /><wsdl:operation name="updateLease"><soap12:operation soapAction="updateLease" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="updateTicket"><soap12:operation soapAction="updateTicket" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="query"><soap12:operation soapAction="query" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="failedRPC"><soap12:operation soapAction="failedRPC" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation><wsdl:operation name="queryResult"><soap12:operation soapAction="queryResult" style="document" /><wsdl:input><soap12:body use="literal" /></wsdl:input><wsdl:output><soap12:body use="literal" /></wsdl:output></wsdl:operation></wsdl:binding><wsdl:service name="ServiceManagerService"><wsdl:port name="ServiceManagerServiceSOAP11port_http" binding="tns:ServiceManagerServiceSOAP11Binding"><soap:address location="http://localhost:8080/axis2/services/ServiceManagerService" /></wsdl:port><wsdl:port name="ServiceManagerServiceSOAP12port_http" binding="tns:ServiceManagerServiceSOAP12Binding"><soap12:address location="http://localhost:8080/axis2/services/ServiceManagerService" /></wsdl:port></wsdl:service></wsdl:definitions>

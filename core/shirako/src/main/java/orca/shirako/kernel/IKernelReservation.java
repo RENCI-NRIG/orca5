@@ -67,7 +67,14 @@ interface IKernelReservation extends IReservation
      * @throws Exception
      */
     public void extendLease() throws Exception;
-
+    
+    /**
+     * Modifies the reservation.
+     *
+     * @throws Exception
+     */
+    public void modifyLease() throws Exception;
+    
     // XXX: we pass the actor to extendTicket, so that we can distinguish
     // between service managers and brokers.
     // This is a hack. The proper solution is to separate ReservationClient into
@@ -156,6 +163,13 @@ interface IKernelReservation extends IReservation
      */
     public void serviceExtendLease() throws Exception;
 
+    /**
+     * Finishes processing extend lease.
+     *
+     * @throws Exception
+     */
+    public void serviceModifyLease() throws Exception;
+    
     /**
      * Finishes processing extend ticket.
      *

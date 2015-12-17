@@ -323,6 +323,7 @@ public class ResourceSet implements Persistable, Recoverable {
     }
 
     protected void deltaUpdate(IReservation r, ResourceSet set) throws Exception {
+    	
         if (resources == null) {
             // in case of close for a canceled reservation.
             if (set.gained == null) {
@@ -382,6 +383,7 @@ public class ResourceSet implements Persistable, Recoverable {
                 this.modified = set.modified;
             }
 
+            
             /* update the units */
             this.units += difference;
             this.previousProperties = properties;
@@ -411,6 +413,8 @@ public class ResourceSet implements Persistable, Recoverable {
      * =======================================================================
      */
     protected void fullUpdate(IReservation r, ResourceSet rset) throws Exception {
+    	
+    	
         /* take the units and the type */
         units = rset.units;
         type = rset.type;
@@ -789,6 +793,8 @@ public class ResourceSet implements Persistable, Recoverable {
      */
 
     public void serviceExtend() throws Exception {
+    	
+    	
         serviceCheck();
 
         /*
@@ -839,8 +845,25 @@ public class ResourceSet implements Persistable, Recoverable {
         if (modified != null) {
             resources.modify(myModified, true);
         }
+        
     }
 
+    /**
+     * Complete service for a term extension (server side).
+     * @param term the new term
+     * @throws Exception
+     */
+
+    public void serviceModify() throws Exception {
+    	
+        serviceCheck();
+        
+        resources.modify(resources, true);
+        
+    }
+    
+    
+    
     public void serviceReserveSite() throws Exception {
         IConcreteSet cs = null;
 
@@ -1051,6 +1074,15 @@ public class ResourceSet implements Persistable, Recoverable {
         }
     }
 
+    public void updateProps(IReservation r, ResourceSet rset) throws Exception {
+        if ((r == null) || (rset == null)) {
+            throw new IllegalArgumentException();
+        }
+
+        mergeProperties(r, rset);
+        
+    }
+    
     /**
      * Validates a fresh <code>ResourceSet</code> passed in from outside. *
      * @throws Exception thrown if the set is determined to be invalid

@@ -42,10 +42,11 @@ public class ReservationStates
     public static final int Closing = 8;
     public static final int Probing = 9;
     public static final int ClosingJoining = 10;
+    public static final int ModifyingLease = 11;
     public static final String[] pendings = {
                                                 "No pending", "None", "Ticketing", "Redeeming",
                                                 "ExtendingTicket", "ExtendingLease", "Priming",
-                                                "Blocked", "Closing", "Probing", "ClosingJoining"
+                                                "Blocked", "Closing", "Probing", "ClosingJoining", "ModifyingLease"
                                             };
     public static final int AbsorbUpdate = 11;
 

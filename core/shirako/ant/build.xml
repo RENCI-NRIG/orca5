@@ -23,6 +23,7 @@
 	  ${wsdl.file} - path to the wsdl to be compiled
   -->
 	<target name="proxies.soap.axis2.helper" description="helper target to invoke wsdl2java with the right parameters">
+		<!--<echo>CP=${runtime_classpath}</echo>-->
 		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpath="${runtime_classpath}">
 			<arg value="-d" />
 			<arg value="adb" />
@@ -48,10 +49,10 @@
 		<delete dir="${tmp.dir}" />
 		<mkdir dir="${tmp.dir}" />
 		<antcall target="proxies.soap.axis2.helper">
-			<param name="wsdl.file" value="resources/proxies/soapaxis2/wsdl/actor.wsdl" />
+			<param name="wsdl.file" value="../resources/proxies/soapaxis2/wsdl/actor.wsdl" />
 		</antcall>
 		<!-- copy the generated beans to their correct destination -->
-		<copy todir="src/main/java/orca/shirako/proxies/soapaxis2/beans" overwrite="true">
+		<copy todir="../src/main/java/orca/shirako/proxies/soapaxis2/beans" overwrite="true">
 			<fileset dir="${tmp.dir}/src/orca/shirako/proxies/soapaxis2/beans" includes="**/*.java" />
 		</copy>
 		<delete dir="${tmp.dir}" />
@@ -63,13 +64,13 @@
   -->
 	<target name="proxies.soap.axis2.fixservicexml" description="fixes service.xml">
 		<exec executable="bash">
-			<arg value="resources/proxies/soapaxis2/tools/convert.servicexml.sh" />
+			<arg value="../resources/proxies/soapaxis2/tools/convert.servicexml.sh" />
 			<arg value="${fixservicexml.in}" />
 		</exec>
 
 		<!-- add security settings -->
 		<exec executable="perl">
-			<arg value="resources/proxies/soapaxis2/tools/patch.service.xml.pl" />
+			<arg value="../resources/proxies/soapaxis2/tools/patch.service.xml.pl" />
 			<arg value="${fixservicexml.in}" />
 			<arg value="${fixservicexml.in}.secure" />
 		</exec>
@@ -77,13 +78,13 @@
 
 	<target name="proxies.soap.axis2.fixstub" description="fixes service.xml">
 		<exec executable="bash">
-			<arg value="resources/proxies/soapaxis2/tools/convert.stub.sh" />
+			<arg value="../resources/proxies/soapaxis2/tools/convert.stub.sh" />
 			<arg value="${fixstub.in}" />
 		</exec>
 
 		<!-- Increase the timeout -->
 		<exec executable="perl">
-			<arg value="resources/proxies/soapaxis2/tools/patch.stub.pl" />
+			<arg value="../resources/proxies/soapaxis2/tools/patch.stub.pl" />
 			<arg value="${fixstub.in}" />
 			<arg value="${fixstub.in}.fixed" />
 		</exec>
@@ -104,16 +105,16 @@
 
 		<!-- actor -->
 		<antcall target="proxies.soap.axis2.helper">
-			<param name="wsdl.file" value="resources/proxies/soapaxis2/wsdl/actor.wsdl" />
+			<param name="wsdl.file" value="../resources/proxies/soapaxis2/wsdl/actor.wsdl" />
 		</antcall>
 
 		<antcall target="proxies.soap.axis2.fixservicexml">
 			<param name="fixservicexml.in" value="${tmp.dir}/resources/services.xml" />
 		</antcall>
 
-		<move file="${tmp.dir}/resources/services.xml" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/actor.xml" />
+		<move file="${tmp.dir}/resources/services.xml" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/actor.xml" />
 
-		<move file="${tmp.dir}/resources/services.xml.secure" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/actor.secure.xml" />
+		<move file="${tmp.dir}/resources/services.xml.secure" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/actor.secure.xml" />
 
 		<antcall target="proxies.soap.axis2.fixstub">
 			<param name="fixstub.in" value="${tmp.dir}/src/orca/shirako/proxies/soapaxis2/services/ActorServiceStub.java" />
@@ -122,17 +123,17 @@
 
 		<!-- service manager -->
 		<antcall target="proxies.soap.axis2.helper">
-			<param name="wsdl.file" value="resources/proxies/soapaxis2/wsdl/servicemanager.wsdl" />
+			<param name="wsdl.file" value="../resources/proxies/soapaxis2/wsdl/servicemanager.wsdl" />
 		</antcall>
 
 		<antcall target="proxies.soap.axis2.fixservicexml">
 			<param name="fixservicexml.in" value="${tmp.dir}/resources/services.xml" />
 		</antcall>
 
-		<move file="${tmp.dir}/resources/services.xml" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/servicemanager.xml" />
+		<move file="${tmp.dir}/resources/services.xml" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/servicemanager.xml" />
 
 
-		<move file="${tmp.dir}/resources/services.xml.secure" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/servicemanager.secure.xml" />
+		<move file="${tmp.dir}/resources/services.xml.secure" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/servicemanager.secure.xml" />
 
 		<antcall target="proxies.soap.axis2.fixstub">
 			<param name="fixstub.in" value="${tmp.dir}/src/orca/shirako/proxies/soapaxis2/services/ServiceManagerServiceStub.java" />
@@ -141,16 +142,16 @@
 
 		<!-- broker -->
 		<antcall target="proxies.soap.axis2.helper">
-			<param name="wsdl.file" value="resources/proxies/soapaxis2/wsdl/broker.wsdl" />
+			<param name="wsdl.file" value="../resources/proxies/soapaxis2/wsdl/broker.wsdl" />
 		</antcall>
 
 		<antcall target="proxies.soap.axis2.fixservicexml">
 			<param name="fixservicexml.in" value="${tmp.dir}/resources/services.xml" />
 		</antcall>
 
-		<move file="${tmp.dir}/resources/services.xml" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/broker.xml" />
+		<move file="${tmp.dir}/resources/services.xml" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/broker.xml" />
 
-		<move file="${tmp.dir}/resources/services.xml.secure" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/broker.secure.xml" />
+		<move file="${tmp.dir}/resources/services.xml.secure" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/broker.secure.xml" />
 
 		<antcall target="proxies.soap.axis2.fixstub">
 			<param name="fixstub.in" value="${tmp.dir}/src/orca/shirako/proxies/soapaxis2/services/BrokerServiceStub.java" />
@@ -159,30 +160,30 @@
 
 		<!-- authority -->
 		<antcall target="proxies.soap.axis2.helper">
-			<param name="wsdl.file" value="resources/proxies/soapaxis2/wsdl/authority.wsdl" />
+			<param name="wsdl.file" value="../resources/proxies/soapaxis2/wsdl/authority.wsdl" />
 		</antcall>
 
 		<antcall target="proxies.soap.axis2.fixservicexml">
 			<param name="fixservicexml.in" value="${tmp.dir}/resources/services.xml" />
 		</antcall>
 
-		<move file="${tmp.dir}/resources/services.xml" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/authority.xml" />
+		<move file="${tmp.dir}/resources/services.xml" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/authority.xml" />
 
-		<move file="${tmp.dir}/resources/services.xml.secure" tofile="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/authority.secure.xml" />
+		<move file="${tmp.dir}/resources/services.xml.secure" tofile="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/authority.secure.xml" />
 
 		<antcall target="proxies.soap.axis2.fixstub">
 			<param name="fixstub.in" value="${tmp.dir}/src/orca/shirako/proxies/soapaxis2/services/AuthorityServiceStub.java" />
 		</antcall>
 
 		<!-- Copy the wsdl templates -->
-		<copy todir="src/main/resources/orca/shirako/proxies/soapaxis2/deployment/">
+		<copy todir="../src/main/resources/orca/shirako/proxies/soapaxis2/deployment/">
 			<fileset dir="${tmp.dir}">
 				<include name="resources/*.wsdl" />
 			</fileset>
 		</copy>
 
 		<!-- Put all code files at the right place -->
-		<copy todir="src/main/java/orca/shirako/proxies/soapaxis2/services" overwrite="true">
+		<copy todir="../src/main/java/orca/shirako/proxies/soapaxis2/services" overwrite="true">
 			<fileset dir="${tmp.dir}/src/orca/shirako/proxies/soapaxis2/services" includes="**/*.java" excludes="**/*Skeleton.java" />
 		</copy>
 
@@ -192,7 +193,7 @@
 	<target name="manage.beans" description="generates orca.manage.beans">
 		<delete dir="${tmp.dir}" />
 		<mkdir dir="${tmp.dir}" />
-		<xjc schema="resources/orca.manage.beans.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.beans.xsd" destdir="${tmp.dir}" />
 		<!-- copy the generated beans to their destination -->
 		<copy todir="src/main/java/orca/manage/beans" overwrite="true">
 			<fileset dir="${tmp.dir}/orca/manage/beans">
@@ -206,49 +207,49 @@
 		<delete dir="${tmp.dir}" />
 		<mkdir dir="${tmp.dir}" />
 		<!-- container -->
-		<xjc schema="resources/orca.manage.container.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.container.xsd" destdir="${tmp.dir}" />
 		<copy todir="src/main/java/orca/manage/proxies/soap/beans/container" overwrite="true">
 			<fileset dir="${tmp.dir}/orca/manage/proxies/soap/beans/container">
 				<include name="**/*" />
 			</fileset>
 		</copy>		
 		<!-- actor -->
-		<xjc schema="resources/orca.manage.actor.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.actor.xsd" destdir="${tmp.dir}" />
 		<copy todir="src/main/java/orca/manage/proxies/soap/beans/actor" overwrite="true">
 			<fileset dir="${tmp.dir}/orca/manage/proxies/soap/beans/actor">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 		<!-- server actor -->
-		<xjc schema="resources/orca.manage.serveractor.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.serveractor.xsd" destdir="${tmp.dir}" />
 		<copy todir="src/main/java/orca/manage/proxies/soap/beans/serveractor" overwrite="true">
 			<fileset dir="${tmp.dir}/orca/manage/proxies/soap/beans/serveractor">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 		<!-- client actor -->
-		<xjc schema="resources/orca.manage.clientactor.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.clientactor.xsd" destdir="${tmp.dir}" />
 		<copy todir="src/main/java/orca/manage/proxies/soap/beans/clientactor" overwrite="true">
 			<fileset dir="${tmp.dir}/orca/manage/proxies/soap/beans/clientactor">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 		<!-- broker -->
-		<xjc schema="resources/orca.manage.broker.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.broker.xsd" destdir="${tmp.dir}" />
 		<copy todir="src/main/java/orca/manage/proxies/soap/beans/broker" overwrite="true" failonerror="false">
 			<fileset dir="${tmp.dir}/orca/manage/proxies/soap/beans/broker">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 		<!-- authority -->
-		<xjc schema="resources/orca.manage.authority.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.authority.xsd" destdir="${tmp.dir}" />
 		<copy todir="src/main/java/orca/manage/proxies/soap/beans/authority" overwrite="true">
 			<fileset dir="${tmp.dir}/orca/manage/proxies/soap/beans/authority">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 		<!-- service manager -->
-		<xjc schema="resources/orca.manage.servicemanager.xsd" target="${tmp.dir}" />
+		<xjc schema="resources/orca.manage.servicemanager.xsd" destdir="${tmp.dir}" />
 		<copy todir="src/main/java/orca/manage/proxies/soap/beans/servicemanager" overwrite="true">
 			<fileset dir="${tmp.dir}/orca/manage/proxies/soap/beans/servicemanager">
 				<include name="**/*" />
