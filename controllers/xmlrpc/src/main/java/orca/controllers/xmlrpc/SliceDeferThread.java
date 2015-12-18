@@ -126,7 +126,7 @@ public class SliceDeferThread implements Runnable {
 	private synchronized void updateLast(XmlrpcControllerSlice s) {
 		if (s == null)
 			return;
-		logger.info("SliceDeferThread: updating last slice with " + s.getSliceUrn() + "/" + s.getSliceID());
+		logger.info("updateLast(): updating last slice with " + s.getSliceUrn() + "/" + s.getSliceID());
 		lastSlice = s;
 		lastSliceTime = System.currentTimeMillis();
 	}
@@ -145,12 +145,16 @@ public class SliceDeferThread implements Runnable {
 		if (s == null)
 			return;
 		
-		if (checkComputedReservations(s) && delayNotDone(lastSlice)) {
-			logger.info("SliceDeferThread: Putting slice " + s.getSliceUrn() + "/" + s.getSliceID() + " on wait queue");
+		// with the introduction of sliceModify, a slice can end up waiting for itself if
+		// we don't check that last slice isn't the same as new one
+		// It remains to be seen how reliable this is - if a slice is redeeming a previous inter-domain modify
+		// and a new one comes in and is allowed to proceed, will it screw up OSCARS/NLR? /ib
+		if ((s != lastSlice) && checkComputedReservations(s) && delayNotDone(lastSlice)) {
+			logger.info("processSlice(): Putting slice " + s.getSliceUrn() + "/" + s.getSliceID() + " on wait queue");
 			// put on queue
 			putTail(s);
 		} else {
-			logger.info("SliceDeferThread: Processing slice " + s.getSliceUrn() + "/" + s.getSliceID() + " immediately");
+			logger.info("processSlice(): Processing slice " + s.getSliceUrn() + "/" + s.getSliceID() + " immediately");
 			if (checkComputedReservations(s)) {
 				updateLast(s);
 			}
@@ -167,26 +171,26 @@ public class SliceDeferThread implements Runnable {
 			if (slice == null)
 				continue;
 			
-			logger.info("SliceDeferThread: processing previously deferred slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID());
+			logger.info("run(): processing previously deferred slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID());
 			// we know it touches on delay domains,
 			// just check if last one done
 			try {
 				lastSlice.lock();
 				if (delayNotDone(lastSlice)) {
 					if ((System.currentTimeMillis() - lastSliceTime) > maxCreateWaitTime) 
-						logger.info("SliceDeferThread: maximum wait time exceeded for slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID() + ", proceeding anyway.");
+						logger.info("run(): maximum wait time exceeded for slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID() + ", proceeding anyway.");
 					else
 						continue;
 				}
 			} catch (InterruptedException e) {
 				continue;
 			} catch (Exception e) {
-				logger.error("SliceDeferThread: exception while checking slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID() + ": " + e);
+				logger.error("run(): exception while checking slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID() + ": " + e);
 			} finally {
 				lastSlice.unlock();
 			}
 
-			logger.info("SliceDeferThread: performing demand on deferred slice " + slice.getSliceUrn() + "/" + slice.getSliceID());
+			logger.info("run(): performing demand on deferred slice " + slice.getSliceUrn() + "/" + slice.getSliceID());
 			updateLast(slice);
 			try {
 				slice.lock();
@@ -194,7 +198,7 @@ public class SliceDeferThread implements Runnable {
 			} catch (InterruptedException e) {
 				continue;
 			} catch (Exception ee) {
-				logger.error("SliceDeferThread: exception while demanding slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID() + ": " + ee);
+				logger.error("run(): exception while demanding slice " + lastSlice.getSliceUrn() + "/" + lastSlice.getSliceID() + ": " + ee);
 			} finally {
 				slice.unlock();
 			}
@@ -207,7 +211,7 @@ public class SliceDeferThread implements Runnable {
 	private void demandSlice(XmlrpcControllerSlice s) {
 
 		if (s == null) {
-			logger.error("SliceDeferThread: demandSlice was given a null slice");
+			logger.error("demandSlice(): demandSlice was given a null slice");
 			return;
 		}
 		
@@ -253,19 +257,19 @@ public class SliceDeferThread implements Runnable {
 	private boolean checkComputedReservations(XmlrpcControllerSlice slice) {
 		
 		if ((slice == null) || (slice.getComputedReservations() == null)) {
-			logger.info("SliceDeferThread: checkComputedReservaions empty slice or no computed reservations");
+			logger.info("checkComputedReservations(): checkComputedReservaions empty slice or no computed reservations");
 			return false;
 		}
 		
 		for(TicketReservationMng cr: slice.getComputedReservations()) {
 			for (String drt: delayResourceTypes) {
 				if (drt.equals(cr.getResourceType())) {
-					logger.info("SliceDeferThread: checkComputedReservaions " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has delayed domain");
+					logger.info("checkComputedReservations(): checkComputedReservaions " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has delayed domain");
 					return true;
 				}
 			}
 		}
-		logger.info("SliceDeferThread: checkComputedReservaions " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has no delayed domains");
+		logger.info("checkComputedReservations(): checkComputedReservaions " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has no delayed domains");
 		return false;
 	}
 	
@@ -281,6 +285,8 @@ public class SliceDeferThread implements Runnable {
 			return false;
 		}
 		
+		logger.info("delayNotDone(): checking slice " + slice.getSliceUrn() + "/" + slice.getSliceID());
+		
 		IOrcaServiceManager sm = null;
 
 		List<ReservationMng> allRes;
@@ -289,7 +295,7 @@ public class SliceDeferThread implements Runnable {
 			allRes = slice.getAllReservations(sm);
 
 		} catch (Exception e) {
-			logger.error("SliceDeferThread: Exception in delayNotDone for slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + ": " + e);
+			logger.error("delayNotDone(): Exception in delayNotDone for slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + ": " + e);
 			return false;
 		} finally {
 			if (sm != null)
@@ -297,13 +303,13 @@ public class SliceDeferThread implements Runnable {
 		}
 
 		if (allRes == null) {
-			logger.info("SliceDeferThread: Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has null reservations in delayNotDone");
+			logger.info("delayNotDone(): Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has null reservations in delayNotDone");
 			// slice has not been submitted
 			return checkComputedReservations(slice);
 		}
 		else {
 			if (allRes.size() <= 0){
-				logger.info("SliceDeferThread: Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has empty reservations in delayNotDone");
+				logger.info("delayNotDone(): Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has empty reservations in delayNotDone");
 				// slice has not been submitted
 				return checkComputedReservations(slice);
 			}
@@ -319,13 +325,13 @@ public class SliceDeferThread implements Runnable {
 								(r.getState() != OrcaConstants.ReservationStateClosed) &&
 								(r.getState() != OrcaConstants.ReservationStateCloseWait) &&
 								(r.getState() != OrcaConstants.ReservationStateFailed)) {
-							logger.info("SliceDeferThread: Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has domain " + drt + " with reservation " + r.getReservationID() + " that is not yet done");
+							logger.info("delayNotDone(): Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has domain " + drt + " with reservation " + r.getReservationID() + " that is not yet done");
 							return true;
 						}
 					}
 				}
 			}
-			logger.info("SliceDeferThread: Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has no non-final reservations (" + allRes.size() + ")");
+			logger.info("delayNotDone(): Slice " + slice.getSliceUrn() + "/" + slice.getSliceID() + " has no non-final reservations (" + allRes.size() + ")");
 			return false;
 		}
 	}
