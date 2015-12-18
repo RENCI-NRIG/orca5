@@ -353,10 +353,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		return sliceUrn;
 	}
 
-	public String getSliceID() throws Exception {
-		if (slice != null)
-			return slice.getSliceID();
-		throw new Exception("geSliceID(): unable to get ID, slice is null");
+	public String getSliceID() {
+		return slice.getSliceID();
 	}
 
 	public static String getSliceIDForUrn(String urn) {
@@ -427,7 +425,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @param slice_urn
 	 * @param logger
 	 */
-	public void deleteFromPublishQ(Logger logger) throws Exception {
+	public void deleteFromPublishQ(Logger logger) {
 		// check if publish is enabled in xmlrpc.controller.properties
 
 		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
@@ -446,7 +444,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 	 * @param slice_urn
 	 * @param logger
 	 */
-	public void publishManifest(Logger logger) throws Exception {
+	public void publishManifest(Logger logger) {
 
 		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
 		if ((pubManifestEnabled == null) || !pubManifestEnabled.equalsIgnoreCase("true")) {
@@ -460,7 +458,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 				SliceState.PubSubState.SUBMITTED, start, end, 0));
 	}
 
-	public void updatePublishedManifest(Logger logger) throws Exception {
+	public void updatePublishedManifest(Logger logger) {
 		String pubManifestEnabled = OrcaController.getProperty(OrcaXmlrpcHandler.PUBSUB_ENABLED_PROP);
 		if ((pubManifestEnabled == null) || !pubManifestEnabled.equalsIgnoreCase("true")) {
 			logger.info("ORCA.publish.manifest property needs to be set to true for publishing manifests; Can't re-publish manifest");

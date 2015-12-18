@@ -358,6 +358,9 @@ exit 0
 
 %changelog
 *Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild again to test pubsub at RCI
+
+*Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild to test pubsub at RCI
 
 *Thu Dec 17 2015 Ilya Baldin <ibaldin@renci.org>
