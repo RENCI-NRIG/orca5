@@ -423,10 +423,10 @@ public class PublishManager {
 			}
 
 			if (sliceListString != null) {
-				logger.info("buildSliceListString(): sliceListString = " + sliceListString);
+				logger.debug("buildSliceListString(): sliceListString[first 100 chars] = " + sliceListString.substring(1, 100));
 			}
 			else {
-				logger.info("buildSliceListString(): Null sliceList");
+				logger.debug("buildSliceListString(): Null sliceList");
 			}
 
 			return sliceListString;

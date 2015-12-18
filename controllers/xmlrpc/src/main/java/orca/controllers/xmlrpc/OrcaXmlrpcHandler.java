@@ -1619,7 +1619,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	                drt.setAvailableUnits(a.getIntValue());
 	            }
 	            
-	          	logger.info("discoverTypes: " + domain + " rt=" + drt.getResourceType() + " available units=" + drt.getAvailableUnits());
+	          	logger.debug("discoverTypes: " + domain + " rt=" + drt.getResourceType() + " available units=" + drt.getAvailableUnits());
 	            domainResources.addResource(drt);
 	            BitSet bSet = instance.getControllerAssignedLabel().get(domain);
 				a = rpd.getAttribute(ResourceProperties.ResourceNdlAbstractDomain);
