@@ -132,6 +132,7 @@ public class PublishManager {
 
 		public void run() {
 
+			ManifestPublisher mPublisher = new ManifestPublisher(logger);
 			try{
 
 				// Find if Orca container is still running
@@ -166,7 +167,6 @@ public class PublishManager {
 				pubQ.drainModified();
 
 				// initialize XMPP. This is inefficient, but helps when XMPP server gets wiped and restarted
-				ManifestPublisher mPublisher = new ManifestPublisher(logger);
 				mPublisher.createAccountAndDisconnect();
 				mPublisher.prepareXMPP();
 				
@@ -314,11 +314,16 @@ public class PublishManager {
 						}
 					}
 				} // end synchronized
-				mPublisher.disconnectXMPP();
 
 			} catch(Exception e){ // this is to catch all exceptions in the run() method for the timer thread; prevents timer thread from getting killed by exceptions
 				logger.error("Exception occured during Timer thread execution for handling PubSub: Stack trace follows... " , e);
 				e.printStackTrace();
+			} finally {
+				try {
+					mPublisher.disconnectXMPP();
+				} catch (Exception ex) {
+					logger.error("Unable disconnect from XMPP: " + ex);
+				}
 			}
 		}
 

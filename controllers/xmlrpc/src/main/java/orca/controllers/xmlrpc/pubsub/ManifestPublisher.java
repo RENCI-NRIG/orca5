@@ -89,7 +89,8 @@ public class ManifestPublisher {
 
 	public void disconnectXMPP() throws Exception {
 		try {
-			xps._finalize();
+			if (xps != null)
+				xps._finalize();
 		} catch (Throwable ex) {
 			throw new Exception("Error disconnecting from XMPP server: " + ex);
 		}
