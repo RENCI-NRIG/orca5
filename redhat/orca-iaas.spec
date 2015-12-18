@@ -357,6 +357,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
+- Rebuild to test pubsub at RCI
+
 *Thu Dec 17 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild of master for test at RCI
 
