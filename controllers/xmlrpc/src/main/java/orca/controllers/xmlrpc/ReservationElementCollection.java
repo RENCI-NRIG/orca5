@@ -339,7 +339,8 @@ public class ReservationElementCollection {
 			return;
 		String name = de.getName();
 		this.addMacAddress(de);
-		AllNodeMap.put(name,de);
+		if(!AllNodeMap.containsKey(name))
+			AllNodeMap.put(name,de);
 	}
 	
 	public void remove_vm(String name){
