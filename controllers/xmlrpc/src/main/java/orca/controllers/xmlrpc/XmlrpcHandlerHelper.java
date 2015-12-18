@@ -412,9 +412,11 @@ public class XmlrpcHandlerHelper {
 
 			try {
 				altNameStrings = getExtensionValue(clientCertificateChain[0], SUBJECT_ALTERNATIVE_NAME);
+				/*
 				for (String altName: altNameStrings) {
-					logger.info("Certificate contains subject alternative name: " + altName);
+					logger.debug("Certificate contains subject alternative name: " + altName);
 				}
+				*/
 			} catch (Exception e) {
 				;
 			}
@@ -446,8 +448,6 @@ public class XmlrpcHandlerHelper {
         return (((altNameStrings != null) && (altNameStrings.size() > 0)) ? altNameStrings.toString() : 
         	clientCertificateChain[0].getSubjectDN().getName());
         */
-        
-        logger.info("Setting userDN");
         
         // supply URN if emulab cert or DN if other cert
         String clientcertUserDN = ((altNameStrings != null) && (altNameStrings.size() > 0)) ? altNameStrings.toString() : 
@@ -498,11 +498,11 @@ public class XmlrpcHandlerHelper {
         
         // If it is not speaks for context, then return userDN from client cert in SSL connection
         if(!speaks_for_context){
-            logger.info("returning clientcertUserDN as userDN");
+            logger.debug("returning clientcertUserDN as userDN");
             return clientcertUserDN;
         }
         else {
-            logger.info("returning speaksforUserDN as userDN");
+            logger.debug("returning speaksforUserDN as userDN");
             return speaksforUserDN;
         }
         

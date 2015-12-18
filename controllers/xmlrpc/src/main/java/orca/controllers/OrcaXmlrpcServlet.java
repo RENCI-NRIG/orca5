@@ -126,13 +126,15 @@ public class OrcaXmlrpcServlet extends XmlRpcServlet {
     		Log.debug("Client " + pRequest.getRemoteAddr() + " is not using secure communications");
     	}else{
     		Log.debug("Client " + pRequest.getRemoteAddr() + " is using secure communications");
+    		/*
     		Log.debug("Available attributes: --------");
         	Enumeration<?> names = pRequest.getAttributeNames();
         	while(names.hasMoreElements()){
         		Log.debug(names.nextElement());
         	}
         	Log.debug("--------");
-         
+         	*/
+    		
         	X509Certificate[] certChain = (X509Certificate[]) pRequest.getAttribute("javax.servlet.request.X509Certificate");
         	clientCertificateChain.set(certChain);
         	
