@@ -234,6 +234,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		IOrcaServiceManager sm = null;
 		XmlrpcControllerSlice ndlSlice = null;
 
+		logger.info("ORCA API createSlice() invoked");
+		
 		//Check existing slices, remove the closed ones from XmlrpcOrcaState
 		instance.closeDeadSlices();
 		
@@ -241,14 +243,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			return setError("ERROR: low system memory, please try later");
 		}
 		
-		if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
-			return setError("ERROR: system is busy, please try again in a few minutes");
-		}
-		
 		synchronized(globalStateLock) {
 
 			try {
-				logger.info("ORCA API createSlice() invoked");
+				
+				if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
+					return setError("ERROR: system is busy, please try again in a few minutes");
+				}
 
 				String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, verifyCredentials, logger);
 
@@ -536,13 +537,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		if (!checkMemory(null)) {
 			return setError("ERROR: low system memory, please try later");
 		}
-		
-		if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
-			return setError("ERROR: system is busy, please try again in a few minutes");
-		}
 
 		synchronized(globalStateLock) {
+			
 			try {
+				if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
+					return setError("ERROR: system is busy, please try again in a few minutes");
+				}
+				
 				String result_str = null;
 				logger.info("ORCA API modifySlice() invoked for " + slice_urn);
 
@@ -1089,13 +1091,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		IOrcaServiceManager sm = null;
 		XmlrpcControllerSlice ndlSlice = null;
 
-		
-		if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
-			return setError("ERROR: system is busy, please try again in a few minutes");
-		}
-		
 		synchronized(globalStateLock) {
 			try {
+				
+				if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
+					return setError("ERROR: system is busy, please try again in a few minutes");
+				}
+				
 				Boolean result = false;
 				logger.info("ORCA API deleteSlice() invoked");
 
