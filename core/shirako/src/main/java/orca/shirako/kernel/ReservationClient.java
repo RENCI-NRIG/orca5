@@ -733,7 +733,10 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
             relinquished = true;
             // tell the policy this reservation is now closed
             try {
-                policy.closed(this);
+            	if (policy != null)
+            		policy.closed(this);
+            	else
+            		logger.warn("doRelinquish(): policy not set in reservation " + rid + ", unable to call policy.closed(), continuing");
             } catch (Exception e) {
                 logger.error("close with policy", e);
             }
