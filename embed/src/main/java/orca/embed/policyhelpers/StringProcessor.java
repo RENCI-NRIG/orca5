@@ -11,7 +11,7 @@ public class StringProcessor {
 	
 	public static String getHostInterface(Properties local,String unit_parent_url){
 		String key=null,value=null,host_interface=null;
-		if(local.isEmpty() || !local.containsValue(unit_parent_url))
+		if ((local == null) || local.isEmpty() || (unit_parent_url == null) || !local.containsValue(unit_parent_url))
 			return null;
 		for(Entry<Object, Object> entry:local.entrySet()){
 			key=(String) entry.getKey();
