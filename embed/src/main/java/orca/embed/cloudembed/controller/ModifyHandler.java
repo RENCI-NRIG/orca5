@@ -157,9 +157,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 		LinkedList <Device> nodeGroupAddedDevices = new LinkedList <Device> ();
 		for(Device device:addedDevices){
 			DomainElement de = (DomainElement) device;
-			if(de.getCe()!=null && !de.isModify() && !NdlCommons.isStitchingNodeInManifest(de.getResource()) )
-				if(de.getCe().getDependencies().size()==0 || de.getCe().getGroup()!=null) //not part of a interdomain link
-					nodeGroupAddedDevices.add(device);
+			if( (de.getType().endsWith("vm")) || (de.getType().endsWith("baremetalce")) || (de.getType().endsWith("lun")))
+				if(de.getCe()!=null && !de.isModify() && !NdlCommons.isStitchingNodeInManifest(de.getResource()) )
+					if(de.getCe().getDependencies().size()==0 || de.getCe().getGroup()!=null) //not part of a interdomain link
+						nodeGroupAddedDevices.add(device);
 		}
 		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
 		createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
@@ -343,8 +344,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 		
 		for(NetworkElement device:this.getDeviceList()){
 			DomainElement dd = (DomainElement) device;
+			logger.debug("ModifyHandler:dd="+dd.getName()+";isModify="+dd.isModify()
+					+";dd.modifyversion="+dd.getModifyVersion()+";this.modifyversion="+this.modifyVersion);
+			
 			if(dd.getModifyVersion() == this.modifyVersion){
-				logger.debug("ModifyHandler:dd="+dd.getName()+";isModify="+dd.isModify());
 				if(dd.isModify()){
 					if(!modifiedDevices.contains(dd)){
 						modifies.addModifedElement(device.getResource());

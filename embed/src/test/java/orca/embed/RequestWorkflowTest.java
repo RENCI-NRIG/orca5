@@ -65,9 +65,9 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		
 		requestFileRenciVMSVlan= "src/test/resources/orca/embed/TS3-3.rdf";  // a vlan connected 3-node cluster in renci vmsite
 		
-		requestFileGPO = "src/test/resources/orca/embed/ndl.rdf"; 
+		requestFileGPO = "src/test/resources/orca/embed/mp.rdf"; 
 		
-		requestFileGush = "src/test/resources/orca/embed/st-modify.rdf"; 
+		requestFileGush = "src/test/resources/orca/embed/mp-modify.rdf"; 
 		
 		requestFileDukeUHouston = "src/main/resources/orca/ndl/request/idRequest-dukeEuca-uhoustonEuca.rdf";
 		requestFileDukeRice = "orca/ndl/request/idRequest-dukeEuca-riceEuca.rdf";
@@ -149,14 +149,17 @@ public class RequestWorkflowTest extends InterDomainHandlerTest {
 		HashMap <String,DomainElement> firstGroupElement=new HashMap <String,DomainElement>();
 		
 		ReservationElementCollection elementCollection = new ReservationElementCollection(boundElements, firstGroupElement);
-		
+		/*
+		String fileName = "/home/geni-orca/workspace-orca5/orca5/embed/src/test/resources/orca/embed/mp-manifest.rdf";
+        OutputStream fsw = new FileOutputStream(fileName);
+        workflow.getManifestModel().write(fsw);
+		*/
 		workflow.modify(drp, modReq,"slice-id",elementCollection.NodeGroupMap,elementCollection.firstGroupElement);
 		
 		LinkedList<NetworkElement> connection = (LinkedList<NetworkElement>) workflow.getBoundElements();
 		
 		print(connection);
 		
-		//workflow.getManifestModel().write(System.out);
 		workflow.closeModel();
 		workflow.close();
 	}

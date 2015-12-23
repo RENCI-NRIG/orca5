@@ -613,8 +613,16 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		}
 		else{
 			if(hop==1){
+				if((device!=null) &&  mapper.isCe(device)){//start is modify, copy start to device
+					device.setURI(start.getURI());
+					device.copyDependency(start);
+					device.setModify(start.isModify());
+					device.setCe(start.getCe());
+					setModifyFlag(device);
+				}
 				setModifyFlag(start);
 				dependList.add(start);
+				
 				logger.debug("modified device, new start:"+start.getName());
 			}
 		}

@@ -192,6 +192,15 @@ public class CloudHandler extends MappingHandler{
 			}
 		}
 		logger.info("There are "+ typeCount +" types of resource in the request!!!");
+		if(typeCount==0){ //possible modifying
+			if((domainName.endsWith("vm")) || (!domainName.endsWith("baremetalce")) || (!domainName.endsWith("lun")) ){
+				domain=domainName;
+				int last_index = domainName.lastIndexOf("/");
+				pureType = domainName.substring(last_index,domainName.length());
+				domainName=domainName.substring(0, last_index);
+				logger.info("But possible modifying element:domainName="+domainName+";type="+pureType);
+			}		
+		}
 		//go form the reservation domainElement
 		DomainElement link_device = null;
 		for(NetworkElement element:elements){
@@ -443,6 +452,10 @@ public class CloudHandler extends MappingHandler{
 			if(device.getCastType()!=null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
 				mpDevice=true;
 			}
+			logger.debug("createEdgeDeviceCG: device:"+device.getName()
+					+";numInterface="+device.getNumInterface()
+					+";isModify="+device.isModify()
+					+";modify version="+this.modifyVersion);
 			setModifyFlag(device);
 			if(!deviceList.contains(device)){
 				deviceList.add(device);
@@ -467,7 +480,9 @@ public class CloudHandler extends MappingHandler{
 	private DomainElement createNewNode(NetworkElement element,int i,DomainElement link_device, String domainName, 
 			OntModel requestModel, LinkedList<NetworkElement> deviceList, int num){
 		
-		logger.info("Creating new node:hole="+i+"domainName="+domainName);
+		logger.info("Creating new node:hole="+i+";domainName="+domainName);
+		if(link_device!=null)
+			logger.debug(";link_device="+link_device.getName());
 		
 		DomainResourceType dType = new DomainResourceType(element.getResourceType().getResourceType(),element.getResourceType().getCount());
 		dType.setCount(1);
@@ -478,7 +493,7 @@ public class CloudHandler extends MappingHandler{
 		ComputeElement ce_element = (ComputeElement) element;
 		String dTypeStr = element.getResourceType().getResourceType();
 		if( (dTypeStr.endsWith("vm")) || (dTypeStr.endsWith("baremetalce")) || (dTypeStr.endsWith("lun")) ){	
-			if(ce_element.getGroup()!=null)
+			if(ce_element.getGroup()!=null && !ce_element.isModify())
 				name = name.concat("/")+String.valueOf(i);
 		}
 		
@@ -508,21 +523,21 @@ public class CloudHandler extends MappingHandler{
 		
 		for(NetworkElement existing_ce: deviceList){
 			if(existing_ce.getName().equalsIgnoreCase(edge_device.getName())){
+				logger.debug("isModify:"+existing_ce.getName()
+						+";numInterface="+existing_ce.getNumInterface()
+						+";isModify="+element.isModify());
 				boolean isInter = isInterdomain(((DomainElement) existing_ce).getCe(),ce_element, link_device);
+				logger.debug(";isInter="+isInter);
 				if(!element.isModify() || isInter){
-					logger.info("Existing ce="+existing_ce.getName());
+					logger.info("isInter Existing ce="+existing_ce.getName());
 					edge_device = (DomainElement) existing_ce;
 					break;
 				}
 				if(element.isModify() && existing_ce.isModify()){
-					logger.info("Existing ce="+existing_ce.getName());
+					logger.info("isModify Existing ce="+existing_ce.getName());
 					edge_device = (DomainElement) existing_ce;
 					break;
 				}
-				logger.debug("isModify:"+existing_ce.getName()
-						+";numInterface="+existing_ce.getNumInterface()
-						+";isModify="+element.isModify()
-						+"isInter="+isInter);
 				if(element.isModify()){
 					edge_device.setNumInterface(existing_ce.getNumInterface());
 				}
@@ -626,8 +641,13 @@ public class CloudHandler extends MappingHandler{
 			logger.debug("isInterdomain:ncByInterface="+ncByInterface.getName()
 					+"intf="+intf.getName()
 					+"ce_intf="+ce.getInterfaceByName(ncByInterface.getName()));
+			if(link_device!=null)
+				logger.debug(";link_device="+link_device.getName());
 			if(!ncByInterface.getName().equals(link_device.getName())){                      //inter-site topology request: link != connection
-                ce_intf=ce.getInterfaceByName(ncByInterface.getName()); 
+                ce_intf=ce.getInterfaceByName(ncByInterface.getName());
+                if(ce_intf!=null)
+                	logger.debug("ce_intf="+ce_intf.getName());
+                logger.debug("intf="+intf.getName());
                 if(ce_intf!=null && ce_intf==intf){
                 	isInter=true;
                 	break;
