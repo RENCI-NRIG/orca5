@@ -197,7 +197,7 @@ public class NlrNdlPropertiesConverter extends BenNdlPropertiesConverter {
         	logger.error("Unable to save connection " + con + " onto reservation due to persistence exception: " + pee);
         }
     	
-    	logger.debug("PROPERTIES: " + p.toString());
+    	//logger.debug("PROPERTIES: " + p.toString());
         return p;
     }
 }

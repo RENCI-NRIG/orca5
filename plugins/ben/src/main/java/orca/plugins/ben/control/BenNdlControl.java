@@ -276,7 +276,7 @@ public class BenNdlControl extends ResourceControl {
 		// inprogress bit
 		if (Config.TargetJoin.equals(action)) {
 			setInprogress(false);
-			logger.debug("BenNdlControl.configurationComplete(): this request is finished: inProgress = " + inprogress);
+			logger.debug("BenNdlControl.configurationComplete(): this request " + token.getReservationID() + " is finished: inProgress = " + inprogress);
 		}
 	}
 
@@ -314,7 +314,7 @@ public class BenNdlControl extends ResourceControl {
 
 		} else {
 			unsetcloseInProgress();
-			logger.debug("BenNdlControl.close(): Missing unit for reservation " + reservation.getReservationID().toHashString());
+			logger.debug("BenNdlControl.close(): Missing unit for reservation " + reservation.getReservationID());
 		}
 	}
 
@@ -423,5 +423,23 @@ public class BenNdlControl extends ResourceControl {
 		logger.debug("Restored BenNdlControl resource type: " + type);
 		logger.debug("with NetworkHandler: " + handler);
 	}
+	
+    /**
+     * Returns the status code contained in the properties list. To be use in
+     * configuration handlers.
+     * 
+     * @param properties
+     * @return
+     */
+    protected int getResultCode(Properties properties) {
+        int result = 0;
+        String temp = properties.getProperty(Config.PropertyTargetResultCode);
+
+        if (temp != null) {
+            result = Integer.parseInt(temp);
+        }
+
+        return result;
+    }
 	
 }

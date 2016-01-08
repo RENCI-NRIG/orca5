@@ -14,6 +14,8 @@ import orca.shirako.container.Globals;
 import orca.shirako.core.Unit;
 import orca.shirako.core.UnitSet;
 import orca.shirako.kernel.ResourceSet;
+import orca.shirako.plugins.config.Config;
+import orca.shirako.plugins.config.ConfigToken;
 import orca.shirako.util.ResourceData;
 import orca.util.PropList;
 
@@ -21,6 +23,7 @@ public class NdlMPControl extends BenNdlControl {
 
 	@Override
 	public void donate(IClientReservation r) throws Exception {
+		logger.debug("NdlMpControl.donate() for " + r + " is called");
 		if (handler != null) {
 			throw new Exception("only a single source reservation is supported");
 		}        
@@ -34,6 +37,7 @@ public class NdlMPControl extends BenNdlControl {
 	 * {@overide}
 	 */
 	public ResourceSet assign(IAuthorityReservation r) throws Exception {
+		logger.debug("NdlMpControl.assign() for " + r + " is called");
 		if (handler == null) {
 			throw new Exception("no inventory");
 		}
@@ -106,7 +110,7 @@ public class NdlMPControl extends BenNdlControl {
 
 	@Override
 	public synchronized void close(IReservation reservation) {
-		logger.debug("NdlMPControl.close(): for reservation: " + reservation.getReservationID().toHashString());
+		logger.debug("NdlMPControl.close(): for reservation: " + reservation.getReservationID());
 
 		//super.close(reservation);
 
@@ -119,9 +123,9 @@ public class NdlMPControl extends BenNdlControl {
 		}
 
 		setcloseInProgress();
-		if (u != null) {            
+		if (u != null) {   
 			String uri = u.getProperty(PropertyRequestID);
-			logger.debug("NdlMPControl.close(): found unit for reservation: " + reservation.getReservationID().toHashString() + " requestID=" + uri);
+			logger.debug("NdlMPControl.close(): found unit for reservation: " + reservation.getReservationID() + " requestID=" + uri);
 			// unset the setup properties
 			NetworkConnection con = handler.getConnection(uri);
 			Properties setupProperties = NlrNdlPropertiesConverter.convert(con, (MultiPointNetworkHandler)handler, logger);
@@ -131,18 +135,54 @@ public class NdlMPControl extends BenNdlControl {
 			Properties teardownProperties = NlrNdlPropertiesConverter.convert(con, (MultiPointNetworkHandler)handler, logger);
 			u.mergeProperties(teardownProperties);  
 
+			closeConnectionCleanup(u);
+			/*
 			String requestID = u.getProperty(PropertyRequestID);
 			try {
 				handler.releaseReservation(requestID);
 			} catch (Exception e) {
 				logger.error("NdlMPControl.close(): Exception: " + e);
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}	
+			}
+			*/	
 		} else {
 			unsetcloseInProgress();
-			logger.debug("NdlMPControl.close(): missing unit for reservation " + reservation.getReservationID().toHashString());
+			logger.debug("NdlMPControl.close(): missing unit for reservation " + reservation.getReservationID());
 		}
+	}
+	
+	/**
+	 * Cleanup connection state for a failed or closed unit
+	 * @param u
+	 */
+	private void closeConnectionCleanup(Unit u) {
+		logger.debug("NdlMpControl.closeConnectionCleanup() called for " + u.getReservationID())	;
+		String requestID = u.getProperty(PropertyRequestID);
+		try {
+			handler.releaseReservation(requestID);
+		} catch (Exception e) {
+			logger.error("NdlMPControl.closeConnectionCleanup(): Exception: " + e);
+			e.printStackTrace();
+		}	
+	}
+	
+	@Override
+	public void configurationComplete(String action, ConfigToken token, Properties outProperties) {
+		logger.debug("NdlMpControl.configurationComplete() called for " + token.getReservationID());
+		
+		super.configurationComplete(action, token, outProperties);
+
+		Unit u = (Unit)token;
+		
+        int result = getResultCode(outProperties);
+        
+        // if failure to provision, need to cleanup
+        if (result != 0) {
+        	logger.warn("NdlMpControl.configurationComplete() reservation " + token.getReservationID() + " failed, cleaning up");
+        	setcloseInProgress();
+        	closeConnectionCleanup(u);
+        	unsetcloseInProgress();
+        }
 	}
 	
 	@Override
