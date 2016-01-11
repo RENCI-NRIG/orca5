@@ -23,8 +23,19 @@ import org.apache.log4j.Logger;
 
 public class NlrNdlPropertiesConverter extends BenNdlPropertiesConverter {
 
-	public static Properties convert(NetworkConnection con,MultiPointNetworkHandler handler,Logger logger)
+	public static Properties convert(NetworkConnection con, NetworkHandler h,Logger logger)
     {
+		logger.debug("Invoking NlrNdlPropertiesConverter.convert()");
+		
+		MultiPointNetworkHandler handler;
+		
+		try {
+			handler = (MultiPointNetworkHandler)h;
+		} catch(ClassCastException cce) {
+			logger.error("Passed in handler " + h + " is not of type MultiPointNetworkHandler");
+			return null;
+		}
+		
     	if(con==null){
         	logger.debug("No connection being generated in DD/NLR:");
         	return null;

@@ -1,9 +1,13 @@
 package orca.plugins.ben.control;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Properties;
+
+import org.apache.log4j.Logger;
 
 import orca.embed.cloudembed.NetworkHandler;
 import orca.embed.policyhelpers.RequestReservation;
@@ -41,6 +45,22 @@ public class BenNdlControl extends ResourceControl {
     public static final String PropertyConnectionRecoveryProperty = "connection.recovery.property";
     public static final String PropertyAssignedLabelRecovery = "assigned.label.recovery.property";
 
+	protected static Class<? extends BenNdlPropertiesConverter> propertiesConverter;
+	protected static Method propertiesConverterConvertMethod = null;
+	{
+		propertiesConverter = BenNdlPropertiesConverter.class;
+		
+		try {
+			propertiesConverterConvertMethod = propertiesConverter.getDeclaredMethod("convert", NetworkConnection.class, NetworkHandler.class, Logger.class);
+		} catch(NoSuchMethodException nme) {
+			System.out.println("Unable to find appropriate convert method in " + propertiesConverter.getCanonicalName());
+			Method[] methods = propertiesConverter.getMethods();
+			for (Method m: methods) {
+				System.out.println("Method " + m);
+			}
+		}
+	}
+    
 	/**
 	 * The resource type this control is responsible for.
 	 */
@@ -268,8 +288,44 @@ public class BenNdlControl extends ResourceControl {
 		return new ResourceSet(gained, null, null, type, rd);
 	}
 
+	/**
+	 * Cleanup connection state for a failed or closed unit
+	 * @param u
+	 */
+	protected void closeConnectionCleanup(Unit u) {
+		logger.debug("closeConnectionCleanup() called for " + u.getReservationID());
+		
+		String uri = u.getProperty(PropertyRequestID);
+		
+		if (uri == null) {
+			logger.error("Unable to fund URI of the request to complete connection close");
+			return;
+		}
+		
+		// set the teardown properties
+		NetworkConnection teardown = handler.getConnectionTeardownActions(uri);
+		try {
+			//Properties teardownProperties = BenNdlPropertiesConverter.convert(teardown, handler, logger);
+			Properties teardownProperties = (Properties)propertiesConverterConvertMethod.invoke(null, teardown, handler, logger);
+			u.mergeProperties(teardownProperties);
+		} catch (InvocationTargetException ite) {
+			logger.error("Unable to get teardown properties: " + ite + " for " + u.getReservationID());
+		} catch (IllegalAccessException iae) {
+			logger.error("Unable to get teardown properties: " + iae + " for " + u.getReservationID());
+		}
+		
+		try {
+			handler.releaseReservation(uri);
+		} catch (Exception e) {
+			logger.error("NdlMPControl.closeConnectionCleanup(): Exception: " + e + " for " + u.getReservationID());
+			e.printStackTrace();
+		}	
+	}
+	
 	@Override
 	public void configurationComplete(String action, ConfigToken token, Properties outProperties) {
+		logger.debug("configurationComplete() called for " + token.getReservationID());
+		
 		super.configurationComplete(action, token, outProperties);
 
 		// we handle only one action at a time, so we simply reset the
@@ -277,6 +333,18 @@ public class BenNdlControl extends ResourceControl {
 		if (Config.TargetJoin.equals(action)) {
 			setInprogress(false);
 			logger.debug("BenNdlControl.configurationComplete(): this request " + token.getReservationID() + " is finished: inProgress = " + inprogress);
+			
+			Unit u = (Unit)token;
+			
+	        int result = getResultCode(outProperties);
+	        
+	        // if failure to provision, need to cleanup
+	        if (result != 0) {
+	        	logger.warn("BenNdlControl.configurationComplete(): reservation " + token.getReservationID() + " failed, cleaning up");
+	        	setcloseInProgress();
+	        	closeConnectionCleanup(u);
+	        	unsetcloseInProgress();
+	        }
 		}
 	}
 
@@ -291,30 +359,29 @@ public class BenNdlControl extends ResourceControl {
 		} catch (Exception e) {
 			u = null;
 		}
-
+		
+		logger.debug("Using properties converter " + propertiesConverter.getCanonicalName() + " in BenNdlControl.close()");
+		
 		setcloseInProgress();
-		if (u != null) {            
+		if ((u != null) && (propertiesConverterConvertMethod != null)){
+			
 			String uri = u.getProperty(PropertyRequestID);
 			// unset the setup properties
 			NetworkConnection con = handler.getConnection(uri);
-			Properties setupProperties = BenNdlPropertiesConverter.convert(con, handler, logger);
-			u.unsetProperties(setupProperties);
-			// set the teardown properties
-			NetworkConnection teardown = handler.getConnectionTeardownActions(uri);
-			Properties teardownProperties = BenNdlPropertiesConverter.convert(teardown, handler, logger);
-			u.mergeProperties(teardownProperties);      
-
-			String requestID = u.getProperty(PropertyRequestID);
+			//Properties setupProperties = BenNdlPropertiesConverter.convert(con, handler, logger);
 			try {
-				handler.releaseReservation(requestID);
-			} catch (Exception e) {
-				logger.error("BenNdlControl.close(): Exception " + e);
-				e.printStackTrace();
+				Properties setupProperties = (Properties)propertiesConverterConvertMethod.invoke(null, con, handler, logger);
+				u.unsetProperties(setupProperties);
+			} catch (InvocationTargetException ite) {
+				logger.error("Unable to get setup properties: " + ite + " for " + reservation.getReservationID());
+			} catch (IllegalAccessException iae) {
+				logger.error("Unable to get setup properties: " + iae + " for " + reservation.getReservationID());
 			}
 
+			closeConnectionCleanup(u);
 		} else {
 			unsetcloseInProgress();
-			logger.debug("BenNdlControl.close(): Missing unit for reservation " + reservation.getReservationID());
+			logger.debug("BenNdlControl.close(): Missing unit for reservation or unable to get convert method for " + reservation.getReservationID());
 		}
 	}
 

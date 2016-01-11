@@ -152,6 +152,7 @@ public class BenNdlPropertiesConverter
 
     public static Properties convert(NetworkConnection con, NetworkHandler handler, Logger logger)
     {
+		logger.debug("Invoking BenNdlPropertiesConverter.convert()");
         if(con==null){
         	logger.debug("No connection being generated in BEN:");
         	return null;
