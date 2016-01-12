@@ -357,14 +357,8 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Jan 01 2016 Victor J. Orlikowski <vjo@duke.edu>
+- Initial rebuild for whole testbed maintenance.
+
 *Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild again to test pubsub at RCI
-
-*Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
-- Rebuild to test pubsub at RCI
-
-*Thu Dec 17 2015 Ilya Baldin <ibaldin@renci.org>
-- Rebuild of master for test at RCI
-
-*Fri Dec 04 2015 Ilya Baldin <ibaldin@renci.org>
-- Rebuild for testing new approach to modify model handling
