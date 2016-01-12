@@ -201,12 +201,14 @@ mkdir -p %{buildroot}%{pid_dir}/controller-11080
 cp -R server/orca/axis2repository %{buildroot}%{conf_dir}/am+broker-12080
 cp -R server/orca/config %{buildroot}%{conf_dir}/am+broker-12080
 cp -R server/orca/lib %{buildroot}%{conf_dir}/am+broker-12080
+mkdir -p %{buildroot}%{conf_dir}/am+broker-12080/ssl
 # Unique to the AM - an NDL directory.
 mkdir -p %{buildroot}%{conf_dir}/am+broker-12080/ndl
 # Populate sm-14080
 cp -R server/orca/axis2repository %{buildroot}%{conf_dir}/sm-14080
 cp -R server/orca/config %{buildroot}%{conf_dir}/sm-14080
 cp -R server/orca/lib %{buildroot}%{conf_dir}/sm-14080
+mkdir -p %{buildroot}%{conf_dir}/sm-14080/ssl
 # Populate controller-11080
 cp -R controllers/xmlrpc/xmlrpc/config %{buildroot}%{conf_dir}/controller-11080
 
@@ -219,13 +221,15 @@ mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 # Copy in the appropriate sysconfig script template for each of the above actors,
 # and modify it appropriately.
 install -p -D -m 644 redhat/orcad-sysconfig.tmpl %{buildroot}%{_sysconfdir}/sysconfig/orca_am+broker-12080
-sed -i -e 's;@@ORCA_HOME@@;"/etc/orca/am+broker-12080";' %{buildroot}%{_sysconfdir}/sysconfig/orca_am+broker-12080
-sed -i -e 's;@@ORCA_SERVER_PORT@@;"12080";' %{buildroot}%{_sysconfdir}/sysconfig/orca_am+broker-12080
+sed -i -e 's;@@ORCA_HOME@@;/etc/orca/am+broker-12080;' %{buildroot}%{_sysconfdir}/sysconfig/orca_am+broker-12080
+sed -i -e 's;@@ORCA_SERVER_PORT@@;12080;' %{buildroot}%{_sysconfdir}/sysconfig/orca_am+broker-12080
+sed -i -e 's;@@ORCA_SSL_SERVER_PORT@@;12443;' %{buildroot}%{_sysconfdir}/sysconfig/orca_am+broker-12080
 install -p -D -m 644 redhat/orcad-sysconfig.tmpl %{buildroot}%{_sysconfdir}/sysconfig/orca_sm-14080
-sed -i -e 's;@@ORCA_HOME@@;"/etc/orca/sm-14080";' %{buildroot}%{_sysconfdir}/sysconfig/orca_sm-14080
-sed -i -e 's;@@ORCA_SERVER_PORT@@;"14080";' %{buildroot}%{_sysconfdir}/sysconfig/orca_sm-14080
+sed -i -e 's;@@ORCA_HOME@@;/etc/orca/sm-14080;' %{buildroot}%{_sysconfdir}/sysconfig/orca_sm-14080
+sed -i -e 's;@@ORCA_SERVER_PORT@@;14080;' %{buildroot}%{_sysconfdir}/sysconfig/orca_sm-14080
+sed -i -e 's;@@ORCA_SSL_SERVER_PORT@@;14443;' %{buildroot}%{_sysconfdir}/sysconfig/orca_sm-14080
 install -p -D -m 644 redhat/xmlrpcd-sysconfig.tmpl %{buildroot}%{_sysconfdir}/sysconfig/orca_controller-11080
-sed -i -e 's;@@ORCA_CONTROLLER_HOME@@;"/etc/orca/controller-11080";' %{buildroot}%{_sysconfdir}/sysconfig/orca_controller-11080
+sed -i -e 's;@@ORCA_CONTROLLER_HOME@@;/etc/orca/controller-11080;' %{buildroot}%{_sysconfdir}/sysconfig/orca_controller-11080
 
 # Create an init.d directory
 mkdir -p %{buildroot}%{_initrddir}
@@ -330,6 +334,7 @@ exit 0
 %{conf_dir}/am+broker-12080/axis2repository
 %{conf_dir}/am+broker-12080/lib
 %{conf_dir}/am+broker-12080/ndl
+%{conf_dir}/am+broker-12080/ssl
 %attr(755, root, root) %{_initrddir}/orca_am+broker-12080
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_am+broker-12080
 %config(noreplace) %{conf_dir}/am+broker-12080/config/*
@@ -342,6 +347,7 @@ exit 0
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/sm-14080
 %{conf_dir}/sm-14080/axis2repository
 %{conf_dir}/sm-14080/lib
+%{conf_dir}/sm-14080/ssl
 %attr(755, root, root) %{_initrddir}/orca_sm-14080
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_sm-14080
 %config(noreplace) %{conf_dir}/sm-14080/config/*
@@ -358,7 +364,7 @@ exit 0
 
 %changelog
 *Tue Jan 01 2016 Victor J. Orlikowski <vjo@duke.edu>
-- Initial rebuild for whole testbed maintenance.
+- Rebuild for changes to sysconfig templates and inclusion of ssl directory.
 
 *Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
 - Rebuild again to test pubsub at RCI
