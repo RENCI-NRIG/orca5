@@ -34,7 +34,8 @@ import com.hp.hpl.jena.util.ResourceUtils;
  * @author ibaldin
  *
  */
-public class NdlModifyParser extends NdlCommons {
+public class NdlModifyParser extends NdlParserHelper {
+	public static final String USER_MODIFY_RULES_FILE_PROPERTY = "NDL_MODIFY_RULE_FILE";
 	private static final String RULES_FILE = "orca/ndl/rules/modifyRules.rules";
 	INdlModifyModelListener listener;
 	OntModel modifyModel;
@@ -169,10 +170,9 @@ public class NdlModifyParser extends NdlCommons {
 	public synchronized void processModifyRequest() throws NdlException {
 		if (modifyModel == null)
 			return;
-
 		
 		if (!lessStrictChecking) {
-			validateRequest();
+			validateRequest(RULES_FILE, USER_MODIFY_RULES_FILE_PROPERTY, modifyModel);
 		}
 		
 		// reservation query from which everything flows
@@ -224,83 +224,6 @@ public class NdlModifyParser extends NdlCommons {
 		}
 		listener.ndlParseComplete();
 	}
-	
-	/**
-	 * Validate the request using the rules
-	 * @throws NdlException
-	 */
-	private void validateRequest() throws NdlException {
-		
-		PrintUtil.registerPrefix("topo", "http://geni-orca.renci.org/owl/topology.owl#");
-		PrintUtil.registerPrefix("comp", "http://geni-orca.renci.org/owl/compute.owl#");
-		PrintUtil.registerPrefix("xo", "http://geni-orca.renci.org/owl/exogeni.owl#");
-		PrintUtil.registerPrefix("exogeni", "http://geni-orca.renci.org/owl/exogeni.owl#");
-		PrintUtil.registerPrefix("storage", "http://geni-orca.renci.org/owl/storage.owl#");
-		PrintUtil.registerPrefix("geni", "http://geni-orca.renci.org/owl/geni.owl#");
-		PrintUtil.registerPrefix("dom", "http://geni-orca.renci.org/owl/domain.owl#");
-		PrintUtil.registerPrefix("req", "http://geni-orca.renci.org/owl/request.owl#");
-		PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.rdf#");
-		PrintUtil.registerPrefix("euca", "http://geni-orca.renci.org/owl/eucalyptus.owl#");
-		PrintUtil.registerPrefix("pl", "http://geni-orca.renci.org/owl/planetlab.owl#");
-		PrintUtil.registerPrefix("col", "http://geni-orca.renci.org/owl/collections.owl#");
-		PrintUtil.registerPrefix("color", "http://geni-orca.renci.org/owl/app-color.owl#");
-		PrintUtil.registerPrefix("ip4", "http://geni-orca.renci.org/owl/ip4.owl#");
-		PrintUtil.registerPrefix("modify", "http://geni-orca.renci.org/owl/modify.owl#");
-		
-		ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
-
-		//Reasoner owlReasoner = ReasonerRegistry.getOWLReasoner();
-		
-		// look at the first mc models from the list (to save time)
-		// and validate against them
-		/**
-		int mc = 3;
-		for (String model: inferenceModels) {
-			if (mc-- == 0)
-				break;
-			URL schemaowl = cl.getResource("orca/ndl/schema/" + model);
-			FileManager fm = new FileManager();
-			fm.addLocator(new NdlCommons.LocatorJarURL());
-			Model schema1 = fm.loadModel(schemaowl.toString());
-
-			owlReasoner = owlReasoner.bindSchema(schema1);
-
-			InfModel owlModel = ModelFactory.createInfModel(owlReasoner, requestModel);
-
-			ValidityReport rep = owlModel.validate();
-			
-			if (rep.isValid() && rep.isClean()) {
-				continue;
-			} 
-			StringBuilder sb = new StringBuilder("Request validation failed OWL validation due to");
-			for (Iterator<Report> i = rep.getReports(); i.hasNext();) {
-				sb.append(": " + i.next());
-			}
-			throw new NdlException(sb.toString());
-		}
-		*/
-		
-		// load the rules and create a rule-based reasoner
-		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream(RULES_FILE));
-		Rule.Parser rp = Rule.rulesParserFromReader(new BufferedReader(isr));
-		List<Rule> rules = Rule.parseRules(rp);
-		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
-		reasoner.setOWLTranslation(true);
-		reasoner.setTransitiveClosureCaching(true);
-		InfModel ruleModel = ModelFactory.createInfModel(reasoner, modifyModel);
-		
-		// parse the validity report
-		ValidityReport rep = ruleModel.validate();
-		if (rep.isValid() && rep.isClean()) {
-			return;
-		} 
-		StringBuilder sb = new StringBuilder("Request validation failed rule validation due to");
-		for (Iterator<Report> i = rep.getReports(); i.hasNext();) {
-			sb.append(": " + i.next());
-		}
-		throw new NdlException(sb.toString());
-	}
-
 	
 	public void doLessStrictChecking() {
 		lessStrictChecking = true;

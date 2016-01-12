@@ -10,6 +10,8 @@ import orca.controllers.xmlrpc.geni.GeniAmV2Handler;
 import orca.controllers.xmlrpc.x509util.CredentialValidator;
 import orca.manage.IOrcaServiceManager;
 import orca.ndl.NdlCommons;
+import orca.ndl.NdlModifyParser;
+import orca.ndl.NdlRequestParser;
 import orca.shirako.common.ConfigurationException;
 import orca.util.ID;
 
@@ -36,6 +38,8 @@ public class XmlRpcController extends OrcaController {
 	public static final String PropertyControllerCallWaitTimeMs = "controller.wait.time.ms";
 	public static final String PropertyControllerMaxCreateTimeMs = "controller.create.wait.time.ms";
 	public static final String PropertyDelayResourceTypes = "controller.delay.resource.types";
+	public static final String PropertyUserRequestRulesFile = "controller.user.request.rules.file";
+	public static final String PropertyUserModifyRulesFile = "controller.user.modify.rules.file";
 	
 	private static final int defaultPort = 9443;
 	private static final int defaultThreads = 10;
@@ -57,6 +61,21 @@ public class XmlRpcController extends OrcaController {
 	protected void init() throws Exception {
 		super.init();
 		XmlrpcOrcaState.getInstance().setController(this);
+		
+		// copy NDL-related controller properties into system properties
+		String requestRulesFileName = OrcaController.getProperty(XmlRpcController.PropertyUserRequestRulesFile);
+		if (requestRulesFileName != null) {
+			Log.info("Copying " + XmlRpcController.PropertyUserRequestRulesFile + " set to " + requestRulesFileName + " to " + NdlRequestParser.USER_REQUEST_RULES_FILE_PROPERTY + " system property");
+			System.setProperty(NdlRequestParser.USER_REQUEST_RULES_FILE_PROPERTY, 
+					requestRulesFileName);
+		}
+		
+		String modifyRulesFileName = OrcaController.getProperty(XmlRpcController.PropertyUserModifyRulesFile);
+		if (modifyRulesFileName != null) {
+			Log.info("Copying " + XmlRpcController.PropertyUserModifyRulesFile + " set to " + modifyRulesFileName + " to " + NdlModifyParser.USER_MODIFY_RULES_FILE_PROPERTY + " system property");
+			System.setProperty(NdlModifyParser.USER_MODIFY_RULES_FILE_PROPERTY, 
+					modifyRulesFileName);
+		}
 	}
 	  
 	private void setupXmlRpcHandlers() throws ConfigurationException {		

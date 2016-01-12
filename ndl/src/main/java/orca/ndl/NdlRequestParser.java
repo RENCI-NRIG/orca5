@@ -1,8 +1,6 @@
 package orca.ndl;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,18 +10,11 @@ import java.util.Set;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.reasoner.ValidityReport;
-import com.hp.hpl.jena.reasoner.ValidityReport.Report;
-import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
-import com.hp.hpl.jena.reasoner.rulesys.Rule;
 import com.hp.hpl.jena.sparql.core.ResultBinding;
-import com.hp.hpl.jena.util.PrintUtil;
 
 /** 
  * Query NDL request for known salient features and invoke callbacks
@@ -31,14 +22,14 @@ import com.hp.hpl.jena.util.PrintUtil;
  * @author ibaldin
  *
  */
-public class NdlRequestParser extends NdlCommons {
+public class NdlRequestParser extends NdlParserHelper {
+	public static final String USER_REQUEST_RULES_FILE_PROPERTY = "NDL_REQUEST_RULE_FILE";
 	private static final String RULES_FILE = "orca/ndl/rules/requestRules.rules";
 	INdlRequestModelListener listener;
 	INdlColorRequestListener colorListener = null;
 	OntModel requestModel;
 	Set<Resource> interfaces = new HashSet<Resource>();
 	Set<Resource> nodesAndLinks = new HashSet<Resource>();
-	private boolean lessStrictChecking = false;
 	
 	protected String[] inferenceModels = { "topology.owl", "layer.owl", "ethernet.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
 	
@@ -132,10 +123,6 @@ public class NdlRequestParser extends NdlCommons {
 			requestModel.read(ORCA_NS + model);
 	}
 	
-	public void doLessStrictChecking() {
-		lessStrictChecking = true;
-	}
-	
 	public void addColorListener(INdlColorRequestListener ci) {
 		colorListener = ci;
 	}
@@ -150,82 +137,6 @@ public class NdlRequestParser extends NdlCommons {
 	}
 
 	/**
-	 * Validate the request using the rules
-	 * @throws NdlException
-	 */
-	private void validateRequest() throws NdlException {
-		
-		PrintUtil.registerPrefix("topo", "http://geni-orca.renci.org/owl/topology.owl#");
-		PrintUtil.registerPrefix("comp", "http://geni-orca.renci.org/owl/compute.owl#");
-		PrintUtil.registerPrefix("xo", "http://geni-orca.renci.org/owl/exogeni.owl#");
-		PrintUtil.registerPrefix("exogeni", "http://geni-orca.renci.org/owl/exogeni.owl#");
-		PrintUtil.registerPrefix("storage", "http://geni-orca.renci.org/owl/storage.owl#");
-		PrintUtil.registerPrefix("geni", "http://geni-orca.renci.org/owl/geni.owl#");
-		PrintUtil.registerPrefix("dom", "http://geni-orca.renci.org/owl/domain.owl#");
-		PrintUtil.registerPrefix("req", "http://geni-orca.renci.org/owl/request.owl#");
-		PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.rdf#");
-		PrintUtil.registerPrefix("euca", "http://geni-orca.renci.org/owl/eucalyptus.owl#");
-		PrintUtil.registerPrefix("pl", "http://geni-orca.renci.org/owl/planetlab.owl#");
-		PrintUtil.registerPrefix("col", "http://geni-orca.renci.org/owl/collections.owl#");
-		PrintUtil.registerPrefix("color", "http://geni-orca.renci.org/owl/app-color.owl#");
-		PrintUtil.registerPrefix("ip4", "http://geni-orca.renci.org/owl/ip4.owl#");
-		PrintUtil.registerPrefix("modify", "http://geni-orca.renci.org/owl/modify.owl#");
-		
-		ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
-
-		//Reasoner owlReasoner = ReasonerRegistry.getOWLReasoner();
-		
-		// look at the first mc models from the list (to save time)
-		// and validate against them
-		/**
-		int mc = 3;
-		for (String model: inferenceModels) {
-			if (mc-- == 0)
-				break;
-			URL schemaowl = cl.getResource("orca/ndl/schema/" + model);
-			FileManager fm = new FileManager();
-			fm.addLocator(new NdlCommons.LocatorJarURL());
-			Model schema1 = fm.loadModel(schemaowl.toString());
-
-			owlReasoner = owlReasoner.bindSchema(schema1);
-
-			InfModel owlModel = ModelFactory.createInfModel(owlReasoner, requestModel);
-
-			ValidityReport rep = owlModel.validate();
-			
-			if (rep.isValid() && rep.isClean()) {
-				continue;
-			} 
-			StringBuilder sb = new StringBuilder("Request validation failed OWL validation due to");
-			for (Iterator<Report> i = rep.getReports(); i.hasNext();) {
-				sb.append(": " + i.next());
-			}
-			throw new NdlException(sb.toString());
-		}
-		*/
-		
-		// load the rules and create a rule-based reasoner
-		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream(RULES_FILE));
-		Rule.Parser rp = Rule.rulesParserFromReader(new BufferedReader(isr));
-		List<Rule> rules = Rule.parseRules(rp);
-		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
-		reasoner.setOWLTranslation(true);
-		reasoner.setTransitiveClosureCaching(true);
-		InfModel ruleModel = ModelFactory.createInfModel(reasoner, requestModel);
-		
-		// parse the validity report
-		ValidityReport rep = ruleModel.validate();
-		if (rep.isValid() && rep.isClean()) {
-			return;
-		} 
-		StringBuilder sb = new StringBuilder("Request validation failed rule validation due to");
-		for (Iterator<Report> i = rep.getReports(); i.hasNext();) {
-			sb.append(": " + i.next());
-		}
-		throw new NdlException(sb.toString());
-	}
-	
-	/**
 	 * Query the request invoking the listener callbacks
 	 * @throws NdlException
 	 */
@@ -234,7 +145,7 @@ public class NdlRequestParser extends NdlCommons {
 			return;
 		
 		if (!lessStrictChecking) {
-			validateRequest();
+			validateRequest(RULES_FILE, USER_REQUEST_RULES_FILE_PROPERTY, requestModel);
 		}
 		
 		List<Resource> resources = null;
