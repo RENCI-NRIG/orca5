@@ -122,7 +122,10 @@ public class PublishManager {
 		logger.info("Deleting node : " + actor_name + "---" + actor_guid + "/" + "sliceList");
 
 		try {
+			mPublisher.createAccountAndDisconnect();
+			mPublisher.prepareXMPP();
 			mPublisher.expungeNode(actor_name + "---" + actor_guid + "/" + "sliceList");
+			mPublisher.disconnectXMPP();
 		} catch (Exception e){
 			logger.error("Exception in PublishManager:doExpungeSliceList() : " + e );
 		}
