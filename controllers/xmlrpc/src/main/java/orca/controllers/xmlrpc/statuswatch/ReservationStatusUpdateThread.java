@@ -336,7 +336,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 		
 		// Process triggered active entries, which can create their own watches, so don't do it in the
 		// above loop
-		logger.info("run(): processsing " + toProcess.size() + " triggered " + watchType + " callbacks");
+		logger.info("run(): processing " + toProcess.size() + " triggered " + watchType + " callbacks");
 		for(TriggeredWatchEntry<ID> twe: toProcess) {
 			try {
 				this.<ID>processCallBack(twe);
