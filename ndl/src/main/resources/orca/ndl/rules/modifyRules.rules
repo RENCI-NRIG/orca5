@@ -18,7 +18,8 @@
 # global MP link cannot be subject of modify
 [validateModifyMP: (?v rb:validation on()) ->
 	[ (?Z rb:violation error('Modifying global multi-point vlans is not implemented', 'Modifying global multipoint vlans is not implemented', ?MP))
-		<- (?ME rdf:type modify:ModifyElement), (?ME modify:modifySubject http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan) ] ]
+		<- (?ME rdf:type modify:ModifyElement), (?ME modify:modifySubject http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan), 
+		(?ME modify:modifyElement http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan) ] ]
 
 # Stitchport interface can't have IP address
 [validateStitchPort1: (?v rb:validation on()) ->

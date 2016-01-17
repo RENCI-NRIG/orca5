@@ -40,7 +40,7 @@ public class ModifyParserTest implements INdlModifyModelListener {
 		String r = new Scanner(is).useDelimiter("\\A").next();
 
 		NdlModifyParser p = new NdlModifyParser(r, this);
-		System.out.println("Processing");
+		System.out.println("Processing " + p);
 		p.processModifyRequest();
 
 		System.out.println("Rewriting");
@@ -56,8 +56,8 @@ public class ModifyParserTest implements INdlModifyModelListener {
 
 	}
 	
-	private static String[] validRequests={ "/modify-request.rdf", "/modify-test-request-valid.rdf" };
-	private static String[] invalidRequests={ "/mp-modify-delete-mp.rdf", "/ub-storage.rdf" };
+	private static String[] validRequests={ "/modify-request.rdf", "/modify-test-request-valid.rdf", "/removeGlobalMP.rdf" };
+	private static String[] invalidRequests={ "/ub-storage.rdf", "/modifyGlobalMP.rdf" };
 	
 	@Test
 	public void run() throws Exception, NdlException, IOException {
@@ -87,7 +87,8 @@ public class ModifyParserTest implements INdlModifyModelListener {
 		try {
 			mpt.run();
 		} catch (Exception e) {
-			System.err.println(e);
+			System.err.println("ERROR: " + e);
+			e.printStackTrace();
 		}
 	}
 }
