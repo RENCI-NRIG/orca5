@@ -736,6 +736,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			RequestReservation request, String userDN, String controller_url, String sliceId){
         logger.info("Creating manifest model");
         
+        /*
         OntModelSpec s = NdlModel.getOntModelSpec(OntModelSpec.OWL_MEM, true);
         //OntModel manifestModel = ModelFactory.createOntologyModel(s);
         OntModel manifestModel = null;
@@ -747,6 +748,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
         
         manifestModel.add(request.getModel().getBaseModel());
+        */
         //top level manifest resource
         Resource reservation_rs=request.getReservation_rs();
 

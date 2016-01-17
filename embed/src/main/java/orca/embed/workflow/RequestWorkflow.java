@@ -144,6 +144,17 @@ public class RequestWorkflow {
 		term=request.getTerm();
 		((CloudHandler)embedderAlgorithm).addSubstrateModel(abstractModels);
 		
+        OntModelSpec s = NdlModel.getOntModelSpec(OntModelSpec.OWL_MEM, true);
+
+        try {
+			manifestModel = NdlModel.createModel(s, true, NdlModel.ModelType.TdbPersistent,
+	        		Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep + "manifest-" + sliceId);
+		} catch (NdlException e1) {
+			logger.error("ModifyHandler.createManifest(): Unable to create a persistent model of manifest");
+		}
+        manifestModel.add(request.getModel().getBaseModel());
+		((CloudHandler) embedderAlgorithm).setManifestModel(manifestModel);
+		
 		((CloudHandler) embedderAlgorithm).setControllerAssignedLabel(controllerAssignedLabel);
 		((CloudHandler) embedderAlgorithm).setGlobalControllerAssignedLabel(globalControllerAssignedLabel);	
 		((CloudHandler) embedderAlgorithm).setShared_IP_set(shared_IP_set);
@@ -158,8 +169,6 @@ public class RequestWorkflow {
 		
 		manifestModel = ((CloudHandler) embedderAlgorithm).createManifest(boundElements, request, userDN, controller_url, sliceId);
 		domainInConnectionList = ((CloudHandler) embedderAlgorithm).getDomainInConnectionList();
-		
-		((CloudHandler) embedderAlgorithm).setManifestModel(manifestModel);
 		
 		//TDB.sync(requestModel);
 		//closeCreateModel();

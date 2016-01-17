@@ -297,7 +297,6 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			idm_intf_rs =idm.getResource(intf_rs_base.getURI());
 		String stitching_intf_label = null;
 		if(idm_intf_rs!=null){
-			System.out.println("idmintfrs="+idm_intf_rs.getURI());
 			if(idm_intf_rs.getProperty(NdlCommons.topologyHasName)!=null){
 				String stitching_domain_name = idm_intf_rs.getProperty(NdlCommons.topologyHasName).getString();
 				domain_rs.addProperty(NdlCommons.topologyHasName,stitching_domain_name);
@@ -404,14 +403,22 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			if(start.isDepend() & next_Hop.isDepend()) {
 				ComputeElement ce1= (ComputeElement) requestElement.getNe1();
 				ComputeElement ce2= (ComputeElement) requestElement.getNe2();
-				OntResource rs1_ont=null;
-				if(ce1.getInterfaceName(requestElement)!=null)
+				
+				OntResource rs1_ont=null,rs2_ont=null,rs_ont=null;
+				if(ce1.getInterfaceName(requestElement)!=null){
 					// NOTE: I'm assuming I'm getting hold of the right model in the getResource call /ib
-					rs1_ont=ce1.getInterfaceName(requestElement).getLabel()==null?null:ce1.getInterfaceName(requestElement).getLabel().getResource(ce1.getInterfaceName(requestElement).getModel());
-				OntResource rs2_ont=null;
-				if(ce2.getInterfaceName(requestElement)!=null)
+					rs_ont=ce1.getInterfaceName(requestElement).getLabel()==null?null:ce1.getInterfaceName(requestElement).getLabel().getResource(ce1.getInterfaceName(requestElement).getModel());
+
+					rs1_ont=getCEOnt(rs_ont);
+				}
+				
+				if(ce2.getInterfaceName(requestElement)!=null){
 					// NOTE: I'm assuming I'm getting hold of the right model in the getResource call /ib
-					rs2_ont=ce2.getInterfaceName(requestElement).getLabel()==null?null:ce2.getInterfaceName(requestElement).getLabel().getResource(ce2.getInterfaceName(requestElement).getModel());
+					rs_ont=ce2.getInterfaceName(requestElement).getLabel()==null?null:ce2.getInterfaceName(requestElement).getLabel().getResource(ce2.getInterfaceName(requestElement).getModel());
+
+					rs2_ont=getCEOnt(rs_ont);
+				}
+
 				root=domainDepend(start,next_Hop,dependList,i,path_len,rs1_ont,rs2_ont);
 				if(root==null){
 					error = new SystemNativeError();

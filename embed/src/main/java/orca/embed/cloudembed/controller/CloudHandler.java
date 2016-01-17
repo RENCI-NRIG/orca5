@@ -602,6 +602,10 @@ public class CloudHandler extends MappingHandler{
 					}
 					if(new_intf!=null)
 						intf=new_intf;
+					else{
+						OntResource new_intf_ont = getCEOnt(intf.getResource());
+						new_intf = new Interface(new_intf_ont.getOntModel(),new_intf_ont.getURI(),new_intf_ont.getURI());
+					}
 					setEdgeNeighbourhood(edge_device,link_device, intf, ncByInterface);
 					edge_device.addClientInterface(intf);
 					edge_device.setNumInterface(edge_device.getNumInterface()+1);
@@ -621,6 +625,24 @@ public class CloudHandler extends MappingHandler{
 			}
 		}
 		return edge_device;
+	}
+	
+	public OntResource getCEOnt(OntResource rs_ont){
+		Individual rs1_ind=null;
+		if(rs_ont!=null){
+			rs1_ind=manifestModel.createIndividual(rs_ont.getURI(), NdlCommons.interfaceOntClass);
+			if(rs_ont.hasProperty(NdlCommons.ip4LocalIPAddressProperty)){
+				Resource ip_rs = rs_ont.getProperty(NdlCommons.ip4LocalIPAddressProperty).getResource();
+				Individual ip_ind = manifestModel.createIndividual(ip_rs.getURI(), NdlCommons.IPAddressOntClass);
+				rs1_ind.addProperty(NdlCommons.ip4LocalIPAddressProperty, ip_ind);
+				if(ip_rs.hasProperty(NdlCommons.layerLabelIdProperty))
+					ip_ind.addProperty(NdlCommons.layerLabelIdProperty, ip_rs.getProperty(NdlCommons.layerLabelIdProperty).getString());
+			}
+				
+			if(rs_ont.hasProperty(NdlCommons.hasGUIDProperty))
+				rs1_ind.addProperty(NdlCommons.hasGUIDProperty, rs_ont.getProperty(NdlCommons.hasGUIDProperty).getString());
+		}
+		return rs1_ind;
 	}
 	
 	public boolean isInterdomain(ComputeElement ce_element,ComputeElement ce, DomainElement link_device){
