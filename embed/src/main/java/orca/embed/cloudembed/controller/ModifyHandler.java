@@ -110,14 +110,14 @@ public class ModifyHandler extends UnboundRequestHandler {
 			HashMap <String,DomainElement> firstGroupElement, OntModel requestModel, OntModel modifyRequestModel) throws UnknownHostException, InetNetworkException{
 		this.modifyVersion++;
 		this.isModify=true;
+		this.err=null;
 		
-		SystemNativeError error=null;
 		if( (modifyElements==null) || (modifyElements.size()==0) ){
-			error = new SystemNativeError();
-			error.setErrno(8);
-			error.setMessage("modifyElements is empty!");
-			logger.error(error.toString());
-			return error;
+			err = new SystemNativeError();
+			err.setErrno(8);
+			err.setMessage("modifyElements is empty!");
+			logger.error(err.toString());
+			return err;
 		}
 		logger.debug("ModifyHandler.modifySlice() starts....");
 		RequestReservation addedRequest=null;
@@ -128,7 +128,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				ModifyElement me = mei.next();
 				logger.debug("ModifyHandler.modifySlice():"+me.getModType());
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.REMOVE)){
-					error=removeElement(me, manifestOnt, nodeGroupMap, deviceList);
+					err=removeElement(me, manifestOnt, nodeGroupMap, deviceList);
 				}
 			
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.ADD) || me.getModType().equals(INdlModifyModelListener.ModifyType.MODIFY)){
@@ -136,8 +136,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 				}
 			
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.INCREASE)){
-					error = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
+					err = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
+				if(err!=null)
+					break;
 			}
 			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId, modifyRequestModel);
 		}
@@ -165,7 +167,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		logger.debug("nodeGroupAddedDevices:"+nodeGroupAddedDevices.size());
 		createManifest(manifestOnt, manifest, nodeGroupAddedDevices);	//out of increasing nodeGroudp
 		
-		return error;
+		return err;
 	}
 	
 	public List <ReservationMng> modifyStorage(HashMap <String, List<ReservationMng>> m_map){
