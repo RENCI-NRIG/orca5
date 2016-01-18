@@ -3,6 +3,7 @@ package orca.handlers.network.core;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.regex.Pattern;
+import org.apache.commons.lang.StringEscapeUtils;
 
 
 /**
@@ -85,6 +86,7 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
 
         while (!found) {
             String read = readOutput(timeout);
+            logger.debug("SSH output: " + StringEscapeUtils.escapeJava(read));
 
             // Stop if no progress
             if (read.equals(""))
