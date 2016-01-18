@@ -18,8 +18,10 @@ import orca.handlers.network.core.CommandException;
 
 public class Ciena8700Device extends RouterSSHPromptDevice implements IMappingRouterDevice, RouterConstants {
 
-    protected static final String promptPatternString = "^[a-zA-Z0-9]+8700.>";
-
+    /* The prompt consists of a host-like name and an optional access level
+     * symbol, followed by a greater-than sign.
+     */
+    protected static final String promptPatternString = "^[a-zA-Z0-9][a-zA-Z0-9_.-]*.?>";
 
     protected static final String PropertySubPort = "subPort"; //8700
     protected static final String PropertyQoSSubPort = "qosSubPort"; //8700
