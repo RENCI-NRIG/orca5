@@ -2481,7 +2481,8 @@ public class NdlCommons {
 	 * @return
 	 */
 	public static boolean isStitchingNodeInManifest(Resource r) {
-
+		if(r==null)
+			return false;
 		if (hasResourceType(r, deviceOntClass)) {
 			Resource dom = getDomain(r);
 			if(dom==null)

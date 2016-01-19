@@ -230,7 +230,7 @@ public class CloudHandler extends MappingHandler{
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (InetNetworkException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
