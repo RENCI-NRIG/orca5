@@ -363,10 +363,10 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Mon Jan 18 2016 Ilya Baldin <ibaldin@renci.org>
+*Tue Jan 19 2016 Victor J. Orlikowski <vjo@duke.edu>
 - Rebuild for production deployment.
 
-*Thu Jan 14 2016 Victor J. Orlikowski <vjo@duke.edu>
+*Mon Jan 18 2016 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for production deployment.
 
 *Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
