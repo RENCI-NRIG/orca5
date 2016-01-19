@@ -364,7 +364,7 @@ exit 0
 
 %changelog
 *Tue Jan 19 2016 Victor J. Orlikowski <vjo@duke.edu>
-- Rebuild for production deployment.
+- Rebuild for production deployment, take 2.
 
 *Mon Jan 18 2016 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for production deployment.
