@@ -755,7 +755,7 @@
     <owl:NamedIndividual rdf:about="&QFX3500;GigabitEthernet/0/0/6/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&ndl;Interface"/>
-        <rdfs:label rdf:datatype="&xsd;string">ge-0/0/6</rdfs:label>
+        <rdfs:label rdf:datatype="&xsd;string">ge-0/0/38</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <ndl:hasName>ncsuNet</ndl:hasName>
         <ethernet:availableVLANSet rdf:resource="&QFX3500;availableVLANSet"/>
