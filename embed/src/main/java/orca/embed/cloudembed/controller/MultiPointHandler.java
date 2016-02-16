@@ -121,10 +121,13 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 					this.mpRequest.setRequest(ne);
 			}
 			try {
-				if(domainCount.size()>1)
+				if(domainCount!=null){
+					if(domainCount.size()>1)
+						error=runEmbedding(request, domainResourcePools);
+					else if(domainCount.size()==1)
+						error=runEmbedding(domainCount.keySet().iterator().next(),request, domainResourcePools);
+				}else
 					error=runEmbedding(request, domainResourcePools);
-				else if(domainCount.size()==1)
-					error=runEmbedding(domainCount.keySet().iterator().next(),request, domainResourcePools);
 				if(root!=null)
 					setCastType(root, deviceList);
 			} catch (IOException e) {

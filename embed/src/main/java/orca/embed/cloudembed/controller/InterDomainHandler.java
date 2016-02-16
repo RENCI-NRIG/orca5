@@ -888,7 +888,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	public void createManifest(NetworkElement requestElement,OntModel manifestModel,OntResource manifest, LinkedList <Device> domainList){
 		OntResource rc_ont = requestElement.getResource();
 		if(requestElement.isModify()){
-			rc_ont = manifestModel.getOntResource(rc_ont.getURI());
+			if(rc_ont==null)
+				rc_ont = manifestModel.getOntResource(requestElement.getURI());
+			else
+				rc_ont = manifestModel.getOntResource(rc_ont.getURI());
 			if(requestElement.getCastType().equalsIgnoreCase("multicast")){ //go one level above
 				for (StmtIterator j=manifest.listProperties(NdlCommons.collectionElementProperty);j.hasNext();){
 					Resource nc = j.next().getResource();
@@ -904,6 +907,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			}
 		}
 		else{
+			if(this.isModify)
+				return;
 			rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
 			manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
 		}

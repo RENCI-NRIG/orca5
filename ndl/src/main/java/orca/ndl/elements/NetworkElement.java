@@ -275,6 +275,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	public OntResource getResource() {
 		if (uri != null && !model.isClosed())
 			return model.getOntResource(uri);
+		logger.error("resource is null:uri="+uri+";model.isClosed()="+model.isClosed());
 		return null;
 	}
 	
