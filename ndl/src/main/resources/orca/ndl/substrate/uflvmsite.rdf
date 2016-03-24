@@ -484,8 +484,8 @@
         <rdf:type rdf:resource="&topology;Device"/>
         <topology:hasSwitchMatrix rdf:resource="&uflvmsite;UFL/ExoGeni/EthernetSwitchMatrix"/>
         <topology:hasInterface rdf:resource="&uflvmsite;UFL/ExoGeni/TenGigabitEthernet/1/ethernet"/>
+        <topology:hasInterface rdf:resource="&uflvmsite;UFL/ExoGeni/TengigabitEthernet/2/ethernet"/>
         <compute:availableVMLabelSet rdf:resource="&uflvmsite;UFL/ExoGeni/availableVMLabelSet"/>
-        <collections:element rdf:resource="&uflvmsite;UFL/ISCSI"/>
     </owl:NamedIndividual>
     
 
@@ -533,6 +533,7 @@
         <location:locatedAt rdf:resource="&uflvmsite;UFL"/>
         <collections:element rdf:resource="&uflvmsite;UFL/BareMetal"/>
         <collections:element rdf:resource="&uflvmsite;UFL/ExoGeni"/>
+        <collections:element rdf:resource="&uflvmsite;UFL/ISCSI"/>
     </owl:NamedIndividual>
     
 
