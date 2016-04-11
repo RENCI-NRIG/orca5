@@ -907,7 +907,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			}
 		}
 		else{
-			if(this.isModify)
+			if(this.isModify && requestElement.getCastType()!=null && requestElement.getCastType().equalsIgnoreCase("multicast"))
 				return;
 			rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
 			manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
