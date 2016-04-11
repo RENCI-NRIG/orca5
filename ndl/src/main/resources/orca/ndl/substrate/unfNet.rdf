@@ -594,7 +594,7 @@
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&UNFNet;IBM/G8052/availableVLANSet/AL2S/1"/>
         <collections:element rdf:resource="&UNFNet;IBM/G8052/availableVLANSet/fiuNet/1"/>
-        <topology:interfaceOf rdf:resource="&UNFNet;IBM/G8052/availableVLANSet/uflNet/1"/>
+        <collections:element rdf:resource="&UNFNet;IBM/G8052/availableVLANSet/uflNet/1"/>
     </owl:NamedIndividual>
     
 
