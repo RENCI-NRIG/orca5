@@ -627,9 +627,8 @@
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>24-31</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName>of-data</topology:hostInterfaceName>
+        <topology:hostInterfaceName>vlan-data</topology:hostInterfaceName>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#pucpNet/Force10/S4810/TenGigabitEthernet/1/2/ethernet"/>
         <topology:interfaceOf rdf:resource="&pucpvmsite;pucp/ExoGeni"/>
     </owl:NamedIndividual>
