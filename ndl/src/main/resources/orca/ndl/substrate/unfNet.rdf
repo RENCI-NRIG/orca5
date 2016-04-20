@@ -331,12 +331,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/0/0/ethernet -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/0/0/ethernet"/>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/0/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/0/1/ethernet"/>
@@ -346,18 +340,6 @@
     <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/UNFNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/UNFNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/nlr.rdf#NLR/Houston/Cisco/6509/TenGigabitEthernet/1/2/etherent -->
-
-    <owl:NamedIndividual rdf:about="&TenGigabitEthernet6;etherent"/>
     
 
 

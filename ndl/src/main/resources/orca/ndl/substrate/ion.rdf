@@ -467,6 +467,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/Cisco/6509"/>
         <ethernet:availableVLANSet rdf:resource="&ION;Domain/NetworkService/1/availableVLANSet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
     </owl:NamedIndividual>
     
 
@@ -2212,6 +2213,12 @@
     <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/0/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
     
 
 
