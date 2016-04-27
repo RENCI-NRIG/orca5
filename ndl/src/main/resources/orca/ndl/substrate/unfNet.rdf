@@ -355,29 +355,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/Domain -->
-
-    <owl:NamedIndividual rdf:about="&UNFNet;Domain">
-        <rdf:type rdf:resource="&topology;NetworkDomain"/>
-        <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
-        <domain:hasService rdf:resource="&UNFNet;Domain/NetworkService/1"/>
-        <collections:element rdf:resource="&UNFNet;PoP"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/Domain/NetworkService/1 -->
-
-    <owl:NamedIndividual rdf:about="&UNFNet;Domain/NetworkService/1">
-        <rdf:type rdf:resource="&domain;NetworkService"/>
-        <domain:hasTopology rdf:resource="&domain;Node"/>
-        <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
-        <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <ethernet:availableVLANSet rdf:resource="&UNFNet;IBM/G8052/availableVLANSet"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052 -->
 
     <owl:NamedIndividual rdf:about="&UNFNet;IBM/G8052">
@@ -650,6 +627,29 @@
         <rdf:type rdf:resource="&collections;Set"/>
         <collections:element rdf:resource="&UNFNet;IBM/G8052"/>
         <location:locatedAt rdf:resource="&unfvmsite;UNFNet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#unfNet/Domain -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#unfNet/Domain">
+        <rdf:type rdf:resource="&topology;NetworkDomain"/>
+        <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
+        <collections:element rdf:resource="&UNFNet;PoP"/>
+        <domain:hasService rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#unfNet/Domain/NetworkService/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#unfNet/Domain/NetworkService/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#unfNet/Domain/NetworkService/1">
+        <rdf:type rdf:resource="&domain;NetworkService"/>
+        <domain:hasTopology rdf:resource="&domain;Node"/>
+        <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
+        <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <ethernet:availableVLANSet rdf:resource="&UNFNet;IBM/G8052/availableVLANSet"/>
     </owl:NamedIndividual>
     
 
