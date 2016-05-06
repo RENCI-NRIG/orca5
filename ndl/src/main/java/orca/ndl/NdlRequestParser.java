@@ -33,6 +33,10 @@ public class NdlRequestParser extends NdlParserHelper {
 	
 	protected String[] inferenceModels = { "topology.owl", "layer.owl", "ethernet.owl", "compute.owl", "exogeni.owl", "storage.owl", "geni.owl", "eucalyptus.owl", "planetlab.owl", "protogeni.owl", "ec2.owl" };
 	
+	OntModel getModel() {
+		return requestModel;
+	}
+	
 	/**
 	 * Create a parser on existing model
 	 * @param reqModel

@@ -1,10 +1,7 @@
 package orca.ndl;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,18 +9,11 @@ import orca.ndl.INdlModifyModelListener.ModifyType;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.reasoner.ValidityReport;
-import com.hp.hpl.jena.reasoner.ValidityReport.Report;
-import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
-import com.hp.hpl.jena.reasoner.rulesys.Rule;
 import com.hp.hpl.jena.sparql.core.ResultBinding;
-import com.hp.hpl.jena.util.PrintUtil;
 import com.hp.hpl.jena.util.ResourceUtils;
 
 /**
@@ -42,6 +32,10 @@ public class NdlModifyParser extends NdlParserHelper {
 	boolean rewritten=false;
 	private boolean lessStrictChecking = false;
 
+	OntModel getModel() {
+		return modifyModel;
+	}
+	
 	public NdlModifyParser(String ndlModifyRequest, INdlModifyModelListener l) throws NdlException {
 
 		if ((ndlModifyRequest == null) || (l == null))

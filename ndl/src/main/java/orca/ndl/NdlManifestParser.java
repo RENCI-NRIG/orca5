@@ -24,6 +24,10 @@ public class NdlManifestParser extends NdlCommons {
 	OntModel manifestModel;
 	Set<Resource> nodesAndLinks = new HashSet<Resource>();
 	
+	OntModel getModel() {
+		return manifestModel;
+	}
+	
 	public NdlManifestParser(OntModel ndlManifestModel, INdlManifestModelListener l) throws NdlException {
 		if ((ndlManifestModel == null) || (l == null))
 			throw new NdlException("Null parameters to the NdlManifestParser constructor");

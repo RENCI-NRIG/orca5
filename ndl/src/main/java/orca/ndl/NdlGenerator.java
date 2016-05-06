@@ -37,6 +37,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class NdlGenerator {
 
+	private static final String MODIFY_NS = "modify";
+	private static final String REQUEST_NS = "request";
 	private static final String XML_SCHEMA_INTEGER = "http://www.w3.org/2001/XMLSchema#integer";
 	private static final String STITCHING_DOMAIN_URL = "http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain";
 	private Logger l;
@@ -161,6 +163,42 @@ public class NdlGenerator {
 	}
 	
 	/**
+	 * Build a generator based on pre-existing request model in the parser. 
+	 * @param p
+	 * @param log
+	 */
+	public NdlGenerator(NdlRequestParser p, Logger log) throws NdlException {		
+		l = log;
+		l.info("Initializing model from parser");
+		blank = p.getModel();
+		ref = new ReferenceModel();
+		// get request id from URL
+		String nsUri = blank.getNsPrefixURI(REQUEST_NS);
+		if (nsUri == null)
+			throw new NdlException("Model in NdlRequestParser doesn't contain request namespace!");
+		requestId = nsUri.replace(NdlCommons.ORCA_NS, "");
+		requestId = requestId.replace("#", "");
+	}
+	
+	/**
+	 * Build a generator based on pre-existing modify model in the parser
+	 * @param p
+	 * @param log
+	 */
+	public NdlGenerator(NdlModifyParser p, Logger log) throws NdlException {
+		l = log;
+		l.info("Initializing model from parser");
+		blank = p.getModel();
+		ref = new ReferenceModel();
+		// get request id from URL
+		String nsUri = blank.getNsPrefixURI(MODIFY_NS);
+		if (nsUri == null)
+			throw new NdlException("Model in NdlModifyParser doesn't contain modify namespace!");
+		requestId = nsUri.replace(NdlCommons.ORCA_NS, "");
+		requestId = requestId.replace("#", "");
+	}
+	
+	/**
 	 * Remove the model and the reference model. 
 	 * Making calls on NdlGenerator after calling done() will result in NPEs
 	 */
@@ -201,7 +239,7 @@ public class NdlGenerator {
         	requestId = UUID.randomUUID().toString();
         else
         	requestId = guid;
-        blank.setNsPrefix("modify", NdlCommons.ORCA_NS + requestId +"#");
+        blank.setNsPrefix(MODIFY_NS, NdlCommons.ORCA_NS + requestId +"#");
 	}
 	
 	private void initializeRequest(String guid) {
@@ -220,7 +258,7 @@ public class NdlGenerator {
         	requestId = UUID.randomUUID().toString();
         else
         	requestId = guid;
-        blank.setNsPrefix("request", NdlCommons.ORCA_NS + requestId +"#");
+        blank.setNsPrefix(REQUEST_NS, NdlCommons.ORCA_NS + requestId +"#");
 	}
 	
 	/** 
@@ -458,7 +496,7 @@ public class NdlGenerator {
 	public Individual declareServerCloud(String name, boolean splittable) throws NdlException {
 		Individual ind = addIndividual(requestId + "#" + massageName(name), "compute", "ServerCloud");
 		addTypedProperty(ind, "topology", "splittable", "" + splittable, XSDDatatype.XSDboolean);
-		addSimpleProperty(ind, "request", "groupName", massageName(name));
+		addSimpleProperty(ind, REQUEST_NS, "groupName", massageName(name));
 		return ind;
 		
 	}
@@ -470,7 +508,7 @@ public class NdlGenerator {
 	 */
 	public Individual declareServerCloud(String name) throws NdlException {
 		Individual group = addIndividual(requestId + "#" + massageName(name), "compute", "ServerCloud");
-		addSimpleProperty(group, "request", "groupName",  massageName(name));
+		addSimpleProperty(group, REQUEST_NS, "groupName",  massageName(name));
 		return group;
 	}
 	
@@ -1332,6 +1370,32 @@ public class NdlGenerator {
 	}
 	
 	/**
+	 * Remove specific node type from node individual
+	 * @param ns
+	 * @param tp
+	 * @param node
+	 * @throws NdlException
+	 */
+	public void removeNodeTypeFromCE(String ns, String tp, Individual node) throws NdlException {
+		Property pr = ref.getProperty(ref.getNsPrefixUri("compute") + "specificCE");
+		if (null == pr)
+			throw new NdlException("Unable to find property " + "specificCE");
+		node.removeProperty(pr, blank.getResource(ref.getNsPrefixUri(ns) + tp));
+	}
+	
+	/**
+	 * Removes ALL node types from particular node individual
+	 * @param node
+	 * @throws NdlException
+	 */
+	public void removeNodeTypeFromCE(Individual node) throws NdlException {
+		Property pr = ref.getProperty(ref.getNsPrefixUri("compute") + "specificCE");
+		if (null == pr)
+			throw new NdlException("Unable to find property " + "specificCE");
+		node.removeAll(pr);
+	}
+	
+	/**
 	 * Add a post boot script string to a node
 	 * @param pbscript
 	 * @param node
@@ -1684,6 +1748,12 @@ public class NdlGenerator {
 
 		try {
 			ngen.declareColor("test color", null, blob, true);
+			Individual n = ngen.declareComputeElement("mynode");
+			Individual n1 = ngen.declareComputeElement("mynode1");
+			ngen.addNodeTypeToCE("exogeni", "XOMedium", n1);
+			ngen.addNodeTypeToCE("exogeni", "XOMedium", n);
+			//ngen.removeNodeTypeFromCE(n);
+			ngen.removeNodeTypeFromCE("exogeni", "XOMedium", n);
 		} catch (NdlException ee) {
 			System.out.println("Exception: " + ee);
 		}
