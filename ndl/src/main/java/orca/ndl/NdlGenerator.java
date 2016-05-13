@@ -269,6 +269,10 @@ public class NdlGenerator {
 	 * @return Individual
 	 */
 	private Individual addIndividual(String indName, String prefix, String clsName) throws NdlException {
+		assert(indName != null);
+		assert(prefix != null);
+		assert(clsName != null);
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri(prefix) + clsName);
 		if (null == cls)
 			throw new NdlException("Unable to find class " + clsName);
@@ -284,6 +288,9 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Individual addAnonIndividual(String prefix, String clsName) throws NdlException {
+		assert(prefix != null);
+		assert(clsName != null);
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri(prefix) + clsName);
 		if (null == cls)
 			throw new NdlException("Unable to find class " + clsName);
@@ -299,6 +306,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Individual addUniqueIndividual(String indName, String prefix, String clsName) throws NdlException {
+		assert(indName != null);
+		assert(prefix != null);
+		assert(clsName != null);
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri(prefix) + clsName);
 		if (null == cls)
 			throw new NdlException("Unable to find class " + clsName);
@@ -316,6 +327,11 @@ public class NdlGenerator {
 	 * @return
 	 */
 	private Resource addProperty(Individual i, String prefix, String pName, String uri) throws NdlException {
+		assert(i != null);
+		assert(prefix != null);
+		assert(pName != null);
+		assert(uri != null);
+		
 		Property pr = ref.getProperty(ref.getNsPrefixUri(prefix) + pName);
 		if (null == pr)
 			throw new NdlException("Unable to find property " + pName);
@@ -332,6 +348,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Resource addProperty(Individual i, String prefix, String pName, RDFNode n) throws NdlException {
+		assert(i != null);
+		assert(prefix != null);
+		assert(pName != null);
+		assert(n != null);
+		
 		Property pr = ref.getProperty(ref.getNsPrefixUri(prefix) + pName);
 		if (null == pr)
 			throw new NdlException("Unable to find property " + pName);
@@ -347,6 +368,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private void removeProperty(Individual i, String prefix, String pName, String toRemove) throws NdlException {
+		assert(i != null);
+		assert(prefix != null);
+		assert(pName != null);
+		assert(toRemove != null);
+		
 		Property pr = ref.getProperty(ref.getNsPrefixUri(prefix) + pName);
 		if (null == pr) 
 			throw new NdlException("Unable to find property " + pName);
@@ -363,6 +389,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Resource addProperty(Individual i, Property p, Resource ob) throws NdlException {
+		assert(i != null);
+		assert(p != null);
+		assert(ob != null);
+		
 		return i.addProperty(p, ob);
 	}
 	
@@ -420,11 +450,12 @@ public class NdlGenerator {
 	/**
 	 * Declare a ComputeElement with existing url (from manifest) that will be modified. Modifies always require a guid.
 	 * @param url
-	 * @param guid
+	 * @param guid (can be null)
 	 * @return
 	 * @throws NdlException
 	 */
 	public Individual declareModifiedComputeElement(String url, String guid) throws NdlException {
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri("compute") + "ComputeElement");
 		
 		if (null == cls)
@@ -432,7 +463,8 @@ public class NdlGenerator {
 
 		Individual in = blank.createIndividual(url, cls);
 		
-		addGuid(in, guid);
+		if (guid != null)
+			addGuid(in, guid);
 		addTypedProperty(in, "modify-schema", "isModify", "true", XSDDatatype.XSDboolean);
 		
 		return in;
