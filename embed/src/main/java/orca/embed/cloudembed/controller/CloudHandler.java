@@ -497,11 +497,18 @@ public class CloudHandler extends MappingHandler{
 				name = name.concat("/")+String.valueOf(i);
 		}
 		
+		String device_guid=element.getGUID();
+		if(device_guid==null){
+			device_guid=UUID.randomUUID().toString();
+			element.getResource().addProperty(NdlCommons.hasGUIDProperty, device_guid);
+		}
 		OntModel device_model = element.getModel();
 		if(this.manifestModel!=null)
 			device_model=this.manifestModel;
-		if(device_model.getOntResource(element.getName())==null)
+		if(device_model.getOntResource(element.getName())==null){
 			device_model.createIndividual(element.getName(), element.getResource().getRDFType(true));
+			device_model.getOntResource(element.getName()).addProperty(NdlCommons.hasGUIDProperty, device_guid);
+		}
 		ComputeElement ce = ce_element.copy(device_model, requestModel,url,name);
 		ce.setResourceType(dType);
 		ce.setNodeGroupName(ce_element.getNodeGroupName());
@@ -514,11 +521,6 @@ public class CloudHandler extends MappingHandler{
 		DomainElement edge_device=new DomainElement(device_model,url,name) ;
 		edge_device.setCe(ce);
 		edge_device.setResourceType(dType);
-		String device_guid=element.getGUID();
-		if(device_guid==null){
-			device_guid=UUID.randomUUID().toString();
-			element.getResource().addProperty(NdlCommons.hasGUIDProperty, device_guid);
-		}
 		edge_device.setGUID(device_guid);
 		
 		for(NetworkElement existing_ce: deviceList){
