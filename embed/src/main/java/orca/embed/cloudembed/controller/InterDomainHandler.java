@@ -913,7 +913,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
 		}
 		Device start= domainList.get(0), next_Hop, next_next_Hop = null;
-		String link_url,link_name,domain_name;
+		String link_url,domain_name;
 		OntResource link_ont,intf_start,intf_next,intf_next_next;
 		Resource domain_rs=null;
 
@@ -940,6 +940,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
             			}
                 	}
                 }else if(start.getCastType()!=null && start.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
+                	link_url = start.getName();
                 	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
                 	link_ont.addProperty(NdlCommons.hasCastType, NdlCommons.multicastOntClass);
                 	rc_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);        	
@@ -962,6 +963,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
         			link_ont.addProperty(NdlCommons.inDomainProperty,domain_rs);
         			addDomainProperty(domain_rs,manifestModel);
         		}
+                
                 link_ont.addProperty(NdlCommons.hasURLProperty,domain_name);
                 link_ont.addProperty(NdlCommons.inConnection, "true", XSDDatatype.XSDboolean);
                 link_ont.addProperty(NdlCommons.inRequestNetworkConnection, rc_ont);
@@ -1029,6 +1031,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
             			}
                 	}
                 }else if(next_Hop.getCastType()!=null && next_Hop.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
+                	link_url = next_Hop.getName();
                 	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
                 	link_ont.addProperty(NdlCommons.hasCastType, NdlCommons.multicastOntClass);
                 	rc_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);        	
