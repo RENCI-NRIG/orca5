@@ -1647,7 +1647,8 @@ public class NdlCommons {
 	}
 	/**
 	 * Get the hasResourceType property of resource
-	 * @param r
+	 * @param r - resource
+	 * @param element - network element
 	 * @return
 	 */
 	public static DomainResourceType getDomainResourceType(Resource r,NetworkElement element) {
@@ -1685,6 +1686,13 @@ public class NdlCommons {
 		}
 	}
 	
+	/**
+	 * Set resource type and count. If more than one hasResourceType statement
+	 * relates to this resource, the first one is picked at random. If no hasResourceType
+	 * statements are found, looks at atLayer properties instead, uses IP as resource label.
+	 * @param r
+	 * @return
+	 */
 	public static DomainResourceType getDomainResourceType(Resource r) {
 		assert(r != null);
     	int rank = 0;
@@ -1692,18 +1700,18 @@ public class NdlCommons {
 	   	DomainResourceType type = new DomainResourceType();
 		Statement rtStmt = r.getProperty(domainHasResourceTypeProperty);
 		Resource rType = null;
-		if (rtStmt != null){
+		if (rtStmt != null) {
 			rType = rtStmt.getResource();
-			if(rType!=null){
+			if (rType!=null) {
 				rType_str=rType.getURI();
 				int i = rType_str.indexOf('#');
-				if(i>0){
+				if (i>0) {
 					rType_str=rType_str.substring(i+1).toLowerCase();
 				}
 				if(rType.getProperty(resourceTypeRank)!=null)
 					rank=rType.getProperty(resourceTypeRank).getInt();
 			}
-		}else{
+		} else {
 			rtStmt = r.getProperty(atLayer);
 			if (rtStmt != null){
 				rType_str = Layer.valueOf(rtStmt.getResource().getLocalName()).getLabelP().toString();
@@ -1714,14 +1722,54 @@ public class NdlCommons {
 		type.setRank(rank);
 		
 		rtStmt = r.getProperty(numCEProperty);
-		if (rtStmt != null){
+		if (rtStmt != null) {
 			int numResource = rtStmt.getInt();
 			type.setCount(numResource);
-		}else{
+		} else {
 			type.setCount(1);
 		}
 
     	return type;
+	}
+	
+	/**
+	 * Answer all domain resource types for this resource (if multiples are specified). Unlike 
+	 * getDomainResourceType() it does not look at atLayer property - only hasResourceType property
+	 * @param r
+	 * @return
+	 */
+	public static List<DomainResourceType> getDomainResourceTypes(Resource r) {
+		assert(r != null);
+		
+		int rank = 0;
+		List<DomainResourceType> ret = new ArrayList<>();
+		StmtIterator iter = r.listProperties(domainHasResourceTypeProperty);
+		while(iter.hasNext()) {
+			DomainResourceType type = new DomainResourceType();
+			Statement rtStmt = iter.next();
+			String rType_str = null;
+			Resource rType = rtStmt.getResource();
+			if (rType!=null) {
+				rType_str=rType.getURI();
+				int i = rType_str.indexOf('#');
+				if (i>0) {
+					rType_str=rType_str.substring(i+1).toLowerCase();
+				}
+				if(rType.getProperty(resourceTypeRank)!=null)
+					rank=rType.getProperty(resourceTypeRank).getInt();
+			}
+			type.setResourceType(rType_str);
+			type.setRank(rank);
+			rtStmt = r.getProperty(numCEProperty);
+			if (rtStmt != null) {
+				int numResource = rtStmt.getInt();
+				type.setCount(numResource);
+			} else {
+				type.setCount(1);
+			}
+			ret.add(type);
+		}
+		return ret;
 	}
 	
 	// sometimes getLocalName is not good enough

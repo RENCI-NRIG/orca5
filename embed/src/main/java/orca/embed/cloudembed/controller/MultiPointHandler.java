@@ -93,7 +93,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 				multicastDomain=element.getResource();
 			}else
 				domainCount = ifMPConnection(element);
-			if((domainCount!=null)&&(domainCount.size()<=2) && !element.isModify()){	//in-rack broadcasting
+			if((domainCount!=null)&&(domainCount.size()<2) && !element.isModify()){	//in-rack broadcasting
 					
 			}else{	
 				if(multicastDomain==null){
@@ -102,9 +102,9 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 					error.setMessage("There is no multicast capable domain"+"!");
 					return error;
 				}
-				OntResource root_rs=requestModel.createIndividual(multicastDomain.getURI(),NdlCommons.computeElementClass);
+				OntResource root_rs=requestModel.createIndividual(element.getURI(),NdlCommons.computeElementClass);
 				root_rs.addProperty(NdlCommons.inDomainProperty, multicastDomain);
-				root = new ComputeElement(requestModel,multicastDomain);
+				root = new ComputeElement(requestModel,root_rs.getURI(),root_rs.getURI());
 				root.setModify(element.isModify());
 				root.setCastType(element.getCastType());
 				logger.debug("MultiPointHandler:root="+root.getName()+";isModify="+root.isModify());
@@ -193,14 +193,13 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 	}
 	
 	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg,NetworkConnection c_e){
-		OntResource ne1_rs=null;
-		ComputeElement ne = null;
-		if(rs.getURI().contains(NdlCommons.stitching_domain_str))
-			ne=(ComputeElement) cg.getFirst();
-		else{
-			ne1_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
-			ne1_rs.addProperty(NdlCommons.inDomainProperty, rs);
-			ne = new ComputeElement(m,ne1_rs);
+		OntResource ne_rs=null;
+		ComputeElement ne = (ComputeElement) cg.getFirst();
+		LinkedList <Interface> clientInterface = ne.getClientInterface();
+		if(!rs.getURI().contains(NdlCommons.stitching_domain_str)){
+			ne_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
+			ne_rs.addProperty(NdlCommons.inDomainProperty, rs);
+			ne = new ComputeElement(m,ne_rs.getURI(),ne.getName());
 		
 			DomainResourceType dType=((NetworkElement) cg.toArray()[0]).getResourceType();
 			int res_count=0;
@@ -213,7 +212,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			ne.setResourceType(rType);
 		
 			ne.setCeGroup(cg);
-			
+			ne.setClientInterface(clientInterface);
 			ne.addDependency(c_e);
 		}
 		return ne;
@@ -278,7 +277,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 	
 	protected void setCastType(NetworkElement root, LinkedList<NetworkElement> deviceList){
 		for(NetworkElement d: deviceList){
-			if(root.getURI().equalsIgnoreCase(d.getURI())){
+			if(root.getName().equalsIgnoreCase(d.getName())){
 				d.setCastType(NdlCommons.multicast);
 				LinkedList <SwitchingAction> action_list = ((Device) d).getActionList();
 				int size=action_list.size();

@@ -29,6 +29,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 
 /**
  * This class generates NDL 
@@ -269,6 +271,10 @@ public class NdlGenerator {
 	 * @return Individual
 	 */
 	private Individual addIndividual(String indName, String prefix, String clsName) throws NdlException {
+		assert(indName != null);
+		assert(prefix != null);
+		assert(clsName != null);
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri(prefix) + clsName);
 		if (null == cls)
 			throw new NdlException("Unable to find class " + clsName);
@@ -284,6 +290,9 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Individual addAnonIndividual(String prefix, String clsName) throws NdlException {
+		assert(prefix != null);
+		assert(clsName != null);
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri(prefix) + clsName);
 		if (null == cls)
 			throw new NdlException("Unable to find class " + clsName);
@@ -299,6 +308,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Individual addUniqueIndividual(String indName, String prefix, String clsName) throws NdlException {
+		assert(indName != null);
+		assert(prefix != null);
+		assert(clsName != null);
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri(prefix) + clsName);
 		if (null == cls)
 			throw new NdlException("Unable to find class " + clsName);
@@ -316,6 +329,11 @@ public class NdlGenerator {
 	 * @return
 	 */
 	private Resource addProperty(Individual i, String prefix, String pName, String uri) throws NdlException {
+		assert(i != null);
+		assert(prefix != null);
+		assert(pName != null);
+		assert(uri != null);
+		
 		Property pr = ref.getProperty(ref.getNsPrefixUri(prefix) + pName);
 		if (null == pr)
 			throw new NdlException("Unable to find property " + pName);
@@ -332,6 +350,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Resource addProperty(Individual i, String prefix, String pName, RDFNode n) throws NdlException {
+		assert(i != null);
+		assert(prefix != null);
+		assert(pName != null);
+		assert(n != null);
+		
 		Property pr = ref.getProperty(ref.getNsPrefixUri(prefix) + pName);
 		if (null == pr)
 			throw new NdlException("Unable to find property " + pName);
@@ -347,6 +370,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private void removeProperty(Individual i, String prefix, String pName, String toRemove) throws NdlException {
+		assert(i != null);
+		assert(prefix != null);
+		assert(pName != null);
+		assert(toRemove != null);
+		
 		Property pr = ref.getProperty(ref.getNsPrefixUri(prefix) + pName);
 		if (null == pr) 
 			throw new NdlException("Unable to find property " + pName);
@@ -363,6 +391,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	private Resource addProperty(Individual i, Property p, Resource ob) throws NdlException {
+		assert(i != null);
+		assert(p != null);
+		assert(ob != null);
+		
 		return i.addProperty(p, ob);
 	}
 	
@@ -420,11 +452,12 @@ public class NdlGenerator {
 	/**
 	 * Declare a ComputeElement with existing url (from manifest) that will be modified. Modifies always require a guid.
 	 * @param url
-	 * @param guid
+	 * @param guid (can be null)
 	 * @return
 	 * @throws NdlException
 	 */
 	public Individual declareModifiedComputeElement(String url, String guid) throws NdlException {
+		
 		OntClass cls = ref.getOntClass(ref.getNsPrefixUri("compute") + "ComputeElement");
 		
 		if (null == cls)
@@ -432,7 +465,8 @@ public class NdlGenerator {
 
 		Individual in = blank.createIndividual(url, cls);
 		
-		addGuid(in, guid);
+		if (guid != null)
+			addGuid(in, guid);
 		addTypedProperty(in, "modify-schema", "isModify", "true", XSDDatatype.XSDboolean);
 		
 		return in;
@@ -711,11 +745,13 @@ public class NdlGenerator {
 	/**
 	 * add IP address to individual e.g. Interface. Note that adding the same IP
 	 * will result in re-using a previously created individual, so if a model needs to
-	 * contain multiple definitions of similar IP addresses, use addUniqueIPIndividual() instead
+	 * contain multiple definitions of similar IP addresses, use addUniqueIPIndividual() instead.
+	 * It disassociates previously created IP individual from the interface. 
 	 * @param ip
 	 * @param ind
 	 */
 	public Individual addIPToIndividual(String ip, Individual ind) throws NdlException {
+		ind.removeAll(NdlCommons.ip4LocalIPAddressProperty);
 		String indName = requestId + "#ip-" + ip.replace('.', '-');
 		// create ip Individual if not already there
 		Individual ipInd = addIndividual(indName, "ip4", "IPAddress");
@@ -729,12 +765,14 @@ public class NdlGenerator {
 	
 	/**
 	 * Add a unique IP individual using e.g. VLAN name. Also see addIPIndividual().
+	 * It disassociates previously created IP individual from the interface.
 	 * @param ip - ip address string
 	 * @param name - e.g. vlan name
 	 * @param ind
 	 * @throws NdlException
 	 */
 	public Individual addUniqueIPToIndividual(String ip, String name, Individual ind) throws NdlException {
+		ind.removeAll(NdlCommons.ip4LocalIPAddressProperty);
 		String indName = requestId + "#" + massageName(name) + "-ip-" + ip.replace('.', '-');
 		
 		// create ip Individual if not already there
@@ -746,6 +784,65 @@ public class NdlGenerator {
 		addProperty(ind, "ip4", "localIPAddress", ipInd.getURI());
 		
 		return ipInd;
+	}
+	
+	/**
+	 * Add netmask to an individual IP subject (the subject must have been added using addIPToIndividual
+	 * or addUniqueIPToIndividual
+	 * @param ip
+	 * @param netmask
+	 * @throws NdlException
+	 */
+	public void addNetmaskToIP(Individual ip, String netmask) throws NdlException {
+		addTypedProperty(ip, "ip4", "netmask", netmask, 
+				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
+	}
+	
+	/**
+	 * Set IP on interface individual, including overwriting any existing IP (but not netmask). This
+	 * function is complimentary to the addIPToIndividual() and can undo its results. 
+	 * @param ip
+	 * @param intf
+	 * @throws NdlException
+	 */
+	public void setInterfaceIP(String ip, Individual intf) throws NdlException {
+		Statement s = intf.getProperty(NdlCommons.ip4LocalIPAddressProperty);
+
+		Individual ipInd = null;
+		if (s != null) {
+			ipInd = blank.getIndividual(s.getResource().getURI());
+			ipInd.removeAll(NdlCommons.layerLabelIdProperty);
+		} else {
+			// /ib anonymous didn't work because they have no URI to retrieve an individual from, so use guids
+			ipInd = addIndividual("ip-" + UUID.randomUUID().toString(), "ip4", "IPAddress");
+			addProperty(intf, "ip4", "localIPAddress", ipInd.getURI());
+		}
+		addTypedProperty(ipInd, "layer", "label_ID", ip, 
+				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
+		
+	}
+	
+	/**
+	 * Set netmask on interface, including overwriting any existing netmask (but not IP). This function is
+	 * complimentary to addNetmaskToIP() and can undo its results. 
+	 * @param nm
+	 * @param intf
+	 * @throws NdlException
+	 */
+	public void setInterfaceNetmask(String nm, Individual intf) throws NdlException {
+		Statement s = intf.getProperty(NdlCommons.ip4LocalIPAddressProperty);
+
+		Individual ipInd = null;
+		if (s != null) {
+			ipInd = blank.getIndividual(s.getResource().getURI());
+			ipInd.removeAll(NdlCommons.ip4NetmaskProperty);
+		} else {
+			// /ib anonymous didn't work because they have no URI to retrieve an individual from, so use guids
+			ipInd = addIndividual("ip-" + UUID.randomUUID().toString(), "ip4", "IPAddress");
+			addProperty(intf, "ip4", "localIPAddress", ipInd.getURI());
+		}
+		addTypedProperty(ipInd, "ip4", "netmask", nm, 
+				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
 	}
 	
 	/**
@@ -780,32 +877,6 @@ public class NdlGenerator {
 		if (fsmntpoint != null)
 			addTypedProperty(in, "storage", "hasMntPoint", fsmntpoint, XSDDatatype.XSDstring);
 		addTypedProperty(in, "storage", "doFormat", "" + doFormat, XSDDatatype.XSDboolean);
-	}
-	
-	/**
-	 * add netmask to IP address individual. Note that this creates IPaddress individual if it
-	 * is not there. THIS METHOD SHOULD NOT BE USED.
-	 * @param name
-	 * @return
-	 */
-//	public void addNetmaskToIP(String ip, String netmask) throws NdlException {
-//		String indName = requestId + "#ip-" + ip.replace('.', '-');
-//		// create ip Individual if not already there
-//		Individual ipInd = addIndividual(indName, "ip4", "IPAddress");
-//		addTypedProperty(ipInd, "ip4", "netmask", netmask, 
-//				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
-//		
-//	}
-	
-	/**
-	 * Add netmask to an individual IP subject
-	 * @param ip
-	 * @param netmask
-	 * @throws NdlException
-	 */
-	public void addNetmaskToIP(Individual ip, String netmask) throws NdlException {
-		addTypedProperty(ip, "ip4", "netmask", netmask, 
-				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
 	}
 	
 	/***
@@ -1748,12 +1819,30 @@ public class NdlGenerator {
 
 		try {
 			ngen.declareColor("test color", null, blob, true);
+			
+			// nodes
 			Individual n = ngen.declareComputeElement("mynode");
 			Individual n1 = ngen.declareComputeElement("mynode1");
 			ngen.addNodeTypeToCE("exogeni", "XOMedium", n1);
 			ngen.addNodeTypeToCE("exogeni", "XOMedium", n);
 			//ngen.removeNodeTypeFromCE(n);
 			ngen.removeNodeTypeFromCE("exogeni", "XOMedium", n);
+			
+			// ip
+			Individual intf = ngen.declareInterface("if1");
+			ngen.addInterfaceToIndividual(intf, n);
+			//Individual ipInd = ngen.addIPToIndividual("1.2.3.4", intf);
+			//ngen.addNetmaskToIP(ipInd, "255.255.255.0");
+			
+			//ipInd = ngen.addIPToIndividual("4.3.2.1", intf);
+			//ngen.addNetmaskToIP(ipInd, "255.255.0.0");
+			
+			ngen.setInterfaceIP("5.5.5.5", intf);
+			ngen.setInterfaceNetmask("255.0.0.0", intf);
+			
+			ngen.setInterfaceIP("6.6.6.6", intf);
+			ngen.setInterfaceNetmask("255.255.255.0", intf);
+			
 		} catch (NdlException ee) {
 			System.out.println("Exception: " + ee);
 		}
