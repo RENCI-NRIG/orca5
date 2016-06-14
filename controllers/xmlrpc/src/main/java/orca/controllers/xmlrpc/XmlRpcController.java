@@ -125,17 +125,17 @@ public class XmlRpcController extends OrcaController {
 //		server.addConnector(connector);
 
 		SslSelectChannelConnector ssl_connector = new SslSelectChannelConnector();
-	        ssl_connector.setPort(serverSslPort);
-	        ssl_connector.setPassword(keyStorePass);
-	        ssl_connector.setKeyPassword(keyStorePass);
-	        ssl_connector.setKeystore(HomeDirectory + KeystoreLocation);
-	        ssl_connector.setNeedClientAuth(true);
-	        ssl_connector.setTruststore(HomeDirectory + getProperty(CredentialValidator.PropertyChTruststorePath));
-	        ssl_connector.setTrustPassword(getProperty(CredentialValidator.PropertyChTruststorePassword));
-	        ssl_connector.setAcceptors(acceptorThreads);
-	        server.addConnector(ssl_connector);
+		ssl_connector.setPort(serverSslPort);
+		ssl_connector.setPassword(keyStorePass);
+		ssl_connector.setKeyPassword(keyStorePass);
+		ssl_connector.setKeystore(HomeDirectory + KeystoreLocation);
+		ssl_connector.setNeedClientAuth(true);
+		ssl_connector.setTruststore(HomeDirectory + getProperty(CredentialValidator.PropertyChTruststorePath));
+		ssl_connector.setTrustPassword(getProperty(CredentialValidator.PropertyChTruststorePassword));
+		ssl_connector.setAcceptors(acceptorThreads);
+		server.addConnector(ssl_connector);
 		
-	        // the handler
+		// the handler
 		ServletContextHandler servletHandler =
                     new ServletContextHandler(ServletContextHandler.SECURITY|ServletContextHandler.SECURITY);
 		servletHandler.setContextPath("/");
@@ -163,8 +163,7 @@ public class XmlRpcController extends OrcaController {
 		server.start();
 		l.start();
 	}
-	
-	
+
 	private class ControllerContextListener implements ServletContextListener {
 		public void contextInitialized(ServletContextEvent arg0) {
 		}
