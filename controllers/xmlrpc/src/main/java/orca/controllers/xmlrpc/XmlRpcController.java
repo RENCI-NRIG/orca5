@@ -40,6 +40,7 @@ public class XmlRpcController extends OrcaController {
 	public static final String PropertyDelayResourceTypes = "controller.delay.resource.types";
 	public static final String PropertyUserRequestRulesFile = "controller.user.request.rules.file";
 	public static final String PropertyUserModifyRulesFile = "controller.user.modify.rules.file";
+	public static final String PropertyOpenstackMacPrefix = "controller.openstack.mac.prefix";
 	
 	private static final int defaultPort = 9443;
 	private static final int defaultThreads = 10;
