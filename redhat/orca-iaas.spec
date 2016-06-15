@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Jun 14 2016 Ilya Baldin <ibaldin@renci.org>
+- Rebuild for controller testing
+
 *Tue Jan 19 2016 Victor J. Orlikowski <vjo@duke.edu>
 - Rebuild for production deployment, take 2.
 
