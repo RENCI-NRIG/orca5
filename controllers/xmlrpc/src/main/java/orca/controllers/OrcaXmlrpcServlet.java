@@ -3,7 +3,6 @@ package orca.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.security.cert.X509Certificate;
-import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -124,7 +123,7 @@ public class OrcaXmlrpcServlet extends XmlRpcServlet {
     	// insecure comms are not allowed
     	if (sslSessionId.get() == null) {
     		Log.debug("Client " + pRequest.getRemoteAddr() + " is not using secure communications");
-    	}else{
+    	} else {
     		Log.debug("Client " + pRequest.getRemoteAddr() + " is using secure communications");
     		/*
     		Log.debug("Available attributes: --------");

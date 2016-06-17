@@ -73,7 +73,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.sparql.core.ResultBinding;
-import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -82,7 +81,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
 public class ReservationConverter implements LayerConstant {
 	static final String SUDO_NO = "no";
 	static final String SUDO_YES = "yes";
-	static final String OPENSTACK_MAC_PREFIX = "fe:16:3e:00:";
+	static final String OPENSTACK_MAC_DEFAULT_PREFIX = "fe:16:3e:00:";
 	public static final String UNIT_URL_RES = UnitProperties.UnitURL;
 	private static final long TWO_WEEKS = (14*24*3600*1000);
 	private static final long ONE_DAY = (24*3600*1000);
@@ -119,8 +118,6 @@ public class ReservationConverter implements LayerConstant {
 	public static final String SUDO_FIELD = "sudo";
 	public static final String URN_FIELD = "urn";
 	
-	private static final Pattern macNamePattern = Pattern.compile(UnitProperties.UnitEthPrefix + "[\\d]+" + UnitProperties.UnitEthMacSuffix);
-	
 	public static final String ISCSI_Initiator_Iqn_prefix = "iqn.2012-02.net.exogeni:";
 	
 	protected static String noopConfigFile = "handlers/common/noop.xml";
@@ -148,6 +145,8 @@ public class ReservationConverter implements LayerConstant {
 	// restored from manifest model (by workflow parser)
 	HashMap <String,DomainElement> firstGroupElement;
 
+	public static String openstackMacPrefix = null;
+	
 	public ReservationConverter() {
 		logger = NdlCommons.getNdlLogger();
 	}
@@ -715,7 +714,7 @@ public class ReservationConverter implements LayerConstant {
 							if(parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)!=null)
 								mac_addr=parent.getValue().getProperty(NdlCommons.ipMacAddressProperty).getString();
 							else
-								mac_addr = generateNewMAC();
+								mac_addr = generateNewMAC(orca_state_instance);
 							if(mac_addr!=null){
 								parent.getValue().addProperty(NdlCommons.ipMacAddressProperty, mac_addr);
 								logger.debug("ReservationConverter:mac property:"+parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)); 
@@ -825,7 +824,7 @@ public class ReservationConverter implements LayerConstant {
 		if(parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)!=null)
 			mac_addr=parent.getValue().getProperty(NdlCommons.ipMacAddressProperty).getString();
 		else
-			mac_addr = generateNewMAC();
+			mac_addr = generateNewMAC(orca_state_instance);
 		if(mac_addr!=null){
 			parent.getValue().addProperty(NdlCommons.ipMacAddressProperty, mac_addr);
 			logger.debug("ReservationConverter:mac property:"+parent.getValue().getProperty(NdlCommons.ipMacAddressProperty)); 
@@ -2082,7 +2081,17 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 	}
-    private String generateNewMAC(){
+    static String generateNewMAC(XmlrpcOrcaState osi) {
+    	
+    	// initialize the prefix from property if any (can be done in a static initializer too /ib
+    	if (openstackMacPrefix == null) {
+    		String propPrefix = OrcaController.getProperty(XmlRpcController.PropertyOpenstackMacPrefix);
+    		if (propPrefix != null) 
+    			openstackMacPrefix = propPrefix;
+    		else
+    			openstackMacPrefix = OPENSTACK_MAC_DEFAULT_PREFIX;
+    	}
+    	
         //Generates libvirt compliant random mac addr (hopefully this.hashCode() is random enough
     	SecureRandom secureRandom = new SecureRandom();
     	String new_mac = null;
@@ -2094,10 +2103,10 @@ public class ReservationConverter implements LayerConstant {
                 StringBuffer m = new StringBuffer(Long.toString(l, 16));
                 while (m.length() < 4) m.insert(0, "0");
 
-                new_mac=OPENSTACK_MAC_PREFIX + m.substring(0,2) + ":" + m.substring(2,4);
+                new_mac = openstackMacPrefix + m.substring(0,2) + ":" + m.substring(2,4);
 
-                if(!orca_state_instance.existingUsedMac(new_mac)){
-                        orca_state_instance.setUsedMac(new_mac);
+                if(!osi.existingUsedMac(new_mac)){
+                        osi.setUsedMac(new_mac);
                         break;
                 }
         }

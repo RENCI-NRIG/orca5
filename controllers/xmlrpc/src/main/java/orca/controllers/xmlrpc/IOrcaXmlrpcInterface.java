@@ -22,4 +22,9 @@ public interface IOrcaXmlrpcInterface {
 	
 	public Map<String, Object> renewSlice(String slice_urn, Object[] credentials, String newTermEnd);
 	
+	public Map<String, Object> modifySlice(String slice_urn, Object[] credentials, String modReq);
+	
+	public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials, 
+    		String modifySubcommand, List<Map<String, ?>> modifyProperties);
+	
 }

@@ -1,15 +1,24 @@
 package orca.controllers.xmlrpc;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import orca.ndl.NdlCommons;
+import orca.ndl.elements.ComputeElement;
+import orca.ndl.elements.DomainElement;
+import orca.ndl.elements.Interface;
+import orca.ndl.elements.NetworkConnection;
+import orca.ndl.elements.NetworkElement;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.ontology.OntResource;
-
-import orca.ndl.NdlCommons;
-import orca.ndl.elements.*;
-import orca.shirako.container.Globals;
 
 /**
  *
@@ -77,7 +86,7 @@ public class ReservationElementCollection {
 	
 	private void addMacAddress(DomainElement de){
 		LinkedList <Interface> interfaces = de.getClientInterface();
-		if(interfaces!=null){
+		if (interfaces!=null) {
 			for(Interface intf:interfaces){
 				OntResource intf_ont = intf.getResource();
 				if(intf_ont==null){
@@ -85,32 +94,32 @@ public class ReservationElementCollection {
 					continue;
 				}
 				if(intf_ont.getProperty(NdlCommons.ipMacAddressProperty)==null)
-					intf_ont.addProperty(NdlCommons.ipMacAddressProperty,generateNewMAC());
+					intf_ont.addProperty(NdlCommons.ipMacAddressProperty, ReservationConverter.generateNewMAC(XmlrpcOrcaState.getInstance()));
 			}
 		}
 	}
 	
-	private final XmlrpcOrcaState orca_state_instance = XmlrpcOrcaState.getInstance();
-    private String generateNewMAC(){
-        //Generates libvirt compliant random mac addr (hopefully this.hashCode() is random enough
-    	String new_mac = null;
-    	while(true){
-    		long l = Globals.secureRandom.nextLong();
-         
-    		l = Math.abs(l);
-
-    		StringBuffer m = new StringBuffer(Long.toString(l, 16));
-    		while (m.length() < 4) m.insert(0, "0");
-    		
-    		new_mac="fe:16:3e:00:" + m.substring(0,2) + ":" + m.substring(2,4);
-    		
-    		if(!orca_state_instance.existingUsedMac(new_mac)){
-    			orca_state_instance.setUsedMac(new_mac);
-    			break;
-    		}
-    	}
-        return new_mac;
-    }
+//	private final XmlrpcOrcaState orca_state_instance = XmlrpcOrcaState.getInstance();
+//    private String generateNewMAC(){
+//        //Generates libvirt compliant random mac addr (hopefully this.hashCode() is random enough
+//    	String new_mac = null;
+//    	while(true){
+//    		long l = Globals.secureRandom.nextLong();
+//         
+//    		l = Math.abs(l);
+//
+//    		StringBuffer m = new StringBuffer(Long.toString(l, 16));
+//    		while (m.length() < 4) m.insert(0, "0");
+//    		
+//    		new_mac = ReservationConverter.OPENSTACK_MAC_PREFIX + m.substring(0,2) + ":" + m.substring(2,4);
+//    		
+//    		if(!orca_state_instance.existingUsedMac(new_mac)){
+//    			orca_state_instance.setUsedMac(new_mac);
+//    			break;
+//    		}
+//    	}
+//        return new_mac;
+//    }
 	
 	private void addNodeToGroup(String group, DomainElement ce){
 		if(this.NodeGroupMap==null)
