@@ -245,6 +245,37 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509">
+        <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.jack.net.internet2.edu:eth1/2:unf-eg</topology:hasURN>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/PoP -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/PoP">
+        <rdf:type rdf:resource="&collections;Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UMASS/Cisco/6509 -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UMASS/Cisco/6509">
@@ -412,6 +443,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/TAMU/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UCD/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UMASS/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/PoP"/>
@@ -454,6 +486,12 @@
     <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
     
 
 
