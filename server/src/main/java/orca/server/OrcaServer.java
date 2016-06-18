@@ -21,6 +21,7 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.jolokia.http.AgentServlet;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
@@ -188,6 +189,10 @@ public class OrcaServer {
 		ServletHolder axisHolder = new ServletHolder(new AxisServlet());
 		axisHolder.setName("AxisServlet");
 		servletHandler.addServlet(axisHolder, "/services/*");		
+		// add the Jolokia servlet
+		ServletHolder jolokiaHolder = new ServletHolder(new AgentServlet());
+		jolokiaHolder.setName("JolokiaServlet");
+		servletHandler.addServlet(jolokiaHolder, "/jmx/*");		
 		
 		// register the handler
 		server.setHandler(servletHandler);
