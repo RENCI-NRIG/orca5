@@ -149,8 +149,10 @@ public class XmlRpcController extends OrcaController {
 		servletHandler.addServlet(xmlrpcHolder, "/orca/xmlrpc");
 		// add the Jolokia servlet
 		ServletHolder jolokiaHolder = new ServletHolder(new AgentServlet());
+		String jmxAccessPolicyFile = "file://" + HomeDirectory + "config/jolokia-access.xml";
 		jolokiaHolder.setName("JolokiaServlet");
-		servletHandler.addServlet(jolokiaHolder, "/jmx/*");   
+		jolokiaHolder.setInitParameter("policyLocation", jmxAccessPolicyFile);
+		servletHandler.addServlet(jolokiaHolder, "/jmx/*");
 
 		// register the handler
 		server.setHandler(servletHandler);
