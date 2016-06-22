@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Jun 22 2016 Mert Cevik <mcevik@renci.org>
+- Rebuild for enabling use of Jolokia servlet
+
 *Tue Jun 14 2016 Ilya Baldin <ibaldin@renci.org>
 - Rebuild for controller testing
 
