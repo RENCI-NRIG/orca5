@@ -448,7 +448,7 @@
     <owl:NamedIndividual rdf:about="&RciNet;IBM/G8264/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>17-24</rdfs:label>
+        <rdfs:label>17-24,28</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&RciNet;IBM/G8264"/>
@@ -463,7 +463,7 @@
     <owl:NamedIndividual rdf:about="&RciNet;IBM/G8264/TenGigabitEthernet/1/2/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>41-48</rdfs:label>
+        <rdfs:label>41-48,52</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
