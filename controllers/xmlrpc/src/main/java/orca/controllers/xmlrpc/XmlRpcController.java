@@ -17,6 +17,7 @@ import orca.util.ID;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -42,7 +43,9 @@ public class XmlRpcController extends OrcaController {
 	public static final String PropertyUserModifyRulesFile = "controller.user.modify.rules.file";
 	public static final String PropertyOpenstackMacPrefix = "controller.openstack.mac.prefix";
 	
-	private static final int defaultPort = 9443;
+	private static final int defaultSslPort = 11443;
+	private static final int defaultPort = 11080;
+	
 	private static final int defaultThreads = 10;
 	private static final String defaultKeystorePass = "xmlrpc";
 	/**
@@ -98,7 +101,9 @@ public class XmlRpcController extends OrcaController {
 		
 		Log.info("Starting XMLRPC controller");
 		
-		int serverSslPort = defaultPort;
+		int serverSslPort = defaultSslPort;
+		int serverPort = defaultPort;
+		
 		if (getProperty(CtrlPortProperty) != null) {
 			try {
 				serverSslPort = Integer.parseInt(getProperty(CtrlPortProperty));
@@ -120,10 +125,10 @@ public class XmlRpcController extends OrcaController {
 		}
 		
 		// disable the non-ssl connector
-//		SelectChannelConnector connector = new SelectChannelConnector();
-//		connector.setPort(9090);
-//		connector.setAcceptors(2);
-//		server.addConnector(connector);
+		SelectChannelConnector connector = new SelectChannelConnector();
+		connector.setPort(serverPort);
+		connector.setAcceptors(2);
+		server.addConnector(connector);
 
 		SslSelectChannelConnector ssl_connector = new SslSelectChannelConnector();
 		ssl_connector.setPort(serverSslPort);
