@@ -7,8 +7,8 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY wgs84_pos "http://www.w3.org/2003/01/geo/wgs84_pos#" >
-    <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
     <!ENTITY orca "http://geni-orca.renci.org/owl/orca.rdf#" >
+    <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
     <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
     <!ENTITY layer2 "http://geni-orca.renci.org/owl/layer.owl#10" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
@@ -654,7 +654,7 @@
         <domain:hasTopology rdf:resource="&domain;Node"/>
         <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
         <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <domain:hasAggregateManager rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#BbnRackController"/>
+        <domain:hasAggregateManager rdf:resource="&orca;BbnRackController"/>
     </owl:NamedIndividual>
     
 
@@ -763,7 +763,7 @@
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/BBN/Juniper/MX/TenGigabitEthernet/1/1/ethernet">
-        <topology:hasURN>urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.newy32aoa.net.internet2.edu:eth5/2:gpo-eg</topology:hasURN>
+        <topology:hasURN>urn:publicid:IDN+al2s.internet2.edu+interface+rtsw.newy32aoa.net.internet2.edu:et-7/3/0.0:gpo-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 
@@ -774,15 +774,15 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet"/>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker -->
 
     <owl:NamedIndividual rdf:about="&orca;ExoGENIBroker"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/umassNet.rdf#umassNet/IBM/G8264/TenGigabitEthernet/1/2/ethernet"/>
 </rdf:RDF>
 
 

@@ -22,6 +22,7 @@ import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.jolokia.http.AgentServlet;
 
 public class XmlRpcController extends OrcaController {
 	public static final String PropertyRequestNdl = "request.ndl";
@@ -151,6 +152,12 @@ public class XmlRpcController extends OrcaController {
 		ServletHolder xmlrpcHolder = new ServletHolder(xmlrpc);
 		xmlrpcHolder.setName("orca-xmlrpc");
 		servletHandler.addServlet(xmlrpcHolder, "/orca/xmlrpc");
+		// add the Jolokia servlet
+		ServletHolder jolokiaHolder = new ServletHolder(new AgentServlet());
+		String jmxAccessPolicyFile = "file://" + HomeDirectory + "config/jolokia-access.xml";
+		jolokiaHolder.setName("JolokiaServlet");
+		jolokiaHolder.setInitParameter("policyLocation", jmxAccessPolicyFile);
+		servletHandler.addServlet(jolokiaHolder, "/jmx/*");
 
 		// register the handler
 		server.setHandler(servletHandler);
