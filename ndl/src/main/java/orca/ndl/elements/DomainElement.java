@@ -254,16 +254,21 @@ public class DomainElement extends Device {
 				}
 			}
 		}else{
-			if(getUpNeighbour(getModel())!=null){
-				domainRequestModel.removeAll(getUpNeighbour(getModel()),NdlCommons.topologyInterfaceOfProperty,null);
-				domainRequestModel.removeAll(getUpNeighbour(getModel()),NdlCommons.connectedTo,null);
-				up_device_rs=setNeighborDevice(domainRequestModel, this.getURI() + "/up", getUpNeighbour(getModel()), getUpLocal(getModel()));
+			OntResource upNeighbour = getUpNeighbour(getModel());
+			if(upNeighbour!=null){
+				String up_device_url = this.getURI() + "/up";
+				OntResource upLocal=getUpLocal(getModel());
+				domainRequestModel.removeAll(upNeighbour,NdlCommons.topologyInterfaceOfProperty,null);
+				domainRequestModel.removeAll(upNeighbour,NdlCommons.connectedTo,null);
+				up_device_rs=setNeighborDevice(domainRequestModel, up_device_url, upNeighbour, upLocal);
 			}
-			
-			if(getDownNeighbour(getModel())!=null){
-				domainRequestModel.removeAll(getDownNeighbour(getModel()),NdlCommons.topologyInterfaceOfProperty,null);
-				domainRequestModel.removeAll(getDownNeighbour(getModel()),NdlCommons.connectedTo,null);
-				down_device_rs=setNeighborDevice(domainRequestModel,this.getURI()+"/down", getDownNeighbour(getModel()),getDownLocal(getModel()));
+			OntResource downNeighbour = getDownNeighbour(getModel());			
+			if(downNeighbour!=null){
+				String down_device_url = this.getURI()+"/down";
+				OntResource downLocal = getDownLocal(getModel());
+				domainRequestModel.removeAll(downNeighbour,NdlCommons.topologyInterfaceOfProperty,null);
+				domainRequestModel.removeAll(downNeighbour,NdlCommons.connectedTo,null);
+				down_device_rs=setNeighborDevice(domainRequestModel, down_device_url, downNeighbour,downLocal);
 			}
 			Resource intf_rs = null,intf_link_rs=null;
 			if(up_device_rs!=null) {
@@ -320,6 +325,24 @@ public class DomainElement extends Device {
 			}
 			else break;
 		}	
+		
+		rs=local;
+		while(true){
+			neighbor_intf_rs=domainRequestModel.createIndividual(rs.getURI(),NdlCommons.interfaceOntClass);
+			for (StmtIterator j=rs.listProperties();j.hasNext();){
+				Statement s_type = (Statement) j.next();
+				domainRequestModel.add(neighbor_intf_rs,s_type.getPredicate(),s_type.getObject());
+			}
+			ResultSet results=NdlCommons.getLayerAdapatation(local.getOntModel(),rs.getURI());
+			String varName=(String) results.getResultVars().get(0);
+			if (results.hasNext()){
+				rs=results.nextSolution().getResource(varName);
+				if(neighbor_intf_rs.getProperty(NdlCommons.RDFS_Label)!=null)
+					rs.addProperty(NdlCommons.RDFS_Label, neighbor_intf_rs.getProperty(NdlCommons.RDFS_Label).getString());
+			}
+			else break;
+		}
+		
 		return device_rs;
 	}
 	
