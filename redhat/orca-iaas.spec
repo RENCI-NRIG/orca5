@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Jun 29 2016 Mert Cevik <mcevik@renci.org>
+- Rebuild for updates: ION control policy change
+
 *Mon Jun 27 2016 Mert Cevik <mcevik@renci.org>
 - Rebuild for updates: Support for unsecured connection to controller on 10080, RDF updates for RCI and UVA-NL
 
