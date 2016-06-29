@@ -177,6 +177,9 @@ public class NdlInterfaceVLANControl extends NdlVLANControl {
                 }
                 gained.add(u);
                 r_set = new ResourceSet(gained, null, null, type, rd);
+                if (r_set != null) {
+                    convertEdgeProperties(configuration_properties, tag);
+                }
             } else {
                 // no resource - delay the allocation
                 r_set = null;
