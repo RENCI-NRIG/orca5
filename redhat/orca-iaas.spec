@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Sat Jul 02 2016 Mert Cevik <mcevik@renci.org>
+- Rebuild for updates: Remove a possible NPE
+
 *Wed Jun 29 2016 Mert Cevik <mcevik@renci.org>
 - Rebuild for updates: ION control policy change
 
