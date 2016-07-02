@@ -326,23 +326,24 @@ public class DomainElement extends Device {
 			else break;
 		}	
 		
-		rs=local;
-		while(true){
-			neighbor_intf_rs=domainRequestModel.createIndividual(rs.getURI(),NdlCommons.interfaceOntClass);
-			for (StmtIterator j=rs.listProperties();j.hasNext();){
-				Statement s_type = (Statement) j.next();
-				domainRequestModel.add(neighbor_intf_rs,s_type.getPredicate(),s_type.getObject());
+		if(local!=null){
+			rs=local;
+			while(true){
+				neighbor_intf_rs=domainRequestModel.createIndividual(rs.getURI(),NdlCommons.interfaceOntClass);
+				for (StmtIterator j=rs.listProperties();j.hasNext();){
+					Statement s_type = (Statement) j.next();
+					domainRequestModel.add(neighbor_intf_rs,s_type.getPredicate(),s_type.getObject());
+				}
+				ResultSet results=NdlCommons.getLayerAdapatation(local.getOntModel(),rs.getURI());
+				String varName=(String) results.getResultVars().get(0);
+				if (results.hasNext()){
+					rs=results.nextSolution().getResource(varName);
+					if(neighbor_intf_rs.getProperty(NdlCommons.RDFS_Label)!=null)
+						rs.addProperty(NdlCommons.RDFS_Label, neighbor_intf_rs.getProperty(NdlCommons.RDFS_Label).getString());
+				}
+				else break;
 			}
-			ResultSet results=NdlCommons.getLayerAdapatation(local.getOntModel(),rs.getURI());
-			String varName=(String) results.getResultVars().get(0);
-			if (results.hasNext()){
-				rs=results.nextSolution().getResource(varName);
-				if(neighbor_intf_rs.getProperty(NdlCommons.RDFS_Label)!=null)
-					rs.addProperty(NdlCommons.RDFS_Label, neighbor_intf_rs.getProperty(NdlCommons.RDFS_Label).getString());
-			}
-			else break;
 		}
-		
 		return device_rs;
 	}
 	
