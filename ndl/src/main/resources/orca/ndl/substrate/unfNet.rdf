@@ -368,7 +368,7 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/AL2S/1"/>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/Instageni/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/InstaGeni/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/fiuNet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/uflNet/1"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
@@ -427,7 +427,7 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
-        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/Instageni"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/InstaGeni"/>
         <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
@@ -585,11 +585,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/Instageni -->
+    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/InstaGeni -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/Instageni">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/InstaGeni">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/Instageni/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/InstaGeni/1"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
         <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</collections:size>
     </owl:NamedIndividual>
@@ -628,9 +628,9 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/Instageni/1 -->
+    <!-- http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/InstaGeni/1 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/Instageni/1">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/availableVLANSet/InstaGeni/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
         <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/VLANLabel/1470"/>
         <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/VLANLabel/1489"/>
