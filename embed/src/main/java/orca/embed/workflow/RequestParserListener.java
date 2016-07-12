@@ -240,6 +240,14 @@ public class RequestParserListener implements INdlRequestModelListener {
 		if(dType.getResourceType()==null)
 			dType.setResourceType(dType.VLAN_RESOURCE_TYPE);
 		ol.setResourceType(dType);
+		
+		Resource domain = NdlCommons.getDomain(l);
+		if (domain != null){
+			ol.setInDomain(domain.getURI());
+		}else{
+			ol.setInDomain(reservationDomain);
+		}
+		
 		Resource layer_rs = NdlCommons.getLayer(l);
 		String layer=null;
 		if(layer_rs!=null)

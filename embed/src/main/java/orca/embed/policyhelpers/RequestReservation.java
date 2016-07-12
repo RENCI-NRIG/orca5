@@ -164,12 +164,12 @@ public class RequestReservation {
     	//numbering the nodes using the integer stqrting from 1
 		for(Iterator <NetworkElement> j=requestElements.iterator();j.hasNext();){	
 			element=j.next();
-			logger.debug("generateGraph: element="+element.getURI()+";inDomain="+element.getInDomain());
+			String elementDomain = element.getInDomain();
+			logger.debug("generateGraph: element="+element.getURI()+";inDomain="+elementDomain);
 			//System.out.println("Doamin--element:"+element.getName()+":inDomain="+element.getInDomain()+";reservation domain="+reservationDomain);
 			if(!(element instanceof NetworkConnection)){
 				if(element instanceof ComputeElement){  //out of the request parser, compute elements are always added first
 					ComputeElement ce = (ComputeElement) element;
-					String elementDomain = element.getInDomain();
 					if(elementDomain!=null){
 						if(reservationDomain==null){
 							if(mixDomain==false)
@@ -204,7 +204,7 @@ public class RequestReservation {
 			if(!requestConnection.isModify())
 				setPureType(requestConnection.getResourceType(),typeTotalUnits);
 			if( (reservationDomain==null) 
-					|| (requestConnection.getCastType()!=null && requestConnection.getCastType().equalsIgnoreCase("Multicast") && requestConnection.isModify()) ){	
+					|| (elementDomain==null && requestConnection.getCastType()!=null && requestConnection.getCastType().equalsIgnoreCase("Multicast") && requestConnection.isModify()) ){	
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
 					String connection_domain = null;
