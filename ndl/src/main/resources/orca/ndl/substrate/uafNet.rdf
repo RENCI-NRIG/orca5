@@ -551,11 +551,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/uafNet.rdf#uafNet/IBM/G8264/VLANLabel/2360 -->
+    <!-- http://geni-orca.renci.org/owl/uafNet.rdf#uafNet/IBM/G8264/VLANLabel/2355 -->
 
-    <owl:NamedIndividual rdf:about="&uafNet;IBM/G8264/VLANLabel/2360">
+    <owl:NamedIndividual rdf:about="&uafNet;IBM/G8264/VLANLabel/2355">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">2360.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">2355.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -609,7 +609,7 @@
     <owl:NamedIndividual rdf:about="&uafNet;IBM/G8264/availableVLANSet/InstaGeni/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&uafNet;IBM/G8264/VLANLabel/2341"/>
-        <layer:upperBound rdf:resource="&uafNet;IBM/G8264/VLANLabel/2360"/>
+        <layer:upperBound rdf:resource="&uafNet;IBM/G8264/VLANLabel/2355"/>
     </owl:NamedIndividual>
     
 
