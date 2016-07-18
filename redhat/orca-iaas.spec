@@ -363,7 +363,7 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Fri Jul 15 2016 Mert Cevik <mcevik@renci.org>
+*Mon Jul 18 2016 Mert Cevik <mcevik@renci.org>
 - Rebuild for updates: Broadcast link modify
 
 *Sat Jul 02 2016 Mert Cevik <mcevik@renci.org>
