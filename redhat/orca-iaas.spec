@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Jul 20 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Fixing logging NPE (triggered by recovery)
+
 *Mon Jul 18 2016 Mert Cevik <mcevik@renci.org>
 - Rebuild for updates: Broadcast link modify
 
