@@ -892,10 +892,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							throw new Exception("Failed to close reservation", ex);
 						}
 					}
+					// please note that computed reservations can be null after recovery /ib
 					logger.debug("There are " + a_r.size() 
 							+ " reservations to be removed in the slice with urn=" + slice_urn 
 							+ " sliceId = " + ndlSlice.getSliceID()
-							+ "reservations "+ndlSlice.getComputedReservations().size());
+							+ (ndlSlice.getComputedReservations() != null ? "reservations "+ ndlSlice.getComputedReservations().size() : ""));
 				}       
 
 				logger.info("modifySlice(): processing add reservations");
