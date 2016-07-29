@@ -415,7 +415,7 @@
     <owl:NamedIndividual rdf:about="&uafNet;IBM/G8264/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>1</rdfs:label>
+        <rdfs:label>64</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">500000000</layer:bandwidth>
         <topology:hasName rdf:datatype="&xsd;string">InstaGeni-UAF</topology:hasName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UAF/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
