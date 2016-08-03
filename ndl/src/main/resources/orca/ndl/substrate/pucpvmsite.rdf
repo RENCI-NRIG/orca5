@@ -625,7 +625,7 @@
     <owl:NamedIndividual rdf:about="&pucpvmsite;pucp/ExoGeni/TenGigabitEthernet/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>24-31</rdfs:label>
+        <rdfs:label>1-8</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName>vlan-data</topology:hostInterfaceName>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
