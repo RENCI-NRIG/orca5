@@ -26,7 +26,7 @@ class Commands:
 
 
     @classmethod
-    def run(self, args, cwd = None, shell = False, kill_tree = True, timeout = -1, env = None):
+    def run(self, args, cwd = None, shell = False, kill_tree = True, timeout = -1, env = None, delay = 0):
         '''
         Run a command with a timeout after which it will be forcibly
         killed.
@@ -41,8 +41,12 @@ class Commands:
             raise Alarm
 
         LOG.debug("run: args= " + str(args))
+
         #p = Popen(args, shell = shell, cwd = cwd, stdout = PIPE, stderr = PIPE, env = env)
         p = Popen(args, stdout=PIPE, stderr=STDOUT)
+
+        time.sleep(delay)
+
         if timeout != -1:
             signal(SIGALRM, alarm_handler)
             alarm(timeout)
@@ -533,6 +537,11 @@ class VM:
 
     @classmethod
     def _ssh_test_vm(self, floating_addr, key, user, retries, timeout):
+
+        if (os.environ['EC2_SSH_DELAY']).isdigit() :
+        	ssh_delay = int(os.environ['EC2_SSH_DELAY'])
+	else:
+		ssh_delay=0
         
         for i in range(retries):
             try:
@@ -546,7 +555,8 @@ class VM:
                        "-i", str(key), 
                        str(user) + "@" + str(floating_addr),
                        "echo >/dev/null 2>&1"]
-                rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60)
+                ###rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60)
+                rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60, delay=ssh_delay)
 
                 if rtncode == 0:
                     return True
@@ -938,6 +948,11 @@ class VM:
     def prepare_key(self, instance_ip, user_ssh_key, root_ssh_key, retries=10, timeout=3):
         import traceback
 
+        if (os.environ['EC2_SSH_DELAY']).isdigit() :
+        	ssh_delay = int(os.environ['EC2_SSH_DELAY'])
+	else:
+		ssh_delay=0
+
         #ip = self._get_floating_ip_by_id(id)
         ip=instance_ip
       
@@ -954,7 +969,8 @@ class VM:
                        "-i", str(root_ssh_key),
                        str('root') + "@" + str(ip),
                        "echo " + str(user_ssh_key) + " >> .ssh/authorized_keys"]
-                rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                ###rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3, delay=ssh_delay)
                 
                 if rtncode == 0:
                     return True
@@ -973,6 +989,11 @@ class VM:
     @classmethod
     def prepare_keys(self, instance_ip, user_id, user_ssh_keys, shouldSudo, root_ssh_key, retries=1, timeout=3):
         import traceback
+
+        if (os.environ['EC2_SSH_DELAY']).isdigit() :
+        	ssh_delay = int(os.environ['EC2_SSH_DELAY'])
+	else:
+		ssh_delay=0
 
         LOG.debug('prepare_keys')
         LOG.debug('instance_ip: ' + str(instance_ip))
@@ -1007,7 +1028,8 @@ class VM:
                            "-i", str(root_ssh_key),
                            str('root') + "@" + str(ip),
                            "useradd -m " + str(user_id) ]
-                    rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                    ###rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                    rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3, delay=ssh_delay)
                 
                     if rtncode == 0:
                         break
@@ -1038,7 +1060,8 @@ class VM:
                                "-i", str(root_ssh_key),
                                str('root') + "@" + str(ip),
                                "echo '" + str(user_id)  + " ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers" ]
-                        rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                        ###rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                        rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3, delay=ssh_delay)
 
                         if rtncode == 0:
                             break
@@ -1073,7 +1096,8 @@ class VM:
                            "-i", str(root_ssh_key),
                            str('root') + "@" + str(ip),
                            "useradd -D | grep HOME | awk '{ split(\\$0, a, \"=\"); print a[2]}'" ]
-                    rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                    ###rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                    rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3, delay=ssh_delay)
 
                     if rtncode == 0:
                         user_home_prefix = data_stdout
@@ -1105,7 +1129,8 @@ class VM:
                                str('root') + "@" + str(ip),
                                "mkdir -p " + str(user_home_prefix) + "/" + str(user_id) + "/.ssh; echo " + str(user_key)  +  " >> " + str(user_home_prefix) + "/" + str(user_id) + "/.ssh/authorized_keys; chown -R " + str(user_id) + ":" + str(user_id)
  + " " + str(user_home_prefix) + "/" + str(user_id) + "/.ssh"  ]
-                        rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                        ###rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3)
+                        rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=3, delay=ssh_delay)
 
                         if rtncode == 0:
                             break

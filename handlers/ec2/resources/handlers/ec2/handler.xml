@@ -64,6 +64,7 @@
 				<echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
 				<echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
 				<echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
+				<echo message="EC2_SSH_DELAY=${ec2.ssh.delay}" />
 				<echo message="EC2_STARTUP_RETRIES=${ec2.startup.retries}" />
 				<echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
 				<echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
@@ -88,6 +89,7 @@
 					<env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
 					<env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
 					<env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
+					<env key="EC2_SSH_DELAY" value="${ec2.ssh.delay}" />
 					<env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
 					<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
 					<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
@@ -224,6 +226,7 @@
 						<echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
 						<echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
 						<echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
+						<echo message="EC2_SSH_DELAY=${ec2.ssh.delay}" />
 						<echo message="EC2_STARTUP_RETRIES=${ec2.startup.retries}" />
 						<echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
 						<echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
@@ -248,6 +251,7 @@
 							<env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
 							<env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
 							<env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
+							<env key="EC2_SSH_DELAY" value="${ec2.ssh.delay}" />
 							<env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
 							<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
 							<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
@@ -360,6 +364,7 @@
 													<env key="EC2_DIR" value="${ec2.dir}" />
 													<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
 													<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+													<env key="EC2_SSH_DELAY" value="${ec2.ssh.delay}" />
 													<arg value="${shirako.save.unit.manage.ip}" />
 													<arg value="${loginProperty}" />
 													<arg value="${keysProperty}" />
@@ -644,6 +649,7 @@
 								<env key="EC2_DIR" value="${ec2.dir}" />
 								<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
 								<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+								<env key="EC2_SSH_DELAY" value="${ec2.ssh.delay}" />
 								<arg value="${unit.manage.ip}" />
 								<arg value="${loginProperty}" />
 								<arg value="${keysProperty}" />
