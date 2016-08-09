@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Aug 09 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Add property for VM handler to configure delay for SSH connections
+
 *Mon Aug 08 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Add property for VM handler to configure delay for SSH connections
 
