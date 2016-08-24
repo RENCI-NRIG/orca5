@@ -359,7 +359,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.clev.net.internet2.edu:eth3/2:wsu-eg</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+rtsw.net.internet2.edu:et-3/3/0.0:wsu-eg</topology:hasURN>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/wsuNet.rdf#wsuNet/IBM/G8264/TenGigabitEthernet/1/1/ethernet"/>
     </owl:NamedIndividual>

@@ -330,7 +330,7 @@
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/Cisco/6509/GigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/WSU/Cisco/6509/GigabitEthernet/1/1/ethernet">
-        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.clev.net.internet2.edu:eth3/2:wsu-eg</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+rtsw.net.internet2.edu:et-3/3/0.0:wsu-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 
