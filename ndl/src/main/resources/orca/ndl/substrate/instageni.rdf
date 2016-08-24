@@ -229,7 +229,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;float">1.0E9</layer:bandwidth>
-        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.sunn.net.internet2.edu:eth5/1:ucdavis-eg</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.sunn.net.internet2.edu:et-8/0/0.0:ucdavis-eg</topology:hasURN>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UCD/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ucdNet.rdf#ucdNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
     </owl:NamedIndividual>

@@ -812,8 +812,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UCDNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ucdNet.rdf#ucdNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.sunn.net.internet2.edu:port=eth5/1:link=Stanford</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.sunn.net.internet2.edu:port=eth5/1:link=Stanford</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.sunn.net.internet2.edu:port=et-8/0/0.0:link=Stanford</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.sunn.net.internet2.edu:port=et-8/0/0.0:link=Stanford</rdfs:label>
     </owl:NamedIndividual>
     
 
