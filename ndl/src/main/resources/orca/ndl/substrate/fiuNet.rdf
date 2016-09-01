@@ -350,6 +350,7 @@
         <topology:hasInterface rdf:resource="&FiuNet;IBM/G8052/TenGigabitEthernet/1/2/ethernet"/>
         <topology:hasInterface rdf:resource="&FiuNet;IBM/G8052/TenGigabitEthernet/1/3/etherent"/>
         <topology:hasInterface rdf:resource="&FiuNet;IBM/G8052/TenGigabitEthernet/1/3/ethernet/VLAN/1009"/>
+        <topology:hasInterface rdf:resource="&FiuNet;IBM/G8052/TenGigabitEthernet/1/4/ethernet"/>
         <topology:hasInterface rdf:resource="&fiuNet;IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:hasInterface rdf:resource="&fiuNet;IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
     </owl:NamedIndividual>
@@ -468,6 +469,21 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/1/4/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&FiuNet;IBM/G8052/TenGigabitEthernet/1/4/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">InstaGeni-FIU</topology:hasName>
+        <topology:interfaceOf rdf:resource="&FiuNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&FiuNet;IBM/G8052/availableVLANSet/InstaGeni"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/FIU/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;1G"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/VLANLabel/1009 -->
 
     <owl:NamedIndividual rdf:about="&FiuNet;IBM/G8052/VLANLabel/1009">
@@ -538,8 +554,9 @@
         <collections:size rdf:datatype="&xsd;int">30</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&FiuNet;IBM/G8052/availableVLANSet/AL2S/1"/>
+        <collections:element rdf:resource="&FiuNet;IBM/G8052/availableVLANSet/InstaGeni/1"/>
         <collections:element rdf:resource="&FiuNet;IBM/G8052/availableVLANSet/uflNet/1"/>
-        <layer:upperBound rdf:resource="&FiuNet;IBM/G8052/availableVLANSet/unfNet/1"/>
+        <collections:element rdf:resource="&FiuNet;IBM/G8052/availableVLANSet/unfNet/1"/>
         <domain:hasBroker rdf:resource="&orca;ExoGENIBroker"/>
     </owl:NamedIndividual>
     
@@ -562,6 +579,25 @@
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&FiuNet;IBM/G8052/VLANLabel/1760"/>
         <layer:upperBound rdf:resource="&FiuNet;IBM/G8052/VLANLabel/1769"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/availableVLANSet/InstaGeni -->
+
+    <owl:NamedIndividual rdf:about="&FiuNet;IBM/G8052/availableVLANSet/InstaGeni">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">5</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&FiuNet;IBM/G8052/availableVLANSet/InstaGeni/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/availableVLANSet/InstaGeni/1 -->
+
+    <owl:NamedIndividual rdf:about="&FiuNet;IBM/G8052/availableVLANSet/InstaGeni/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
     </owl:NamedIndividual>
     
 
@@ -708,6 +744,14 @@
         <rdf:type rdf:resource="&location;Location"/>
         <wgs84_pos:lat>25.757292</wgs84_pos:lat>
         <wgs84_pos:long>-80.374042</wgs84_pos:long>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/FIU/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/FIU/Cisco/6509/GigabitEthernet/1/1/ethernet">
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.jack.net.internet2.edu:eth1/2:fiu-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 

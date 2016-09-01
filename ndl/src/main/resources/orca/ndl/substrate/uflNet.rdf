@@ -337,6 +337,14 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet">
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.jack.net.internet2.edu:eth1/2:ufl-eg</topology:hasURN>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/UFLNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/UFLNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
@@ -363,6 +371,7 @@
         <topology:hasInterface rdf:resource="&uflNet;IBM/G8052/TenGigabitEthernet/0/0/ethernet"/>
         <topology:hasInterface rdf:resource="&uflNet;IBM/G8052/TenGigabitEthernet/0/1/ethernet"/>
         <topology:hasInterface rdf:resource="&uflNet;IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
+        <topology:hasInterface rdf:resource="&uflNet;IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
         <topology:hasInterface rdf:resource="&uflNet;IBM/G8052/TenGigabitEthernet/3/ethernet"/>
         <topology:hasInterface rdf:resource="&uflNet;IBM/G8052/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <topology:hasInterface rdf:resource="&uflNet;IBM/G8052/TenGigabitEthernet/BareMetal/1/ethernet"/>
@@ -423,6 +432,21 @@
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&uflNet;IBM/G8052"/>
         <ethernet:availableVLANSet rdf:resource="&uflNet;IBM/G8052/availableVLANSet/AL2S"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&uflNet;IBM/G8052/TenGigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="&xsd;string">InstaGeni-UFL</topology:hasName>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:hasBitRate rdf:resource="&layer;1G"/>
+        <topology:interfaceOf rdf:resource="&uflNet;IBM/G8052"/>
+        <ethernet:availableVLANSet rdf:resource="&uflNet;IBM/G8052/availableVLANSet/InstaGeni"/>
     </owl:NamedIndividual>
     
 
@@ -579,15 +603,34 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/VLANLabel/1485 -->
+
+    <owl:NamedIndividual rdf:about="&uflNet;IBM/G8052/VLANLabel/1485">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1485.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/VLANLabel/1489 -->
+
+    <owl:NamedIndividual rdf:about="&uflNet;IBM/G8052/VLANLabel/1489">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">1489.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/availableVLANSet -->
 
     <owl:NamedIndividual rdf:about="&uflNet;IBM/G8052/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">30</collections:size>
+        <collections:size rdf:datatype="&xsd;int">5</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&uflNet;IBM/G8052/availableVLANSet/AL2S/1"/>
+        <collections:element rdf:resource="&uflNet;IBM/G8052/availableVLANSet/InstaGeni/1"/>
         <collections:element rdf:resource="&uflNet;IBM/G8052/availableVLANSet/fiuNet/1"/>
-        <layer:upperBound rdf:resource="&uflNet;IBM/G8052/availableVLANSet/unfNet/1"/>
+        <collections:element rdf:resource="&uflNet;IBM/G8052/availableVLANSet/unfNet/1"/>
     </owl:NamedIndividual>
     
 
@@ -609,6 +652,27 @@
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&uflNet;IBM/G8052/VLANLabel/1410"/>
         <layer:upperBound rdf:resource="&uflNet;IBM/G8052/VLANLabel/1419"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/availableVLANSet/InstaGeni -->
+
+    <owl:NamedIndividual rdf:about="&uflNet;IBM/G8052/availableVLANSet/InstaGeni">
+        <rdf:type rdf:resource="&layer;LabelSet"/>
+        <collections:size rdf:datatype="&xsd;int">5</collections:size>
+        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
+        <collections:element rdf:resource="&uflNet;IBM/G8052/availableVLANSet/InstaGeni/1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/availableVLANSet/InstaGeni/1 -->
+
+    <owl:NamedIndividual rdf:about="&uflNet;IBM/G8052/availableVLANSet/InstaGeni/1">
+        <rdf:type rdf:resource="&layer;LabelRange"/>
+        <layer:lowerBound rdf:resource="&uflNet;IBM/G8052/VLANLabel/1485"/>
+        <layer:upperBound rdf:resource="&uflNet;IBM/G8052/VLANLabel/1489"/>
     </owl:NamedIndividual>
     
 
