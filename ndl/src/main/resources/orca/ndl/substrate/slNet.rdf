@@ -794,10 +794,11 @@
 
     <owl:NamedIndividual rdf:about="&slNet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">163</collections:size>
+        <collections:size rdf:datatype="&xsd;int">173</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <domain:hasBroker rdf:resource="&orca;ExoGENIBroker"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#SlNet/IBM/G8052/InstaGeniVlanSet/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#SlNet/IBM/G8052/availableVlanSet/CIENA2/1"/>
         <collections:element rdf:resource="&slNet;IBM/G8264/VLANLabel/4004"/>
         <collections:element rdf:resource="&slNet;IBM/G8264/availableVLANSet/1"/>
         <collections:element rdf:resource="&slNet;IBM/G8264/availableVLANSet/2"/>
