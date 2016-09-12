@@ -366,8 +366,8 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/starlight.rdf#StarLight/Cisco/6509/TenGigabitEthernet/2/8/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gatech</topology:hasName>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.atla.net.internet2.edu:port=e5/2:link=*</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.atla.net.internet2.edu:port=e5/2:link=*</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.atla.net.internet2.edu:port=et-4/3/0.0:link=*</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.atla.net.internet2.edu:port=et-4/3/0.0:link=*</rdfs:label>
     </owl:NamedIndividual>
     
 
