@@ -46,6 +46,12 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/1/4/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/1/4/ethernet"/>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/TenGigabitEthernet/0/2/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/TenGigabitEthernet/0/2/ethernet"/>
@@ -88,6 +94,19 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/Domain/NetworkService/1">
         <rdf:type rdf:resource="&domain;NetworkService"/>
         <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/FIU/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/FIU/Cisco/6509/GigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.jack.net.internet2.edu:eth1/2:fiu-eg</topology:hasURN>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/1/4/ethernet"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509"/>
     </owl:NamedIndividual>
     
 
@@ -249,7 +268,9 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509">
         <rdf:type rdf:resource="&topology;Device"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/FIU/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UNF/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
     </owl:NamedIndividual>
     
 
@@ -260,9 +281,9 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.jack.net.internet2.edu:eth1/2:unf-eg</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.jack.net.internet2.edu:eth1/2:ufl-eg</topology:hasURN>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509"/>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
     </owl:NamedIndividual>
     
 
@@ -301,6 +322,19 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UMASS/PoP">
         <rdf:type rdf:resource="&collections;Set"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UMASS/Cisco/6509"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UNF/Cisco/6509/GigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UNF/Cisco/6509/GigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&topology;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.jack.net.internet2.edu:eth1/2:unf-eg</topology:hasURN>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UFL/Cisco/6509"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
     </owl:NamedIndividual>
     
 
@@ -480,6 +514,12 @@
     <!-- http://geni-orca.renci.org/owl/ucdNet.rdf#ucdNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ucdNet.rdf#ucdNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/TenGigabitEthernet/1/1/ethernet"/>
     
 
 
