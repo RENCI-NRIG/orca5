@@ -598,15 +598,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/nlr.rdf#NLR/DD/Juniper/QFX3500/VLANLabel/100 -->
-
-    <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/VLANLabel/100">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">100.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/nlr.rdf#NLR/DD/Juniper/QFX3500/VLANLabel/1760 -->
 
     <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/VLANLabel/1760">
@@ -643,11 +634,20 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/nlr.rdf#NLR/DD/Juniper/QFX3500/VLANLabel/399 -->
+    <!-- http://geni-orca.renci.org/owl/nlr.rdf#NLR/DD/Juniper/QFX3500/VLANLabel/3800 -->
 
-    <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/VLANLabel/399">
+    <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/VLANLabel/3800">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">399.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">3800.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/nlr.rdf#NLR/DD/Juniper/QFX3500/VLANLabel/3999 -->
+
+    <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/VLANLabel/3999">
+        <rdf:type rdf:resource="&ethernet;VLAN"/>
+        <layer:label_ID rdf:datatype="&xsd;float">3999.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -710,7 +710,7 @@
 
     <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">345</collections:size>
+        <collections:size rdf:datatype="&xsd;int">245</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&NLR;DD/Juniper/QFX3500/availableVLANSet/1"/>
         <collections:element rdf:resource="&NLR;DD/Juniper/QFX3500/availableVLANSet/BBN/1"/>
@@ -726,8 +726,8 @@
 
     <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/availableVLANSet/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&NLR;DD/Juniper/QFX3500/VLANLabel/100"/>
-        <layer:upperBound rdf:resource="&NLR;DD/Juniper/QFX3500/VLANLabel/399"/>
+        <layer:lowerBound rdf:resource="&NLR;DD/Juniper/QFX3500/VLANLabel/3800"/>
+        <layer:upperBound rdf:resource="&NLR;DD/Juniper/QFX3500/VLANLabel/3999"/>
     </owl:NamedIndividual>
     
 
@@ -824,7 +824,7 @@
     <owl:NamedIndividual rdf:about="&NLR;DD/Juniper/QFX3500/xe/0/0/1/ethernet">
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label rdf:datatype="&xsd;string">xe-0/0/1</rdfs:label>
+        <rdfs:label rdf:datatype="&xsd;string">xe-0/0/8</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/DD/Cisco/6509/TenGigabitEthernet/1/2/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
