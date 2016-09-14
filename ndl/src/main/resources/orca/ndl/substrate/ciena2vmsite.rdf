@@ -21,8 +21,8 @@
     <!ENTITY openflow "http://geni-orca.renci.org/owl/openflow.owl#" >
     <!ENTITY location "http://geni-orca.renci.org/owl/location.owl#" >
     <!ENTITY topology "http://geni-orca.renci.org/owl/topology.owl#" >
-    <!ENTITY ciena2vmsite "http://geni-orca.renci.org/owl/ciena2vmsite.rdf#" >
     <!ENTITY collections "http://geni-orca.renci.org/owl/collections.owl#" >
+    <!ENTITY ciena2vmsite "http://geni-orca.renci.org/owl/ciena2vmsite.rdf#" >
     <!ENTITY CIENA "http://geni-orca.renci.org/owl/ciena2vmsite.rdf#CIENA/" >
     <!ENTITY ciena2vmsite2 "http://geni-orca.renci.org/owl/ciena2vmsite.rdf#ciena2vmsite/" >
     <!ENTITY ExoGeni "http://geni-orca.renci.org/owl/ciena2vmsite.rdf#CIENA/ExoGeni/" >
@@ -32,10 +32,10 @@
     <!ENTITY TenGigabitEthernet4 "http://geni-orca.renci.org/owl/ciena2vmsite.rdf#CIENA/BareMetal/TenGigabitEthernet/2/" >
     <!ENTITY TenGigabitEthernet "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/1/1/" >
     <!ENTITY TenGigabitEthernet3 "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/1/2/" >
-    <!ENTITY ExoGeni2 "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/1/" >
     <!ENTITY ExoGeni3 "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/2/" >
-    <!ENTITY BareMetal "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/BareMetal/1/" >
+    <!ENTITY ExoGeni2 "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/1/" >
     <!ENTITY BareMetal3 "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/BareMetal/2/" >
+    <!ENTITY BareMetal "http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/BareMetal/1/" >
 ]>
 
 
@@ -52,21 +52,21 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
      xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
-     xmlns:ciena2vmsite2="&ciena2vmsite;ciena2vmsite/"
      xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
      xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
      xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
      xmlns:BareMetal3="http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/BareMetal/2/"
-     xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
+     xmlns:ciena2vmsite="http://geni-orca.renci.org/owl/ciena2vmsite.rdf#"
      xmlns:BareMetal2="&ciena2vmsite;CIENA/BareMetal/"
+     xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
      xmlns:ExoGeni="&ciena2vmsite;CIENA/ExoGeni/"
      xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
-     xmlns:ciena2vmsite="http://geni-orca.renci.org/owl/ciena2vmsite.rdf#"
      xmlns:TenGigabitEthernet2="&ciena2vmsite;CIENA/ExoGeni/TenGigabitEthernet/1/"
      xmlns:orca="http://geni-orca.renci.org/owl/orca.owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:ciena2vmsite2="&ciena2vmsite;ciena2vmsite/"
      xmlns:TenGigabitEthernet="http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/1/1/"
      xmlns:TenGigabitEthernet5="&ciena2vmsite;CIENA/BareMetal/TenGigabitEthernet/1/"
      xmlns:ExoGeni2="http://geni-orca.renci.org/owl/ciena2Net.rdf#ciena2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/1/"
@@ -390,45 +390,39 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
+    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet"/>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet"/>
     
 
 
@@ -436,8 +430,8 @@
 
     <owl:NamedIndividual rdf:about="&ciena2vmsite;CIENA">
         <rdf:type rdf:resource="&location;Location"/>
-        <wgs84_pos:long>-83.065563</wgs84_pos:long>
         <wgs84_pos:lat>42.357744</wgs84_pos:lat>
+        <wgs84_pos:long>-83.065563</wgs84_pos:long>
     </owl:NamedIndividual>
     
 
@@ -472,7 +466,7 @@
         <rdfs:label>1/1,2/1,2/2</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">40000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/FourtyGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:interfaceOf rdf:resource="&ciena2vmsite;CIENA/BareMetal40g"/>
         <layer:hasBitRate rdf:resource="&layer;40G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
@@ -488,7 +482,7 @@
         <rdfs:label>1/1,2/1,2/2</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">40000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/FourtyGigabitEthernet/BareMetal/2/ethernet"/>
         <topology:interfaceOf rdf:resource="&ciena2vmsite;CIENA/BareMetal40g"/>
         <layer:hasBitRate rdf:resource="&layer;40G"/>
     </owl:NamedIndividual>
@@ -503,7 +497,7 @@
         <rdfs:label>3/5,3/6,3/7,3/8,3/9</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">of-data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <topology:interfaceOf rdf:resource="&ciena2vmsite;CIENA/BareMetal"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
@@ -519,7 +513,7 @@
         <rdfs:label>3/5,3/6,3/7,3/8,3/9</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/BareMetal/2/ethernet"/>
         <topology:interfaceOf rdf:resource="&ciena2vmsite;CIENA/BareMetal"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
     </owl:NamedIndividual>
@@ -621,7 +615,7 @@
         <rdfs:label>3/2,3/3,3/4</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName>of-data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/1/ethernet"/>
         <topology:interfaceOf rdf:resource="&ciena2vmsite;CIENA/ExoGeni"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <openflow:openflowCapable rdf:resource="&openflow;OpenFlow-1.0"/>
@@ -652,7 +646,6 @@
         <rdfs:label>3/10</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <ethernet:vlan rdf:resource="&ciena2vmsite;CIENA/ExoGeni/VLANLabel/1009"/>
         <topology:interfaceOf rdf:resource="&ciena2vmsite;CIENA/ISCSI"/>
     </owl:NamedIndividual>
@@ -674,8 +667,8 @@
 
     <owl:NamedIndividual rdf:about="&ciena2vmsite;CIENA/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2">
         <rdf:type rdf:resource="&ip4;IPAddress"/>
-        <layer:label_ID>10.104.0.3</layer:label_ID>
         <ip4:netmask>255.255.255.0</ip4:netmask>
+        <layer:label_ID>10.104.0.3</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -684,8 +677,8 @@
 
     <owl:NamedIndividual rdf:about="&ciena2vmsite;CIENA/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/3">
         <rdf:type rdf:resource="&ip4;IPAddress"/>
-        <layer:label_ID>10.104.0.4</layer:label_ID>
         <ip4:netmask>255.255.255.0</ip4:netmask>
+        <layer:label_ID>10.104.0.4</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -698,7 +691,7 @@
         <rdfs:label>3/2,3/3,3/4</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName>vlan-data</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/ExoGeni/2/ethernet"/>
         <topology:interfaceOf rdf:resource="&ciena2vmsite;CIENA/ExoGeni"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
     </owl:NamedIndividual>

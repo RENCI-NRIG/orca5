@@ -661,11 +661,9 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">52</collections:size>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/VLANLabel/3300"/>
+        <collections:size rdf:datatype="&xsd;int">30</collections:size>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/availableVLANSet/AL2S/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/availableVLANSet/CIENA/1"/>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/availableVLANSet/InstaGeni/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/availableVLANSet/SL/1"/>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
     </owl:NamedIndividual>
