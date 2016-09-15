@@ -374,26 +374,26 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Domain/NetworkService/1/availableVLANSet/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Domain/NetworkService/VLANLabel/100"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Network/NetworkService/VLANLabel/200"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Domain/NetworkService/VLANLabel/3800"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Network/NetworkService/VLANLabel/3899"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Domain/NetworkService/VLANLabel/100 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Domain/NetworkService/VLANLabel/3800 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Domain/NetworkService/VLANLabel/100">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Domain/NetworkService/VLANLabel/3800">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3800.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Network/NetworkService/VLANLabel/200 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Network/NetworkService/VLANLabel/3899 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Network/NetworkService/VLANLabel/200">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Ben/Network/NetworkService/VLANLabel/3899">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3899.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -422,7 +422,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/availableVLANSet/1"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">101</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">100</collections:size>
     </owl:NamedIndividual>
     
 
@@ -592,20 +592,20 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/100 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/3800 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/100">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/3800">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3800.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/200 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/3899 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/200">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/3899">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3899.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -614,8 +614,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/availableVLANSet/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/100"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/200"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/3800"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/VLANLabel/3899"/>
     </owl:NamedIndividual>
     
 
@@ -759,20 +759,20 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/100 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/3800 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/100">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/3800">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3800.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/200 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/3899 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/200">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/3899">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3899.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -790,8 +790,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/availableVLANSet/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/100"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/200"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/3800"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/VLANLabel/3899"/>
     </owl:NamedIndividual>
     
 
@@ -812,7 +812,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/availableVLANSet/1"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">101</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">100</collections:size>
     </owl:NamedIndividual>
     
 
@@ -1122,20 +1122,74 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/100 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1485 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/100">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1485">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1485.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/200 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1489 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/200">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1489">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1489.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1490 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1490">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1490.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1494 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1494">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1494.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1495 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1495">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1495.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1499 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1499">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1499.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/3800 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/3800">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3800.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/3899 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/3899">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3899.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -1172,60 +1226,6 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/908">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
         <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">908.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1495 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1495">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1495.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1499 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1499">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1499.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1490 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1490">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1490.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1494 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1494">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1494.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1485 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1485">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1485.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1489 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/1489">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1489.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -1294,8 +1294,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/availableVLANSet/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/100"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/200"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/3800"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/VLANLabel/3899"/>
     </owl:NamedIndividual>
     
 
@@ -1366,7 +1366,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/availableVLANSet/1"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">101</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">100</collections:size>
     </owl:NamedIndividual>
     
 
@@ -1524,20 +1524,20 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/100 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/3800 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/100">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/3800">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3800.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/200 -->
+    <!-- http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/3899 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/200">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/3899">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3899.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -1546,8 +1546,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/availableVLANSet/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/100"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/200"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/3800"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/VLANLabel/3899"/>
     </owl:NamedIndividual>
     
 
