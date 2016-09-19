@@ -363,7 +363,7 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
-*Mon Sept 19 2016 Mert Cevik <mcevik@renci.org>
+*Mon Sep 19 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Roll back the change made to accommodate stitching port on BEN
 
 *Tue Aug 09 2016 Mert Cevik <mcevik@renci.org>
