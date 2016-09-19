@@ -325,7 +325,7 @@ public class DomainElement extends Device {
 			}
 			else break;
 		}	
-		
+		/*
 		if(local!=null){
 			rs=local;
 			while(true){
@@ -343,7 +343,7 @@ public class DomainElement extends Device {
 				}
 				else break;
 			}
-		}
+		}*/
 		return device_rs;
 	}
 	
