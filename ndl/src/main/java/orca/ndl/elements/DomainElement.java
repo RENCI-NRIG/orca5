@@ -325,7 +325,7 @@ public class DomainElement extends Device {
 			}
 			else break;
 		}	
-		/*
+		
 		if(local!=null){
 			rs=local;
 			Resource neighbour_device_rs = null;
@@ -366,7 +366,7 @@ public class DomainElement extends Device {
 					else break;
 				}
 			}
-		}*/
+		}
 		return device_rs;
 	}
 	
