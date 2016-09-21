@@ -611,11 +611,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/1879 -->
+    <!-- http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/VLANLabel/1874 -->
 
-    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/1879">
+    <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/VLANLabel/1874">
         <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">1879.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="&xsd;float">1874.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -633,7 +633,7 @@
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">21</collections:size>
+        <collections:size rdf:datatype="&xsd;int">16</collections:size>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/VLANLabel/3300"/>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/AL2S/1"/>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/CIENA2/1"/>
@@ -646,7 +646,7 @@
 
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/availableVLANSet/AL2S">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">10</collections:size>
+        <collections:size rdf:datatype="&xsd;int">5</collections:size>
         <collections:element rdf:resource="&CIENANet;IBM/G8264/availableVLANSet/AL2S/1"/>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
     </owl:NamedIndividual>
@@ -658,7 +658,7 @@
     <owl:NamedIndividual rdf:about="&CIENANet;IBM/G8264/availableVLANSet/AL2S/1">
         <rdf:type rdf:resource="&layer;LabelRange"/>
         <layer:lowerBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/1870"/>
-        <layer:upperBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/1879"/>
+        <layer:upperBound rdf:resource="&CIENANet;IBM/G8264/VLANLabel/1874"/>
     </owl:NamedIndividual>
     
 

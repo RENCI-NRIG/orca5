@@ -558,7 +558,6 @@
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>64</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/0/0/ethernet"/>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#SlNet/IBM/G8052/availableVlanSet/CIENA2"/>
         <topology:interfaceOf rdf:resource="&slNet;IBM/G8264"/>
