@@ -89,6 +89,7 @@ public class ComputeElement extends NetworkElement {
 			ce.setPostBootScript(script);
 		
 		ce.setSpecificCEType(this.getSpecificCEType());
+		ce.setSpecificCETypeurl(this.getSpecificCETypeurl());
 		ce.setNodeGroupName(this.getNodeGroupName());		
 
 		ce.setFSType(this.getFSType());
@@ -234,6 +235,9 @@ public class ComputeElement extends NetworkElement {
 		return specificCEType;
 	}
 	
+	public void setSpecificCETypeurl(String specificCETypeurl) {
+		this.specificCETypeurl = specificCETypeurl;
+	}
 	public String getSpecificCETypeurl() {
 		return specificCETypeurl;
 	}
