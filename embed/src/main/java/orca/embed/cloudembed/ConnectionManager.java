@@ -391,7 +391,7 @@ public class ConnectionManager extends RequestMapping {
 		if(usedLayerBitSet!=null)
 			usedLayerBitSet.andNot(releasedLayerBitSet);
 		else
-			System.out.println("ERROR:No local used bitset");
+			logger.error("ERROR:No local used bitset");
 		
 		removeInConnectionProperty("ndl:visited",visited);
 		return releaseNetworkConnection;		
@@ -856,18 +856,37 @@ public class ConnectionManager extends RequestMapping {
 			rs1_parent=intf1.getResource().getProperty(adaptationPropertyOf).getResource();
 			if(label1_rs!=null){ //Only consider aSet and uSet for interface with assigned label 
 				logger.info("This labeled interface:"+layer+":"+aSet_p+":"+rs1_parent+":"+rs1_parent_availableSet+"--"+label1_rs.getURI()+"\n");
-
-				layer=findLayer(ontModel,rs1_parent);	
-				prefix=Layer.valueOf(layer).getPrefix().toString();
+				try{
+					layer=findLayer(ontModel,rs1_parent);	
+					prefix=Layer.valueOf(layer).getPrefix().toString();
 				
-				aSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getASet();
-				aSet_p=ontModel.getObjectProperty(aSet);
+					aSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getASet();
+					aSet_p=ontModel.getObjectProperty(aSet);
 			
-				if(rs1_parent.getProperty(aSet_p)!=null)
-					rs1_parent_availableSet= ontModel.getOntResource(rs1_parent.getProperty(aSet_p).getResource());
+					if(rs1_parent.getProperty(aSet_p)!=null)
+						rs1_parent_availableSet= ontModel.getOntResource(rs1_parent.getProperty(aSet_p).getResource());
 				
-				uSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getUSet();
-				uSet_p=ontModel.createObjectProperty(uSet);
+					uSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getUSet();
+					uSet_p=ontModel.createObjectProperty(uSet);
+				}catch(Exception e){
+					logger.error("Exception:"+e.getLocalizedMessage()+":"
+							+rs1_parent.getURI()+":"
+							+layer+":"
+							+label1_rs.getURI());
+				}
+			}
+		}
+		if(rs1_parent_availableSet!=null){
+			logger.info("Returning used label:"+uSet_p+":"+rs1_parent+":"+rs1_parent.getProperty(uSet_p));
+			if(rs1_parent.getProperty(uSet_p)!=null){
+				rs1_parent_usedSet = ontModel.getOntResource(rs1_parent.getProperty(uSet_p).getResource());
+				if(rs1_parent_availableSet!=null && rs1_parent_usedSet!=null && rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label1_rs) && (label1_rs!=null)){
+					rs1_parent_usedSet.removeProperty(NdlCommons.collectionElementProperty, label1_rs);
+					rs1_parent_availableSet.addProperty(NdlCommons.collectionElementProperty, label1_rs);
+					logger.info("Returned used label:"+label1_rs+":"+rs1_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+":" + 
+						rs1_parent_usedSet+":"+rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+"\n");	
+				}else
+					logger.warn("No Returned used label:label1_rs="+label1_rs);
 			}
 		}
 
@@ -884,42 +903,36 @@ public class ConnectionManager extends RequestMapping {
 			rs2_parent=intf2.getResource().getProperty(adaptationPropertyOf).getResource();
 			if(label2_rs!=null){
 				logger.info("This labeled interface:"+layer+":"+aSet_p+":"+rs2_parent+":"+rs2_parent_availableSet+"--"+label2_rs.getURI()+"\n");
-
-				layer=findLayer(ontModel,rs2_parent);
-				prefix=Layer.valueOf(layer).getPrefix().toString();
+				try{
+					layer=findLayer(ontModel,rs2_parent);
+					prefix=Layer.valueOf(layer).getPrefix().toString();
 						
-				aSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getASet();
-				aSet_p=ontModel.getObjectProperty(aSet);
-				if(rs2_parent.getProperty(aSet_p)!=null)
-					rs2_parent_availableSet = ontModel.getOntResource(rs2_parent.getProperty(aSet_p).getResource());
+					aSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getASet();
+					aSet_p=ontModel.getObjectProperty(aSet);
+					if(rs2_parent.getProperty(aSet_p)!=null)
+						rs2_parent_availableSet = ontModel.getOntResource(rs2_parent.getProperty(aSet_p).getResource());
 						
-				uSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getUSet();
-				uSet_p=ontModel.createObjectProperty(uSet);
+					uSet=NdlCommons.ORCA_NS+prefix+".owl#"+Layer.valueOf(layer).getUSet();
+					uSet_p=ontModel.createObjectProperty(uSet);
+				}catch(Exception e){
+					logger.error("Exception:"+e.getLocalizedMessage()+":"
+							+rs2_parent.getURI()+":"
+							+layer+":"
+							+label2_rs.getURI());
+				}
 			}
 		}
 		
 		if( (rs1_parent_availableSet==null) && (rs2_parent_availableSet==null)) return null;
-			
-		logger.info("Returning used label:"+uSet_p+":"+rs1_parent+":"+rs1_parent.getProperty(uSet_p));
-		if(rs1_parent.getProperty(uSet_p)!=null){
-			rs1_parent_usedSet = ontModel.getOntResource(rs1_parent.getProperty(uSet_p).getResource());
-			if(rs1_parent_availableSet!=null && rs1_parent_usedSet!=null && rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label1_rs) && (label1_rs!=null)){
-				rs1_parent_usedSet.removeProperty(NdlCommons.collectionElementProperty, label1_rs);
-				rs1_parent_availableSet.addProperty(NdlCommons.collectionElementProperty, label1_rs);
-				logger.info("Returned used label:"+label1_rs+":"+rs1_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+":" + 
-						rs1_parent_usedSet+":"+rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label1_rs)+"\n");	
-			}else
-				logger.warn("No Returned used label:label1_rs="+label1_rs);
-		}
-		logger.info("Returning used label:"+uSet_p+":"+rs2_parent+":"+rs2_parent.getProperty(uSet_p));
-		if(rs2_parent.getProperty(uSet_p)!=null){
-			if(rs2_parent.getProperty(uSet_p)!=rs1_parent.getProperty(uSet_p)){
-				rs2_parent_usedSet = ontModel.getOntResource(rs2_parent.getProperty(uSet_p).getResource());
-				if(rs2_parent_availableSet!=null && rs2_parent_usedSet!=null && rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label2_rs) && (label2_rs!=null)){
+		if(rs2_parent.getProperty(uSet_p)!=null){	
+			logger.info("Returning used label:"+uSet_p+":"+rs2_parent+":"+rs2_parent.getProperty(uSet_p));
+			rs2_parent_usedSet = ontModel.getOntResource(rs2_parent.getProperty(uSet_p).getResource());
+			if(rs2_parent_usedSet!=null && rs2_parent_usedSet!=rs1_parent_usedSet){		
+				if(rs2_parent_availableSet!=null && rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label2_rs) && (label2_rs!=null)){
 					rs2_parent_usedSet.removeProperty(NdlCommons.collectionElementProperty, label2_rs);
 					rs2_parent_availableSet.addProperty(NdlCommons.collectionElementProperty, label2_rs);
 					logger.info("Returned used label:"+label2_rs+":"+rs2_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty,label2_rs) + ":" + 
-							rs2_parent_usedSet+":"+rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label2_rs)+"\n");
+					rs2_parent_usedSet+":"+rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty,label2_rs)+"\n");
 				}else
 					logger.warn("No Returned used label:label2_rs="+label2_rs);
 			}

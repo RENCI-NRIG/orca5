@@ -838,6 +838,7 @@ try {
 								}else
 									static_label_rs_list.add(static_label_rs);
 							}
+							logger.info("static_label_rs_list="+static_label_rs_list.size());
 							for(Resource static_rs:static_label_rs_list){
 								if(static_rs.hasProperty(NdlCommons.layerLabelIdProperty)){
 									static_label = static_rs.getProperty(NdlCommons.layerLabelIdProperty).getInt();
@@ -1430,7 +1431,7 @@ try {
 				this.usedLabelSetPerLayer.get(layer).or(usedLabelSet);
 			}
 		}
-		System.out.println("Used label in mapper:"+this.usedLabelSetPerLayer.get(layer));
+		logger.info("Used label in mapper:"+this.usedLabelSetPerLayer.get(layer));
 	}
 }
 
