@@ -93,7 +93,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 				multicastDomain=element.getResource();
 			}else
 				domainCount = ifMPConnection(element);
-			if((domainCount!=null)&&(domainCount.size()<2) && !element.isModify()){	//in-rack broadcasting
+			if((domainCount!=null)&&(domainCount.size()<=2) && !element.isModify()){	//in-rack broadcasting
 					
 			}else{	
 				if(multicastDomain==null){
