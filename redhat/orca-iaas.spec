@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Mon Sep 26 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Fix MP issues
+
 *Tue Sep 20 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Fix the stitching port
 
