@@ -90,7 +90,7 @@ public class RequestWorkflow {
 	 */
 	public RequestWorkflow(IRequestEmbedder algm) {
 		assert(algm != null);
-		NdlCommons.setGlobalJenaRedirections();
+		NdlModel.setGlobalJenaRedirections();
 		embedderAlgorithm = algm;
 	}
 

@@ -62,7 +62,7 @@ public class Domain implements IDomainAbstractor{
 	}
 	
 	private void init(OntModel model) throws NdlException {
-		NdlCommons.setGlobalJenaRedirections();
+		NdlModel.setGlobalJenaRedirections();
 		OntResource domain_ont = getDomain(model);
 		
 		if (domain_ont == null)

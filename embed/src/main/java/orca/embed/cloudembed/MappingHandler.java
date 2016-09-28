@@ -66,7 +66,7 @@ public class MappingHandler implements IRequestEmbedder {
 	 * Create a handler with NO model (idm is not set)
 	 */
 	public MappingHandler() throws NdlException {
-		NdlCommons.setGlobalJenaRedirections();
+		NdlModel.setGlobalJenaRedirections();
 		idm = NdlModel.createModel(OntModelSpec.OWL_MEM_RDFS_INF, true);
 	}
 	
