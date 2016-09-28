@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
-import orca.ndl.NdlCommons.LocatorJarURL;
+import orca.ndl.NdlModel.LocatorJarURL;
 
 import com.hp.hpl.jena.ontology.OntDocumentManager;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -44,7 +44,7 @@ public class TestValidator {
 	public TestValidator() {
 		NdlCommons.init();
 		OntDocumentManager dm = OntDocumentManager.getInstance();
-		dm.getFileManager().addLocator(new LocatorJarURL());
+		dm.getFileManager().addLocator(new NdlModel.LocatorJarURL());
 		PrintUtil.registerPrefix("dom", "http://geni-orca.renci.org/owl/domain.owl#");
 		PrintUtil.registerPrefix("comp", "http://geni-orca.renci.org/owl/compute.owl#");
 		PrintUtil.registerPrefix("req", "http://geni-orca.renci.org/owl/request.owl#");
