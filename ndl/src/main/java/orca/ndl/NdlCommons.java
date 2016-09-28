@@ -2,17 +2,12 @@ package orca.ndl;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,7 +30,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntDocumentManager;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.ontology.Restriction;
@@ -54,8 +48,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.PropertyImpl;
 import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 import com.hp.hpl.jena.sparql.core.ResultBinding;
-import com.hp.hpl.jena.util.LocatorURL;
-import com.hp.hpl.jena.util.TypedStream;
 
 /** 
  * Common declarations for use in NDL 
@@ -353,114 +345,6 @@ public class NdlCommons {
     	hasColorValue = new PropertyImpl(ORCA_NS + "app-color.owl#hasColorValue");
     	hasColorXMLBlob = new PropertyImpl(ORCA_NS + "app-color.owl#hasColorXMLBlob");
     	hasColorXMLCompressedBlob = new PropertyImpl(ORCA_NS + "app-color.owl#hasColorXMLCompressedBlob");
-	}
-	
-	// map from 
-	public static final String[] orcaSchemaFiles = { 
-		"collections.owl",
-		"compute.owl",
-		"domain.owl",
-		"dtn.owl",
-		"ec2.owl",
-		"ethernet.owl",
-		"eucalyptus.owl",
-		"exogeni.owl",
-		"geni.owl",
-		"ip4.owl",
-		"itu-grid.owl",
-		"kansei.owl",
-		"layer.owl",
-		"location.owl",
-		"manifest.owl",
-		"modify.owl",
-		"openflow.owl",
-		"planetlab.owl",
-		"protogeni.owl",
-		"request.owl",
-		"storage.owl",
-		"tcp.owl",
-		"topology.owl",
-		"app-color.owl"
-	};
-	
-	public static final String[] orcaSubstrateFiles = {
-		"orca.rdf", "ben.rdf", "ben-dtn.rdf", "ben-6509.rdf"
-	};
-	
-	public static final Map<String, String> externalSchemas; 
-	static {
-		Map<String, String> m = new HashMap<String, String>();
-		m.put("http://www.w3.org/2006/time", "time.owl");
-		externalSchemas = Collections.unmodifiableMap(m);
-	}
-	
-	/**
-	 * Jena does not handle java jar:file: URLs, so we need this locator
-	 * @author ibaldin
-	 *
-	 */
-	public static class LocatorJarURL extends LocatorURL {
-		public LocatorJarURL() {
-			super();
-		}
-		
-		@Override
-		public TypedStream open(String filenameOrURI) {
-			try {
-				URL u = new URL(filenameOrURI);
-				if (filenameOrURI.startsWith("jar:")) {
-					JarURLConnection jarConnection = (JarURLConnection)u.openConnection();
-					return new TypedStream(jarConnection.getInputStream());
-				}
-				return new TypedStream(u.openStream());
-			} catch (MalformedURLException e) {
-				;
-			} catch (IOException i) {
-				;
-			}
-			
-			return super.open(filenameOrURI);
-		}
-		
-		@Override
-		public String getName() {
-			return ("LocatorJarURL");
-		}
-		
-	}
-	
-	/**
-	 * Set global DocumentManager redirections for Jena not to look for schema files
-	 * on the internet, but to use files in this package instead.
-	 */
-	private static boolean globalRedirections = false;
-	
-	public static void setGlobalJenaRedirections() {
-		
-		// idempotent
-		if (globalRedirections)
-			return;
-		globalRedirections = true;
-		
-		//ClassLoader cl = NdlCommons.class.getClassLoader();
-		//ClassLoader cl = ClassLoader.getSystemClassLoader();
-		ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
-		
-		OntDocumentManager dm = OntDocumentManager.getInstance();
-		dm.getFileManager().addLocator(new LocatorJarURL());
-		
-		for (String s: orcaSchemaFiles) { 
-			dm.addAltEntry(NdlCommons.ORCA_NS + s, cl.getResource(ORCA_NDL_SCHEMA + s).toString());
-		}
-		
-		for (String s: orcaSubstrateFiles) { 
-			dm.addAltEntry(NdlCommons.ORCA_NS + s, cl.getResource(ORCA_NDL_SUBSTRATE + s).toString());
-		}
-		
-		 //deal with odd ones we didn't create (time etc)
-		for (String s: externalSchemas.keySet()) { 
-			dm.addAltEntry(s, cl.getResource(ORCA_NDL_SCHEMA + externalSchemas.get(s)).toString());
-		}
 	}
 	
 	/**
@@ -2643,7 +2527,7 @@ public class NdlCommons {
 	 * Initialize Ndl Commons
 	 */
 	public static void init() {
-		setGlobalJenaRedirections();
+		NdlModel.setGlobalJenaRedirections();
 		ModelFolders.getInstance();
 	}
 }

@@ -250,7 +250,7 @@ public class NdlManifestParser extends NdlCommons {
 						if (result != null) {
 							Resource u = (Resource)result.get("item");
 							if (u.hasProperty(RDF_TYPE, topologyNetworkConnectionClass) &&
-									!u.hasProperty(RDF_TYPE, topologyLinkConnectionClass))
+									!u.hasProperty(RDF_TYPE, topologyLinkConnectionClass) && !u.hasProperty(RDF_TYPE, topologyCrossConnectClass))
 								continue;
 							if (u.hasProperty(RDF_TYPE, topologyLinkConnectionClass)
 									|| u.hasProperty(RDF_TYPE, topologyCrossConnectClass)) {

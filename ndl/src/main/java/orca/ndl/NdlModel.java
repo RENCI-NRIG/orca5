@@ -4,7 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import orca.ndl.util.ModelFolders;
 
@@ -17,6 +22,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.util.LocationMapper;
+import com.hp.hpl.jena.util.LocatorURL;
+import com.hp.hpl.jena.util.TypedStream;
 
 /**
  * Class that encapsulates NDL Model handling
@@ -25,10 +32,85 @@ import com.hp.hpl.jena.util.LocationMapper;
  */
 public class NdlModel {
 
+	// map from 
+	public static final String[] orcaSchemaFiles = { 
+		"collections.owl",
+		"compute.owl",
+		"domain.owl",
+		"dtn.owl",
+		"ec2.owl",
+		"ethernet.owl",
+		"eucalyptus.owl",
+		"exogeni.owl",
+		"geni.owl",
+		"ip4.owl",
+		"itu-grid.owl",
+		"kansei.owl",
+		"layer.owl",
+		"location.owl",
+		"manifest.owl",
+		"modify.owl",
+		"openflow.owl",
+		"planetlab.owl",
+		"protogeni.owl",
+		"request.owl",
+		"storage.owl",
+		"tcp.owl",
+		"topology.owl",
+		"app-color.owl"
+	};
+
+
+	public static final String[] orcaSubstrateFiles = {
+		"orca.rdf", "ben.rdf", "ben-dtn.rdf", "ben-6509.rdf"
+	};
+
+	public static final Map<String, String> externalSchemas;
+
+	static {
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("http://www.w3.org/2006/time", "time.owl");
+		externalSchemas = Collections.unmodifiableMap(m);
+	}
 	
 	// model types we allow
 	public enum ModelType { InMemory, TdbEphemeral, TdbPersistent };
 	
+	/**
+	 * Jena does not handle java jar:file: URLs, so we need this locator
+	 * @author ibaldin
+	 *
+	 */
+	public static class LocatorJarURL extends LocatorURL {
+		public LocatorJarURL() {
+			super();
+		}
+		
+		@Override
+		public TypedStream open(String filenameOrURI) {
+			try {
+				URL u = new URL(filenameOrURI);
+				if (filenameOrURI.startsWith("jar:")) {
+					JarURLConnection jarConnection = (JarURLConnection)u.openConnection();
+					return new TypedStream(jarConnection.getInputStream());
+				}
+				return new TypedStream(u.openStream());
+			} catch (MalformedURLException e) {
+				;
+			} catch (IOException i) {
+				;
+			}
+			
+			return super.open(filenameOrURI);
+		}
+		
+		@Override
+		public String getName() {
+			return ("LocatorJarURL");
+		}
+		
+	}
+
 	/**
 	 * Set common redirections for a specific document manager
 	 * @param dm
@@ -42,23 +124,23 @@ public class NdlModel {
 		FileManager fm = new FileManager();
 		// deep copy standard location mapper
 		fm.setLocationMapper(new LocationMapper(OntDocumentManager.getInstance().getFileManager().getLocationMapper()));
-		fm.addLocator(new NdlCommons.LocatorJarURL());
+		fm.addLocator(new NdlModel.LocatorJarURL());
 		fm.setModelCaching(false);
 		dm.setFileManager(fm);
 		dm.setCacheModels(false);
 	
-		for (String s: NdlCommons.orcaSchemaFiles) { 
+		for (String s: NdlModel.orcaSchemaFiles) { 
 			dm.addAltEntry(NdlCommons.ORCA_NS + s, cl.getResource(NdlCommons.ORCA_NDL_SCHEMA + s).toString());
 		}
 		
 		
-		for (String s: NdlCommons.orcaSubstrateFiles) { 
+		for (String s: NdlModel.orcaSubstrateFiles) { 
 			dm.addAltEntry(NdlCommons.ORCA_NS + s, cl.getResource(NdlCommons.ORCA_NDL_SUBSTRATE + s).toString());
 		}
 		
 		 //deal with odd ones we didn't create (time etc)
-		for (String s: NdlCommons.externalSchemas.keySet()) { 
-			dm.addAltEntry(s, cl.getResource(NdlCommons.ORCA_NDL_SCHEMA + NdlCommons.externalSchemas.get(s)).toString());
+		for (String s: NdlModel.externalSchemas.keySet()) { 
+			dm.addAltEntry(s, cl.getResource(NdlCommons.ORCA_NDL_SCHEMA + NdlModel.externalSchemas.get(s)).toString());
 		}
 	}
 
@@ -238,7 +320,7 @@ public class NdlModel {
 		FileManager fm = new FileManager();
 		// deep copy standard location mapper
 		fm.setLocationMapper(new LocationMapper(OntDocumentManager.getInstance().getFileManager().getLocationMapper()));
-		fm.addLocator(new NdlCommons.LocatorJarURL());
+		fm.addLocator(new NdlModel.LocatorJarURL());
 		
 		ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
 		URL reqUrl = cl.getResource(NdlCommons.ORCA_NDL_SCHEMA + "request.owl");
@@ -470,4 +552,40 @@ public class NdlModel {
 
 	// set to true to enable using TDB
 	static private boolean globalTDB = true;
+
+
+	/**
+	 * Set global DocumentManager redirections for Jena not to look for schema files
+	 * on the internet, but to use files in this package instead.
+	 */
+	private static boolean globalRedirections = false;
+	
+	public static void setGlobalJenaRedirections() {
+		
+		// idempotent
+		if (NdlModel.globalRedirections)
+			return;
+		NdlModel.globalRedirections = true;
+		
+		//ClassLoader cl = NdlCommons.class.getClassLoader();
+		//ClassLoader cl = ClassLoader.getSystemClassLoader();
+		ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
+		
+		OntDocumentManager dm = OntDocumentManager.getInstance();
+		dm.getFileManager().addLocator(new NdlModel.LocatorJarURL());
+		
+		for (String s: NdlModel.orcaSchemaFiles) { 
+			dm.addAltEntry(NdlCommons.ORCA_NS + s, cl.getResource(NdlCommons.ORCA_NDL_SCHEMA + s).toString());
+		}
+		
+		for (String s: NdlModel.orcaSubstrateFiles) { 
+			dm.addAltEntry(NdlCommons.ORCA_NS + s, cl.getResource(NdlCommons.ORCA_NDL_SUBSTRATE + s).toString());
+		}
+		
+		 //deal with odd ones we didn't create (time etc)
+		for (String s: NdlModel.externalSchemas.keySet()) { 
+			dm.addAltEntry(s, cl.getResource(NdlCommons.ORCA_NDL_SCHEMA + NdlModel.externalSchemas.get(s)).toString());
+		}
+	}
+
 }

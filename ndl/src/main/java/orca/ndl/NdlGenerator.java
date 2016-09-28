@@ -44,7 +44,7 @@ public class NdlGenerator {
 	private static final String XML_SCHEMA_INTEGER = "http://www.w3.org/2001/XMLSchema#integer";
 	private static final String STITCHING_DOMAIN_URL = "http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain";
 	private Logger l;
-	public static final Set<String> externalSchemas = NdlCommons.externalSchemas.keySet();
+	public static final Set<String> externalSchemas = NdlModel.externalSchemas.keySet();
 	protected OntModel blank;
 	private ReferenceModel ref = null;
     protected String requestId;
