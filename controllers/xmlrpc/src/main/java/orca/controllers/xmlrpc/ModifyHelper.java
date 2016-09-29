@@ -28,6 +28,21 @@ public class ModifyHelper {
 	
 	static final Map<ReservationID, Queue<ModifyOperation>> modifyQueues = new HashMap<>(); 
 	
+	// lists known widely-used modify commands
+	public enum ModifySubcommand {
+		ADDIFACE("addiface"),
+		REMOVEIFACE("removeiface"),
+		SSH("ssh");
+		
+		private String name;
+		ModifySubcommand(String n) {
+			name = n;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+	
 	/**
 	 * Container class for a single modify operation
 	 * @author ibaldin
@@ -282,7 +297,7 @@ public class ModifyHelper {
 		
 		try {
 			sm = XmlrpcOrcaState.getInstance().getSM();
-			return ModifyHelper.modifySliver(sm, res, modifySubcommand, modifyPropertiesList);
+			return modifySliver(sm, res, modifySubcommand, modifyPropertiesList);
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to modify sliver reservation: " + e);
 		} finally {
@@ -304,7 +319,7 @@ public class ModifyHelper {
 		
 		try {
 			sm = XmlrpcOrcaState.getInstance().getSM();
-			return ModifyHelper.modifySliver(sm, res, modifySubcommand, modifyProperties);
+			return modifySliver(sm, res, modifySubcommand, modifyProperties);
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to modify sliver reservation: " + e);
 		} finally {
@@ -355,7 +370,7 @@ public class ModifyHelper {
 				throw new RuntimeException("modifySliver(): unable to get configuration properties for reservation " + res);
 			
 			Properties cp = OrcaConverter.fill(psmng);
-			int index = PropList.highestModifyIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
+			int index = PropList.highestPropIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
 
 			//prepend all property names with modify.x.
 			PropList.renamePropertyNames(modifyProperties, OrcaConstants.MODIFY_PROPERTY_PREFIX + index + ".");
@@ -373,5 +388,4 @@ public class ModifyHelper {
 			throw new RuntimeException("Unable to modify sliver reservation " + res + " due to " + e);
 		}
 	}
-
 }

@@ -3,6 +3,9 @@ package orca.controllers.xmlrpc;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import orca.controllers.OrcaController;
 import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
 import orca.embed.policyhelpers.StringProcessor;
 import orca.manage.IOrcaServiceManager;
@@ -20,23 +23,25 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 	public void success(List<ReservationID> ok, List<ReservationID> actOn)
 			throws StatusCallbackException {
 		
+		final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
+		
 		String parent_prefix = UnitProperties.UnitEthPrefix;
 		String host_interface=null;
 		String reservation_id = null;
 		if(reservation!=null)
 			reservation_id=reservation.getReservationID();
 		if(actOn==null || ! (reservation_id.equals(actOn.get(0).toString()))){
-			System.out.println("Empty modifying...."+actOn+";reservation="+reservation_id);
+			logger.debug("Empty modify...."+actOn+"; reservation="+reservation_id);
 			return;
 		}
 
 		IOrcaServiceManager sm = null;
 		try {
 			sm = XmlrpcOrcaState.getInstance().getSM();
-			System.out.println("SUCCESS ON MODIFY WATCH OF " + ok);
+			logger.debug("SUCCESS ON MODIFY WATCH OF " + ok);
 			//ok-parents
 			//actOn-to be modified reservation
-			String modifySubcommand = "addiface";
+			String modifySubcommand = ModifyHelper.ModifySubcommand.ADDIFACE.getName();
 
 			// use the queueing version to avoid collisions with modified performed by the controller itself
 			Properties local = OrcaConverter.fill(reservation.getLocalProperties());
@@ -56,7 +61,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 
 			if(p_str!=null){
 				p=Integer.valueOf(p_str);
-				System.out.println("Number of parent reservations:"+p+";num_interface="+num_interface_int+";num_storage="+num_storage_int);
+				logger.debug("Number of parent reservations:"+p+";num_interface="+num_interface_int+";num_storage="+num_storage_int);
 				for(int i=0;i<p;i++){
 					String unit_tag = null,unit_parent_url=null;
 					Properties modifyProperties=new Properties();
@@ -71,7 +76,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 
 							if(isNetwork!=null && isNetwork.equals("1")){	//Parent is a networking reservation
 								// seems it's possible for this to not produce a tag. Doing this in a loop with a fixed number of repetitions
-								int n = 10;
+								//int n = 10;
 								//while ((n-->0) && (unit_tag == null)) {
 									List<UnitMng> un = sm.getUnits(new ReservationID(p_r.getReservationID()));
 									if (un != null) {
@@ -86,11 +91,11 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									//if (unit_tag == null)
 									//	Thread.sleep(1000L);
 								//}
-								System.out.println("parent r_id="+r_id+";unit tag:"+unit_tag+";unit_parent_url:"+unit_parent_url+";n=" + n);
+									logger.debug("parent r_id="+r_id+";unit tag:"+unit_tag+";unit_parent_url:"+unit_parent_url);
 								if(unit_tag!=null){
 									host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
 									if(host_interface==null){
-										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
+										logger.debug("Not find the parent interace index:unit_tag="+unit_tag);
 										continue;
 									}
 										
@@ -116,10 +121,10 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									if(local.getProperty(parent_url)!=null)
 										modifyProperties.setProperty("parent.url",local.getProperty(parent_url));
 										
-									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
+									logger.debug("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
-									System.out.println("Parent doesnot return the unit tag:"+pr_u);
+									logger.debug("Parent doesnot return the unit tag:"+pr_u);
 									continue;
 								}
 							}
@@ -141,7 +146,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 								//}
 								
 								String parent_url=StringProcessor.getParentURL(local,pr_local);
-								System.out.println("isLun="+isLun+";parent unit lun tag:"+unit_tag
+								logger.debug("isLun="+isLun+";parent unit lun tag:"+unit_tag
 										+";r_id="+r_id+";p_r_id="+p_r.getReservationID()+";parent_url=" + parent_url);
 								if(unit_tag!=null){
 									modifyProperties.setProperty("target.lun.num",unit_tag);
@@ -149,7 +154,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 										modifyProperties.setProperty("parent.url", parent_url);
 									host_interface=StringProcessor.getHostInterface(local,p_r);
 									if(host_interface==null){
-										System.out.println("Not find the parent interace index:unit_tag="+unit_tag);
+										logger.debug("Not find the parent interace index:unit_tag="+unit_tag);
 										continue;
 									}
 									String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
@@ -219,10 +224,10 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									else
 										modifyProperties.setProperty("target.should_attach",ReservationConverter.SUDO_YES);
 									num_storage_int--;
-									System.out.println("modifycommand:"+modifySubcommand+":properties:"+modifyProperties.toString());
+									logger.debug("modifycommand: "+modifySubcommand+":properties: "+modifyProperties.toString());
 									ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 								}else{	//no need to go futher
-									System.out.println("Parent did not return the unit lun tag:"+pr_u);
+									logger.debug("Parent did not return the unit lun tag: "+pr_u);
 									continue;
 								}
 							}
@@ -246,8 +251,8 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 	@Override
 	public void failure(List<ReservationID> failed, List<ReservationID> ok,
 			List<ReservationID> actOn) throws StatusCallbackException {
-		System.out.println("FAILURE ON MODIFY WATCH OF " + failed);
-
+		final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
+		logger.debug("FAILURE ON MODIFY WATCH OF " + failed);
 	}
 
 	public ReservationMng getReservation() {

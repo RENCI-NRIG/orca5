@@ -260,64 +260,6 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		}
 		return false;
 	}
-	
-	/**
-	 * Modify reservation based on reservation id (or null)
-	 * @param sm
-	 * @param res
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static boolean modifySliver(IOrcaServiceManager sm, String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
-		try {
-			// here we break up the semantics of different subcommands
-			
-			ReservationMng rm = sm.getReservation(new ReservationID(res));
-			if (rm == null)
-				throw new RuntimeException("modifySliver(): Unable to find reservation " + res);
-			
-			PropertiesMng psmng = rm.getConfigurationProperties();
-			if (psmng == null)
-				throw new RuntimeException("modifySliver(): unable to get configuration properties for reservation " + res);
-			
-			Properties cp = OrcaConverter.fill(psmng);
-			int index = PropList.highestModifyIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
-			
-			Properties modifyProperties = new Properties();
-			boolean implementedSubcommand = false;
-			//
-			// add more subcommands here. make sure to set implementedSubcommand to true.
-			//
-			if ("ssh".equalsIgnoreCase(modifySubcommand)) {
-				implementedSubcommand = true;
-				modifyProperties.putAll(ReservationConverter.generateSSHProperties(modifyPropertiesList));
-			} else {
-				implementedSubcommand = true;
-				// collect properties from first list entry map
-				if (modifyPropertiesList.size() == 0)
-					throw new RuntimeException("Subcommand " + modifySubcommand + " requires a list maps of size one or more");
-				
-				modifyProperties = fromMap((Map<String, String>)modifyPropertiesList.get(0));
-			}
-			
-			if (!implementedSubcommand)
-				throw new RuntimeException("Subcommand " + modifySubcommand + " is not implemented");
-			
-			//prepend all property names with modify.x.
-			PropList.renamePropertyNames(modifyProperties, OrcaConstants.MODIFY_PROPERTY_PREFIX + index + ".");
-			
-			// add the subcommand as a property after everything
-			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + index, 
-					OrcaConstants.MODIFY_PROPERTY_PREFIX + modifySubcommand);
-
-			return sm.modifyReservation(new ReservationID(res), modifyProperties);
-		} catch(RuntimeException re) { 
-			throw re;
-		} catch (Exception e) {
-			throw new RuntimeException("Unable to modify sliver reservation " + res + " due to " + e);
-		}
-	}
-	
 
 	public RequestWorkflow getWorkflow() {
 		return workflow;

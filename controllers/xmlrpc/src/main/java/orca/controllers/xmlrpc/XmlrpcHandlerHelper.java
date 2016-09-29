@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -35,14 +36,18 @@ import orca.controllers.xmlrpc.geni.GeniAmV2Handler;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.ApiOptionFields;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
 import orca.controllers.xmlrpc.x509util.CertificateUtil;
+import orca.controllers.xmlrpc.x509util.Credential;
 import orca.controllers.xmlrpc.x509util.CredentialValidator;
 import orca.controllers.xmlrpc.x509util.Gid;
-import orca.controllers.xmlrpc.x509util.Credential;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConverter;
+import orca.manage.beans.PropertiesMng;
+import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
 import orca.security.AbacUtil;
 import orca.security.AuthToken;
+import orca.shirako.common.ReservationID;
+import orca.util.PropList;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
@@ -393,20 +398,20 @@ public class XmlrpcHandlerHelper {
 	@SuppressWarnings("unchecked")
 	public static String validateOrcaCredential(String sliceUrn, Object[] credentials, String[] requiredPrivilege, 
 			boolean verifyCredentials, Logger logger) throws CredentialException {
-		
+
 		if (!verifyCredentials) {
 			return null;
 		}
-		
+
 		// insecure comms are not allowed
-    	if (OrcaXmlrpcServlet.getSslSessionId() == null || OrcaXmlrpcServlet.getClientCertificateChain() == null) {
-    		logger.error("Client " + OrcaXmlrpcServlet.getClientIpAddress() + " is not using secure communications, operations are not allowed");
-    		throw new CredentialException("Client " + OrcaXmlrpcServlet.getClientIpAddress() + " is not using secure communications, operations are not allowed");
-    	}
-		
+		if (OrcaXmlrpcServlet.getSslSessionId() == null || OrcaXmlrpcServlet.getClientCertificateChain() == null) {
+			logger.error("Client " + OrcaXmlrpcServlet.getClientIpAddress() + " is not using secure communications, operations are not allowed");
+			throw new CredentialException("Client " + OrcaXmlrpcServlet.getClientIpAddress() + " is not using secure communications, operations are not allowed");
+		}
+
 		X509Certificate[] clientCertificateChain = OrcaXmlrpcServlet.getClientCertificateChain();
 		List<String> altNameStrings = null;
-		
+
 		if (clientCertificateChain.length > 0) {
 			logger.info("validateOrcaCredential(): Client presented a certificate with subject: " + clientCertificateChain[0].getSubjectX500Principal());
 
@@ -416,7 +421,7 @@ public class XmlrpcHandlerHelper {
 				for (String altName: altNameStrings) {
 					logger.debug("Certificate contains subject alternative name: " + altName);
 				}
-				*/
+				 */
 			} catch (Exception e) {
 				;
 			}
@@ -429,87 +434,175 @@ public class XmlrpcHandlerHelper {
 		} catch (Exception e) {
 			throw new CredentialException("Certificate invalid: " + e);
 		}
-		
+
 		// and that it can be traced to a trust root
 		String CH_TRUSTSTORE_PATH = XmlRpcController.HomeDirectory + XmlRpcController.getProperty(CredentialValidator.PropertyChTruststorePath);
-        String CH_TRUSTSTORE_PASS = XmlRpcController.getProperty(CredentialValidator.PropertyChTruststorePassword);
-		
-        try {
-        	CertificateUtil.verifyCertChain((List<X509Certificate>)Arrays.asList(clientCertificateChain), 
-        			CH_TRUSTSTORE_PATH, CH_TRUSTSTORE_PASS);
-        } catch (CertPathValidatorException e) {
-        	throw new CredentialException("Unable to validate trust root: " + e);
-        }
-        
-        // Changes below for speaks_for
-        
-        // In the normal case, return the clientcertUserDN as below
-        /*
+		String CH_TRUSTSTORE_PASS = XmlRpcController.getProperty(CredentialValidator.PropertyChTruststorePassword);
+
+		try {
+			CertificateUtil.verifyCertChain((List<X509Certificate>)Arrays.asList(clientCertificateChain), 
+					CH_TRUSTSTORE_PATH, CH_TRUSTSTORE_PASS);
+		} catch (CertPathValidatorException e) {
+			throw new CredentialException("Unable to validate trust root: " + e);
+		}
+
+		// Changes below for speaks_for
+
+		// In the normal case, return the clientcertUserDN as below
+		/*
         return (((altNameStrings != null) && (altNameStrings.size() > 0)) ? altNameStrings.toString() : 
         	clientCertificateChain[0].getSubjectDN().getName());
-        */
-        
-        // supply URN if emulab cert or DN if other cert
-        String clientcertUserDN = ((altNameStrings != null) && (altNameStrings.size() > 0)) ? altNameStrings.toString() : 
-        	clientCertificateChain[0].getSubjectDN().getName();
-        
-        logger.info("clientcertUserDN = " + clientcertUserDN);
-                
-        String speaksforUserDN = null;
-        boolean speaks_for_context = false;
-        
-        // Check if a speaks for credential exists in the list of credentials
-        // If so, get the userDN from the userCert in the speaks-for credential and set speaks_for_context to true
-        for(int itr=0; itr < credentials.length; itr++){ // for each cred in credentials
-            String type = CredentialValidator.checkCredentialType((String)credentials[itr]);
-            // if credential type is "abac"
-            if(type != null && type.equalsIgnoreCase("abac")){ // this is a speaks for credential
-                logger.info("Found speaks for credential while setting userDN");
-                // get userDN from (String)credentials[itr]
-                Credential credential;
-                try{
-                    credential = new Credential((String)credentials[itr]);
-                } catch(Exception exception){
-                    logger.error(exception.getMessage());
-                    throw new CredentialException("Exception parsing speaks_for credential xml while setting userDN");
-                }
-                
-                Gid userGid = credential.getSignature().getIssuerGid(); // user gid
-                X509Certificate userCert = userGid.getCertificate(); // this is the cert of the user on behalf of whool the tool is speaking for
-                                
-                List<String> altNameStringsInUserCert = null;
-                
-                try {
-                    altNameStringsInUserCert = getExtensionValue(userCert, SUBJECT_ALTERNATIVE_NAME);
-                    for (String altNameInUserCert: altNameStringsInUserCert) {
-                        logger.info("User certificate (speaks-for) contains subject alternative name: " + altNameInUserCert);
-                    }
-		} catch (Exception e) {
-				;
-                }
-                
-                speaksforUserDN = ((altNameStringsInUserCert != null) && (altNameStringsInUserCert.size() > 0)) ? altNameStringsInUserCert.toString() : userCert.getSubjectDN().getName();
-                logger.info("speaksforUserDN = " + speaksforUserDN);
-                
-                speaks_for_context = true;
-                
-            }
-        }
-        
-        // If it is not speaks for context, then return userDN from client cert in SSL connection
-        if(!speaks_for_context){
-            logger.debug("returning clientcertUserDN as userDN");
-            return clientcertUserDN;
-        }
-        else {
-            logger.debug("returning speaksforUserDN as userDN");
-            return speaksforUserDN;
-        }
-        
-        
+		 */
+
+		// supply URN if emulab cert or DN if other cert
+		String clientcertUserDN = ((altNameStrings != null) && (altNameStrings.size() > 0)) ? altNameStrings.toString() : 
+			clientCertificateChain[0].getSubjectDN().getName();
+
+		logger.info("clientcertUserDN = " + clientcertUserDN);
+
+		String speaksforUserDN = null;
+		boolean speaks_for_context = false;
+
+		// Check if a speaks for credential exists in the list of credentials
+		// If so, get the userDN from the userCert in the speaks-for credential and set speaks_for_context to true
+		for(int itr=0; itr < credentials.length; itr++){ // for each cred in credentials
+			String type = CredentialValidator.checkCredentialType((String)credentials[itr]);
+			// if credential type is "abac"
+			if(type != null && type.equalsIgnoreCase("abac")){ // this is a speaks for credential
+				logger.info("Found speaks for credential while setting userDN");
+				// get userDN from (String)credentials[itr]
+				Credential credential;
+				try{
+					credential = new Credential((String)credentials[itr]);
+				} catch(Exception exception){
+					logger.error(exception.getMessage());
+					throw new CredentialException("Exception parsing speaks_for credential xml while setting userDN");
+				}
+
+				Gid userGid = credential.getSignature().getIssuerGid(); // user gid
+				X509Certificate userCert = userGid.getCertificate(); // this is the cert of the user on behalf of whool the tool is speaking for
+
+				List<String> altNameStringsInUserCert = null;
+
+				try {
+					altNameStringsInUserCert = getExtensionValue(userCert, SUBJECT_ALTERNATIVE_NAME);
+					for (String altNameInUserCert: altNameStringsInUserCert) {
+						logger.info("User certificate (speaks-for) contains subject alternative name: " + altNameInUserCert);
+					}
+				} catch (Exception e) {
+					;
+				}
+
+				speaksforUserDN = ((altNameStringsInUserCert != null) && (altNameStringsInUserCert.size() > 0)) ? altNameStringsInUserCert.toString() : userCert.getSubjectDN().getName();
+				logger.info("speaksforUserDN = " + speaksforUserDN);
+
+				speaks_for_context = true;
+
+			}
+		}
+
+		// If it is not speaks for context, then return userDN from client cert in SSL connection
+		if(!speaks_for_context){
+			logger.debug("returning clientcertUserDN as userDN");
+			return clientcertUserDN;
+		}
+		else {
+			logger.debug("returning speaksforUserDN as userDN");
+			return speaksforUserDN;
+		}
+
+
 	}
        
+	public static class NoOwnerDNOnReservation extends Exception {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public String toString() {
+			return "Owner not specified on reservation";
+		}
+	}
 	
+	/**
+	 * Validate ownership of a sliver by a given DN
+	 * @param sm
+	 * @param sliver_guid
+	 * @param userDN
+	 * @return
+	 */
+	public static boolean validateSliverOwner(IOrcaServiceManager sm, String sliver_guid, String userDN) throws NoOwnerDNOnReservation {
+		try {
+			if (userDN == null) 
+				throw new RuntimeException("validateSliverOwner(): supplied userDN is null");
+			
+			ReservationID res = new ReservationID(sliver_guid);
+			ReservationMng rm = sm.getReservation(res);
+			if (rm == null) 
+				throw new RuntimeException("validateSliverOwner(): Unable to find reservation " + res);
+			
+			String reservationDN = OrcaConverter.getLocalProperty(rm, XmlrpcOrcaState.XMLRPC_USER_DN);
+			if (reservationDN != null)
+				return userDN.equals(reservationDN);
+			else
+				throw new NoOwnerDNOnReservation();
+		} catch(RuntimeException re) {
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to validate sliver ownership " + sliver_guid + " due to " + e);
+		}
+	}
+	
+	/**
+	 * alternative version of reservation ownership validation, if we already have ReservationMng object on hand
+	 * @param rm
+	 * @param userDN
+	 * @return
+	 */
+	public static boolean validateSliverOwner(ReservationMng rm, String userDN) throws NoOwnerDNOnReservation  {
+		try {
+			if (userDN == null) 
+				throw new RuntimeException("validateSliverOwner(): supplied userDN is null");
+			
+			if (rm == null) 
+				throw new RuntimeException("validateSliverOwner(): reservation is null ");
+			
+			String reservationDN = OrcaConverter.getLocalProperty(rm, XmlrpcOrcaState.XMLRPC_USER_DN);
+			if (reservationDN != null)
+				return userDN.equals(OrcaConverter.getLocalProperty(rm, XmlrpcOrcaState.XMLRPC_USER_DN));
+			else
+				throw new NoOwnerDNOnReservation();
+		} catch(RuntimeException re) {
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to validate sliver ownership " + rm + " due to " + e);
+		}
+	}
+	
+	/**
+	 * helper function looks at list of reservations, makes sure at least one reservation has a DN property
+	 * matching the supplied string
+	 * @param l
+	 * @param userDN
+	 * @return
+	 */
+	public static boolean validateSliverListOwner(List<ReservationMng> l, String userDN) throws NoOwnerDNOnReservation {
+		if (l == null)
+			return false;
+		for(ReservationMng r: l) {
+			try {
+				return validateSliverOwner(r, userDN);
+			} catch(NoOwnerDNOnReservation ndn) {
+				// skip if DN is not on reservation
+				;
+			}
+		}
+		// however DN has to be on at least one reservation
+		throw new NoOwnerDNOnReservation();
+	}
 	
 	/**
 	 * Return DN or subjectAlternativeName URN in the certificate used for this SSL session
@@ -873,4 +966,64 @@ public class XmlrpcHandlerHelper {
 				ndlSlice.unlock();
 		}
 	}
+	
+	
+	/**
+	 * Add a new configuration property to reservation of the form prefix.index.suffix. First find the highest index and increment.  
+	 * @param sm
+	 * @param res
+	 * @param propPrefix
+	 * @param propSuffix
+	 * @return index of new property added
+	 */
+	public static Integer addIndexedConfigProperty(IOrcaServiceManager sm, ReservationID res, String propPrefix, String propSuffix, String value) {
+		try {
+			ReservationMng rm = sm.getReservation(res);
+			if (rm == null)
+				throw new RuntimeException("addIndexedConfigProperty(): Unable to find reservation " + res);
+			
+			return addIndexedConfigProperty(rm, propPrefix, propSuffix, value);
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to add config property " + res + " due to " + e);
+		}
+	}
+	
+	/**
+	 * Add a new configuration property to reservation of the form prefix.index.suffix. First find the highest index and increment.  
+	 * @param rm
+	 * @param propPrefix
+	 * @param propSuffix
+	 * @return
+	 */
+	public static Integer addIndexedConfigProperty(ReservationMng rm, String propPrefix, String propSuffix, String value) {
+		try {
+			PropertiesMng psmng = rm.getConfigurationProperties();
+			if (psmng == null)
+				throw new RuntimeException("addIndexedConfigProperty(): unable to get configuration properties for reservation " + rm.getReservationID());
+			
+			Properties cp = OrcaConverter.fill(psmng);
+			int index = PropList.highestPropIndex(cp, propPrefix) + 1;
+			
+			PropertyMng pmng = new PropertyMng();
+			pmng.setName(propPrefix + "." + index + "." + propSuffix);
+			pmng.setValue(value);
+			
+			psmng.getProperty().add(pmng);
+
+			// alternative implementation
+			//
+			//cp.setProperty(propPrefix + "." + index + "." + propSuffix, value);
+			//psmng = OrcaConverter.fill(cp);
+			//rm.setConfigurationProperties(psmng);
+			
+			return index;
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to add config property " + rm.getReservationID() + " due to " + e);
+		}
+	}
+
 }

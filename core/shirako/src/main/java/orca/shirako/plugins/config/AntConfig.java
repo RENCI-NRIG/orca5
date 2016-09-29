@@ -325,7 +325,7 @@ public class AntConfig extends Config {
         // Else it will default to a target called "modify"
         // If there is no "modify.*" or "modify" target in the handler, it will fail in the same way as it will fail when a specified ant target does not exist
         
-        int highestIndex = PropList.highestModifyIndex(p, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY);
+        int highestIndex = PropList.highestPropIndex(p, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY);
         String modifyTarget = p.getProperty(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + highestIndex);
         
         if(modifyTarget == null){

@@ -746,7 +746,7 @@ public class PropList
      * @param keyStartsWith
      * @return
      */
-    public static int highestModifyIndex(Properties p, String keyStartsWith) {
+    public static int highestPropIndex(Properties p, String keyStartsWith) {
         int highestIndex = 0;
         int countSeparators = keyStartsWith.split("\\.").length;
         for(String key : p.stringPropertyNames()) {        	
