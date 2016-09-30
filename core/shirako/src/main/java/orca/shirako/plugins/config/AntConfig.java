@@ -19,7 +19,6 @@ import java.util.Vector;
 
 import orca.manage.OrcaConstants;
 import orca.shirako.api.IActorIdentity;
-import orca.shirako.api.IServiceManagerReservation;
 import orca.shirako.common.meta.ConfigurationProperties;
 import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.container.Globals;
@@ -325,8 +324,8 @@ public class AntConfig extends Config {
         // Else it will default to a target called "modify"
         // If there is no "modify.*" or "modify" target in the handler, it will fail in the same way as it will fail when a specified ant target does not exist
         
-        int highestIndex = PropList.highestPropIndex(p, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY);
-        String modifyTarget = p.getProperty(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + highestIndex);
+        int highestIndex = PropList.highestPropIndex(p, UnitProperties.ModifySubcommandPrefix);
+        String modifyTarget = p.getProperty(UnitProperties.ModifySubcommandPrefix + highestIndex);
         
         if(modifyTarget == null){
         	modifyTarget = TargetModify;

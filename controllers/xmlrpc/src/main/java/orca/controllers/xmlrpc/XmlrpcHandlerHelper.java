@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -969,60 +970,53 @@ public class XmlrpcHandlerHelper {
 	
 	
 	/**
-	 * Add a new configuration property to reservation of the form prefix.index.suffix. First find the highest index and increment.  
+	 * Add new local properties to reservation of the form prefix.index.suffix. First find the highest index and increment (if indicated,
+	 * otherwise use current highest index).  It also calls updateReservation on SM to save the new properties. ReservationMng object is modified
+	 * and not safe to use afterwards
 	 * @param sm
-	 * @param res
-	 * @param propPrefix
-	 * @param propSuffix
-	 * @return index of new property added
-	 */
-	public static Integer addIndexedConfigProperty(IOrcaServiceManager sm, ReservationID res, String propPrefix, String propSuffix, String value) {
-		try {
-			ReservationMng rm = sm.getReservation(res);
-			if (rm == null)
-				throw new RuntimeException("addIndexedConfigProperty(): Unable to find reservation " + res);
-			
-			return addIndexedConfigProperty(rm, propPrefix, propSuffix, value);
-		} catch(RuntimeException re) { 
-			throw re;
-		} catch (Exception e) {
-			throw new RuntimeException("Unable to add config property " + res + " due to " + e);
-		}
-	}
-	
-	/**
-	 * Add a new configuration property to reservation of the form prefix.index.suffix. First find the highest index and increment.  
 	 * @param rm
 	 * @param propPrefix
-	 * @param propSuffix
+	 * @param increment - increment index or not
+	 * @param p - new properties
 	 * @return
 	 */
-	public static Integer addIndexedConfigProperty(ReservationMng rm, String propPrefix, String propSuffix, String value) {
+	public static Integer addIndexedLocalProperties(IOrcaServiceManager sm, ReservationMng rm, String propPrefix, boolean increment, Properties p) {
 		try {
-			PropertiesMng psmng = rm.getConfigurationProperties();
+			PropertiesMng psmng = rm.getLocalProperties();
 			if (psmng == null)
-				throw new RuntimeException("addIndexedConfigProperty(): unable to get configuration properties for reservation " + rm.getReservationID());
+				throw new RuntimeException("addIndexedLocalProperties(): unable to get local properties for reservation " + rm.getReservationID());
 			
 			Properties cp = OrcaConverter.fill(psmng);
-			int index = PropList.highestPropIndex(cp, propPrefix) + 1;
+			int index = PropList.highestPropIndex(cp, propPrefix) + (increment ? 1 : 0);
 			
-			PropertyMng pmng = new PropertyMng();
-			pmng.setName(propPrefix + "." + index + "." + propSuffix);
-			pmng.setValue(value);
+			Enumeration<?> names = p.propertyNames();
 			
-			psmng.getProperty().add(pmng);
-
+			PropertiesMng npsmng = new PropertiesMng();
+			
+			while(names.hasMoreElements()) {
+				String nm = (String)names.nextElement();
+				
+				PropertyMng pmng = new PropertyMng();
+				pmng.setName(propPrefix + "." + index + "." + nm);
+				pmng.setValue(p.getProperty(nm));
+				
+				npsmng.getProperty().add(pmng);
+			}
+			
+			rm.setLocalProperties(npsmng);
 			// alternative implementation
 			//
 			//cp.setProperty(propPrefix + "." + index + "." + propSuffix, value);
 			//psmng = OrcaConverter.fill(cp);
 			//rm.setConfigurationProperties(psmng);
 			
+			sm.updateReservation(rm);
+			
 			return index;
 		} catch(RuntimeException re) { 
 			throw re;
 		} catch (Exception e) {
-			throw new RuntimeException("Unable to add config property " + rm.getReservationID() + " due to " + e);
+			throw new RuntimeException("Unable to add local properties " + rm.getReservationID() + " due to " + e);
 		}
 	}
 

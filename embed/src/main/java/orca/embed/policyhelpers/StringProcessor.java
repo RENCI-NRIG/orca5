@@ -1,8 +1,9 @@
 package orca.embed.policyhelpers;
 
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 
+import orca.manage.OrcaConstants;
 import orca.manage.OrcaConverter;
 import orca.manage.beans.ReservationMng;
 import orca.shirako.common.meta.UnitProperties;
@@ -20,10 +21,12 @@ public class StringProcessor {
 				String url = null;
 				if(key.contains(UnitProperties.UnitEthPrefix))
 					url=key.split(UnitProperties.UnitEthPrefix)[1];
-				if(key.contains("modify."))
-					url=key.split("modify.")[1];
+				// this is likely incorrect, since modify properties have a modify.[index].suffix form /ib
+				// also new reservations created via modify have simple config properties on them
+				if(key.contains(UnitProperties.ModifyPrefix))
+					url=key.split(UnitProperties.ModifyPrefix)[1];
 				if(url!=null){
-					int index=url.indexOf(".parent.url");
+					int index=url.indexOf(UnitProperties.UnitEthParentUrlSuffix);
 					host_interface=url.substring(0, index);
 					break;
 				}
@@ -43,7 +46,7 @@ public class StringProcessor {
 			p_key=(String) entry.getKey();
 			p_value=(String) entry.getValue();
 			
-			if(p_key.endsWith(".parent.url")){
+			if(p_key.endsWith(UnitProperties.UnitEthParentUrlSuffix)){
 				//System.out.println("p_key="+p_key+"p_value="+p_value);
 				host_interface=getHostInterface(local,p_value);
 				break;
@@ -63,7 +66,7 @@ public class StringProcessor {
 		for(Entry<Object, Object> pr_entry:pr_local.entrySet()){
 			p_key=(String) pr_entry.getKey();
 			p_value=(String) pr_entry.getValue();
-			if(p_key.endsWith(".parent.url")){
+			if(p_key.endsWith(UnitProperties.UnitEthParentUrlSuffix)){
 				for(Entry<Object, Object> entry:local.entrySet()){
 					key=(String) entry.getKey();
 					value=(String) entry.getValue();

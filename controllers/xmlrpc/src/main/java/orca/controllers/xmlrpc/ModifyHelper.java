@@ -16,6 +16,7 @@ import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.ReservationMng;
 import orca.shirako.common.ReservationID;
+import orca.shirako.common.meta.UnitProperties;
 import orca.util.PropList;
 
 /**
@@ -370,14 +371,14 @@ public class ModifyHelper {
 				throw new RuntimeException("modifySliver(): unable to get configuration properties for reservation " + res);
 			
 			Properties cp = OrcaConverter.fill(psmng);
-			int index = PropList.highestPropIndex(cp, OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY) + 1;
+			int index = PropList.highestPropIndex(cp, UnitProperties.ModifySubcommandPrefix) + 1;
 
 			//prepend all property names with modify.x.
-			PropList.renamePropertyNames(modifyProperties, OrcaConstants.MODIFY_PROPERTY_PREFIX + index + ".");
+			PropList.renamePropertyNames(modifyProperties, UnitProperties.ModifyPrefix + index + ".");
 			
 			// add the subcommand as a property after everything
-			modifyProperties.put(OrcaConstants.MODIFY_SUBCOMMAND_PROPERTY + index, 
-					OrcaConstants.MODIFY_PROPERTY_PREFIX + modifySubcommand);
+			modifyProperties.put(UnitProperties.ModifySubcommandPrefix + index, 
+					UnitProperties.ModifyPrefix + modifySubcommand);
 	
 			sm.modifyReservation(res, modifyProperties);
 			

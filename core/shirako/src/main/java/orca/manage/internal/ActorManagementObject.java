@@ -852,6 +852,7 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 					}
 					
 					ManagementUtils.updateReservation(r, reservation);
+					r.setDirty();
 					try {
 			           actor.getShirakoPlugin().getDatabase().updateReservation(r);
 				    } catch (Exception e) {

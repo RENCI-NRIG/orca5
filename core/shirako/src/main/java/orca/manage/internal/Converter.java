@@ -94,6 +94,7 @@ public class Converter extends OrcaConverter {
 
 	public static void absorbProperties(ReservationMng mng, IReservation r){
 		Properties p = fill(mng.getLocalProperties());
+		
 		PropList.mergeProperties(p, r.getResources().getLocalProperties());
 		
 		fill(mng.getRequestProperties());

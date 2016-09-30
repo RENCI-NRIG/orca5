@@ -107,15 +107,29 @@ public interface UnitProperties {
      * the first configurable interface would generally be eth1. 
      */
     
-    public static final String UnitEthPrefix           = "unit.eth";    
-    public static final String UnitEthVlanSuffix       = ".vlan.tag";  
-    public static final String UnitEthIPSuffix         = ".ip"; 
-    public static final String UnitEthModeSuffix       = ".mode";
-    public static final String UnitHostEthSuffix       = ".hosteth";
-    public static final String UnitEthMacSuffix        = ".mac";
-    public static final String UnitEthStateSuffix      = ".state";
-    public static final String UnitEthIPVersionSuffix  = ".ipversion";
-    public static final String UnitEthNetworkUUIDSuffix= ".net.uuid";
+    public static final String DOT                     = ".";
+    
+    public static final String UnitEthPrefix           = "unit.eth";
+    public static final String UnitEthVlan			   = "vlan.tag";
+    public static final String UnitEthVlanSuffix       = DOT + UnitEthVlan;
+    public static final String UnitEthIP			   = "ip";
+    public static final String UnitEthIPSuffix         = DOT + UnitEthIP;
+    public static final String UnitEthMode			   = "mode";
+    public static final String UnitEthModeSuffix       = DOT + UnitEthMode;
+    public static final String UnitHostEth			   = "hosteth";
+    public static final String UnitHostEthSuffix       = DOT + UnitHostEth;
+    public static final String UnitEthMac			   = "mac";
+    public static final String UnitEthMacSuffix        = DOT + UnitEthMac;
+    public static final String UnitEthState	 	       = "state";
+    public static final String UnitEthStateSuffix 	   = DOT + UnitEthState;
+    public static final String UnitEthIPVersion		   = "ipversion";
+    public static final String UnitEthIPVersionSuffix  = DOT + UnitEthIPVersion;
+    public static final String UnitEthNetworkUUID      = "net.uuid";
+    public static final String UnitEthNetworkUUIDSuffix= DOT + UnitEthNetworkUUID;
+    public static final String UnitEthUUID			   = "uuid";
+    public static final String UnitEthUUIDSuffix       = DOT + UnitEthUUID;
+    public static final String UnitEthParentUrl	       = "parent.url";
+    public static final String UnitEthParentUrlSuffix  = DOT + UnitEthParentUrl;
 
     /* Routing options NEuca v1.0 */
     public static final String UnitRouter              = "unit.isrouter";
@@ -141,23 +155,42 @@ public interface UnitProperties {
     public static final String UnitSliceGuid        = "unit.slice.guid";
     
     public static final String UnitISCSIInitiatorIQNPrefix   = "unit.initiator.iqn_prefix";
-    public static final String UnitISCSIInitiatorIQN         = "unit.iscsi.initiator.iqn";
-    public static final String UnitTargetPrefix             = "unit.target";
+    public static final String ISCSIInitiatorIQN             = "iscsi.initiator.iqn";
+    public static final String UnitISCSIInitiatorIQN         = "unit." + ISCSIInitiatorIQN;
+    public static final String UnitTargetPrefix              = "unit.target";
     public static final String UnitStoragePrefix             = "unit.storage";
-    public static final String UnitStoreTypeSuffix           = ".type";
-    public static final String UnitTargetIPSuffix            = ".target.ip";
-    public static final String UnitTargetPortSuffix          = ".target.port";
-    public static final String UnitTargetNameSuffix          = ".target.name";
-    public static final String UnitTargetLunSuffix           = ".target.lun.num";
-    public static final String UnitTargetLunGuid			 = ".target.lun.guid";
-    public static final String UnitTargetShouldAttachSuffix  = ".target.should_attach";
-    public static final String UnitTargetChapUserSuffix      = ".target.chap_user";
-    public static final String UnitTargetChapSecretSuffix    = ".target.chap_password";
-    public static final String UnitFSTypeSuffix              = ".fs.type";
-    public static final String UnitFSOptionsSuffix           = ".target.options";
-    public static final String UnitFSShouldFormatSuffix      = ".target.should_format";
-    public static final String UnitFSMountPointSuffix        = ".target.mount_point";
+    public static final String UnitStoreType                 = "type";
+    public static final String UnitStoreTypeSuffix           = DOT + UnitStoreType;
+    public static final String UnitTargetIP                  = "target.ip";
+    public static final String UnitTargetIPSuffix            = DOT + UnitTargetIP;
+    public static final String UnitTargetPort                = "target.port";
+    public static final String UnitTargetPortSuffix          = DOT + UnitTargetPort;
+    public static final String UnitTargetName                = "target.name";
+    public static final String UnitTargetNameSuffix          = DOT + UnitTargetName;
+    public static final String UnitTargetLun                 = "target.lun.num";
+    public static final String UnitTargetLunSuffix           = DOT + UnitTargetLun;
+    public static final String UnitTargetLunGuid     	     = "target.lun.guid";
+    public static final String UnitTargetLunGuidSuffix	     = DOT + UnitTargetLunGuid;
+    public static final String UnitTargetShouldAttach        = "target.should_attach";
+    public static final String UnitTargetShouldAttachSuffix  = DOT + UnitTargetShouldAttach;
+    public static final String UnitTargetChapUser            = "target.chap_user";
+    public static final String UnitTargetChapUserSuffix      = DOT + UnitTargetChapUser;
+    public static final String UnitTargetChapSecret          = "target.chap_password";
+    public static final String UnitTargetChapSecretSuffix    = DOT + UnitTargetChapSecret;
+    public static final String UnitFSType                    = "fs.type";
+    public static final String UnitFSTypeSuffix              = DOT + UnitFSType;
+    public static final String UnitFSOptions                 = "target.options";
+    public static final String UnitFSOptionsSuffix           = DOT + UnitFSOptions;
+    public static final String UnitFSShouldFormat            = "target.should_format";
+    public static final String UnitFSShouldFormatSuffix      = DOT + UnitFSShouldFormat;
+    public static final String UnitFSMountPoint              = "target.mount_point";
+    public static final String UnitFSMountPointSuffix        = DOT + UnitFSMountPoint;
 
+    public static final String DefaultFSOptions				 = "-F -b 1024";
+    public static final String DefaultMountPoint			 = "/mnt/target/";
+    public static final String DefaultBlockDeviceType		 = "iscsi";
+    public static final String DefaultISCSIPort				 = "3260";
+    public static final String DefaultFSType				 = "ext3";
 
 
     /**
@@ -174,4 +207,14 @@ public interface UnitProperties {
      * Miscellaneous properties
      */
     public static final String UserDN = "xmlrpc.user.dn";
+    
+	
+	public static final String ModifySubcommandPrefix="modify.subcommand.";
+	public static final String ModifyPrefix="modify.";
+	
+	public static final String SliceStitchPrefix = "sliceStitch";
+	public static final String SliceStitchAllowed = "allowed";
+	public static final String SliceStitchYes = "yes";
+	public static final String SliceStitchNo = "no";
+	public static final String SliceStitchPass = "password";
 }

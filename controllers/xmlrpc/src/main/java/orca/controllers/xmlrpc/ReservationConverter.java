@@ -1069,7 +1069,7 @@ public class ReservationConverter implements LayerConstant {
 		if (base_ip_addr!=null)
 			p.setProperty(storagePrefix + UnitProperties.UnitTargetIPSuffix,base_ip_addr);
 
-		p.setProperty(storagePrefix + UnitProperties.UnitTargetLunGuid,lun_uuid);
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetLunGuidSuffix,lun_uuid);
 	}
 	
 	public void setVMISCSIParam(Properties p,ComputeElement s_ce,int s_num){
@@ -1079,17 +1079,17 @@ public class ReservationConverter implements LayerConstant {
 		if(s_ce.getFSType()!=null)
 			p.setProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix,s_ce.getFSType());
 		else
-			p.setProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix,"ext3");
+			p.setProperty(storagePrefix + UnitProperties.UnitFSTypeSuffix, UnitProperties.DefaultFSType);
 		
 		if(s_ce.getFSParam()!=null)
 			p.setProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix,s_ce.getFSParam());
 		else
-			p.setProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix,"-F -b 1024");
+			p.setProperty(storagePrefix + UnitProperties.UnitFSOptionsSuffix, UnitProperties.DefaultFSOptions);
 		
 		if(s_ce.getMntPoint()!=null)
 			p.setProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix,s_ce.getMntPoint());
 		else
-			p.setProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix,"/mnt/target/"+String.valueOf(s_num));
+			p.setProperty(storagePrefix + UnitProperties.UnitFSMountPointSuffix, UnitProperties.DefaultMountPoint + String.valueOf(s_num));
 		if(s_ce.isDoFormat())
 			p.setProperty(storagePrefix + UnitProperties.UnitFSShouldFormatSuffix,SUDO_YES);
 		else
@@ -1098,8 +1098,8 @@ public class ReservationConverter implements LayerConstant {
 		p.setProperty(storagePrefix + UnitProperties.UnitTargetChapUserSuffix,s_ce.getCHAP_User());
 		p.setProperty(storagePrefix + UnitProperties.UnitTargetChapSecretSuffix,s_ce.getCHAP_Password());
 		
-		p.setProperty(storagePrefix+UnitProperties.UnitStoreTypeSuffix,"iscsi");
-		p.setProperty(storagePrefix + UnitProperties.UnitTargetPortSuffix,"3260");
+		p.setProperty(storagePrefix+UnitProperties.UnitStoreTypeSuffix, UnitProperties.DefaultBlockDeviceType);
+		p.setProperty(storagePrefix + UnitProperties.UnitTargetPortSuffix, UnitProperties.DefaultISCSIPort);
 		
 		p.setProperty(storagePrefix + UnitProperties.UnitTargetShouldAttachSuffix,SUDO_YES);
 		logger.debug("setVMISCSIParam():"+storagePrefix + UnitProperties.UnitFSMountPointSuffix + "="+s_ce.getMntPoint()+":"+storagePrefix + UnitProperties.UnitTargetChapUserSuffix + "=" + s_ce.getCHAP_User());

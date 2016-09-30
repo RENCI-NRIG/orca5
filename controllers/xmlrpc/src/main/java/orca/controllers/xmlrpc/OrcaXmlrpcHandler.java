@@ -729,10 +729,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							}
 							logger.debug("modifyremove:rr="+rr.getReservationID()+";name="+de.getName()
 									+";guid="+rr_guid+";parent size="+de.getPrecededBy().size());
+							
+
+							String modifySubcommand = ModifyHelper.ModifySubcommand.REMOVEIFACE.getName();
+							
 							for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()){
 								String parent_prefix = UnitProperties.UnitEthPrefix;
-								String modifySubcommand = ModifyHelper.ModifySubcommand.REMOVEIFACE.getName();
-
 								Properties modifyProperties=new Properties();
 
 								DomainElement pe = parent.getKey();
@@ -767,60 +769,69 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									}
 
 									host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
+									
 									if(host_interface==null){	//modify case, properties only in config
+										// this likely never happens because even network links added as part of modify
+										// have their properties set as if they are new. Also, setting parent_prefix to "modify."
+										// is incorrect, since modify properties are modify.[index].suffix, not modify.suffix
 										host_interface=StringProcessor.getHostInterface(config,unit_parent_url);
 										parent_prefix = "modify.";
+										// added by me 09/30/16 /ib because I don't think this every happens
+										logger.error("Unable to find local properties to perform REMOVEIFACE modify");
+										throw new Exception("Unable to find local properties to perform REMOVEIFACE modify");
 									}
-									if(host_interface==null){
-										logger.warn("Not find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
-										continue;
-									}
+									
+									// commented out as a result of above /ib 09/30/16
+									//if(host_interface==null){
+									//	logger.warn("Unable to find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
+									//	continue;
+									//}
 
 									logger.debug("modifyRemove: host_interface="+host_interface+";tag="+unit_tag+";parent url="+unit_parent_url);
 
 									String parent_tag_name = parent_prefix+host_interface+UnitProperties.UnitEthVlanSuffix;
-									modifyProperties.setProperty("vlan.tag",unit_tag);
+									modifyProperties.setProperty(UnitProperties.UnitEthVlan, unit_tag);
 									/*local.remove(parent_tag_name);
-								config.remove(parent_tag_name);
-								request.remove(parent_tag_name);
-								resource.remove(parent_tag_name);
+								      config.remove(parent_tag_name);
+								      request.remove(parent_tag_name);
+								      resource.remove(parent_tag_name);
 									 */
 									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
 									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
 									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
-									String parent_interface_uuid = parent_prefix+host_interface+".uuid";
+									String parent_interface_uuid = parent_prefix+host_interface + UnitProperties.UnitEthUUID;
 									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
 
 									if(config.getProperty(parent_mac_addr)!=null){
-										modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
+										modifyProperties.setProperty(UnitProperties.UnitEthMac, config.getProperty(parent_mac_addr));
 										/*local.remove(parent_mac_addr);
 									config.remove(parent_mac_addr);
 									request.remove(parent_mac_addr);
 									resource.remove(parent_mac_addr);*/
 									}
 									if(config.getProperty(parent_ip_addr)!=null){
-										modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
+										modifyProperties.setProperty(UnitProperties.UnitEthIP,config.getProperty(parent_ip_addr));
 										/*local.remove(parent_ip_addr);
 									config.remove(parent_ip_addr);
 									request.remove(parent_ip_addr);
 									resource.remove(parent_ip_addr);*/
 									}
 									if(config.getProperty(parent_quantum_uuid)!=null){
-										modifyProperties.setProperty("net.uuid",config.getProperty(parent_quantum_uuid));
+										modifyProperties.setProperty(UnitProperties.UnitEthNetworkUUID, config.getProperty(parent_quantum_uuid));
 										/*local.remove(parent_quantum_uuid);
 									config.remove(parent_quantum_uuid);
 									request.remove(parent_quantum_uuid);
 									resource.remove(parent_quantum_uuid);*/
 									}
 									if(config.getProperty(parent_interface_uuid)!=null){
-										modifyProperties.setProperty("uuid",config.getProperty(parent_interface_uuid));
+										modifyProperties.setProperty(UnitProperties.UnitEthUUID, config.getProperty(parent_interface_uuid));
 										/*local.remove(parent_interface_uuid);
 									config.remove(parent_interface_uuid);
 									request.remove(parent_interface_uuid);
 									resource.remove(parent_interface_uuid);*/
 									}
 									if(config.getProperty(site_host_interface)!=null){
-										modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
+										modifyProperties.setProperty(UnitProperties.UnitHostEth, config.getProperty(site_host_interface));
 										/*local.remove(site_host_interface);
 									config.remove(site_host_interface);
 									request.remove(site_host_interface);
@@ -859,13 +870,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 										String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
 
 										if(config.getProperty(parent_tag_name)!=null)
-											modifyProperties.setProperty("vlan.tag",config.getProperty(parent_tag_name));
+											modifyProperties.setProperty(UnitProperties.UnitEthVlan, config.getProperty(parent_tag_name));
 										if(config.getProperty(parent_mac_addr)!=null)
-											modifyProperties.setProperty("mac",config.getProperty(parent_mac_addr));
+											modifyProperties.setProperty(UnitProperties.UnitEthMac, config.getProperty(parent_mac_addr));
 										if(config.getProperty(parent_ip_addr)!=null)
-											modifyProperties.setProperty("ip",config.getProperty(parent_ip_addr));
+											modifyProperties.setProperty(UnitProperties.UnitEthIP, config.getProperty(parent_ip_addr));
 										if(config.getProperty(site_host_interface)!=null)
-											modifyProperties.setProperty("hosteth",config.getProperty(site_host_interface));
+											modifyProperties.setProperty(UnitProperties.UnitHostEth, config.getProperty(site_host_interface));
 									}else{	//no need to go futher
 										logger.error("Parent did not return the unit lun tag:"+pr_local);
 										continue;
@@ -1134,13 +1145,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             
             if (rmng == null) {
             	logger.error("permitSliceStitch(): unable to find reservation " + sliver_guid + " in slice " + slice_urn);
-            	return setError("ERROR: unable to find reservation " + sliver_guid + " in slice " + slice_urn);
+            	return setError("ERROR: permitSliceStitch() unable to find reservation " + sliver_guid + " in slice " + slice_urn);
             }
             
             // check the owner of the reservation against the DN
             if (!validateSliverOwner(rmng, userDN)) {
             	logger.error("permitSliceStitch(): user " + userDN + " is not the owner of reservation " + sliver_guid);
-            	return setError("ERROR: user " + userDN + " is not the owner of reservation " + sliver_guid);
+            	return setError("ERROR: permitSliceStitch() user " + userDN + " is not the owner of reservation " + sliver_guid);
             }
             
             // FIXME: technically we should check that this sliver is part of the named slice
@@ -1148,15 +1159,17 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // compute hash of password and set the property of the reservation
             String hash = OrcaPasswordHash.generatePasswordHash(pass);
             
-            addIndexedConfigProperty(rmng, "sliceStitch", "pass", hash);
+            Properties lp = new Properties();
+            lp.setProperty(UnitProperties.SliceStitchPass, hash);
+            lp.setProperty(UnitProperties.SliceStitchAllowed, UnitProperties.SliceStitchYes);
             
-            sm.updateReservation(rmng);
+            int index = addIndexedLocalProperties(sm, rmng, UnitProperties.SliceStitchPrefix, false, lp);
             
             return setReturn(true);
     	} catch (Exception e) {
-    		logger.error("modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));	
+    		logger.error("permitSliceStitch(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));	
     		e.printStackTrace();
-    		return setError("ERROR: modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
+    		return setError("ERROR: permitSliceStitch(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
     	} finally {
     		if (sm != null){
     			instance.returnSM(sm);
@@ -1170,6 +1183,70 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 	}
 
+	public Map<String, Object> revokeSliceStitch(String slice_urn, String sliver_guid, Object[] credentials) {
+    	IOrcaServiceManager sm = null;
+    	XmlrpcControllerSlice ndlSlice = null;
+
+    	logger.info("ORCA API revokeSliceStitch() invoked for " + sliver_guid + " of slice " + slice_urn);
+
+    	if (sliver_guid == null) 
+    		return setError("ERROR: revokeSliceStitch() sliver_guid is null");
+    	try {
+			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
+			
+			// check the whitelist
+			if (verifyCredentials && !checkWhitelist(userDN)) 
+				return setError(WHITELIST_ERROR);
+    		sm = instance.getSM();
+    		
+            // find this slice and lock it
+            ndlSlice = instance.getSlice(slice_urn);
+            if (ndlSlice == null) {
+            	logger.error("revokeSliceStitch(): unable to find slice " + slice_urn + " among active slices");
+            	return setError("ERROR: revokeSliceStitch() unable to find slice " + slice_urn + " among active slices");
+            }
+            
+            // lock the slice
+            ndlSlice.lock();
+           
+            ReservationMng rmng = sm.getReservation(new ReservationID(sliver_guid));
+            
+            if (rmng == null) {
+            	logger.error("permitSliceStitch(): unable to find reservation " + sliver_guid + " in slice " + slice_urn);
+            	return setError("ERROR: unable to find reservation " + sliver_guid + " in slice " + slice_urn);
+            }
+            
+            // check the owner of the reservation against the DN
+            if (!validateSliverOwner(rmng, userDN)) {
+            	logger.error("permitSliceStitch(): user " + userDN + " is not the owner of reservation " + sliver_guid);
+            	return setError("ERROR: user " + userDN + " is not the owner of reservation " + sliver_guid);
+            }
+            
+            // FIXME: technically we should check that this sliver is part of the named slice
+            
+            Properties lp = new Properties();
+            lp.setProperty(UnitProperties.SliceStitchAllowed, UnitProperties.SliceStitchNo);
+            
+            int index = addIndexedLocalProperties(sm, rmng, UnitProperties.SliceStitchPrefix, false, lp);
+            
+            return setReturn(true);
+    	} catch (Exception e) {
+    		logger.error("revokeSliceStitch(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));	
+    		e.printStackTrace();
+    		return setError("ERROR: revokeSliceStitch(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
+    	} finally {
+    		if (sm != null){
+    			instance.returnSM(sm);
+    		}
+    		if (ndlSlice != null) {
+				ndlSlice.getWorkflow().syncManifestModel();
+				ndlSlice.getWorkflow().syncRequestModel();
+    			ndlSlice.unlock();
+    		}
+    	}
+	}
+
+	
 	/**
 	 * Perform stitching from one slice to another. The caller is the owner of the 'from_slice', using 'to_pass' password to connect
 	 * to sliver on 'to_slice'. 
@@ -1229,25 +1306,122 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     		
             // check the owner of the from reservation against the DN
             if (!validateSliverOwner(sm, from_sliver_guid, userDN)) {
-            	logger.error("getSliverProperties(): user " + userDN + " is not the owner of reservation " + from_sliver_guid);
+            	logger.error("performSliceStitch(): user " + userDN + " is not the owner of reservation " + from_sliver_guid);
             	return setError("ERROR: user " + userDN + " is not the owner of reservation " + from_sliver_guid);
             }
 
+            // determine which is the node, and which is the network, get local properties
+            ReservationMng fromRes = sm.getReservation(new ReservationID(from_sliver_guid));
+            ReservationMng toRes = sm.getReservation(new ReservationID(to_sliver_guid));
+            ReservationMng netRes = null, nodeRes = null;
+            
+            Properties fromLocal = null, toLocal = null, nodeLocal = null, netLocal = null;
+            fromLocal = OrcaConverter.fill(fromRes.getLocalProperties());
+            toLocal = OrcaConverter.fill(toRes.getLocalProperties());
+            
+            if (fromLocal.getProperty(ReservationConverter.PropertyIsNetwork).equals("1")) {
+            	netRes = fromRes;
+            	netLocal = fromLocal;
+            }
+            
+            if (fromLocal.getProperty(ReservationConverter.PropertyIsVM).equals("1")) {
+            	nodeRes = fromRes;
+            	nodeLocal = fromLocal;
+            }
+            
+            if (toLocal.getProperty(ReservationConverter.PropertyIsNetwork).equals("1")) {
+            	netRes = toRes;
+            	netLocal = toLocal;
+            }
+            
+            if (toLocal.getProperty(ReservationConverter.PropertyIsVM).equals("1")) {
+            	nodeRes = toRes;
+            	nodeLocal = toLocal;
+            }
+            
+            if ((nodeRes == null) || (netRes == null)) {
+            	logger.error("performSliceStitch(): unable to clearly identify node and network between " + from_sliver_guid + " and " + to_sliver_guid + ", exiting");
+            	return setError("ERROR: unable to clearly identify node and network between " + from_sliver_guid + " and " + to_sliver_guid + ", exiting");
+            }
+            
+            // Verify authorization to stitch on the 'to' reservation
+            boolean allowed = false;
+            if (UnitProperties.SliceStitchYes.equals(toLocal.getProperty(UnitProperties.SliceStitchAllowed))) {
+            	String storedPass = toLocal.getProperty(UnitProperties.SliceStitchPass);
+            	if (OrcaPasswordHash.validatePassword(to_pass, storedPass)) 
+            		allowed = true;
+            }
+            if (!allowed) {
+            	logger.error("performSliceStitch(): stitch to " + to_sliver_guid + " was not authorized");
+            	return setError("ERROR: stitch to " + to_sliver_guid + " was not authorized");
+            }
+            
+            // FIXME: add properties needed for add interface modify on the node
+            
+            // Parent is a networking reservation
+            List<UnitMng> un = sm.getUnits(new ReservationID(netRes.getReservationID()));
+            String unitTag = null, unitParentUrl = null;
+        	Properties modifyProperties = new Properties();
+            if (un != null) {
+            	for (UnitMng u : un) {
+            		Properties uP = OrcaConverter.fill(u.getProperties());										
+            		unitTag = uP.getProperty(UnitProperties.UnitVlanTag);
+            		unitParentUrl = uP.getProperty(UnitProperties.UnitVlanUrl);
+            	}
+            
+            	if ((unitTag == null) || (unitParentUrl == null)) {
+                	logger.error("performSliceStitch(): unit tag or parent URL of the net reservation " + netRes.getReservationID() + " is null");
+                	return setError("ERROR: unit tag or parent URL of the net reservation " + netRes.getReservationID() + " is null");
+            	}
+            	
+            	String hostInterface = StringProcessor.getHostInterface(netLocal, unitParentUrl);
+            	if (hostInterface == null) {
+            		logger.error("performSliceStitch(): Unable to find the parent interface index: unit_tag=" + unitTag + " reservation " + netRes.getReservationID());
+            		return setError("ERROR: nable to find the parent interface index: unit_tag=" + unitTag + " reservation " + netRes.getReservationID());
+            	}
+							
+            	String parentTagName = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitEthVlanSuffix;
+            	
+            	modifyProperties.setProperty(UnitProperties.UnitEthVlan, unitTag);
+					
+            	String parentMacAddr = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitEthMacSuffix;
+            	String parentIpAddr = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitEthIPSuffix;
+            	String parent_quantum_uuid = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitEthNetworkUUIDSuffix;
+            	String parent_interface_uuid = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitEthUUIDSuffix;
+            	String site_host_interface = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitHostEthSuffix;
+            	String parent_url = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitEthParentUrlSuffix;	
+						
+            	if(netLocal.getProperty(parentMacAddr)!=null)
+            		modifyProperties.setProperty(UnitProperties.UnitEthMac, netLocal.getProperty(parentMacAddr));
+            	if(netLocal.getProperty(parentIpAddr)!=null)
+            		modifyProperties.setProperty(UnitProperties.UnitEthIP, netLocal.getProperty(parentIpAddr));
+            	if(netLocal.getProperty(parent_quantum_uuid)!=null)
+            		modifyProperties.setProperty(UnitProperties.UnitEthNetworkUUID, netLocal.getProperty(parent_quantum_uuid));
+            	if(netLocal.getProperty(parent_interface_uuid)!=null)
+            		modifyProperties.setProperty(UnitProperties.UnitEthUUID, netLocal.getProperty(parent_interface_uuid));
+            	if(netLocal.getProperty(site_host_interface)!=null)
+            		modifyProperties.setProperty(UnitProperties.UnitHostEth, netLocal.getProperty(site_host_interface));
+            	if(netLocal.getProperty(parent_url)!=null)
+            		modifyProperties.setProperty(UnitProperties.UnitEthParentUrl, netLocal.getProperty(parent_url));
+			} else {
+				// no units - this shouldn't happen
+				logger.error("performSliceStitch(): no units found on the reservation " + to_sliver_guid + " unable to perform stitch");
+				return setError("ERROR: no units found on the reservation " + to_sliver_guid + " unable to perform stitch");
+			}
+            
             // FIXME: need to save on properties of both reservations identifying information of the slice(s) we are stitched to so we can 
             // undo the stitch from either side (keep in mind multiple stitches from same or multiple slices are possible to the same sliver).
             
-            // FIXME: need to be able to unstitch when slice is deleted
-            
             // use the queueing version to avoid collisions with modified performed by the controller itself
-            logger.info("modifySliver(): enqueuing modify operation");
-            
-           // ModifyHelper.enqueueModify(sliver_guid, modifySubcommand, modifyProperties);
+            logger.info("performSliceStitch(): enqueuing modify operation");
+            System.out.println("Modify properties for " + nodeRes.getReservationID() + ": " + modifyProperties);
+            //ModifyHelper.enqueueModify(nodeRes.getReservationID(), ModifyHelper.ModifySubcommand.ADDIFACE.getName(), modifyProperties);
             
             return setReturn(true);
     	} catch (Exception e) {
-    		logger.error("modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));	
+    		logger.error("performSliceStitch(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));	
     		e.printStackTrace();
-    		return setError("ERROR: modifySliver(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
+    		return setError("ERROR: performSliceStitch(): Exception encountered: " + (e.getMessage() != null ? e.getMessage() : e));
     	} finally {
     		if (sm != null){
     			instance.returnSM(sm);
