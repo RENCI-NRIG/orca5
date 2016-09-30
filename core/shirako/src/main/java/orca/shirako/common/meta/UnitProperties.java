@@ -211,6 +211,7 @@ public interface UnitProperties {
 	
 	public static final String ModifySubcommandPrefix="modify.subcommand.";
 	public static final String ModifyPrefix="modify.";
+	public static final String ZERO = "0";
 	
 	public static final String SliceStitchPrefix = "sliceStitch";
 	public static final String SliceStitchAllowed = "allowed";

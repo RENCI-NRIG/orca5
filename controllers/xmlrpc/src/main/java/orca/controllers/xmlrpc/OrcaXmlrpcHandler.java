@@ -1344,10 +1344,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setError("ERROR: unable to clearly identify node and network between " + from_sliver_guid + " and " + to_sliver_guid + ", exiting");
             }
             
-            // Verify authorization to stitch on the 'to' reservation
+            // FIXME: verify that they are on the same aggregate (deal with xxxNet vs xxxvmsite issue)
+            
+            // Verify authorization to stitch on the 'to' reservation. Note that auth properties always start with modify.0. (index never changes)
             boolean allowed = false;
-            if (UnitProperties.SliceStitchYes.equals(toLocal.getProperty(UnitProperties.SliceStitchAllowed))) {
-            	String storedPass = toLocal.getProperty(UnitProperties.SliceStitchPass);
+            if (UnitProperties.SliceStitchYes.equals(toLocal.getProperty(UnitProperties.ModifyPrefix + UnitProperties.ZERO + UnitProperties.DOT + UnitProperties.SliceStitchAllowed))) {
+            	String storedPass = toLocal.getProperty(UnitProperties.ModifyPrefix + UnitProperties.ZERO + UnitProperties.DOT + UnitProperties.SliceStitchPass);
             	if (OrcaPasswordHash.validatePassword(to_pass, storedPass)) 
             		allowed = true;
             }
@@ -1412,7 +1414,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // FIXME: need to save on properties of both reservations identifying information of the slice(s) we are stitched to so we can 
             // undo the stitch from either side (keep in mind multiple stitches from same or multiple slices are possible to the same sliver).
             
-            // use the queueing version to avoid collisions with modified performed by the controller itself
             logger.info("performSliceStitch(): enqueuing modify operation");
             System.out.println("Modify properties for " + nodeRes.getReservationID() + ": " + modifyProperties);
             //ModifyHelper.enqueueModify(nodeRes.getReservationID(), ModifyHelper.ModifySubcommand.ADDIFACE.getName(), modifyProperties);
