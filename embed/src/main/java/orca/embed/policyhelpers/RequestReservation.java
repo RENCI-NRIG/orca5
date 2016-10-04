@@ -208,9 +208,9 @@ public class RequestReservation {
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
 					String connection_domain = null;
-					if(requestConnection.getCastType().equalsIgnoreCase("Multicast"))
-						connection_domain=this.MultiPoint_Domain;
-					else
+					//if(requestConnection.getCastType().equalsIgnoreCase("Multicast"))
+					//	connection_domain=this.MultiPoint_Domain;
+					//else
 						connection_domain=ifMPConnection(requestConnection);
 					if(connection_domain.equals(RequestReservation.Unbound_Domain))
 						requestBounded = false;
