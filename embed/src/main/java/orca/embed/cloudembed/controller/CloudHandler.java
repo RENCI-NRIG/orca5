@@ -494,6 +494,7 @@ public class CloudHandler extends MappingHandler{
 		String dTypeStr = element.getResourceType().getResourceType();
 		if( (dTypeStr.endsWith("vm")) || (dTypeStr.endsWith("baremetalce")) || (dTypeStr.endsWith("lun")) ){	
 			if(ce_element.getGroup()!=null && !ce_element.isModify())
+			//if(ce_element.getGroup()!=null && ce_element.getCeGroup()!=null && ce_element.getCeGroup().size()>1  && !ce_element.isModify())
 				name = name.concat("/")+String.valueOf(i);
 		}
 		

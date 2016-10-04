@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import orca.embed.cloudembed.IConnectionManager;
@@ -127,7 +128,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 					else if(domainCount.size()==1)
 						error=runEmbedding(domainCount.keySet().iterator().next(),request, domainResourcePools);
 				}else
-					error=runEmbedding(request, domainResourcePools);
+					error=runEmbedding(request,domainResourcePools);
 				if(root!=null)
 					setCastType(root, deviceList);
 			} catch (IOException e) {
@@ -196,6 +197,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		OntResource ne_rs=null;
 		ComputeElement ne = (ComputeElement) cg.getFirst();
 		LinkedList <Interface> clientInterface = ne.getClientInterface();
+		HashMap <NetworkConnection, Interface> interfaces = ne.getInterfaces();
 		if(!rs.getURI().contains(NdlCommons.stitching_domain_str)){
 			ne_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
 			ne_rs.addProperty(NdlCommons.inDomainProperty, rs);
@@ -214,6 +216,12 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			ne.setCeGroup(cg);
 			ne.setClientInterface(clientInterface);
 			ne.addDependency(c_e);
+			if(interfaces!=null && interfaces.size()>0){
+				for(Entry<NetworkConnection,Interface> intf:interfaces.entrySet()){
+					if(intf.getKey().getName().equals(c_e.getName()))
+						ne.setInterfaceName(c_e, intf.getValue());
+				}
+			}
 		}
 		return ne;
 	}
@@ -311,13 +319,13 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 				}
 				if(domainCount.containsKey(e_domain)){
 					domainCount.get(e_domain).add(e);
-					if(c_e.getGroup()==null)
-						c_e.setGroup(c_e.getName());
+					//if(c_e.getGroup()==null)
+					//	c_e.setGroup(c_e.getName());
 				}else{
 					elements = new LinkedList <NetworkElement>();
 					elements.add(e);
-					if(c_e.getGroup()==null)
-						c_e.setGroup(c_e.getName());
+					//if(c_e.getGroup()==null)
+					//	c_e.setGroup(c_e.getName());
 					domainCount.put(e_domain, elements);
 				}
 			}

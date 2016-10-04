@@ -193,7 +193,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 						error=runEmbedding(source.getInDomain(),edgeRequest, domainResourcePools);
 						if(error!=null)
 							break;
-						if(source.getCe().getGroup()!=null || source.getCe().getCeGroup()!=null){
+						//if(source.getCe().getGroup()!=null || source.getCe().getCeGroup()!=null){
+						if(source.getCe().getGroup()!=null){
 							if(source_link.getFollowedBy()!=null)
 								source_link.getFollowedBy().remove(source);
 							deviceList.remove(source);
@@ -218,7 +219,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 						error=runEmbedding(dest.getInDomain(),edgeRequest, domainResourcePools);
 						if(error!=null)
 							break;
-						if(dest.getCe().getGroup()!=null || dest.getCe().getCeGroup()!=null){
+						//if(dest.getCe().getGroup()!=null || dest.getCe().getCeGroup()!=null){
+						if(dest.getCe().getGroup()!=null){
 							if(dest_link.getFollowedBy()!=null)
 								dest_link.getFollowedBy().remove(dest);
 							deviceList.remove(dest);
@@ -907,8 +909,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 			}
 		}
 		else{
-			if(this.isModify && requestElement.getCastType()!=null && requestElement.getCastType().equalsIgnoreCase("multicast"))
-				return;
+			//if(this.isModify && requestElement.getCastType()!=null && requestElement.getCastType().equalsIgnoreCase("multicast"))
+			//	return;
 			rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
 			manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
 		}
