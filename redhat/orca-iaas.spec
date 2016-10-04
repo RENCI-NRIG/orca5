@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Oct 04 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Fix unbounded MP request, converting multiple 2-branch MP to P2P
+
 *Mon Sep 26 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Fix MP issues
 
