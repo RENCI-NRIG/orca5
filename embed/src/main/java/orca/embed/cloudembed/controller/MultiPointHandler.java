@@ -196,13 +196,14 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 	public ComputeElement createNE(OntModel m, Resource rs, LinkedList <NetworkElement> cg,NetworkConnection c_e){
 		OntResource ne_rs=null;
 		ComputeElement ne = (ComputeElement) cg.getFirst();
+		ComputeElement new_ne=null;
 		LinkedList <Interface> clientInterface = ne.getClientInterface();
 		HashMap <NetworkConnection, Interface> interfaces = ne.getInterfaces();
 		if(!rs.getURI().contains(NdlCommons.stitching_domain_str)){
 			ne_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
 			ne_rs.addProperty(NdlCommons.inDomainProperty, rs);
-			ne = new ComputeElement(m,ne_rs.getURI(),ne.getName());
-		
+			new_ne = new ComputeElement(m,ne_rs.getURI(),ne.getName());
+			new_ne.setImageInfo(ne.getImage(), ne.getVMImageURL(),ne.getVMImageHash());
 			DomainResourceType dType=((NetworkElement) cg.toArray()[0]).getResourceType();
 			int res_count=0;
 			for(NetworkElement e:cg){
@@ -211,19 +212,19 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			DomainResourceType rType = new DomainResourceType(dType.getResourceType(),res_count);
 			rType.setRank(dType.getRank());
 			rType.setDomainURL(rs.getURI());
-			ne.setResourceType(rType);
+			new_ne.setResourceType(rType);
 		
-			ne.setCeGroup(cg);
-			ne.setClientInterface(clientInterface);
-			ne.addDependency(c_e);
+			new_ne.setCeGroup(cg);
+			new_ne.setClientInterface(clientInterface);
+			new_ne.addDependency(c_e);
 			if(interfaces!=null && interfaces.size()>0){
 				for(Entry<NetworkConnection,Interface> intf:interfaces.entrySet()){
 					if(intf.getKey().getName().equals(c_e.getName()))
-						ne.setInterfaceName(c_e, intf.getValue());
+						new_ne.setInterfaceName(c_e, intf.getValue());
 				}
 			}
 		}
-		return ne;
+		return new_ne;
 	}
 	
 	@SuppressWarnings("unchecked")
