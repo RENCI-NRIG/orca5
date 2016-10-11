@@ -110,6 +110,13 @@ public class NdlPath extends NdlCommons {
 		
 		// termination condition - found the desired end
 		for (Resource endInt: NdlCommons.getResourceInterfaces(end.getResource())) {
+			// if interface leads to compute element or stitchport, skip it. this is a hack dealing with
+			// interface naming in multipoint connections 10/11/16 /ib
+			if (NdlCommons.attachedToCompute(endInt) || (NdlCommons.attachedToStitchPort(endInt))) {
+				if (debug)
+					System.out.println("  Interface " + endInt + " leads to compute element or stitchport, skipping");
+				continue;
+			}
 			if (endInt.equals(last.getTail())) {
 				end.setHead(endInt);
 				path.add(end);
@@ -264,6 +271,7 @@ public class NdlPath extends NdlCommons {
 		for(Resource i: headInterfaces) {
 			if (debug)
 				System.out.println("  Trying build a path from " + pathHead + " to " + pathTail + " using interface " + i);
+			
 			// change the outgoing interface and try again
 			pathHead.setTail(i);
 			if (tryPathRecursive(pathTail, path)) {
