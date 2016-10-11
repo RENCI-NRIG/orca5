@@ -41,6 +41,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -775,7 +776,7 @@ public class NdlCommons {
      * @param queryString
      * @return
      */
-    public static ResultSet rdfQuery(OntModel model, String queryString)
+    public static ResultSet rdfQuery(Model model, String queryString)
     {
 
         Query query = QueryFactory.create(queryString);
@@ -1726,7 +1727,7 @@ public class NdlCommons {
 	 * @param m
 	 * @return
 	 */
-	public static List<Resource> getWhoHasInterface(Resource i, OntModel m) {
+	public static List<Resource> getWhoHasInterface(Resource i, Model m) {
 		// FIXME: HACK - should be done via inference and inverse property;
 		// query should be avoided
 		String query = NdlCommons.createQueryStringWhoHasInterface(i);
@@ -1745,6 +1746,38 @@ public class NdlCommons {
 			return ret;
 		else
 			return null;
+	}
+	
+	
+	/**
+	 * One of the owners of this interface is compute node
+	 * @param intface
+	 * @return
+	 */
+	public static boolean attachedToCompute(Resource intface) {
+		List<Resource> attachedList = NdlCommons.getWhoHasInterface(intface, intface.getModel());
+		
+		for(Resource r: attachedList) {
+			if (NdlCommons.isComputeElement(r))
+				return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * One of the owners of this interface is compute node
+	 * @param intface
+	 * @return
+	 */
+	public static boolean attachedToStitchPort(Resource intface) {
+		List<Resource> attachedList = NdlCommons.getWhoHasInterface(intface, intface.getModel());
+		
+		for(Resource r: attachedList) {
+			if (NdlCommons.isStitchingNode(r))
+				return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -2351,6 +2384,10 @@ public class NdlCommons {
 	
 	public static boolean isNetworkStorage(Resource r) {
 		return r.hasProperty(RDF_TYPE, networkStorageClass);
+	}
+	
+	public static boolean isComputeElement(Resource r) {
+		return r.hasProperty(RDF_TYPE, computeElementClass);
 	}
 
 	/**
