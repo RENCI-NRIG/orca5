@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Oct 11 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Changes to path building
+
 *Fri Oct 07 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Add image info when converting inter-rack 2-branch MP to P2P
 
