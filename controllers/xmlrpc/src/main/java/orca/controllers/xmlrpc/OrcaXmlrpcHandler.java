@@ -969,7 +969,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							//get properties to get its parent reservations
 
 							String  p_str = local.getProperty(ReservationConverter.PropertyNumExistParentReservations);
-							logger.debug("addActiveStatuWatch:numExistParent="+p_str);
+							System.out.println("addActiveStatuWatch:numExistParent="+p_str);
 							int p = 0;
 							String r_id=null;
 							if(p_str!=null){
