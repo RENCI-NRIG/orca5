@@ -1740,6 +1740,17 @@ public class ReservationConverter implements LayerConstant {
 						logger.debug("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);	
 						p++;
 						p_r.add(p_rmg);
+						if(!parent_de.getResourceType().getResourceType().endsWith("lun")){
+							String site_host_interface = getSiteHostInterface(parent);
+							if(site_host_interface!=null){
+								Properties p_property = new Properties();
+								p_property.setProperty(UnitProperties.UnitQuantumNetname,site_host_interface);	
+								p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
+								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
+							}	
+							Properties property = formInterfaceProperties(manifestModel, dd, parent,site_host_interface, num_interface, p);
+							rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
+						}
 					}	
 					
 					//Parented by an added reservation: new link
@@ -1756,7 +1767,7 @@ public class ReservationConverter implements LayerConstant {
 								p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
 								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
 							}	
-							Properties property = formInterfaceProperties(manifestModel, dd, parent,site_host_interface, num_interface, m_p);
+							Properties property = formInterfaceProperties(manifestModel, dd, parent,site_host_interface, num_interface, p+m_p);
 							rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
 						}
 					}
