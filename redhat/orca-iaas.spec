@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Oct 12 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Postbootscript fix
+
 *Tue Oct 11 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Changes to path building
 
