@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.security.auth.login.CredentialException;
 import javax.xml.crypto.MarshalException;
@@ -740,45 +742,7 @@ public class XmlrpcHandlerHelper {
 				}
 		}
 	}
-	
-	public static void main (String[] args) {
-		
-		
-		try {
-			Date d = parseRFC3339Date("2013-03-06T15:00:00-05:00");
-			System.out.println("Date " + d.toString());
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		
-		System.exit(0);
-		
-		try {
-			InputStream inStream = new FileInputStream("/Users/ibaldin/.ssl/IliaBaldine-Emulab/emulab-tmp.pem");
-			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			X509Certificate cert = (X509Certificate)cf.generateCertificate(inStream);
-			List<String> altNames = getExtensionValue(cert, SUBJECT_ALTERNATIVE_NAME);
-			System.out.println("Alt name is: " + altNames);
-			for (String altName: altNames) {
-				try {
-					URI altNameUri = new URI(altName);
-					String r = PublicId.decodeURN(altName);
-					System.out.println("Authority: " + altNameUri.getAuthority());
-					System.out.println("Scheme-specific part: " + altNameUri.getSchemeSpecificPart());
-					System.out.println("Decoded: " + r);
-					if (r.matches("IDN .+ user .+")) 
-						System.out.println("Matches!");
-				} catch(Exception e) { 
-					;
-				}
-			}
-			
-		} catch (Exception e) {
-			System.err.println("Error encountered: " + e);
-			e.printStackTrace();
-		}
-		
-	}
+
 	
 	/**
 	 * Make RR calls to converters until success or list exhausted
@@ -1018,6 +982,69 @@ public class XmlrpcHandlerHelper {
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to add local properties " + rm.getReservationID() + " due to " + e);
 		}
+	}
+	
+	private static final String RESOURCE_DOMAIN_VALUE = "resource.domain.value";
+	private static final String DomainPattern = "(\\w+)(vmsite|Net)/(vm|Net)";
+	private static final Pattern pattern = Pattern.compile(DomainPattern);
+
+	/**
+	 * Obtain a short domain name from RESOURCE resource.domain.value property (XXXvmsite/vm or XXXvmsite/vlan or XXXNet/vlan)
+	 * @param mng
+	 * @return
+	 */
+	public static String getShortDomain(ReservationMng mng) {
+		// Look at 'resource.domain.value' RESOURCE property which will XXXvmsite/vm or XXXvmsite/vlan or XXXNet/vlan, match on XXX
+		Properties resProps = OrcaConverter.fill(mng.getResourceProperties());
+		
+		String domain = resProps.getProperty(RESOURCE_DOMAIN_VALUE);
+    
+	    Matcher matcher = pattern.matcher(domain);
+
+	    if (matcher.find())
+	    	return matcher.group(1);
+	    else
+	    	return null;
+	}
+	
+	public static void main (String[] args) {
+		
+		try {
+			Date d = parseRFC3339Date("2013-03-06T15:00:00-05:00");
+			System.out.println("Date " + d.toString());
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+	//	System.exit(0);
+		
+//		try {
+//			InputStream inStream = new FileInputStream("/Users/ibaldin/.ssl/IliaBaldine-Emulab/emulab-tmp.pem");
+//			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+//			X509Certificate cert = (X509Certificate)cf.generateCertificate(inStream);
+//			List<String> altNames = getExtensionValue(cert, SUBJECT_ALTERNATIVE_NAME);
+//			System.out.println("Alt name is: " + altNames);
+//			for (String altName: altNames) {
+//				try {
+//					URI altNameUri = new URI(altName);
+//					String r = PublicId.decodeURN(altName);
+//					System.out.println("Authority: " + altNameUri.getAuthority());
+//					System.out.println("Scheme-specific part: " + altNameUri.getSchemeSpecificPart());
+//					System.out.println("Decoded: " + r);
+//					if (r.matches("IDN .+ user .+")) 
+//						System.out.println("Matches!");
+//				} catch(Exception e) { 
+//					;
+//				}
+//			}
+//			
+//		} catch (Exception e) {
+//			System.err.println("Error encountered: " + e);
+//			e.printStackTrace();
+//		}
+		
+		System.out.println("Testing regex: " + getShortDomain(null));
+		
 	}
 
 }

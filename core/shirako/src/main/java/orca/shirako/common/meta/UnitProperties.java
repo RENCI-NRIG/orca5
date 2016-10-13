@@ -106,7 +106,9 @@ public interface UnitProperties {
      * its components/dependencies may reserve control over eth0, so 
      * the first configurable interface would generally be eth1. 
      */
-    
+    public static final String ONE					   = "1";
+	public static final String YES 					   = "yes";
+	public static final String NO 					   = "no";
     public static final String DOT                     = ".";
     
     public static final String UnitEthPrefix           = "unit.eth";
@@ -215,7 +217,5 @@ public interface UnitProperties {
 	
 	public static final String SliceStitchPrefix = "sliceStitch";
 	public static final String SliceStitchAllowed = "allowed";
-	public static final String SliceStitchYes = "yes";
-	public static final String SliceStitchNo = "no";
 	public static final String SliceStitchPass = "password";
 }

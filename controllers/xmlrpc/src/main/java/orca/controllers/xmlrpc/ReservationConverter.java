@@ -2081,7 +2081,7 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 	}
-    static String generateNewMAC(XmlrpcOrcaState osi) {
+    public static String generateNewMAC(XmlrpcOrcaState osi) {
     	
     	// initialize the prefix from property if any (can be done in a static initializer too /ib
     	if (openstackMacPrefix == null) {

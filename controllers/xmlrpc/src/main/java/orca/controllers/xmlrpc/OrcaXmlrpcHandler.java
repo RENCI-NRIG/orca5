@@ -1161,7 +1161,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             
             Properties lp = new Properties();
             lp.setProperty(UnitProperties.SliceStitchPass, hash);
-            lp.setProperty(UnitProperties.SliceStitchAllowed, UnitProperties.SliceStitchYes);
+            lp.setProperty(UnitProperties.SliceStitchAllowed, UnitProperties.YES);
             
             int index = addIndexedLocalProperties(sm, rmng, UnitProperties.SliceStitchPrefix, false, lp);
             
@@ -1225,7 +1225,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // FIXME: technically we should check that this sliver is part of the named slice
             
             Properties lp = new Properties();
-            lp.setProperty(UnitProperties.SliceStitchAllowed, UnitProperties.SliceStitchNo);
+            lp.setProperty(UnitProperties.SliceStitchAllowed, UnitProperties.NO);
             
             int index = addIndexedLocalProperties(sm, rmng, UnitProperties.SliceStitchPrefix, false, lp);
             
@@ -1258,10 +1258,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	 * @param to_slice_urn
 	 * @param to_sliver_guid
 	 * @param to_pass
+	 * @param node_properties
 	 * @param credentials
 	 * @return
 	 */
-	public Map<String, Object> performSliceStitch(String from_slice_urn, String from_sliver_guid, String to_slice_urn, String to_sliver_guid, String to_pass, Object[] credentials) {
+	public Map<String, Object> performSliceStitch(String from_slice_urn, String from_sliver_guid, String to_slice_urn, String to_sliver_guid, String to_pass, 
+			Map<String, ?> node_properties, Object[] credentials) {
     	IOrcaServiceManager sm = null;
     	XmlrpcControllerSlice fromNdlSlice = null, toNdlSlice = null;
 
@@ -1316,51 +1318,58 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             ReservationMng netRes = null, nodeRes = null;
             
             Properties fromLocal = null, toLocal = null, nodeLocal = null, netLocal = null;
+            
             fromLocal = OrcaConverter.fill(fromRes.getLocalProperties());
             toLocal = OrcaConverter.fill(toRes.getLocalProperties());
             
-            if (fromLocal.getProperty(ReservationConverter.PropertyIsNetwork).equals("1")) {
+            if (UnitProperties.ONE.equals(fromLocal.getProperty(ReservationConverter.PropertyIsNetwork))) {
             	netRes = fromRes;
             	netLocal = fromLocal;
             }
             
-            if (fromLocal.getProperty(ReservationConverter.PropertyIsVM).equals("1")) {
+            if (UnitProperties.ONE.equals(fromLocal.getProperty(ReservationConverter.PropertyIsVM))) {
             	nodeRes = fromRes;
             	nodeLocal = fromLocal;
             }
             
-            if (toLocal.getProperty(ReservationConverter.PropertyIsNetwork).equals("1")) {
+            if (UnitProperties.ONE.equals(toLocal.getProperty(ReservationConverter.PropertyIsNetwork))) {
             	netRes = toRes;
             	netLocal = toLocal;
             }
             
-            if (toLocal.getProperty(ReservationConverter.PropertyIsVM).equals("1")) {
+            if (UnitProperties.ONE.equals(toLocal.getProperty(ReservationConverter.PropertyIsVM))) {
             	nodeRes = toRes;
             	nodeLocal = toLocal;
             }
             
             if ((nodeRes == null) || (netRes == null)) {
-            	logger.error("performSliceStitch(): unable to clearly identify node and network between " + from_sliver_guid + " and " + to_sliver_guid + ", exiting");
-            	return setError("ERROR: unable to clearly identify node and network between " + from_sliver_guid + " and " + to_sliver_guid + ", exiting");
+            	logger.error("performSliceStitch(): unable to clearly identify node and network between " + from_sliver_guid + " and " + 
+            			to_sliver_guid + ", unable to perform the stitch");
+            	return setError("ERROR: unable to clearly identify node and network between " + from_sliver_guid + " and " + 
+            			to_sliver_guid + ", unable to perform the stitch");
             }
             
-            // FIXME: verify that they are on the same aggregate (deal with xxxNet vs xxxvmsite issue)
+            // compare domains
+            String netDomain = XmlrpcHandlerHelper.getShortDomain(netRes);
+            String nodeDomain = XmlrpcHandlerHelper.getShortDomain(nodeRes);
+            if ((netDomain != null) && (!netDomain.equals(nodeDomain))) {
+            	logger.error("performSliceStitch(): domain mismatch  in to/from reservations or one of domains is null");
+            	return setError("ERROR: domain mismatch in to/from reservations or one of domains is null");
+            }
             
             // Verify authorization to stitch on the 'to' reservation. Note that auth properties always start with modify.0. (index never changes)
             boolean allowed = false;
-            if (UnitProperties.SliceStitchYes.equals(toLocal.getProperty(UnitProperties.ModifyPrefix + UnitProperties.ZERO + UnitProperties.DOT + UnitProperties.SliceStitchAllowed))) {
-            	String storedPass = toLocal.getProperty(UnitProperties.ModifyPrefix + UnitProperties.ZERO + UnitProperties.DOT + UnitProperties.SliceStitchPass);
+            if (UnitProperties.YES.equals(toLocal.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + UnitProperties.ZERO + UnitProperties.DOT + UnitProperties.SliceStitchAllowed))) {
+            	String storedPass = toLocal.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + UnitProperties.ZERO + UnitProperties.DOT + UnitProperties.SliceStitchPass);
             	if (OrcaPasswordHash.validatePassword(to_pass, storedPass)) 
             		allowed = true;
             }
+            
             if (!allowed) {
             	logger.error("performSliceStitch(): stitch to " + to_sliver_guid + " was not authorized");
             	return setError("ERROR: stitch to " + to_sliver_guid + " was not authorized");
             }
             
-            // FIXME: add properties needed for add interface modify on the node
-            
-            // Parent is a networking reservation
             List<UnitMng> un = sm.getUnits(new ReservationID(netRes.getReservationID()));
             String unitTag = null, unitParentUrl = null;
         	Properties modifyProperties = new Properties();
@@ -1381,8 +1390,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             		logger.error("performSliceStitch(): Unable to find the parent interface index: unit_tag=" + unitTag + " reservation " + netRes.getReservationID());
             		return setError("ERROR: nable to find the parent interface index: unit_tag=" + unitTag + " reservation " + netRes.getReservationID());
             	}
-							
-            	String parentTagName = UnitProperties.UnitEthPrefix + hostInterface + UnitProperties.UnitEthVlanSuffix;
             	
             	modifyProperties.setProperty(UnitProperties.UnitEthVlan, unitTag);
 					
@@ -1407,8 +1414,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             		modifyProperties.setProperty(UnitProperties.UnitEthParentUrl, netLocal.getProperty(parent_url));
 			} else {
 				// no units - this shouldn't happen
-				logger.error("performSliceStitch(): no units found on the reservation " + to_sliver_guid + " unable to perform stitch");
-				return setError("ERROR: no units found on the reservation " + to_sliver_guid + " unable to perform stitch");
+				logger.error("performSliceStitch(): no units found on the net/vlan reservation " + netRes.getReservationID() + " unable to perform stitch");
+				return setError("ERROR: no units found on the net/vlan reservation " + netRes.getReservationID() + " unable to perform stitch");
 			}
             
             // FIXME: need to save on properties of both reservations identifying information of the slice(s) we are stitched to so we can 

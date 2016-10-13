@@ -3,7 +3,6 @@ package orca.embed.policyhelpers;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import orca.manage.OrcaConstants;
 import orca.manage.OrcaConverter;
 import orca.manage.beans.ReservationMng;
 import orca.shirako.common.meta.UnitProperties;
