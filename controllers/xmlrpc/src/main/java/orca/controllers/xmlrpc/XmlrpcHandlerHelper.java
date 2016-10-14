@@ -50,6 +50,7 @@ import orca.manage.beans.ReservationMng;
 import orca.security.AbacUtil;
 import orca.security.AuthToken;
 import orca.shirako.common.ReservationID;
+import orca.shirako.common.meta.UnitProperties;
 import orca.util.PropList;
 
 import org.apache.log4j.Logger;
@@ -982,6 +983,106 @@ public class XmlrpcHandlerHelper {
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to add local properties " + rm.getReservationID() + " due to " + e);
 		}
+	}
+	
+	/**
+	 * Add new local properties to reservation of the form prefix.suffix.  It also calls updateReservation on SM to save the new properties. 
+	 * ReservationMng object is modified and not safe to use afterwards
+	 * @param sm
+	 * @param rm
+	 * @param propPrefix
+	 * @param increment - increment index or not
+	 * @param p - new properties
+	 * @return
+	 */
+	public static void addLocalProperties(IOrcaServiceManager sm, ReservationMng rm, String propPrefix, Properties p) {
+		try {
+			PropertiesMng psmng = rm.getLocalProperties();
+			if (psmng == null)
+				throw new RuntimeException("addLocalProperties(): unable to get local properties for reservation " + rm.getReservationID());
+			
+			Enumeration<?> names = p.propertyNames();
+			
+			PropertiesMng npsmng = new PropertiesMng();
+			
+			while(names.hasMoreElements()) {
+				String nm = (String)names.nextElement();
+				
+				PropertyMng pmng = new PropertyMng();
+				pmng.setName(propPrefix + "." + nm);
+				pmng.setValue(p.getProperty(nm));
+				
+				npsmng.getProperty().add(pmng);
+			}
+			
+			rm.setLocalProperties(npsmng);
+			
+			sm.updateReservation(rm);
+		} catch(RuntimeException re) { 
+			throw re;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to add local properties " + rm.getReservationID() + " due to " + e);
+		}
+	}
+	
+	/**
+	 * Find an active stitch to the given reservation and return its GUID (stitch which has a performed property, but no undone property)
+	 * @param local
+	 * @return
+	 */
+	public static String findActiveStitch(Properties local, String to) {
+		String retGuid = null;
+		if (to == null)
+			return retGuid;
+		
+		for(String key : local.stringPropertyNames()) {			
+			if (key.startsWith(UnitProperties.SliceStitchPrefix)) {
+				String[] keyNameParts = key.split("\\.");
+				if (keyNameParts.length < 3)
+					continue;
+				retGuid = keyNameParts[1];
+				String datePerformed = local.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + retGuid + 
+						UnitProperties.DOT + UnitProperties.SliceStitchPerformed);
+				String dateUndone = local.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + retGuid + 
+						UnitProperties.DOT + UnitProperties.SliceStitchUndone);
+				String toRes = local.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + retGuid + 
+						UnitProperties.DOT + UnitProperties.SliceStitchToReservation);
+				
+				if ((to.equals(toRes)) && (datePerformed != null) && (dateUndone == null))
+					return retGuid;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Find index of modify operation matching this stitch operation guid
+	 * @param config
+	 * @param guid
+	 * @return
+	 */
+	public static int findModifyIndexForStitch(Properties config, String guid) {
+		int retIndex = -1;
+
+		if (guid == null)
+			return retIndex;
+		
+		for(String key: config.stringPropertyNames()) {
+			if (key.startsWith(UnitProperties.ModifyPrefix)) {
+				String[] keyNameParts = key.split("\\.");
+				if (keyNameParts.length < 3)
+					continue;
+				try {
+					retIndex = Integer.parseInt(keyNameParts[1]);
+				} catch (NumberFormatException nfe) {
+					continue;
+				}
+				String modifyStitchGuid = config.getProperty(UnitProperties.ModifyPrefix + retIndex + UnitProperties.DOT + UnitProperties.SliceStitchUUID);
+				if (guid.equals(modifyStitchGuid)) 
+					return retIndex;
+			}
+		}
+		return retIndex;
 	}
 	
 	private static final String RESOURCE_DOMAIN_VALUE = "resource.domain.value";

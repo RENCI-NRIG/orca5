@@ -218,4 +218,9 @@ public interface UnitProperties {
 	public static final String SliceStitchPrefix = "sliceStitch";
 	public static final String SliceStitchAllowed = "allowed";
 	public static final String SliceStitchPass = "password";
+	public static final String SliceStitchToReservation = "toreservation";
+	public static final String SliceStitchToSlice = "toslice";
+	public static final String SliceStitchUUID = "stitchUUID";
+	public static final String SliceStitchPerformed = "performed";
+	public static final String SliceStitchUndone = "undone";
 }

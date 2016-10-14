@@ -669,26 +669,26 @@ public class ReservationConverter implements LayerConstant {
 							if (index > 0) {
 								ip_addr = intf_name.substring(0, index);
 								host_interface = String.valueOf(Integer.valueOf(intf_name.substring(index + 1)).intValue() + 1);
-								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
-								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
-								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
-								config.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
-								local.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
+								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(UnitProperties.UnitEthIPSuffix);
+								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(UnitProperties.UnitEthMacSuffix);
+								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(UnitProperties.UnitEthUUIDSuffix);
+								config.setProperty(UnitProperties.UnitEthPrefix + host_interface + UnitProperties.UnitHostEthSuffix, site_host_interface);
+								local.setProperty(UnitProperties.UnitEthPrefix + host_interface + UnitProperties.UnitHostEthSuffix, site_host_interface);
 								if (de.getPrecededBySet().size() >= 1) {
-									parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
+									parent_tag_name = parent_tag_name.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
 									parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 								}
 							} else {
 								ip_addr = intf_name;
 								host_interface = String.valueOf(r.networkDependencies);
 								logger.debug("setDependency:host_interface="+host_interface);
-								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
-								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
-								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
+								parent_mac_addr = parent_mac_addr.concat(host_interface).concat(UnitProperties.UnitEthMacSuffix);
+								parent_ip_addr = parent_ip_addr.concat(host_interface).concat(UnitProperties.UnitEthIPSuffix);
+								parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(UnitProperties.UnitEthUUIDSuffix);
 								if (de.getPrecededBySet().size() >= 1) {
-									config.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
-									local.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
-									parent_tag_name = parent_tag_name.concat(host_interface).concat(".vlan.tag");
+									config.setProperty(UnitProperties.UnitEthPrefix + host_interface + UnitProperties.UnitHostEthSuffix, site_host_interface);
+									local.setProperty(UnitProperties.UnitEthPrefix + host_interface + UnitProperties.UnitHostEthSuffix, site_host_interface);
+									parent_tag_name = parent_tag_name.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
 									parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 									if(pr!=null){
 										pr_config.setProperty(UnitProperties.UnitQuantumNetname,site_host_interface);	
@@ -810,11 +810,11 @@ public class ReservationConverter implements LayerConstant {
 			ip_addr = intf_name;
 			host_interface = String.valueOf(num_parent+num);
 		}
-		parent_ip_addr = parent_ip_addr.concat(host_interface).concat(".ip");
-		parent_mac_addr = parent_mac_addr.concat(host_interface).concat(".mac");
-		parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(".uuid");
+		parent_ip_addr = parent_ip_addr.concat(host_interface).concat(UnitProperties.UnitEthIPSuffix);
+		parent_mac_addr = parent_mac_addr.concat(host_interface).concat(UnitProperties.UnitEthMacSuffix);
+		parent_interface_uuid = parent_interface_uuid.concat(host_interface).concat(UnitProperties.UnitEthUUIDSuffix);
 			
-		property.setProperty(UnitProperties.UnitEthPrefix + host_interface + ".hosteth", site_host_interface);
+		property.setProperty(UnitProperties.UnitEthPrefix + host_interface + UnitProperties.UnitHostEthSuffix, site_host_interface);
 
 		parent_quantum_uuid = parent_quantum_uuid.concat(host_interface).concat(UnitProperties.UnitEthNetworkUUIDSuffix);
 
@@ -842,7 +842,7 @@ public class ReservationConverter implements LayerConstant {
 			logger.error("Not a Valid IP address:" + parent_ip_addr + ":" + ip_addr);
 		}
 		
-		property.setProperty(UnitProperties.UnitEthPrefix+ host_interface + ".parent.url", parent.getKey().getName());
+		property.setProperty(UnitProperties.UnitEthPrefix+ host_interface + UnitProperties.UnitEthParentUrlSuffix, parent.getKey().getName());
 		/*
 		String type="request:Manifest";
 		OntResource manifest=NdlCommons.getOntOfType(manifestModel, type);
