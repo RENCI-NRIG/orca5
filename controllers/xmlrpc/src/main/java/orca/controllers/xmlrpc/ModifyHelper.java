@@ -11,7 +11,6 @@ import java.util.Queue;
 import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
 import orca.controllers.xmlrpc.statuswatch.ReservationIDWithModifyIndex;
 import orca.manage.IOrcaServiceManager;
-import orca.manage.OrcaConstants;
 import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.ReservationMng;
@@ -249,6 +248,23 @@ public class ModifyHelper {
 		
 		for(Map.Entry<Object, Object>e: p.entrySet()) {
 			m.put((String)e.getKey(), (String)e.getValue());
+		}
+		return m;
+	}
+	
+	/**
+	 * Conversion between properties and map of strings, remove keyPrefix from keynames before
+	 * inserting into map
+	 * @param p
+	 * @param keyPrefix
+	 * @return
+	 */
+	public static Map<String, String> fromProperties(Properties p, String keyPrefix) {
+		Map<String, String> m = new HashMap<String, String>();
+		
+		for(Map.Entry<Object, Object>e: p.entrySet()) {
+			String key = (String)e.getKey();
+			m.put(key.replace((CharSequence)keyPrefix, (CharSequence)""), (String)e.getValue());
 		}
 		return m;
 	}

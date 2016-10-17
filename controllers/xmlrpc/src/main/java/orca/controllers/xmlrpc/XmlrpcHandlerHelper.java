@@ -5,13 +5,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,7 +63,6 @@ import org.bouncycastle.asn1.DERTaggedObject;
 import org.bouncycastle.asn1.DERUTF8String;
 
 import com.hp.hpl.jena.ontology.OntResource;
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -79,6 +75,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
  *
  */
 public class XmlrpcHandlerHelper {
+	public static final String RFC3399_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	public static final String PropertyNdlConverterUrlList="ndl.converter.url";
 	private static final String SUBJECT_ALTERNATIVE_NAME = "2.5.29.17";
 	public static final String RSPEC2_TO_NDL = "ndlConverter.requestFromRSpec2";
@@ -116,7 +113,7 @@ public class XmlrpcHandlerHelper {
 		Date d = new Date();
 		//if there is no time zone, we don't need to do any special parsing.
 		if(datestring.endsWith("Z")){
-			SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");//spec for RFC3339
+			SimpleDateFormat s = new SimpleDateFormat(RFC3399_DATE_FORMAT);//spec for RFC3339
 			s.setTimeZone(TimeZone.getTimeZone("UTC"));
                         try {
                             d = s.parse(datestring);
@@ -609,6 +606,28 @@ public class XmlrpcHandlerHelper {
 	}
 	
 	/**
+	 * Validate that offered list of reservations is part of the list of slice reservations
+	 * @param sliceRes
+	 * @param resList
+	 * @return
+	 */
+	public static boolean validateSliverListSlice(List<ReservationMng> sliceRes, List<String> resList) {
+		if ((resList == null) || (sliceRes == null))
+			return false;
+		
+		Set<String> resSet = new HashSet<>(resList);
+		int validCount = 0;
+		for(ReservationMng rmng: sliceRes) {
+			if (resSet.contains(rmng.getReservationID())) {
+				validCount++;
+			}
+		}
+		if (validCount == resSet.size())
+			return true;
+		return false;
+	}
+	
+	/**
 	 * Return DN or subjectAlternativeName URN in the certificate used for this SSL session
 	 * @param logger
 	 * @return
@@ -1053,6 +1072,48 @@ public class XmlrpcHandlerHelper {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Return a list of guids (possibly empty) of all stitches
+	 * @param local
+	 * @return
+	 */
+	public static Set<String> findAllStitches(Properties local) {
+		Set<String> ret = new HashSet<>();
+		
+		for(String key : local.stringPropertyNames()) {			
+			if (key.startsWith(UnitProperties.SliceStitchPrefix)) {
+				String[] keyNameParts = key.split("\\.");
+				if (keyNameParts.length < 3) 
+					continue;
+				
+				if (keyNameParts != null)
+					ret.add(keyNameParts[1]);
+			}
+		}
+		
+		return ret;
+	}
+	
+	/** 
+	 * Return as map properties of a given stitch
+	 * @param local
+	 * @param stitchGuid
+	 * @return
+	 */
+	public static Properties getStitchProperties(Properties local, String stitchGuid) {
+		Properties ret = new Properties();
+		
+		if (stitchGuid == null)
+			return null;
+		
+		for (String key: local.stringPropertyNames()) {
+			if (key.startsWith(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + stitchGuid)) {
+				ret.setProperty(key, local.getProperty(key));
+			}
+		}
+		return ret;
 	}
 	
 	/**

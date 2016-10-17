@@ -223,4 +223,5 @@ public interface UnitProperties {
 	public static final String SliceStitchUUID = "stitchUUID";
 	public static final String SliceStitchPerformed = "performed";
 	public static final String SliceStitchUndone = "undone";
+	public static final String SliceStitchDN = "stitch.dn";
 }

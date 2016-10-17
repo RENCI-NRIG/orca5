@@ -1,7 +1,7 @@
 package orca.controllers.xmlrpc;
 
 import java.io.File;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.BitSet;
 //import com.ibm.icu.util.Calendar;
@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.zip.DataFormatException;
 
@@ -60,6 +62,7 @@ import orca.shirako.common.meta.ResourceProperties;
 import orca.shirako.common.meta.UnitProperties;
 import orca.util.CompressEncode;
 import orca.util.ID;
+import orca.util.PropList;
 import orca.util.ResourceType;
 import orca.util.VersionUtils;
 import orca.util.password.hash.OrcaPasswordHash;
@@ -1157,7 +1160,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setError("permitSliceStitch() user " + userDN + " is not the owner of reservation " + sliver_guid);
             }
             
-            // FIXME: technically we should check that this sliver is part of the named slice
+            if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            }
             
             // compute hash of password and set the property of the reservation
             String hash = OrcaPasswordHash.generatePasswordHash(pass);
@@ -1225,7 +1231,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setError("user " + userDN + " is not the owner of reservation " + sliver_guid);
             }
             
-            // FIXME: technically we should check that this sliver is part of the named slice
+            if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            }
             
             Properties lp = new Properties();
             lp.setProperty(UnitProperties.SliceStitchAllowed, UnitProperties.NO);
@@ -1276,7 +1285,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     		return setError("performSliceStitch() slice identifier or sliver guid is null");
 
 		if (from_slice_urn.equals(to_slice_urn)) {
-			logger.error("performSliceStitch(): cannot unstitch slice " + from_slice_urn + " to itself");
+			logger.error("performSliceStitch(): cannot stitch slice " + from_slice_urn + " to itself");
 			return setError("cannot stitch slice " + from_slice_urn + " to itself");
 		}
 		
@@ -1318,6 +1327,16 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             if (!validateSliverOwner(sm, from_sliver_guid, userDN)) {
             	logger.error("performSliceStitch(): user " + userDN + " is not the owner of reservation " + from_sliver_guid);
             	return setError("user " + userDN + " is not the owner of reservation " + from_sliver_guid);
+            }
+            
+            if (!validateSliverListSlice(toNdlSlice.getAllReservations(sm), Collections.singletonList(to_sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + to_sliver_guid + " is not part of slice " + to_slice_urn);
+            	return setReturn("Reservation " + to_sliver_guid + " is not part of slice " + to_slice_urn);
+            }
+            
+            if (!validateSliverListSlice(fromNdlSlice.getAllReservations(sm), Collections.singletonList(from_sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + from_sliver_guid + " is not part of slice " + from_slice_urn);
+            	return setReturn("Reservation " + from_sliver_guid + " is not part of slice " + from_slice_urn);
             }
 
             // determine which is the node, and which is the network, get local properties
@@ -1421,14 +1440,20 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
             	Properties sp = new Properties();
                 
-                sp.setProperty(UnitProperties.SliceStitchPerformed, DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
+            	SimpleDateFormat s = new SimpleDateFormat(RFC3399_DATE_FORMAT);//spec for RFC3339
+        		s.setTimeZone(TimeZone.getTimeZone("UTC"));
+            	
+                sp.setProperty(UnitProperties.SliceStitchPerformed, s.format(new Date()));
+                
                 sp.setProperty(UnitProperties.SliceStitchToReservation, nodeRes.getReservationID());
                 sp.setProperty(UnitProperties.SliceStitchToSlice, nodeLocal.getProperty(UnitProperties.UnitSliceName));
+                sp.setProperty(UnitProperties.SliceStitchDN, nodeLocal.getProperty(UnitProperties.UserDN));
                 
                 addLocalProperties(sm, netRes, UnitProperties.SliceStitchPrefix + UnitProperties.DOT + stitchGuid, sp);
                 
                 sp.setProperty(UnitProperties.SliceStitchToReservation, netRes.getReservationID());
                 sp.setProperty(UnitProperties.SliceStitchToSlice, netLocal.getProperty(UnitProperties.UnitSliceName));
+                sp.setProperty(UnitProperties.SliceStitchDN, netLocal.getProperty(UnitProperties.UserDN));
                 
                 addLocalProperties(sm, nodeRes, UnitProperties.SliceStitchPrefix + UnitProperties.DOT + stitchGuid, sp);
                 
@@ -1528,6 +1553,16 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setError("user " + userDN + " is not the owner of reservation " + from_sliver_guid);
             }
 
+            if (!validateSliverListSlice(toNdlSlice.getAllReservations(sm), Collections.singletonList(to_sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + to_sliver_guid + " is not part of slice " + to_slice_urn);
+            	return setReturn("Reservation " + to_sliver_guid + " is not part of slice " + to_slice_urn);
+            }
+            
+            if (!validateSliverListSlice(fromNdlSlice.getAllReservations(sm), Collections.singletonList(from_sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + from_sliver_guid + " is not part of slice " + from_slice_urn);
+            	return setReturn("Reservation " + from_sliver_guid + " is not part of slice " + from_slice_urn);
+            }
+            
             // determine which is the node, and which is the network, get local properties
             ReservationMng fromRes = sm.getReservation(new ReservationID(from_sliver_guid));
             ReservationMng toRes = sm.getReservation(new ReservationID(to_sliver_guid));
@@ -1629,7 +1664,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
         	
             Properties sp = new Properties();
             
-            sp.setProperty(UnitProperties.SliceStitchUndone, DateFormat.getDateInstance(DateFormat.FULL).format(new Date()));
+        	SimpleDateFormat s = new SimpleDateFormat(RFC3399_DATE_FORMAT);//spec for RFC3339
+    		s.setTimeZone(TimeZone.getTimeZone("UTC"));
+    		
+            sp.setProperty(UnitProperties.SliceStitchUndone, s.format(new Date()));
             
             addLocalProperties(sm, netRes, UnitProperties.SliceStitchPrefix + UnitProperties.DOT + activeStitchGuid, sp);
             addLocalProperties(sm, nodeRes, UnitProperties.SliceStitchPrefix + UnitProperties.DOT + activeStitchGuid, sp);
@@ -1963,7 +2001,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	}
     
      /**
-      * Return unit properties of a sliver in a list of maps of pName, pValue. One map per unit. 
+      * Return unit properties of a sliver in a list of maps of pName, pValue. One map per unit. If sliver_guids list is empty
+      * state of all reservations in the slice is returned
       * @param slice_urn
       * @param sliver_guid - list of guids
       * @param credentials
@@ -1975,9 +2014,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
     	 logger.info("ORCA API getReservationStates() invoked for " + sliver_guids + " of slice " + slice_urn);
 
-    	 // FIXME: allow passing in null, in which case just walk the list of all reservations in the slice.
     	 if (sliver_guids == null) 
-    		 return setError("getReservationStates() sliver_guids is null");
+    		 sliver_guids = new ArrayList<String>();
 
     	 try {
     		 String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
@@ -2008,7 +2046,20 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     				 return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
     			 }
     		 }
-
+    		 
+    		 // if list was empty, populate with all reservations
+    		 if (sliver_guids.size() == 0) {
+    			 for(ReservationMng rmng: allRes) {
+    				 sliver_guids.add(rmng.getReservationID());
+    			 }
+    		 }
+    		 
+    		 // check the reservations belong to this slice
+    		 if (!validateSliverListSlice(allRes, sliver_guids)) {
+    			 logger.error("getReservationStates(): some reservations on the list " + sliver_guids + " are not part of slice " + slice_urn);
+    			 return setReturn("Some reservations on the list " + sliver_guids + " are not part of slice " + slice_urn);
+    		 }
+    		 
     		 List<ReservationStateMng> resStates = ndlSlice.getReservationStates(sm, sliver_guids);
     		 if (resStates == null) {
     			 return setError("getReservationStates(): unable to get states for " + sliver_guids);
@@ -2083,6 +2134,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setError("user " + userDN + " is not the owner of reservation " + sliver_guid);
             }
             
+            if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            }
+            
     		List<UnitMng> sliverUnits = ndlSlice.getUnits(sm, sliver_guid);
     		if (sliverUnits == null) {
     			return setError("getSliverProperties(): no units associated with reservation " + sliver_guid);
@@ -2112,8 +2168,97 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ndlSlice.getWorkflow().syncRequestModel();
 				ndlSlice.unlock();
 			}
-    	}
-    	
+    	}	
+    }
+    
+    /**
+     * Get information about reservation stitches to other slices in the form of map of maps of maps (reservation id, stitching guid, stitching properties)
+     * @param slice_urn
+     * @param sliver_guids
+     * @param credentials
+     * @return
+     */
+    public Map<String, Object> getReservationSliceStitchInfo(String slice_urn, List<String> sliver_guids, Object[] credentials) {
+    	IOrcaServiceManager sm = null;
+    	XmlrpcControllerSlice ndlSlice = null;
+    	Map<String, Object> ret = new HashMap<>();
+
+    	logger.info("ORCA API getReservationSliceStitchInfo() invoked for " + sliver_guids + " of slice " + slice_urn);
+
+    	if (sliver_guids == null) 
+    		return setError("getReservationSliceStitchInfo() sliver_guids is null");
+
+    	try {
+    		String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
+
+    		// check the whitelist
+    		if (verifyCredentials && !checkWhitelist(userDN)) 
+    			return setError(WHITELIST_ERROR);
+    		sm = instance.getSM();
+
+    		// find this slice and lock it
+    		ndlSlice = instance.getSlice(slice_urn);
+    		if (ndlSlice == null) {
+    			logger.error("getReservationSliceStitchInfo: unable to find slice " + slice_urn + " among active slices");
+    			return setError("unable to find slice " + slice_urn + " among active slices");
+    		}
+    		// lock the slice
+    		ndlSlice.lock();
+
+    		List<ReservationMng> allRes =  ndlSlice.getAllReservations(sm);
+    		if(allRes == null){
+    			ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
+    			logger.debug("getReservationSliceStitchInfo(): No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
+    			return setError("no reservations in slice " + slice_urn + " sliceId " + ndlSlice.getSliceID());
+    		} else {
+    			// check that the caller's DN is the slice owner on at least one reservation
+    			if (!validateSliverListOwner(allRes, userDN)) {
+    				logger.error("getReservationSliceStitchInfo(): caller " + userDN + " is not the owner of slice " + slice_urn);
+    				return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
+    			}
+    		}
+    		
+            if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), sliver_guids)) {
+            	logger.error("getReservationStates(): Some reservations in list " + sliver_guids + " are not part of slice " + slice_urn);
+            	return setReturn("Some reservations in list " + sliver_guids + " are not part of slice " + slice_urn);
+            }
+            
+    		// collect all stitch properties from mentioned reservations
+    		for(ReservationMng rmng: allRes) {
+    			if (sliver_guids.contains(rmng.getReservationID())) {
+        			Map<String, Object> stitchesMap = new HashMap<>();
+    				Properties local = OrcaConverter.fill(rmng.getLocalProperties());
+    				
+    	            // add a state section showing stitching is permitted or not
+    	            stitchesMap.put(UnitProperties.SliceStitchAllowed, 
+    	            		local.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + UnitProperties.SliceStitchAllowed));
+    	            // find stitch history
+    				Set<String> stitches = findAllStitches(local);
+    				for(String stitchGuid: stitches) {
+    					Properties sp = getStitchProperties(local, stitchGuid);
+    					Map<String, String> spm = ModifyHelper.fromProperties(sp, UnitProperties.SliceStitchPrefix + UnitProperties.DOT + stitchGuid + UnitProperties.DOT);
+    					stitchesMap.put(stitchGuid, spm);
+    				}
+    				ret.put(rmng.getReservationID(), stitchesMap);
+    			} else
+    				return setError("reservation " + rmng.getReservationID() + " is not part of slice " + slice_urn);
+    		}
+    		
+    		return setReturn(ret);
+    	} catch (Exception e) {
+    		logger.error("getReservationSliceStitchInfo(): Exception encountered: " + e.getMessage());	
+    		e.printStackTrace();
+    		return setError("getReservationSliceStitchInfo(): Exception encountered: " + e.getMessage());
+    	} finally {
+    		if (sm != null){
+    			instance.returnSM(sm);
+    		}
+    		if (ndlSlice != null) {
+    			ndlSlice.getWorkflow().syncManifestModel();
+    			ndlSlice.getWorkflow().syncRequestModel();
+    			ndlSlice.unlock();
+    		}
+    	}	
     }
      
     /**
@@ -2157,6 +2302,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             if (!validateSliverOwner(sm, sliver_guid, userDN)) {
             	logger.error("modifySliver(): user " + userDN + " is not the owner of reservation " + sliver_guid);
             	return setError("user " + userDN + " is not the owner of reservation " + sliver_guid);
+            }
+            
+            if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
+            	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
             }
 
             // use the queueing version to avoid collisions with modified performed by the controller itself
@@ -2342,5 +2492,4 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		
 		return true;
 	}
-	
 }
