@@ -738,6 +738,10 @@ class AuthorityReservation extends ReservationServer implements IKernelAuthority
                 }
 
                 break;
+            // fixing issue #23 recovery exception with Failed,None /ib 10/17/16
+            case ReservationStates.Failed:
+            	// do nothing in this case
+            	break;
             default:
                 throw new OrcaException("Unexpected reservation state: state=" + state
                         + " pending=" + pending);
