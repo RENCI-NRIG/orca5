@@ -2230,8 +2230,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     				Properties local = OrcaConverter.fill(rmng.getLocalProperties());
     				
     	            // add a state section showing stitching is permitted or not
-    	            stitchesMap.put(UnitProperties.SliceStitchAllowed, 
-    	            		local.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + UnitProperties.SliceStitchAllowed));
+    				String allowed = local.getProperty(UnitProperties.SliceStitchPrefix + UnitProperties.DOT + UnitProperties.SliceStitchAllowed); 
+    	            stitchesMap.put(UnitProperties.SliceStitchAllowed, (allowed == null ? UnitProperties.NO : allowed));
+
     	            // find stitch history
     				Set<String> stitches = findAllStitches(local);
     				for(String stitchGuid: stitches) {
@@ -2240,8 +2241,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     					stitchesMap.put(stitchGuid, spm);
     				}
     				ret.put(rmng.getReservationID(), stitchesMap);
-    			} else
-    				return setError("reservation " + rmng.getReservationID() + " is not part of slice " + slice_urn);
+    			} 
     		}
     		
     		return setReturn(ret);
