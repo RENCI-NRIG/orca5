@@ -583,7 +583,7 @@
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/GWU/Cisco/6509/GigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/GWU/Cisco/6509/GigabitEthernet/1/1/ethernet">
-        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.wash.net.internet2.edu:eth7/2:gwu-eg</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;string">urn:publicid:IDN+al2s.internet2.edu+interface+rtsw.wash.net.internet2.edu:et-4/3/0.0:gwu-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 

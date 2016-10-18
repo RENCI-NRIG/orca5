@@ -488,8 +488,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/gwuNet.rdf#gwuNet/Cisco/UCSFI/TenGigabitEthernet/0/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.wash.net.internet2.edu:port=eth7/2:link=gwu</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.wash.net.internet2.edu:port=eth7/2:link=gwu</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.wash.net.internet2.edu:port=et-4/3/0.0:link=gwu</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.wash.net.internet2.edu:port=et-4/3/0.0:link=gwu</rdfs:label>
     </owl:NamedIndividual>
     
 
