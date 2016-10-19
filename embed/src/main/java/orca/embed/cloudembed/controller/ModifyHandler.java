@@ -756,7 +756,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 
         Individual manifest = manifestModel.createIndividual(reservation_rs.getNameSpace()+"manifest", NdlCommons.manifestOntClass);
         if(controller_url!=null){
-        	Individual controller = manifestModel.createIndividual(reservation_rs.getNameSpace()+"controller", NdlCommons.domainControllerClass);
+        	// needed to randomize the name of the controller individual not to collide with nodes or links named 'controller' /ib 10/18/16
+        	Individual controller = manifestModel.createIndividual(reservation_rs.getNameSpace()+ UUID.randomUUID().toString() + "-orca-controller", NdlCommons.domainControllerClass);
         	controller.addProperty(NdlCommons.hasURLProperty, controller_url);
         	manifest.addProperty(NdlCommons.domainHasController, controller);
         }
