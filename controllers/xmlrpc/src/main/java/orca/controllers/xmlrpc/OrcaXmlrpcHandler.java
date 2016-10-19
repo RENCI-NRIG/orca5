@@ -1643,19 +1643,19 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
         				UnitProperties.UnitEthIPSuffix));
         	
         	if (nodeConfig.getProperty(UnitProperties.ModifyPrefix + index + 
-        			UnitProperties.UnitHostEth) != null)
+        			UnitProperties.UnitHostEthSuffix) != null)
         		modifyProperties.setProperty(UnitProperties.UnitHostEth, nodeConfig.getProperty(UnitProperties.ModifyPrefix + index + 
-        				UnitProperties.UnitHostEth));
+        				UnitProperties.UnitHostEthSuffix));
         	
         	if (nodeConfig.getProperty(UnitProperties.ModifyPrefix + index + 
-        			UnitProperties.UnitEthNetworkUUID) != null) 
+        			UnitProperties.UnitEthNetworkUUIDSuffix) != null) 
         	modifyProperties.setProperty(UnitProperties.UnitEthNetworkUUID, nodeConfig.getProperty(UnitProperties.ModifyPrefix + index + 
-        			UnitProperties.UnitEthNetworkUUID));
+        			UnitProperties.UnitEthNetworkUUIDSuffix));
         	
         	if (nodeConfig.getProperty(UnitProperties.ModifyPrefix + index + 
-        			UnitProperties.UnitEthVlan) != null)
+        			UnitProperties.UnitEthVlanSuffix) != null)
         		modifyProperties.setProperty(UnitProperties.UnitEthVlan, nodeConfig.getProperty(UnitProperties.ModifyPrefix + index + 
-        				UnitProperties.UnitEthVlan));
+        				UnitProperties.UnitEthVlanSuffix));
         	
         	modifyProperties.setProperty(UnitProperties.SliceStitchUUID, activeStitchGuid);
         	
