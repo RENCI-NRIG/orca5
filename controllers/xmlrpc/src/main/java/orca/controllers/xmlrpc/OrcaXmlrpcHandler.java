@@ -49,6 +49,7 @@ import orca.ndl.INdlModifyModelListener.ModifyType;
 import orca.ndl.NdlException;
 import orca.ndl.elements.Device;
 import orca.ndl.elements.DomainElement;
+import orca.ndl.elements.IPAddress;
 import orca.ndl.elements.NetworkElement;
 import orca.ndl.elements.OrcaReservationTerm;
 import orca.security.AbacUtil;
@@ -1422,8 +1423,16 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	
             	modifyProperties.setProperty(UnitProperties.UnitEthMac, ReservationConverter.generateNewMAC(instance));
             	
-            	if (node_properties.containsKey(UnitProperties.UnitEthIP))
-            		modifyProperties.setProperty(UnitProperties.UnitEthIP, (String)node_properties.get(UnitProperties.UnitEthIP));
+            	if (node_properties.containsKey(UnitProperties.UnitEthIP)) {
+            		if (IPAddress.validateCIDR((String)node_properties.get(UnitProperties.UnitEthIP)))
+            			modifyProperties.setProperty(UnitProperties.UnitEthIP, (String)node_properties.get(UnitProperties.UnitEthIP));
+            		else {
+            			logger.error("performSliceStitch(): ip address is not properly formatted: " + 
+            					(String)node_properties.get(UnitProperties.UnitEthIP) + ", unable to perform stitch");
+        				return setError("ip address is not properly formatted: " + 
+            					(String)node_properties.get(UnitProperties.UnitEthIP) + ", unable to perform stitch");
+            		}
+            	}
             	
             	if (netLocal.getProperty(UnitProperties.UnitQuantumNetname) != null)
             		modifyProperties.setProperty(UnitProperties.UnitHostEth, netLocal.getProperty(UnitProperties.UnitQuantumNetname));
@@ -2492,4 +2501,5 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		
 		return true;
 	}
+
 }

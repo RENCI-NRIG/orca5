@@ -3,23 +3,28 @@ package orca.ndl.elements;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import net.jwhoisserver.utils.InetIP2UBI;
+import net.jwhoisserver.utils.InetNetwork;
+import net.jwhoisserver.utils.InetNetworkException;
 import orca.ndl.NdlCommons;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
-import com.hp.hpl.jena.rdf.model.Resource;
-
-import net.jwhoisserver.utils.InetIP2UBI;
-import net.jwhoisserver.utils.InetNetwork;
-import net.jwhoisserver.utils.InetNetworkException;
 
 public class IPAddress extends Label {
 	public String address;
 	public String netmask;
 	public String cidr;
 	public IPAddress base_IP;
+	
+	private static final String IP_PATTERN = "^([\\d]+)[.]([\\d]+)[.]([\\d]+)[.]([\\d]+)$";
+	private static final Pattern ipPattern = Pattern.compile(IP_PATTERN);
+	private static final String CIDR_PATTERN = "^([\\d]+)[.]([\\d]+)[.]([\\d]+)[.]([\\d]+)/([\\d]+)$";
+	private static final Pattern cidrPattern = Pattern.compile(CIDR_PATTERN);
 	
 	public IPAddress(String a,String m) throws UnknownHostException, InetNetworkException{
 		address = a;
@@ -92,5 +97,57 @@ public class IPAddress extends Label {
 		IPAddress new_ip = getNewIpAddress(om, address, netmask, label_uri, i);
 		new_ip.base_IP = this;
 		return new_ip;
+	}
+	
+	private static boolean checkOctet(String i) {
+		try {
+			int ii = Integer.parseInt(i);
+			if ((ii < 0) || (ii > 255)) 
+				return false;
+			return true;
+		} catch(NumberFormatException nfe) {
+			return false;
+		}
+	}
+	
+	private static boolean checkNetmask(String i) {
+		try {
+			int ii = Integer.parseInt(i);
+			if ((ii < 0) || (ii > 32)) 
+				return false;
+			return true;
+		} catch(NumberFormatException nfe) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Validate IP dotted notation W.X.Y.Z
+	 * @param ip
+	 * @return
+	 */
+	public static boolean validateIP(String ip) {
+		Matcher m = ipPattern.matcher(ip);
+		if (m.find()) {
+			//System.out.println(m.group(1) + "-" + m.group(2) + "-" + m.group(3) + "-" + m.group(4));
+			return checkOctet(m.group(1)) && checkOctet(m.group(2)) && 
+					checkOctet(m.group(3)) && checkOctet(m.group(4));
+		} 
+		return false;
+	}
+	
+	/**
+	 * Validate CIDR notation W.X.Y.Z/M
+	 * @param ip
+	 * @return
+	 */
+	public static boolean validateCIDR(String ip) {
+		Matcher m = cidrPattern.matcher(ip);
+		if (m.find()) {
+			return checkOctet(m.group(1)) && checkOctet(m.group(2)) && 
+					checkOctet(m.group(3)) && checkOctet(m.group(4)) && 
+					checkNetmask(m.group(5));
+		}
+		return false;
 	}
 }
