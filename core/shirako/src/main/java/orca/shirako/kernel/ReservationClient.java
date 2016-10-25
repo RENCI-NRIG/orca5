@@ -641,8 +641,10 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
         boolean approved = true;
 
         for (PredecessorState p : redeemPredecessors.values()) {
-            if (p.getReservation().isFailed() || p.getReservation().isClosed()) {
-                logger.error("redeem predecessor reservation is in a terminal state. ignoring it: "
+        	// added check on getReservation being null - this throws NPE after recovery in certain cases. /ib 10/25/2016
+        	// this doesnt guarantee proper recovery, just so it doesn't get stuck in NPE
+            if ((p.getReservation() == null) || p.getReservation().isFailed() || p.getReservation().isClosed()) {
+                logger.error("redeem predecessor reservation is in a terminal state or reservatio is null. ignoring it: "
                         + p.getReservation());
                 continue;
             }
@@ -941,12 +943,12 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
 
         switch (state) {
         case ReservationStates.Active:
-            
+        	
             transition("modify lease",
                     ReservationStates.Active,
                     ReservationStates.ModifyingLease);
             sequenceLeaseOut++;
-
+            
             RPCManager.modifyLease(authority, this, slice.getOwner());
 
             break;
