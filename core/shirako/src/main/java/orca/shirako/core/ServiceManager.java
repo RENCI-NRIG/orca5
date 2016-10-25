@@ -479,18 +479,20 @@ public class ServiceManager extends Actor implements IServiceManager {
             throw new Exception("Unknown reservation: " + rid);
         }
 
-        // Copy modify properties onto approvedResources (for the AM) and onto leasedResources (so SM has access to them)
-        if(rc.getApprovedResources() != null){
+        // Copy modify properties onto rResources (for the AM) and onto leasedResources (so SM has access to them)
+        // NOTE: without recovery resoruces, requesetdResources and approvedResources are the same object. After
+        // recovery they are not, but the AM sees config properties set on resources resourceSet. /ib 10/25/16
+        if(rc.getResources() != null){
         	
         	// All client-side property manipulation happens here
 
         	// Merging modifyProperties into ConfigurationProperties
-        	Properties currConfigProps = rc.getApprovedResources().getConfigurationProperties();        	
+        	Properties currConfigProps = rc.getResources().getConfigurationProperties();        	
         	PropList.mergePropertiesPriority(modifyProps, currConfigProps);
         	
         	//rc.getApprovedResources().setConfigurationProperties(modifyProps);
-        	rc.getApprovedResources().setConfigurationProperties(currConfigProps);
-;
+        	rc.getResources().setConfigurationProperties(currConfigProps);
+
         	
         	// After this point the new modifyProperties are a part of the configuration properties 
         	// of the resource set associated with the reservation; These properties flow from the SM
@@ -499,6 +501,7 @@ public class ServiceManager extends Actor implements IServiceManager {
         	
 			// now same for Leased resources, because look at Converter.attachProperties(ReservationMng mng, IReservation r) /ib - 
 			// Controller or pequod won't see it otherwise 
+        	
 			if (rc.getLeasedResources() != null) {
 				currConfigProps = rc.getLeasedResources().getConfigurationProperties();
 				PropList.mergePropertiesPriority(modifyProps, currConfigProps);
@@ -509,7 +512,6 @@ public class ServiceManager extends Actor implements IServiceManager {
         } else {
         	logger.warn("ServiceManager.modify(): There are no approved resources for " + rid + ", no modify properties will be added");
         }
-        
         if (!recovered) {
             modifyingLease.add((IServiceManagerReservation) rc);
         }else {

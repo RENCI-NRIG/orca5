@@ -132,7 +132,7 @@ public class ReservationStatusUpdateThread implements Runnable {
 		protected StatusChecker.Status check_(IOrcaServiceManager sm, ReservationIDWithModifyIndex l) {
 			if (!(l instanceof ReservationIDWithModifyIndex))
 				return StatusChecker.Status.NOTREADY;
-			
+
 			ReservationIDWithModifyIndex rid = (ReservationIDWithModifyIndex)l;
 			
 			try {
@@ -143,19 +143,22 @@ public class ReservationStatusUpdateThread implements Runnable {
 
 				// has to be Active, None to be worth checking
 				if ((rm.getState() != OrcaConstants.ReservationStateActive) ||
-						(rm.getPendingState() != OrcaConstants.ReservationPendingStateNone))
+						(rm.getPendingState() != OrcaConstants.ReservationPendingStateNone)) {
+					logger.debug("ModifyStatusChecker.check_() - returning NOTREADY for reservation " + 
+						rid.toString() + " in state (" + rm.getState() + ", " + rm.getPendingState() + ")"); 
 					return StatusChecker.Status.NOTREADY;
-				
+				}
+
 				// failed or closed abruptly
 				if ((rm.getState() == OrcaConstants.ReservationStateFailed) ||
 						(rm.getState() == OrcaConstants.ReservationStateClosed))
 					return StatusChecker.Status.NOTOK;
-				
+
 				List<UnitMng> units = sm.getUnits(rid.getReservationID());
 				
 				if (units.size() == 0) 
 					throw new Exception("No units associated with reservation " + rid.getReservationID());
-				
+
 				// use only unit0
 				UnitMng unit0 = units.get(0);
 				// check unit properties for modify status
