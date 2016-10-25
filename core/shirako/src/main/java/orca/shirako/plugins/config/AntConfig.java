@@ -328,7 +328,7 @@ public class AntConfig extends Config {
         String modifyTarget = p.getProperty(UnitProperties.ModifySubcommandPrefix + highestIndex);
         
         if(modifyTarget == null){
-        	modifyTarget = TargetModify;
+        	throw new Exception("No modify subcommand found on reservation properties.");
         }
         
         p.setProperty(Config.PropertyModifySequenceNumber, Integer.toString(highestIndex));
