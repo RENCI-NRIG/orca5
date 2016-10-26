@@ -640,6 +640,9 @@ public class CloudHandler extends MappingHandler{
 				rs1_ind.addProperty(NdlCommons.ip4LocalIPAddressProperty, ip_ind);
 				if(ip_rs.hasProperty(NdlCommons.layerLabelIdProperty))
 					ip_ind.addProperty(NdlCommons.layerLabelIdProperty, ip_rs.getProperty(NdlCommons.layerLabelIdProperty).getString());
+				if(ip_rs.hasProperty(NdlCommons.ip4NetmaskProperty))
+					ip_ind.addProperty(NdlCommons.ip4NetmaskProperty, ip_rs.getProperty(NdlCommons.ip4NetmaskProperty).getString());
+				
 			}
 				
 			if(rs_ont.hasProperty(NdlCommons.hasGUIDProperty))
