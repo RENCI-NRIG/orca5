@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Wed Oct 26 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Modify by adding two p2p inter-rack broadcast links to an existing node
+
 *Wed Oct 12 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Postbootscript fix
 
