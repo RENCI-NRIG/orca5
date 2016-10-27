@@ -1147,7 +1147,7 @@ public class XmlrpcHandlerHelper {
 	}
 	
 	private static final String RESOURCE_DOMAIN_VALUE = "resource.domain.value";
-	private static final String DomainPattern = "(\\w+)(vmsite|Net)/(vm|Net)";
+	private static final String DomainPattern = "(\\w+)(vmsite|Net)/(vm|vlan)";
 	private static final Pattern pattern = Pattern.compile(DomainPattern);
 
 	/**
@@ -1160,6 +1160,9 @@ public class XmlrpcHandlerHelper {
 		Properties resProps = OrcaConverter.fill(mng.getResourceProperties());
 		
 		String domain = resProps.getProperty(RESOURCE_DOMAIN_VALUE);
+
+		if (domain == null)
+			return null;
     
 	    Matcher matcher = pattern.matcher(domain);
 

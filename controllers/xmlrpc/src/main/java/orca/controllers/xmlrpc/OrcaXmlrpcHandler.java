@@ -1380,9 +1380,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // compare domains
             String netDomain = XmlrpcHandlerHelper.getShortDomain(netRes);
             String nodeDomain = XmlrpcHandlerHelper.getShortDomain(nodeRes);
+            if ((netDomain == null) || (nodeDomain == null)) {
+            	logger.error("performSliceStitc(): unable to determine domain of net or node reservation");
+            	return setError("unable to determine domain of net or node reservation");
+            }
             if ((netDomain != null) && (!netDomain.equals(nodeDomain))) {
-            	logger.error("performSliceStitch(): domain mismatch  in to/from reservations or one of domains is null");
-            	return setError("domain mismatch in to/from reservations or one of domains is null");
+            	logger.error("performSliceStitch(): domain mismatch  in to/from reservations");
+            	return setError("domain mismatch in to/from reservations");
             }
             
             // Verify authorization to stitch on the 'to' reservation.
