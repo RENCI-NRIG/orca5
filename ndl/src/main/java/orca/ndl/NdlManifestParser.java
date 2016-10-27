@@ -179,15 +179,17 @@ public class NdlManifestParser extends NdlCommons {
 									conItem.hasProperty(RDF_TYPE, topologyCrossConnectClass) ||
 									(conItem.hasProperty(RDF_TYPE, serverCloudClass) && 
 											conItem.hasLiteral(numCEProperty, 1))) {
-								
-								Resource ceClass = getResourceType(conItem);
-								if (ceClass == null)
-									ceClass = computeElementClass; // default
 
 								if (!checkNodeOrLink(conItem)) 
 									continue;
 								
-								if (ceClass.equals(topologyCrossConnectClass))
+								Resource ceClass = getResourceType(conItem);
+								if (ceClass == null)
+									ceClass = computeElementClass; // default
+								
+								// this check doesn't work if more than one type statement is made about the individual /ib 10/27/16
+								//if (ceClass.equals(topologyCrossConnectClass))
+								if (conItem.hasProperty(RDF_TYPE, topologyCrossConnectClass))
 									listener.ndlCrossConnect(conItem, manifestModel,  
 											getResourceBandwidth(conItem), getResourceLabel(conItem), 
 											getResourceInterfaces(conItem), resourceElement);
