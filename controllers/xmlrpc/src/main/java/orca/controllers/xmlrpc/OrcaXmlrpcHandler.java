@@ -498,14 +498,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					return setError(result);
 				}
 				else{
-					if (!validateSliverListOwner(allRes, userDN)) {
+					try {
+						if (!validateSliverListOwner(allRes, userDN)) {
+							count = 0;
+						}
+					} catch (XmlrpcHandlerHelper.NoOwnerDNOnReservation nodn) {
 						logger.warn("sliceStatus(): unable to check identity on reservations count=" + count + ", sleeping");
 						Thread.sleep(SM_QUERY_WAIT_MS);
 					}
 				}
 			}
 			
-			if ((count == 0) && !validateSliverListOwner(allRes, userDN)) {
+			if ((count <= 0) && !validateSliverListOwner(allRes, userDN)) {
 				logger.error("sliceStatus(): caller " + userDN + " is not the owner of slice " + slice_urn);
 				return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
 			}
