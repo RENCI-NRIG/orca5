@@ -505,7 +505,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				}
 			}
 			
-			if (count == 0) {
+			if ((count == 0) && !validateSliverListOwner(allRes, userDN)) {
 				logger.error("sliceStatus(): caller " + userDN + " is not the owner of slice " + slice_urn);
 				return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
 			}
