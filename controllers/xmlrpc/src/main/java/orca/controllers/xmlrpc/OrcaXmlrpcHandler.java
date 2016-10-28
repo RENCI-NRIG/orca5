@@ -464,6 +464,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		}
 	}
 
+	// how many times we ask SM for reservations before we give up
+	static int SM_QUERY_RETRY_COUNT = 10;
+	// wait 100ms 
+	static int SM_QUERY_WAIT_MS = 200;
+	
 	/**
 	 * Returns the status of the reservations in the input slice
 	 * @param slice_urn
@@ -482,47 +487,57 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (verifyCredentials && !checkWhitelist(userDN)) 
 				return setError(WHITELIST_ERROR);
 			
-			allRes = getSliceReservations(instance, slice_urn, logger);
+			int count = SM_QUERY_RETRY_COUNT;
 			
-			if (allRes == null){
-				result = "Invalid slice " + slice_urn + ", no reservations in the slice";
-				logger.error("sliceStatus(): Invalid slice " + slice_urn  + ", no reservations in the slice");
-				return setError(result);
-			}
-			else{
-				if (!validateSliverListOwner(allRes, userDN)) {
-					logger.error("sliceStatus(): caller " + userDN + " is not the owner of slice " + slice_urn);
-					return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
-				}
-				
-				logger.debug("There are " + allRes.size() + " reservations in the slice with sliceId = " + slice_urn);
-				if (allRes.size() <= 0) {
-					result = "There are no reservations in the slice with sliceId = " + slice_urn;
+			while(count-- > 0) {
+				allRes = getSliceReservations(instance, slice_urn, logger);
+
+				if (allRes == null){
+					result = "Invalid slice " + slice_urn + ", no reservations in the slice";
+					logger.error("sliceStatus(): Invalid slice " + slice_urn  + ", no reservations in the slice");
 					return setError(result);
 				}
-				resultSB.append(VersionUtils.buildVersion);
-				resultSB.append("\n");
-				for (ReservationMng res: allRes){
-					resultSB.append("************************************************************* \n");
-					resultSB.append("[ ");
-
-					resultSB.append(" Reservation UID: ");
-					resultSB.append(res.getReservationID());
-
-					resultSB.append(" | Resource Type: ");
-					resultSB.append(res.getResourceType());  // FIXME: this used to use getApprovedResourceType()
-
-					resultSB.append(" | Units: ");
-					resultSB.append(((LeaseReservationMng)res).getLeasedUnits());
-
-					resultSB.append(" | Status: ");
-					resultSB.append(OrcaConstants.getReservationStateName(res.getState()));
-
-					resultSB.append(" ] \n");
+				else{
+					if (!validateSliverListOwner(allRes, userDN)) {
+						logger.warn("sliceStatus(): unable to check identity on reservations count=" + count + ", sleeping");
+						Thread.sleep(SM_QUERY_WAIT_MS);
+					}
 				}
-
-				resultSB.append(getSliceManifest(instance, slice_urn, logger));
 			}
+			
+			if (count == 0) {
+				logger.error("sliceStatus(): caller " + userDN + " is not the owner of slice " + slice_urn);
+				return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
+			}
+			
+			logger.debug("There are " + allRes.size() + " reservations in the slice with sliceId = " + slice_urn);
+			if (allRes.size() <= 0) {
+				result = "There are no reservations in the slice with sliceId = " + slice_urn;
+				return setError(result);
+			}
+			resultSB.append(VersionUtils.buildVersion);
+			resultSB.append("\n");
+			for (ReservationMng res: allRes){
+				resultSB.append("************************************************************* \n");
+				resultSB.append("[ ");
+
+				resultSB.append(" Reservation UID: ");
+				resultSB.append(res.getReservationID());
+
+				resultSB.append(" | Resource Type: ");
+				resultSB.append(res.getResourceType());  // FIXME: this used to use getApprovedResourceType()
+
+				resultSB.append(" | Units: ");
+				resultSB.append(((LeaseReservationMng)res).getLeasedUnits());
+
+				resultSB.append(" | Status: ");
+				resultSB.append(OrcaConstants.getReservationStateName(res.getState()));
+
+				resultSB.append(" ] \n");
+			}
+
+			resultSB.append(getSliceManifest(instance, slice_urn, logger));
+
 			result = resultSB.toString();
 			
 			return setReturn(result);
