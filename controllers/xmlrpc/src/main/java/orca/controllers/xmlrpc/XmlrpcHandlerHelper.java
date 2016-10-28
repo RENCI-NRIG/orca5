@@ -516,15 +516,20 @@ public class XmlrpcHandlerHelper {
 	}
        
 	public static class NoOwnerDNOnReservation extends Exception {
-
+		String reservation;
+		
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		
+		public NoOwnerDNOnReservation(String resId) {
+			reservation = resId;
+		}
+		
 		@Override
 		public String toString() {
-			return "Owner not specified on reservation";
+			return "Owner not specified on reservation " + reservation;
 		}
 	}
 	
@@ -549,11 +554,11 @@ public class XmlrpcHandlerHelper {
 			if (reservationDN != null)
 				return userDN.equals(reservationDN);
 			else
-				throw new NoOwnerDNOnReservation();
+				throw new NoOwnerDNOnReservation(sliver_guid);
 		} catch(RuntimeException re) {
 			throw re;
 		} catch (Exception e) {
-			throw new RuntimeException("Unable to validate sliver ownership " + sliver_guid + " due to " + e);
+			throw new RuntimeException("Unable to validate sliver ownership due to " + e);
 		}
 	}
 	
@@ -575,11 +580,11 @@ public class XmlrpcHandlerHelper {
 			if (reservationDN != null)
 				return userDN.equals(OrcaConverter.getLocalProperty(rm, XmlrpcOrcaState.XMLRPC_USER_DN));
 			else
-				throw new NoOwnerDNOnReservation();
+				throw new NoOwnerDNOnReservation(rm.getReservationID());
 		} catch(RuntimeException re) {
 			throw re;
 		} catch (Exception e) {
-			throw new RuntimeException("Unable to validate sliver ownership " + rm + " due to " + e);
+			throw new RuntimeException("Unable to validate sliver ownership due to " + e);
 		}
 	}
 	
