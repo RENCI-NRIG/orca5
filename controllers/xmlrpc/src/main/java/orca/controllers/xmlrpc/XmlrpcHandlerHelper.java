@@ -607,7 +607,7 @@ public class XmlrpcHandlerHelper {
 			}
 		}
 		// however DN has to be on at least one reservation
-		throw new NoOwnerDNOnReservation();
+		throw new NoOwnerDNOnReservation("none");
 	}
 	
 	/**
