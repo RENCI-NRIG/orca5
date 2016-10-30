@@ -334,9 +334,9 @@ public class DomainElement extends Device {
 				neighbour_device_rs=neighbor_intf_rs.getProperty(NdlCommons.topologyInterfaceOfProperty).getResource();
 				isStitching=(neighbour_device_rs.getURI().contains(NdlCommons.stitching_domain_str) 
 						||  neighbor_intf_rs.getURI().contains(NdlCommons.stitching_domain_str));
-				System.out.println("neighbour_device_rs="+neighbour_device_rs.getURI());
+				logger.debug("neighbour_device_rs="+neighbour_device_rs.getURI());
 			}
-			System.out.println("neighbor_intf_rs="+neighbor_intf_rs.getURI()
+			logger.debug("neighbor_intf_rs="+neighbor_intf_rs.getURI()
 					+";isStitching="+isStitching);
 			
 			if(local.hasProperty(NdlCommons.topologyInterfaceOfProperty)){
@@ -344,9 +344,9 @@ public class DomainElement extends Device {
 				if(!isStitching)
 					isStitching=(neighbour_device_rs.getURI().contains(NdlCommons.stitching_domain_str)
 							|| local.getURI().contains(NdlCommons.stitching_domain_str));
-				System.out.println("neighbour_device_rs="+neighbour_device_rs.getURI());
+				logger.debug("neighbour_device_rs="+neighbour_device_rs.getURI());
 			}
-			System.out.println("local="+local.getURI()
+			logger.debug("local="+local.getURI()
 					+";isStitching="+isStitching);
 			
 			if(isStitching){

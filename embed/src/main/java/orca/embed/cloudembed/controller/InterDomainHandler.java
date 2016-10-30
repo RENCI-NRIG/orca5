@@ -193,8 +193,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 						error=runEmbedding(source.getInDomain(),edgeRequest, domainResourcePools);
 						if(error!=null)
 							break;
-						//if(source.getCe().getGroup()!=null || source.getCe().getCeGroup()!=null){
-						if(source.getCe().getGroup()!=null){
+						if(source.getCe().getGroup()!=null || (source.getCe().getCeGroup()!=null && source.getCe().getCeGroup().size()>1 )){
+						//if(source.getCe().getGroup()!=null){
 							if(source_link.getFollowedBy()!=null)
 								source_link.getFollowedBy().remove(source);
 							deviceList.remove(source);
@@ -219,8 +219,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 						error=runEmbedding(dest.getInDomain(),edgeRequest, domainResourcePools);
 						if(error!=null)
 							break;
-						//if(dest.getCe().getGroup()!=null || dest.getCe().getCeGroup()!=null){
-						if(dest.getCe().getGroup()!=null){
+						if(dest.getCe().getGroup()!=null || (dest.getCe().getCeGroup()!=null && dest.getCe().getCeGroup().size()>1)){
+						//if(dest.getCe().getGroup()!=null){
 							if(dest_link.getFollowedBy()!=null)
 								dest_link.getFollowedBy().remove(dest);
 							deviceList.remove(dest);

@@ -197,12 +197,24 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		OntResource ne_rs=null;
 		ComputeElement ne = (ComputeElement) cg.getFirst();
 		ComputeElement new_ne=null;
+		String new_ne_url=null,new_ne_name=null;
+		if(cg==null){
+			new_ne_url = rs.getURI();
+			new_ne_name = ne.getName();
+		}else if(cg.size()==1){
+			new_ne_url = rs.getURI();
+			new_ne_name = ne.getName();
+		}else{
+			new_ne_url = rs.getURI()+"/cg";
+			new_ne_name = ne.getName()+"/cg";
+		}
+		
 		LinkedList <Interface> clientInterface = ne.getClientInterface();
 		HashMap <NetworkConnection, Interface> interfaces = ne.getInterfaces();
 		if(!rs.getURI().contains(NdlCommons.stitching_domain_str)){
-			ne_rs=m.createIndividual(rs.getURI(),NdlCommons.computeElementClass);
+			ne_rs=m.createIndividual(new_ne_url,NdlCommons.computeElementClass);
 			ne_rs.addProperty(NdlCommons.inDomainProperty, rs);
-			new_ne = new ComputeElement(m,ne_rs.getURI(),ne.getName());
+			new_ne = new ComputeElement(m,ne_rs.getURI(),new_ne_name);
 			new_ne.setImageInfo(ne.getImage(), ne.getVMImageURL(),ne.getVMImageHash());
 			new_ne.setPostBootScript(ne.getPostBootScript());
 			new_ne.setModify(ne.isModify());

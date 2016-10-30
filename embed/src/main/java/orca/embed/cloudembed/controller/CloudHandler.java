@@ -549,7 +549,16 @@ public class CloudHandler extends MappingHandler{
 		edge_device.setModify(element.isModify());
 		if(ce.getGroup()==null){
 			logger.debug("Adding a single node");
-			LinkedList <Interface> interfaces = ce_element.getClientInterface();
+			try {
+				createInterface(ce_element,edge_device,i,link_device);
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InetNetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/*LinkedList <Interface> interfaces = ce_element.getClientInterface();
 			NetworkConnection ncByInterface=null;
 			Interface new_intf = null;
 			
@@ -583,7 +592,7 @@ public class CloudHandler extends MappingHandler{
 								/*System.out.println("4. CloudHandler label:"+ip_range.getbSet()
 										+";controller bset="+this.controllerAssignedLabel.get(link_device.getDomainName())
 										+";base_ip="+base_ip.address
-										+";hole="+hole);*/
+										+";hole="+hole);
 							}
 							if(base_ip!=null){
 								if(dType.getResourceType().equals("lun"))
@@ -615,7 +624,7 @@ public class CloudHandler extends MappingHandler{
 					ce.addClientInterface(intf);
 					logger.debug("Intf ip:"+intf.getResource()+";ip="+intf.getResource().getProperty(NdlCommons.layerLabelIdProperty));
 				}
-			}
+			}*/
 		}else{				
 			try {
 				createInterface(ce_element,edge_device,i,link_device);
