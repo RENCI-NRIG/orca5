@@ -533,6 +533,24 @@ public class XmlrpcHandlerHelper {
 		}
 	}
 	
+	public static class NotSliceOwnerException extends Exception {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		String sliceName, userDN;
+		
+		public NotSliceOwnerException(String s, String dn) {
+			sliceName = s;
+			userDN = dn;
+		}
+		
+		@Override
+		public String toString() {
+			return "Slice " + sliceName + " is not owned by " + userDN;
+		}
+	}
+	
 	/**
 	 * Validate ownership of a sliver by a given DN
 	 * @param sm
@@ -911,10 +929,11 @@ public class XmlrpcHandlerHelper {
 	 * Get all slice reservations in a standard way
 	 * @param instance
 	 * @param slice_urn
+	 * @param userDN
 	 * @param logger
 	 * @throws OrcaControllerException
 	 */
-	public static List<ReservationMng> getSliceReservations(XmlrpcOrcaState instance, String slice_urn, Logger logger) throws OrcaControllerException {
+	public static List<ReservationMng> getSliceReservations(XmlrpcOrcaState instance, String slice_urn, String userDN, Logger logger) throws OrcaControllerException {
 		
 		IOrcaServiceManager sm = null;
 		XmlrpcControllerSlice ndlSlice = null;
@@ -925,7 +944,7 @@ public class XmlrpcHandlerHelper {
             ndlSlice = instance.getSlice(slice_urn);
             if (ndlSlice == null) {
                     logger.error("getSliceReservations(): unable to find slice " + slice_urn + " among active slices");
-                    throw new OrcaControllerException("ERROR: unable to find slice " + slice_urn + " among active slices");
+                    throw new OrcaControllerException("unable to find slice " + slice_urn + " among active slices");
             }
             // lock the slice
             ndlSlice.lock();
@@ -934,20 +953,23 @@ public class XmlrpcHandlerHelper {
 			
 			sm = instance.getSM();
             
+			if (!ndlSlice.matchUserDN(userDN)) 
+				throw new NotSliceOwnerException(slice_urn, userDN);
+			
             try {
             	allRes = ndlSlice.getAllReservations(sm);
             } catch (Exception e) {
             	logger.error("getSliceReservations(): Exception encountered for " + slice_urn + ": " + e);
-            	throw new OrcaControllerException("ERROR: unable to get reservations in slice status for " + slice_urn);
+            	throw new OrcaControllerException("nable to get reservations in slice status for " + slice_urn);
             } 
             return allRes;
 		} catch (CredentialException ce) {
 			logger.error("getSliceReservations(): Credential Exception: " + ce.getMessage());
-			throw new OrcaControllerException("ERROR: CredentialException encountered: " + ce.getMessage());
+			throw new OrcaControllerException("CredentialException encountered: " + ce.getMessage());
 		} catch (Exception oe) {
 			logger.error("getSliceReservations(): Exception encountered: " + oe.getMessage());	
 			oe.printStackTrace();
-			throw new OrcaControllerException("ERROR: Exception encountered: " + oe);
+			throw new OrcaControllerException(oe.toString());
 		} finally {
 			if (sm != null){
 				instance.returnSM(sm);

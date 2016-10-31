@@ -269,6 +269,12 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 		return userDN;
 	}
 	
+	public boolean matchUserDN(String dn) {
+		if (dn == null)
+			return false;
+		return userDN.equals(dn);
+	}
+	
 	/**
 	 * Get all SSH logins concatenated as a comma-separated string
 	 * @return

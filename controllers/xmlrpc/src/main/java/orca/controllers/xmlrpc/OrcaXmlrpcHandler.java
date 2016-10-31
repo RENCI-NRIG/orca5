@@ -63,7 +63,6 @@ import orca.shirako.common.meta.ResourceProperties;
 import orca.shirako.common.meta.UnitProperties;
 import orca.util.CompressEncode;
 import orca.util.ID;
-import orca.util.PropList;
 import orca.util.ResourceType;
 import orca.util.VersionUtils;
 import orca.util.password.hash.OrcaPasswordHash;
@@ -463,11 +462,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		}
 	}
-
-	// how many times we ask SM for reservations before we give up
-	static int SM_QUERY_RETRY_COUNT = 10;
-	// wait 100ms 
-	static int SM_QUERY_WAIT_MS = 200;
 	
 	/**
 	 * Returns the status of the reservations in the input slice
@@ -487,33 +481,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			if (verifyCredentials && !checkWhitelist(userDN)) 
 				return setError(WHITELIST_ERROR);
 			
-			int count = SM_QUERY_RETRY_COUNT;
-			
-			while(count-- > 0) {
-				allRes = getSliceReservations(instance, slice_urn, logger);
+			allRes = getSliceReservations(instance, slice_urn, userDN, logger);
 
-				if (allRes == null){
-					result = "Invalid slice " + slice_urn + ", no reservations in the slice";
-					logger.error("sliceStatus(): Invalid slice " + slice_urn  + ", no reservations in the slice");
-					return setError(result);
-				}
-				else{
-					try {
-						if (!validateSliverListOwner(allRes, userDN)) {
-							count = 0;
-						}
-					} catch (XmlrpcHandlerHelper.NoOwnerDNOnReservation nodn) {
-						logger.warn("sliceStatus(): unable to check identity on reservations count=" + count + ", sleeping");
-						Thread.sleep(SM_QUERY_WAIT_MS);
-					}
-				}
+			if (allRes == null){
+				result = "Invalid slice " + slice_urn + ", no reservations in the slice";
+				logger.error("sliceStatus(): Invalid slice " + slice_urn  + ", no reservations in the slice");
+				return setError(result);
 			}
-			
-			if ((count <= 0) && !validateSliverListOwner(allRes, userDN)) {
-				logger.error("sliceStatus(): caller " + userDN + " is not the owner of slice " + slice_urn);
-				return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
-			}
-			
+		
 			logger.debug("There are " + allRes.size() + " reservations in the slice with sliceId = " + slice_urn);
 			if (allRes.size() <= 0) {
 				result = "There are no reservations in the slice with sliceId = " + slice_urn;
@@ -602,6 +577,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				ndlSlice.lock();
 				ndlSlice.getStateMachine().transitionSlice(SliceCommand.MODIFY);
 
+				if (!ndlSlice.matchUserDN(userDN)) {
+					logger.error("modifySlice(): user " + userDN + " is not owner of slice " + slice_urn);
+					return setError("user " + userDN + " is not owner of slice " + slice_urn);
+				}
+				
 				RequestWorkflow workflow = ndlSlice.getWorkflow();
 
 				//populate typesMap and abstractModels
@@ -663,11 +643,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					return setError(result_str);
 				}
 				else {
-					// check that the caller's DN is the slice owner on at least one reservation
-					if (!validateSliverListOwner(allRes, userDN)) {
-						logger.error("modifySlice(): caller " + userDN + " is not the owner of slice " + slice_urn);
-						return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
-					}
 					
 					allRes_map = new HashMap <String, ReservationMng>();
 					for(ReservationMng aRes:allRes)
@@ -1171,19 +1146,20 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             
             if (rmng == null) {
             	logger.error("permitSliceStitch(): unable to find reservation " + sliver_guid + " in slice " + slice_urn);
-            	return setError("permitSliceStitch() unable to find reservation " + sliver_guid + " in slice " + slice_urn);
+            	return setError("unable to find reservation " + sliver_guid + " in slice " + slice_urn);
             }
             
-            // check the owner of the reservation against the DN
-            if (!validateSliverOwner(rmng, userDN)) {
-            	logger.error("permitSliceStitch(): user " + userDN + " is not the owner of reservation " + sliver_guid);
-            	return setError("permitSliceStitch() user " + userDN + " is not the owner of reservation " + sliver_guid);
-            }
+            
+			if (!ndlSlice.matchUserDN(userDN)) {
+				logger.error("permitSliceStitch(): user " + userDN + " is not owner of slice " + slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + slice_urn);
+			}
             
             if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
             	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
             	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
             }
+
             
             // compute hash of password and set the property of the reservation
             String hash = OrcaPasswordHash.generatePasswordHash(pass);
@@ -1241,18 +1217,17 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             ReservationMng rmng = sm.getReservation(new ReservationID(sliver_guid));
             
             if (rmng == null) {
-            	logger.error("permitSliceStitch(): unable to find reservation " + sliver_guid + " in slice " + slice_urn);
+            	logger.error("revokeSliceStitch(): unable to find reservation " + sliver_guid + " in slice " + slice_urn);
             	return setError("unable to find reservation " + sliver_guid + " in slice " + slice_urn);
             }
             
-            // check the owner of the reservation against the DN
-            if (!validateSliverOwner(rmng, userDN)) {
-            	logger.error("permitSliceStitch(): user " + userDN + " is not the owner of reservation " + sliver_guid);
-            	return setError("user " + userDN + " is not the owner of reservation " + sliver_guid);
-            }
+			if (!ndlSlice.matchUserDN(userDN)) {
+				logger.error("revokeSliceStitch(): user " + userDN + " is not owner of slice " + slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + slice_urn);
+			}
             
             if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
-            	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            	logger.error("revokeSliceStitch(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
             	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
             }
             
@@ -1343,11 +1318,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	fromNdlSlice.lock();
             }
     		
-            // check the owner of the from reservation against the DN
-            if (!validateSliverOwner(sm, from_sliver_guid, userDN)) {
-            	logger.error("performSliceStitch(): user " + userDN + " is not the owner of reservation " + from_sliver_guid);
-            	return setError("user " + userDN + " is not the owner of reservation " + from_sliver_guid);
-            }
+			if (!fromNdlSlice.matchUserDN(userDN)) {
+				logger.error("performSliceStitch(): user " + userDN + " is not owner of slice " + from_slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + from_slice_urn);
+			}
             
             if (!validateSliverListSlice(toNdlSlice.getAllReservations(sm), Collections.singletonList(to_sliver_guid))) {
             	logger.error("getReservationStates(): reservation " + to_sliver_guid + " is not part of slice " + to_slice_urn);
@@ -1579,11 +1553,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	fromNdlSlice.lock();
             }
     		
-            // check the owner of the from reservation against the DN
-            if (!validateSliverOwner(sm, from_sliver_guid, userDN)) {
-            	logger.error("undoSliceStitch(): user " + userDN + " is not the owner of reservation " + from_sliver_guid);
-            	return setError("user " + userDN + " is not the owner of reservation " + from_sliver_guid);
-            }
+			if (!fromNdlSlice.matchUserDN(userDN)) {
+				logger.error("undoSliceStitch(): user " + userDN + " is not owner of slice " + from_slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + from_slice_urn);
+			}
 
             if (!validateSliverListSlice(toNdlSlice.getAllReservations(sm), Collections.singletonList(to_sliver_guid))) {
             	logger.error("getReservationStates(): reservation " + to_sliver_guid + " is not part of slice " + to_slice_urn);
@@ -1767,16 +1740,20 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				//            	return setError("ERROR: unable to delete deferred slice " + slice_urn + ", please try some time later");
 				//            }
 
+				
+				sm = instance.getSM();
+				
 				// lock the slice
 				ndlSlice.lock();
 
 				if (ndlSlice.isDeadOrClosing())
 					return setError("slice already closed");
 				
-				//if (!ndlSlice.isStable())
-				//	return setError("ERROR: slice is still in transition and cannot be closed");
+				if (!ndlSlice.matchUserDN(userDN)) {
+					logger.error("deleteSlice(): user " + userDN + " is not owner of slice " + slice_urn);
+					return setError("user " + userDN + " is not owner of slice " + slice_urn);
+				}
 				
-				sm = instance.getSM();
 
 				List<ReservationMng> allRes = ndlSlice.getAllReservations(sm);
 				if(allRes == null){
@@ -1784,12 +1761,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
 					logger.debug("No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
 				} else {
-					// check that the caller's DN is the slice owner on at least one reservation
-					if (!validateSliverListOwner(allRes, userDN)) {
-						logger.error("deleteSlice(): caller " + userDN + " is not the owner of slice " + slice_urn);
-						return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
-					}
-					
 					logger.debug("There are " + allRes.size() + " reservations in the slice with urn " + slice_urn + " sliceId = " + ndlSlice.getSliceID());
 					for (ReservationMng r : allRes){
 						try {
@@ -1913,19 +1884,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 			// lock the slice
 			ndlSlice.lock();
-
+			
+			if (!ndlSlice.matchUserDN(userDN)) {
+				logger.error("renewSlice(): user " + userDN + " is not owner of slice " + slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + slice_urn);
+			}
+			
 			List<ReservationMng> allRes =  ndlSlice.getAllReservations(sm);
 			if(allRes == null){
 				ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
 				logger.debug("No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
 				return setError("no reservations in slice " + slice_urn + " sliceId " + ndlSlice.getSliceID());
-			} else {
-				// check that the caller's DN is the slice owner on at least one reservation
-				if (!validateSliverListOwner(allRes, userDN)) {
-					logger.error("renewSlice(): caller " + userDN + " is not the owner of slice " + slice_urn);
-					return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
-				}
-			}
+			} 
 
             if (!ndlSlice.isStableOK() && !ndlSlice.isStableError() && !ndlSlice.isDead()) {
             	logger.info("renewSlice(): unable to extendy slice that is not yet stable, try again later");
@@ -2065,19 +2035,18 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     		 }
     		 // lock the slice
     		 ndlSlice.lock();
+ 			
+ 			if (!ndlSlice.matchUserDN(userDN)) {
+ 				logger.error("getReservationStates(): user " + userDN + " is not owner of slice " + slice_urn);
+ 				return setError("user " + userDN + " is not owner of slice " + slice_urn);
+ 			}
 
     		 List<ReservationMng> allRes =  ndlSlice.getAllReservations(sm);
     		 if(allRes == null){
     			 ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
     			 logger.debug("No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
     			 return setError("no reservations in slice " + slice_urn + " sliceId " + ndlSlice.getSliceID());
-    		 } else {
-    			 // check that the caller's DN is the slice owner on at least one reservation
-    			 if (!validateSliverListOwner(allRes, userDN)) {
-    				 logger.error("getReservationStates(): caller " + userDN + " is not the owner of slice " + slice_urn);
-    				 return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
-    			 }
-    		 }
+    		 } 
     		 
     		 // if list was empty, populate with all reservations
     		 if (sliver_guids.size() == 0) {
@@ -2159,12 +2128,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             }
             // lock the slice
             ndlSlice.lock();
-    		
-            // check the owner of the reservation against the DN
-            if (!validateSliverOwner(sm, sliver_guid, userDN)) {
-            	logger.error("getSliverProperties(): user " + userDN + " is not the owner of reservation " + sliver_guid);
-            	return setError("user " + userDN + " is not the owner of reservation " + sliver_guid);
-            }
+			
+			if (!ndlSlice.matchUserDN(userDN)) {
+				logger.error("getSliverProperties: user " + userDN + " is not owner of slice " + slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + slice_urn);
+			}
             
             if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
             	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
@@ -2237,18 +2205,17 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     		// lock the slice
     		ndlSlice.lock();
 
+			if (!ndlSlice.matchUserDN(userDN)) {
+				logger.error("getReservationSliceStitchInfo(): user " + userDN + " is not owner of slice " + slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + slice_urn);
+			}
+    		
     		List<ReservationMng> allRes =  ndlSlice.getAllReservations(sm);
     		if(allRes == null){
     			ndlSlice.getStateMachine().transitionSlice(SliceCommand.DELETE);
     			logger.debug("getReservationSliceStitchInfo(): No reservations in slice with urn " + slice_urn + " sliceId  " + ndlSlice.getSliceID());
     			return setError("no reservations in slice " + slice_urn + " sliceId " + ndlSlice.getSliceID());
-    		} else {
-    			// check that the caller's DN is the slice owner on at least one reservation
-    			if (!validateSliverListOwner(allRes, userDN)) {
-    				logger.error("getReservationSliceStitchInfo(): caller " + userDN + " is not the owner of slice " + slice_urn);
-    				return setError("caller " + userDN + " is not the owner of slice " + slice_urn);
-    			}
-    		}
+    		} 
     		
             if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), sliver_guids)) {
             	logger.error("getReservationStates(): Some reservations in list " + sliver_guids + " are not part of slice " + slice_urn);
@@ -2330,11 +2297,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             // lock the slice
             ndlSlice.lock();
     		
-            // check the owner of the reservation against the DN
-            if (!validateSliverOwner(sm, sliver_guid, userDN)) {
-            	logger.error("modifySliver(): user " + userDN + " is not the owner of reservation " + sliver_guid);
-            	return setError("user " + userDN + " is not the owner of reservation " + sliver_guid);
-            }
+			if (!ndlSlice.matchUserDN(userDN)) {
+				logger.error("modifySliver(): user " + userDN + " is not owner of slice " + slice_urn);
+				return setError("user " + userDN + " is not owner of slice " + slice_urn);
+			}
             
             if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
             	logger.error("getReservationStates(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
