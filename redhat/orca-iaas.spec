@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Sun Oct 30 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Multi-domain broadcast link with two sites multiple nodes
+
 *Thu Oct 27 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Slice stitch
 
