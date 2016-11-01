@@ -363,6 +363,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Tue Nov 01 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Fixing slice ownership checkes to simplify and speed up
+
 *Sun Oct 30 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Multi-domain broadcast link with two sites multiple nodes
 
