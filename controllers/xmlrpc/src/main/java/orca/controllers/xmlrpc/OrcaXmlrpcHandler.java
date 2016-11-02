@@ -1160,6 +1160,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
             }
 
+            if (rmng.getState() != OrcaConstants.ReservationStateActive)  {
+            	logger.error("permitSliceStitch(): reservation " + rmng.getReservationID() + " is not in Active state: " + 
+            			rmng.getState() + ", unable to revoke stitching permission");
+            	return setError("reservation " + rmng.getReservationID() + " is not in Active state: " + 
+            			rmng.getState() + ", unable to revoke stitching permission");
+            }
             
             // compute hash of password and set the property of the reservation
             String hash = OrcaPasswordHash.generatePasswordHash(pass);
@@ -1229,6 +1235,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             if (!validateSliverListSlice(ndlSlice.getAllReservations(sm), Collections.singletonList(sliver_guid))) {
             	logger.error("revokeSliceStitch(): reservation " + sliver_guid + " is not part of slice " + slice_urn);
             	return setReturn("Reservation " + sliver_guid + " is not part of slice " + slice_urn);
+            }
+            
+            if (rmng.getState() != OrcaConstants.ReservationStateActive)  {
+            	logger.error("revokeSliceStitch(): reservation " + rmng.getReservationID() + " is not in Active state: " + 
+            			rmng.getState() + ", unable to revoke stitching permission");
+            	return setError("reservation " + rmng.getReservationID() + " is not in Active state: " + 
+            			rmng.getState() + ", unable to revoke stitching permission");
             }
             
             Properties lp = new Properties();
@@ -1368,6 +1381,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             			to_sliver_guid + ", unable to perform the stitch");
             	return setError("unable to clearly identify node and network between " + from_sliver_guid + " and " + 
             			to_sliver_guid + ", unable to perform the stitch");
+            }
+            
+            if ((nodeRes.getState() != OrcaConstants.ReservationStateActive) || (netRes.getState() != OrcaConstants.ReservationStateActive)) {
+            	logger.error("performSliceStitch(): one of stitching reservations " + nodeRes.getReservationID() + "/" + 
+            			netRes.getReservationID() + " is not in Active state: " + nodeRes.getState() + "/" + netRes.getState() + 
+            			", unable to stitch slices " + from_slice_urn + " and " + to_slice_urn);
+            	return setError("one of stitching reservations " + nodeRes.getReservationID() + "/" + 
+            			netRes.getReservationID() + " is not in Active state: " + nodeRes.getState() + "/" + netRes.getState() + 
+            			", unable to stitch slices " + from_slice_urn + " and " + to_slice_urn);
             }
             
             // compare domains
@@ -1610,6 +1632,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             			to_sliver_guid + ", unable to perform the stitch");
             	return setError("unable to clearly identify node and network between " + from_sliver_guid + " and " + 
             			to_sliver_guid + ", unable to perform the stitch");
+            }
+            
+            if (nodeRes.getState() != OrcaConstants.ReservationStateActive) {
+            	logger.error("undoSliceStitch(): node stitching reservation " + nodeRes.getReservationID() + 
+            			" is not in Active state: " + nodeRes.getState() + 
+            			", unable to unstitch slices " + from_slice_urn + " and " + to_slice_urn);
+            	return setError("node  stitching reservation " + nodeRes.getReservationID() + 
+            			" is not in Active state: " + nodeRes.getState() + 
+            			", unable to unstitch slices " + from_slice_urn + " and " + to_slice_urn);
             }
             
             // find the guids and modify indices of all stitch operations performed between these two reservations
@@ -2003,7 +2034,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	}
     
      /**
-      * Return unit properties of a sliver in a list of maps of pName, pValue. One map per unit. If sliver_guids list is empty
+      * Return current and pending states of a sliver in a list of maps of pName, pValue. One map per unit. If sliver_guids list is empty
       * state of all reservations in the slice is returned
       * @param slice_urn
       * @param sliver_guid - list of guids

@@ -11,6 +11,7 @@ import java.util.Queue;
 import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
 import orca.controllers.xmlrpc.statuswatch.ReservationIDWithModifyIndex;
 import orca.manage.IOrcaServiceManager;
+import orca.manage.OrcaConstants;
 import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.ReservationMng;
@@ -381,6 +382,10 @@ public class ModifyHelper {
 			ReservationMng rm = sm.getReservation(res);
 			if (rm == null)
 				throw new RuntimeException("modifySliver(): Unable to find reservation " + res);
+			
+			// FIXME: should we enable this check? /ib 11/2/2016
+			//if (rm.getState() != OrcaConstants.ReservationStateActive) 
+			//throw new RuntimeException("modifySliver(): unable to modify reservation " + res + " that is not active (" + rm.getState() + ")");
 			
 			PropertiesMng psmng = rm.getConfigurationProperties();
 			if (psmng == null)
