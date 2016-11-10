@@ -24,8 +24,9 @@ URL: https://github.com/RENCI-NRIG/orca5.git
 # For a "real" SRPM/source tarball, we'll need to have a BuildRequire for Maven,
 # probably from the JPackage repo.
 # Also - we require the Oracle "jdk", rather than using the more standard "java" for a Require.
+# Removing BuildRequires statements, as Ubuntu uses different package naming.
 #BuildRequires:  jdk >= 1.7.0 ant
-BuildRequires:  jdk >= 1.7.0
+#BuildRequires:  jdk >= 1.7.0
 Requires:       jdk >= 1.7.0
 Requires:       orca-iaas-common = %{version}-%{release}
 

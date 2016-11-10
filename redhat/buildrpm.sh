@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Set up tools
-export JAVA_HOME=/usr/java/latest
+if [ -f /etc/redhat-release ]; then
+    export JAVA_HOME=/usr/java/latest
+fi # else assume user has set JAVA_HOME
 export PATH=/opt/jdev/maven/bin:$PATH
 
 # Define top-level build directory
@@ -108,7 +110,9 @@ tar -czf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz ${BASE_SRC_DIR}-${SHORTCOMMIT}
 export MAVEN_ARGS="-s ${ORCA_BLD}/settings.xml"
 
 # Build RPM from tarball
-rpmbuild --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
+# the build scripts use Bash specific functions (pushd/popd), so make sure we use that buildshell
+# /bin/sh defaults to bash on RedHat, but it does not on Ubuntu. 
+rpmbuild --define '_buildshell /bin/bash' --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
 
 BLD_STATUS=$?
 if [ $BLD_STATUS -ne 0 ]; then
