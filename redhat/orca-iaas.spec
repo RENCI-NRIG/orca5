@@ -364,6 +364,9 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Fri Nov 11 2016 Mert Cevik <mcevik@renci.org>
+-Rebuild for updates: Changed extend to not fail on closed/failed reservations and update lease term
+
 *Tue Nov 01 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Fixing slice ownership checkes to simplify and speed up
 
