@@ -1896,7 +1896,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		IOrcaServiceManager sm = null;
 		XmlrpcControllerSlice ndlSlice = null;
     	try { 
-    		Boolean result = false;
 			logger.info("ORCA API renewSlice() invoked");
 			
 			String userDN = validateOrcaCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"},  verifyCredentials, logger);
@@ -1972,6 +1971,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			Calendar extendedEnd = Calendar.getInstance();
 			extendedEnd.setTime(termEndDate);
 			for (ReservationMng r : allRes){
+				if ((r.getState() == OrcaConstants.ReservationStateClosed) || (r.getState() == OrcaConstants.ReservationStateFailed))
+					continue;
+				
 				Calendar resEnd = Calendar.getInstance();
 				resEnd.setTime(new Date(r.getEnd()));
 				if (extendedEnd.before(resEnd)) {
@@ -1987,17 +1989,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					if (!extret) 
 						failedToExtend.add(r);
 				} catch (Exception ex) {
-					result = false;
 					throw new Exception("Failed to extend reservation", ex);
 				}
 			}
 
-			if (failedToExtend.size() == 0) {
-				workflow.modifyTerm(termEndDate);
-				ReservationConverter orc = ndlSlice.getOrc();
-				orc.modifyTerm(workflow.getManifestModel(), workflow.getTerm());
-				result = true;
-			} else {
+			workflow.modifyTerm(termEndDate);
+			ReservationConverter orc = ndlSlice.getOrc();
+			orc.modifyTerm(workflow.getManifestModel(), workflow.getTerm());
+
+			if (failedToExtend.size() != 0) {
 				String extMessage;
 				if (failedToExtend.size() == allRes.size()) {
 					extMessage = "Failed to extend all reservations in slice " + slice_urn;
@@ -2009,11 +2009,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					sb.append(" in slice " + slice_urn);
 					extMessage = sb.toString();
 				}
-				result = false;
 				return setError("renewSlice(): " + extMessage);
 			}
-
-			return setReturn(result);
+			
+			return setReturn(true);
 		} catch (CredentialException ce) {
 			logger.error("renewSlice(): Credential Exception: " + ce.getMessage());
 			return setError("renewSlice(): Credential Exception: " + ce.getMessage());

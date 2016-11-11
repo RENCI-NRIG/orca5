@@ -1545,7 +1545,7 @@ public class ReservationConverter implements LayerConstant {
 		Individual intf_ind=manifestModel.createIndividual(intf_ont.getURI(), NdlCommons.interfaceOntClass);
 		parent_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ind);
 		child_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ind);
-		System.out.println("intf_ont="+intf_ont.getURI());
+		//System.out.println("intf_ont="+intf_ont.getURI());
 		if(intf_ont.hasProperty(NdlCommons.ip4LocalIPAddressProperty)){
 			Resource ip_rs = intf_ont.getProperty(NdlCommons.ip4LocalIPAddressProperty).getResource();
 			Individual ip_ind = manifestModel.createIndividual(ip_rs.getURI(), NdlCommons.IPAddressOntClass);
@@ -1949,7 +1949,11 @@ public class ReservationConverter implements LayerConstant {
 		v_ont.removeAll(p);
 	}
 	
-	public void modifyTerm(OntModel manifestModel,OrcaReservationTerm term){
+	public void modifyTerm(OntModel manifestModel,OrcaReservationTerm term) throws ReservationConverterException {
+		
+		// update the lease term (used when doing modify/add) /ib 11/11/16
+		setLeaseTerm(term, false);
+		
 		String query = OntProcessor.createQueryStringReservationTerm();
 		ResultSet rs = OntProcessor.rdfQuery(manifestModel, query);
 		
