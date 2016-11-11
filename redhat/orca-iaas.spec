@@ -365,7 +365,7 @@ exit 0
 
 %changelog
 *Fri Nov 11 2016 Victor J. Orlikowski <vjo@duke.edu>
--Testing improved GitHub build trigger, take 1.
+-Testing improved GitHub build trigger, take 2.
 
 *Fri Nov 11 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Changed extend to not fail on closed/failed reservations and update lease term
