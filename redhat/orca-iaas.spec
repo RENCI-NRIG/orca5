@@ -364,74 +364,8 @@ exit 0
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
+*Fri Nov 11 2016 Victor J. Orlikowski <vjo@duke.edu>
+-Testing improved GitHub build trigger, take 1.
+
 *Fri Nov 11 2016 Mert Cevik <mcevik@renci.org>
 -Rebuild for updates: Changed extend to not fail on closed/failed reservations and update lease term
-
-*Tue Nov 01 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Fixing slice ownership checkes to simplify and speed up
-
-*Sun Oct 30 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Multi-domain broadcast link with two sites multiple nodes
-
-*Thu Oct 27 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Slice stitch
-
-*Wed Oct 26 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Modify by adding two p2p inter-rack broadcast links to an existing node
-
-*Wed Oct 12 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Postbootscript fix
-
-*Tue Oct 11 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Changes to path building
-
-*Fri Oct 07 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Add image info when converting inter-rack 2-branch MP to P2P
-
-*Tue Oct 04 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Fix unbounded MP request, converting multiple 2-branch MP to P2P
-
-*Mon Sep 26 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Fix MP issues
-
-*Tue Sep 20 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Fix the stitching port
-
-*Mon Sep 19 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Roll back the change made to accommodate stitching port on BEN
-
-*Tue Aug 09 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Add property for VM handler to configure delay for SSH connections
-
-*Mon Aug 08 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Add property for VM handler to configure delay for SSH connections
-
-*Wed Jul 20 2016 Mert Cevik <mcevik@renci.org>
--Rebuild for updates: Fixing logging NPE (triggered by recovery)
-
-*Mon Jul 18 2016 Mert Cevik <mcevik@renci.org>
-- Rebuild for updates: Broadcast link modify
-
-*Sat Jul 02 2016 Mert Cevik <mcevik@renci.org>
-- Rebuild for updates: Remove a possible NPE
-
-*Wed Jun 29 2016 Mert Cevik <mcevik@renci.org>
-- Rebuild for updates: ION control policy change
-
-*Mon Jun 27 2016 Mert Cevik <mcevik@renci.org>
-- Rebuild for updates: Support for unsecured connection to controller on 10080, RDF updates for RCI and UVA-NL
-
-*Wed Jun 22 2016 Mert Cevik <mcevik@renci.org>
-- Rebuild for enabling use of Jolokia servlet
-
-*Tue Jun 14 2016 Ilya Baldin <ibaldin@renci.org>
-- Rebuild for controller testing
-
-*Tue Jan 19 2016 Victor J. Orlikowski <vjo@duke.edu>
-- Rebuild for production deployment, take 2.
-
-*Mon Jan 18 2016 Ilya Baldin <ibaldin@renci.org>
-- Rebuild for production deployment.
-
-*Thu Dec 18 2015 Ilya Baldin <ibaldin@renci.org>
-- Rebuild again to test pubsub at RCI
