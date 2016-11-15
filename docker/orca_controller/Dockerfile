@@ -13,6 +13,8 @@ RUN sed -e '/oom_adj/ s/^#*/#/' -i /etc/init.d/orca_controller-11080
 # Tell Orca which MySQL server to talk to (use a named linked docker container as hostname)
 #RUN sed -e '/mysql.server/s/localhost/orca_mysql/' -i /etc/orca/controller-11080/config/orca.properties
 
+COPY config /etc/orca/controller-11080/config/
+
 EXPOSE 11080 8443
 
 # this comes in via the ONBUILD COPY in orca_common

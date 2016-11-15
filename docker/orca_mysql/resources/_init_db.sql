@@ -1,4 +1,6 @@
 
-CREATE DATABASE orca;
+CREATE DATABASE orca12080;
+CREATE DATABASE orca14080;
 CREATE USER 'orca'@'%';
-GRANT ALL PRIVILEGES ON orca.* to 'orca'@'%';
+GRANT ALL PRIVILEGES ON orca12080.* to 'orca'@'%';
+GRANT ALL PRIVILEGES ON orca14080.* to 'orca'@'%';

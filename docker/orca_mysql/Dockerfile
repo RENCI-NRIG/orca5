@@ -1,7 +1,7 @@
 FROM mysql:5.7.16
 
 LABEL description = "A MySQL server configured with Orca databases." \
-      cmd = "docker run -d --name=orca_mysql orca_mysql"
+      cmd = "docker run -d --name orca-mysql --hostname orca-mysql orca-mysql"
 
 # we could just put these in a volume, instead of having our own image.
 # but this makes it a little easier to run

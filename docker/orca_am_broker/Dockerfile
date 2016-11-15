@@ -13,7 +13,12 @@ RUN yum -y install /tmp/orca-iaas-*.rpm && yum clean all
 RUN sed -e '/oom_adj/ s/^#*/#/' -i /etc/init.d/orca_am+broker-12080
 
 # Tell Orca which MySQL server to talk to (use a named linked docker container as hostname)
-RUN sed -e '/mysql.server/s/localhost/orca_mysql/' -i /etc/orca/am+broker-12080/config/orca.properties
+#RUN sed -e '/mysql.server/s/localhost/orca_mysql/' -i /etc/orca/am+broker-12080/config/orca.properties
+
+RUN cp /etc/orca/am+broker-12080/config/config.xml /etc/orca/am+broker-12080/config/config.xml.rpmnew && \
+    cp /etc/orca/am+broker-12080/config/orca.properties /etc/orca/am+broker-12080/config/orca.properties.rpmnew
+
+COPY config /etc/orca/am+broker-12080/config/
 
 EXPOSE 12080 8443
 
