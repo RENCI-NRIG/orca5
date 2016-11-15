@@ -1,7 +1,8 @@
 FROM orca_common:openjdk
 
 LABEL description = "An Orca AM+Broker configured to talk to a named linked MySQL container" \
-      cmd = "docker run -d --name orca_am_broker --link orca_mysql orca_am_broker"
+      build = "docker build -t orca-am-broker ." \
+      run = "docker run -d --net orca --name orca-am-broker --hostname orca-am-broker orca-am-broker"
 
 COPY resources /tmp/
 #COPY resources/orca-iaas-common-5.0.0-201611101008git5e2079af.x86_64.rpm /tmp/
@@ -19,6 +20,9 @@ RUN cp /etc/orca/am+broker-12080/config/config.xml /etc/orca/am+broker-12080/con
     cp /etc/orca/am+broker-12080/config/orca.properties /etc/orca/am+broker-12080/config/orca.properties.rpmnew
 
 COPY config /etc/orca/am+broker-12080/config/
+COPY ndl /etc/orca/am+broker-12080/ndl/
+
+RUN chown -R geni-orca:nonrenci /etc/orca
 
 EXPOSE 12080 8443
 

@@ -1,7 +1,8 @@
 FROM orca_common:openjdk
 
 LABEL description = "An Orca SM configured to talk to a named linked MySQL container" \
-      cmd = "docker run -d --name orca_sm --link orca_mysql orca_sm"
+      build = "docker build -t orca-sm ." \
+      run = "docker run -d --net orca --name orca-sm --hostname orca-sm orca-sm"
 
 # In the future, hopefully we will use Maven to automatically copy these files after they are built.
 COPY resources /tmp/
@@ -22,6 +23,8 @@ RUN cp /etc/orca/sm-14080/config/config.xml /etc/orca/sm-14080/config/config.xml
     cp /etc/orca/sm-14080/config/orca.properties /etc/orca/sm-14080/config/orca.properties.rpmnew
 
 COPY config /etc/orca/sm-14080/config/
+
+RUN chown -R geni-orca:nonrenci /etc/orca
 
 EXPOSE 14080 8443
 

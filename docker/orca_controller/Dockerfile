@@ -1,7 +1,8 @@
 FROM orca_common:openjdk
 
 LABEL description = "An Orca controller configured to talk to a named linked MySQL container" \
-      cmd = "docker run -d --name orca_controller --link orca_mysql orca_controller"
+      build = "docker build -t orca-controller ." \
+      run = "docker run -d --net orca --name orca-controller --hostname orca-controller -p 11443:11443 orca-controller"
 
 # In the future, hopefully we will use Maven to automatically copy these files after they are built.
 COPY resources /tmp/
@@ -15,7 +16,9 @@ RUN sed -e '/oom_adj/ s/^#*/#/' -i /etc/init.d/orca_controller-11080
 
 COPY config /etc/orca/controller-11080/config/
 
-EXPOSE 11080 8443
+RUN chown -R geni-orca:nonrenci /etc/orca
+
+EXPOSE 11080 8443 11443
 
 # this comes in via the ONBUILD COPY in orca_common
 #COPY ./supervisord.conf /etc/supervisord.conf
