@@ -2,7 +2,13 @@ FROM orca-common:openjdk
 
 LABEL description = "An Orca AM+Broker configured to talk to a named linked MySQL container" \
       build = "docker build -t orca-am-broker ." \
-      run = "docker run -d --net orca --name orca-am-broker --hostname orca-am-broker orca-am-broker"
+      run = "docker run -d \
+                    --net orca \
+                    --name orca-am-broker \
+                    --hostname orca-am-broker \
+                    -v /opt/orca/am+broker/config:/etc/orca/am+broker-12080/config \
+                    -v /opt/orca/am+broker/ndl:/etc/orca/am+broker-12080/ndl \
+                    orca-am-broker"
 
 COPY resources /tmp/
 #COPY resources/orca-iaas-common-5.0.0-201611101008git5e2079af.x86_64.rpm /tmp/
@@ -19,8 +25,8 @@ RUN sed -e '/oom_adj/ s/^#*/#/' -i /etc/init.d/orca_am+broker-12080
 RUN cp /etc/orca/am+broker-12080/config/config.xml /etc/orca/am+broker-12080/config/config.xml.rpmnew && \
     cp /etc/orca/am+broker-12080/config/orca.properties /etc/orca/am+broker-12080/config/orca.properties.rpmnew
 
-COPY config /etc/orca/am+broker-12080/config/
-COPY ndl /etc/orca/am+broker-12080/ndl/
+#COPY config /etc/orca/am+broker-12080/config/
+#COPY ndl /etc/orca/am+broker-12080/ndl/
 
 RUN chown -R geni-orca:nonrenci /etc/orca
 
