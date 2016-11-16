@@ -1,4 +1,4 @@
-FROM orca_common:openjdk
+FROM orca-common:openjdk
 
 LABEL description = "An Orca AM+Broker configured to talk to a named linked MySQL container" \
       build = "docker build -t orca-am-broker ." \
@@ -24,5 +24,13 @@ COPY ndl /etc/orca/am+broker-12080/ndl/
 
 RUN chown -R geni-orca:nonrenci /etc/orca
 
+#VOLUME /etc/orca/am+broker-12080/config /opt/orca/am+broker/config
+#VOLUME /etc/orca/am+broker-12080/ndl /opt/orca/am+broker/ndl
+
 EXPOSE 12080 8443
+
+COPY ./docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["orca_am+broker-12080"]
 

@@ -1,7 +1,8 @@
-#FROM orca_base:oracle
-FROM orca_base:openjdk
+#FROM orca-base:oracle
+FROM orca-base:openjdk
 
-LABEL description = "An Orca image with common Orca libraries / configuration installed" 
+LABEL description = "An Orca image with common Orca libraries / configuration installed" \
+      build = "docker build -t orca-common:openjdk ."
 
 # add geni users and groups
 RUN useradd -ms /bin/bash geni-orca && \
@@ -17,7 +18,3 @@ COPY resources /tmp/
 
 RUN yum -y install /tmp/orca-iaas-*.rpm && yum clean all
 
-
-ONBUILD COPY ./supervisord.conf /etc/supervisord.conf
-
-ENTRYPOINT ["/usr/bin/supervisord", "-n"]

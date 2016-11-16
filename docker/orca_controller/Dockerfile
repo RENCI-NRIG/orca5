@@ -1,4 +1,4 @@
-FROM orca_common:openjdk
+FROM orca-common:openjdk
 
 LABEL description = "An Orca controller configured to talk to a named linked MySQL container" \
       build = "docker build -t orca-controller ." \
@@ -20,7 +20,10 @@ RUN chown -R geni-orca:nonrenci /etc/orca
 
 EXPOSE 11080 8443 11443
 
-# this comes in via the ONBUILD COPY in orca_common
-#COPY ./supervisord.conf /etc/supervisord.conf
+COPY ./docker-entrypoint.sh /
 
-#ENTRYPOINT ["/usr/bin/supervisord", "-n"]
+#RUN sed -e '/eval \$COMMAND_LINE/s/eval/echo/' -i /opt/orca-controller/bin/xmlrpcd
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["orca_controller-11080"]
+
