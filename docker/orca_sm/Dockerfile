@@ -1,4 +1,5 @@
-FROM orca-common:openjdk
+#FROM orca-common:openjdk
+FROM renci/orca-common:${git.commit.id.abbrev}
 
 LABEL description = "An Orca SM configured to talk to a named linked MySQL container" \
       build = "docker build -t orca-sm ." \
@@ -7,7 +8,7 @@ LABEL description = "An Orca SM configured to talk to a named linked MySQL conta
                     --name orca-sm \
                     --hostname orca-sm \
                     -v /opt/orca/sm/config:/etc/orca/sm-14080/config \
-                    orca-sm"
+                    renci/orca-sm"
 
 # In the future, hopefully we will use Maven to automatically copy these files after they are built.
 COPY resources /tmp/
@@ -34,6 +35,8 @@ RUN chown -R geni-orca:nonrenci /etc/orca
 EXPOSE 14080 8443
 
 COPY ./docker-entrypoint.sh /
+
+RUN chmod a+x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["orca_sm-14080"]

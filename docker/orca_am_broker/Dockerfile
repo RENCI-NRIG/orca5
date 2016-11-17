@@ -1,4 +1,5 @@
-FROM orca-common:openjdk
+#FROM orca-common:openjdk
+FROM renci/orca-common:${git.commit.id.abbrev}
 
 LABEL description = "An Orca AM+Broker configured to talk to a named linked MySQL container" \
       build = "docker build -t orca-am-broker ." \
@@ -8,7 +9,7 @@ LABEL description = "An Orca AM+Broker configured to talk to a named linked MySQ
                     --hostname orca-am-broker \
                     -v /opt/orca/am+broker/config:/etc/orca/am+broker-12080/config \
                     -v /opt/orca/am+broker/ndl:/etc/orca/am+broker-12080/ndl \
-                    orca-am-broker"
+                    renci/orca-am-broker"
 
 COPY resources /tmp/
 #COPY resources/orca-iaas-common-5.0.0-201611101008git5e2079af.x86_64.rpm /tmp/
@@ -36,6 +37,8 @@ RUN chown -R geni-orca:nonrenci /etc/orca
 EXPOSE 12080 8443
 
 COPY ./docker-entrypoint.sh /
+
+RUN chmod a+x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["orca_am+broker-12080"]
