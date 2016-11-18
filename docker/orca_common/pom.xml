@@ -59,12 +59,8 @@
 								<directory>${user.home}/orca-build/rpmbuild/RPMS/x86_64/</directory>
 								<targetPath>resources</targetPath>
 								<includes>
-									<include>orca-iaas*.rpm</include>
+									<include>orca-iaas-common*.rpm</include>
 								</includes>
-								<excludes>
-									<exclude>*controller*</exclude>
-									<exclude>*config*</exclude>
-								</excludes>
 							</resource>
 						</resources>
 					</configuration>

@@ -62,8 +62,14 @@
 								<directory>${user.home}/orca-build/rpmbuild/RPMS/x86_64/</directory>
 								<targetPath>resources</targetPath>
 								<includes>
+									<include>orca-iaas-*.rpm</include>
 									<include>orca-iaas-exogeni-am+broker-config*.rpm</include>
 								</includes>
+								<excludes>
+									<exclude>*common*</exclude>
+									<exclude>*controller*</exclude>
+									<exclude>*sm-config*</exclude>
+								</excludes>
 							</resource>
 						</resources>
 					</configuration>
