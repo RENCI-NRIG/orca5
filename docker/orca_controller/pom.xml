@@ -62,7 +62,7 @@
 								<directory>${user.home}/orca-build/rpmbuild/RPMS/x86_64/</directory>
 								<targetPath>resources</targetPath>
 								<includes>
-									<include>orca-iaas-*controller*.rpm</include>
+									<include>orca-iaas-*controller*${git.commit.id.abbrev}*.rpm</include>
 								</includes>
 							</resource>
 						</resources>
