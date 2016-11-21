@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca</groupId>
 	<artifactId>orca</artifactId>
-	<version>5.0-SNAPSHOT</version>
+	<version>5.0</version>
 	<packaging>pom</packaging>
 	<name>Orca</name>
 	<url>https://geni-orca.renci.org/orca-doc</url>
@@ -152,7 +151,8 @@
 		<developerConnection>scm:git:git@github.com:RENCI-NRIG/orca5.git</developerConnection>
 		<connection>scm:git:git@github.com:RENCI-NRIG/orca5.git</connection>
 		<url>https://github.com/RENCI-NRIG/orca5</url>
-	</scm>
+	  <tag>orca-5.0</tag>
+  </scm>
 
 	<issueManagement>
 		<system>trac</system>

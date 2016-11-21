@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.plugins</groupId>
 	<artifactId>ben</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0-SNAPSHOT</version>
+	<version>5.0</version>
 	<name>Orca BEN Plugins</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>plugins</artifactId>
-		<version>5.0-SNAPSHOT</version>
+		<version>5.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -44,24 +43,12 @@
 										<exclude name="*-sources.jar" />
 									</fileset>
 								</copy>
-								<copy file="${maven.dependency.orca.embed.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
-								<copy file="${maven.dependency.org.apache.jena.jena-core.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
-								<copy file="${maven.dependency.org.apache.jena.jena-arq.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
-								<copy file="${maven.dependency.org.apache.jena.jena-iri.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
-								<copy file="${maven.dependency.edu.washington.sig.gleen.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
-								<copy file="${maven.dependency.com.ibm.icu.icu4j.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
+								<copy file="${maven.dependency.orca.embed.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.org.apache.jena.jena-core.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.org.apache.jena.jena-arq.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.org.apache.jena.jena-iri.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.edu.washington.sig.gleen.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.com.ibm.icu.icu4j.jar.path}" todir="target/package/lib" flatten="true" />
 								<!-- all handlers come here -->
 								<mkdir dir="target/package/handlers" />
 								<copy todir="target/package/handlers">
@@ -99,8 +86,7 @@
 								<delete file="target/orca.plugins.ben.tar" />
 								<delete dir="tmp" />
 								<!-- attach the package as an artifact -->
-								<attachArtifact file="target/orca.plugins.ben.tar.gz"
-									classifier="package" type="tar.gz" />
+								<attachArtifact file="target/orca.plugins.ben.tar.gz" classifier="package" type="tar.gz" />
 							</tasks>
 						</configuration>
 						<goals>

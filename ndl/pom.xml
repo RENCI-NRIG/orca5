@@ -1,16 +1,15 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>orca</artifactId>
 		<groupId>orca</groupId>
-		<version>5.0-SNAPSHOT</version>
+		<version>5.0</version>
 	</parent>
 	<name>Orca NDL Processing</name>
 	<groupId>orca</groupId>
 	<artifactId>ndl</artifactId>
-	<version>5.0-SNAPSHOT</version>
+	<version>5.0</version>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,7 +65,7 @@
 		<dependency>
 			<groupId>orca.core</groupId>
 			<artifactId>util</artifactId>
-			<version>5.0-SNAPSHOT</version>
+			<version>5.0</version>
 		</dependency>
 	</dependencies>
 	<build>

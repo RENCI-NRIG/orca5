@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.controllers</groupId>
 	<artifactId>xmlrpc</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0-SNAPSHOT</version>
+	<version>5.0</version>
 	<name>Orca XML-RPC Controller</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>controllers</artifactId>
-		<version>5.0-SNAPSHOT</version>
+		<version>5.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -143,8 +142,7 @@
 								<delete file="target/orca.controllers.xmlrpc.tar" />
 								<copy file="target/orca.controllers.xmlrpc.tar.gz" todir="../../tools/cmdline/startup" />
 
-								<attachArtifact file="target/orca.controllers.xmlrpc.tar.gz"
-									classifier="package" type="tar.gz" />
+								<attachArtifact file="target/orca.controllers.xmlrpc.tar.gz" classifier="package" type="tar.gz" />
 							</tasks>
 						</configuration>
 						<goals>

@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>handlers</artifactId>
-		<version>5.0-SNAPSHOT</version>
+		<version>5.0</version>
 	</parent>
 	<groupId>orca.handlers</groupId>
 	<artifactId>nodeagent2</artifactId>
@@ -65,17 +63,9 @@
 										<exclude name="*-sources.jar" />
 									</fileset>
 								</copy>
-								<copy
-									file="${maven.dependency.org.apache.httpcomponents.httpclient.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
-								<copy
-									file="${maven.dependency.com.googlecode.json-simple.json-simple.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
-								<copy file="${maven.dependency.orca.node-agent2.agentlib.jar.path}"
-									todir="target/package/lib"
-									flatten="true" />
+								<copy file="${maven.dependency.org.apache.httpcomponents.httpclient.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.com.googlecode.json-simple.json-simple.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.orca.node-agent2.agentlib.jar.path}" todir="target/package/lib" flatten="true" />
 
 								<!-- 
 								<mkdir dir="target/package/handlers" />
@@ -103,8 +93,7 @@
 
 								<delete file="target/${name.prefix}.tar" />
 
-								<attachArtifact file="target/${name.prefix}.tar.gz"
-									classifier="package" type="tar.gz" />
+								<attachArtifact file="target/${name.prefix}.tar.gz" classifier="package" type="tar.gz" />
 							</tasks>
 						</configuration>
 						<goals>

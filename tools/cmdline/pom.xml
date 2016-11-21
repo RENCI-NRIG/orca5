@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.tools</groupId>
 	<artifactId>cmdline</artifactId>
@@ -10,7 +9,7 @@
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>tools</artifactId>
-		<version>5.0-SNAPSHOT</version>
+		<version>5.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
@@ -34,7 +33,7 @@
 		<dependency>
 			<groupId>orca.dependencies</groupId>
 			<artifactId>ant-contrib</artifactId>
-			<version>1.0</version>
+			<version>5.0</version>
 			<type>pom</type>
 		</dependency>
 	</dependencies>
@@ -89,97 +88,19 @@
 										<include name="*tar.gz" />
 									</fileset>
 								</delete>
-								<resolveArtifact
-									groupId="orca.core"
-									artifactId="handlers"
-									classifier="package"
-									type="tar.gz"
-									version="${project.version}"
-									tofile="startup/package-handlers-core.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="ec2"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.ec2.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="xcat"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.xcat.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers.network"
-									artifactId="nsi"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.network.nsi.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers.network"
-									artifactId="oscars"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.network.oscars.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="nodeagent2"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.nodeagent2.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers.network"
-									artifactId="providers"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.network.providers.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="network"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.network.tar.gz" />
-								<resolveArtifact
-									groupId="orca.plugins"
-									artifactId="ben"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.plugins.ben.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="ibm_ds"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.ibm_ds.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="storage_service"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.storage_service.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="nodeagent2"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.nodeagent2.tar.gz" />
-								<resolveArtifact
-									groupId="orca.handlers"
-									artifactId="slurm"
-									version="${project.version}"
-									classifier="package"
-									type="tar.gz"
-									tofile="startup/package-orca.handlers.slurm.tar.gz" />
+								<resolveArtifact groupId="orca.core" artifactId="handlers" classifier="package" type="tar.gz" version="${project.version}" tofile="startup/package-handlers-core.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="ec2" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.ec2.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="xcat" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.xcat.tar.gz" />
+								<resolveArtifact groupId="orca.handlers.network" artifactId="nsi" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.network.nsi.tar.gz" />
+								<resolveArtifact groupId="orca.handlers.network" artifactId="oscars" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.network.oscars.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="nodeagent2" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.nodeagent2.tar.gz" />
+								<resolveArtifact groupId="orca.handlers.network" artifactId="providers" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.network.providers.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="network" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.network.tar.gz" />
+								<resolveArtifact groupId="orca.plugins" artifactId="ben" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.plugins.ben.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="ibm_ds" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.ibm_ds.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="storage_service" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.storage_service.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="nodeagent2" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.nodeagent2.tar.gz" />
+								<resolveArtifact groupId="orca.handlers" artifactId="slurm" version="${project.version}" classifier="package" type="tar.gz" tofile="startup/package-orca.handlers.slurm.tar.gz" />
 							</tasks>
 						</configuration>
 

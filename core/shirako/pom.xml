@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.core</groupId>
 	<artifactId>shirako</artifactId>
@@ -8,7 +7,7 @@
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>core</artifactId>
-		<version>5.0-SNAPSHOT</version>
+		<version>5.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -140,8 +139,7 @@
 										<include name="orca/shirako/common/**/*" />
 									</fileset>
 								</jar>
-								<attachArtifact file="${client.jar}" classifier="client"
-									type="jar" />
+								<attachArtifact file="${client.jar}" classifier="client" type="jar" />
 							</tasks>
 						</configuration>
 						<goals>
