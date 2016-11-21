@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.handlers</groupId>
 	<artifactId>ec2</artifactId>
@@ -88,7 +89,8 @@
 								<gzip zipfile="target/${name.prefix}.tar.gz" src="target/${name.prefix}.tar" />
 								<delete file="target/${name.prefix}.tar" />
 
-								<attachArtifact file="target/${name.prefix}.tar.gz" classifier="package" type="tar.gz" />
+								<attachArtifact file="target/${name.prefix}.tar.gz"
+									classifier="package" type="tar.gz" />
 
 							</tasks>
 						</configuration>

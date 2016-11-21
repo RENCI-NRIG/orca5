@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.core</groupId>
 	<artifactId>handlers</artifactId>
@@ -28,7 +29,7 @@
 									<fileset dir="target">
 										<include name="*.jar" />
 										<exclude name="*test*.jar" />
-										<exclude name="*-sources.jar" />                
+										<exclude name="*-sources.jar" />
 									</fileset>
 								</copy>
 								<mkdir dir="target/package/handlers" />
@@ -51,15 +52,16 @@
 								<delete file="target/orca.handlers.common.tar" />
 								<delete dir="tmp" />
 								<!-- attach the tar.gz file to the artifacts set -->
-								<attachArtifact file="target/orca.handlers.common.tar.gz" classifier="package" type="tar.gz" />
-						</tasks>
+								<attachArtifact file="target/orca.handlers.common.tar.gz"
+									classifier="package" type="tar.gz" />
+							</tasks>
 						</configuration>
 						<goals>
 							<goal>run</goal>
 						</goals>
 					</execution>
-			</executions>        
-			</plugin>      
+				</executions>
+			</plugin>
 		</plugins>
-	</build>    
+	</build>
 </project>

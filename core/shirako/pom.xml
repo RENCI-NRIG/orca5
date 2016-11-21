@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.core</groupId>
 	<artifactId>shirako</artifactId>
@@ -72,9 +73,9 @@
 			<artifactId>spring-ws-core</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework.ws</groupId>
-            <artifactId>spring-ws-support</artifactId>
-        </dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-support</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -139,7 +140,8 @@
 										<include name="orca/shirako/common/**/*" />
 									</fileset>
 								</jar>
-								<attachArtifact file="${client.jar}" classifier="client" type="jar" />
+								<attachArtifact file="${client.jar}" classifier="client"
+									type="jar" />
 							</tasks>
 						</configuration>
 						<goals>

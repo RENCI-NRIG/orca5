@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.tools</groupId>
 	<artifactId>axis2repository</artifactId>
@@ -33,10 +34,14 @@
 								<property name="plugin.classpath" refid="maven.plugin.classpath" />
 
 								<property name="maven.project.build.directory" value="${project.build.directory}" />
-								<property name="maven.project.build.sourceDirectory" value="${project.build.sourceDirectory}" />
-								<property name="maven.project.build.testSourceDirectory" value="${project.build.testSourceDirectory}" />
-								<property name="maven.project.build.outputDirectory" value="${project.build.outputDirectory}" />
-								<property name="maven.project.build.testOutputDirectory" value="${project.build.testOutputDirectory}" />
+								<property name="maven.project.build.sourceDirectory"
+									value="${project.build.sourceDirectory}" />
+								<property name="maven.project.build.testSourceDirectory"
+									value="${project.build.testSourceDirectory}" />
+								<property name="maven.project.build.outputDirectory"
+									value="${project.build.outputDirectory}" />
+								<property name="maven.project.build.testOutputDirectory"
+									value="${project.build.testOutputDirectory}" />
 								<property name="maven.project.version" value="${project.version}" />
 
 								<ant antfile="${basedir}/maven_build.xml">
@@ -61,10 +66,14 @@
 								<property name="plugin.classpath" refid="maven.plugin.classpath" />
 
 								<property name="maven.project.build.directory" value="${project.build.directory}" />
-								<property name="maven.project.build.sourceDirectory" value="${project.build.sourceDirectory}" />
-								<property name="maven.project.build.testSourceDirectory" value="${project.build.testSourceDirectory}" />
-								<property name="maven.project.build.outputDirectory" value="${project.build.outputDirectory}" />
-								<property name="maven.project.build.testOutputDirectory" value="${project.build.testOutputDirectory}" />
+								<property name="maven.project.build.sourceDirectory"
+									value="${project.build.sourceDirectory}" />
+								<property name="maven.project.build.testSourceDirectory"
+									value="${project.build.testSourceDirectory}" />
+								<property name="maven.project.build.outputDirectory"
+									value="${project.build.outputDirectory}" />
+								<property name="maven.project.build.testOutputDirectory"
+									value="${project.build.testOutputDirectory}" />
 								<property name="maven.project.version" value="${project.version}" />
 
 								<ant antfile="${basedir}/maven_build.xml">

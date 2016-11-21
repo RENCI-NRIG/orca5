@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca</groupId>
 	<artifactId>orca</artifactId>
@@ -42,8 +43,8 @@
 	</organization>
 
 	<!-- NOTE: if you want to pass any of these properties down to ant files 
-	using the ant profile you will have to add them explicitly to the definition 
-	of the ant profile. -->
+		using the ant profile you will have to add them explicitly to the definition 
+		of the ant profile. -->
 	<properties>
 		<orca.tools.build.version>1.0</orca.tools.build.version>
 		<orca.repository.id>geni-orca-libs</orca.repository.id>
@@ -88,8 +89,9 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<!--  FIXME: get rid of these repositories. Move what we need from them into the orca nexus repo -->
-		<!--
+		<!-- FIXME: get rid of these repositories. Move what we need from them 
+			into the orca nexus repo -->
+		<!-- 
 		<repository>
 			<id>codehaus.mojo</id>
 			<name>Codehaus Mojos</name>
@@ -133,7 +135,7 @@
 		<snapshotRepository>
 			<id>${orca.snap.repository.id}</id>
 			<name>Orca Project Maven Snapshot Repository</name>
-                        <url>${orca.snap.repository.url}</url>
+			<url>${orca.snap.repository.url}</url>
 		</snapshotRepository>
 		<repository>
 			<id>${orca.rel.repository.id}</id>
@@ -158,10 +160,10 @@
 	</issueManagement>
 
 	<!-- Place the version of every dependency needed by an ORCA component in 
-	the dependencyManagement section. Then reference the dependency only using 
-	groupId and artifactId without version. If you ever want to update the dependency 
-	version, then all you need to do is change the version in the dependencyManagement 
-	section. -->
+		the dependencyManagement section. Then reference the dependency only using 
+		groupId and artifactId without version. If you ever want to update the dependency 
+		version, then all you need to do is change the version in the dependencyManagement 
+		section. -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -170,9 +172,9 @@
 				<version>4.10</version>
 			</dependency>
 			<dependency>
-			      <groupId>org.ini4j</groupId>
-			      <artifactId>ini4j</artifactId>
-			      <version>0.5.4</version>
+				<groupId>org.ini4j</groupId>
+				<artifactId>ini4j</artifactId>
+				<version>0.5.4</version>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
@@ -316,10 +318,10 @@
 				<version>${spring.ws.version}</version>
 			</dependency>
 			<dependency>
-            	<groupId>org.springframework.ws</groupId>
-            	<artifactId>spring-ws-support</artifactId>
-           		<version>${spring.ws.version}</version>
-        	</dependency>
+				<groupId>org.springframework.ws</groupId>
+				<artifactId>spring-ws-support</artifactId>
+				<version>${spring.ws.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty.aggregate</groupId>
 				<artifactId>jetty-all-server</artifactId>
@@ -329,27 +331,27 @@
 				<groupId>org.reflections</groupId>
 				<artifactId>reflections</artifactId>
 				<version>0.9.9-RC1</version>
-			</dependency>      
-			<dependency>
-			  <groupId>com.beust</groupId>
-			  <artifactId>jcommander</artifactId>
-			  <version>1.30</version>
 			</dependency>
-                <dependency>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jcl-over-slf4j</artifactId>
-                        <version>1.7.5</version>
-                </dependency>
-                <dependency>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                        <version>1.7.5</version>
-                </dependency>
-                <dependency>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                        <version>1.7.5</version>
-                </dependency>
+			<dependency>
+				<groupId>com.beust</groupId>
+				<artifactId>jcommander</artifactId>
+				<version>1.30</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>1.7.5</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.5</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.5</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -359,27 +361,27 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-                        <dependency>
-                        <groupId>org.ini4j</groupId>
-                        <artifactId>ini4j</artifactId>
-                        <version>0.5.4</version>
-                </dependency>
+		<dependency>
+			<groupId>org.ini4j</groupId>
+			<artifactId>ini4j</artifactId>
+			<version>0.5.4</version>
+		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
-                <dependency>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jcl-over-slf4j</artifactId>
-                </dependency>
-                <dependency>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                </dependency>
-                <dependency>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
 	</dependencies>
 
 	<!-- Plugin configurations -->
@@ -512,7 +514,8 @@
 		</extensions>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -586,7 +589,7 @@
 					</plugin>
 					<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-checkstyle-plugin</artifactId> 
 						<configuration> <configLocation>orca/checkstyle.xml</configLocation> <headerLocation>orca/header.txt</headerLocation> 
-							<excludes>**/beans/**/*.java</excludes> </configuration> </plugin> -->
+						<excludes>**/beans/**/*.java</excludes> </configuration> </plugin> -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-pmd-plugin</artifactId>
@@ -642,12 +645,12 @@
 					</plugin>
 
 					<!-- Create a binary distribution: this was copied from maven's pom 
-					file. Update it!!! Info about this plugin: http://maven.apache.org/plugins/maven-assembly-plugin/ 
-					<plugin> <artifactId>maven-assembly-plugin</artifactId> <inherited>false</inherited> 
+						file. Update it!!! Info about this plugin: http://maven.apache.org/plugins/maven-assembly-plugin/ 
+						<plugin> <artifactId>maven-assembly-plugin</artifactId> <inherited>false</inherited> 
 						<configuration> <descriptors> <descriptor>src/main/assembly/src.xml</descriptor> 
-							</descriptors> <tarLongFileMode>gnu</tarLongFileMode> <finalName>maven-${project.version}-src</finalName> 
-								</configuration> <executions> <execution> <id>make-assembly</id> <phase>package</phase> 
-								<goals> <goal>single</goal> </goals> </execution> </executions> </plugin> -->
+						</descriptors> <tarLongFileMode>gnu</tarLongFileMode> <finalName>maven-${project.version}-src</finalName> 
+						</configuration> <executions> <execution> <id>make-assembly</id> <phase>package</phase> 
+						<goals> <goal>single</goal> </goals> </execution> </executions> </plugin> -->
 				</plugins>
 			</build>
 		</profile>
@@ -663,10 +666,10 @@
 						<configuration>
 							<tasks>
 								<!-- ant code embedded in this pom file can access any maven property, 
-								even properties indicating the path to a given depdency's jar file. However, 
-								ant code in an external file invoked by the antrun plugin will not inherit 
-								any of these properties. To make sure your ant file can access a given property, 
-								you will have to specify it here explicitly. -->
+									even properties indicating the path to a given depdency's jar file. However, 
+									ant code in an external file invoked by the antrun plugin will not inherit 
+									any of these properties. To make sure your ant file can access a given property, 
+									you will have to specify it here explicitly. -->
 
 								<property name="compile_classpath" refid="maven.compile.classpath" />
 								<property name="runtime_classpath" refid="maven.runtime.classpath" />
