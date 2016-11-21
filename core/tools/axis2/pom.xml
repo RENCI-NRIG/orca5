@@ -6,14 +6,14 @@
 	<parent>
 		<groupId>orca.core</groupId>
 		<artifactId>tools</artifactId>
-		<version>5.0</version>
+		<version>5.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
 		<dependency>
 			<groupId>orca.dependencies</groupId>
 			<artifactId>axis2</artifactId>
-			<version>5.0</version>
+			<version>1.0</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>

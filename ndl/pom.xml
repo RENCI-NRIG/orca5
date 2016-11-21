@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>orca</artifactId>
 		<groupId>orca</groupId>
-		<version>5.0</version>
+		<version>5.0.1-SNAPSHOT</version>
 	</parent>
 	<name>Orca NDL Processing</name>
 	<groupId>orca</groupId>
 	<artifactId>ndl</artifactId>
-	<version>5.0</version>
+	<version>5.0.1-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>orca.core</groupId>
 			<artifactId>util</artifactId>
-			<version>5.0</version>
+			<version>5.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
