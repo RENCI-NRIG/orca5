@@ -1,6 +1,6 @@
 #FROM orca-base:oracle
 #FROM orca-base:openjdk
-FROM renci/orca-base:${git.commit.id.abbrev}
+FROM renci/orca-base:${git.commit.id.abbrev}-${orca.docker.jre.vendor}
 
 LABEL description = "An Orca image with common Orca libraries / configuration installed" \
       build = "docker build -t orca-common:openjdk ."

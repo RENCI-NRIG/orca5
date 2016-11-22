@@ -23,6 +23,11 @@
 		<module>orca_sm</module>
 		<module>orca_controller</module>
 	</modules>
+	
+	<properties>
+		<!-- use either 'oracle' or 'openjdk' for JRE runtime vendor -->
+		<orca.docker.jre.vendor>openjdk</orca.docker.jre.vendor>
+	</properties>
 
 	<build>
 		<plugins>

@@ -1,5 +1,5 @@
 #FROM orca-common:openjdk
-FROM renci/orca-common:${git.commit.id.abbrev}
+FROM renci/orca-common:${git.commit.id.abbrev}-${orca.docker.jre.vendor}
 
 LABEL description = "An Orca AM+Broker configured to talk to a named linked MySQL container" \
       build = "docker build -t orca-am-broker ." \
