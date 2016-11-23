@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>orca</groupId>
@@ -34,9 +35,8 @@
 			<version>1.1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>orca.node-agent2</groupId>
+			<groupId>org.renci.node-agent2</groupId>
 			<artifactId>agentlib</artifactId>
-			<version>0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
@@ -63,28 +63,23 @@
 										<exclude name="*-sources.jar" />
 									</fileset>
 								</copy>
-								<copy file="${maven.dependency.org.apache.httpcomponents.httpclient.jar.path}" todir="target/package/lib" flatten="true" />
-								<copy file="${maven.dependency.com.googlecode.json-simple.json-simple.jar.path}" todir="target/package/lib" flatten="true" />
-								<copy file="${maven.dependency.orca.node-agent2.agentlib.jar.path}" todir="target/package/lib" flatten="true" />
+								<copy
+									file="${maven.dependency.org.apache.httpcomponents.httpclient.jar.path}"
+									todir="target/package/lib" flatten="true" />
+								<copy
+									file="${maven.dependency.com.googlecode.json-simple.json-simple.jar.path}"
+									todir="target/package/lib" flatten="true" />
+								<copy file="${maven.dependency.org.renci.node-agent2.agentlib.jar.path}"
+									todir="target/package/lib" flatten="true" />
 
-								<!-- 
-								<mkdir dir="target/package/handlers" />
-								<copy todir="target/package/handlers">
-									<fileset dir="src/main/resources/orca/handlers" />
-								</copy>
-								-->
+								<!-- <mkdir dir="target/package/handlers" /> <copy todir="target/package/handlers"> 
+									<fileset dir="src/main/resources/orca/handlers" /> </copy> -->
 
 								<copy file="resources/scripts/install.sh" todir="target/package" />
 
-								<!-- 
-								<mkdir dir="target/package/web" />
-								<copy todir="target/package/web">
-									<fileset dir="resources/web">
-										<include name="**/*" />
-									</fileset>
-								</copy>
-								-->
-								
+								<!-- <mkdir dir="target/package/web" /> <copy todir="target/package/web"> 
+									<fileset dir="resources/web"> <include name="**/*" /> </fileset> </copy> -->
+
 								<copy file="resources/package.xml" todir="target/package" />
 
 								<tar tarfile="target/${name.prefix}.tar" basedir="target/package" />
@@ -93,7 +88,8 @@
 
 								<delete file="target/${name.prefix}.tar" />
 
-								<attachArtifact file="target/${name.prefix}.tar.gz" classifier="package" type="tar.gz" />
+								<attachArtifact file="target/${name.prefix}.tar.gz"
+									classifier="package" type="tar.gz" />
 							</tasks>
 						</configuration>
 						<goals>
