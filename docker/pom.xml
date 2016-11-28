@@ -1,0 +1,82 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>docker-orca</artifactId>
+	<name>Orca Docker sub-modules</name>
+	<packaging>pom</packaging>
+
+
+	<parent>
+		<groupId>orca</groupId>
+		<artifactId>orca</artifactId>
+		<version>5.0-SNAPSHOT</version>
+	</parent>
+
+	<modules>
+		<module>orca_mysql</module>
+		<module>orca_base</module>
+		<module>orca_common</module>
+		<module>orca_am_broker</module>
+		<module>orca_sm</module>
+		<module>orca_controller</module>
+	</modules>
+	
+	<properties>
+		<!-- use either 'oracle' or 'openjdk' for JRE runtime vendor -->
+		<orca.docker.jre.vendor>oracle</orca.docker.jre.vendor>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<!-- If you'd like to tell the plugin where your .git directory is, 
+						use this setting, otherwise we'll perform a search trying to figure out the 
+						right directory. It's better to add it explicitly IMHO. -->
+					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+
+					<!-- that's the default value, you don't have to set it -->
+					<prefix>git</prefix>
+
+					<!-- that's the default value -->
+					<dateFormat>dd.MM.yyyy '@' HH:mm:ss z</dateFormat>
+
+					<!-- <verbose>true</verbose> -->
+
+					<generateGitPropertiesFile>false</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+
+					<skipPoms>false</skipPoms>
+
+				</configuration>
+
+			</plugin>
+			<!-- END OF GIT COMMIT ID PLUGIN CONFIGURATION -->
+
+			<!-- other plugins -->
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.13</version>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
