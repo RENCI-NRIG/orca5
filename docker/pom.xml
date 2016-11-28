@@ -26,7 +26,7 @@
 	
 	<properties>
 		<!-- use either 'oracle' or 'openjdk' for JRE runtime vendor -->
-		<orca.docker.jre.vendor>openjdk</orca.docker.jre.vendor>
+		<orca.docker.jre.vendor>oracle</orca.docker.jre.vendor>
 	</properties>
 
 	<build>

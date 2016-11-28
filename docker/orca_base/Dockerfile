@@ -6,7 +6,7 @@ LABEL description = "A base Orca image, with common packages installed, includin
 RUN yum -y install epel-release; yum clean all
 RUN yum -y install initscripts glibc nss-softokn-freebl && yum clean all
 
-ENV oracle_rpm jre-7u79-linux-x64.rpm
+ENV oracle_rpm jdk-7u79-linux-x64.rpm
 
 # conditional build and tag from Maven: oracle
 RUN if [ "${orca.docker.jre.vendor}" == "oracle" ]; then \

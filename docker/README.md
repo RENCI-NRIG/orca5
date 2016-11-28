@@ -46,6 +46,12 @@ docker run -d \
            renci/orca-controller
 ```
 
+### Examining a running container
+You may find that you need to be able to get shell access inside a running container, for example to look at the Orca logs.  You can use the `docker exec` command start a shell inside a running container.  Just subsititute the name of the container you need:
+```
+docker exec -it orca-sm bash
+```
+
 ## Dependencies
 1. Docker must be installed on your system.  You will either need to run the above commands with sudo / as root, or add your current user to the 'docker' group.
 1. Orca needs many configuration files to operate.  These need to be volume mounted into the running containers (the `-v` options above).
