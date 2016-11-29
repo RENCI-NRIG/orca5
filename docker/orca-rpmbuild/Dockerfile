@@ -27,14 +27,6 @@ ENV ANT_HOME /opt/apache-ant-1.9.7
 # Setup PATH variable with Maven and Ant
 ENV PATH /opt/apache-maven-3.3.9/bin:$PATH:$ANT_HOME/bin
 
-## Add Ant libraries
-#ENV ant_contrib_tgz ant-contrib-1.0b3-bin.tar.gz
-#
-#RUN cd /opt/apache-ant-1.9.7/lib && \
-    #curl --location "http://downloads.sourceforge.net/project/ant-contrib/ant-contrib/1.0b3/${ant_contrib_tgz}" | tar zx ant-contrib/ant-contrib-1.0b3.jar --strip=1
-#
-#COPY resources /opt/apache-ant-1.9.7/lib/
-
 # The Orca source must be volume mounted from the local/host machine
 #  (at the `docker run` command)
 #  for this entrypoint to work.

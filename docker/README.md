@@ -20,8 +20,8 @@ docker run -d \
            --net orca \
            --name orca-am-broker \
            --hostname orca-am-broker \
-           -v /opt/orca/am+broker/config:/etc/orca/am+broker-12080/config \
-           -v /opt/orca/am+broker/ndl:/etc/orca/am+broker-12080/ndl \
+           --volume /opt/orca/am+broker/config:/etc/orca/am+broker-12080/config \
+           --volume /opt/orca/am+broker/ndl:/etc/orca/am+broker-12080/ndl \
            renci/orca-am-broker
 ```
 
@@ -31,7 +31,7 @@ docker run -d \
            --net orca \
            --name orca-sm \
            --hostname orca-sm \
-           -v /opt/orca/sm/config:/etc/orca/sm-14080/config \
+           --volume /opt/orca/sm/config:/etc/orca/sm-14080/config \
            renci/orca-sm
 ```
 
@@ -41,8 +41,8 @@ docker run -d \
            --net orca \
            --name orca-controller \
            --hostname orca-controller \
-           -p 11443:11443 \
-           -v /opt/orca/controller/config:/etc/orca/controller-11080/config \
+           --publish 11443:11443 \
+           --volume /opt/orca/controller/config:/etc/orca/controller-11080/config \
            renci/orca-controller
 ```
 
@@ -54,17 +54,22 @@ docker exec -it orca-sm bash
 
 ## Dependencies
 1. Docker must be installed on your system.  You will either need to run the above commands with sudo / as root, or add your current user to the 'docker' group.
-1. Orca needs many configuration files to operate.  These need to be volume mounted into the running containers (the `-v` options above).
+1. Orca needs many configuration files to operate.  These need to be volume mounted into the running containers (the `--volume` options above).
 1. The Orca RPMs must be built before the Docker images can be built.  See the `redhat` module for more details.
 1. Before you run your first Orca docker container, you will need to create a docker network for Orca to use (referenced in the above docker run commands): `docker network create orca`
 
 ### Using Docker to build RPMs
+This container makes use of your local/host files in order to build the Orca RPMs from your working copy of the source code.  In each of the below `--volume` statements below, the container expects to find necessary files in the location specified to the right of the `:`.  You may modify the left-side of the `--volume` statement to match your local/host filesystem.
+
+If the `~/orca-build/` directory does not already exist, it will be created by the rpm build.
+
+Including your `~/.m2/` directory and associated local Maven repository can greatly improve your build time.
 
 ```
 docker run \
-           -v ~/git/orca5:/root/git/orca5 \     # change the left hand path if your source is checked out somewhere else
-           -v ~/orca-build/:/root/orca-build/ \ # the paths will automatically be created by the ./buildrpm.sh
-           -v ~/.m2/:/root/.m2/ \               # including your .m2/repository/ can greatly improve your build time
+           --volume ~/git/orca5:/root/git/orca5 \
+           --volume ~/orca-build/:/root/orca-build/ \ # the paths will automatically be created by the ./buildrpm.sh
+           --volume ~/.m2/:/root/.m2/ \               # including your .m2/repository/ can greatly improve your build time
            renci/orca-rpmbuild
 ```
 
@@ -74,4 +79,9 @@ docker run \
 1. Download [Docker for Mac](https://docs.docker.com/docker-for-mac/#/download-docker-for-mac) by clicking the [Get Docker for Mac (stable)](https://download.docker.com/mac/stable/Docker.dmg) button.
 1. [Install and Run Docker for Mac](https://docs.docker.com/docker-for-mac/#/step-1-install-and-run-docker-for-mac)
 
+## Hopefully-Only-Temporarily Complicated Instructions for Putting it all Together
+1. Build the base docker image, that doesn't depend on any RPMs: `cd docker/orca_base && mvn clean package`
+1. Build the orca-rpmbuild docker image: `cd ../orca-rpmbuild && mvn clean package`
+1. [Build RPMs using Docker](# Using Docker to build RPMs)
+1. Build the remainder of the Orca Docker images: 'cd .. && mvn clean package`
 
