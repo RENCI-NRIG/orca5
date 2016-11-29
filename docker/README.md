@@ -56,4 +56,22 @@ docker exec -it orca-sm bash
 1. Docker must be installed on your system.  You will either need to run the above commands with sudo / as root, or add your current user to the 'docker' group.
 1. Orca needs many configuration files to operate.  These need to be volume mounted into the running containers (the `-v` options above).
 1. The Orca RPMs must be built before the Docker images can be built.  See the `redhat` module for more details.
+1. Before you run your first Orca docker container, you will need to create a docker network for Orca to use (referenced in the above docker run commands): `docker network create orca`
+
+### Using Docker to build RPMs
+
+```
+docker run \
+           -v ~/git/orca5:/root/git/orca5 \
+           -v ~/orca-build/:/root/orca-build/ \
+           -v ~/.m2/:/root/.m2/ \
+           renci/orca-rpmbuild
+```
+
+## Installing Docker on Mac OS X
+1. Visit the [docker-for-mac](https://docs.docker.com/docker-for-mac/) page.
+1. Review the [System Requirements](https://docs.docker.com/docker-for-mac/#/what-to-know-before-you-install)
+1. Download [Docker for Mac](https://docs.docker.com/docker-for-mac/#/download-docker-for-mac) by clicking the [Get Docker for Mac (stable)](https://download.docker.com/mac/stable/Docker.dmg) button.
+1. [Install and Run Docker for Mac](https://docs.docker.com/docker-for-mac/#/step-1-install-and-run-docker-for-mac)
+
 
