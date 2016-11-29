@@ -62,9 +62,9 @@ docker exec -it orca-sm bash
 
 ```
 docker run \
-           -v ~/git/orca5:/root/git/orca5 \
-           -v ~/orca-build/:/root/orca-build/ \
-           -v ~/.m2/:/root/.m2/ \
+           -v ~/git/orca5:/root/git/orca5 \     # change the left hand path if your source is checked out somewhere else
+           -v ~/orca-build/:/root/orca-build/ \ # the paths will automatically be created by the ./buildrpm.sh
+           -v ~/.m2/:/root/.m2/ \               # including your .m2/repository/ can greatly improve your build time
            renci/orca-rpmbuild
 ```
 
