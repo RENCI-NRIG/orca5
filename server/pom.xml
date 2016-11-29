@@ -159,6 +159,10 @@
 							<verifyArtifact>false</verifyArtifact>
 							<tasks>
 								<taskdef resource="net/sf/antcontrib/antlib.xml" />
+								
+								<!-- Creates a directory. Does nothing if the directory already exist. -->
+								<mkdir dir="orca/startup" />
+								
 								<delete>
 									<fileset dir="orca/startup">
 										<include name="*tar.gz" />
