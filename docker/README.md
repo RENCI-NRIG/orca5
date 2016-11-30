@@ -68,8 +68,8 @@ Including your `~/.m2/` directory and associated local Maven repository can grea
 ```
 docker run \
            --volume ~/git/orca5:/root/git/orca5 \
-           --volume ~/orca-build/:/root/orca-build/ \ # the paths will automatically be created by the ./buildrpm.sh
-           --volume ~/.m2/:/root/.m2/ \               # including your .m2/repository/ can greatly improve your build time
+           --volume ~/orca-build/:/root/orca-build/ \
+           --volume ~/.m2/:/root/.m2/ \
            renci/orca-rpmbuild
 ```
 
@@ -78,6 +78,7 @@ docker run \
 1. Review the [System Requirements](https://docs.docker.com/docker-for-mac/#/what-to-know-before-you-install)
 1. Download [Docker for Mac](https://docs.docker.com/docker-for-mac/#/download-docker-for-mac) by clicking the [Get Docker for Mac (stable)](https://download.docker.com/mac/stable/Docker.dmg) button.
 1. [Install and Run Docker for Mac](https://docs.docker.com/docker-for-mac/#/step-1-install-and-run-docker-for-mac)
+1. Add the `/opt` directory (or the directory where you have stored Orca config) to the shared paths available to Docker: Docker -> Preferences... -> File Sharing
 
 ## Hopefully-Only-Temporarily Complicated Instructions for Putting it all Together
 1. Build the base docker image, that doesn't depend on any RPMs: `cd docker/orca_base && mvn clean package`
