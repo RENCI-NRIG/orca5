@@ -1,3 +1,7 @@
+# Orca specific build files
+handlers/network/logs/
+server/orca/startup/
+tools/cmdline/startup/
 
 # Created by https://www.gitignore.io/api/java,maven,eclipse
 
