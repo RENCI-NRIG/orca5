@@ -2,8 +2,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca</groupId>
 	<artifactId>dependencies</artifactId>
-	<version>1.0</version>
 	<packaging>pom</packaging>
+	<parent>
+		<groupId>orca</groupId>
+		<artifactId>tools</artifactId>
+		<version>5.0.1-SNAPSHOT</version>
+	</parent>
 	<name>Orca Dependencies</name>
 	<description>
 		Helper poms to simplify dependencies management

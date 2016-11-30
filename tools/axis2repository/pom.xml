@@ -48,34 +48,6 @@
 							<goal>run</goal>
 						</goals>
 					</execution>
-					<execution>
-						<id>deploy</id>
-						<phase>deploy</phase>
-						<configuration>
-							<tasks>
-								<property name="username" value="${username}" />
-								<property name="password" value="${password}" />
-								<property name="compile.classpath" refid="maven.compile.classpath" />
-								<property name="run.classpath" refid="maven.runtime.classpath" />
-								<property name="test.classpath" refid="maven.test.classpath" />
-								<property name="plugin.classpath" refid="maven.plugin.classpath" />
-
-								<property name="maven.project.build.directory" value="${project.build.directory}" />
-								<property name="maven.project.build.sourceDirectory" value="${project.build.sourceDirectory}" />
-								<property name="maven.project.build.testSourceDirectory" value="${project.build.testSourceDirectory}" />
-								<property name="maven.project.build.outputDirectory" value="${project.build.outputDirectory}" />
-								<property name="maven.project.build.testOutputDirectory" value="${project.build.testOutputDirectory}" />
-								<property name="maven.project.version" value="${project.version}" />
-
-								<ant antfile="${basedir}/maven_build.xml">
-									<target name="deploy" />
-								</ant>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
 				</executions>
 			</plugin>
 		</plugins>

@@ -4,12 +4,10 @@
 	<groupId>orca</groupId>
 	<artifactId>tools</artifactId>
 	<packaging>pom</packaging>
-	<version>5.0.1-SNAPSHOT</version>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>orca</artifactId>
 		<version>5.0.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>Orca Tools</name>
