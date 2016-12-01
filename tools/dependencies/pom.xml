@@ -5,7 +5,7 @@
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>orca</groupId>
-		<artifactId>tools</artifactId>
+		<artifactId>orca</artifactId>
 		<version>5.0.3-SNAPSHOT</version>
 	</parent>
 	<name>Orca Dependencies</name>
@@ -20,4 +20,18 @@
 		<module>axis2</module>
 		<module>jaxb</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<!-- This Orca module should be pushed to Nexus. -->
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
