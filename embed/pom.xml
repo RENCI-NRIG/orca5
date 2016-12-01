@@ -4,13 +4,13 @@
 	<groupId>orca</groupId>
 	<artifactId>embed</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0.2-SNAPSHOT</version>
+	<version>5.0.2</version>
 	<name>Orca Network Embedding v2</name>
 	<url>https://geni-orca.renci.org/orca-doc</url>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>orca</artifactId>
-		<version>5.0.2-SNAPSHOT</version>
+		<version>5.0.2</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
