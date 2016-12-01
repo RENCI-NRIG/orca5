@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>orca.dependencies</groupId>
 			<artifactId>axiom</artifactId>
-			<version>1.0</version>
+			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>
@@ -131,7 +131,7 @@
 		<dependency>
 			<groupId>orca.dependencies</groupId>
 			<artifactId>jaxb</artifactId>
-			<version>1.0</version>
+			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>

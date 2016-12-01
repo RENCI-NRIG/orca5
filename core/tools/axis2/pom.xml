@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>orca.dependencies</groupId>
 			<artifactId>axis2</artifactId>
-			<version>1.0</version>
+			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>
