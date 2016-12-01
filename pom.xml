@@ -501,8 +501,8 @@
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.2</version>
 				<configuration>
-					<!-- Most Orca modules do not need to be pushed to Nexus, so we will set the top-level skip to true. Individual submodules can be enabled. -->
-					<skip>true</skip>
+					<!-- Most Orca modules do not need to be pushed to Nexus, but the parent pom must be pushed. -->
+					<skip>false</skip>
 				</configuration>
 			</plugin>
 		</plugins>
