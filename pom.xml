@@ -20,6 +20,7 @@
 		<module>site</module>
 		<module>tools</module>
 		<module>nodeagent</module>
+		<module>docker</module>
 	</modules>
 
 	<!-- Project licenses -->
