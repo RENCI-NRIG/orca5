@@ -6,6 +6,13 @@ FROM renci/orca-base:${project.version}-${orca.docker.jre.vendor}
 #RUN yum -y install rpm-build git ant && yum clean all
 RUN yum -y install rpm-build git && yum clean all
 
+# Oracle installs the full JDK, but openjdk by default only installs the JRE
+RUN if [ "${orca.docker.jre.vendor}" == "openjdk" ]; then \
+		yum -y install java-1.7.0-openjdk-devel && yum clean all; \
+		echo $'export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/bin/java::")' >> /etc/bashrc; \
+	fi
+
+
 # Install Apache Maven
 ENV apache_maven_tgz apache-maven-3.3.9-bin.tar.gz
 
