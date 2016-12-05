@@ -22,3 +22,7 @@ RUN if [ "${orca.docker.jre.vendor}" == "openjdk" ]; then \
 		yum -y install java-1.7.0-openjdk && yum clean all; \
 	fi
 
+
+RUN echo $'export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/bin/java::")' >> /etc/bashrc; \
+	echo $'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/bashrc;
+

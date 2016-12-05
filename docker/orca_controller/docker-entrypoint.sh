@@ -4,6 +4,9 @@ set -e
 prog="orca_controller-11080"
 exec="/opt/orca-controller/bin/xmlrpcd"
     
+export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/bin/java::")
+export PATH=$JAVA_HOME/bin:$PATH
+
 # default: run Orca AM+Broker
 if [ "$1" = "$prog" ]; then
     [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
