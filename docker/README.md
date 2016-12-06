@@ -3,7 +3,7 @@ This module can be used to build Docker images for Orca.
 ## Building Docker Images
 If you have all of the dependencies setup, you should be able to simply do:
 ```
-mvn clean package
+mvn clean package -Pdocker
 ```
 
 ## Running the Docker images
@@ -81,8 +81,8 @@ docker run \
 1. Add the `/opt` directory (or the directory where you have stored Orca config) to the shared paths available to Docker: Docker -> Preferences... -> File Sharing
 
 ## Hopefully-Only-Temporarily Complicated Instructions for Putting it all Together
-1. Build the base docker image, that doesn't depend on any RPMs: `cd docker/orca_base && mvn clean package`
-1. Build the orca-rpmbuild docker image: `cd ../orca-rpmbuild && mvn clean package`
+1. Build the base docker image, that doesn't depend on any RPMs: `cd docker/orca_base && mvn clean package -Pdocker`
+1. Build the orca-rpmbuild docker image: `cd ../orca-rpmbuild && mvn clean package -Pdocker`
 1. [Build RPMs using Docker](# Using Docker to build RPMs)
-1. Build the remainder of the Orca Docker images: 'cd .. && mvn clean package`
+1. Build the remainder of the Orca Docker images: 'cd .. && mvn clean package -Pdocker`
 
