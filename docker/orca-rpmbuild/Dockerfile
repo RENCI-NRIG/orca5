@@ -33,7 +33,12 @@ ENV ANT_HOME /opt/apache-ant-1.9.7
 # Setup PATH variable with Maven and Ant
 ENV PATH /opt/apache-maven-3.3.9/bin:$PATH:$ANT_HOME/bin
 
+COPY ./docker-entrypoint.sh /
+
+RUN chmod a+x /docker-entrypoint.sh
+
 # The Orca source must be volume mounted from the local/host machine
 #  (at the `docker run` command)
 #  for this entrypoint to work.
-ENTRYPOINT ["/root/git/orca5/redhat/buildrpm.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["/root/git/orca5/redhat/buildrpm.sh"]
