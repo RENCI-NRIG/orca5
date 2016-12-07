@@ -21,6 +21,13 @@ echo "Note: If no such containers existed, you can safely ignore this error."
 docker network create ${DOCKER_NET_NAME}
 echo "Note: If your docker network '${DOCKER_NET_NAME}' already exists, you can safely ignore this error."
 
+# Docker-on-Mac is a bit slower
+var_sleep=10
+if [[ $OSTYPE == darwin* ]]
+then
+  let "var_sleep *= 15"
+fi
+
 # Start Orca MySQL server
 docker run -d \
            --net ${DOCKER_NET_NAME} \
@@ -35,8 +42,8 @@ then
 fi
 
 # Sleep
-echo -n "Sleeping to allow ${DOCKER_NAME_MYSQL} container to start ..."
-sleep 10;
+echo -n "Sleeping for ${var_sleep} to allow ${DOCKER_NAME_MYSQL} container to start ..."
+sleep ${var_sleep};
 echo " done."
 
 # Start Orca AM+Broker
@@ -55,8 +62,8 @@ then
 fi
 
 # Sleep
-echo -n "Sleeping to allow ${DOCKER_NAME_AM_BROKER} container to start ..."
-sleep 10;
+echo -n "Sleeping for ${var_sleep} to allow ${DOCKER_NAME_AM_BROKER} container to start ..."
+sleep ${var_sleep};
 echo " done."
 
 # Start Orca SM
@@ -74,8 +81,9 @@ then
 fi
 
 # Sleep
-echo -n "Sleeping to allow ${DOCKER_NAME_SM} container to start ..."
-sleep 5;
+let "var_sleep /= 2";
+echo -n "Sleeping for ${var_sleep} to allow ${DOCKER_NAME_SM} container to start ..."
+sleep ${var_sleep};
 echo " done."
 
 # Start Orca Controller
