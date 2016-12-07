@@ -48,6 +48,34 @@
 						<pushImage>false</pushImage>
 
 						<resources>
+							<!-- Copy the entire source tree, to be placed in the created Image.
+							     Ideally, we would only do this on Mac systems,
+							     where the Docker engine is exceptionally slow
+							     at using volume mounted files. -->
+							<resource>
+								<targetPath>/orca/</targetPath>
+								<directory>${project.basedir}/../../</directory>
+								<excludes>
+									<exclude>**/target/**/*</exclude>
+									<exclude>**/repo/**/*</exclude>
+									<exclude>**/network/logs/**/*</exclude>
+									<exclude>**/startup/**/*</exclude>
+									<exclude>.git/**/*</exclude>
+									<exclude>**/.project</exclude>
+									<exclude>**/.classpath</exclude>
+									<exclude>**/.settings/**/*</exclude>
+								</excludes>
+							</resource>
+							<!-- normally wouldn't want to include .git directory,
+							     but it is needed to get the git commit ID.
+							     luckily, most of it is small, except for the objects dir. -->
+							<resource>
+								<targetPath>/orca/.git/</targetPath>
+								<directory>${project.basedir}/../../.git/</directory>
+								<excludes>
+									<exclude>objects/**/*</exclude>
+								</excludes>
+							</resource>
 						</resources>
 					</configuration>
 				</plugin>

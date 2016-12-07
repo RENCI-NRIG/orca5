@@ -37,6 +37,14 @@ COPY ./docker-entrypoint.sh /
 
 RUN chmod a+x /docker-entrypoint.sh
 
+# COPY Orca source tree, if present (e.g. Maven on Mac will copy Orca source tree)
+COPY orca /root/git/orca5
+
+# we don't want to copy the git objects into the image,
+# but the folder needs to exist in order to trick git
+# into allowing us to get the commit ID
+RUN mkdir -p /root/git/orca5/.git/objects/
+
 # The Orca source must be volume mounted from the local/host machine
 #  (at the `docker run` command)
 #  for this entrypoint to work.

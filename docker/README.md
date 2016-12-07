@@ -3,11 +3,21 @@ This module can be used to build Docker images for Orca.
 ## Building Docker Images
 If you have all of the dependencies setup, you should be able to simply do:
 ```
+./docker_build.sh
+```
+
+Or, you can build individual containers manually using Maven:
+```
 mvn clean package -Pdocker
 ```
 
 ## Running the Docker images
-Four runnable Docker images will be created. Start them in this order:
+Four runnable Docker images will be created. Use this script to start them all:
+```
+./docker_run.sh
+```
+
+Or start them manually in this order:
 
 A MySQL container configured for Orca:
 ```
@@ -59,6 +69,11 @@ docker exec -it orca-sm bash
 1. Before you run your first Orca docker container, you will need to create a docker network for Orca to use (referenced in the above docker run commands): `docker network create orca`
 
 ### Using Docker to build RPMs
+Use this script to build the orca-rpmbuild container and build the RPMs.  They will be copied into your `~/orca-build/` directory (which will be created, if it does not exist. The RPMs are built automatically for you if you run the top-level `docker_build.sh` script.
+```
+docker_build_rpms.sh
+```
+
 This container makes use of your local/host files in order to build the Orca RPMs from your working copy of the source code.  In each of the below `--volume` statements below, the container expects to find necessary files in the location specified to the right of the `:`.  You may modify the left-side of the `--volume` statement to match your local/host filesystem.
 
 If the `~/orca-build/` directory does not already exist, it will be created by the rpm build.
