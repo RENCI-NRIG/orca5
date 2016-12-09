@@ -14,7 +14,7 @@ echo "Info: removing any previous Orca containers..."
 docker rm -f ${DOCKER_NAME_CONTROLLER}
 docker rm -f ${DOCKER_NAME_SM}
 docker rm -f ${DOCKER_NAME_AM_BROKER}
-docker rm -f ${DOCKER_NAME_MYSQL}
+#docker rm -f ${DOCKER_NAME_MYSQL}
 echo "Note: If no such containers existed, you can safely ignore this error."
 
 # Create docker network
@@ -28,23 +28,34 @@ then
   let "var_sleep *= 15"
 fi
 
-# Start Orca MySQL server
-docker run -d \
-           --net ${DOCKER_NET_NAME} \
-           --name ${DOCKER_NAME_MYSQL} \
-           --hostname orca-mysql \
-           renci/orca-mysql
+# The MySQL container probably doesn't need to be restarted
+RUNNING=$(docker inspect --format="{{ .State.Running }}" $DOCKER_NAME_MYSQL 2> /dev/null)
 
-# check exit status from docker run, and kill script if not successful
-if [ $? -ne 0 ]
-then
-  exit $?
+if [ $? -eq 1 ] || [ "$RUNNING" == "false" ]; then
+  if [ "$RUNNING" == "false" ]; then
+    docker rm -f ${DOCKER_NAME_MYSQL}
+  fi
+
+  # Start Orca MySQL server
+  docker run -d \
+             --net ${DOCKER_NET_NAME} \
+             --name ${DOCKER_NAME_MYSQL} \
+             --hostname orca-mysql \
+             renci/orca-mysql
+
+  # check exit status from docker run, and kill script if not successful
+  if [ $? -ne 0 ]
+  then
+    exit $?
+  fi
+
+  # Sleep
+  echo -n "Sleeping for ${var_sleep} to allow ${DOCKER_NAME_MYSQL} container to start ..."
+  sleep ${var_sleep};
+  echo " done."
+else
+  echo "Container '${DOCKER_NAME_MYSQL}' is running; not restarting."
 fi
-
-# Sleep
-echo -n "Sleeping for ${var_sleep} to allow ${DOCKER_NAME_MYSQL} container to start ..."
-sleep ${var_sleep};
-echo " done."
 
 # Start Orca AM+Broker
 docker run -d \
