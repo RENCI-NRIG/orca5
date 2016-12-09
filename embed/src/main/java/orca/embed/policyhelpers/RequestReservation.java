@@ -254,9 +254,11 @@ public class RequestReservation {
 					element.setInDomain(Interdomain_Domain);
 				}
 			}else{
-				if(!Objects.equals(ne1_domain, RequestReservation.Unbound_Domain))
+				// Objects.equals will return False if exactly one argument is null,
+				// so we must maintain null check separately
+				if((ne1_domain!=null) && !Objects.equals(ne1_domain, RequestReservation.Unbound_Domain))
 					ne_domain=ne1_domain;
-				if(!Objects.equals(ne2_domain, RequestReservation.Unbound_Domain))
+				if((ne2_domain!=null) && !Objects.equals(ne2_domain, RequestReservation.Unbound_Domain))
 					ne_domain=ne2_domain;
 				if(ne_domain==null)
 					ne_domain=reservationDomain;
@@ -370,7 +372,7 @@ public class RequestReservation {
 	public Integer getNodeMapKey(HashMap <Integer,String> nodeMap, String rs){
 		Integer sn=0;
 		for(Entry <Integer,String> entry:nodeMap.entrySet()){
-			if(rs==entry.getValue()){
+			if(Objects.equals(rs, entry.getValue())){
 				sn=entry.getKey();
 				break;
 			}
