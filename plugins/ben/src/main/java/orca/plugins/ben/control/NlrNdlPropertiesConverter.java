@@ -119,7 +119,7 @@ public class NlrNdlPropertiesConverter extends BenNdlPropertiesConverter {
             long exchange_bw=0;
             numAction = 0;
             for (SwitchingAction a : actions) {
-            	if (a.getDefaultAction() == LayerConstant.Action.Temporary.toString())
+            	if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString()))
                    	continue;
             	numAction++;	
             	logger.debug("vlan="+a.getLabel_ID());
