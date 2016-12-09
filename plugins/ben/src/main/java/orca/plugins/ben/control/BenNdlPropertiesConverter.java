@@ -2,6 +2,7 @@ package orca.plugins.ben.control;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Properties;
 
 import orca.embed.cloudembed.NetworkHandler;
@@ -91,7 +92,7 @@ public class BenNdlPropertiesConverter
                 for (int i = 0; i < actions.size(); i++) {
                     SwitchingAction a = actions.get(i);
                     logger.debug("Action=" + a.getDefaultAction());
-                    if (a.getDefaultAction() == LayerConstant.Action.Temporary.toString()) {
+                    if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString())) {
                         continue;
                     }
                     if ((a.getDefaultAction().equals(LayerConstant.Action.VLANtag.toString())) || (name.equals("6509"))) {

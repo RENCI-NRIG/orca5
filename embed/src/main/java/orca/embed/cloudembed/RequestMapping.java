@@ -1,16 +1,7 @@
 package orca.embed.cloudembed;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Stack;
 
 import orca.embed.cloudembed.controller.InterDomainHandler;
 import orca.embed.policyhelpers.RequestMappingException;
@@ -324,7 +315,7 @@ try {
 		            Resource j_res=null;
 		            for (StmtIterator j=intf_ont.listProperties(NdlCommons.connectedTo);j.hasNext();){
 		            	j_res=j.next().getResource();
-		            	if(next_intf_ont.getURI() == j_res.getURI()){
+		            	if(Objects.equals(next_intf_ont.getURI(), j_res.getURI())){
 		     				cc=true;
 		     				break;
 		     			}

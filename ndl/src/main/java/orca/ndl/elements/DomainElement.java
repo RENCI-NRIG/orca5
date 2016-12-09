@@ -3,6 +3,7 @@ package orca.ndl.elements;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import orca.ndl.DomainResourceType;
@@ -456,7 +457,7 @@ public class DomainElement extends Device {
 		if(followedBy==null)
 			return null;
 		for(Entry <DomainElement,OntResource> entry:followedBy.entrySet()){
-			if(entry.getKey().getURI()==de || entry.getKey().getName()==de)
+			if(Objects.equals(entry.getKey().getURI(), de) || Objects.equals(entry.getKey().getName(), de))
 				return entry.getValue();
 		}
 		return null;
@@ -480,7 +481,7 @@ public class DomainElement extends Device {
 		if(precededBy==null)
 			return null;
 		for(Entry <DomainElement,OntResource> entry:precededBy.entrySet()){
-			if(entry.getKey().getURI()==de)
+			if(Objects.equals(entry.getKey().getURI(), de))
 				return entry.getValue();
 		}
 		return null;

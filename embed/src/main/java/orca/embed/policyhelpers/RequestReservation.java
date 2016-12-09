@@ -5,15 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
@@ -260,9 +254,9 @@ public class RequestReservation {
 					element.setInDomain(Interdomain_Domain);
 				}
 			}else{
-				if((ne1_domain!=null)&&(ne1_domain!=RequestReservation.Unbound_Domain))
+				if(!Objects.equals(ne1_domain, RequestReservation.Unbound_Domain))
 					ne_domain=ne1_domain;
-				if((ne2_domain!=null) &&(ne2_domain!=RequestReservation.Unbound_Domain))
+				if(!Objects.equals(ne2_domain, RequestReservation.Unbound_Domain))
 					ne_domain=ne2_domain;
 				if(ne_domain==null)
 					ne_domain=reservationDomain;

@@ -1,11 +1,7 @@
 package orca.embed.cloudembed;
 
 import java.io.IOException;
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.Map.Entry;
 
 import orca.embed.cloudembed.controller.InterDomainHandler;
@@ -376,7 +372,7 @@ public class ConnectionManager extends RequestMapping {
 	            for (int i = 0; i < actions.size(); i++) {
 	                SwitchingAction a = actions.get(i);
 	                logger.debug("Releasing Action=" + a.getDefaultAction()+";"+a.getAtLayer());
-	                if (a.getDefaultAction() == LayerConstant.Action.Temporary.toString()) {
+	                if (Objects.equals(a.getDefaultAction(), Action.Temporary.toString())) {
 	                    continue;
 	                }
 	                if(a.getAtLayer().equalsIgnoreCase(connectionLayer)){

@@ -3,12 +3,7 @@ package orca.ndl;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Queue;
+import java.util.*;
 
 import orca.ndl.elements.Device;
 import orca.ndl.elements.DomainElement;
@@ -718,7 +713,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant
         while (results.hasNext()) {
             rs = results.nextSolution().getResource(var0);
             if(!m.getOntResource(rs).hasRDFType(NdlCommons.deviceOntClass)) {
-            	if(rs.getURI()!=rs2.getURI())
+            	if(!Objects.equals(rs.getURI(), rs2.getURI()))
             		continue;
             }
             if (rs.getNameSpace().equals(rs1.getNameSpace()))

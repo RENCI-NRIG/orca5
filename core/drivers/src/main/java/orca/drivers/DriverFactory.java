@@ -12,6 +12,7 @@ package orca.drivers;
 
 import java.util.Hashtable;
 
+import com.mysql.jdbc.StringUtils;
 import org.apache.log4j.Logger;
 
 
@@ -90,7 +91,7 @@ public class DriverFactory
     {
         int result = 0;
 
-        if ((id == null) || (className == "")) {
+        if ((id == null) || StringUtils.isNullOrEmpty(className)) {
             logger.warn("Invalid arguments to install driver");
 
             return CodeInvalidArguments;
@@ -130,7 +131,7 @@ public class DriverFactory
     {
         int result = 0;
 
-        if ((id == null) || (className == "")) {
+        if ((id == null) || StringUtils.isNullOrEmpty(className)) {
             return CodeInvalidArguments;
         }
 

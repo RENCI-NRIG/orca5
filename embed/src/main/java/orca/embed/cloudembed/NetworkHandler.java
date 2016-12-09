@@ -1,13 +1,8 @@
 package orca.embed.cloudembed;
 
 import java.io.IOException;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import orca.embed.cloudembed.controller.InterDomainHandler;
 import orca.embed.policyhelpers.RequestReservation;
@@ -235,7 +230,7 @@ public class NetworkHandler extends MappingHandler
 	        for (int i = 0; i < actions.size(); i++) {
 		       	a = actions.get(i);
 		       	logger.debug("Action=" + a.getDefaultAction()+";"+a.getAtLayer());
-		        if (a.getDefaultAction() == LayerConstant.Action.Temporary.toString()) {
+		        if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString())) {
 		         	continue;
 		        }
 		        layer = a.getAtLayer();

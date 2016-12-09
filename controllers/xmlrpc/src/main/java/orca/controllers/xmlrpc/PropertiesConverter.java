@@ -2,6 +2,7 @@ package orca.controllers.xmlrpc;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Properties;
 
 import orca.ndl.LayerConstant;
@@ -82,7 +83,7 @@ public class PropertiesConverter
                 for (int i = 0; i < actions.size(); i++) {
                     SwitchingAction a = actions.get(i);
                     //System.out.println("Action=" + a.getDefaultAction());
-                    if (a.getDefaultAction() == LayerConstant.Action.Temporary.toString()) {
+                    if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString())) {
                         continue;
                     }
                     if ((a.getDefaultAction().equals(LayerConstant.Action.VLANtag.toString())) || (name.equals("6509"))) {

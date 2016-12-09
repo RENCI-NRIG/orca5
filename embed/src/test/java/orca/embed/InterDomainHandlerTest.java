@@ -4,10 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Properties;
+import java.util.*;
 import java.util.Map.Entry;
 
 import net.jwhoisserver.utils.InetNetworkException;
@@ -325,10 +322,10 @@ public class InterDomainHandlerTest extends MappingHandlerTest {
                 
                 for (int i = 0; i < actionCount; i++) {
                     SwitchingAction a = actions.get(i);
-                    if (a.getDefaultAction() ==  LayerConstant.Action.Temporary.toString()) {
+                    if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString())) {
                         continue;
                     }
-                    if (a.getDefaultAction() == "VLANtag") {
+                    if (Objects.equals(a.getDefaultAction(), "VLANtag")) {
                         PropList.setProperty(p, "vlan.tag", (int)a.getLabel_ID());
                         PropList.setProperty(p, "bandwidth", a.getBw());
                     } // ignore label id otherwise

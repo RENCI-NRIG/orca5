@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Properties;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -126,10 +127,10 @@ public class NetworkHandlerTest extends TestCase {
                 
                 for (int i = 0; i < actionCount; i++) {
                     SwitchingAction a = actions.get(i);
-                    if (a.getDefaultAction() ==  LayerConstant.Action.Temporary.toString()) {
+                    if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString())) {
                         continue;
                     }
-                    if (a.getDefaultAction() == "VLANtag") {
+                    if (Objects.equals(a.getDefaultAction(), "VLANtag")) {
                         PropList.setProperty(p, "vlan.tag", (int)a.getLabel_ID());
                         PropList.setProperty(p, "vlan.bandwidth", a.getBw());
                         System.out.println("vlan.tag="+a.getLabel_ID()+";vlan.bandwidth="+a.getBw());

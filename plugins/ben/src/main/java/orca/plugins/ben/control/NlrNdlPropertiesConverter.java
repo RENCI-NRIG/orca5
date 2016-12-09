@@ -3,6 +3,7 @@ package orca.plugins.ben.control;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Properties;
 
 import orca.embed.cloudembed.MultiPointNetworkHandler;
@@ -95,7 +96,7 @@ public class NlrNdlPropertiesConverter extends BenNdlPropertiesConverter {
             logger.debug("numAction="+actions.size());
             for (SwitchingAction a : actions) {
                 logger.debug("Action=" + a.getDefaultAction());
-                if (a.getDefaultAction() == LayerConstant.Action.Temporary.toString())
+                if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString()))
                     continue;
                 numAction++;
                 if(numAction==1)
