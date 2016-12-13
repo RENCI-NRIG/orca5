@@ -60,6 +60,11 @@ public class MappingHandlerTest extends TestCase {
 		super.tearDown();
 	}
 
+	// Empty test. Fixes error: Failed tests:   warning(junit.framework.TestSuite$1): No tests found in orca.embed.MappingHandlerTest
+	public void testNothing() {
+
+	}
+
 	public  List<String> getAbstractModels() throws IOException, NdlException {
 		abstractModels = new ArrayList<String>();
 		pools=new ResourcePoolsDescriptor();

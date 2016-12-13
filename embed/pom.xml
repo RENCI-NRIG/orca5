@@ -31,6 +31,11 @@
   				</releases>
 	 		</repository>
 	</repositories>
+
+	<properties>
+		<skipTests>true</skipTests>
+	</properties>
+
 	<dependencies>
         <dependency>
             <groupId>orca.core</groupId>
@@ -65,7 +70,7 @@
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<skip>true</skip>
+					<skip>${skipTests}</skip>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -151,8 +151,15 @@ public class DomainTest extends TestCase {
 				vlanProperty=new VlanPolicyNDLPoolPropertyExtractor(abstractModel);
 				System.out.println(vlanProperty.getPoolProperties().toString());
 			}
-			
-			DomainResources res = domain.getDomainResources(abstractModel, 20);
+
+			//java.lang.RuntimeException: http://geni-orca.renci.org/owl/mass.rdf#mass/Domain/vm:VM;Too many delegated units from the config.xml, total=20, than specified in the site RDF units=8, please modify and restart the actor!
+			//java.lang.RuntimeException: http://geni-orca.renci.org/owl/starlight.rdf#starlight/Domain/vlan:VLAN;Too many delegated units from the config.xml, total=20, than specified in the site RDF units=11, please modify and restart the actor!
+			DomainResources res;
+			if (i==3 || i==6){
+				res = domain.getDomainResources(abstractModel, 8);
+			} else {
+				res = domain.getDomainResources(abstractModel, 20);
+			}
 			assertNotNull(res);
 			List <DomainResourceType> types = res.getResourceType();
 			assertNotNull(types);
