@@ -229,7 +229,13 @@ public class Domain implements IDomainAbstractor{
 						set.getProperty(NdlCommons.domainHasResourceTypeProperty).getResource() + ", continuing. Check your configuration.");
 				continue;
 			}
-			
+
+			if(units>total){
+				logger.warn("Delegated less units:"+total+";units="+units);
+				// change number of units to be allocated in the DomainResourceType
+				units=total;
+			}
+
 			int resourceTypeRank=0;
 			if(!res.hasType(type)) {
 				resType = new DomainResourceType(type, units);
@@ -244,11 +250,6 @@ public class Domain implements IDomainAbstractor{
 			}
 			else res.addResourceType(type,units);
 
-			if(units>total){
-				logger.warn("Delegated less units:"+total+";units="+units);
-				units=total;
-			}
-			
 			logger.info("Resource pool:"+domain+":"+type+":"+units+":"+resourceTypeRank+"\n");
 			
 			//if it is vm or baremetal, set up constraints: #cores, memory, storage for a site

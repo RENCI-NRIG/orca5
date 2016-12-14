@@ -64,10 +64,12 @@ public class CloudHandlerTest {
         }
     }
 
+    // JUnit automatically passes in Parameters to constructor
     public CloudHandlerTest(String requestFilename, boolean expected){
         this.requestFilename = requestFilename;
         this.expected = expected;
     }
+
     @Test
     public void runEmbedding_withXOXlargeRequests_tooLarge() throws Exception {
         CloudHandler cloudHandler = new CloudHandler();
@@ -118,7 +120,7 @@ public class CloudHandlerTest {
                 // can't use assertNull if we want to use err.toString() as part of message.
                 fail("cloudHandler.runEmbedding() failed: " + err.toString());
             } else {
-                fail("test should failed for request: " + requestFilename);
+                fail("test should have failed for request: " + requestFilename);
             }
         }
     }
