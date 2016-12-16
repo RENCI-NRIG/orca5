@@ -25,7 +25,7 @@ import orca.shirako.util.UpdateData;
 import orca.util.PropList;
 import orca.util.ResourceType;
 
-public class UnitsControlTest extends AuthorityCalendarPolicyTest implements ResourceProperties, UnitProperties, ConfigurationProperties
+public class UnitsControlTest extends AuthorityCalendarPolicyTest //implements ResourceProperties, UnitProperties, ConfigurationProperties
 {
 
     protected IResourceControl getControl() throws Exception

@@ -28,7 +28,12 @@ import orca.shirako.time.Term;
 import orca.shirako.util.UpdateData;
 import orca.util.ResourceType;
 
-public class SimpleVMControlTest extends AuthorityCalendarPolicyTest implements ResourceProperties, ConfigurationProperties, UnitProperties {
+import static orca.shirako.common.meta.ResourceProperties.ResourceMemory;
+import static orca.shirako.common.meta.UnitProperties.UnitManageSubnet;
+import static orca.shirako.common.meta.UnitProperties.UnitManagementIP;
+import static orca.shirako.common.meta.UnitProperties.UnitMemory;
+
+public class SimpleVMControlTest extends AuthorityCalendarPolicyTest { // implements ResourceProperties, ConfigurationProperties, UnitProperties {
     public static final String AttributeValueMemory = "128";
 
     protected IResourceControl getControl() throws Exception {
