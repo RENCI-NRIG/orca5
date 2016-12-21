@@ -11,6 +11,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import orca.shirako.container.Globals;
+import orca.shirako.container.api.IOrcaConfiguration;
 import orca.shirako.proxies.soapaxis2.SoapAxis2ServiceFactory;
 
 import org.apache.axis2.context.ConfigurationContext;
@@ -36,7 +37,8 @@ public class OrcaServer {
 	public static final String ORCA_ALIAS="ORCA_ALIAS";
 	public static final int DefaultServerPort = 8080;
 	public static final int DefaultSSLServerPort = 8443;
-	
+	public static final int DefaultNumContainerThreads = 2;
+
 	private static final int ServerPort, SSLServerPort;
 	private static final String keystore, truststore, alias, passphrase;
 	private static boolean enableSsl = true;
@@ -123,15 +125,26 @@ public class OrcaServer {
 			System.err.println("WARNING: basedir property is set system-wide. ORCA requires this property is NOT set. Clearing and proceeding.");
 			System.clearProperty(PROPERTY_BASEDIR);
 		}
-		
+
+		// Need to "initialize", in order to get access to configuration properties
+		Globals.initialize();
+		IOrcaConfiguration configuration = Globals.getConfiguration();
+
+		int numAcceptors = DefaultNumContainerThreads;
+		String containerThreads = configuration.getProperty(IOrcaConfiguration.PropertyContainerThreads);
+		if (null != containerThreads){
+			numAcceptors = Integer.parseInt(containerThreads);
+		}
+
 		server = new Server();
 		server.setStopAtShutdown(true);
 		
 		// the connector
 		SelectChannelConnector connector = new SelectChannelConnector();
 		connector.setPort(ServerPort);
-		connector.setAcceptors(2);
+		connector.setAcceptors(numAcceptors);
 		server.addConnector(connector);
+		Globals.Log.info("Connector added on port: " + ServerPort + " with container.threads: " + numAcceptors);
 		
 		System.out.println("Checking ssl " + enableSsl);
 		// SSL connector
