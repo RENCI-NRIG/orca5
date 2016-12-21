@@ -24,6 +24,12 @@ public interface IOrcaConfiguration {
      */
     public static final String PropertyContainerManagerClass = "container.manager.class";
 
+    /**
+     * Number of Jetty container threads to start for non-SSL Actor Container connections
+     * See: https://github.com/RENCI-NRIG/orca5/issues/89
+     */
+    public static final String PropertyContainerThreads = "container.threads";
+
     public static final String PropertySoapAxis2Url = "protocols.soapaxis2.url";
 
     public static final String RemoteRegistryCacheClass = "RemoteRegistryCache.class";

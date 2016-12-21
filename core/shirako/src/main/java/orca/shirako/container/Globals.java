@@ -45,6 +45,7 @@ public class Globals {
 	private static IOrcaAdminConfiguration adminConfiguration;
 	private static Properties properties;
 	private static Object globalLock = new Object();
+	private static volatile boolean initialized;
 	private static volatile boolean started;
 	private static volatile boolean startCompleted;
 	
@@ -100,11 +101,13 @@ public class Globals {
 				if (forceFresh) {
 					deleteSuperblock();
 				}
-								
-				initialize();
-				adminConfiguration = makeAdminConfiguration();
-				configuration = adminConfiguration.getConfiguration();
+			}
 
+			// initialize is now a public function, so must request globalLock for itself
+			// in normal operation, Orca will already be initialized by OrcaServer
+			initialize();
+
+			synchronized (globalLock) {
 				String cn = configuration.getProperty(IOrcaConfiguration.PropertyContainerManagerClass);
 				if (cn == null) {
 					throw new ContainerInitializationException(
@@ -193,21 +196,38 @@ public class Globals {
 		}
 	}
 
-	private static void initialize() throws ContainerInitializationException {
-		Log.info("Orca starting...");
-		Log.info("Home directory: " + HomeDirectory);
+	/**
+	 * Sets up many configurations, including via Properties file.
+	 * Can be called separately, in order to access configurations.
+	 * Alternatively, the Globals.start() method ensures that initialization has started.
+	 *
+	 * @throws ContainerInitializationException
+	 */
+	public static void initialize() throws ContainerInitializationException {
+		synchronized (globalLock) {
+			if (!initialized) {
+				Log.info("Orca starting...");
+				Log.info("Home directory: " + HomeDirectory);
 
-		registerSecurityProvider();
+				registerSecurityProvider();
 
-		Log.info("Starting main container initialization...");
-		try {
-			loadConfiguration();
-		} catch (Exception e) {
-			Log.fatal("Container initialization failed", e);
-			throw new ContainerInitializationException(e);
+				Log.info("Starting main container initialization...");
+				try {
+					loadConfiguration();
+				} catch (Exception e) {
+					Log.fatal("Container initialization failed", e);
+					throw new ContainerInitializationException(e);
+				}
+
+				Log.info("Main container initialization complete.");
+
+
+				adminConfiguration = makeAdminConfiguration();
+				configuration = adminConfiguration.getConfiguration();
+
+				initialized = true;
+			}
 		}
-
-		Log.info("Main container initialization complete.");
 	}
 
 	private static void loadConfiguration() throws FileNotFoundException, IOException {
