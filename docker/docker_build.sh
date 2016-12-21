@@ -2,6 +2,9 @@
 
 DOCKER_MVN_CMD="mvn clean package -Pdocker"
 
+# start in the docker directory
+cd "$( dirname "$0" )"
+
 f_mvn_build_dir ()
 {
   var_dir="$1"

@@ -4,7 +4,7 @@ LABEL description = "A base Orca image, with common packages installed, includin
       build = "docker build -t orca-base:openjdk ."
 
 RUN yum -y install epel-release; yum clean all
-RUN yum -y install initscripts glibc nss-softokn-freebl && yum clean all
+RUN yum -y install initscripts glibc glibc.i686 nss-softokn-freebl nss-softokn-freebl.i686 && yum clean all
 
 ENV oracle_rpm jdk-7u79-linux-x64.rpm
 

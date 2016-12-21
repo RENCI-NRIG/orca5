@@ -41,6 +41,7 @@ if [ $? -eq 1 ] || [ "$RUNNING" == "false" ]; then
              --net ${DOCKER_NET_NAME} \
              --name ${DOCKER_NAME_MYSQL} \
              --hostname orca-mysql \
+             --publish 3306:3306\
              renci/orca-mysql
 
   # check exit status from docker run, and kill script if not successful
