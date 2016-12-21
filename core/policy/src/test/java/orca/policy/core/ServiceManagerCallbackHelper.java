@@ -12,6 +12,7 @@ import orca.shirako.proxies.local.LocalReturn;
 import orca.shirako.registry.ActorRegistry;
 import orca.shirako.util.UpdateData;
 import orca.util.ID;
+import orca.util.persistence.NotPersistent;
 
 public class ServiceManagerCallbackHelper extends ClientCallbackHelper implements IServiceManagerCallbackProxy {
     public interface IUpdateLeaseHandler {
@@ -20,8 +21,13 @@ public class ServiceManagerCallbackHelper extends ClientCallbackHelper implement
         public void checkTermination();
     }
 
+    @NotPersistent
     protected int calledForLease = 0;
+
+    @NotPersistent
     protected IReservation lease;
+
+    @NotPersistent
     protected IUpdateLeaseHandler updateLeaseHandler;
 
     public ServiceManagerCallbackHelper(String name, ID id) {

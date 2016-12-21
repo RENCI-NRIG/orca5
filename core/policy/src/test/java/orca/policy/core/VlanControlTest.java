@@ -31,6 +31,7 @@ public class VlanControlTest extends AuthorityCalendarPolicyTest //implements Re
 {
     public static final int StartVlan = 50;
     public static final int EndVlan = StartVlan + DonateUnits - 1;
+    public static final int VlanBW = 100;
 
     protected IResourceControl getControl() throws Exception
     {
@@ -50,7 +51,9 @@ public class VlanControlTest extends AuthorityCalendarPolicyTest //implements Re
         PropList.setProperty(resources.getLocalProperties(), VlanControl.PropertyStartVlan + 1, StartVlan);
         PropList.setProperty(resources.getLocalProperties(), VlanControl.PropertyEndVlan + 1, EndVlan);
 
-        ResourceDelegation del = actor.getShirakoPlugin().getTicketFactory().makeDelegation(units, term, type);
+        Properties properties = new Properties();
+        PropList.setProperty(properties, ResourceProperties.ResourceBandwidth, VlanBW);
+        ResourceDelegation del = actor.getShirakoPlugin().getTicketFactory().makeDelegation(units, term, type, properties);
         ResourceTicket ticket = actor.getShirakoPlugin().getTicketFactory().makeTicket(del);
         Ticket cs = new Ticket(ticket, actor.getShirakoPlugin(), null);
 

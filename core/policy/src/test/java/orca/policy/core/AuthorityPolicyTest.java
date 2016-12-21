@@ -20,6 +20,7 @@ import orca.shirako.common.delegation.DelegationException;
 import orca.shirako.common.delegation.ResourceDelegation;
 import orca.shirako.common.delegation.ResourceTicket;
 import orca.shirako.common.delegation.TicketException;
+import orca.shirako.container.Globals;
 import orca.shirako.container.OrcaTestCase;
 import orca.shirako.core.Ticket;
 import orca.shirako.kernel.AuthorityReservationFactory;
@@ -29,11 +30,15 @@ import orca.shirako.kernel.SliceFactory;
 import orca.shirako.plugins.config.Config;
 import orca.shirako.plugins.substrate.SubstrateTestWrapper;
 import orca.shirako.plugins.substrate.db.SubstrateActorDatabase;
+import orca.shirako.registry.ActorRegistry;
 import orca.shirako.time.Term;
 import orca.shirako.util.ResourceData;
 import orca.shirako.util.UpdateData;
 import orca.util.ID;
 import orca.util.ResourceType;
+import org.apache.log4j.Logger;
+
+import static java.lang.Thread.sleep;
 
 /**
  * <code>AuthorityPolicyTest</code> is the base class for authority policy unit
@@ -50,6 +55,7 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
     public static final long TicketEndCycle = TicketStartCycle + 10;
     public static final long TicketNewEndCycle = TicketEndCycle + 10;
     public static final int TicketUnits = 1;
+    protected static final Logger logger = Globals.getLogger(AuthorityPolicyTest.class.getCanonicalName());
 
     @Override
     protected IDatabase makeActorDatabase() {
@@ -107,7 +113,7 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
     protected Ticket getTicket(int units, ResourceType type, Term term, IClientReservation source, IActor actor, ID holder) throws Exception {
         ResourceTicket srcTicket = ((Ticket) source.getResources().getResources()).getTicket();
 
-        ResourceDelegation del = actor.getShirakoPlugin().getTicketFactory().makeDelegation(units, term, type, holder);
+        ResourceDelegation del = actor.getShirakoPlugin().getTicketFactory().makeDelegation(units, term, type, srcTicket.getDelegation().getProperties(), holder);
         ResourceTicket ticket = actor.getShirakoPlugin().getTicketFactory().makeTicket(srcTicket, del);
         Ticket cs = new Ticket(ticket, actor.getShirakoPlugin(), null);
         return cs;
@@ -248,8 +254,8 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         Term reqTerm = new Term(reqStart, reqEnd);
         Ticket ticket = getTicket(TicketUnits, Type, reqTerm, source, authority, identity.getGuid());
         IAuthorityReservation request = getRequest(TicketUnits, Type, reqTerm, ticket);
-        authority.registerSlice(request.getSlice());
-        authority.register(request);
+        //authority.registerSlice(request.getSlice());
+        //authority.register(request);
         return request;
     }
 
@@ -284,8 +290,7 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         assertEquals(request.getRequestedUnits(), set.getUnits());
     }
 
-    // FIXME: handler is never called
-    public void _testRedeem() throws Exception {
+    public void testRedeem() throws Exception {
         // note: variables to be used in the update lease handler must be
         // marked as final
         final IAuthority site = getAuthority();
@@ -293,6 +298,10 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         IServiceManager sm = getSM();
         // create the callback helper: this is how we check the returned lease
         ServiceManagerCallbackHelper proxy = new ServiceManagerCallbackHelper(sm.getName(), sm.getGuid());
+        ServiceManagerCallbackHelper authorityProxy = new ServiceManagerCallbackHelper(site.getName(), site.getGuid());
+        ActorRegistry.registerCallback(proxy);
+        ActorRegistry.registerCallback(authorityProxy);
+
         // create a source reservation
         IClientReservation source = getDonateSource(site);
         // donate the reservation to the policy
@@ -333,12 +342,13 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         // attach the update lease handler
         proxy.setUpdateLeaseHandler(handler);
         // tick the actor once so that it becomes active
-        site.externalTick(0);
+        externalTick(site, 0);
         // redeem the request
+        logger.info("Redeeming request...");
         site.redeem(request, proxy, proxy.getIdentity());
         // keep ticking
         for (long cycle = 1; cycle < DonateEndCycle; cycle++) {
-            site.externalTick(cycle);
+            externalTick(site, cycle);
         }
 
         handler.checkTermination();
@@ -358,8 +368,7 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         assertEquals(incoming.getTerm(), request.getRequestedTerm());
     }
 
-    // FIXME: handler is never called
-    public void _testExtendLease() throws Exception {
+    public void testExtendLease() throws Exception {
         // note: variables to be used in the update lease handler must be
         // marked as final
         final IAuthority site = getAuthority();
@@ -367,6 +376,10 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         IServiceManager sm = getSM();
         // create the callback helper: this is how we check the returned lease
         ServiceManagerCallbackHelper proxy = new ServiceManagerCallbackHelper(sm.getName(), sm.getGuid());
+        ServiceManagerCallbackHelper authorityProxy = new ServiceManagerCallbackHelper(site.getName(), site.getGuid());
+        ActorRegistry.registerCallback(proxy);
+        ActorRegistry.registerCallback(authorityProxy);
+
         // create a source reservation
         IClientReservation source = getDonateSource(site);
         // donate the reservation to the policy
@@ -412,23 +425,39 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
 
         // attach the update lease handler
         proxy.setUpdateLeaseHandler(handler);
+
         // tick the actor once so that becomes active
-        site.externalTick(0);
+        externalTick(site, 0);
         // redeem the request
+        logger.info("Redeeming request...");
         site.redeem(request, proxy, proxy.getIdentity());
         // keep ticking
         for (long cycle = 1; cycle < DonateEndCycle; cycle++) {
             if (cycle == TicketEndCycle - 3) {
+                logger.info("Extending lease...");
                 site.extendLease(extendRequest, proxy.getIdentity());
             }
-            site.externalTick(cycle);
+            externalTick(site, cycle);
         }
 
         handler.checkTermination();
     }
 
-    // FIXME: handler is never called
-    public void _testClose() throws Exception {
+    /**
+     *
+     * @param site
+     * @param cycle
+     * @throws Exception
+     */
+    protected void externalTick(IAuthority site, long cycle) throws Exception {
+        site.externalTick(cycle);
+
+        while (site.getCurrentCycle() != cycle){
+            sleep(1);
+        }
+    }
+
+    public void testClose() throws Exception {
         // note: variables to be used in the update lease handler must be
         // marked as final
         final IAuthority site = getAuthority();
@@ -436,6 +465,10 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         IServiceManager sm = getSM();
         // create the callback helper: this is how we check the returned lease
         ServiceManagerCallbackHelper proxy = new ServiceManagerCallbackHelper(sm.getName(), sm.getGuid());
+        ServiceManagerCallbackHelper authorityProxy = new ServiceManagerCallbackHelper(site.getName(), site.getGuid());
+        ActorRegistry.registerCallback(proxy);
+        ActorRegistry.registerCallback(authorityProxy);
+
         // create a source reservation
         IClientReservation source = getDonateSource(site);
         // donate the reservation to the policy
@@ -475,7 +508,7 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
         // attach the update lease handler
         proxy.setUpdateLeaseHandler(handler);
         // tick the actor once so that becomes active
-        site.externalTick(0);
+        externalTick(site, 0);
         // redeem the request
         site.redeem(request, proxy, proxy.getIdentity());
         // keep ticking
@@ -483,7 +516,7 @@ public abstract class AuthorityPolicyTest extends OrcaTestCase {
             if (cycle == TicketEndCycle - 3) {
                 site.close(request);
             }
-            site.externalTick(cycle);
+            externalTick(site, cycle);
         }
 
         handler.checkTermination();

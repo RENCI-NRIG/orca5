@@ -13,6 +13,7 @@ import orca.shirako.api.IServiceManager;
 import orca.shirako.api.IServiceManagerPolicy;
 import orca.shirako.api.IServiceManagerReservation;
 import orca.shirako.api.ISlice;
+import orca.shirako.container.Globals;
 import orca.shirako.kernel.ReservationStates;
 import orca.shirako.kernel.ResourceSet;
 import orca.shirako.kernel.ServiceManagerReservationFactory;
@@ -20,6 +21,8 @@ import orca.shirako.kernel.SliceFactory;
 import orca.shirako.time.ActorClock;
 import orca.shirako.time.Term;
 import orca.util.ResourceType;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Unit tests for <code>ServiceManagerSimplePolicy</code>
@@ -62,16 +65,19 @@ public class ServiceManagerSimplePolicyTest extends ServiceManagerPolicyTest {
         sm.register(r);
         sm.demand(r.getReservationID());
 
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= end+2; i++) {
             sm.externalTick((long) i);
-            System.out.println("i: " + i + " r.getState() = " + r.getState());
-            //FIXME: state is always NASCENT
+            //System.out.println("i: " + i + " r.getState() = " + r.getState());
+            while (sm.getCurrentCycle() != i){
+                sleep(1);
+            }
+
             if ((i >= start) && (i < (end - 1))) {
-                //assertTrue(r.getState() == ReservationStates.Active);
+                assertTrue(r.getState() == ReservationStates.Active);
             }
 
             if (i > end) {
-                //assertTrue(r.getState() == ReservationStates.Closed);
+                assertTrue(r.getState() == ReservationStates.Closed);
             }
         }
     }

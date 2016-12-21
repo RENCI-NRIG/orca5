@@ -6,11 +6,9 @@ import orca.embed.policyhelpers.RequestReservation;
 import orca.embed.policyhelpers.SystemNativeError;
 import orca.embed.workflow.Domain;
 import orca.embed.workflow.RequestParserListener;
-import orca.ndl.DomainResources;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlRequestParser;
-import orca.ndl.elements.NetworkElement;
 import orca.shirako.common.meta.ResourcePoolsDescriptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +17,7 @@ import org.junit.runners.Parameterized;
 import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -31,8 +29,8 @@ public class CloudHandlerTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", true },
-                { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf", false }
+                { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", true, 3 }/*,
+                { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf", false, 5 }*/ // this test does not expose the error correctly
         });
     }
 
@@ -41,6 +39,9 @@ public class CloudHandlerTest {
 
     // Second Parameter -- whether test should pass
     private boolean expected;
+
+    // Third Parameter -- number of Devices / Network Elements requested
+    private int numDevicesInRequest;
 
     protected static Map<Domain, Map<String, Integer>> resourceMap;
     static {
@@ -65,9 +66,10 @@ public class CloudHandlerTest {
     }
 
     // JUnit automatically passes in Parameters to constructor
-    public CloudHandlerTest(String requestFilename, boolean expected){
+    public CloudHandlerTest(String requestFilename, boolean expected, int numDevicesInRequest){
         this.requestFilename = requestFilename;
         this.expected = expected;
+        this.numDevicesInRequest = numDevicesInRequest;
     }
 
     @Test
@@ -117,12 +119,15 @@ public class CloudHandlerTest {
         if ((err != null) == expected) {
             System.out.println("TestCase: " + requestFilename + " should have passed? " + expected);
             if (expected) {
-                // can't use assertNull if we want to use err.toString() as part of message.
                 fail("cloudHandler.runEmbedding() failed: " + err.toString());
             } else {
-                fail("test should have failed for request: " + requestFilename);
+                fail("embedding should have failed for request: " + requestFilename);
             }
         }
+
+        //System.out.println("deviceList: " + Arrays.toString(cloudHandler.deviceList.toArray()));
+        //System.out.println("domainConnectionList: " + Arrays.toString(cloudHandler.domainConnectionList.entrySet().toArray()));
+        assertEquals(numDevicesInRequest, cloudHandler.deviceList.size());
     }
 
 }

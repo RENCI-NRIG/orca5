@@ -13,14 +13,7 @@ import java.util.Date;
 
 import orca.policy.core.util.DummyAuthorityProxy;
 import orca.security.AuthToken;
-import orca.shirako.api.IAuthorityProxy;
-import orca.shirako.api.IBroker;
-import orca.shirako.api.IBrokerReservation;
-import orca.shirako.api.IClientReservation;
-import orca.shirako.api.IProxy;
-import orca.shirako.api.IReservation;
-import orca.shirako.api.IServiceManager;
-import orca.shirako.api.ISlice;
+import orca.shirako.api.*;
 import orca.shirako.common.delegation.DelegationException;
 import orca.shirako.common.delegation.TicketException;
 import orca.shirako.container.Globals;
@@ -33,6 +26,9 @@ import orca.shirako.time.ActorClock;
 import orca.shirako.time.Term;
 import orca.util.ID;
 import orca.util.ResourceType;
+import org.apache.log4j.Logger;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Base class for broker policy unit tests.
@@ -41,6 +37,7 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
 
     public static final long DonateStartCycle = 10;
     public static final long DonateEndCycle = 100;
+    protected static final Logger logger = Globals.getLogger(BrokerPolicyTest.class.getCanonicalName());
 
     @Override
     public IBroker getBroker() throws Exception {
@@ -70,7 +67,7 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
         // In this way we make sure that the code correctly detects that it must translate the proxy to the correct protocol.
         IAuthorityProxy proxy = new SoapAxis2AuthorityProxy("http://my.container/orca:8080/services/mysite", auth, Globals.Log);
         // NOTE: passing the ticket  back to the SM involves encoding/decoding the proxy to the authority
-        // encoding depends on the existence of a proxy in the actor registry. 
+        // encoding depends on the existence of a proxy in the actor registry.
         try {
             // make sure that we have a local proxy to the authority in the actor registry
             if (ActorRegistry.getProxy(IProxy.ProxyTypeLocal, "mysite") == null) {
@@ -82,8 +79,8 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
         }
         return proxy;
     }
-    // FIXME: externalTick() doesn't seem to do anything
-    public void _testAllocateTicket() throws Exception {
+
+    public void testAllocateTicket() throws Exception {
         /*
          * Requests a ticket for all resources. Checks if the ticket is
          * allocated for what was asked. Checks the term. Checks whether the
@@ -126,6 +123,9 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
         // keep ticking
         for (; cycle < DonateEndCycle; cycle++) {
             broker.externalTick(cycle);
+            while (broker.getCurrentCycle() != cycle){
+                sleep(1);
+            }
 
             if (lastCalled < proxy.getCalled()) {
                 assertTicketed(proxy.getReservation(), units, type, start, end);
@@ -133,12 +133,13 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
             }
         }
 
+        broker.awaitNoPendingReservations(); // without this, the test would sometime pass, and sometime fail
+
         assertEquals(1, proxy.getCalled());
         assertTrue(request.isClosed());
     }
 
-    // FIXME: externalTick() doesn't seem to do anything
-    public void _testAllocateTicket2() throws Exception {
+    public void testAllocateTicket2() throws Exception {
         /*
          * Requests a ticket for all resources. Checks if the ticket is
          * allocated for what was asked. Checks the term. Checks whether the
@@ -181,6 +182,9 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
         // keep ticking
         for (; cycle < DonateEndCycle; cycle++) {
             broker.externalTick(cycle);
+            while (broker.getCurrentCycle() != cycle){
+                sleep(1);
+            }
 
             if (lastCalled < proxy.getCalled()) {
                 assertTicketed(proxy.getReservation(), units, type, start, end);
@@ -188,6 +192,8 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
             }
 
             if (cycle == cycleEnd) {
+                broker.awaitNoPendingReservations();
+
                 assertTrue(request.isClosed());
                 assertEquals(1, proxy.getCalled());
 
@@ -198,12 +204,12 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
             }
         }
 
+        broker.awaitNoPendingReservations();
         assertTrue(request.isClosed());
         assertEquals(2, proxy.getCalled());
     }
 
-    // FIXME: externalTick() doesn't seem to do anything
-    public void _testExtendTicket() throws Exception {
+    public void testExtendTicket() throws Exception {
         /*
          * Requests a ticket for all resources. Checks if the ticket is
          * allocated for what was asked. Checks the term. Checks whether the
@@ -247,6 +253,9 @@ public abstract class BrokerPolicyTest extends OrcaTestCase {
         // keep ticking
         for (; cycle <= DonateEndCycle; cycle++) {
             broker.externalTick(cycle);
+            while (broker.getCurrentCycle() != cycle){
+                sleep(1);
+            }
 
             if (lastCalled < proxy.getCalled()) {
                 assertTicketed(proxy.getReservation(), units, type, start, end);
