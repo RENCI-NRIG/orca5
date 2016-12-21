@@ -41,6 +41,8 @@ import orca.shirako.time.ActorClock;
 import orca.shirako.time.Term;
 import orca.util.ResourceType;
 
+import static java.lang.Thread.sleep;
+
 public class BrokerSimplerUnitsPolicyTest extends BrokerPolicyTest {
     @Override
     public IBrokerPolicy getBrokerPolicy() throws Exception {
@@ -176,7 +178,7 @@ public class BrokerSimplerUnitsPolicyTest extends BrokerPolicyTest {
             rd = checkQueryResponse(response, i);
         }
     }
-    
+
     public void testAdvancedRequest() throws Exception {
         IBroker broker = getBroker();
         IServiceManager sm = getSM();
@@ -222,15 +224,26 @@ public class BrokerSimplerUnitsPolicyTest extends BrokerPolicyTest {
             // since the RPC is performed on a separate thread, the exact cycle when the SM is going to process it
             // is not deterministic.
             broker.externalTick(cycle);
+            while (broker.getCurrentCycle() != cycle){
+                sleep(1);
+            }
+
+            while (proxy.prepared != 1) {
+                sleep(1); // what if the test fails?
+            }
+
             // the reservation on the broker side should have transitioned to ticketed
             assertTicketed(request, units, type, start, end);
             // a proxy callback should have been prepared
-            assertEquals(proxy.prepared, 1);
+            assertEquals(1, proxy.prepared);
             
             if (proxy.called > 0){
                 assertTicketed(proxy.getReservation(), units, type, start, end);
             }
         }
+
+        //((Broker) broker).awaitNoEvents(10000L);
+        broker.awaitNoPendingReservations();
 
         assertEquals(1, proxy.getCalled());
         assertTrue(request.isClosed());

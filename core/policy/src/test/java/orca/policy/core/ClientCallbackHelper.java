@@ -28,6 +28,7 @@ import orca.shirako.registry.ActorRegistry;
 import orca.shirako.util.UpdateData;
 import orca.util.ID;
 
+import orca.util.persistence.NotPersistent;
 import org.apache.log4j.Logger;
 
 public class ClientCallbackHelper implements IClientCallbackProxy {
@@ -35,11 +36,17 @@ public class ClientCallbackHelper implements IClientCallbackProxy {
         IReservation r;
         UpdateData udd;
     };
-    
+
+    @NotPersistent
     protected AuthToken token;
+
+    @NotPersistent
     protected int called = 0;
+
+    @NotPersistent
     protected int prepared = 0;
-    
+
+    @NotPersistent
     protected IReservation reservation;
 
     public ClientCallbackHelper(String name, ID id) {

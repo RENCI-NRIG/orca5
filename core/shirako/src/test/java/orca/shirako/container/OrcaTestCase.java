@@ -10,16 +10,7 @@
 package orca.shirako.container;
 
 import orca.security.AuthToken;
-import orca.shirako.api.IActor;
-import orca.shirako.api.IAuthority;
-import orca.shirako.api.IAuthorityPolicy;
-import orca.shirako.api.IBroker;
-import orca.shirako.api.IBrokerPolicy;
-import orca.shirako.api.IDatabase;
-import orca.shirako.api.IPolicy;
-import orca.shirako.api.IServiceManager;
-import orca.shirako.api.IServiceManagerPolicy;
-import orca.shirako.api.IShirakoPlugin;
+import orca.shirako.api.*;
 import orca.shirako.common.delegation.IResourceTicketFactory;
 import orca.shirako.common.delegation.SimpleResourceTicketFactory;
 import orca.shirako.container.api.IOrcaContainerDatabase;
@@ -33,6 +24,7 @@ import orca.shirako.core.ServiceManagerPolicy;
 import orca.shirako.core.TestActor;
 import orca.shirako.plugins.ShirakoPluginTestWrapper;
 import orca.shirako.plugins.db.ActorDatabase;
+import orca.shirako.proxies.soapaxis2.SoapAxis2AuthorityProxy;
 import orca.shirako.registry.ActorRegistry;
 import orca.util.ID;
 
@@ -317,6 +309,7 @@ public abstract class OrcaTestCase extends OrcaTestCaseBase {
         ActorRegistry.unregister(actor);
         ActorRegistry.registerActor(actor);
         actor.actorAdded();
+        actor.start();  // not sure if there is a better way, but this seems to work.
     }
     
     /**

@@ -12,11 +12,7 @@ package orca.shirako.kernel;
 
 import java.util.Iterator;
 
-import orca.shirako.api.IAuthorityProxy;
-import orca.shirako.api.IClientPolicy;
-import orca.shirako.api.IConcreteSet;
-import orca.shirako.api.IReservation;
-import orca.shirako.api.IServiceManagerPolicy;
+import orca.shirako.api.*;
 import orca.shirako.common.delegation.ResourceDelegation;
 import orca.shirako.common.delegation.ResourceTicket;
 import orca.shirako.core.ServiceManager;

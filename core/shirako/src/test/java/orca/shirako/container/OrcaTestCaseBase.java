@@ -16,7 +16,9 @@ public abstract class OrcaTestCaseBase extends TestCase {
     public static final String MySqlDatabaseUser = "orca_test";
 
     static {
-        System.setProperty("ORCA_HOME", "orca");
+        //System.out.println(System.getProperty("user.dir"));
+
+        System.setProperty("ORCA_HOME", "../../core/shirako/orca/");
         OrcaTestSettings.TestMode = true;
         fixClassPath();
         Term.SetCycles = false;
