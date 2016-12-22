@@ -514,6 +514,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/availableVLANSet/3">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3712"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/wvnNet.rdf#wvnNet/Cisco/UCSFI/VLANLabel/3716"/>
     </owl:NamedIndividual>
     
 
