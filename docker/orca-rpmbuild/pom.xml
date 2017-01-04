@@ -60,7 +60,15 @@
 									<exclude>**/repo/**/*</exclude>
 									<exclude>**/network/logs/**/*</exclude>
 									<exclude>**/startup/**/*</exclude>
-									<exclude>.git/**/*</exclude>
+									<exclude>**/.git/**/*</exclude>
+									<exclude>**/handlers/network/logs/</exclude>
+									<exclude>**/nodeagent/scripts/**/*</exclude>
+									<exclude>**/server/orca/config/runtime/**/*</exclude>
+									<exclude>**/server/orca/logs/**/*</exclude>
+									<exclude>**/server/orca/scripts/**/*</exclude>
+									<exclude>**/server/orca/startup/**/*</exclude>
+									<exclude>**/tools/cmdline/startup/</exclude>
+									<exclude>**/core/shirako/orca/</exclude>
 									<exclude>**/.project</exclude>
 									<exclude>**/.classpath</exclude>
 									<exclude>**/.settings/**/*</exclude>

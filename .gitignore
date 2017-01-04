@@ -1,5 +1,9 @@
 # Orca specific build files
 handlers/network/logs/
+nodeagent/scripts/
+server/orca/config/runtime/
+server/orca/logs/
+server/orca/scripts/
 server/orca/startup/
 tools/cmdline/startup/
 core/shirako/orca/
