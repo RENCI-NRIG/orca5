@@ -26,9 +26,6 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>**/Dockerfile</include>
-					<!-- the file docker-entrypoint.sh doesn't currently need any filtering. 
-						but it does need to get copied. -->
-					<include>**/docker-entrypoint.sh</include>
 				</includes>
 			</resource>
 		</resources>

@@ -63,9 +63,11 @@ docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_AM_BROKER} \
            --hostname orca-am-broker \
+           --publish 9010:9010 \
            --volume ${ORCA_CONFIG_DIR}/am+broker/config:/etc/orca/am+broker-12080/config \
            --volume ${ORCA_CONFIG_DIR}/am+broker/ndl:/etc/orca/am+broker-12080/ndl \
-           renci/orca-am-broker
+           renci/orca-am-broker \
+           debug # DEBUG mode, for JMX remote monitoring
 
 # check exit status from docker run, and kill script if not successful
 if [ $? -ne 0 ]
@@ -83,8 +85,10 @@ docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_SM} \
            --hostname orca-sm \
+           --publish 9011:9010 \
            --volume ${ORCA_CONFIG_DIR}/sm/config:/etc/orca/sm-14080/config \
-           renci/orca-sm
+           renci/orca-sm \
+           debug # DEBUG mode, for JMX remote monitoring
 
 # check exit status from docker run, and kill script if not successful
 if [ $? -ne 0 ]
@@ -104,8 +108,10 @@ docker run -d \
            --name ${DOCKER_NAME_CONTROLLER} \
            --hostname orca-controller \
            --publish 11443:11443 \
+           --publish 9012:9010 \
            --volume ${ORCA_CONFIG_DIR}/controller/config:/etc/orca/controller-11080/config \
-           renci/orca-controller
+           renci/orca-controller \
+           debug # DEBUG mode, for JMX remote monitoring
 
 # check exit status from docker run, and kill script if not successful
 if [ $? -ne 0 ]

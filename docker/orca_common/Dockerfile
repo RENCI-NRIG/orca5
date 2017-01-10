@@ -10,12 +10,24 @@ RUN useradd -ms /bin/bash geni-orca && \
     groupadd nonrenci && \
     usermod -a -G nonrenci geni-orca
 
-# In the future, hopefully we will use Maven to automatically copy these files after they are built.
+# Copy Orca RPMs to /tmp
 COPY resources /tmp/
-#COPY resources/orca-iaas-common-5.0.0-201611101008git5e2079af.x86_64.rpm /tmp/
-#COPY resources/orca-iaas-5.0.0-201611101008git5e2079af.x86_64.rpm /tmp/
-#COPY resources/orca-iaas-exogeni-am+broker-config-5.0.0-201611101008git5e2079af.x86_64.rpm /tmp/
 
+#RUN yum -y install /tmp/orca-iaas-*.rpm && yum clean all
+# rpm install is quicker than yum install.
+# deleting the RPM doesn't make our Image any smaller, but it corrects later RPM install complications
+RUN rpm -i /tmp/orca-iaas-*.rpm && rm /tmp/orca-iaas-*.rpm
 
-RUN yum -y install /tmp/orca-iaas-*.rpm && yum clean all
+# Copy default wrapper-overrides.conf file to /tmp
+# These contain debug statements for JMX remote monitoring,
+# that are only enabled if container is started in debug mode
+COPY wrapper-overrides.conf /tmp/
 
+#Expose JMX port for Java profiling
+EXPOSE 9010
+
+# Copy base docker-entrypoint.sh file.  Will be modified in later stages
+COPY ./docker-entrypoint.sh /
+RUN chmod a+x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
