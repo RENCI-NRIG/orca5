@@ -3,12 +3,12 @@
 	<groupId>orca</groupId>
 	<artifactId>nodeagent</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0.3-SNAPSHOT</version>
+	<version>5.0.3</version>
 	<name>Orca Node Agent</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>orca</artifactId>
-		<version>5.0.3-SNAPSHOT</version>
+		<version>5.0.3</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
