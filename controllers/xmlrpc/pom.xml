@@ -5,12 +5,12 @@
 	<groupId>orca.controllers</groupId>
 	<artifactId>xmlrpc</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0.3</version>
+	<version>5.0.4-SNAPSHOT</version>
 	<name>Orca XML-RPC Controller</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>controllers</artifactId>
-		<version>5.0.3</version>
+		<version>5.0.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 

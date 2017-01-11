@@ -6,11 +6,11 @@
 	<artifactId>handlers</artifactId>
 	<packaging>pom</packaging>
 	<name>Orca Handlers</name>
-	<version>5.0.3</version>
+	<version>5.0.4-SNAPSHOT</version>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>orca</artifactId>
-		<version>5.0.3</version>
+		<version>5.0.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
