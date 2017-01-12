@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>orca.tools</groupId>
 	<artifactId>config</artifactId>
-	<version>5.0.3-SNAPSHOT</version>
+	<version>5.0.4-SNAPSHOT</version>
 
 	<name>Orca Configuration Tools</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>tools</artifactId>
-		<version>5.0.3-SNAPSHOT</version>
+		<version>5.0.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>

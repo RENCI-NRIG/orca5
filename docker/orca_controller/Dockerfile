@@ -1,8 +1,8 @@
 #FROM orca-common:openjdk
 FROM renci/orca-common:${git.commit.id.abbrev}-${orca.docker.jre.vendor}
 
-LABEL description = "An Orca controller configured to talk to a named linked MySQL container" \
-      build = "docker build -t orca-controller ." \
+LABEL description = "An Orca controller configured to talk to a named MySQL container" \
+      build = "mvn clean package -Pdocker" \
       run = "docker run -d \
                     --net orca \
                     --name orca-controller \
@@ -11,28 +11,27 @@ LABEL description = "An Orca controller configured to talk to a named linked MyS
                     -v /opt/orca/controller/config:/etc/orca/controller-11080/config \
                     renci/orca-controller"
 
-# In the future, hopefully we will use Maven to automatically copy these files after they are built.
+# Copy Orca RPMs to /tmp
 COPY resources /tmp/
 
-RUN yum -y install /tmp/orca-iaas-*.rpm && yum clean all
+# rpm install is quicker than yum install
+#RUN yum -y install /tmp/orca-iaas-*.rpm && yum clean all
+RUN rpm -i /tmp/orca-iaas-*.rpm
 
+# oom_adj cannot be modified under Docker
 RUN sed -e '/oom_adj/ s/^#*/#/' -i /etc/init.d/orca_controller-11080
 
-# Tell Orca which MySQL server to talk to (use a named linked docker container as hostname)
-#RUN sed -e '/mysql.server/s/localhost/orca_mysql/' -i /etc/orca/controller-11080/config/orca.properties
+# Configuration files should be volume mounted at run-time
 
-#COPY config /etc/orca/controller-11080/config/
-
-RUN chown -R geni-orca:nonrenci /etc/orca
-
+# Expose ports for Controller
 EXPOSE 11080 8443 11443
 
-COPY ./docker-entrypoint.sh /
+# Modify docker-entrypoint.sh for Controller
+RUN sed -e '/prog/s/orca/orca_controller-11080/' -i /docker-entrypoint.sh && \
+    sed -e 's!/opt/orca!/opt/orca-controller!g' -i /docker-entrypoint.sh && \
+    sed -e 's/ORCA_HOME/ORCA_CONTROLLER_HOME/g' -i /docker-entrypoint.sh && \
+    sed -e 's/orcad/xmlrpcd/g' -i /docker-entrypoint.sh && \
+    sed -e 's/orca-stdout/controller-stdout/g' -i /docker-entrypoint.sh
 
-#RUN sed -e '/eval \$COMMAND_LINE/s/eval/echo/' -i /opt/orca-controller/bin/xmlrpcd
-
-RUN chmod a+x /docker-entrypoint.sh
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["orca_controller-11080"]
 
