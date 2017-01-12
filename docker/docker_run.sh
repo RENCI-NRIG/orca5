@@ -9,17 +9,40 @@ DOCKER_NAME_CONTROLLER="orca-controller"
 
 DOCKER_NET_NAME="orca"
 
+# remove stopped or running containers
+f_rm_f_docker_container ()
+{
+  #container_name="$1"
+  RUNNING=$(docker inspect --format="{{ .State.Running }}" $1 2> /dev/null)
+
+  # if it's not there at all, we don't need to remove it
+  if [ $? -ne 1 ]; then
+    echo -n "Removing $1: "
+    docker rm -f $1
+
+    # check exit status, and kill script if not successful
+    if [ $? -ne 0 ]
+    then
+      exit $?
+    fi
+  fi
+}
+
 # Remove any previous docker containers of name
 echo "Info: removing any previous Orca containers..."
-docker rm -f ${DOCKER_NAME_CONTROLLER}
-docker rm -f ${DOCKER_NAME_SM}
-docker rm -f ${DOCKER_NAME_AM_BROKER}
-#docker rm -f ${DOCKER_NAME_MYSQL}
-echo "Note: If no such containers existed, you can safely ignore this error."
+f_rm_f_docker_container ${DOCKER_NAME_CONTROLLER}
+f_rm_f_docker_container ${DOCKER_NAME_SM}
+f_rm_f_docker_container ${DOCKER_NAME_AM_BROKER}
 
 # Create docker network
-docker network create ${DOCKER_NET_NAME}
-echo "Note: If your docker network '${DOCKER_NET_NAME}' already exists, you can safely ignore this error."
+NET_INSPECT=$(docker network inspect ${DOCKER_NET_NAME} 2> /dev/null)
+# only create it if it doesn't already exist
+if [ $? -eq 1 ]; then
+  echo -n "Creating docker network ${DOCKER_NET_NAME}: "
+  docker network create ${DOCKER_NET_NAME}
+else
+  echo "Info: Docker network '${DOCKER_NET_NAME}' already exists."
+fi
 
 # Docker-on-Mac is a bit slower
 var_sleep=10
@@ -33,10 +56,11 @@ RUNNING=$(docker inspect --format="{{ .State.Running }}" $DOCKER_NAME_MYSQL 2> /
 
 if [ $? -eq 1 ] || [ "$RUNNING" == "false" ]; then
   if [ "$RUNNING" == "false" ]; then
-    docker rm -f ${DOCKER_NAME_MYSQL}
+    f_rm_f_docker_container ${DOCKER_NAME_MYSQL}
   fi
 
   # Start Orca MySQL server
+  echo -n "docker run ${DOCKER_NAME_MYSQL}: "
   docker run -d \
              --net ${DOCKER_NET_NAME} \
              --name ${DOCKER_NAME_MYSQL} \
@@ -59,6 +83,7 @@ else
 fi
 
 # Start Orca AM+Broker
+echo -n "docker run ${DOCKER_NAME_AM_BROKER}: "
 docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_AM_BROKER} \
@@ -81,6 +106,7 @@ sleep ${var_sleep};
 echo " done."
 
 # Start Orca SM
+echo -n "docker run ${DOCKER_NAME_SM}: "
 docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_SM} \
@@ -103,6 +129,7 @@ sleep ${var_sleep};
 echo " done."
 
 # Start Orca Controller
+echo -n "docker run ${DOCKER_NAME_CONTROLLER}: "
 docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_CONTROLLER} \
