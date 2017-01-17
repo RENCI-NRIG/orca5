@@ -7,6 +7,9 @@ server/orca/scripts/
 server/orca/startup/
 tools/cmdline/startup/
 core/shirako/orca/
+controllers/xmlrpc/controller_recovery.lock
+controllers/xmlrpc/logs/
+controllers/xmlrpc/modelState/
 #core/shirako/orca/config/runtime/axis2/test*
 #core/shirako/orca/config/runtime/keystores/test*
 #core/shirako/orca/logs/
