@@ -17,7 +17,7 @@ f_rm_f_docker_container ()
 
   # if it's not there at all, we don't need to remove it
   if [ $? -ne 1 ]; then
-    echo -n "Removing $1: "
+    echo -n "Removing container: "
     docker rm -f $1
 
     # check exit status, and kill script if not successful
@@ -111,6 +111,7 @@ docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_SM} \
            --hostname orca-sm \
+           --publish 14080:14080\
            --publish 9011:9010 \
            --volume ${ORCA_CONFIG_DIR}/sm/config:/etc/orca/sm-14080/config \
            renci/orca-sm \
