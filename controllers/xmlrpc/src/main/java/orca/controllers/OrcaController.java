@@ -24,7 +24,7 @@ import org.apache.log4j.PropertyConfigurator;
 public class OrcaController {
 	public static final String HomeDirectory = PathGuesser.getOrcaControllerHome();
 	public static final String ConfigDirectory = HomeDirectory + System.getProperty("file.separator") + "config" + System.getProperty("file.separator");
-	private static Properties controllerProperties;
+	protected static Properties controllerProperties;
 	public static final String ControllerConfigurationFile = ConfigDirectory + "controller.properties";
 	public static final Logger Log = makeLogger();
 

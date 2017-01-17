@@ -177,7 +177,7 @@ public class XmlRpcController extends OrcaController {
 		l.start();
 	}
 
-	private class ControllerContextListener implements ServletContextListener {
+	protected class ControllerContextListener implements ServletContextListener {
 		public void contextInitialized(ServletContextEvent arg0) {
 		}
 

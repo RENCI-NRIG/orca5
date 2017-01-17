@@ -263,6 +263,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				if (verifyCredentials && !checkWhitelist(userDN)) 
 					return setError(WHITELIST_ERROR);
 
+				if (!verifyCredentials && null == userDN){
+					logger.error("Setting userDN to test. This should only happen in Unit Testing.");
+					userDN = "test";
+				}
+
 				sm = instance.getSM();
 
 
