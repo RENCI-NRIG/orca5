@@ -38,7 +38,7 @@
 							<goal>generate-daemons</goal>
 						</goals>
 						<configuration>
-							<assembleDirectory>${basedir}/xmlrpc</assembleDirectory>
+							<assembleDirectory>${basedir}</assembleDirectory>
 							<programs>
 								<program>
 									<mainClass>orca.controllers.xmlrpc.XmlRpcController</mainClass>
@@ -157,7 +157,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${basedir}/xmlrpc</directory>
+							<directory>${basedir}</directory>
 							<includes>
 								<include>bin/**</include>
 								<include>repo/**</include>
