@@ -69,6 +69,9 @@
 									<exclude>**/server/orca/startup/**/*</exclude>
 									<exclude>**/tools/cmdline/startup/</exclude>
 									<exclude>**/core/shirako/orca/</exclude>
+									<exclude>**/controllers/xmlrpc/controller_recovery.lock</exclude>
+									<exclude>**/controllers/xmlrpc/logs/</exclude>
+									<exclude>**/controllers/xmlrpc/modelState/</exclude>
 									<exclude>**/.project</exclude>
 									<exclude>**/.classpath</exclude>
 									<exclude>**/.settings/**/*</exclude>
