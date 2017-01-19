@@ -287,30 +287,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					throw new Exception("Could not create slice: " + sm.getLastError());
 				}
 
-				// if uuid was not provided, use Orca GUID
-				// FIXME: really should check for tuple <name, uuid> if it is already present.
-				String uuid = null;
-				int index = 0;
-				while (index < credentials.length) {
-					// see if we can get uuid from credentials
-					try {
-						Credential cred = new Credential((String)credentials[index]);
-						uuid = cred.getObjectGid().getUuid().toString();
-						break;
-					} catch (ClassCastException cce) {
-						// just use GUID
-						break;
-					} catch (NullPointerException npe) {
-						// try to find it in the next one
-						index++;
-						continue;
-					} 
-				}
-				if (uuid == null){
-					uuid = sid.toString();
-				}
-				// now uuid should be set
-
 				//populate typesMap and abstractModels
 				try {
 					discoverTypes(sm);
