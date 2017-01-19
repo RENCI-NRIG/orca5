@@ -2,10 +2,13 @@ package orca.controllers.mock;
 
 import orca.embed.EmbedTestHelper;
 import orca.embed.workflow.Domain;
-import orca.manage.IOrcaServiceManager;
-import orca.manage.beans.*;
+import orca.manage.beans.PoolInfoMng;
+import orca.manage.beans.ReservationMng;
+import orca.manage.beans.SliceMng;
+import orca.manage.beans.TicketReservationMng;
 import orca.manage.internal.Converter;
 import orca.manage.internal.ManagementObject;
+import orca.manage.internal.ServiceManagerManagementObject;
 import orca.manage.internal.local.LocalServiceManager;
 import orca.ndl.NdlException;
 import orca.security.AuthToken;
@@ -50,6 +53,11 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     public MockOrcaServiceManager(ManagementObject manager, AuthToken auth) {
         super(manager, auth);
         reservationMap = new HashMap<>();
+    }
+
+    public MockOrcaServiceManager(ServiceManagerManagementObject manager, AuthToken authToken, Map<ReservationID, TicketReservationMng> reservationMap) {
+        super(manager, authToken);
+        this.reservationMap = reservationMap;
     }
 
     /**
