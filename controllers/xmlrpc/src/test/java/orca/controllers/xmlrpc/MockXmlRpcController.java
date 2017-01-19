@@ -2,15 +2,19 @@ package orca.controllers.xmlrpc;
 
 import orca.controllers.OrcaXmlrpcServlet;
 import orca.controllers.mock.MockOrcaConnectionFactory;
-import orca.controllers.xmlrpc.XmlRpcController;
-import orca.controllers.xmlrpc.XmlrpcOrcaState;
 import orca.manage.IOrcaServiceManager;
+import orca.manage.beans.TicketReservationMng;
 import orca.shirako.common.ConfigurationException;
+import orca.shirako.common.ReservationID;
 import orca.util.ID;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.util.Map;
+
 public class MockXmlRpcController extends XmlRpcController {
+
+    protected Map<ReservationID, TicketReservationMng> reservationMap;
 
     /**
      *
@@ -18,6 +22,18 @@ public class MockXmlRpcController extends XmlRpcController {
      */
     @Override
     protected void init() throws Exception {
+        XmlrpcOrcaState.getInstance().setController(this);
+        initConnectionFactory();
+    }
+
+    /**
+     *
+     * @param reservationMap
+     * @throws Exception
+     */
+    protected void init(Map<ReservationID, TicketReservationMng> reservationMap) throws Exception {
+        this.reservationMap = reservationMap;
+
         XmlrpcOrcaState.getInstance().setController(this);
         initConnectionFactory();
     }
@@ -36,7 +52,12 @@ public class MockXmlRpcController extends XmlRpcController {
         String url = controllerProperties.getProperty(OrcaURL);
         String user = controllerProperties.getProperty(OrcaUser);
         String password = controllerProperties.getProperty(OrcaLogin);
-        orca = new MockOrcaConnectionFactory(url, user, password, new ID(smGuid));
+
+        if (null != reservationMap){
+            orca = new MockOrcaConnectionFactory(url, user, password, new ID(smGuid), reservationMap);
+        } else {
+            orca = new MockOrcaConnectionFactory(url, user, password, new ID(smGuid));
+        }
     }
 
     /**

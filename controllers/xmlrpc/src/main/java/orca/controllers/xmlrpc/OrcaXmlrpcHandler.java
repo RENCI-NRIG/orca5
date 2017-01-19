@@ -485,7 +485,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			// check the whitelist
 			if (verifyCredentials && !checkWhitelist(userDN)) 
 				return setError(WHITELIST_ERROR);
-			
+
 			allRes = getSliceReservations(instance, slice_urn, userDN, logger);
 
 			if (allRes == null){
@@ -541,7 +541,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public Map<String, Object> modifySlice(String slice_urn, Object[] credentials, String modReq) {
 		XmlrpcControllerSlice ndlSlice = null;
 		IOrcaServiceManager sm = null;
-		
+
+		logger.info("ORCA API modifySlice() invoked");
+		if (logger.isTraceEnabled()){
+			logger.trace("modReq: " + modReq);
+		}
+
 		//Check existing slices, remove the closed ones from XmlrpcOrcaState
 		instance.closeDeadSlices();
 		
@@ -564,6 +569,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				// check the whitelist
 				if (verifyCredentials && !checkWhitelist(userDN)) 
 					return setError(WHITELIST_ERROR);
+
+				if (!verifyCredentials && null == userDN){
+					logger.error("Setting userDN to test. This should only happen in Unit Testing.");
+					userDN = "test";
+				}
 
 				if ((modReq == null) || (modReq.length() == 0)) {
 					logger.error("modifySlice(): modification request for slice " + slice_urn + " is empty");
