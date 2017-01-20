@@ -33,9 +33,6 @@
         <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#Term"/>
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
-    </rdf:Description>
     <rdf:Description rdf:about="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#TermDuration">
         <time:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</time:days>
         <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
@@ -62,7 +59,6 @@
     <rdf:Description rdf:about="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#alan3">
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#net1-alan3"/>
         <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#node boot script</request-schema:postBootScript>
-        <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain"/>
         <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOXlarge"/>
         <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#PRUTH-Ubuntu-14.04-v0.4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
@@ -75,7 +71,6 @@
     <rdf:Description rdf:about="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#alan2">
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#net1-alan2"/>
         <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#node boot script</request-schema:postBootScript>
-        <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain"/>
         <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOXlarge"/>
         <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#PRUTH-Ubuntu-14.04-v0.4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
@@ -91,7 +86,6 @@
     <rdf:Description rdf:about="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#alan0">
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#net1-alan0"/>
         <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#node boot script</request-schema:postBootScript>
-        <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain"/>
         <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOXlarge"/>
         <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#PRUTH-Ubuntu-14.04-v0.4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
@@ -107,7 +101,6 @@
     <rdf:Description rdf:about="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#alan1">
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#net1-alan1"/>
         <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#node boot script</request-schema:postBootScript>
-        <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain"/>
         <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOXlarge"/>
         <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/b81a06da-18df-46c3-9cc0-851265a14b13#PRUTH-Ubuntu-14.04-v0.4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
