@@ -27,7 +27,6 @@ import orca.controllers.OrcaControllerException;
 import orca.controllers.xmlrpc.SliceStateMachine.SliceCommand;
 import orca.controllers.xmlrpc.geni.GeniAmV2Handler;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
-import orca.controllers.xmlrpc.x509util.Credential;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.StringProcessor;
@@ -287,14 +286,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					throw new Exception("Could not create slice: " + sm.getLastError());
 				}
 
-				//populate typesMap and abstractModels
-				try {
-					discoverTypes(sm);
-				} catch (Exception ex) {
-					logger.error("createSlice(): discoverTypes() failed to populate typesMap and abstractModels: " + ex, ex);
-					return setError("discoverTypes() failed to populate typesMap and abstractModels");
-				}
-				
 				// create XmlrpcSlice object and register with Orca state
 				ndlSlice = new XmlrpcControllerSlice(sm, slice, slice_urn, userDN, users, false);
 				// we lock the slice from any concurrent modifications
@@ -306,12 +297,19 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				// now done on separate thread LabelSyncThread /ib 11/30/15
 				//instance.syncTags(sm);
 				
-				instance.getController();
 				String controller_url = OrcaController.getProperty(PropertyXmlrpcControllerUrl);
 
-				ReservationConverter orc = ndlSlice.getOrc(); 
-				
-				DomainResourcePools drp = new DomainResourcePools(); 
+				ReservationConverter orc = ndlSlice.getOrc();
+
+				//populate typesMap and abstractModels
+				try {
+					discoverTypes(sm);
+				} catch (Exception ex) {
+					logger.error("createSlice(): discoverTypes() failed to populate typesMap and abstractModels: " + ex, ex);
+					return setError("discoverTypes() failed to populate typesMap and abstractModels");
+				}
+
+				DomainResourcePools drp = new DomainResourcePools();
 				drp.getDomainResourcePools(pools);
 
 
@@ -374,33 +372,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				// or put on deferred queue
 				XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 
-				// What do we return in the manifest ? reservation Id, type, units ? slice ?
-				StringBuilder result = new StringBuilder("Here are the leases: \n");
-
-				it = ndlSlice.getComputedReservations().iterator();
-				result.append("Request id: ");
-				result.append(ndlSlice.getSliceID());
-				result.append("\n");
-
-				while(it.hasNext()){
-					LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
-
-					result.append("[ ");
-
-					result.append("  Slice UID: ");
-					result.append(currRes.getSliceID().toString());
-
-					result.append(" | Reservation UID: ");
-					result.append(currRes.getReservationID().toString());
-
-					result.append(" | Resource Type: ");
-					result.append(currRes.getResourceType().toString());
-
-					result.append(" | Resource Units: ");
-					result.append(currRes.getUnits());
-
-					result.append(" ] \n");
-				}
+				StringBuilder result = getComputedReservationSummary(ndlSlice);
 
 				// call getManifest to fully form it (otherwise recovery will fail) /ib
 				List<ReservationMng> allRes = ndlSlice.getAllReservations(sm);
@@ -408,14 +380,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						workflow.getDomainInConnectionList(),
 						workflow.getBoundElements(),
 						allRes);
-				
+
 				// call publishManifest if there are reservations in the slice
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
 					ndlSlice.publishManifest(logger);
 				}
 
-				String errMsg = workflow.getErrorMsg();
-				result.append((errMsg == null ? "No errors reported" : errMsg));
 				
 				//workflow.closeModel(); //close the substrate model, but would break modifying now
 				
@@ -1022,54 +992,24 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					}
 
 				}
+				StringBuilder result = getComputedReservationSummary(ndlSlice);
 
-				// What do we return in the manifest ? reservation Id, type, units ? slice ?
-				StringBuilder result = new StringBuilder("Here are the leases: \n");
-
-				result.append("Request id: ");
-				result.append(ndlSlice.getSliceID());
-				result.append("\n");
-				if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
-					Iterator<TicketReservationMng> it = ndlSlice.getComputedReservations().iterator();
-
-					while(it.hasNext()){
-						LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
-
-						result.append("[ ");
-
-						result.append("  Slice UID: ");
-						result.append(currRes.getSliceID().toString());
-
-						result.append(" | Reservation UID: ");
-						result.append(currRes.getReservationID().toString());
-
-						result.append(" | Resource Type: ");
-						result.append(currRes.getResourceType().toString());
-
-						result.append(" | Resource Units: ");
-						result.append(currRes.getUnits());
-
-						result.append(" ] \n");
-					}
-					
-					// call getManifest to fully form it (otherwise recovery will fail) /ib
-					allRes = ndlSlice.getAllReservations(sm);
-					orc.getManifest(workflow.getManifestModel(),
-							workflow.getDomainInConnectionList(),
-							workflow.getBoundElements(),
-							allRes);
-					
-					// update published manifest
-					ndlSlice.updatePublishedManifest(logger);
-				} else {
-					result.append("No new reservations were computed in modifySlice() call\n");
-				}
+				// call getManifest to fully form it (otherwise recovery will fail) /ib
+				allRes = ndlSlice.getAllReservations(sm);
+				orc.getManifest(workflow.getManifestModel(),
+						workflow.getDomainInConnectionList(),
+						workflow.getBoundElements(),
+						allRes);
 
 				String errMsg = workflow.getErrorMsg();
 				result.append((errMsg == null ? "No errors reported" : errMsg));
 
-				if (result.length() == 0)
-					result.append("No result available");
+
+				// update published manifest
+				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+					ndlSlice.updatePublishedManifest(logger);
+				}
+
 
 				logger.debug("modifySlice(): returning result " + result);
 				return setReturn(result.toString());
@@ -1096,7 +1036,51 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		}
 
 	}
-	
+
+	/**
+	 *
+	 * @param ndlSlice
+	 * @return
+	 */
+	protected StringBuilder getComputedReservationSummary(XmlrpcControllerSlice ndlSlice) {
+
+		StringBuilder result = new StringBuilder("Here are the leases: \n");
+
+		result.append("Request id: ");
+		result.append(ndlSlice.getSliceID());
+		result.append("\n");
+		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+
+			for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
+				//LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(ticketReservationMng.getReservationID()));
+
+				result.append("[ ");
+
+				result.append("  Slice UID: ");
+				result.append(currRes.getSliceID());
+
+				result.append(" | Reservation UID: ");
+				result.append(currRes.getReservationID());
+
+				result.append(" | Resource Type: ");
+				result.append(currRes.getResourceType());
+
+				result.append(" | Resource Units: ");
+				result.append(currRes.getUnits());
+
+				result.append(" ] \n");
+			}
+
+        } else {
+            result.append("No new reservations were computed\n");
+        }
+
+		if (result.length() == 0)
+            result.append("No result available");
+
+		return result;
+	}
+
 	/**
 	 * Permit stitching by other slices to this sliver with password. This call does not check
 	 * the type of the sliver, only its existence within the given slice and 
