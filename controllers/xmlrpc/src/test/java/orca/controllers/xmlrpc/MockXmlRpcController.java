@@ -10,11 +10,13 @@ import orca.util.ID;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MockXmlRpcController extends XmlRpcController {
 
     protected Map<ReservationID, TicketReservationMng> reservationMap;
+    protected boolean failReservation = false;
 
     /**
      *
@@ -22,8 +24,7 @@ public class MockXmlRpcController extends XmlRpcController {
      */
     @Override
     protected void init() throws Exception {
-        XmlrpcOrcaState.getInstance().setController(this);
-        initConnectionFactory();
+        this.init(reservationMap);
     }
 
     /**
@@ -32,7 +33,16 @@ public class MockXmlRpcController extends XmlRpcController {
      * @throws Exception
      */
     protected void init(Map<ReservationID, TicketReservationMng> reservationMap) throws Exception {
-        this.reservationMap = reservationMap;
+        this.init(reservationMap, failReservation);
+    }
+
+    public void init(Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) throws Exception {
+        if (null != reservationMap) {
+            this.reservationMap = reservationMap;
+        } else {
+            this.reservationMap = new HashMap<>();
+        }
+        this.failReservation = failReservation;
 
         XmlrpcOrcaState.getInstance().setController(this);
         initConnectionFactory();
@@ -53,11 +63,7 @@ public class MockXmlRpcController extends XmlRpcController {
         String user = controllerProperties.getProperty(OrcaUser);
         String password = controllerProperties.getProperty(OrcaLogin);
 
-        if (null != reservationMap){
-            orca = new MockOrcaConnectionFactory(url, user, password, new ID(smGuid), reservationMap);
-        } else {
-            orca = new MockOrcaConnectionFactory(url, user, password, new ID(smGuid));
-        }
+        orca = new MockOrcaConnectionFactory(url, user, password, new ID(smGuid), reservationMap, failReservation);
     }
 
     /**
@@ -95,4 +101,5 @@ public class MockXmlRpcController extends XmlRpcController {
     public ID getBroker(IOrcaServiceManager sm) {
         return new ID();
     }
+
 }

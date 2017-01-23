@@ -21,8 +21,11 @@ import orca.util.ID;
 import java.io.IOException;
 import java.util.*;
 
+import static orca.manage.OrcaConstants.ReservationStateFailed;
+
 public class MockOrcaServiceManager extends LocalServiceManager {
 
+    protected final boolean failReservation;
     protected Map<ReservationID, TicketReservationMng> reservationMap;
 
     /**
@@ -51,13 +54,17 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     }
 
     public MockOrcaServiceManager(ManagementObject manager, AuthToken auth) {
-        super(manager, auth);
-        reservationMap = new HashMap<>();
+        this(manager, auth, new HashMap<ReservationID, TicketReservationMng>());
     }
 
-    public MockOrcaServiceManager(ServiceManagerManagementObject manager, AuthToken authToken, Map<ReservationID, TicketReservationMng> reservationMap) {
+    public MockOrcaServiceManager(ManagementObject manager, AuthToken authToken, Map<ReservationID, TicketReservationMng> reservationMap) {
+        this(manager, authToken, reservationMap, false);
+    }
+
+    public MockOrcaServiceManager(ManagementObject manager, AuthToken authToken, Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) {
         super(manager, authToken);
         this.reservationMap = reservationMap;
+        this.failReservation = failReservation;
     }
 
     /**
@@ -139,6 +146,14 @@ public class MockOrcaServiceManager extends LocalServiceManager {
      */
     @Override
     public List<ReservationMng> getReservations(SliceID sliceID) {
+        // fail one of the reservations in the Test
+        if (failReservation) {
+            for (ReservationMng reservation : reservationMap.values()){
+                reservation.setState(ReservationStateFailed);
+                break;
+            }
+        }
+
         return new ArrayList<ReservationMng>(reservationMap.values());
     }
 

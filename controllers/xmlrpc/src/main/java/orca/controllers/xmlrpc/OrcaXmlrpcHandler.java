@@ -71,6 +71,8 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 
+import static orca.manage.OrcaConstants.ReservationStateFailed;
+
 
 /**
  * ORCA XMLRPC client interface
@@ -83,7 +85,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String RET_RET_FIELD = "ret";
 	public static final String MSG_RET_FIELD = "msg";
 	public static final String ERR_RET_FIELD = "err";
-	
+	public static final String FAILED_ENTITIES_FIELD = "failedRequestEntities";
+	public static final String TICKETED_ENTITIES_FIELD = "ticketedRequestEntities";
+	public static final int BASE_RESERVATION_BUILDER_SIZE = 100;
+	public static final int PER_RESERVATION_BUILDER_SIZE = 180;
+
 	protected final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	
 	protected ResourcePoolsDescriptor pools;
@@ -119,7 +125,24 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		m.put(MSG_RET_FIELD, "ERROR: " + msg);
 		return m;
 	}
-	
+
+	/**
+	 *
+	 * @param msg
+	 * @param ticketedRequestEntities
+	 * @param failedRequestEntities
+	 * @return
+	 */
+	private Map<String,Object> setError(String msg, Map<String, Object> ticketedRequestEntities, Map<String, Object> failedRequestEntities) {
+		Map <String, Object> m = new HashMap<String, Object>();
+		m.put(ERR_RET_FIELD, true);
+		m.put(MSG_RET_FIELD, "ERROR: " + msg);
+		m.put(FAILED_ENTITIES_FIELD, failedRequestEntities);
+		m.put(TICKETED_ENTITIES_FIELD, ticketedRequestEntities);
+		return m;
+	}
+
+
 	/** manage the xmlrpc return structure
 	 * 
 	 * @param ret
@@ -131,7 +154,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		m.put(RET_RET_FIELD, ret);
 		return m;
 	}
-	
+
+	private static Map<String, Object> setReturn(Object ret, Map<String, Object> ticketedRequestEntities) {
+		Map <String, Object> m = new HashMap<String, Object>();
+		m.put(ERR_RET_FIELD, false);
+		m.put(RET_RET_FIELD, ret);
+		m.put(TICKETED_ENTITIES_FIELD, ticketedRequestEntities);
+		return m;
+	}
+
 
 	public OrcaXmlrpcHandler() {
 		//Some Fields in the XmlrpcorcaState are populated by the XmlrpcController, before invoke this.
@@ -381,15 +412,38 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						workflow.getBoundElements(),
 						allRes);
 
-				// call publishManifest if there are reservations in the slice
+				// check individual reservations for failure
+				Map<String, Object> ticketedRequestEntities = new HashMap<>();
+				Map<String, Object> failedRequestEntities = new HashMap<>();
+				if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+					for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
+						Map<String, Object> currResMap = currRes.toMap();
+						if (currRes.getState() == ReservationStateFailed){
+							failedRequestEntities.put(currRes.getReservationID(), currResMap);
+						}
+						ticketedRequestEntities.put(currRes.getReservationID(), currResMap);
+
+						if (logger.isDebugEnabled()){
+							logger.debug("Reservation " + currRes.getReservationID() +
+									" is in state: " + OrcaConstants.getReservationStateName(currRes.getState()));
+						}
+					}
+				}
+
+				if (0 != failedRequestEntities.size()){
+					return setError(result.toString(), ticketedRequestEntities, failedRequestEntities);
+				}
+
+					// call publishManifest if there are reservations in the slice
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
 					ndlSlice.publishManifest(logger);
 				}
 
 				
 				//workflow.closeModel(); //close the substrate model, but would break modifying now
-				
-				return setReturn(result.toString());
+
+				logger.debug("createSlice(): returning result " + result);
+				return setReturn(result.toString(), ticketedRequestEntities);
 			} catch (CredentialException ce) {
 				logger.error("createSlice(): Credential Exception: " + ce.getMessage());
 				return setError("CredentialException encountered: " + ce.getMessage());
@@ -413,7 +467,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the status of the reservations in the input slice
 	 * @param slice_urn
@@ -1044,7 +1098,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	 */
 	protected StringBuilder getComputedReservationSummary(XmlrpcControllerSlice ndlSlice) {
 
-		StringBuilder result = new StringBuilder("Here are the leases: \n");
+		int builderSize = BASE_RESERVATION_BUILDER_SIZE;
+		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+			builderSize += (ndlSlice.getComputedReservations().size() * PER_RESERVATION_BUILDER_SIZE);
+		}
+
+		StringBuilder result = new StringBuilder(builderSize);
+
+		result.append("Here are the leases: \n");
 
 		result.append("Request id: ");
 		result.append(ndlSlice.getSliceID());
@@ -1946,7 +2007,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			Calendar extendedEnd = Calendar.getInstance();
 			extendedEnd.setTime(termEndDate);
 			for (ReservationMng r : allRes){
-				if ((r.getState() == OrcaConstants.ReservationStateClosed) || (r.getState() == OrcaConstants.ReservationStateFailed))
+				if ((r.getState() == OrcaConstants.ReservationStateClosed) || (r.getState() == ReservationStateFailed))
 					continue;
 				
 				Calendar resEnd = Calendar.getInstance();

@@ -34,7 +34,7 @@ public class OrcaXmlrpcHandlerTest {
             "\\A[\\w\\s]+\\p{Punct}\\s*\\n" + // Here are the leases:
             "[\\w\\s]+\\p{Punct}[\\w\\s-]+\\n" + //Request id: 66c2001b-5c86-4747-b451-f072dd17b588
             "(?:\\p{Punct}(?:[\\w\\s]+\\:[\\w\\s.\\/-]+?\\p{Punct}\\s*)+\\n)+" + // [   Slice UID: 66c2001b-5c86-4747-b451-f072dd17b588 | Reservation UID: 0c77a77d-300d-4e68-ab71-5287aa67894e | Resource Type: ncsuvmsite.vm | Resource Units: 1 ]
-            "[\\w\\s]+\\z"; //No errors reported
+            "(?:[\\w\\s]+)*\\z"; //No errors reported
 
     /**
      * testCreateSliceWithLiveSM() requires a connection to a running (non-test)
@@ -88,6 +88,9 @@ public class OrcaXmlrpcHandlerTest {
         assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
                         ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_CREATE,
                 countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
+
+        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
+
     }
 
     /**
@@ -97,11 +100,12 @@ public class OrcaXmlrpcHandlerTest {
      * @throws Exception
      */
     @Test
-    public void testCreateSliceReservationFailulreWithMockSM() throws Exception {
-        // Need to setup a controller
-        // Currently this works if an SM is running locally.  Need to setup a Mock one.
-        XmlRpcController controller = new MockXmlRpcController();
-        controller.init();
+    public void testCreateSliceReservationFailureWithMockSM() throws Exception {
+        // empty reservationMap is unchanged in this test
+        Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
+
+        MockXmlRpcController controller = new MockXmlRpcController();
+        controller.init(reservationMap, true);
         controller.start();
 
         Map<String, Object> result = doTestCreateSlice(controller,
@@ -110,11 +114,10 @@ public class OrcaXmlrpcHandlerTest {
 
         // verify results of createSlice()
         assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+        assertTrue("createSlice() should have returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
 
-        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_CREATE_FAILURE,
-                countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
+        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+
     }
 
     /**
