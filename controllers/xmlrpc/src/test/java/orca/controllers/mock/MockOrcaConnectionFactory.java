@@ -8,10 +8,12 @@ import orca.security.AuthToken;
 import orca.shirako.common.ReservationID;
 import orca.util.ID;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MockOrcaConnectionFactory extends OrcaConnectionFactory {
 
+    protected final boolean failReservation;
     protected Map<ReservationID, TicketReservationMng> reservationMap;
 
     /**
@@ -22,15 +24,25 @@ public class MockOrcaConnectionFactory extends OrcaConnectionFactory {
      * @param smGuid
      */
     public MockOrcaConnectionFactory(String url, String user, String password, ID smGuid) {
-        super(url, user, password, smGuid);
+        // empty reservationMap
+        this(url, user, password, smGuid, null, false);
     }
 
     public MockOrcaConnectionFactory(String url, String user, String password, ID id, Map<ReservationID, TicketReservationMng> reservationMap) {
-        super(url, user, password, id);
-        this.reservationMap = reservationMap;
+        this(url, user, password, id, reservationMap, false);
     }
 
-        /**
+    public MockOrcaConnectionFactory(String url, String user, String password, ID id, Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) {
+        super(url, user, password, id);
+        if (null != reservationMap) {
+            this.reservationMap = reservationMap;
+        } else {
+            this.reservationMap = new HashMap<>();
+        }
+        this.failReservation = failReservation;
+    }
+
+    /**
          *
          * @return
          * @throws Exception
@@ -58,11 +70,7 @@ public class MockOrcaConnectionFactory extends OrcaConnectionFactory {
         AuthToken authToken = new AuthToken();
         IOrcaServiceManager sm;// = new MockOrcaServiceManager(manager, authToken);
 
-        if (null != reservationMap){
-            sm = new MockOrcaServiceManager(manager, authToken, reservationMap);
-        } else {
-            sm = new MockOrcaServiceManager(manager, authToken);
-        }
+        sm = new MockOrcaServiceManager(manager, authToken, reservationMap, failReservation);
 
         if (null == sm) {
             throw new Exception("getServiceManager returned null SM");
