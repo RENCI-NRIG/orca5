@@ -121,6 +121,29 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * The Live SM doesn't show reservations as being failed, only `Invalid`
+     *
+     * @throws Exception
+     */
+    //@Test
+    public void testCreateSliceReservationFailureWithLiveSM() throws Exception {
+        XmlRpcController controller = new XmlRpcController();
+        controller.init();
+        controller.start();
+
+        Map<String, Object> result = doTestCreateSlice(controller,
+                "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf",
+                "createSlice_testFailure_" + controller.getClass().getSimpleName());
+
+        // verify results of createSlice()
+        assertNotNull(result);
+        assertTrue("createSlice() should have returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+
+        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+
+    }
+
+    /**
      *
      * @param controller
      * @param ndlFile
@@ -144,18 +167,6 @@ public class OrcaXmlrpcHandlerTest {
 
 
         return orcaXmlrpcHandler.createSlice(slice_urn, credentials, resReq, users);
-    }
-
-    private List<Map<String, ?>> getUsersMap() {
-        List<Map<String, ?>> users = new ArrayList<>();
-        Map<String, Object> userEntry = new HashMap<>();
-        List<String> keys = new ArrayList<String>();
-        keys.add("ssh-rsa this is not a key");
-        userEntry.put("keys", keys);
-        userEntry.put("login", "root");
-        userEntry.put("sudo", false);
-        users.add(userEntry);
-        return users;
     }
 
     /**
@@ -241,27 +252,10 @@ public class OrcaXmlrpcHandlerTest {
         String slice_urn = "modifySlice_test_" + controller.getClass().getSimpleName(); //java.lang.AssertionError: createSlice() returned error: ERROR: duplicate slice urn createSlice_test
         Object [] credentials = new Object[0];
 
-        /*
-        // need to create a slice first
-        String resReq = NdlCommons.readFile("../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf");
-        List<Map<String, ?>> users = new ArrayList<>();
-        Map<String, Object> userEntry = new HashMap<>();
-        List<String> keys = new ArrayList<String>();
-        keys.add("ssh-rsa this is not a key");
-        userEntry.put("keys", keys);
-        userEntry.put("login", "root");
-        userEntry.put("sudo", false);
-        users.add(userEntry);
-
-        // create the slice, before we can modify it
-        result = orcaXmlrpcHandler.createSlice(slice_urn, credentials, resReq, users);
-        // verify results of createSlice()
-        assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-        */
-
+        // get the reservations that would have been created by a previous call to createSlice()
         ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn);
 
+        // add them to the reservationMap in our Mock SM
         addReservationListToMap(reservationsFromRequest, reservationMap);
 
         // modify request
@@ -274,12 +268,34 @@ public class OrcaXmlrpcHandlerTest {
         assertFalse("modifySlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
 
         assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_MODIFY,
+                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_MODIFY,
                 countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
 
         assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
     }
 
+    /**
+     *
+     * @return
+     */
+    private List<Map<String, ?>> getUsersMap() {
+        List<Map<String, ?>> users = new ArrayList<>();
+        Map<String, Object> userEntry = new HashMap<>();
+        List<String> keys = new ArrayList<String>();
+        keys.add("ssh-rsa this is not a key");
+        userEntry.put("keys", keys);
+        userEntry.put("login", "root");
+        userEntry.put("sudo", false);
+        users.add(userEntry);
+        return users;
+    }
+
+    /**
+     *
+     * @param string
+     * @param toMatch
+     * @return
+     */
     private int countMatches(String string, char toMatch){
         int occurrences = 0;
         for(char c : string.toCharArray()){
@@ -289,7 +305,6 @@ public class OrcaXmlrpcHandlerTest {
         }
         return occurrences;
     }
-
 
     /**
      *
@@ -302,6 +317,13 @@ public class OrcaXmlrpcHandlerTest {
         }
     }
 
+    /**
+     *
+     * @param orcaXmlrpcHandler
+     * @param slice_urn
+     * @return
+     * @throws Exception
+     */
     protected ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn) throws Exception {
         String resReq = NdlCommons.readFile("../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf");
         List<Map<String, ?>> users = getUsersMap();
@@ -348,4 +370,5 @@ public class OrcaXmlrpcHandlerTest {
         return reservations;
 
     }
+
 }

@@ -430,7 +430,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					}
 				}
 
-				if (0 != failedRequestEntities.size()){
+				// reference: https://github.com/RENCI-NRIG/orca5/issues/88
+				// If any individual reservations have failed, cancel the createSlice()
+				// Unfortunately, this doesn't currently work, as all of the reservations
+				// have a state of 'Invalid' at this point in the reservation process.
+				if (failedRequestEntities.size() > 0){
 					return setError(result.toString(), ticketedRequestEntities, failedRequestEntities);
 				}
 
