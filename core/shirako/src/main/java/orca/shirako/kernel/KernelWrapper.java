@@ -12,6 +12,7 @@ package orca.shirako.kernel;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 
+import orca.manage.OrcaConstants;
 import orca.security.AbacUtil;
 import orca.security.AccessMonitor;
 import orca.security.AuthToken;
@@ -838,6 +839,14 @@ public class KernelWrapper {
     public void redeem(final IServiceManagerReservation reservation) throws Exception {
         if (reservation == null) {
             throw new IllegalArgumentException();
+        }
+
+        if (logger.isTraceEnabled()) {
+            IKernelSlice slice = (IKernelSlice) reservation.getSlice();
+            for (IReservation sliceReservation : slice.getReservations()){
+                logger.trace("redeem() Reservation " + sliceReservation.getReservationID() +
+                        " is in state: " + OrcaConstants.getReservationStateName(sliceReservation.getState()));
+            }
         }
 
         IKernelServiceManagerReservation target = (IKernelServiceManagerReservation) kernel.validate(reservation.getReservationID());

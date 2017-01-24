@@ -13,13 +13,11 @@ package orca.policy.core;
 import java.util.Iterator;
 import java.util.Properties;
 
-import orca.shirako.api.IBrokerProxy;
-import orca.shirako.api.IClientReservation;
-import orca.shirako.api.IReservation;
-import orca.shirako.api.IServiceManager;
-import orca.shirako.api.IServiceManagerReservation;
+import orca.manage.OrcaConstants;
+import orca.shirako.api.*;
 import orca.shirako.core.PropertiesManager;
 import orca.shirako.kernel.ResourceSet;
+import orca.shirako.kernel.IKernelSlice;
 import orca.shirako.time.Term;
 import orca.shirako.util.Bids;
 import orca.shirako.util.ReservationSet;
@@ -195,6 +193,16 @@ public class ServiceManagerSimplePolicy extends ServiceManagerCalendarPolicy
 
         if (demand == null) {
             return new ReservationSet();
+        }
+
+        if (logger.isTraceEnabled()){
+            for (IReservation reservation : demand){
+                IKernelSlice slice = (IKernelSlice) reservation.getSlice();
+                for (IReservation sliceReservation : slice.getReservations()){
+                    logger.trace("Reservation " + sliceReservation.getReservationID() +
+                            " is in state: " + OrcaConstants.getReservationStateName(sliceReservation.getState()));
+                }
+            }
         }
 
         IBrokerProxy broker = ((IServiceManager) actor).getDefaultBroker();
