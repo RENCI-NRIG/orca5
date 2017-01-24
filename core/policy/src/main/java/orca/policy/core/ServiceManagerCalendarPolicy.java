@@ -16,6 +16,7 @@ import orca.shirako.api.IClientReservation;
 import orca.shirako.api.IReservation;
 import orca.shirako.api.IServiceManagerReservation;
 import orca.shirako.core.ServiceManagerPolicy;
+import orca.shirako.kernel.IKernelSlice;
 import orca.shirako.kernel.ReservationStates;
 import orca.shirako.kernel.ResourceSet;
 import orca.shirako.time.Term;
@@ -23,6 +24,9 @@ import orca.shirako.time.calendar.ServiceManagerCalendar;
 import orca.shirako.util.ReservationSet;
 import orca.util.OrcaException;
 import orca.util.persistence.NotPersistent;
+
+import static orca.manage.OrcaConstants.ReservationStateFailed;
+import static orca.manage.OrcaConstants.ReservationStateNascent;
 
 
 /**
@@ -145,24 +149,71 @@ public abstract class ServiceManagerCalendarPolicy extends ServiceManagerPolicy
                     onExtendTicketComplete(r);
                     pendingNotify.remove(r);
                 } else if (r.isTicketed()) {
-                    /*
-                     * The reservation obtained a ticket for the first time
-                     */
-                    calendar.addHolding(r, r.getTerm().getNewStartTime(), r.getTerm().getEndTime());
-                    calendar.addRedeeming(r, getRedeem(r));
+                    // reference: https://github.com/RENCI-NRIG/orca5/issues/88
+                    // if any reservations in the Slice containing this reservation are failed,
+                    // then we should fail all reservations in that Slice.
+                    // if any reservations in the Slice are still Nascent, then we must delay any actions
+                    // on any reservations in this slice until all reservations are non-Nascent (Ticketed or Failed)
+                    boolean sliceFailed = false;
+                    boolean sliceNascent = false;
 
-                    calendar.addClosing(r, getClose(r, r.getTerm()));
-
-                    if (r.isRenewable()) {
-                        long cycle = getRenew(r);
-                        r.setRenewTime(cycle);
-                        r.setDirty();
-                        calendar.addRenewing(r, cycle);
+                    IKernelSlice slice = (IKernelSlice) r.getSlice();
+                    for (IReservation sliceReservation : slice.getReservations()){
+                        if (sliceReservation.getState() == ReservationStateFailed) {
+                            logger.info("Found Failed Reservation " +
+                                    sliceReservation.getReservationID() +
+                                    " in Slice " + slice.getName() +
+                                    " when preparing " + r.getReservationID());
+                            sliceFailed = true;
+                            break;
+                        } else if (sliceReservation.getState() == ReservationStateNascent) {
+                            logger.info("Found Nascent Reservation " +
+                                    sliceReservation.getReservationID() +
+                                    " in Slice " + slice.getName() +
+                                    " when preparing " + r.getReservationID());
+                            sliceNascent = true;
+                            // there could be a Failed one too, but we'll just stop here
+                            break;
+                        }
                     }
 
-                    // Notify Subscribers
-                    onTicketComplete(r);
-                    pendingNotify.remove(r);
+                    if (!sliceFailed && !sliceNascent) {
+                        /*
+                         * The reservation obtained a ticket for the first time
+                         */
+                        calendar.addHolding(r, r.getTerm().getNewStartTime(), r.getTerm().getEndTime());
+                        calendar.addRedeeming(r, getRedeem(r));
+
+                        calendar.addClosing(r, getClose(r, r.getTerm()));
+
+                        if (r.isRenewable()) {
+                            long cycle = getRenew(r);
+                            r.setRenewTime(cycle);
+                            r.setDirty();
+                            calendar.addRenewing(r, cycle);
+                        }
+
+                        // Notify Subscribers
+                        onTicketComplete(r);
+                        pendingNotify.remove(r);
+
+                    } else if (sliceFailed){
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Slice had Failed reservations, removing reservation from the pending list: " + r);
+                        }
+
+                        // just remove the one...
+                        r.transition("fail on slice reservation failed", ReservationStates.Failed, ReservationStates.None);
+                        calendar.removePending(r);
+                        pendingNotify.remove(r);
+                    } else {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Slice had Nascent reservations, doing nothing this tick for " + r.getReservationID());
+                        }
+                        continue; // do NOT remove from calendar pending
+                        // maybe we need to ADD this to pendingNotify ?
+                        // since it doesn't seem to currently exist in pendingNotify?
+                    }
                 } else if (r.getState() == ReservationStates.Active) {
                     if (pendingNotify.contains(r)) {
                         /*

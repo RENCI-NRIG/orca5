@@ -22,6 +22,8 @@ import orca.shirako.util.Bids;
 import orca.shirako.util.ReservationSet;
 import orca.util.ResourceType;
 
+import static orca.manage.OrcaConstants.ReservationStateFailed;
+
 public class ServiceManagerTestWrapper extends ServiceManager {
 	@Override
 	protected void bid() throws Exception {
@@ -34,22 +36,36 @@ public class ServiceManagerTestWrapper extends ServiceManager {
 				/*
 				 * Issue new ticket requests.
 				 */
-				Iterator<IReservation> iter = ticketing.iterator();
-
-				while (iter.hasNext()) {
-					ReservationClient r = (ReservationClient) iter.next();
+				for (IReservation r : ticketing){
 
 					System.out.println("cycle: " + currentCycle
 							+ ". Ticket request for: " + r);
 
+					// testing failed reservations
+					if (r.getSliceName().startsWith("fail")){
+						boolean alreadyFailed = false;
+						IKernelSlice slice = (IKernelSlice) r.getSlice();
+						for (IReservation sliceReservation : slice.getReservations()){
+							if (sliceReservation.getState() == ReservationStateFailed){
+								alreadyFailed = true;
+								break;
+							}
+						}
+
+						if (!alreadyFailed){
+							failTicket((ReservationClient) r);
+							continue; // don't call updateTicket
+						}
+					}
+
 					// make a ticket: exactly as the client wanted
 					ResourceDelegation del = getShirakoPlugin().getTicketFactory().makeDelegation(r.getApprovedResources().getUnits(), r.getApprovedTerm(), r.getApprovedType());
 					ResourceTicket t = getShirakoPlugin().getTicketFactory().makeTicket(del);
-					
+
 					Ticket ticket = new Ticket(t, spi, (IAuthorityProxy) null);
 
-					updateTicket(r, r.getApprovedType(), r.getApprovedUnits(),
-							ticket, r.getApprovedTerm());
+					updateTicket((ReservationClient) r, r.getApprovedType(), r.getApprovedUnits(),
+								ticket, r.getApprovedTerm());
 				}
 			}
 
@@ -59,10 +75,7 @@ public class ServiceManagerTestWrapper extends ServiceManager {
 				/*
 				 * Issue extend ticket requests.
 				 */
-				Iterator<IReservation> iter = extending.iterator();
-
-				while (iter.hasNext()) {
-					ReservationClient r = (ReservationClient) iter.next();
+				for (IReservation r : extending){
 
 					System.out.println("cycle: " + currentCycle
 							+ ". Extend Ticket request for: " + r);
@@ -75,7 +88,7 @@ public class ServiceManagerTestWrapper extends ServiceManager {
 					
 					Ticket ticket = new Ticket(t, spi, (IAuthorityProxy) null);
 
-					updateTicket(r, r.getApprovedType(), r.getApprovedUnits(),
+					updateTicket((ReservationClient) r, r.getApprovedType(), r.getApprovedUnits(),
 							ticket, r.getApprovedTerm());
 				}
 			}
@@ -192,5 +205,9 @@ public class ServiceManagerTestWrapper extends ServiceManager {
 			r.transition("extendticket", ReservationStates.ActiveTicketed,
 					ReservationStates.None);
 		}
+	}
+
+	protected void failTicket(ReservationClient r) {
+		r.transition("fail", ReservationStates.Failed, ReservationStates.None);
 	}
 }

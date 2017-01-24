@@ -14,10 +14,7 @@ import orca.shirako.api.IServiceManagerPolicy;
 import orca.shirako.api.IServiceManagerReservation;
 import orca.shirako.api.ISlice;
 import orca.shirako.container.Globals;
-import orca.shirako.kernel.ReservationStates;
-import orca.shirako.kernel.ResourceSet;
-import orca.shirako.kernel.ServiceManagerReservationFactory;
-import orca.shirako.kernel.SliceFactory;
+import orca.shirako.kernel.*;
 import orca.shirako.time.ActorClock;
 import orca.shirako.time.Term;
 import orca.util.ResourceType;
@@ -61,7 +58,7 @@ public class ServiceManagerSimplePolicyTest extends ServiceManagerPolicyTest {
         IServiceManagerReservation r = ServiceManagerReservationFactory.getInstance().create(resources, term, slice);
 
         r.setRenewable(false);
-        
+
         sm.register(r);
         sm.demand(r.getReservationID());
 
@@ -81,4 +78,117 @@ public class ServiceManagerSimplePolicyTest extends ServiceManagerPolicyTest {
             }
         }
     }
+
+    public void testFail() throws Exception {
+        IServiceManager sm = (IServiceManager) getSM();
+
+        ActorClock clock = sm.getActorClock();
+        Term.clock = clock;
+
+        ResourceSet resources = new ResourceSet(1, new ResourceType(1));
+        ISlice slice = SliceFactory.getInstance().create("fail");
+        sm.registerSlice(slice);
+
+        long start = 5;
+        long end = 10;
+
+        Term term = new Term(clock.cycleStartDate(start), clock.cycleEndDate(end));
+
+        // one reservation
+        IServiceManagerReservation r1 = ServiceManagerReservationFactory.getInstance().create(resources, term, slice);
+
+        r1.setRenewable(false);
+
+        sm.register(r1);
+        sm.demand(r1.getReservationID());
+
+        // second reservation
+        IServiceManagerReservation r2 = ServiceManagerReservationFactory.getInstance().create(resources, term, slice);
+
+        r2.setRenewable(false);
+
+        sm.register(r2);
+        sm.demand(r2.getReservationID());
+
+        for (int i = 1; i <= end+2; i++) {
+            sm.externalTick((long) i);
+            //System.out.println("i: " + i + " r.getState() = " + r.getState());
+            while (sm.getCurrentCycle() != i){
+                sleep(1);
+            }
+
+            if ((i >= start) && (i < (end - 1))) {
+                assertTrue(r1.getState() == ReservationStates.Failed);
+                assertTrue(r2.getState() == ReservationStates.Failed);
+            }
+
+            if (i > end) {
+                //assertTrue(r2.getState() == ReservationStates.Closed);
+            }
+        }
+
+        IKernelSlice kernelSlice = (IKernelSlice) r1.getSlice();
+        //kernelSlice.
+    }
+
+    public void testNascent() throws Exception {
+        IServiceManager sm = (IServiceManager) getSM();
+
+        ActorClock clock = sm.getActorClock();
+        Term.clock = clock;
+
+        ResourceSet resources = new ResourceSet(1, new ResourceType(1));
+        ISlice slice = SliceFactory.getInstance().create("nascent");
+        sm.registerSlice(slice);
+
+        long start = 5;
+        long end = 10;
+
+        Term term = new Term(clock.cycleStartDate(start), clock.cycleEndDate(end));
+
+        // one reservation
+        IServiceManagerReservation r1 = ServiceManagerReservationFactory.getInstance().create(resources, term, slice);
+
+        r1.setRenewable(false);
+
+        sm.register(r1);
+        sm.demand(r1.getReservationID());
+
+        // second reservation
+        IServiceManagerReservation r2 = ServiceManagerReservationFactory.getInstance().create(resources, term, slice);
+
+        r2.setRenewable(false);
+
+        sm.register(r2);
+        //sm.demand(r2.getReservationID()); // don't ticket this until later
+        boolean r2demanded = false;
+
+
+        for (int i = 1; i <= end+2; i++) {
+            sm.externalTick((long) i);
+            //System.out.println("i: " + i + " r.getState() = " + r.getState());
+            while (sm.getCurrentCycle() != i){
+                sleep(1);
+            }
+
+            if ( (i == start-2) && !r2demanded ){
+                assertTrue(r1.getState() == ReservationStates.Ticketed);
+                assertTrue(r2.getState() == ReservationStates.Nascent);
+                sm.demand(r2.getReservationID());
+                r2demanded = true;
+            }
+
+            if ((i >= start) && (i < (end - 1))) {
+                assertTrue(r1.getState() == ReservationStates.Active);
+                assertTrue(r2.getState() == ReservationStates.Active);
+            }
+
+            if (i > end) {
+                assertTrue(r1.getState() == ReservationStates.Closed);
+                assertTrue(r2.getState() == ReservationStates.Closed);
+            }
+        }
+
+    }
+
 }
