@@ -481,18 +481,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#BareMetalCluster"/>
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
-        <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/availableBareMetalLabelSet"/>
-        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/TenGigabitEthernet/1/ethernet"/>
-        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/EthernetSwitchingMatrix"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni">
@@ -500,6 +488,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
         <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/availableVMLabelSet"/>
         <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/TenGigabitEthernet/1/ethernet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/TenGigabitEthernet/2/ethernet"/>
         <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/EthernetSwitchMatrix"/>
     </owl:NamedIndividual>
     
@@ -517,42 +506,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/EthernetSwitchingMatrix -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/EthernetSwitchingMatrix">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix"/>
-        <layer:switchingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/availableBareMetalLabelSet -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/availableBareMetalLabelSet">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
-        <compute:hasUnitServer rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENI-M4"/>
-        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#BareMetalCE"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</collections:size>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/TenGigabitEthernet/1/ethernet -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/TenGigabitEthernet/1/ethernet">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
-        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
-        <openflow:openflowCapable rdf:resource="http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.0"/>
-        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal"/>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#pucpNet/Force10/S4810/TenGigabitEthernet/1/1/ethernet"/>
-        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">of-data</topology:hostInterfaceName>
-        <rdfs:label>32-33</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/EthernetSwitchMatrix -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/EthernetSwitchMatrix">
@@ -566,7 +519,6 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/PoP">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ISCSI"/>
         <location:locatedAt rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp"/>
@@ -654,11 +606,27 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
         <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <openflow:openflowCapable rdf:resource="http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.0"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#pucpNet/Force10/S4810/TenGigabitEthernet/1/1/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">of-data</topology:hostInterfaceName>
+        <rdfs:label>24-31</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/TenGigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/TenGigabitEthernet/2/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#pucpNet/Force10/S4810/TenGigabitEthernet/1/2/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName>vlan-data</topology:hostInterfaceName>
-        <rdfs:label>1-8</rdfs:label>
+        <rdfs:label>0-7</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -827,7 +795,6 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucpvmsite/Domain/NetworkService/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#NetworkService"/>
-        <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/BareMetal/availableBareMetalLabelSet"/>
         <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/availableVMLabelSet"/>
         <domain:hasAccessMethod rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ORCAActor"/>
         <domain:hasAggregateManager rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIController"/>
