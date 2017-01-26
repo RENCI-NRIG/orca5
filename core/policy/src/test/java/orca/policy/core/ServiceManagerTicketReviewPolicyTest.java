@@ -69,8 +69,8 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
             }
 
             if ((i >= start) && (i < (end - 1))) {
-                assertTrue(r1.getState() == ReservationStates.Failed);
-                assertTrue(r2.getState() == ReservationStates.Failed);
+                assertTrue(r1.getState() == ReservationStates.Closed);
+                assertTrue(r2.getState() == ReservationStates.Closed);
             }
 
             if (i > end) {

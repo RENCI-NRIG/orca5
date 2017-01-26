@@ -97,9 +97,9 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                 // take action on the current reservation
                 if (sliceStatusMap.get(sliceID) == ReservationStateFailed) {
                     // Fail the reservation, and remove it from everything
-                    logger.info("Failing reservation " + reservation.getReservationID() +
+                    logger.info("Closing reservation " + reservation.getReservationID() +
                             " due to failure in Slice " + slice.getName());
-                    reservation.transition("fail on slice reservation failed", ReservationStates.Failed, ReservationStates.None);
+                    actor.close(reservation); // "perform local close operations and issue close request to authority"
                     calendar.removePending(reservation);
                     pendingNotify.remove(reservation);
 
