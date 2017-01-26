@@ -3,12 +3,10 @@ package orca.policy.core;
 import orca.shirako.api.IReservation;
 import orca.shirako.common.SliceID;
 import orca.shirako.kernel.IKernelSlice;
-import orca.shirako.kernel.ReservationStates;
 import orca.shirako.util.ReservationSet;
 import orca.util.persistence.NotPersistent;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static orca.manage.OrcaConstants.*;
 
@@ -51,6 +49,9 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
         // keep track of status of the slice containing each reservation
         Map<SliceID, Integer> sliceStatusMap = new HashMap<>();
 
+        // keep track of which sites (per slice) had a failure
+        Map<SliceID, List<String>> sliceFailureSites = new HashMap<>();
+
         // nothing to do!
         if (myPending == null) {
             return;
@@ -63,46 +64,82 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
 
             // only want to do this for 'new' tickets
             if (reservation.isFailed() || reservation.isTicketed()) {
-                // set the default status
-                if (!sliceStatusMap.containsKey(sliceID)) {
+                // check if we've examined this slice already
+                if (Objects.equals(sliceStatusMap.get(sliceID), ReservationStateActive)) {
+                    // we've looked at all of the reservations for this slice, and they are ok
+                    continue;
+
+                } else if (!sliceStatusMap.containsKey(sliceID)) {
+                    // set the default status
                     sliceStatusMap.put(sliceID, ReservationStateActive);
-                }
 
-                // examine every reservation contained within the slice,
-                // until we have found either a Failed or Nascent reservation
-                for (IReservation sliceReservation : slice.getReservations()) {
-                    if (sliceReservation.getState() == ReservationStateFailed) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Found Failed Reservation " +
-                                    sliceReservation.getReservationID() +
-                                    " in Slice " + slice.getName() +
-                                    " when checkPending() for " + reservation.getReservationID());
-                        }
-                        sliceStatusMap.put(sliceID, ReservationStateFailed);
-                        break;
+                    // examine every reservation contained within the slice,
+                    // looking for either a Failed or Nascent reservation
+                    // we have to look at everything in a slice once, to determine all/any Sites with failures
+                    for (IReservation sliceReservation : slice.getReservations()) {
+                        if (sliceReservation.getState() == ReservationStateFailed) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Found Failed Reservation " +
+                                        sliceReservation.getReservationID() +
+                                        " in Slice " + slice.getName() +
+                                        " when checkPending() for " + reservation.getReservationID());
+                            }
 
-                    } else if (sliceReservation.getState() == ReservationStateNascent) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Found Nascent Reservation " +
-                                    sliceReservation.getReservationID() +
-                                    " in Slice " + slice.getName() +
-                                    " when checkPending() for " + reservation.getReservationID());
+                            // if any tickets are Nascent,
+                            // as soon as we remove the Failed reservation,
+                            // those Nascent tickets might get redeemed.
+                            // we must wait to Close any failed reservations
+                            // until all Nascent tickets are either Ticketed or Failed
+                            if (Objects.equals(sliceStatusMap.get(sliceID), ReservationStateActive)) {
+                                sliceStatusMap.put(sliceID, ReservationStateFailed);
+
+                                // Keep track of which sites had failures
+                                // Using Authority Name would be better than ResourceType,
+                                // but failed reservations don't contain an Authority Name
+
+                                // Find the site from type.
+                                // If e.g. a Slice has a failed VM at a site, we don't want to Ticket the VLAN there
+                                if (sliceReservation.getResources() != null && sliceReservation.getResources().getType() != null) {
+                                    String site = getSiteFromType(sliceReservation.getResources().getType().getType());
+
+                                    // compare site to list of site failures
+                                    if (!sliceFailureSites.containsKey(sliceID)) {
+                                        sliceFailureSites.put(sliceID, new ArrayList<String>());
+                                    }
+                                    List<String> failureSites = sliceFailureSites.get(sliceID);
+                                    if (!failureSites.contains(site)) {
+                                        failureSites.add(site);
+                                    }
+                                }
+                            }
+                        } else if (sliceReservation.getState() == ReservationStateNascent) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Found Nascent Reservation " +
+                                        sliceReservation.getReservationID() +
+                                        " in Slice " + slice.getName() +
+                                        " when checkPending() for " + reservation.getReservationID());
+                            }
+
+                            sliceStatusMap.put(sliceID, ReservationStateNascent);
                         }
-                        sliceStatusMap.put(sliceID, ReservationStateNascent);
-                        // there could be a Failed one too, but we'll just stop here
-                        break;
                     }
                 }
 
                 // take action on the current reservation
                 if (sliceStatusMap.get(sliceID) == ReservationStateFailed) {
-                    // Fail the reservation, and remove it from everything
-                    logger.info("Closing reservation " + reservation.getReservationID() +
-                            " due to failure in Slice " + slice.getName());
-                    actor.close(reservation); // "perform local close operations and issue close request to authority"
-                    calendar.removePending(reservation);
-                    pendingNotify.remove(reservation);
-
+                    if (reservation.getResources() != null && reservation.getResources().getType() != null) {
+                        // only fail the reservation if it from the same site as another failed reservation
+                        String site = getSiteFromType(reservation.getResources().getType().getType());
+                        if (sliceFailureSites.containsKey(sliceID) && sliceFailureSites.get(sliceID).contains(site)) {
+                            // Fail the reservation, and remove it from everything
+                            logger.info("TicketReview: Closing reservation " + reservation.getReservationID() +
+                                    " due to failure in Slice " + slice.getName());
+                            reservation.fail("TicketReview: Closing reservation due to failure in Slice.");
+                            actor.close(reservation); // "perform local close operations and issue close request to authority"
+                            calendar.removePending(reservation);
+                            pendingNotify.remove(reservation);
+                        }
+                    }
                 } else if (sliceStatusMap.get(sliceID) == ReservationStateNascent) {
                     // save this reservation for later
                     logger.info("Moving reservation " + reservation.getReservationID() +
@@ -116,5 +153,27 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
 
         // anything remaining in calendar.pending will be processed in parent class
         super.checkPending();
+    }
+
+    /**
+     * Assumes a ResourceType is like "slvmsite.vm" or "slvmsite.vlan"
+     * in which case the Site is "slvmsite" (dropping everything after the '.')
+     *
+     * @param type a ResourceType string
+     * @return the name of the site
+     */
+    private String getSiteFromType(String type) {
+        int siteEnd = type.indexOf('.');
+        String site;
+        if (-1 != siteEnd) {
+            site = type.substring(0, siteEnd);
+        } else {
+            site = type;
+        }
+
+        if (logger.isDebugEnabled()){
+            logger.debug("Reservation had type " + type + " treating Site as " + site);
+        }
+        return site;
     }
 }
