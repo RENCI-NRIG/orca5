@@ -403,7 +403,11 @@ public final class XmlrpcOrcaState implements Serializable {
 	 }
 
 	 /**
-	  * Get all non-dead or closing slices for this user dn.  
+	  * Get all slices for this user dn.
+	  * This used to skip Dead or Closed slices, but those are now returned
+	  * to allow a user to examine a slice that failed on creation from Issue 88:
+	  * https://github.com/RENCI-NRIG/orca5/issues/88
+	  *
 	  * @param userDn
 	  * @return
 	  */
@@ -419,12 +423,8 @@ public final class XmlrpcOrcaState implements Serializable {
 				 XmlrpcControllerSlice sl = entry.getValue();
 				 if (sl == null)
 					 continue;
-				 try {
-					 if ((!sl.isDeadOrClosing()) && (sl.getUserDN().trim().equals(userDn.trim())))
-						 ret.add(sl.getSliceID());
-				 } catch (SliceStateMachine.SliceTransitionException e) {
-					 logger.error("Slice " + sl.getSliceUrn() + " experienced a state transition exception");
-				 }
+				 if (sl.getUserDN().trim().equals(userDn.trim()))
+                     ret.add(sl.getSliceID());
 			 }
 		 }
 
