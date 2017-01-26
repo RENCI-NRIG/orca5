@@ -85,7 +85,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String RET_RET_FIELD = "ret";
 	public static final String MSG_RET_FIELD = "msg";
 	public static final String ERR_RET_FIELD = "err";
-	public static final String FAILED_ENTITIES_FIELD = "failedRequestEntities";
 	public static final String TICKETED_ENTITIES_FIELD = "ticketedRequestEntities";
 	public static final int BASE_RESERVATION_BUILDER_SIZE = 100;
 	public static final int PER_RESERVATION_BUILDER_SIZE = 180;
@@ -126,23 +125,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		return m;
 	}
 
-	/**
-	 *
-	 * @param msg
-	 * @param ticketedRequestEntities
-	 * @param failedRequestEntities
-	 * @return
-	 */
-	private Map<String,Object> setError(String msg, Map<String, Object> ticketedRequestEntities, Map<String, Object> failedRequestEntities) {
-		Map <String, Object> m = new HashMap<String, Object>();
-		m.put(ERR_RET_FIELD, true);
-		m.put(MSG_RET_FIELD, "ERROR: " + msg);
-		m.put(FAILED_ENTITIES_FIELD, failedRequestEntities);
-		m.put(TICKETED_ENTITIES_FIELD, ticketedRequestEntities);
-		return m;
-	}
-
-
 	/** manage the xmlrpc return structure
 	 * 
 	 * @param ret
@@ -155,6 +137,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		return m;
 	}
 
+	/**
+	 *
+	 * @param ret
+	 * @param ticketedRequestEntities
+	 * @return
+	 */
 	private static Map<String, Object> setReturn(Object ret, Map<String, Object> ticketedRequestEntities) {
 		Map <String, Object> m = new HashMap<String, Object>();
 		m.put(ERR_RET_FIELD, false);
@@ -412,33 +400,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						workflow.getBoundElements(),
 						allRes);
 
-				// check individual reservations for failure
-				Map<String, Object> ticketedRequestEntities = new HashMap<>();
-				Map<String, Object> failedRequestEntities = new HashMap<>();
-				if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
-					for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
-						Map<String, Object> currResMap = currRes.toMap();
-						if (currRes.getState() == ReservationStateFailed){
-							failedRequestEntities.put(currRes.getReservationID(), currResMap);
-						}
-						ticketedRequestEntities.put(currRes.getReservationID(), currResMap);
+				// get Map of requested entities to return to user
+				Map<String, Object> ticketedRequestEntities = getRequestedEntities(ndlSlice);
 
-						if (logger.isDebugEnabled()){
-							logger.debug("Reservation " + currRes.getReservationID() +
-									" is in state: " + OrcaConstants.getReservationStateName(currRes.getState()));
-						}
-					}
-				}
 
-				// reference: https://github.com/RENCI-NRIG/orca5/issues/88
-				// If any individual reservations have failed, cancel the createSlice()
-				// Unfortunately, this doesn't currently work, as all of the reservations
-				// have a state of 'Invalid' at this point in the reservation process.
-				if (failedRequestEntities.size() > 0){
-					return setError(result.toString(), ticketedRequestEntities, failedRequestEntities);
-				}
-
-					// call publishManifest if there are reservations in the slice
+				// call publishManifest if there are reservations in the slice
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
 					ndlSlice.publishManifest(logger);
 				}
@@ -1062,6 +1028,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				String errMsg = workflow.getErrorMsg();
 				result.append((errMsg == null ? "No errors reported" : errMsg));
 
+				// get Map of requested entities to return to user
+				Map<String, Object> ticketedRequestEntities = getRequestedEntities(ndlSlice);
+
 
 				// update published manifest
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
@@ -1070,7 +1039,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 
 				logger.debug("modifySlice(): returning result " + result);
-				return setReturn(result.toString());
+				return setReturn(result.toString(), ticketedRequestEntities);
 			} catch (CredentialException ce) {
 				logger.error("modifySlice(): Credential Exception: " + ce.getMessage());
 				return setError("CredentialException encountered: " + ce.getMessage());
@@ -1093,6 +1062,23 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		}
 
+	}
+
+	/**
+	 *
+	 * @param ndlSlice
+	 * @return
+	 */
+	protected Map<String, Object> getRequestedEntities(XmlrpcControllerSlice ndlSlice) {
+		Map<String, Object> ticketedRequestEntities = new HashMap<>();
+		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+            for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
+                Map<String, Object> currResMap = currRes.toMap();
+
+                ticketedRequestEntities.put(currRes.getReservationID(), currResMap);
+            }
+        }
+		return ticketedRequestEntities;
 	}
 
 	/**
