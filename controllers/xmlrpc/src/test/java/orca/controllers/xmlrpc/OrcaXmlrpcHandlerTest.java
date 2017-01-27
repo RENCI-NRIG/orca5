@@ -64,6 +64,8 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Test that a slice can be created, using MockXmlRpcController
+     *
      * Uses a MockXmlRpcController to fake a lot of things, avoiding the need
      * to talk to 'Live' SM or AM+Broker.
      *
@@ -96,7 +98,7 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
-     * Unfortunately this type of error cannot be detected naturally in the controller
+     * Unfortunately this type of error cannot be detected naturally in the controller.
      *
      * Uses a MockXmlRpcController to fake a lot of things, avoiding the need
      * to talk to 'Live' SM or AM+Broker.
@@ -151,9 +153,11 @@ public class OrcaXmlrpcHandlerTest {
 
     /**
      *
-     * @param controller
-     * @param ndlFile
-     * @param slice_urn
+     * Used by createSlice() tests
+     *
+     * @param controller either a 'Live' or Mock XmlRpcController
+     * @param ndlFile filename of createSlice() request RDF
+     * @param slice_urn slice name
      */
     protected Map<String, Object> doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn){
         OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
@@ -222,7 +226,7 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
-     *
+     * Test that a simple slice modify, using MockXmlRpcController
      *
      * @throws Exception
      */
@@ -272,8 +276,9 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Craft a userMap required by createSlice() and modifySlice().
      *
-     * @return
+     * @return a UserMap with junk values
      */
     private List<Map<String, ?>> getUsersMap() {
         List<Map<String, ?>> users = new ArrayList<>();
@@ -288,10 +293,11 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Count the number of times a specific character is present in a string
      *
-     * @param string
-     * @param toMatch
-     * @return
+     * @param string the string to test
+     * @param toMatch the character to look for
+     * @return the number of times toMatch is present in string
      */
     private int countMatches(String string, char toMatch){
         int occurrences = 0;
@@ -304,6 +310,7 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Modify the passed in Map to include the reservations from the passed in List, using ReservationID as key
      *
      * @param reservationsFromRequest a list of reservations to be added to reservationMap
      * @param reservationMap is modified by adding all reservations from reservationsFromRequest
@@ -315,10 +322,11 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Uses much of the same code as createSlice(), but stops after getting the List of reservations.
      *
      * @param orcaXmlrpcHandler
-     * @param slice_urn
-     * @return
+     * @param slice_urn the slice name
+     * @return a list of reservations created.
      * @throws Exception
      */
     protected ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn) throws Exception {
