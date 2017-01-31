@@ -48,24 +48,12 @@ public class MockOrcaConnectionFactory extends OrcaConnectionFactory {
          * @throws Exception
          */
     public synchronized IOrcaServiceManager getServiceManager() throws Exception {
-        // obtain a proxy to the container.
-        // NOTE: we must use reflection to avoid dependency on the internal
-        // package.
-        //container = (IOrcaContainer) ReflectionUtils.invokeStatic(
-        //        "orca.manage.internal.local.LocalConnector", "connect", Thread.currentThread()
-        //                .getContextClassLoader(), new Class<?>[] { AuthToken.class }, (Object) null);
-
-        //String location = url.substring(PROTOCOL_SOAP.length());
-        //container = new SoapContainer(OrcaConstants.ContainerManagmentObjectID, location, null);
-
-        //container = Orca.connect();
-        //IOrcaServiceManager sm = container.getServiceManager(smGuid);
-
         ServiceManagerManagementObject manager = new ServiceManagerManagementObject();
         manager.initialize();
 
+        // our lives might have been easier if we could get ServiceManager to do part of our work.
         //ServiceManager serviceManager = new ServiceManager();
-        //manager.setActor(serviceManager); // TODO: need to be able to call this method.
+        //manager.setActor(serviceManager);
 
         AuthToken authToken = new AuthToken();
         IOrcaServiceManager sm;// = new MockOrcaServiceManager(manager, authToken);
