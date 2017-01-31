@@ -5,7 +5,7 @@
 
 <target name="package" description="Create .tar.gz for XMLRPC controller and daemon based on appassembler outputs" depends="clean">
 	<echo message="Building a .tgz file of XMLRPC application executable" />
-	<tar destfile="${xmlrpctar}" basedir="${basedir}/xmlrpc" includes="bin/* repo/**" compression="gzip" />
+	<tar destfile="${xmlrpctar}" basedir="${basedir}" includes="bin/* repo/**" compression="gzip" />
 	<echo message="Building a .tgz file of XMLRPC daemon"/>
 	<tar destfile="${xmlrpcdtar}" basedir="${basedir}/target/generated-resources/appassembler/jsw/xmlrpcd" compression="gzip" />
 	<echo message="Created tar files ${xmlrpctar}, ${xmlrpcdtar}"/>

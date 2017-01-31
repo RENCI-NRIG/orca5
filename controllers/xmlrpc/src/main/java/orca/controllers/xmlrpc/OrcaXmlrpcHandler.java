@@ -27,7 +27,6 @@ import orca.controllers.OrcaControllerException;
 import orca.controllers.xmlrpc.SliceStateMachine.SliceCommand;
 import orca.controllers.xmlrpc.geni.GeniAmV2Handler;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
-import orca.controllers.xmlrpc.x509util.Credential;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.StringProcessor;
@@ -72,6 +71,8 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 
+import static orca.manage.OrcaConstants.ReservationStateFailed;
+
 
 /**
  * ORCA XMLRPC client interface
@@ -84,7 +85,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String RET_RET_FIELD = "ret";
 	public static final String MSG_RET_FIELD = "msg";
 	public static final String ERR_RET_FIELD = "err";
-	
+	public static final String TICKETED_ENTITIES_FIELD = "ticketedRequestEntities";
+	public static final int BASE_RESERVATION_BUILDER_SIZE = 100;
+	public static final int PER_RESERVATION_BUILDER_SIZE = 180;
+
 	protected final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 	
 	protected ResourcePoolsDescriptor pools;
@@ -120,7 +124,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		m.put(MSG_RET_FIELD, "ERROR: " + msg);
 		return m;
 	}
-	
+
 	/** manage the xmlrpc return structure
 	 * 
 	 * @param ret
@@ -132,7 +136,21 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		m.put(RET_RET_FIELD, ret);
 		return m;
 	}
-	
+
+	/**
+	 * Adds more details about a reservation createSlice() or modifySlice(),
+	 * in a new Map object of ticketRequestEntities.
+	 *
+	 * @param ret
+	 * @param ticketedRequestEntities
+	 * @return
+	 */
+	private static Map<String, Object> setReturn(Object ret, Map<String, Object> ticketedRequestEntities) {
+		Map <String, Object> m = setReturn(ret);
+		m.put(TICKETED_ENTITIES_FIELD, ticketedRequestEntities);
+		return m;
+	}
+
 
 	public OrcaXmlrpcHandler() {
 		//Some Fields in the XmlrpcorcaState are populated by the XmlrpcController, before invoke this.
@@ -263,6 +281,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				if (verifyCredentials && !checkWhitelist(userDN)) 
 					return setError(WHITELIST_ERROR);
 
+				if (!verifyCredentials && null == userDN){
+					logger.error("Setting userDN to test. This should only happen in Unit Testing.");
+					userDN = "test";
+				}
+
 				sm = instance.getSM();
 
 
@@ -282,38 +305,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					throw new Exception("Could not create slice: " + sm.getLastError());
 				}
 
-				// if uuid was not provided, use Orca GUID
-				// FIXME: really should check for tuple <name, uuid> if it is already present.
-				String uuid = null;
-				int index = 0;
-				while (index < credentials.length) {
-					// see if we can get uuid from credentials
-					try {
-						Credential cred = new Credential((String)credentials[index]);
-						uuid = cred.getObjectGid().getUuid().toString();
-						break;
-					} catch (ClassCastException cce) {
-						// just use GUID
-						break;
-					} catch (NullPointerException npe) {
-						// try to find it in the next one
-						index++;
-						continue;
-					} 
-				}
-				if (uuid == null){
-					uuid = sid.toString();
-				}
-				// now uuid should be set
-
-				//populate typesMap and abstractModels
-				try {
-					discoverTypes(sm);
-				} catch (Exception ex) {
-					logger.error("createSlice(): discoverTypes() failed to populate typesMap and abstractModels: " + ex, ex);
-					return setError("discoverTypes() failed to populate typesMap and abstractModels");
-				}
-				
 				// create XmlrpcSlice object and register with Orca state
 				ndlSlice = new XmlrpcControllerSlice(sm, slice, slice_urn, userDN, users, false);
 				// we lock the slice from any concurrent modifications
@@ -325,12 +316,19 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				// now done on separate thread LabelSyncThread /ib 11/30/15
 				//instance.syncTags(sm);
 				
-				instance.getController();
 				String controller_url = OrcaController.getProperty(PropertyXmlrpcControllerUrl);
 
-				ReservationConverter orc = ndlSlice.getOrc(); 
-				
-				DomainResourcePools drp = new DomainResourcePools(); 
+				ReservationConverter orc = ndlSlice.getOrc();
+
+				//populate typesMap and abstractModels
+				try {
+					discoverTypes(sm);
+				} catch (Exception ex) {
+					logger.error("createSlice(): discoverTypes() failed to populate typesMap and abstractModels: " + ex, ex);
+					return setError("discoverTypes() failed to populate typesMap and abstractModels");
+				}
+
+				DomainResourcePools drp = new DomainResourcePools();
 				drp.getDomainResourcePools(pools);
 
 
@@ -393,33 +391,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				// or put on deferred queue
 				XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 
-				// What do we return in the manifest ? reservation Id, type, units ? slice ?
-				StringBuilder result = new StringBuilder("Here are the leases: \n");
-
-				it = ndlSlice.getComputedReservations().iterator();
-				result.append("Request id: ");
-				result.append(ndlSlice.getSliceID());
-				result.append("\n");
-
-				while(it.hasNext()){
-					LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
-
-					result.append("[ ");
-
-					result.append("  Slice UID: ");
-					result.append(currRes.getSliceID().toString());
-
-					result.append(" | Reservation UID: ");
-					result.append(currRes.getReservationID().toString());
-
-					result.append(" | Resource Type: ");
-					result.append(currRes.getResourceType().toString());
-
-					result.append(" | Resource Units: ");
-					result.append(currRes.getUnits());
-
-					result.append(" ] \n");
-				}
+				StringBuilder result = getComputedReservationSummary(ndlSlice);
 
 				// call getManifest to fully form it (otherwise recovery will fail) /ib
 				List<ReservationMng> allRes = ndlSlice.getAllReservations(sm);
@@ -427,18 +399,21 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						workflow.getDomainInConnectionList(),
 						workflow.getBoundElements(),
 						allRes);
-				
+
+				// get Map of requested entities to return to user
+				Map<String, Object> ticketedRequestEntities = getRequestedEntities(ndlSlice);
+
+
 				// call publishManifest if there are reservations in the slice
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
 					ndlSlice.publishManifest(logger);
 				}
 
-				String errMsg = workflow.getErrorMsg();
-				result.append((errMsg == null ? "No errors reported" : errMsg));
 				
 				//workflow.closeModel(); //close the substrate model, but would break modifying now
-				
-				return setReturn(result.toString());
+
+				logger.debug("createSlice(): returning result " + result);
+				return setReturn(result.toString(), ticketedRequestEntities);
 			} catch (CredentialException ce) {
 				logger.error("createSlice(): Credential Exception: " + ce.getMessage());
 				return setError("CredentialException encountered: " + ce.getMessage());
@@ -462,7 +437,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the status of the reservations in the input slice
 	 * @param slice_urn
@@ -480,7 +455,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			// check the whitelist
 			if (verifyCredentials && !checkWhitelist(userDN)) 
 				return setError(WHITELIST_ERROR);
-			
+
 			allRes = getSliceReservations(instance, slice_urn, userDN, logger);
 
 			if (allRes == null){
@@ -536,7 +511,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public Map<String, Object> modifySlice(String slice_urn, Object[] credentials, String modReq) {
 		XmlrpcControllerSlice ndlSlice = null;
 		IOrcaServiceManager sm = null;
-		
+
+		logger.info("ORCA API modifySlice() invoked");
+		if (logger.isTraceEnabled()){
+			logger.trace("modReq: " + modReq);
+		}
+
 		//Check existing slices, remove the closed ones from XmlrpcOrcaState
 		instance.closeDeadSlices();
 		
@@ -559,6 +539,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				// check the whitelist
 				if (verifyCredentials && !checkWhitelist(userDN)) 
 					return setError(WHITELIST_ERROR);
+
+				if (!verifyCredentials && null == userDN){
+					logger.error("Setting userDN to test. This should only happen in Unit Testing.");
+					userDN = "test";
+				}
 
 				if ((modReq == null) || (modReq.length() == 0)) {
 					logger.error("modifySlice(): modification request for slice " + slice_urn + " is empty");
@@ -1031,57 +1016,30 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					}
 
 				}
+				StringBuilder result = getComputedReservationSummary(ndlSlice);
 
-				// What do we return in the manifest ? reservation Id, type, units ? slice ?
-				StringBuilder result = new StringBuilder("Here are the leases: \n");
-
-				result.append("Request id: ");
-				result.append(ndlSlice.getSliceID());
-				result.append("\n");
-				if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
-					Iterator<TicketReservationMng> it = ndlSlice.getComputedReservations().iterator();
-
-					while(it.hasNext()){
-						LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(it.next().getReservationID()));
-
-						result.append("[ ");
-
-						result.append("  Slice UID: ");
-						result.append(currRes.getSliceID().toString());
-
-						result.append(" | Reservation UID: ");
-						result.append(currRes.getReservationID().toString());
-
-						result.append(" | Resource Type: ");
-						result.append(currRes.getResourceType().toString());
-
-						result.append(" | Resource Units: ");
-						result.append(currRes.getUnits());
-
-						result.append(" ] \n");
-					}
-					
-					// call getManifest to fully form it (otherwise recovery will fail) /ib
-					allRes = ndlSlice.getAllReservations(sm);
-					orc.getManifest(workflow.getManifestModel(),
-							workflow.getDomainInConnectionList(),
-							workflow.getBoundElements(),
-							allRes);
-					
-					// update published manifest
-					ndlSlice.updatePublishedManifest(logger);
-				} else {
-					result.append("No new reservations were computed in modifySlice() call\n");
-				}
+				// call getManifest to fully form it (otherwise recovery will fail) /ib
+				allRes = ndlSlice.getAllReservations(sm);
+				orc.getManifest(workflow.getManifestModel(),
+						workflow.getDomainInConnectionList(),
+						workflow.getBoundElements(),
+						allRes);
 
 				String errMsg = workflow.getErrorMsg();
 				result.append((errMsg == null ? "No errors reported" : errMsg));
 
-				if (result.length() == 0)
-					result.append("No result available");
+				// get Map of requested entities to return to user
+				Map<String, Object> ticketedRequestEntities = getRequestedEntities(ndlSlice);
+
+
+				// update published manifest
+				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+					ndlSlice.updatePublishedManifest(logger);
+				}
+
 
 				logger.debug("modifySlice(): returning result " + result);
-				return setReturn(result.toString());
+				return setReturn(result.toString(), ticketedRequestEntities);
 			} catch (CredentialException ce) {
 				logger.error("modifySlice(): Credential Exception: " + ce.getMessage());
 				return setError("CredentialException encountered: " + ce.getMessage());
@@ -1105,7 +1063,74 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 		}
 
 	}
-	
+
+	/**
+	 * get a Map of ticketRequestEntities from a slice.
+	 *
+	 * @param ndlSlice
+	 * @return The Map will have keys of ReservationID strings, while the values are the Map returned by ReservationMng.toMap().
+	 */
+	protected Map<String, Object> getRequestedEntities(XmlrpcControllerSlice ndlSlice) {
+		Map<String, Object> ticketedRequestEntities = new HashMap<>();
+		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+            for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
+                ticketedRequestEntities.put(currRes.getReservationID(), currRes.toMap());
+            }
+        }
+		return ticketedRequestEntities;
+	}
+
+	/**
+	 * Prepare a StringBuilder with basic reservation information as returned by createSlice() and modifySlice()
+	 * @param ndlSlice
+	 * @return
+	 */
+	protected StringBuilder getComputedReservationSummary(XmlrpcControllerSlice ndlSlice) {
+
+		int builderSize = BASE_RESERVATION_BUILDER_SIZE;
+		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+			builderSize += (ndlSlice.getComputedReservations().size() * PER_RESERVATION_BUILDER_SIZE);
+		}
+
+		StringBuilder result = new StringBuilder(builderSize);
+
+		result.append("Here are the leases: \n");
+
+		result.append("Request id: ");
+		result.append(ndlSlice.getSliceID());
+		result.append("\n");
+		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
+
+			for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
+				//LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(ticketReservationMng.getReservationID()));
+
+				result.append("[ ");
+
+				result.append("  Slice UID: ");
+				result.append(currRes.getSliceID());
+
+				result.append(" | Reservation UID: ");
+				result.append(currRes.getReservationID());
+
+				result.append(" | Resource Type: ");
+				result.append(currRes.getResourceType());
+
+				result.append(" | Resource Units: ");
+				result.append(currRes.getUnits());
+
+				result.append(" ] \n");
+			}
+
+        } else {
+            result.append("No new reservations were computed\n");
+        }
+
+		if (result.length() == 0)
+            result.append("No result available");
+
+		return result;
+	}
+
 	/**
 	 * Permit stitching by other slices to this sliver with password. This call does not check
 	 * the type of the sliver, only its existence within the given slice and 
@@ -1971,7 +1996,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			Calendar extendedEnd = Calendar.getInstance();
 			extendedEnd.setTime(termEndDate);
 			for (ReservationMng r : allRes){
-				if ((r.getState() == OrcaConstants.ReservationStateClosed) || (r.getState() == OrcaConstants.ReservationStateFailed))
+				if ((r.getState() == OrcaConstants.ReservationStateClosed) || (r.getState() == ReservationStateFailed))
 					continue;
 				
 				Calendar resEnd = Calendar.getInstance();
