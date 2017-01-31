@@ -157,18 +157,27 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
 
     /**
      * Assumes a ResourceType is like "slvmsite.vm" or "slvmsite.vlan"
+     * Or like "rencivmsite/vm.vm" or "rencivmsite/vlan.vlan"
      * in which case the Site is "slvmsite" (dropping everything after the '.')
+     * or Site become "rencivmsite" dropping everything after the '/' and '.'
      *
      * @param type a ResourceType string
      * @return the name of the site
      */
     private String getSiteFromType(String type) {
-        int siteEnd = type.indexOf('.');
+        // remove everything after a '.' if it exists
+        int siteEnd = type.lastIndexOf('.');
         String site;
         if (-1 != siteEnd) {
             site = type.substring(0, siteEnd);
         } else {
             site = type;
+        }
+
+        // remove everything after a '/' if it exists
+        siteEnd = site.lastIndexOf('/');
+        if (-1 != siteEnd) {
+            site = site.substring(0, siteEnd);
         }
 
         if (logger.isDebugEnabled()){
