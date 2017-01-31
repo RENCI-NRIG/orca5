@@ -482,7 +482,7 @@
         <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#pucpNet/Force10/S4810"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100000000000</layer:bandwidth>
-        <rdfs:label>43</rdfs:label>
+        <rdfs:label>44</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -498,7 +498,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/pucp/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SDN</topology:hasName>
-        <rdfs:label>46</rdfs:label>
+        <rdfs:label>47</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -514,7 +514,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#pucpNet/Force10/S4810"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/TenGigabitEthernet/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <rdfs:label>24-31</rdfs:label>
+        <rdfs:label>25-32</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -529,7 +529,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#pucpNet/Force10/S4810"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pucpvmsite.rdf#pucp/ExoGeni/TenGigabitEthernet/2/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <rdfs:label>0-7</rdfs:label>
+        <rdfs:label>1-8</rdfs:label>
     </owl:NamedIndividual>
     
 
