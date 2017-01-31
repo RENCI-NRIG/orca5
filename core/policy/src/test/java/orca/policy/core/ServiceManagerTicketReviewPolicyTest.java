@@ -10,15 +10,12 @@ import orca.shirako.time.Term;
 import orca.util.ResourceType;
 
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.*;
 
 public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTest {
 
     @Override
     public IServiceManagerPolicy getSMPolicy() throws Exception {
-        IServiceManagerPolicy policy = new ServiceManagerTicketReviewPolicyTestWrapper();
-
-        return policy;
+        return new ServiceManagerTicketReviewPolicyTestWrapper();
     }
 
     /**
@@ -28,7 +25,7 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
      * @throws Exception
      */
     public void testFail() throws Exception {
-        IServiceManager sm = (IServiceManager) getSM();
+        IServiceManager sm = getSM();
 
         ActorClock clock = sm.getActorClock();
         Term.clock = clock;
@@ -69,9 +66,6 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
                 assertTrue(r2.getState() == ReservationStates.Closed);
             }
 
-            if (i > end) {
-                //assertTrue(r2.getState() == ReservationStates.Closed);
-            }
         }
 
         IKernelSlice kernelSlice = (IKernelSlice) r1.getSlice();
@@ -86,7 +80,7 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
      * @throws Exception
      */
     public void testNascent() throws Exception {
-        IServiceManager sm = (IServiceManager) getSM();
+        IServiceManager sm = getSM();
 
         ActorClock clock = sm.getActorClock();
         Term.clock = clock;
@@ -150,7 +144,7 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
      * @throws Exception
      */
     public void testFailAndNascent() throws Exception {
-        IServiceManager sm = (IServiceManager) getSM();
+        IServiceManager sm = getSM();
 
         ActorClock clock = sm.getActorClock();
         Term.clock = clock;
