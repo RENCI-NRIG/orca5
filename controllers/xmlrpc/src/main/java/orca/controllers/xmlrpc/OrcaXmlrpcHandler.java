@@ -138,15 +138,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	}
 
 	/**
+	 * Adds more details about a reservation createSlice() or modifySlice(),
+	 * in a new Map object of ticketRequestEntities.
 	 *
 	 * @param ret
 	 * @param ticketedRequestEntities
 	 * @return
 	 */
 	private static Map<String, Object> setReturn(Object ret, Map<String, Object> ticketedRequestEntities) {
-		Map <String, Object> m = new HashMap<String, Object>();
-		m.put(ERR_RET_FIELD, false);
-		m.put(RET_RET_FIELD, ret);
+		Map <String, Object> m = setReturn(ret);
 		m.put(TICKETED_ENTITIES_FIELD, ticketedRequestEntities);
 		return m;
 	}
@@ -1065,24 +1065,23 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	}
 
 	/**
+	 * get a Map of ticketRequestEntities from a slice.
 	 *
 	 * @param ndlSlice
-	 * @return
+	 * @return The Map will have keys of ReservationID strings, while the values are the Map returned by ReservationMng.toMap().
 	 */
 	protected Map<String, Object> getRequestedEntities(XmlrpcControllerSlice ndlSlice) {
 		Map<String, Object> ticketedRequestEntities = new HashMap<>();
 		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
             for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
-                Map<String, Object> currResMap = currRes.toMap();
-
-                ticketedRequestEntities.put(currRes.getReservationID(), currResMap);
+                ticketedRequestEntities.put(currRes.getReservationID(), currRes.toMap());
             }
         }
 		return ticketedRequestEntities;
 	}
 
 	/**
-	 *
+	 * Prepare a StringBuilder with basic reservation information as returned by createSlice() and modifySlice()
 	 * @param ndlSlice
 	 * @return
 	 */

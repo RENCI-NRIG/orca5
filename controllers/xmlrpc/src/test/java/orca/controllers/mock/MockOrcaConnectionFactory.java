@@ -11,27 +11,26 @@ import orca.util.ID;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A messy attempt at an OrcaConnectionFactory that doesn't need to talk to 'Live' servers.
+ * The main thing is that it returns a MockOrcaServiceManager.
+ */
 public class MockOrcaConnectionFactory extends OrcaConnectionFactory {
 
     protected final boolean failReservation;
     protected Map<ReservationID, TicketReservationMng> reservationMap;
 
     /**
+     * Jump-start a new SM with some fake reservations already in place,
+     * as well as an indicator to the (Mock) SM whether it should fail any reservations.
      *
-     * @param url
-     * @param user
-     * @param password
-     * @param smGuid
+     * @param url passed to super
+     * @param user passed to super
+     * @param password passed to super
+     * @param id passed to super
+     * @param reservationMap a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
+     * @param failReservation an indicator to any SM created whether it should fail any reservations
      */
-    public MockOrcaConnectionFactory(String url, String user, String password, ID smGuid) {
-        // empty reservationMap
-        this(url, user, password, smGuid, null, false);
-    }
-
-    public MockOrcaConnectionFactory(String url, String user, String password, ID id, Map<ReservationID, TicketReservationMng> reservationMap) {
-        this(url, user, password, id, reservationMap, false);
-    }
-
     public MockOrcaConnectionFactory(String url, String user, String password, ID id, Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) {
         super(url, user, password, id);
         if (null != reservationMap) {
@@ -43,10 +42,10 @@ public class MockOrcaConnectionFactory extends OrcaConnectionFactory {
     }
 
     /**
-         *
-         * @return
-         * @throws Exception
-         */
+     *
+     * @return a MockOrcaServiceManager
+     * @throws Exception
+     */
     public synchronized IOrcaServiceManager getServiceManager() throws Exception {
         ServiceManagerManagementObject manager = new ServiceManagerManagementObject();
         manager.initialize();

@@ -13,6 +13,12 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A messy attempt at an XmlRpcController that doesn't need to talk to 'Live' servers.
+ * The main thing is that it returns a MockOrcaConnectionFactory,
+ * but several methods had to be overridden.
+ *
+ */
 public class MockXmlRpcController extends XmlRpcController {
 
     protected Map<ReservationID, TicketReservationMng> reservationMap;
@@ -28,14 +34,23 @@ public class MockXmlRpcController extends XmlRpcController {
     }
 
     /**
+     * Jump-start a new SM with some fake reservations already in place.
      *
-     * @param reservationMap
+     * @param reservationMap a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
      * @throws Exception
      */
     protected void init(Map<ReservationID, TicketReservationMng> reservationMap) throws Exception {
         this.init(reservationMap, failReservation);
     }
 
+    /**
+     * Jump-start a new SM with some fake reservations already in place,
+     * as well as an indicator to the (Mock) SM whether it should fail any reservations.
+     *
+     * @param reservationMap a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
+     * @param failReservation an indicator to any SM created whether it should fail any reservations
+     * @throws Exception
+     */
     public void init(Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) throws Exception {
         if (null != reservationMap) {
             this.reservationMap = reservationMap;
@@ -49,6 +64,7 @@ public class MockXmlRpcController extends XmlRpcController {
     }
 
     /**
+     * Initialize a MockOrcaConnectionFactory, with additional Testing parameters
      *
      * @throws Exception
      */
@@ -93,9 +109,10 @@ public class MockXmlRpcController extends XmlRpcController {
     }
 
     /**
+     * Returns a dummy (new) broker ID
      *
-     * @param sm
-     * @return
+     * @param sm ignored
+     * @return new ID()
      */
     @Override
     public ID getBroker(IOrcaServiceManager sm) {

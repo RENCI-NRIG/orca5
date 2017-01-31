@@ -8,7 +8,6 @@ import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.manage.internal.Converter;
 import orca.manage.internal.ManagementObject;
-import orca.manage.internal.ServiceManagerManagementObject;
 import orca.manage.internal.local.LocalServiceManager;
 import orca.ndl.NdlException;
 import orca.security.AuthToken;
@@ -23,6 +22,9 @@ import java.util.*;
 
 import static orca.manage.OrcaConstants.ReservationStateFailed;
 
+/**
+ * A messy attempt at an OrcaServiceManager that doesn't need to talk to 'Live' servers.
+ */
 public class MockOrcaServiceManager extends LocalServiceManager {
 
     protected final boolean failReservation;
@@ -53,14 +55,13 @@ public class MockOrcaServiceManager extends LocalServiceManager {
         }
     }
 
-    public MockOrcaServiceManager(ManagementObject manager, AuthToken auth) {
-        this(manager, auth, new HashMap<ReservationID, TicketReservationMng>());
-    }
-
-    public MockOrcaServiceManager(ManagementObject manager, AuthToken authToken, Map<ReservationID, TicketReservationMng> reservationMap) {
-        this(manager, authToken, reservationMap, false);
-    }
-
+    /**
+     *
+     * @param manager passed to super
+     * @param authToken passed to super
+     * @param reservationMap a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
+     * @param failReservation an indicator to any SM created whether it should fail any reservations
+     */
     public MockOrcaServiceManager(ManagementObject manager, AuthToken authToken, Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) {
         super(manager, authToken);
         this.reservationMap = reservationMap;
@@ -68,8 +69,9 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     }
 
     /**
+     * Just adds new SliceID to slice, does not save any details.
      *
-     * @param slice is ignored
+     * @param slice new ID is added to slice, but not saved in SM
      * @return
      */
     @Override
@@ -77,11 +79,12 @@ public class MockOrcaServiceManager extends LocalServiceManager {
         SliceID sliceID = new SliceID();
         slice.setSliceID(sliceID.toString());
         return sliceID;
-        //ResultStringMng resultStringMng = manager.addSlice(slice, null);
+        //ResultStringMng resultStringMng = manager.addSlice(slice, null); // can the manager be made to track this for us?
         //resultStringMng.
     }
 
     /**
+     * Provides a static list of pool resources
      *
      * @param broker is ignored
      * @return
@@ -117,9 +120,10 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     }
 
     /**
+     * Add reservation to our maintained reservationMap
      *
-     * @param reservation
-     * @return
+     * @param reservation new ReservationID is added to reservation
+     * @return new ReservationID
      */
     @Override
     public ReservationID addReservation(TicketReservationMng reservation) {
@@ -131,8 +135,8 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
     /**
      *
-     * @param reservationID
-     * @return
+     * @param reservationID used to find reservation
+     * @return the reservation matching ID
      */
     @Override
     public ReservationMng getReservation(ReservationID reservationID) {
@@ -142,7 +146,7 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     /**
      *
      * @param sliceID is ignored
-     * @return
+     * @return all reservations from this (Mock) SM
      */
     @Override
     public List<ReservationMng> getReservations(SliceID sliceID) {
@@ -158,9 +162,10 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     }
 
     /**
+     * Always returns true
      *
-     * @param reservation
-     * @return
+     * @param reservation ignored
+     * @return true
      */
     @Override
     public boolean demand(ReservationMng reservation) {
