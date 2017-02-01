@@ -22,12 +22,15 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 
 public class ReservationConverterTest extends RequestWorkflowTest{
 	
-	String manifestRecoverFile = "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/orca/embed/ng-1-manifest.rdf"; 
+	//String manifestRecoverFile = "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/orca/embed/ng-1-manifest.rdf";
+	String manifestRecoverFile = "../../ndl/src/test/resources/shared-vlan.rdf";
 	
 	@Before
 	public void setUp() throws Exception {
+		ORCA_SRC_HOME = "../../"; //calling tests outside this package
 		super.setUp();
-		requestFileGush = "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/orca/embed/SFDemo_RLS.rdf"; 	
+		//requestFileGush = "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/orca/embed/SFDemo_RLS.rdf";
+		requestFileGush = "../../embed/src/test/resources/orca/embed/TS2/TS2-8.rdf";
 	}
 
 	@After
@@ -39,7 +42,6 @@ public class ReservationConverterTest extends RequestWorkflowTest{
 		String manifestStr = NdlCommons.readFile(manifestRecoverFile);		
 		ByteArrayInputStream modelStream = new ByteArrayInputStream(manifestStr.getBytes());		
 		OntModel manifestModel = NdlModel.getModelFromStream(modelStream, OntModelSpec.OWL_MEM_RDFS_INF, true);
-		
 
 		ReservationConverter orc = new ReservationConverter();
 		workflow.recover(Logger.getLogger(this.getClass()), null, null, manifestModel);

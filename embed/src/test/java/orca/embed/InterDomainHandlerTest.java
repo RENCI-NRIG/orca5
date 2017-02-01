@@ -44,6 +44,9 @@ public class InterDomainHandlerTest extends MappingHandlerTest {
 	String substrateFileName,nlrsubstrateFileName,rencivmsubstrateFileName,dukevmsubstrateFileName,uncvmsubstrateFileName;
 	NetworkHandler benhandler,mphandler;
 	PortHandler portHandler1, portHandler2;
+
+	// some tests are called from outside this package
+	protected String ORCA_SRC_HOME = "../";
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -54,8 +57,9 @@ public class InterDomainHandlerTest extends MappingHandlerTest {
 		requestFile2 = "src/main/resources/orca/ndl/request/idRequest2.rdf";  //Duke/Euca - Umass
 		requestFileRenciNersc="src/main/resources/orca/ndl/request/idRequest-renciEuca-nerscEuca.rdf";  //Nersc/Euca - Renci/Euca
 		requestFileDukeRenci = "src/main/resources/orca/ndl/request/idRequest-dukeEuca-renciEuca.rdf";  //Duke/Euca - Renci/Euca
-		
-		requestFileRenciUNC = "src/test/resources/orca/embed/TS3/TS3-3.rdf";  //UNC/Euca - Renci/Euca
+
+		//requestFileRenciUNC = "src/test/resources/orca/embed/TS3/TS3-3.rdf";  //UNC/Euca - Renci/Euca
+		requestFileRenciUNC = ORCA_SRC_HOME + "embed/src/test/resources/orca/embed/TS3/TS3-3.rdf";  //UNC/Euca - Renci/Euca
 		//requestFileRenciUNC = "src/main/resources/orca/ndl/request/paul-unc-renci-request.rdf";  //UNC/Euca - Renci/Euca
 		
 		handler=new InterDomainHandler();
