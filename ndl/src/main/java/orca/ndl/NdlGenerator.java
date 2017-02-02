@@ -30,7 +30,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 
 /**
  * This class generates NDL 
@@ -1243,15 +1242,8 @@ public class NdlGenerator {
 		
 		if (guid != null)
 			addGuid(el, guid);
-		
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "removeElement", el.getURI());
-		
-		return melI;
+
+		return doModifyElement(mresI, el, "removeElement");
 	}
 	
 	/**
@@ -1275,15 +1267,8 @@ public class NdlGenerator {
 		
 		if (guid != null)
 			addGuid(el, guid);
-		
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "removeElement", el.getURI());
-		
-		return melI;
+
+		return doModifyElement(mresI, el, "removeElement");
 	}
 	
 	/**
@@ -1294,17 +1279,36 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementRemoveElement(Individual mresI, Individual el) throws NdlException {
-		Individual melI = null;
+		return doModifyElement(mresI, el, "removeElement");
+	}
+
+	/**
+	 *
+	 * @param mresI
+	 * @param el
+	 * @param modifyAction
+	 * @return
+	 * @throws NdlException
+	 */
+	protected Individual doModifyElement(Individual mresI, Individual el, String modifyAction) throws NdlException {
+		if (null == mresI){
+			throw new IllegalArgumentException("Individual mresI cannot be null");
+		}
+		if (null == el){
+			throw new IllegalArgumentException("Individual el cannot be null");
+		}
+
+		Individual melI;
 		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
+
 		addProperty(mresI, "collections", "element", melI.getURI());
 		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "removeElement", el.getURI());
-		
+		addProperty(melI, "modify-schema", modifyAction, el.getURI());
+
 		return melI;
 	}
-	
-	
+
+
 	/**
 	 * Declare an element of a modify reservation that adds a single element (node or link)
 	 * @param mresI
@@ -1313,14 +1317,7 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementAddElement(Individual mresI, Individual el) throws NdlException {
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "addElement", el.getURI());
-		
-		return melI;
+		return doModifyElement(mresI, el, "addElement");
 	}
 	
 	/**
@@ -1331,14 +1328,7 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementModifyNode(Individual mresI, Individual node) throws NdlException {
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", node.getURI());
-		addProperty(melI, "modify-schema", "modifyElement", node.getURI());
-		
-		return melI;
+		return doModifyElement(mresI, node, "modifyElement");
 	}
 	
 	/**
