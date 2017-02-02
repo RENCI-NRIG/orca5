@@ -30,7 +30,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 
 /**
  * This class generates NDL 
@@ -408,6 +407,10 @@ public class NdlGenerator {
 	 * @return
 	 */
 	public Resource addTypedProperty(Individual i, String prefix, String pName, String val, RDFDatatype type) throws NdlException {
+		if (null == i){
+			throw new IllegalArgumentException("Individual `i` cannot be null");
+		}
+
 		DatatypeProperty dpr = ref.getDataTypeProperty(ref.getNsPrefixUri(prefix) + pName);
 		if (null == dpr)
 			throw new NdlException("Unable to find datatype property " + pName);
@@ -424,6 +427,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Resource addSimpleProperty(Individual i, String prefix, String pName, String val) throws NdlException {
+		if (null == i){
+			throw new IllegalArgumentException("Individual `i` cannot be null");
+		}
+
 		Property pr = ref.getProperty(ref.getNsPrefixUri(prefix) + pName);
 		return i.addProperty(pr, val);
 	}
@@ -642,6 +649,9 @@ public class NdlGenerator {
 	 * @return
 	 */
 	public Individual addLayerToConnection(Individual conn, String prefix, String layer) throws NdlException {
+		if (null == conn){
+			throw new IllegalArgumentException("Individual `conn` cannot be null");
+		}
 
 		addProperty(conn, "layer", "atLayer", 
 				ref.getOntClass(ref.getNsPrefixUri(prefix) + layer).getURI());
@@ -655,7 +665,11 @@ public class NdlGenerator {
 	 * @return
 	 */
 	public Individual addBandwidthToConnection(Individual conn, Long bandwidth) throws NdlException {
-		addTypedProperty(conn, "layer", "bandwidth", bandwidth.toString(), 
+		if (null == conn){
+			throw new IllegalArgumentException("Individual `conn` cannot be null");
+		}
+
+		addTypedProperty(conn, "layer", "bandwidth", bandwidth.toString(),
 				TypeMapper.getInstance().getTypeByName(XML_SCHEMA_INTEGER));
 		return conn;
 	}
@@ -707,6 +721,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addLabelToIndividual(Individual c, String label) throws NdlException {
+		if (null == c){
+			throw new IllegalArgumentException("Individual `c` cannot be null");
+		}
+
 		Individual lab = addIndividual(requestId + "#Label-" + massageName(label), "layer", "Label");
 		addTypedProperty(lab, "layer", "label_ID", label, 
 				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
@@ -720,7 +738,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addRDFSLabelToIndividual(Individual c, String label) throws NdlException {
-		addTypedProperty(c, "rdfs", "label", label, 
+		if (null == c){
+			throw new IllegalArgumentException("Individual `c` cannot be null");
+		}
+
+		addTypedProperty(c, "rdfs", "label", label,
 				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
 	}
 	/** 
@@ -729,6 +751,13 @@ public class NdlGenerator {
 	 * @param ind
 	 */
 	public void addInterfaceToIndividual(Individual iface, Individual ind) throws NdlException {
+		if (null == iface){
+			throw new IllegalArgumentException("Individual `iface` cannot be null");
+		}
+		if (null == ind){
+			throw new IllegalArgumentException("Individual `ind` cannot be null");
+		}
+
 		addProperty(ind, "topology", "hasInterface", iface.getURI());
 	}
 	
@@ -739,6 +768,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void removeInterfaceFromIndividual(String iface, Individual ind) throws NdlException {
+		if (null == iface){
+			throw new IllegalArgumentException("Individual `iface` cannot be null");
+		}
+		if (null == ind){
+			throw new IllegalArgumentException("Individual `ind` cannot be null");
+		}
+
 		removeProperty(ind, "topology", "hasInterface", iface);
 	}
 	
@@ -772,6 +808,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual addUniqueIPToIndividual(String ip, String name, Individual ind) throws NdlException {
+		if (null == ind){
+			throw new IllegalArgumentException("Individual `ind` cannot be null");
+		}
+
 		ind.removeAll(NdlCommons.ip4LocalIPAddressProperty);
 		String indName = requestId + "#" + massageName(name) + "-ip-" + ip.replace('.', '-');
 		
@@ -794,7 +834,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addNetmaskToIP(Individual ip, String netmask) throws NdlException {
-		addTypedProperty(ip, "ip4", "netmask", netmask, 
+		if (null == ip){
+			throw new IllegalArgumentException("Individual `ip` cannot be null");
+		}
+
+		addTypedProperty(ip, "ip4", "netmask", netmask,
 				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#Literal"));
 	}
 	
@@ -806,6 +850,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void setInterfaceIP(String ip, Individual intf) throws NdlException {
+		if (null == intf){
+			throw new IllegalArgumentException("Individual `intf` cannot be null");
+		}
+
 		Statement s = intf.getProperty(NdlCommons.ip4LocalIPAddressProperty);
 
 		Individual ipInd = null;
@@ -830,6 +878,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void setInterfaceNetmask(String nm, Individual intf) throws NdlException {
+		if (null == intf){
+			throw new IllegalArgumentException("Individual `intf` cannot be null");
+		}
+
 		Statement s = intf.getProperty(NdlCommons.ip4LocalIPAddressProperty);
 
 		Individual ipInd = null;
@@ -868,7 +920,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addPropertiesToStorage(long capacity, String fstype, String fsparam, String fsmntpoint, boolean doFormat, Individual in) throws NdlException {
-		addTypedProperty(in, "storage", "storageCapacity", capacity + "", 
+		if (null == in){
+			throw new IllegalArgumentException("Individual `in` cannot be null");
+		}
+
+		addTypedProperty(in, "storage", "storageCapacity", capacity + "",
 				TypeMapper.getInstance().getTypeByName(XML_SCHEMA_INTEGER));
 		if (fstype != null)
 			addTypedProperty(in, "storage", "hasFSType", fstype, XSDDatatype.XSDstring);
@@ -885,6 +941,10 @@ public class NdlGenerator {
 	 * @param ind
 	 */
 	public void addURNToIndividual(Individual ind, String urn) throws NdlException {
+		if (null == ind){
+			throw new IllegalArgumentException("Individual `ind` cannot be null");
+		}
+
 		addTypedProperty(ind, "topology", "hasURN", urn,
 				TypeMapper.getInstance().getTypeByName("http://www.w3.org/2001/XMLSchema#anyURI"));
 	}
@@ -896,6 +956,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareTermBeginning(Date date) throws NdlException {
+		if (null == date){
+			// cal.setTime() doesn't valid inputs, so we should do it here
+			throw new IllegalArgumentException("Date cannot be null");
+		}
+
 		Individual res = addIndividual(requestId + "#TermBeginning", "time", "Instant");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -911,6 +976,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareTermEnd(Date date) throws NdlException {
+		if (null == date){
+			// cal.setTime() doesn't valid inputs, so we should do it here
+			throw new IllegalArgumentException("Date cannot be null");
+		}
+
 		Individual res = addIndividual(requestId + "#TermEnd", "time", "Instant");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -920,6 +990,10 @@ public class NdlGenerator {
 	}
 	
 	private void addToTerm(Individual term, long dur, int units) throws NdlException {
+		if (null == term){
+			throw new IllegalArgumentException("Individual `term` cannot be null");
+		}
+
 		switch(units) {
 		case java.util.Calendar.YEAR:
 			addTypedProperty(term, "time", "years", "" + dur, 
@@ -999,20 +1073,41 @@ public class NdlGenerator {
 	}
 	
 	public void addBeginningToTerm(Individual begI, Individual termI) throws NdlException {
+		if (null == begI){
+			throw new IllegalArgumentException("Individual begI cannot be null");
+		}
+		if (null == termI){
+			throw new IllegalArgumentException("Individual termI cannot be null");
+		}
+
 		addProperty(termI, "time", "hasBeginning", begI.getURI());
 	}
 	
 	public void addEndToTerm(Individual endI, Individual termI) throws NdlException {
+		if (null == endI){
+			throw new IllegalArgumentException("Individual endI cannot be null");
+		}
+		if (null == termI){
+			throw new IllegalArgumentException("Individual termI cannot be null");
+		}
+
 		addProperty(termI, "time", "hasEnd", endI.getURI());
 	}
 	
 	public void addDurationToTerm(Individual durI, Individual termI) throws NdlException {
+		if (null == durI){
+			throw new IllegalArgumentException("Individual durI cannot be null");
+		}
+		if (null == termI){
+			throw new IllegalArgumentException("Individual termI cannot be null");
+		}
+
 		addProperty(termI, "time", "hasDurationDescription", durI.getURI());
 	}
 	
 	/**
 	 * Declare Reservation individual with start and end date
-	 * @param id
+	 *
 	 * @param start
 	 * @param end
 	 */
@@ -1079,8 +1174,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementNGIncreaseBy(Individual mresI, String ngUrl, Integer count) throws NdlException {
+		if (null == mresI){
+			throw new IllegalArgumentException("Individual mresI cannot be null");
+		}
+
 		if (ngUrl == null)
 			throw new NdlException("Group URL cannot be null");
+
 		Individual melI = null;
 		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
 
@@ -1102,6 +1202,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementNGDeleteNode(Individual mresI, String ngUrl, String nodeUrl) throws NdlException {
+		if (null == mresI){
+			throw new IllegalArgumentException("Individual mresI cannot be null");
+		}
+
 		if ((ngUrl == null) || (nodeUrl == null))
 			throw new NdlException("Group URL and node URL must not be null");
 		
@@ -1125,7 +1229,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementRemoveNode(Individual mresI, String elUrl, String guid) throws NdlException {
-		
+		if (null == mresI){
+			throw new IllegalArgumentException("Individual mresI cannot be null");
+		}
+
 		// retrieve or create an individual
 		Individual el = blank.getIndividual(elUrl);
 		if (el == null) {
@@ -1135,15 +1242,8 @@ public class NdlGenerator {
 		
 		if (guid != null)
 			addGuid(el, guid);
-		
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "removeElement", el.getURI());
-		
-		return melI;
+
+		return doModifyElement(mresI, el, "removeElement");
 	}
 	
 	/**
@@ -1154,7 +1254,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementRemoveLink(Individual mresI, String elUrl, String guid) throws NdlException {
-		
+		if (null == mresI){
+			throw new IllegalArgumentException("Individual mresI cannot be null");
+		}
+
 		// retrieve or create an individual
 		Individual el = blank.getIndividual(elUrl);
 		if (el == null) {
@@ -1164,15 +1267,8 @@ public class NdlGenerator {
 		
 		if (guid != null)
 			addGuid(el, guid);
-		
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "removeElement", el.getURI());
-		
-		return melI;
+
+		return doModifyElement(mresI, el, "removeElement");
 	}
 	
 	/**
@@ -1183,17 +1279,37 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementRemoveElement(Individual mresI, Individual el) throws NdlException {
-		Individual melI = null;
+		//inputs are checked in doModifyElement()
+		return doModifyElement(mresI, el, "removeElement");
+	}
+
+	/**
+	 *
+	 * @param mresI
+	 * @param el
+	 * @param modifyAction
+	 * @return
+	 * @throws NdlException
+	 */
+	protected Individual doModifyElement(Individual mresI, Individual el, String modifyAction) throws NdlException {
+		if (null == mresI){
+			throw new IllegalArgumentException("Individual mresI cannot be null");
+		}
+		if (null == el){
+			throw new IllegalArgumentException("Individual el cannot be null");
+		}
+
+		Individual melI;
 		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
+
 		addProperty(mresI, "collections", "element", melI.getURI());
 		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "removeElement", el.getURI());
-		
+		addProperty(melI, "modify-schema", modifyAction, el.getURI());
+
 		return melI;
 	}
-	
-	
+
+
 	/**
 	 * Declare an element of a modify reservation that adds a single element (node or link)
 	 * @param mresI
@@ -1202,14 +1318,8 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementAddElement(Individual mresI, Individual el) throws NdlException {
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", el.getURI());
-		addProperty(melI, "modify-schema", "addElement", el.getURI());
-		
-		return melI;
+		//inputs are checked in doModifyElement()
+		return doModifyElement(mresI, el, "addElement");
 	}
 	
 	/**
@@ -1220,14 +1330,8 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual declareModifyElementModifyNode(Individual mresI, Individual node) throws NdlException {
-		Individual melI = null;
-		melI = addIndividual(requestId + "#modifyElement/" + UUID.randomUUID().toString(), "modify-schema", "ModifyElement");
-		
-		addProperty(mresI, "collections", "element", melI.getURI());
-		addProperty(melI, "modify-schema", "modifySubject", node.getURI());
-		addProperty(melI, "modify-schema", "modifyElement", node.getURI());
-		
-		return melI;
+		//inputs are checked in doModifyElement()
+		return doModifyElement(mresI, node, "modifyElement");
 	}
 	
 	/**
@@ -1291,6 +1395,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addProxyToIndividual(Individual proxy, Individual resI) throws NdlException {
+		if (null == proxy){
+			throw new IllegalArgumentException("Individual proxy cannot be null");
+		}
+		if (null == resI){
+			throw new IllegalArgumentException("Individual resI cannot be null");
+		}
+
 		addProperty(resI, "domain", "proxy", proxy.getURI());
 	}
 	
@@ -1301,6 +1412,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addResourceToReservation(Individual resI, Individual toAdd) throws NdlException {
+		if (null == resI){
+			throw new IllegalArgumentException("Individual resI cannot be null");
+		}
+		if (null == toAdd){
+			throw new IllegalArgumentException("Individual toAdd cannot be null");
+		}
+
 		addProperty(resI, "collections", "element", toAdd.getURI());
 	}
 	
@@ -1311,6 +1429,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addSliceToReservation(Individual resI, Individual sl) throws NdlException {
+		if (null == resI){
+			throw new IllegalArgumentException("Individual resI cannot be null");
+		}
+		if (null == sl){
+			throw new IllegalArgumentException("Individual sl cannot be null");
+		}
+
 		addProperty(resI, "geni", "slice", sl.getURI());
 	}
 	
@@ -1321,6 +1446,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addDiskImageToIndividual(Individual diskImage, Individual resI) throws NdlException {
+		if (null == diskImage){
+			throw new IllegalArgumentException("Individual diskImage cannot be null");
+		}
+		if (null == resI){
+			throw new IllegalArgumentException("Individual resI cannot be null");
+		}
+
 		addProperty(resI, "compute", "diskImage", diskImage.getURI());
 	}
 		
@@ -1332,6 +1464,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addDependOnToIndividual(Individual dependency, Individual ind) throws NdlException {
+		if (null == dependency){
+			throw new IllegalArgumentException("Individual dependency cannot be null");
+		}
+		if (null == ind){
+			throw new IllegalArgumentException("Individual ind cannot be null");
+		}
+
 		addProperty(ind, "request-schema", "dependOn", dependency.getURI());
 	}
 	
@@ -1361,6 +1500,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addTermToReservation(Individual termI, Individual resI) throws NdlException {
+		if (null == termI){
+			throw new IllegalArgumentException("Individual termI cannot be null");
+		}
+		if (null == resI){
+			throw new IllegalArgumentException("Individual resI cannot be null");
+		}
+
 		addProperty(resI, "request-schema", "hasTerm", termI.getURI());
 	}
 	
@@ -1400,6 +1546,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addOpenFlowCapable(Individual res, String version) throws NdlException {
+		if (null == res){
+			throw new IllegalArgumentException("Individual res cannot be null");
+		}
+
 		if ("1.0".equals(version)) {
 			addProperty(res, NdlCommons.openflowCapableProperty, NdlCommons.openflowV1_0Ind);
 		} else if ("1.1".equals(version)) {
@@ -1416,6 +1566,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addNodeToDomain(Individual dom, Individual node) throws NdlException {
+		if (null == dom){
+			throw new IllegalArgumentException("Individual dom cannot be null");
+		}
+		if (null == node){
+			throw new IllegalArgumentException("Individual node cannot be null");
+		}
+
 		addProperty(node, "request-schema", "inDomain", dom.getURI());
 	}
 	
@@ -1426,6 +1583,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addDomainToIndividual(Individual dom, Individual ind) throws NdlException {
+		if (null == dom){
+			throw new IllegalArgumentException("Individual dom cannot be null");
+		}
+		if (null == ind){
+			throw new IllegalArgumentException("Individual ind cannot be null");
+		}
+
 		addProperty(ind, "request-schema", "inDomain", dom.getURI());
 	}
 	
@@ -1437,6 +1601,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addNodeTypeToCE(String ns, String tp, Individual node) throws NdlException {
+		if (null == node){
+			throw new IllegalArgumentException("Individual node cannot be null");
+		}
+
 		addProperty(node, "compute", "specificCE", ref.getNsPrefixUri(ns) + tp);
 	}
 	
@@ -1448,6 +1616,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void removeNodeTypeFromCE(String ns, String tp, Individual node) throws NdlException {
+		if (null == node){
+			throw new IllegalArgumentException("Individual node cannot be null");
+		}
+
 		Property pr = ref.getProperty(ref.getNsPrefixUri("compute") + "specificCE");
 		if (null == pr)
 			throw new NdlException("Unable to find property " + "specificCE");
@@ -1460,6 +1632,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void removeNodeTypeFromCE(Individual node) throws NdlException {
+		if (null == node){
+			throw new IllegalArgumentException("Individual node cannot be null");
+		}
+
 		Property pr = ref.getProperty(ref.getNsPrefixUri("compute") + "specificCE");
 		if (null == pr)
 			throw new NdlException("Unable to find property " + "specificCE");
@@ -1473,6 +1649,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addPostBootScriptToCE(String pbscript, Individual node) throws NdlException {
+		if (null == node){
+			throw new IllegalArgumentException("Individual node cannot be null");
+		}
+
 		addTypedProperty(node, "request-schema", "postBootScript", pbscript,  XSDDatatype.XSDstring);
 	}
 	
@@ -1483,7 +1663,11 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addPortToProxy(String port, Individual prx) throws NdlException {
-		addTypedProperty(prx, "topology", "proxiedPort", port, XSDDatatype.XSDunsignedShort);  
+		if (null == prx){
+			throw new IllegalArgumentException("Individual prx cannot be null");
+		}
+
+		addTypedProperty(prx, "topology", "proxiedPort", port, XSDDatatype.XSDunsignedShort);
 	}
 	
 	/**
@@ -1495,6 +1679,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addPortToProxy(String port, String newPort, String newIp, Individual prx) throws NdlException {
+		if (null == prx){
+			throw new IllegalArgumentException("Individual prx cannot be null");
+		}
+
 		addTypedProperty(prx, "topology", "proxiedPort", port, XSDDatatype.XSDunsignedShort);
 		addTypedProperty(prx, "topology", "managementIP", newIp, XSDDatatype.XSDstring);
 		addTypedProperty(prx, "topology", "managementPort", newPort, XSDDatatype.XSDstring);
@@ -1508,6 +1696,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addNumCEsToCluster(Integer ns, Individual cluster) throws NdlException {
+		if (null == ns){
+			throw new IllegalArgumentException("Individual ns cannot be null");
+		}
+		if (null == cluster){
+			throw new IllegalArgumentException("Individual cluster cannot be null");
+		}
+
 		addTypedProperty(cluster, "layer", "numCE", ns.toString(), XSDDatatype.XSDinteger);
 	}
 	
@@ -1516,14 +1711,26 @@ public class NdlGenerator {
 	 * @param cluster
 	 */
 	public void addVMDomainProperty(Individual cluster) throws NdlException {
+		if (null == cluster){
+			throw new IllegalArgumentException("Individual cluster cannot be null");
+		}
+
 		addProperty(cluster, "domain", "hasResourceType", NdlCommons.ORCA_NS + "compute.owl#VM");
 	}
 	
 	public void addBareMetalDomainProperty(Individual cluster) throws NdlException {
+		if (null == cluster){
+			throw new IllegalArgumentException("Individual cluster cannot be null");
+		}
+
 		addProperty(cluster, "domain", "hasResourceType", NdlCommons.ORCA_NS + "compute.owl#BareMetalCE");
 	}
 	
 	public void addFourtyGBareMetalDomainProperty(Individual cluster) throws NdlException {
+		if (null == cluster){
+			throw new IllegalArgumentException("Individual cluster cannot be null");
+		}
+
 		addProperty(cluster, "domain", "hasResourceType", NdlCommons.ORCA_NS + "compute.owl#FourtyGBareMetalCE");
 	}
 	
@@ -1536,6 +1743,10 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public void addOfPropertiesToSlice(String userEmail, String slicePass, String userCtrl, Individual slice) throws NdlException {
+		if (null == slice){
+			throw new IllegalArgumentException("Individual slice cannot be null");
+		}
+
 		addTypedProperty(slice, "topology", "hasEmail", userEmail, XSDDatatype.XSDstring);
 		addTypedProperty(slice, "openflow", "hasSlicePassword", slicePass, XSDDatatype.XSDstring);
 		Individual ctrl = declareOfController(slice.getLocalName() + "-of-ctrl", userCtrl);
@@ -1543,6 +1754,10 @@ public class NdlGenerator {
 	}
 	
 	public void addUserDNProperty(String dn, Individual i) throws NdlException {
+		if (null == i){
+			throw new IllegalArgumentException("Individual i cannot be null");
+		}
+
 		addTypedProperty(i, "topology", "userDN", dn, XSDDatatype.XSDinteger);
 	}
 	
@@ -1572,7 +1787,7 @@ public class NdlGenerator {
 	 * @param keys
 	 */
 	public void addKeysOnColor(Individual color, Map<String, String> keys) throws NdlException {
-		if (keys == null)
+		if (keys == null || color == null)
 			return;
 		for(Entry<String, String> e: keys.entrySet()) {
 			Individual ca = addAnonIndividual("app-color", "ColorAttribute");
@@ -1632,11 +1847,28 @@ public class NdlGenerator {
 	 * @param color - color
 	 */
 	public void encodeColorDependency(Individual from, Individual to, Individual color) throws NdlException {
+		if (null == from){
+			throw new IllegalArgumentException("Individual from cannot be null");
+		}
+		if (null == to){
+			throw new IllegalArgumentException("Individual to cannot be null");
+		}
+		if (null == color){
+			throw new IllegalArgumentException("Individual color cannot be null");
+		}
+
 		addProperty(from, "app-color", "toColorDependency", color);
 		addProperty(to, "app-color", "fromColorDependency", color);
 	}
 	
 	public Individual addColorToIndividual(Individual ne, Individual color) throws NdlException {
+		if (null == ne){
+			throw new IllegalArgumentException("Individual ne cannot be null");
+		}
+		if (null == color){
+			throw new IllegalArgumentException("Individual color cannot be null");
+		}
+
 		addProperty(ne, "app-color", "hasColor", color);
 		return ne;
 	}
@@ -1649,6 +1881,13 @@ public class NdlGenerator {
 	 * @throws NdlException
 	 */
 	public Individual addEthernetAdaptation(Individual intf, Individual adaptTo) throws NdlException {
+		if (null == intf){
+			throw new IllegalArgumentException("Individual intf cannot be null");
+		}
+		if (null == adaptTo){
+			throw new IllegalArgumentException("Individual adaptTo cannot be null");
+		}
+
 		addProperty(intf, "ethernet", "Tagged-Ethernet", adaptTo);
 		return intf;
 	}
@@ -1659,7 +1898,11 @@ public class NdlGenerator {
 	 * @param guid
 	 * @throws NdlException
 	 */
-	public void addGuid(Individual in, String guid) throws NdlException { 
+	public void addGuid(Individual in, String guid) throws NdlException {
+		if (null == in){
+			throw new IllegalArgumentException("Individual in cannot be null");
+		}
+
 		addSimpleProperty(in, "topology", "hasGUID", guid);
 	}
 	
