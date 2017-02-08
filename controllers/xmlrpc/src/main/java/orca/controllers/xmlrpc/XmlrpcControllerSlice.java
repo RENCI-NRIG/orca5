@@ -554,4 +554,69 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 			}
 		}
 	}
+
+	/**
+	 * get a Map of ticketRequestEntities from a slice.
+	 *
+	 * @return The Map will have keys of ReservationID strings, while the values are the Map returned by ReservationMng.toMap().
+	 */
+	protected Map<String, Object> getRequestedEntities() {
+		Map<String, Object> ticketedRequestEntities = new HashMap<>();
+		if ((getComputedReservations() != null) && (getComputedReservations().size() > 0)) {
+            for (TicketReservationMng currRes : getComputedReservations()) {
+                ticketedRequestEntities.put(currRes.getReservationID(), currRes.toMap());
+            }
+        }
+		return ticketedRequestEntities;
+	}
+
+	/**
+	 * Prepare a StringBuilder with basic reservation information as returned by createSlice() and modifySlice()
+	 * @return
+	 */
+	protected StringBuilder getComputedReservationSummary() {
+
+		int builderSize = OrcaXmlrpcHandler.BASE_RESERVATION_BUILDER_SIZE;
+		if ((getComputedReservations() != null) && (getComputedReservations().size() > 0)) {
+			builderSize += (getComputedReservations().size() * OrcaXmlrpcHandler.PER_RESERVATION_BUILDER_SIZE);
+		}
+
+		StringBuilder result = new StringBuilder(builderSize);
+
+		result.append("Here are the leases: \n");
+
+		result.append("Request id: ");
+		result.append(getSliceID());
+		result.append("\n");
+		if ((getComputedReservations() != null) && (getComputedReservations().size() > 0)) {
+
+			for (TicketReservationMng currRes : getComputedReservations()) {
+				//LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(ticketReservationMng.getReservationID()));
+
+				result.append("[ ");
+
+				result.append("  Slice UID: ");
+				result.append(currRes.getSliceID());
+
+				result.append(" | Reservation UID: ");
+				result.append(currRes.getReservationID());
+
+				result.append(" | Resource Type: ");
+				result.append(currRes.getResourceType());
+
+				result.append(" | Resource Units: ");
+				result.append(currRes.getUnits());
+
+				result.append(" ] \n");
+			}
+
+        } else {
+            result.append("No new reservations were computed\n");
+        }
+
+		if (result.length() == 0)
+            result.append("No result available");
+
+		return result;
+	}
 }
