@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>orca</artifactId>
-		<version>5.0.4-SNAPSHOT</version>
+		<version>5.1.0</version>
 	</parent>
 
 	<modules>
