@@ -391,7 +391,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				// or put on deferred queue
 				XmlrpcOrcaState.getSDT().processSlice(ndlSlice);
 
-				StringBuilder result = getComputedReservationSummary(ndlSlice);
+				StringBuilder result = ndlSlice.getComputedReservationSummary();
 
 				// call getManifest to fully form it (otherwise recovery will fail) /ib
 				List<ReservationMng> allRes = ndlSlice.getAllReservations(sm);
@@ -401,7 +401,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						allRes);
 
 				// get Map of requested entities to return to user
-				Map<String, Object> ticketedRequestEntities = getRequestedEntities(ndlSlice);
+				Map<String, Object> ticketedRequestEntities = ndlSlice.getRequestedEntities();
 
 
 				// call publishManifest if there are reservations in the slice
@@ -1016,7 +1016,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 					}
 
 				}
-				StringBuilder result = getComputedReservationSummary(ndlSlice);
+				StringBuilder result = ndlSlice.getComputedReservationSummary();
 
 				// call getManifest to fully form it (otherwise recovery will fail) /ib
 				allRes = ndlSlice.getAllReservations(sm);
@@ -1029,7 +1029,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				result.append((errMsg == null ? "No errors reported" : errMsg));
 
 				// get Map of requested entities to return to user
-				Map<String, Object> ticketedRequestEntities = getRequestedEntities(ndlSlice);
+				Map<String, Object> ticketedRequestEntities = ndlSlice.getRequestedEntities();
 
 
 				// update published manifest
@@ -1062,73 +1062,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		}
 
-	}
-
-	/**
-	 * get a Map of ticketRequestEntities from a slice.
-	 *
-	 * @param ndlSlice
-	 * @return The Map will have keys of ReservationID strings, while the values are the Map returned by ReservationMng.toMap().
-	 */
-	protected Map<String, Object> getRequestedEntities(XmlrpcControllerSlice ndlSlice) {
-		Map<String, Object> ticketedRequestEntities = new HashMap<>();
-		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
-            for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
-                ticketedRequestEntities.put(currRes.getReservationID(), currRes.toMap());
-            }
-        }
-		return ticketedRequestEntities;
-	}
-
-	/**
-	 * Prepare a StringBuilder with basic reservation information as returned by createSlice() and modifySlice()
-	 * @param ndlSlice
-	 * @return
-	 */
-	protected StringBuilder getComputedReservationSummary(XmlrpcControllerSlice ndlSlice) {
-
-		int builderSize = BASE_RESERVATION_BUILDER_SIZE;
-		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
-			builderSize += (ndlSlice.getComputedReservations().size() * PER_RESERVATION_BUILDER_SIZE);
-		}
-
-		StringBuilder result = new StringBuilder(builderSize);
-
-		result.append("Here are the leases: \n");
-
-		result.append("Request id: ");
-		result.append(ndlSlice.getSliceID());
-		result.append("\n");
-		if ((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
-
-			for (TicketReservationMng currRes : ndlSlice.getComputedReservations()) {
-				//LeaseReservationMng currRes = (LeaseReservationMng) sm.getReservation(new ReservationID(ticketReservationMng.getReservationID()));
-
-				result.append("[ ");
-
-				result.append("  Slice UID: ");
-				result.append(currRes.getSliceID());
-
-				result.append(" | Reservation UID: ");
-				result.append(currRes.getReservationID());
-
-				result.append(" | Resource Type: ");
-				result.append(currRes.getResourceType());
-
-				result.append(" | Resource Units: ");
-				result.append(currRes.getUnits());
-
-				result.append(" ] \n");
-			}
-
-        } else {
-            result.append("No new reservations were computed\n");
-        }
-
-		if (result.length() == 0)
-            result.append("No result available");
-
-		return result;
 	}
 
 	/**
