@@ -21,7 +21,7 @@ import orca.util.OrcaException;
 /**
  * Kernel-level interface for slice objects.
  */
-interface IKernelSlice extends ISlice
+public interface IKernelSlice extends ISlice
 {
     /**
      * Returns the slice guard.
