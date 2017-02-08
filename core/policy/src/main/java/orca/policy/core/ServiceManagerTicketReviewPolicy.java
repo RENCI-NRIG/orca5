@@ -50,7 +50,8 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
         Map<SliceID, Integer> sliceStatusMap = new HashMap<>();
 
         // keep track of which sites (per slice) had a failure
-        Map<SliceID, List<String>> sliceFailureSites = new HashMap<>();
+        // Note: this feature is not currently used
+        //Map<SliceID, List<String>> sliceFailureSites = new HashMap<>();
 
         // nothing to do!
         if (myPending == null) {
@@ -99,18 +100,19 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
 
                                 // Find the site from type.
                                 // If e.g. a Slice has a failed VM at a site, we don't want to Ticket the VLAN there
-                                if (sliceReservation.getResources() != null && sliceReservation.getResources().getType() != null) {
-                                    String site = getSiteFromType(sliceReservation.getResources().getType().getType());
+                                // Note: this feature is not currently used
+                                //if (sliceReservation.getResources() != null && sliceReservation.getResources().getType() != null) {
+                                    //String site = getSiteFromType(sliceReservation.getResources().getType().getType());
 
                                     // compare site to list of site failures
-                                    if (!sliceFailureSites.containsKey(sliceID)) {
-                                        sliceFailureSites.put(sliceID, new ArrayList<String>());
-                                    }
-                                    List<String> failureSites = sliceFailureSites.get(sliceID);
-                                    if (!failureSites.contains(site)) {
-                                        failureSites.add(site);
-                                    }
-                                }
+                                    //if (!sliceFailureSites.containsKey(sliceID)) {
+                                    //    sliceFailureSites.put(sliceID, new ArrayList<String>());
+                                    //}
+                                    //List<String> failureSites = sliceFailureSites.get(sliceID);
+                                    //if (!failureSites.contains(site)) {
+                                    //    failureSites.add(site);
+                                    //}
+                                //} // sliceSiteFailure
                             }
                         } else if (sliceReservation.getState() == ReservationStateNascent) {
                             if (logger.isDebugEnabled()) {
@@ -129,8 +131,9 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                 if (sliceStatusMap.get(sliceID) == ReservationStateFailed) {
                     if (reservation.getResources() != null && reservation.getResources().getType() != null) {
                         // only fail the reservation if it from the same site as another failed reservation
-                        String site = getSiteFromType(reservation.getResources().getType().getType());
-                        if (sliceFailureSites.containsKey(sliceID) && sliceFailureSites.get(sliceID).contains(site)) {
+                        // Note: this feature is not currently used
+                        //String site = getSiteFromType(reservation.getResources().getType().getType());
+                        //if (sliceFailureSites.containsKey(sliceID) && sliceFailureSites.get(sliceID).contains(site)) {
                             // Fail the reservation, and remove it from everything
                             logger.info("TicketReview: Closing reservation " + reservation.getReservationID() +
                                     " due to failure in Slice " + slice.getName());
@@ -138,7 +141,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             actor.close(reservation); // "perform local close operations and issue close request to authority"
                             calendar.removePending(reservation);
                             pendingNotify.remove(reservation);
-                        }
+                        //} // sliceFailureSites
                     }
                 } else if (sliceStatusMap.get(sliceID) == ReservationStateNascent) {
                     // save this reservation for later
