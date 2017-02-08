@@ -123,6 +123,9 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             }
 
                             sliceStatusMap.put(sliceID, ReservationStateNascent);
+
+                            // once we have found a Nascent reservation, that is what we treat the entire slice
+                            break;
                         }
                     }
                 }
