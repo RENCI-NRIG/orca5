@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
 import static org.junit.Assert.*;
@@ -94,6 +93,42 @@ public class OrcaXmlrpcHandlerTest {
         assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
 
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+
+    }
+
+    /**
+     * Test that a slice can be created, using MockXmlRpcController
+     *
+     * Uses a MockXmlRpcController to fake a lot of things, avoiding the need
+     * to talk to 'Live' SM or AM+Broker.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCreateSliceWithNetmask() throws Exception {
+        // Need to setup a controller
+        // Currently this works if an SM is running locally.  Need to setup a Mock one.
+        XmlRpcController controller = new MockXmlRpcController();
+        controller.init();
+        controller.start();
+
+        Map<String, Object> result = doTestCreateSlice(controller,
+                "src/test/resources/20_create_with_netmask.rdf",
+                "createSlice_testWithNetmask_" + controller.getClass().getSimpleName());
+
+        // verify results of createSlice()
+        assertNotNull(result);
+        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+
+        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
+                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_CREATE,
+                countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
+
+        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
+
+        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+
+        //TODO: can we examine resulting netmask?
 
     }
 
@@ -251,7 +286,7 @@ public class OrcaXmlrpcHandlerTest {
         Object [] credentials = new Object[0];
 
         // get the reservations that would have been created by a previous call to createSlice()
-        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn);
+        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn, "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf");
 
         // add them to the reservationMap in our Mock SM
         addReservationListToMap(reservationsFromRequest, reservationMap);
@@ -273,6 +308,58 @@ public class OrcaXmlrpcHandlerTest {
 
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
 
+    }
+
+    /**
+     * Test that a simple slice modify, using MockXmlRpcController
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testModifySliceWithNetmask() throws Exception {
+        Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
+
+        MockXmlRpcController controller = new MockXmlRpcController();
+        controller.init(reservationMap);
+        controller.start();
+
+        OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
+        assertNotNull(orcaXmlrpcHandler);
+        orcaXmlrpcHandler.verifyCredentials = false;
+
+        orcaXmlrpcHandler.instance.setController(controller);
+
+        Map<String, Object> result;
+
+        // setup parameters for modifySlice()
+        String slice_urn = "modifySlice_testWithNetmask_" + controller.getClass().getSimpleName(); //java.lang.AssertionError: createSlice() returned error: ERROR: duplicate slice urn createSlice_test
+        Object [] credentials = new Object[0];
+
+        // get the reservations that would have been created by a previous call to createSlice()
+        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn, "src/test/resources/48_initial_request.rdf");
+
+        // add them to the reservationMap in our Mock SM
+        addReservationListToMap(reservationsFromRequest, reservationMap);
+
+        // modify request
+        String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
+
+        result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
+
+        // verify results of modifySlice()
+        assertNotNull(result);
+        assertFalse("modifySlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+
+        // TODO: the expected reservations should be 3, not 5. But it is our test framework in error, not the code.
+        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
+                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_MODIFY,
+                countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
+
+        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
+
+        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+
+        //TODO: can we examine resulting netmask?
     }
 
     /**
@@ -326,11 +413,12 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @param orcaXmlrpcHandler
      * @param slice_urn the slice name
+     * @param requestFile
      * @return a list of reservations created.
      * @throws Exception
      */
-    protected ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn) throws Exception {
-        String resReq = NdlCommons.readFile("../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf");
+    protected ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn, String requestFile) throws Exception {
+        String resReq = NdlCommons.readFile(requestFile);
         List<Map<String, ?>> users = getUsersMap();
 
         String userDN = "test";
