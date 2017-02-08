@@ -68,8 +68,6 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
 
         }
 
-        IKernelSlice kernelSlice = (IKernelSlice) r1.getSlice();
-        //kernelSlice.
     }
 
     /**
