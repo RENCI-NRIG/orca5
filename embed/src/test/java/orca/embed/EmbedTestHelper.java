@@ -25,12 +25,12 @@ public class EmbedTestHelper {
                 abstractModels.add(abstractModel);
 
                 DomainResources domainResources=domain.getDomainResources(abstractModel, resource.get(resourceType));
-                pools.add(getResourcePoolDescriptor(domainResources));
+                pools.add(getResourcePoolDescriptor(domainResources, abstractModel));
             }
         }
     }
 
-    protected static ResourcePoolDescriptor getResourcePoolDescriptor(DomainResources domainResources){
+    protected static ResourcePoolDescriptor getResourcePoolDescriptor(DomainResources domainResources, String abstractModel){
         ResourcePoolDescriptor pool = new ResourcePoolDescriptor();
 
         String rdf = null;
@@ -46,10 +46,12 @@ public class EmbedTestHelper {
         //System.out.println("ResourceDescriptor:"+rdf+":"+type+":"+value+":"+rType.toString());
 
         pool.setResourceType(rType);
+        pool.setResourceTypeLabel("label");
         pool.setUnits(domainResources.getResourceType().get(0).getCount());
 
         ResourcePoolAttributeDescriptor att = new ResourcePoolAttributeDescriptor();
         att.setKey(ResourceProperties.ResourceDomain);
+        att.setType(ResourcePoolAttributeType.STRING);
         att.setValue(value);
         pool.addAttribute(att);
 
@@ -57,6 +59,12 @@ public class EmbedTestHelper {
         att.setKey(ResourceProperties.ResourceAvailableUnits);
         att.setType(ResourcePoolAttributeType.INTEGER);
         att.setValue(String.valueOf(domainResources.getResourceType().get(0).getCount()));
+        pool.addAttribute(att);
+
+        att = new ResourcePoolAttributeDescriptor();
+        att.setKey(ResourceProperties.ResourceNdlAbstractDomain);
+        att.setType(ResourcePoolAttributeType.STRING);
+        att.setValue(abstractModel);
         pool.addAttribute(att);
 
         return pool;

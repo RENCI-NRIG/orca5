@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -373,6 +375,54 @@ public class ReservationMng {
      */
     public void setNotices(String value) {
         this.notices = value;
+    }
+
+    /**
+     *
+     * @return a map containing all simple object properties of this object
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        /*
+        propOrder = {
+    "reservationID",
+    "sliceID",
+    "start",
+    "end",
+    "requestedEnd",
+    "resourceType",
+    "units",
+    "state",
+    "pendingState",
+    "localProperties",
+    "configurationProperties",
+    "requestProperties",
+    "resourceProperties",
+    "notices"
+         */
+
+        // org.xml.sax.SAXException: Null values aren't supported, if isEnabledForExtensions() == false
+        putNotNull(map, "reservationID", this.reservationID);
+        putNotNull(map, "sliceID", this.sliceID);
+        // org.apache.xmlrpc.XmlRpcException: Failed to write XML-RPC response: Long values aren't supported, if isEnabledForExtensions() == false
+        //map.put("start", this.start);
+        //map.put("end", this.end);
+        //map.put("requestedEnd", this.requestedEnd);
+        putNotNull(map, "resourceType", this.resourceType);
+        putNotNull(map, "units", this.units);
+        putNotNull(map, "state", this.state);
+        putNotNull(map, "pendingState", this.pendingState);
+        putNotNull(map, "notices", this.notices);
+
+
+        return map;
+    }
+
+    private void putNotNull(Map<String, Object> map, String key, Object value) {
+        if (null != map && null != key && null != value){
+            map.put(key, value);
+        }
     }
 
 }

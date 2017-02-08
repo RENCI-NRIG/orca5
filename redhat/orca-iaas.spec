@@ -211,7 +211,7 @@ cp -R server/orca/config %{buildroot}%{conf_dir}/sm-14080
 cp -R server/orca/lib %{buildroot}%{conf_dir}/sm-14080
 mkdir -p %{buildroot}%{conf_dir}/sm-14080/ssl
 # Populate controller-11080
-cp -R controllers/xmlrpc/xmlrpc/config %{buildroot}%{conf_dir}/controller-11080
+cp -R controllers/xmlrpc/config %{buildroot}%{conf_dir}/controller-11080
 
 # Clean up .git* files that came as a result of the copy
 find %{buildroot}%{conf_dir} -type d -name .git -print0 | xargs -0 rm -rf
