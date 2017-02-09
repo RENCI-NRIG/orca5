@@ -132,6 +132,8 @@ public interface UnitProperties {
     public static final String UnitEthUUIDSuffix       = DOT + UnitEthUUID;
     public static final String UnitEthParentUrl	       = "parent.url";
     public static final String UnitEthParentUrlSuffix  = DOT + UnitEthParentUrl;
+    public static final String UnitEthNetmask          = "netmask";
+    public static final String UnitEthNetmaskSuffix    = DOT + UnitEthNetmask;
 
     /* Routing options NEuca v1.0 */
     public static final String UnitRouter              = "unit.isrouter";

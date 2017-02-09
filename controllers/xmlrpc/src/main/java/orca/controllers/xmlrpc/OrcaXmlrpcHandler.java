@@ -781,11 +781,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								      request.remove(parent_tag_name);
 								      resource.remove(parent_tag_name);
 									 */
+									//TODO: code duplication
 									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
 									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
 									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
 									String parent_interface_uuid = parent_prefix+host_interface + UnitProperties.UnitEthUUID;
 									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
+									String property_parent_netmask = parent_prefix + host_interface + UnitProperties.UnitEthNetmaskSuffix;
 
 									if(config.getProperty(parent_mac_addr)!=null){
 										modifyProperties.setProperty(UnitProperties.UnitEthMac, config.getProperty(parent_mac_addr));
@@ -822,6 +824,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									request.remove(site_host_interface);
 									resource.remove(site_host_interface);*/
 									}
+									if (config.getProperty(property_parent_netmask) != null){
+										String netmask = config.getProperty(property_parent_netmask);
+										modifyProperties.setProperty(UnitProperties.UnitEthNetmask, netmask);
+										if (logger.isTraceEnabled()){
+											logger.trace("modifySlice: copying netmask from config to modifyProperties: " + netmask);
+										}
+									}
 								}
 
 								//parent is lun 
@@ -849,11 +858,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 										logger.debug("isLun="+isLun+";parent unit lun tag:"+unit_tag
 												+";parent_prefix:"+parent_prefix
 												+";host_interface:"+host_interface);
-										
+
+										//TODO: code duplication
 										String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
 										String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
 										String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
 										String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
+										String property_parent_netmask = parent_prefix + host_interface + UnitProperties.UnitEthNetmaskSuffix;
 
 										if(config.getProperty(parent_tag_name)!=null)
 											modifyProperties.setProperty(UnitProperties.UnitEthVlan, config.getProperty(parent_tag_name));
@@ -863,6 +874,13 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 											modifyProperties.setProperty(UnitProperties.UnitEthIP, config.getProperty(parent_ip_addr));
 										if(config.getProperty(site_host_interface)!=null)
 											modifyProperties.setProperty(UnitProperties.UnitHostEth, config.getProperty(site_host_interface));
+										if (config.getProperty(property_parent_netmask) != null){
+											String netmask = config.getProperty(property_parent_netmask);
+											modifyProperties.setProperty(UnitProperties.UnitEthNetmask, netmask);
+											if (logger.isTraceEnabled()){
+												logger.trace("modifySlice: copying netmask from config to modifyProperties: " + netmask);
+											}
+										}
 									}else{	//no need to go futher
 										logger.error("Parent did not return the unit lun tag:"+pr_local);
 										continue;
