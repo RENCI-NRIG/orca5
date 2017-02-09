@@ -27,6 +27,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import orca.controllers.OrcaController;
 import orca.controllers.xmlrpc.geni.IGeniAmV2Interface.GeniStates;
+import orca.embed.cloudembed.controller.CloudHandler;
 import orca.embed.cloudembed.controller.InterCloudHandler;
 import orca.embed.workflow.ModifyReservations;
 import orca.embed.workflow.RequestWorkflow;
@@ -1333,11 +1334,18 @@ public class ReservationConverter implements LayerConstant {
 									
 											Individual vm_ont = manifestModel.getIndividual(vm_url); 
 											if(vm_ont==null){
+												if (logger.isTraceEnabled()){
+													logger.trace("getManifest: creating new individual vm_ont");
+												}
 												if(rType.equalsIgnoreCase("lun"))
 													vm_ont = manifestModel.createIndividual(vm_url, NdlCommons.networkStorageClass);
 												else
 													vm_ont = manifestModel.createIndividual(vm_url, NdlCommons.computeElementClass);
 											}
+											if (logger.isTraceEnabled()){
+												logger.trace("getManifest: vm_ont has netmask "+vm_ont.getProperty(NdlCommons.ip4NetmaskProperty));
+											}
+
 											Resource inDomain_rs = null;
 											if(domain_ont.hasProperty(NdlCommons.inDomainProperty)){
 												inDomain_rs = domain_ont.getProperty(NdlCommons.inDomainProperty).getResource();
@@ -1578,29 +1586,21 @@ public class ReservationConverter implements LayerConstant {
 		parent_device_ont.addProperty(NdlCommons.collectionElementProperty, parent_ont);
 		if(!parent_ont.hasProperty(NdlCommons.topologyHasInterfaceProperty,intf_ont))
 			parent_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ont);
-		
-		Individual intf_ind=manifestModel.createIndividual(intf_ont.getURI(), NdlCommons.interfaceOntClass);
+
+		Individual intf_ind = CloudHandler.getOntResource(manifestModel, intf_ont);
+
 		parent_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ind);
 		child_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ind);
 		//System.out.println("intf_ont="+intf_ont.getURI());
-		if(intf_ont.hasProperty(NdlCommons.ip4LocalIPAddressProperty)){
-			Resource ip_rs = intf_ont.getProperty(NdlCommons.ip4LocalIPAddressProperty).getResource();
-			Individual ip_ind = manifestModel.createIndividual(ip_rs.getURI(), NdlCommons.IPAddressOntClass);
-			intf_ind.addProperty(NdlCommons.ip4LocalIPAddressProperty, ip_ind);
-			if(ip_rs.hasProperty(NdlCommons.layerLabelIdProperty))
-				ip_ind.addProperty(NdlCommons.layerLabelIdProperty, ip_rs.getProperty(NdlCommons.layerLabelIdProperty).getString());
-		}
-		
-		if(intf_ont.hasProperty(NdlCommons.hasGUIDProperty))
-			intf_ind.addProperty(NdlCommons.hasGUIDProperty, intf_ont.getProperty(NdlCommons.hasGUIDProperty).getString());
-		
+
 		child_ont.addProperty(NdlCommons.manifestHasParent, parent_device_ont);
 		logger.debug("Add parent: child="+child_ont.getURI()
 				+";parent="+parent_device_ont.getURI()
 				+";parent de="+parent_ont
 				+";intf="+intf_ont
 				+";ip="+intf_ont.getProperty(NdlCommons.layerLabelIdProperty)
-				+";id="+intf_ont.getProperty(NdlCommons.ip4LocalIPAddressProperty));
+				+";id="+intf_ont.getProperty(NdlCommons.ip4LocalIPAddressProperty)
+				+";nm="+intf_ont.getProperty(NdlCommons.ip4NetmaskProperty));
 	}
 	
 	public boolean existingParent(OntResource c_ont,OntResource p_ont){

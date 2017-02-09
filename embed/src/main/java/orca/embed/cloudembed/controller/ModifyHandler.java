@@ -544,6 +544,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 		modifies.addAddedElement(edge_device.getResource());
 		addedDevices.add(edge_device);
 
+		if (logger.isTraceEnabled()){
+			logger.trace("Created edge_device " + edge_device);
+		}
+
 		return edge_device;
 	}
 	
@@ -574,6 +578,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 			try {
 				new_ip = ip.getNewIpAddress(edge_device.getModel(), network_str, ip.netmask, url, hole);
 				url = new_ip.getURI()+"/intf";
+				if (logger.isTraceEnabled()){
+					logger.trace("new_ip " + new_ip + " using netmask " + ip.netmask);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
