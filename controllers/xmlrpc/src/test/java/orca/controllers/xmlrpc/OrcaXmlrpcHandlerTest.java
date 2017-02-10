@@ -331,11 +331,46 @@ public class OrcaXmlrpcHandlerTest {
 
     /**
      * Test that a simple slice modify, using MockXmlRpcController
+     * This test modifies existing VM reservations to include netmask.
      *
      * @throws Exception
      */
     @Test
-    public void testModifySliceWithNetmask() throws Exception {
+    public void testModifySliceWithNetmaskExisting() throws Exception {
+        // modify request
+        String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
+
+        // modify the modify request to match UUIDs created by create slice
+        modReq = modReq.replaceAll("64dced03-270a-48a2-a33d-e73494aab1b5", "4dd3f9c5-4555-436f-848a-3b578a5b2083");
+
+        doTestModifySliceWithNetmask(modReq, "modifySlice_testWithNetmaskExisting", EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK);
+    }
+
+    /**
+     * Test that a simple slice modify, using MockXmlRpcController
+     * This test modifies the slice to include new VM reservations that include netmask.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testModifySliceWithNetmaskNew() throws Exception {
+        // modify request
+        String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
+
+        // if we don't match the UUID in the modify request, the reservations will be treated as new
+
+        doTestModifySliceWithNetmask(modReq, "modifySlice_testWithNetmaskNew", EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+    }
+
+    /**
+     *
+     * @param modReq
+     * @param slice_urn
+     * @param expectedReservationCount
+     * @throws Exception
+     */
+    protected void doTestModifySliceWithNetmask(String modReq, String slice_urn, int expectedReservationCount) throws Exception {
+
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
 
         MockXmlRpcController controller = new MockXmlRpcController();
@@ -351,7 +386,6 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, Object> result;
 
         // setup parameters for modifySlice()
-        String slice_urn = "modifySlice_testWithNetmask_" + controller.getClass().getSimpleName(); //java.lang.AssertionError: createSlice() returned error: ERROR: duplicate slice urn createSlice_test
         Object [] credentials = new Object[0];
 
         // get the reservations that would have been created by a previous call to createSlice()
@@ -360,21 +394,14 @@ public class OrcaXmlrpcHandlerTest {
         // add them to the reservationMap in our Mock SM
         addReservationListToMap(reservationsFromRequest, reservationMap);
 
-        // modify request
-        String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
-
-        // modify the modify request to match UUIDs created by create slice
-        modReq = modReq.replaceAll("64dced03-270a-48a2-a33d-e73494aab1b5", "4dd3f9c5-4555-436f-848a-3b578a5b2083");
-
         result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
 
         // verify results of modifySlice()
         assertNotNull(result);
         assertFalse("modifySlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
 
-        // TODO: the expected reservations should be 3, not 5. But it is our test framework in error, not the code.
         assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK,
+                        ") did not match expected value", expectedReservationCount,
                 countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
 
         assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
