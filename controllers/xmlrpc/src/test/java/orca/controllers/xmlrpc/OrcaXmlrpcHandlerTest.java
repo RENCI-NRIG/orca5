@@ -4,8 +4,7 @@ import orca.controllers.OrcaController;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
-import orca.manage.beans.SliceMng;
-import orca.manage.beans.TicketReservationMng;
+import orca.manage.beans.*;
 import orca.ndl.NdlCommons;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
@@ -112,6 +111,7 @@ public class OrcaXmlrpcHandlerTest {
         controller.init();
         controller.start();
 
+        // presence of netmask is examine inside doTestCreateSlice()
         Map<String, Object> result = doTestCreateSlice(controller,
                 "src/test/resources/20_create_with_netmask.rdf",
                 "createSlice_testWithNetmask_" + controller.getClass().getSimpleName());
@@ -127,8 +127,6 @@ public class OrcaXmlrpcHandlerTest {
         assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
 
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
-
-        //TODO: can we examine resulting netmask?
 
     }
 
@@ -209,7 +207,26 @@ public class OrcaXmlrpcHandlerTest {
         List<Map<String, ?>> users = getUsersMap();
 
 
-        return orcaXmlrpcHandler.createSlice(slice_urn, credentials, resReq, users);
+        Map<String, Object> result = orcaXmlrpcHandler.createSlice(slice_urn, credentials, resReq, users);
+
+        // check for netmask is modified reservation
+        if (slice_urn.startsWith("createSlice_testWithNetmask_")) {
+            boolean foundNetmask = false;
+
+            XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
+            for (TicketReservationMng reservation : slice.getComputedReservations()) {
+                for (PropertyMng property : reservation.getLocalProperties().getProperty()) {
+                    if (property.getName().equals("unit.eth1.netmask")) {
+                        foundNetmask = true;
+                        break;
+                    }
+                }
+            }
+
+            assertTrue("Could not find netmask value in computed reservations.", foundNetmask);
+        }
+
+        return result;
     }
 
     /**
@@ -359,7 +376,20 @@ public class OrcaXmlrpcHandlerTest {
 
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
 
-        //TODO: can we examine resulting netmask?
+        // check for netmask is modified reservation
+        boolean foundNetmask = false;
+
+        XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
+        for (TicketReservationMng reservation : slice.getComputedReservations()) {
+            for (PropertyMng property : reservation.getLocalProperties().getProperty()) {
+                if (property.getName().equals("unit.eth1.netmask")) {
+                    foundNetmask = true;
+                    break;
+                }
+            }
+        }
+
+        assertTrue("Could not find netmask value in computed reservations.", foundNetmask);
     }
 
     /**
