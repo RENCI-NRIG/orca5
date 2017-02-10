@@ -4,6 +4,7 @@ import orca.controllers.OrcaController;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
+import orca.manage.OrcaConstants;
 import orca.manage.beans.*;
 import orca.ndl.NdlCommons;
 import orca.shirako.common.ReservationID;
@@ -488,6 +489,11 @@ public class OrcaXmlrpcHandlerTest {
         workflow.run(drp, orcaXmlrpcHandler.abstractModels, resReq, userDN, controller_url, ndlSlice.getSliceID());
 
         ArrayList<TicketReservationMng> reservations = orc.getReservations(sm, workflow.getBoundElements(), orcaXmlrpcHandler.typesMap, workflow.getTerm(), workflow.getslice());
+
+        // pretend the reservations are all active
+        for (TicketReservationMng reservation : reservations){
+            reservation.setState(OrcaConstants.ReservationStateActive);
+        }
 
         //this also update the typesMap
         ndlSlice.setComputedReservations(reservations);
