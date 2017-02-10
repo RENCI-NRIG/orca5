@@ -26,6 +26,7 @@ public class OrcaXmlrpcHandlerTest {
 
     protected static final char CHAR_TO_MATCH_RESERVATION_COUNT = '[';
     protected static final int EXPECTED_RESERVATION_COUNT_FOR_MODIFY = 5;
+    protected static final int EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK = 3;
     protected static final int EXPECTED_RESERVATION_COUNT_FOR_CREATE = 3;
     protected static final int EXPECTED_RESERVATION_COUNT_FOR_CREATE_FAILURE = 5;
     protected static final String VALID_RESERVATION_SUMMARY_REGEX =
@@ -209,7 +210,7 @@ public class OrcaXmlrpcHandlerTest {
 
         Map<String, Object> result = orcaXmlrpcHandler.createSlice(slice_urn, credentials, resReq, users);
 
-        // check for netmask is modified reservation
+        // check for netmask in modified reservation
         if (slice_urn.startsWith("createSlice_testWithNetmask_")) {
             boolean foundNetmask = false;
 
@@ -361,6 +362,9 @@ public class OrcaXmlrpcHandlerTest {
         // modify request
         String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
 
+        // modify the modify request to match UUIDs created by create slice
+        modReq = modReq.replaceAll("64dced03-270a-48a2-a33d-e73494aab1b5", "4dd3f9c5-4555-436f-848a-3b578a5b2083");
+
         result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
 
         // verify results of modifySlice()
@@ -369,14 +373,14 @@ public class OrcaXmlrpcHandlerTest {
 
         // TODO: the expected reservations should be 3, not 5. But it is our test framework in error, not the code.
         assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_MODIFY,
+                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK,
                 countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
 
         assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
 
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
 
-        // check for netmask is modified reservation
+        // check for netmask in modified reservation
         boolean foundNetmask = false;
 
         XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
