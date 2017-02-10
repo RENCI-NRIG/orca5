@@ -881,7 +881,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 												logger.trace("modifySlice: copying netmask from config to modifyProperties: " + netmask);
 											}
 										}
-									}else{	//no need to go futher
+									}else{	//no need to go further
 										logger.error("Parent did not return the unit lun tag:"+pr_local);
 										continue;
 									}

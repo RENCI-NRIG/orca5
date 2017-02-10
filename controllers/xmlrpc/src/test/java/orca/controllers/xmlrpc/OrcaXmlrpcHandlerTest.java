@@ -293,7 +293,7 @@ public class OrcaXmlrpcHandlerTest {
 
         doTestModifySliceWithNetmask("modifySlice_test",
                 "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, new int []{5, 13, 13, 13, 6});
 
     }
 
@@ -313,7 +313,7 @@ public class OrcaXmlrpcHandlerTest {
 
         doTestModifySliceWithNetmask("modifySlice_testWithNetmaskExisting",
                 "src/test/resources/48_initial_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK);
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK, new int []{14, 14, 6});
     }
 
     /**
@@ -331,7 +331,7 @@ public class OrcaXmlrpcHandlerTest {
 
         doTestModifySliceWithNetmask("modifySlice_testWithNetmaskNew",
                 "src/test/resources/48_initial_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, new int []{5, 5, 6, 14, 14});
     }
 
     /**
@@ -340,9 +340,10 @@ public class OrcaXmlrpcHandlerTest {
      * @param requestFile
      * @param modReq
      * @param expectedReservationCount
+     * @param propSize
      * @throws Exception
      */
-    protected void doTestModifySliceWithNetmask(String slice_urn, String requestFile, String modReq, int expectedReservationCount) throws Exception {
+    protected void doTestModifySliceWithNetmask(String slice_urn, String requestFile, String modReq, int expectedReservationCount, int[] propSize) throws Exception {
 
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
 
@@ -385,8 +386,16 @@ public class OrcaXmlrpcHandlerTest {
         boolean foundNetmask = false;
 
         XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
-        for (TicketReservationMng reservation : slice.getComputedReservations()) {
-            for (PropertyMng property : reservation.getLocalProperties().getProperty()) {
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+        for (int i = 0; i<computedReservations.size(); i++){
+            TicketReservationMng reservation = computedReservations.get(i);
+            List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
+            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+
+            // we probably need better checks on Properties
+            assertEquals("Incorrect number of localProperties", propSize[i], localProperties.size());
+
+            for (PropertyMng property : localProperties) {
                 if (property.getName().equals("unit.eth1.netmask")) {
                     foundNetmask = true;
                     break;
