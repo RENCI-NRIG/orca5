@@ -2,10 +2,7 @@ package orca.controllers.mock;
 
 import orca.embed.EmbedTestHelper;
 import orca.embed.workflow.Domain;
-import orca.manage.beans.PoolInfoMng;
-import orca.manage.beans.ReservationMng;
-import orca.manage.beans.SliceMng;
-import orca.manage.beans.TicketReservationMng;
+import orca.manage.beans.*;
 import orca.manage.internal.Converter;
 import orca.manage.internal.ManagementObject;
 import orca.manage.internal.local.LocalServiceManager;
@@ -128,6 +125,18 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     @Override
     public ReservationID addReservation(TicketReservationMng reservation) {
         ReservationID reservationID = new ReservationID();
+
+        // check for reservationID from request
+        List<PropertyMng> configurationProperties = reservation.getConfigurationProperties().getProperty();
+        if (null != configurationProperties){
+            for (PropertyMng property : configurationProperties){
+                if (property.getName().equals("element.GUID")){
+                    reservationID = new ReservationID(property.getValue());
+                    break;
+                }
+            }
+        }
+
         reservation.setReservationID(reservationID.toString());
         reservationMap.put(reservationID, reservation);
         return reservationID;
