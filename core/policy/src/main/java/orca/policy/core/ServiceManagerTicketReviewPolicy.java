@@ -1,5 +1,6 @@
 package orca.policy.core;
 
+import orca.ndl.DomainResourceType;
 import orca.shirako.api.IReservation;
 import orca.shirako.common.SliceID;
 import orca.shirako.kernel.IKernelSlice;
@@ -135,7 +136,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                     if (reservation.getResources() != null && reservation.getResources().getType() != null) {
                         // only fail the reservation if it from the same site as another failed reservation
                         // Note: this feature is not currently used
-                        //String site = getSiteFromType(reservation.getResources().getType().getType());
+                        //String site = DomainResourceType.getSiteFromType(reservation.getResources().getType().getType());
                         //if (sliceFailureSites.containsKey(sliceID) && sliceFailureSites.get(sliceID).contains(site)) {
                             // Fail the reservation, and remove it from everything
                             logger.info("TicketReview: Closing reservation " + reservation.getReservationID() +
@@ -161,34 +162,4 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
         super.checkPending();
     }
 
-    /**
-     * Assumes a ResourceType is like "slvmsite.vm" or "slvmsite.vlan"
-     * Or like "rencivmsite/vm.vm" or "rencivmsite/vlan.vlan"
-     * in which case the Site is "slvmsite" (dropping everything after the '.')
-     * or Site become "rencivmsite" dropping everything after the '/' and '.'
-     *
-     * @param type a ResourceType string
-     * @return the name of the site
-     */
-    private String getSiteFromType(String type) {
-        // remove everything after a '.' if it exists
-        int siteEnd = type.lastIndexOf('.');
-        String site;
-        if (-1 != siteEnd) {
-            site = type.substring(0, siteEnd);
-        } else {
-            site = type;
-        }
-
-        // remove everything after a '/' if it exists
-        siteEnd = site.lastIndexOf('/');
-        if (-1 != siteEnd) {
-            site = site.substring(0, siteEnd);
-        }
-
-        if (logger.isDebugEnabled()){
-            logger.debug("Reservation had type " + type + " treating Site as " + site);
-        }
-        return site;
-    }
 }
