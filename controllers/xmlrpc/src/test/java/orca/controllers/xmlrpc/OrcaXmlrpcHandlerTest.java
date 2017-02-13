@@ -291,9 +291,15 @@ public class OrcaXmlrpcHandlerTest {
         // modify request
         String modReq = NdlCommons.readFile("src/test/resources/88_modReq.rdf");
 
-        doTestModifySliceWithNetmask("modifySlice_test",
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        reservationPropertyCountMap.put("d3f12119-0444-441c-bc04-65d94c96680f", 13);
+        reservationPropertyCountMap.put("3e6cc4f7-57ba-46e3-a53c-be63961dca0b", 13);
+        reservationPropertyCountMap.put("23a68267-bf26-4421-ad94-b64a06c0e1db", 13);
+
+
+        doTestModifySlice("modifySlice_test",
                 "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, new int []{5, 13, 13, 13, 6});
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, reservationPropertyCountMap);
 
     }
 
@@ -304,16 +310,20 @@ public class OrcaXmlrpcHandlerTest {
      * @throws Exception
      */
     @Test
-    public void testModifySliceWithNetmaskExisting() throws Exception {
+    public void testModifySliceWithNetmaskOnModify() throws Exception {
         // modify request
         String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
 
         // modify the modify request to match UUIDs created by create slice
         modReq = modReq.replaceAll("64dced03-270a-48a2-a33d-e73494aab1b5", "4dd3f9c5-4555-436f-848a-3b578a5b2083");
 
-        doTestModifySliceWithNetmask("modifySlice_testWithNetmaskExisting",
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        reservationPropertyCountMap.put("6ebf0a2f-be44-475b-a878-0cc5d8e016fe", 14);
+        reservationPropertyCountMap.put("940dcd2c-6c3c-41f7-9b8e-f6256f590d64", 14);
+
+        doTestModifySlice("modifySlice_testWithNetmaskExisting",
                 "src/test/resources/48_initial_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK, new int []{14, 14, 6});
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK, reservationPropertyCountMap);
     }
 
     /**
@@ -323,15 +333,46 @@ public class OrcaXmlrpcHandlerTest {
      * @throws Exception
      */
     @Test
-    public void testModifySliceWithNetmaskNew() throws Exception {
+    public void testModifySliceWithNetmaskOnAdd() throws Exception {
         // modify request
-        String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
+        String modReq = NdlCommons.readFile("src/test/resources/48_modifyadd_modify.rdf");
 
-        // if we don't match the UUID in the modify request, the reservations will be treated as new
+        // modify the modify request to match UUIDs created by create slice
+        modReq = modReq.replaceAll("110aa696-555b-4726-8502-8e961d3072ce", "029294b2-a517-48d6-b6c5-f9f77a95457c");
 
-        doTestModifySliceWithNetmask("modifySlice_testWithNetmaskNew",
-                "src/test/resources/48_initial_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, new int []{5, 5, 6, 14, 14});
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        reservationPropertyCountMap.put("c14eff06-360b-40fe-bc57-71a677a569b1", 13);
+        reservationPropertyCountMap.put("a3949bc7-0c8e-4d43-ac74-e09aaf174806", 14);
+        reservationPropertyCountMap.put("dcaa5e8d-ed44-4729-aab8-4361f108ca22", 22);
+
+        doTestModifySlice("modifySlice_testWithNetmaskNew",
+                "src/test/resources/20_create_with_netmask.rdf",
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, reservationPropertyCountMap);
+    }
+
+    /**
+     * This tests a Modify with ModifyRemove elements.
+     * I'm not convinced the test harness is correctly implementing everything...
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testModifySliceWithModifyRemove() throws Exception {
+        // modify request
+        String modReq = NdlCommons.readFile("src/test/resources/48_modifyremove_modify.rdf");
+
+        // modify the modify request to match UUIDs created by create slice
+        modReq = modReq.replaceAll("bea9b263-2506-4c7b-b09b-6df7ec2b56fa", "0cacb1fe-7af4-41a4-bfcf-79d7886c8155");
+
+        // specify the number of properties expected based on VM reservation ID
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        reservationPropertyCountMap.put("fd36b984-5709-4ed4-a6fe-4530029139d2", 19); // Node0
+        reservationPropertyCountMap.put("78289c1e-8b7f-473f-998d-63734343ac29", 19); // Node1
+        reservationPropertyCountMap.put("19b380a5-f787-453b-83b4-371750c03799", 19); // Node2
+
+        doTestModifySlice("modifySlice_testModifyRemove",
+                "src/test/resources/48_modifyremove_request.rdf",
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, reservationPropertyCountMap);
     }
 
     /**
@@ -340,10 +381,10 @@ public class OrcaXmlrpcHandlerTest {
      * @param requestFile
      * @param modReq
      * @param expectedReservationCount
-     * @param propSize
+     * @param propCountMap
      * @throws Exception
      */
-    protected void doTestModifySliceWithNetmask(String slice_urn, String requestFile, String modReq, int expectedReservationCount, int[] propSize) throws Exception {
+    protected void doTestModifySlice(String slice_urn, String requestFile, String modReq, int expectedReservationCount, Map<String, Integer> propCountMap) throws Exception {
 
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
 
@@ -368,6 +409,12 @@ public class OrcaXmlrpcHandlerTest {
         // add them to the reservationMap in our Mock SM
         addReservationListToMap(reservationsFromRequest, reservationMap);
 
+        XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
+        //RequestWorkflow workflow = slice.getWorkflow();
+        //ReservationConverter orc = slice.getOrc();
+        //String manifest = orc.getManifest(workflow.getManifestModel(), workflow.getDomainInConnectionList(), workflow.getBoundElements(), slice.getAllReservations(orcaXmlrpcHandler.instance.getSM()));
+        //System.out.println(manifest);
+
         result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
 
         // verify results of modifySlice()
@@ -382,28 +429,38 @@ public class OrcaXmlrpcHandlerTest {
 
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
 
-        // check for netmask in modified reservation
-        boolean foundNetmask = false;
-
-        XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
+        // check the reservation properties
+        slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
-        for (int i = 0; i<computedReservations.size(); i++){
-            TicketReservationMng reservation = computedReservations.get(i);
+        for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
 
             // we probably need better checks on Properties
-            assertEquals("Incorrect number of localProperties", propSize[i], localProperties.size());
 
+            // VLANs don't have consistent IDs from the request
+            Integer expected = propCountMap.get(reservation.getReservationID());
+            if (expected == null) {
+                continue;
+            }
+
+            assertEquals("Incorrect number of localProperties",
+                    (long) expected,
+                    (long) localProperties.size());
+
+            // every VM in our current tests should have a netmask
+            // check for netmask in modified reservation
+            boolean foundNetmask = false;
             for (PropertyMng property : localProperties) {
+                //System.out.println(property.getName() + ": " + property.getValue());
                 if (property.getName().equals("unit.eth1.netmask")) {
                     foundNetmask = true;
                     break;
                 }
             }
+            assertTrue("Could not find netmask value in computed reservations.", foundNetmask);
         }
 
-        assertTrue("Could not find netmask value in computed reservations.", foundNetmask);
     }
 
     /**
