@@ -40,13 +40,8 @@ import orca.manage.beans.ReservationMng;
 import orca.manage.beans.ReservationPredecessorMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.manage.beans.UnitMng;
-import orca.ndl.DomainResource;
+import orca.ndl.*;
 import orca.ndl.INdlModifyModelListener.ModifyType;
-import orca.ndl.LayerConstant;
-import orca.ndl.NdlCommons;
-import orca.ndl.NdlException;
-import orca.ndl.NdlModel;
-import orca.ndl.OntProcessor;
 import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.DomainElement;
 import orca.ndl.elements.IPAddressRange;
@@ -1823,7 +1818,7 @@ public class ReservationConverter implements LayerConstant {
 			for (ReservationMng r: allRes) {
 				Properties local = OrcaConverter.fill(r.getLocalProperties());
 				type = r.getResourceType();
-				rDomain = type.split("\\.")[0];
+				rDomain = DomainResourceType.getSiteFromType(type);
 				rType = type.split("\\.")[1];
 				String unit_url = local.getProperty(UNIT_URL_RES);
 				if ((domain.equalsIgnoreCase(rDomain)) && (domain_ont_url.endsWith(rType)) && (domain_ont_name.equals(unit_url))) {
