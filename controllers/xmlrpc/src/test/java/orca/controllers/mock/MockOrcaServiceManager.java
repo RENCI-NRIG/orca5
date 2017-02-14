@@ -129,14 +129,9 @@ public class MockOrcaServiceManager extends LocalServiceManager {
         ReservationID reservationID = new ReservationID();
 
         // check for reservationID from request
-        List<PropertyMng> configurationProperties = reservation.getConfigurationProperties().getProperty();
-        if (null != configurationProperties){
-            for (PropertyMng property : configurationProperties){
-                if (property.getName().equals("element.GUID")){
-                    reservationID = new ReservationID(property.getValue());
-                    break;
-                }
-            }
+        String guid = OrcaConverter.getConfigurationProperty(reservation, "elment.GUID");
+        if (null != guid) {
+            reservationID = new ReservationID(guid);
         }
 
         reservation.setReservationID(reservationID.toString());

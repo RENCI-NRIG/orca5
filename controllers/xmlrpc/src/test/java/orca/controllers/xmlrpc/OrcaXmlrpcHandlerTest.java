@@ -5,6 +5,7 @@ import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
+import orca.manage.OrcaConverter;
 import orca.manage.beans.*;
 import orca.ndl.NdlCommons;
 import orca.shirako.common.ReservationID;
@@ -217,11 +218,10 @@ public class OrcaXmlrpcHandlerTest {
 
             XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
             for (TicketReservationMng reservation : slice.getComputedReservations()) {
-                for (PropertyMng property : reservation.getLocalProperties().getProperty()) {
-                    if (property.getName().equals("unit.eth1.netmask")) {
-                        foundNetmask = true;
-                        break;
-                    }
+                String netmask = OrcaConverter.getLocalProperty(reservation, "unit.eth1.netmask");
+                if (null != netmask){
+                    foundNetmask = true;
+                    break;
                 }
             }
 
