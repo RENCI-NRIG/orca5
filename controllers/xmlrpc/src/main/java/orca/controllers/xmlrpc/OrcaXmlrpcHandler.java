@@ -727,7 +727,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 								ReservationMng p_r_m = p_r_map.get(name);
 
 								if(p_r_m==null){
-									logger.error("no this parent reservation:"+name);
+									logger.warn("not this parent reservation:"+name);
 									continue;
 								}
 								logger.debug("modifyremove:found parent reservation="+name);
