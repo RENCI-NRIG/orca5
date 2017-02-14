@@ -645,21 +645,20 @@ public class CloudHandler extends MappingHandler{
 	}
 
 	public OntResource getCEOnt(OntResource rs_ont){
-		return getOntResource(manifestModel, rs_ont);
+		return getCEInterfaceOnt(manifestModel, rs_ont);
 	}
 
 	/**
 	 * This method is called from external classes.
 	 * TODO: Should probably be moved to a utility class?
-	 * TODO: This function probably needs a better name.
 	 *
 	 * @param manifestModel
 	 * @param rs_ont
 	 * @return
 	 */
-	public static Individual getOntResource(OntModel manifestModel, OntResource rs_ont) {
+	public static Individual getCEInterfaceOnt(OntModel manifestModel, OntResource rs_ont) {
 		if (Globals.Log.isTraceEnabled()){
-			Globals.Log.trace("Inside getOntResource", new Throwable());
+			Globals.Log.trace("Inside getCEInterfaceOnt", new Throwable());
 		}
 
 		Individual rs1_ind=null;

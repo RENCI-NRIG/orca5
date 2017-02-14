@@ -1530,7 +1530,7 @@ public class ReservationConverter implements LayerConstant {
 		if(!parent_ont.hasProperty(NdlCommons.topologyHasInterfaceProperty,intf_ont))
 			parent_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ont);
 
-		Individual intf_ind = CloudHandler.getOntResource(manifestModel, intf_ont);
+		Individual intf_ind = CloudHandler.getCEInterfaceOnt(manifestModel, intf_ont);
 
 		parent_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ind);
 		child_ont.addProperty(NdlCommons.topologyHasInterfaceProperty,intf_ind);
