@@ -306,6 +306,8 @@ public class OrcaXmlrpcHandlerTest {
     /**
      * Test that a simple slice modify, using MockXmlRpcController
      * This test modifies existing VM reservations to include netmask.
+     * Start with two unconnected VMs for the Create.
+     * Modify by adding a network connection between them, and "Auto-IP"
      *
      * @throws Exception
      */
@@ -329,6 +331,8 @@ public class OrcaXmlrpcHandlerTest {
     /**
      * Test that a simple slice modify, using MockXmlRpcController
      * This test modifies the slice to include new VM reservations that include netmask.
+     * Start with two VMs connected with an "Auto-IP" network connection.
+     * Modify by adding a third VM, connected to one of the original two, and "Auto-IP".
      *
      * @throws Exception
      */
@@ -353,6 +357,8 @@ public class OrcaXmlrpcHandlerTest {
     /**
      * This tests a Modify with ModifyRemove elements.
      * I'm not convinced the test harness is correctly implementing everything...
+     * Start with three VMs connected with a ring network, and "Auto-IP".
+     * Modify by removing the network connection between any two nodes.
      *
      * @throws Exception
      */
