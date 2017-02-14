@@ -714,10 +714,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 							}
 							logger.debug("modifyremove:rr="+rr.getReservationID()+";name="+de.getName()
 									+";guid="+rr_guid+";parent size="+de.getPrecededBy().size());
-							
+
 
 							String modifySubcommand = ModifyHelper.ModifySubcommand.REMOVEIFACE.getName();
-							
+
 							for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()){
 								String parent_prefix = UnitProperties.UnitEthPrefix;
 								Properties modifyProperties=new Properties();
@@ -745,7 +745,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
 									if (un != null) {
 										for (UnitMng u : un) {
-											pr_local = OrcaConverter.fill(u.getProperties());										
+											pr_local = OrcaConverter.fill(u.getProperties());
 											if (pr_local.getProperty(UnitProperties.UnitVlanTag) != null)
 												unit_tag = pr_local.getProperty(UnitProperties.UnitVlanTag);
 											if (pr_local.getProperty(UnitProperties.UnitVlanUrl) != null)
@@ -754,7 +754,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 									}
 
 									host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
-									
+
 									if(host_interface==null){	//modify case, properties only in config
 										// this likely never happens because even network links added as part of modify
 										// have their properties set as if they are new. Also, setting parent_prefix to "modify."
@@ -765,7 +765,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 										logger.error("Unable to find local properties to perform REMOVEIFACE modify");
 										throw new Exception("Unable to find local properties to perform REMOVEIFACE modify");
 									}
-									
+
 									// commented out as a result of above /ib 09/30/16
 									//if(host_interface==null){
 									//	logger.warn("Unable to find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
@@ -774,24 +774,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 									logger.debug("modifyRemove: host_interface=" + host_interface+";tag=" + unit_tag+";parent url=" + unit_parent_url);
 
-									String parent_tag_name = parent_prefix+host_interface+UnitProperties.UnitEthVlanSuffix;
-									modifyProperties.setProperty(UnitProperties.UnitEthVlan, unit_tag);
-
-									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
-									String parent_interface_uuid = parent_prefix+host_interface + UnitProperties.UnitEthUUID;
-
-									if(config.getProperty(parent_quantum_uuid)!=null){
-										modifyProperties.setProperty(UnitProperties.UnitEthNetworkUUID, config.getProperty(parent_quantum_uuid));
-									}
-									if(config.getProperty(parent_interface_uuid)!=null){
-										modifyProperties.setProperty(UnitProperties.UnitEthUUID, config.getProperty(parent_interface_uuid));
-									}
-
-									Properties ethModifyProperties = getEthModifyProperties(parent_prefix, host_interface, config);
+									Properties ethModifyProperties = getNetworkEthModifyProperties(parent_prefix, host_interface, unit_tag, config, logger);
 									modifyProperties.putAll(ethModifyProperties);
+
 								}
 
-								//parent is lun 
+								//parent is lun
 								if(isLun!=null && isLun.equals("1")){	//Parent is a storage reservation
 									List<UnitMng> un = sm.getUnits(new ReservationID(p_r_m.getReservationID()));
 									if (un != null) {
@@ -801,7 +789,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 												unit_tag = pr_local.getProperty(UnitProperties.UnitLUNTag);
 										}
 									}
-									
+
 									if(unit_tag!=null){
 										modifyProperties.setProperty(UnitProperties.UnitTargetLun, unit_tag);
 										host_interface=StringProcessor.getHostInterface(local,p_r_m);
@@ -822,7 +810,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 										if(config.getProperty(parent_tag_name)!=null)
 											modifyProperties.setProperty(UnitProperties.UnitEthVlan, config.getProperty(parent_tag_name));
 
-										Properties ethModifyProperties = getEthModifyProperties(parent_prefix, host_interface, config);
+										Properties ethModifyProperties = getEthModifyProperties(parent_prefix, host_interface, config, logger);
 										modifyProperties.putAll(ethModifyProperties);
 
 									}else{	//no need to go further
@@ -1027,14 +1015,50 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	}
 
 	/**
+	 * Copy properties for Networking reservations, in ModifyRemove
+	 *
+	 * @param parent_prefix
+	 * @param host_interface
+	 * @param unit_tag
+	 * @param config
+	 * @param logger
+	 * @return
+	 */
+	protected static Properties getNetworkEthModifyProperties(String parent_prefix, String host_interface, String unit_tag, Properties config, Logger logger) {
+		Properties modifyProperties = new Properties();
+
+		modifyProperties.setProperty(UnitProperties.UnitEthVlan, unit_tag);
+
+		String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
+		String parent_interface_uuid = parent_prefix+host_interface + UnitProperties.UnitEthUUID;
+		String parent_url = parent_prefix + host_interface + UnitProperties.UnitEthParentUrlSuffix;
+
+		if(config.getProperty(parent_quantum_uuid)!=null){
+            modifyProperties.setProperty(UnitProperties.UnitEthNetworkUUID, config.getProperty(parent_quantum_uuid));
+        }
+		if(config.getProperty(parent_interface_uuid)!=null){
+            modifyProperties.setProperty(UnitProperties.UnitEthUUID, config.getProperty(parent_interface_uuid));
+        }
+		if(config.getProperty(parent_url)!=null) {
+			modifyProperties.setProperty(UnitProperties.UnitEthParentUrl, config.getProperty(parent_url));
+		}
+
+		Properties ethModifyProperties = getEthModifyProperties(parent_prefix, host_interface, config, logger);
+		modifyProperties.putAll(ethModifyProperties);
+
+		return modifyProperties;
+	}
+
+	/**
 	 * Copy properties shared by Networking and LUN reservations, in ModifyRemove
 	 *
 	 * @param parent_prefix
 	 * @param host_interface
 	 * @param config
+	 * @param logger
 	 * @return
 	 */
-	protected Properties getEthModifyProperties(String parent_prefix, String host_interface, Properties config) {
+	protected static Properties getEthModifyProperties(String parent_prefix, String host_interface, Properties config, Logger logger) {
 		Properties modifyProperties = new Properties();
 
 		String parent_mac_addr = parent_prefix+host_interface+ UnitProperties.UnitEthMacSuffix;
@@ -1389,7 +1413,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             
             	// generate mac address, copy IP address from properties if available, vlan.tag from unit properties
             	// get quantum UUID (local) and hosteth (host interface) (unit, not available in emulation) from the network reservation 
-            	// (not same as done for slice modify, since this code does not use NDL models 
+            	// (not same as done for slice modify, since this code does not use NDL models
+				// TODO? netmask?
             	
                 // meta data properties. issue unique guid to this stitch operation
                 String stitchGuid = UUID.randomUUID().toString();
