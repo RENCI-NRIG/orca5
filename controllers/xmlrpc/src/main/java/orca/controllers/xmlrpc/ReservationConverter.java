@@ -1205,7 +1205,7 @@ public class ReservationConverter implements LayerConstant {
 				if (!(orcaReservationState[j] != OrcaConstants.ReservationStateActive)) {
 					ready = false;
 				}
-				rDomain = type.split("\\.")[0];
+				rDomain = DomainResourceType.getSiteFromType(type);
 				rType = type.split("\\.")[1];
 
 				//logger.info("getManifest: domain=" + domain_ont.getURI() + " ;aDomian = "+domain+" :rDomain=" + rDomain +" rType="+rType);
@@ -1906,7 +1906,11 @@ public class ReservationConverter implements LayerConstant {
 	
 	public void updateState(OntModel manifestModel,OntResource v_ont,Property p,String new_str){
 		clearProperty(manifestModel,v_ont,p);
-		v_ont.addProperty(p, new_str);
+		if (null != new_str) {
+			v_ont.addProperty(p, new_str);
+		} else {
+			logger.warn("Unable to update property " + p + " with NULL value. Property has been cleared.");
+		}
 	}
 	
 	public void updateState(OntModel manifestModel,OntResource v_ont,Property p,Resource new_r){
