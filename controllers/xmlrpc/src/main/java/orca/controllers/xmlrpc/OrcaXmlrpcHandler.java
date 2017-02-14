@@ -776,61 +776,19 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 									String parent_tag_name = parent_prefix+host_interface+UnitProperties.UnitEthVlanSuffix;
 									modifyProperties.setProperty(UnitProperties.UnitEthVlan, unit_tag);
-									/*local.remove(parent_tag_name);
-								      config.remove(parent_tag_name);
-								      request.remove(parent_tag_name);
-								      resource.remove(parent_tag_name);
-									 */
-									//TODO: code duplication
-									String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
-									String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
+
 									String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
 									String parent_interface_uuid = parent_prefix+host_interface + UnitProperties.UnitEthUUID;
-									String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
-									String property_parent_netmask = parent_prefix + host_interface + UnitProperties.UnitEthNetmaskSuffix;
 
-									if(config.getProperty(parent_mac_addr)!=null){
-										modifyProperties.setProperty(UnitProperties.UnitEthMac, config.getProperty(parent_mac_addr));
-										/*local.remove(parent_mac_addr);
-									config.remove(parent_mac_addr);
-									request.remove(parent_mac_addr);
-									resource.remove(parent_mac_addr);*/
-									}
-									if(config.getProperty(parent_ip_addr)!=null){
-										modifyProperties.setProperty(UnitProperties.UnitEthIP,config.getProperty(parent_ip_addr));
-										/*local.remove(parent_ip_addr);
-									config.remove(parent_ip_addr);
-									request.remove(parent_ip_addr);
-									resource.remove(parent_ip_addr);*/
-									}
 									if(config.getProperty(parent_quantum_uuid)!=null){
 										modifyProperties.setProperty(UnitProperties.UnitEthNetworkUUID, config.getProperty(parent_quantum_uuid));
-										/*local.remove(parent_quantum_uuid);
-									config.remove(parent_quantum_uuid);
-									request.remove(parent_quantum_uuid);
-									resource.remove(parent_quantum_uuid);*/
 									}
 									if(config.getProperty(parent_interface_uuid)!=null){
 										modifyProperties.setProperty(UnitProperties.UnitEthUUID, config.getProperty(parent_interface_uuid));
-										/*local.remove(parent_interface_uuid);
-									config.remove(parent_interface_uuid);
-									request.remove(parent_interface_uuid);
-									resource.remove(parent_interface_uuid);*/
 									}
-									if(config.getProperty(site_host_interface)!=null){
-										modifyProperties.setProperty(UnitProperties.UnitHostEth, config.getProperty(site_host_interface));
-										/*local.remove(site_host_interface);
-									config.remove(site_host_interface);
-									request.remove(site_host_interface);
-									resource.remove(site_host_interface);*/
-									}
-									if (config.getProperty(property_parent_netmask) != null){
-										String netmask = config.getProperty(property_parent_netmask);
-										modifyProperties.setProperty(UnitProperties.UnitEthNetmask, netmask);
-										if (logger.isTraceEnabled()){
-											logger.trace("modifySlice: copying netmask from config to modifyProperties: " + netmask);
-										}
-									}
+
+									Properties ethModifyProperties = getEthModifyProperties(parent_prefix, host_interface, config);
+									modifyProperties.putAll(ethModifyProperties);
 								}
 
 								//parent is lun 
@@ -859,28 +817,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 												+";parent_prefix:"+parent_prefix
 												+";host_interface:"+host_interface);
 
-										//TODO: code duplication
 										String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
-										String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
-										String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
-										String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
-										String property_parent_netmask = parent_prefix + host_interface + UnitProperties.UnitEthNetmaskSuffix;
 
 										if(config.getProperty(parent_tag_name)!=null)
 											modifyProperties.setProperty(UnitProperties.UnitEthVlan, config.getProperty(parent_tag_name));
-										if(config.getProperty(parent_mac_addr)!=null)
-											modifyProperties.setProperty(UnitProperties.UnitEthMac, config.getProperty(parent_mac_addr));
-										if(config.getProperty(parent_ip_addr)!=null)
-											modifyProperties.setProperty(UnitProperties.UnitEthIP, config.getProperty(parent_ip_addr));
-										if(config.getProperty(site_host_interface)!=null)
-											modifyProperties.setProperty(UnitProperties.UnitHostEth, config.getProperty(site_host_interface));
-										if (config.getProperty(property_parent_netmask) != null){
-											String netmask = config.getProperty(property_parent_netmask);
-											modifyProperties.setProperty(UnitProperties.UnitEthNetmask, netmask);
-											if (logger.isTraceEnabled()){
-												logger.trace("modifySlice: copying netmask from config to modifyProperties: " + netmask);
-											}
-										}
+
+										Properties ethModifyProperties = getEthModifyProperties(parent_prefix, host_interface, config);
+										modifyProperties.putAll(ethModifyProperties);
+
 									}else{	//no need to go further
 										logger.error("Parent did not return the unit lun tag:"+pr_local);
 										continue;
@@ -1080,6 +1024,40 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			}
 		}
 
+	}
+
+	/**
+	 * Copy properties shared by Networking and LUN reservations, in ModifyRemove
+	 *
+	 * @param parent_prefix
+	 * @param host_interface
+	 * @param config
+	 * @return
+	 */
+	protected Properties getEthModifyProperties(String parent_prefix, String host_interface, Properties config) {
+		Properties modifyProperties = new Properties();
+
+		String parent_mac_addr = parent_prefix+host_interface+ UnitProperties.UnitEthMacSuffix;
+		if(config.getProperty(parent_mac_addr)!=null){
+            modifyProperties.setProperty(UnitProperties.UnitEthMac, config.getProperty(parent_mac_addr));
+        }
+		String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
+		if(config.getProperty(parent_ip_addr)!=null){
+            modifyProperties.setProperty(UnitProperties.UnitEthIP,config.getProperty(parent_ip_addr));
+        }
+		String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
+		if(config.getProperty(site_host_interface)!=null){
+            modifyProperties.setProperty(UnitProperties.UnitHostEth, config.getProperty(site_host_interface));
+        }
+		String property_parent_netmask = parent_prefix + host_interface + UnitProperties.UnitEthNetmaskSuffix;
+		if (config.getProperty(property_parent_netmask) != null){
+            String netmask = config.getProperty(property_parent_netmask);
+            modifyProperties.setProperty(UnitProperties.UnitEthNetmask, netmask);
+            if (logger.isTraceEnabled()){
+                logger.trace("modifySlice: copying netmask from config to modifyProperties: " + netmask);
+            }
+        }
+		return modifyProperties;
 	}
 
 	/**
