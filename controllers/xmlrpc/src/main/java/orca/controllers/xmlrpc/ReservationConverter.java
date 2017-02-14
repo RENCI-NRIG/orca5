@@ -754,12 +754,27 @@ public class ReservationConverter implements LayerConstant {
 
 	/**
 	 *
+	 * @param manifestModel unused
+	 * @param dd unused
 	 * @param parent
 	 * @param site_host_interface
 	 * @param num_parent
 	 * @param num
 	 * @return
 	 */
+	@Deprecated
+	public Properties formInterfaceProperties(OntModel manifestModel,DomainElement dd,Entry<DomainElement, OntResource> parent,String site_host_interface, int num_parent, int num){
+		return formInterfaceProperties(parent, site_host_interface, num_parent, num);
+	}
+
+	/**
+     *
+     * @param parent
+     * @param site_host_interface
+     * @param num_parent
+     * @param num
+     * @return
+     */
 	public Properties formInterfaceProperties(Entry<DomainElement, OntResource> parent, String site_host_interface, int num_parent, int num){
 		Properties property=new Properties();
 		String ip_addr = null, mac_addr=null, host_interface = null, intf_name=null;
