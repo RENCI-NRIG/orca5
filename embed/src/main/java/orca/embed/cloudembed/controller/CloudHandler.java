@@ -43,6 +43,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.tdb.TDB;
+import orca.shirako.container.Globals;
 
 public class CloudHandler extends MappingHandler{
 	
@@ -636,10 +637,30 @@ public class CloudHandler extends MappingHandler{
 				e.printStackTrace();
 			}
 		}
+
+		if (logger.isTraceEnabled()){
+			logger.trace("Created edge_device " + edge_device);
+		}
 		return edge_device;
 	}
-	
+
 	public OntResource getCEOnt(OntResource rs_ont){
+		return getCEInterfaceOnt(manifestModel, rs_ont);
+	}
+
+	/**
+	 * This method is called from external classes.
+	 * TODO: Should probably be moved to a utility class?
+	 *
+	 * @param manifestModel
+	 * @param rs_ont
+	 * @return
+	 */
+	public static Individual getCEInterfaceOnt(OntModel manifestModel, OntResource rs_ont) {
+		if (Globals.Log.isTraceEnabled()){
+			Globals.Log.trace("Inside getCEInterfaceOnt", new Throwable());
+		}
+
 		Individual rs1_ind=null;
 		if(rs_ont!=null){
 			rs1_ind=manifestModel.createIndividual(rs_ont.getURI(), NdlCommons.interfaceOntClass);
@@ -649,17 +670,21 @@ public class CloudHandler extends MappingHandler{
 				rs1_ind.addProperty(NdlCommons.ip4LocalIPAddressProperty, ip_ind);
 				if(ip_rs.hasProperty(NdlCommons.layerLabelIdProperty))
 					ip_ind.addProperty(NdlCommons.layerLabelIdProperty, ip_rs.getProperty(NdlCommons.layerLabelIdProperty).getString());
-				if(ip_rs.hasProperty(NdlCommons.ip4NetmaskProperty))
+				if(ip_rs.hasProperty(NdlCommons.ip4NetmaskProperty)) {
 					ip_ind.addProperty(NdlCommons.ip4NetmaskProperty, ip_rs.getProperty(NdlCommons.ip4NetmaskProperty).getString());
-				
+				} else {
+					if (Globals.Log.isTraceEnabled()){
+						Globals.Log.trace("Individual did not contain netmask property: " + ip_rs);
+					}
+				}
 			}
-				
+
 			if(rs_ont.hasProperty(NdlCommons.hasGUIDProperty))
 				rs1_ind.addProperty(NdlCommons.hasGUIDProperty, rs_ont.getProperty(NdlCommons.hasGUIDProperty).getString());
 		}
 		return rs1_ind;
 	}
-	
+
 	public boolean isInterdomain(ComputeElement ce_element,ComputeElement ce, DomainElement link_device){
 		boolean isInter = false;
 		if(link_device==null)
@@ -770,22 +795,27 @@ public class CloudHandler extends MappingHandler{
 		try {
 			new_ip = base_ip.getNewIpAddress(device_model,network_str,netmask, base_ip.getURI(),hole);
 			url = new_ip.getURI()+"/intf";
+			if (logger.isTraceEnabled()){
+				logger.trace("new_ip " + new_ip + " using netmask " + netmask);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		Interface new_intf = new Interface(device_model,url,url);
-		new_intf.getResource().addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(device_model));
+		OntResource new_intfResource = new_intf.getResource();
+		new_intfResource.addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(device_model));
 		if(new_ip.cidr!=null)
-			new_intf.getResource().addProperty(NdlCommons.layerLabelIdProperty,new_ip.cidr);
+			new_intfResource.addProperty(NdlCommons.layerLabelIdProperty,new_ip.cidr);
+		new_intfResource.addProperty(NdlCommons.ip4NetmaskProperty, netmask);
 		new_intf.setLabel(new_ip);
 		ce.addClientInterface(new_intf);
 		edge_device.addClientInterface(new_intf);
-		new_intf.getResource().addProperty(NdlCommons.OWL_sameAs, current_intf.getResource());	
+		new_intfResource.addProperty(NdlCommons.OWL_sameAs, current_intf.getResource());
 		logger.debug("CreateInterface:new_ip="+new_ip.getURI()+";url="+url+";new_intf="+new_intf.getURI());	
 		ncByInterface = element.getConnectionByInterfaceName(current_intf);
 		ce.setInterfaceName(ncByInterface, new_intf);			
-		link_device.setFollowedBy(edge_device, new_intf.getResource());
-		edge_device.setPrecededBy(link_device, new_intf.getResource());
+		link_device.setFollowedBy(edge_device, new_intfResource);
+		edge_device.setPrecededBy(link_device, new_intfResource);
 	}
 	
 	protected void setEdgeNeighbourhood(DomainElement edge_device,DomainElement link_device, Interface new_intf, NetworkConnection ncByInterface) {

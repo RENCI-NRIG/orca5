@@ -2,10 +2,8 @@ package orca.controllers.mock;
 
 import orca.embed.EmbedTestHelper;
 import orca.embed.workflow.Domain;
-import orca.manage.beans.PoolInfoMng;
-import orca.manage.beans.ReservationMng;
-import orca.manage.beans.SliceMng;
-import orca.manage.beans.TicketReservationMng;
+import orca.manage.OrcaConverter;
+import orca.manage.beans.*;
 import orca.manage.internal.Converter;
 import orca.manage.internal.ManagementObject;
 import orca.manage.internal.local.LocalServiceManager;
@@ -16,6 +14,7 @@ import orca.shirako.common.SliceID;
 import orca.shirako.common.meta.ResourcePoolDescriptor;
 import orca.shirako.common.meta.ResourcePoolsDescriptor;
 import orca.util.ID;
+import orca.util.PropList;
 
 import java.io.IOException;
 import java.util.*;
@@ -44,7 +43,7 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
             HashMap<String, Integer> resource = new HashMap<>();
             resource.put("site.vm", 8); // this must be smaller than the test we expect to fail (4 XO Xlarge)
-            resource.put("site.vlan", 2);
+            resource.put("site.vlan", 3);
             //resource.put("site.lun", 2);
 
             resourceMap.put(domain, resource);
@@ -128,6 +127,13 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     @Override
     public ReservationID addReservation(TicketReservationMng reservation) {
         ReservationID reservationID = new ReservationID();
+
+        // check for reservationID from request
+        String guid = OrcaConverter.getConfigurationProperty(reservation, "elment.GUID");
+        if (null != guid) {
+            reservationID = new ReservationID(guid);
+        }
+
         reservation.setReservationID(reservationID.toString());
         reservationMap.put(reservationID, reservation);
         return reservationID;
@@ -169,6 +175,58 @@ public class MockOrcaServiceManager extends LocalServiceManager {
      */
     @Override
     public boolean demand(ReservationMng reservation) {
+        return true;
+    }
+
+    /**
+     * This is currently only called in Test from testModifySliceWithModifyRemove,
+     * and that code path only seems to be looking for two properties.
+     *
+     * @param reservationID
+     * @return
+     */
+    @Override
+    public List<UnitMng> getUnits(ReservationID reservationID){
+        List<UnitMng> unitMngList = new ArrayList<>();
+        UnitMng unit = new UnitMng();
+        PropertiesMng mng = new PropertiesMng();
+
+        ReservationMng reservation = getReservation(reservationID);
+        for (PropertyMng propertyMng : reservation.getConfigurationProperties().getProperty()){
+            if (propertyMng.getName().equals("unit.vlan.url")){
+                mng.getProperty().add(propertyMng);
+                PropertyMng propertyMng1 = new PropertyMng();
+                propertyMng1.setName("unit.vlan.tag");
+                propertyMng1.setValue("137"); //can probably be anything
+                mng.getProperty().add(propertyMng1);
+            }
+        }
+
+        unit.setProperties(mng);
+        unitMngList.add(unit);
+
+        return unitMngList;
+    }
+
+    /**
+     * This is currently only called in Test from testModifySliceWithModifyRemove,
+     * but it doesn't really seem to change the result of the test whether or not
+     * this function is implemented. (Besides cleaning up some error logs).
+     *
+     * Stealing code ServiceManager.modify()
+     */
+    @Override
+    public boolean modifyReservation(ReservationID reservationID,
+                                     Properties modifyProperties)
+    {
+        LeaseReservationMng reservation = (LeaseReservationMng) getReservation(reservationID);
+
+        // Merging modifyProperties into ConfigurationProperties
+        PropertiesMng configurationProperties = reservation.getConfigurationProperties();
+        Properties currConfigProps = OrcaConverter.fill(configurationProperties);
+        PropList.mergePropertiesPriority(modifyProperties, currConfigProps);
+        reservation.setConfigurationProperties(OrcaConverter.fill(currConfigProps));
+
         return true;
     }
 }

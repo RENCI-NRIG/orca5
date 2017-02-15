@@ -23,5 +23,10 @@
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>orca</groupId>
+            <artifactId>ndl</artifactId>
+            <version>5.0.4-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

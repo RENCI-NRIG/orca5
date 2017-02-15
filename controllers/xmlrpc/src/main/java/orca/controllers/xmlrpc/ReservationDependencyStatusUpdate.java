@@ -112,32 +112,13 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 							if(unit_tag!=null){
 								host_interface=StringProcessor.getHostInterface(local,unit_parent_url);
 								if(host_interface==null){
-									logger.debug("Unable to find the parent interace index:unit_tag="+unit_tag);
+									logger.debug("Unable to find the parent interface index:unit_tag="+unit_tag);
 									continue;
 								}
-									
-								String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
-								modifyProperties.setProperty(UnitProperties.UnitEthVlan,unit_tag);
-								String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
-								String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
-								String parent_quantum_uuid = parent_prefix+host_interface+UnitProperties.UnitEthNetworkUUIDSuffix;
-								String parent_interface_uuid = parent_prefix+host_interface+UnitProperties.UnitEthUUIDSuffix;
-								String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
-								String parent_url = parent_prefix + host_interface + UnitProperties.UnitEthParentUrlSuffix;	
-								
-								if(local.getProperty(parent_mac_addr)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitEthMac,local.getProperty(parent_mac_addr));
-								if(local.getProperty(parent_ip_addr)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitEthIP,local.getProperty(parent_ip_addr));
-								if(local.getProperty(parent_quantum_uuid)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitEthNetworkUUID,local.getProperty(parent_quantum_uuid));
-								if(local.getProperty(parent_interface_uuid)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitEthUUID,local.getProperty(parent_interface_uuid));
-								if(local.getProperty(site_host_interface)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitHostEth,local.getProperty(site_host_interface));
-								if(local.getProperty(parent_url)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitEthParentUrl,local.getProperty(parent_url));
-									
+
+								Properties ethModifyProperties = OrcaXmlrpcHandler.getNetworkEthModifyProperties(parent_prefix, host_interface, unit_tag, local, logger);
+								modifyProperties.putAll(ethModifyProperties);
+
 								logger.debug("modifycommand:" + modifySubcommand + ":properties:" + modifyProperties.toString());
 								ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand, modifyProperties);
 							}else{	//no need to go futher
@@ -175,18 +156,12 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
 									continue;
 								}
 								String parent_tag_name = parent_prefix.concat(host_interface).concat(UnitProperties.UnitEthVlanSuffix);
-								String parent_mac_addr = parent_prefix+host_interface+UnitProperties.UnitEthMacSuffix;
-								String parent_ip_addr = parent_prefix+host_interface+UnitProperties.UnitEthIPSuffix;
-								String site_host_interface = parent_prefix + host_interface + UnitProperties.UnitHostEthSuffix;
-									
+
 								if(local.getProperty(parent_tag_name)!=null)
 									modifyProperties.setProperty(UnitProperties.UnitEthVlan,local.getProperty(parent_tag_name));
-								if(local.getProperty(parent_mac_addr)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitEthMac,local.getProperty(parent_mac_addr));
-								if(local.getProperty(parent_ip_addr)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitEthIP,local.getProperty(parent_ip_addr));
-								if(local.getProperty(site_host_interface)!=null)
-									modifyProperties.setProperty(UnitProperties.UnitHostEth, local.getProperty(site_host_interface));
+
+								Properties ethModifyProperties = OrcaXmlrpcHandler.getEthModifyProperties(parent_prefix, host_interface, local, logger);
+								modifyProperties.putAll(ethModifyProperties);
 									
 								String storagePrefix = UnitProperties.UnitStoragePrefix+String.valueOf(num_storage_int);
 								//String storageTargetPrefix = storagePrefix + ".target";  
