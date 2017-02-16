@@ -77,6 +77,11 @@ public class InterDomainHandlerTest extends MappingHandlerTest {
         
         portHandler1 = new PortHandler(rencivmsubstrateFileName);
         portHandler2 = new PortHandler(dukevmsubstrateFileName);
+
+        // if loggers are setup, they need to know Orca home
+		if (null == System.getProperty("ORCA_HOME")) {
+			System.setProperty("ORCA_HOME", ORCA_SRC_HOME + "core/shirako/orca");
+		}
 	}
 	
 	public void testRequestHandle() throws IOException, RequestMappingException, InetNetworkException, NdlException{
