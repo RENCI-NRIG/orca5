@@ -1936,7 +1936,7 @@ public class ReservationConverter implements LayerConstant {
 	public void modifyTerm(OntModel manifestModel,OrcaReservationTerm term) throws ReservationConverterException {
 		
 		// update the lease term (used when doing modify/add) /ib 11/11/16
-		setLeaseTerm(term, false);
+		setLeaseTerm(term, true);
 		
 		String query = OntProcessor.createQueryStringReservationTerm();
 		ResultSet rs = OntProcessor.rdfQuery(manifestModel, query);
@@ -1978,10 +1978,10 @@ public class ReservationConverter implements LayerConstant {
 	/**
 	 * Set the term, skip total duration check if recovery set to true
 	 * @param term
-	 * @param recovery
+	 * @param ignoreInvalidityOnRecoveryOrRenew
 	 * @throws ReservationConverterException
 	 */
-	public void setLeaseTerm(OrcaReservationTerm term, boolean recovery)  throws ReservationConverterException {
+	public void setLeaseTerm(OrcaReservationTerm term, boolean ignoreInvalidityOnRecoveryOrRenew)  throws ReservationConverterException {
 		long termDuration = DEFAULT_DURATION; //milliseconds
 		if(term!=null){
 			termDuration = ((long) term.getDurationInSeconds())*1000;
@@ -1994,7 +1994,7 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 		// after recovery duration can be longer than allowed due to extensions /ib
-		if(!recovery && termDuration > OrcaXmlrpcHandler.MaxReservationDuration) {
+		if(!ignoreInvalidityOnRecoveryOrRenew && termDuration > OrcaXmlrpcHandler.MaxReservationDuration) {
 			throw new ReservationConverterException("Slice terms are limited to " + OrcaXmlrpcHandler.MaxReservationDuration/1000/3600 + " hours");
 		}
 		leaseEnd = new Date(leaseStart.getTime() + termDuration);

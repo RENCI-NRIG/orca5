@@ -1932,7 +1932,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 			
 			// compare slice end date to system default 
 			if (systemDefaultEndCal.before(termEndDateCal)) {
-				logger.debug("New term end date exceeds system default, setting to system default.");
+				logger.debug("New term end date exceeds system default, setting to system default: " + systemDefaultEndCal.getTime());
 				termEndDate = systemDefaultEndCal.getTime();
 			}
 			
