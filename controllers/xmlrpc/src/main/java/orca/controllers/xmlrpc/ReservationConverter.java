@@ -1977,7 +1977,9 @@ public class ReservationConverter implements LayerConstant {
 	}
 	
 	/**
-	 * Set the term, skip total duration check if recovery set to true
+	 * Set the term.
+	 * If the term is invalid (longer than the maximum duration), the term will be set for the maximum duration.
+	 *
 	 * @param term
 	 * @param ignoreInvalidityOnRecoveryOrRenew
 	 * @throws ReservationConverterException
@@ -1999,7 +2001,8 @@ public class ReservationConverter implements LayerConstant {
 		
 		// limit reservation terms
 		if(systemDefaultEndCal.before(termEndDateCal)) {
-			logger.error("Slice terms are limited to " + TimeUnit.MILLISECONDS.toHours(OrcaXmlrpcHandler.MaxReservationDuration) + " hours");
+			logger.warn("Slice terms are limited to " + TimeUnit.MILLISECONDS.toHours(OrcaXmlrpcHandler.MaxReservationDuration) + " hours. " +
+					"Setting end date to system maximum: " + systemDefaultEndCal.getTime());
 			leaseEnd = systemDefaultEndCal.getTime();
 		} else {
 			leaseEnd = term.getEnd();
