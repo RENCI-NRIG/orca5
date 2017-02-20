@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1982,22 +1983,27 @@ public class ReservationConverter implements LayerConstant {
 	 * @throws ReservationConverterException
 	 */
 	public void setLeaseTerm(OrcaReservationTerm term, boolean ignoreInvalidityOnRecoveryOrRenew)  throws ReservationConverterException {
-		long termDuration = DEFAULT_DURATION; //milliseconds
-		if(term!=null){
-			termDuration = ((long) term.getDurationInSeconds())*1000;
-			if (term.getStart() == null){
-				leaseStart = new Date();
-			}
+		if (term == null){
+			term = new OrcaReservationTerm(); // default duration of 1 day
 		}
+
 		if (leaseStart == null){
-			leaseStart=term.getStart();
+			leaseStart = term.getStart();
 		}
+
+		Calendar termEndDateCal = Calendar.getInstance();
+		termEndDateCal.setTime(term.getEnd());
+
+		Calendar systemDefaultEndCal = Calendar.getInstance();
+		systemDefaultEndCal.add(Calendar.MILLISECOND, (int) OrcaXmlrpcHandler.MaxReservationDuration);
 		
-		// after recovery duration can be longer than allowed due to extensions /ib
-		if(!ignoreInvalidityOnRecoveryOrRenew && termDuration > OrcaXmlrpcHandler.MaxReservationDuration) {
-			throw new ReservationConverterException("Slice terms are limited to " + OrcaXmlrpcHandler.MaxReservationDuration/1000/3600 + " hours");
+		// limit reservation terms
+		if(systemDefaultEndCal.before(termEndDateCal)) {
+			logger.error("Slice terms are limited to " + TimeUnit.MILLISECONDS.toHours(OrcaXmlrpcHandler.MaxReservationDuration) + " hours");
+			leaseEnd = systemDefaultEndCal.getTime();
+		} else {
+			leaseEnd = term.getEnd();
 		}
-		leaseEnd = new Date(leaseStart.getTime() + termDuration);
 	}
 
 	public Date getLeaseStart() {
