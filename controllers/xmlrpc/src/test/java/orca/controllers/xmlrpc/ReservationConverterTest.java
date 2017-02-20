@@ -75,15 +75,14 @@ public class ReservationConverterTest extends RequestWorkflowTest{
 	/**
 	 * Set the lease term to the maximum allowable. Should succeed without changes.
 	 *
-	 * @throws ReservationConverter.ReservationConverterException
 	 */
-	public void testSetLeaseTermValid() throws ReservationConverter.ReservationConverterException {
+	public void testSetLeaseTermValid() {
 		ReservationConverter orc = new ReservationConverter();
 		OrcaReservationTerm term = new OrcaReservationTerm();
 		term.setStart(new Date());
 		term.setDuration(14, 0, 0, 0);
 
-		orc.setLeaseTerm(term, false);
+		orc.setLeaseTerm(term);
 
 		assertTrue("Valid reservation term should not have been modified", term.getEnd() == orc.leaseEnd);
 		System.out.println("Term end date set to: " + orc.leaseEnd);
@@ -93,15 +92,14 @@ public class ReservationConverterTest extends RequestWorkflowTest{
 	 * Attempt to set the lease term to greater than the maximum allowable.
 	 * The lease term should be updated without errors, but only up to the maximum allowable.
 	 *
-	 * @throws ReservationConverter.ReservationConverterException
 	 */
-	public void testSetLeaseTermInvalid() throws ReservationConverter.ReservationConverterException {
+	public void testSetLeaseTermInvalid() {
 		ReservationConverter orc = new ReservationConverter();
 		OrcaReservationTerm term = new OrcaReservationTerm();
 		term.setStart(new Date());
 		term.setDuration(30, 0, 0, 0);
 
-		orc.setLeaseTerm(term, false);
+		orc.setLeaseTerm(term);
 
 		assertFalse("Invalid reservation term not updated", term.getEnd() == orc.leaseEnd);
 		System.out.println("Term end date updated to: " + orc.leaseEnd);

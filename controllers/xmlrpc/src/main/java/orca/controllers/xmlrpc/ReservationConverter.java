@@ -173,8 +173,8 @@ public class ReservationConverter implements LayerConstant {
 		return elementCollection;
 	}
 	
-	public ArrayList<TicketReservationMng> getReservations(IOrcaServiceManager sm, Collection<NetworkElement> boundElements, HashMap<String, SiteResourceTypes> typesMap,OrcaReservationTerm OTerm, RequestSlice rSlice)  throws ReservationConverterException, NdlException {
-		setLeaseTerm(OTerm, false);
+	public ArrayList<TicketReservationMng> getReservations(IOrcaServiceManager sm, Collection<NetworkElement> boundElements, HashMap<String, SiteResourceTypes> typesMap,OrcaReservationTerm OTerm, RequestSlice rSlice)  throws NdlException {
+		setLeaseTerm(OTerm);
 		
 		if(firstGroupElement==null)
 			firstGroupElement=new HashMap <String,DomainElement>();
@@ -1934,10 +1934,10 @@ public class ReservationConverter implements LayerConstant {
 		v_ont.removeAll(p);
 	}
 	
-	public void modifyTerm(OntModel manifestModel,OrcaReservationTerm term) throws ReservationConverterException {
+	public void modifyTerm(OntModel manifestModel,OrcaReservationTerm term) {
 		
 		// update the lease term (used when doing modify/add) /ib 11/11/16
-		setLeaseTerm(term, true);
+		setLeaseTerm(term);
 		
 		String query = OntProcessor.createQueryStringReservationTerm();
 		ResultSet rs = OntProcessor.rdfQuery(manifestModel, query);
@@ -1975,7 +1975,7 @@ public class ReservationConverter implements LayerConstant {
 		}
 		//TDB.sync(manifestModel);
 	}
-	
+
 	/**
 	 * Set the term.
 	 * If the term is invalid (longer than the maximum duration), the term will be set for the maximum duration.
@@ -1984,7 +1984,18 @@ public class ReservationConverter implements LayerConstant {
 	 * @param ignoreInvalidityOnRecoveryOrRenew
 	 * @throws ReservationConverterException
 	 */
+	@Deprecated
 	public void setLeaseTerm(OrcaReservationTerm term, boolean ignoreInvalidityOnRecoveryOrRenew)  throws ReservationConverterException {
+		setLeaseTerm(term);
+	}
+
+	/**
+	 * Set the term.
+	 * If the term is invalid (longer than the maximum duration), the term will be set for the maximum duration.
+	 *
+	 * @param term
+	 */
+	public void setLeaseTerm(OrcaReservationTerm term) {
 		if (term == null){
 			term = new OrcaReservationTerm(); // default duration of 1 day
 		}
@@ -2294,11 +2305,7 @@ public class ReservationConverter implements LayerConstant {
     public void recover(RequestWorkflow w) {
     	// 
     	logger.info("Recovering ReservationConverter for workflow");
-    	try {
-			setLeaseTerm(w.getTerm(), true);
-		} catch (ReservationConverterException e) {
-			e.printStackTrace();
-		}
+    	setLeaseTerm(w.getTerm());
     	recoverElementCollection(w.getBoundElements());
     }
     
