@@ -480,7 +480,7 @@ public class OrcaXmlrpcHandlerTest {
     public void testRenewSlice() throws Exception {
         Calendar systemDefaultEndCal = Calendar.getInstance();
         systemDefaultEndCal.add(Calendar.MILLISECOND, (int)MaxReservationDuration / 2);
-        String newTermEnd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").format(systemDefaultEndCal.getTime());
+        String newTermEnd = rfc3339Formatter.format(systemDefaultEndCal.getTime());
         System.out.println(newTermEnd);
 
         doTestRenewSlice(newTermEnd);
