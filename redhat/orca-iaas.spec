@@ -1,17 +1,15 @@
 %global commit @@COMMIT@@
-%global shortcommit @@SHORTCOMMIT@@
+%global version @@VERSION@@
 
 Summary: ORCA - An infrastructure-as-a-service control framework
 Name: orca-iaas
-Version: 5.0.0
-# NOTE:
-# DO NOT MODIFY "Release", UNLESS:
-# 1) We move to a revision structure that isn't based on the subversion GlobalRev.
-# 2) Packaging up a tarball for others to use with "rpmbuild -ta"
-Release: @@DATE@@git%{shortcommit}
+# Version is for software
+# Release is for packaging
+Version: %{version}
+Release: @@DATE@@
 #
 BuildRoot: %{_builddir}/%{name}-root
-Source: https://github.com/RENCI-NRIG/orca5/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
+Source: https://github.com/RENCI-NRIG/orca5/archive/%{commit}/%{name}-%{version}-%{release}.tar.gz
 Group: Applications/System
 Vendor: RENCI/ExoGENI
 Packager: RENCI/ExoGENI
@@ -128,7 +126,7 @@ This package contains the ORCA_HOME directory specific to the
 container housing the SM actor.
 
 %prep
-%setup -q -n %{name}-%{version}-%{shortcommit}
+%setup -q -n %{name}-%{version}-%{release}
 
 %build
 LANG=en_US.UTF-8 MAVEN_OPTS=%{maven_opts} mvn ${MAVEN_ARGS} clean install -DskipTests=true

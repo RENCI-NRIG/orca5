@@ -9,8 +9,12 @@ export PATH=/opt/jdev/maven/bin:$PATH
 # Define top-level build directory
 export ORCA_BLD="${HOME}/orca-build"
 
+# need to start in source directory to get VERSION from git
+cd "$( dirname "$0" )"
+
 # Define version of ORCA being built
-export VERSION="5.0.0"
+# http://softwareengineering.stackexchange.com/a/141986
+export VERSION=`git describe --tags --long --dirty --always | sed s/orca-// | sed s/-/_/g`
 
 # Define ORCA source directory
 BASE_SRC_DIR="orca-iaas-${VERSION}"
@@ -92,18 +96,19 @@ cp -a ../. "${BASE_SRC_DIRPATH}"
 # Post-process source
 export BLD_DATE=`date "+%Y%m%d%H%M"`
 export COMMIT=`git rev-parse HEAD`
-export SHORTCOMMIT=`git rev-parse --short=8 HEAD`
 sed -i -e "s;@@DATE@@;${BLD_DATE};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
 sed -i -e "s;@@COMMIT@@;${COMMIT};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
-sed -i -e "s;@@SHORTCOMMIT@@;${SHORTCOMMIT};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
+sed -i -e "s;@@VERSION@@;${VERSION};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
 
 # Change directory to build location
 cd "${ORCA_BLD}"
 
 # Create tarball
+BUILD_NAME=${BASE_SRC_DIR}-${BLD_DATE}
 rm -rf ${BASE_SRC_DIR}-*
-mv ${BASE_SRC_DIR} ${BASE_SRC_DIR}-${SHORTCOMMIT}
-tar -czf ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz ${BASE_SRC_DIR}-${SHORTCOMMIT}
+mv ${BASE_SRC_DIR} ${BUILD_NAME}
+tar -czf ${BUILD_NAME}.tar.gz ${BUILD_NAME}
+echo "Built tarball ${BUILD_NAME}.tar.gz"
 
 # Place some command-line arguments for Maven in an environment variable,
 # and export.
@@ -112,7 +117,7 @@ export MAVEN_ARGS="-s ${ORCA_BLD}/settings.xml"
 # Build RPM from tarball
 # the build scripts use Bash specific functions (pushd/popd), so make sure we use that buildshell
 # /bin/sh defaults to bash on RedHat, but it does not on Ubuntu. 
-rpmbuild --define '_buildshell /bin/bash' --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BASE_SRC_DIR}-${SHORTCOMMIT}.tar.gz
+rpmbuild --define '_buildshell /bin/bash' --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BUILD_NAME}.tar.gz
 
 BLD_STATUS=$?
 if [ $BLD_STATUS -ne 0 ]; then
@@ -123,7 +128,7 @@ fi
 if [ -n "${INSTALL_RPM}" ]; then
     echo "Preparing to install RPMs..."
     cd "${RPM_BUILD_DIR}/RPMS/x86_64"
-    sudo rpm -Uvh --force "*${BLD_DATE}git${SHORTCOMMIT}*.rpm"
+    sudo rpm -Uvh --force "*${VERSION}*.rpm"
 fi
 
 echo "Done."
