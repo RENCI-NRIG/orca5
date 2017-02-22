@@ -6,6 +6,25 @@ export ORCA_BLD="${HOME}/orca-build"
 # Define RPM build directory
 RPM_BUILD_DIR="${ORCA_BLD}/rpmbuild"
 
+# remove stopped or running containers
+f_rm_f_docker_container ()
+{
+  #container_name="$1"
+  RUNNING=$(docker inspect --format="{{ .State.Running }}" $1 2> /dev/null)
+
+  # if it's not there at all, we don't need to remove it
+  if [ $? -ne 1 ]; then
+    echo -n "Removing container: "
+    docker rm -f $1
+
+    # check exit status, and kill script if not successful
+    if [ $? -ne 0 ]
+    then
+      exit $?
+    fi
+  fi
+}
+
 # Delete local RPMs
 echo -n "Deleting ${RPM_BUILD_DIR} at user request..."
 rm -rf "${RPM_BUILD_DIR}"
@@ -19,7 +38,7 @@ mvn clean package -Pdocker
 
 # Remove any previous docker containers of name
 DOCKER_NAME_RPMBUILD="orca-rpmbuild"
-docker rm -f ${DOCKER_NAME_RPMBUILD}
+f_rm_f_docker_container ${DOCKER_NAME_RPMBUILD}
 
 # Run rpmbuild inside container
 docker run --volume ~/.m2/:/root/.m2/ --name ${DOCKER_NAME_RPMBUILD} renci/orca-rpmbuild

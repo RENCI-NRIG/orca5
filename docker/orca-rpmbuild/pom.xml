@@ -84,7 +84,7 @@
 								<targetPath>/orca/.git/</targetPath>
 								<directory>${project.basedir}/../../.git/</directory>
 								<excludes>
-									<exclude>objects/**/*</exclude>
+									<!--<exclude>objects/**/*</exclude>-->
 								</excludes>
 							</resource>
 						</resources>
