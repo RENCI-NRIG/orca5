@@ -2,6 +2,7 @@ package orca.controllers.xmlrpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 
 import orca.embed.RequestWorkflowTest;
@@ -12,6 +13,7 @@ import orca.ndl.NdlException;
 import orca.ndl.NdlModel;
 import orca.ndl.elements.NetworkElement;
 
+import orca.ndl.elements.OrcaReservationTerm;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -69,7 +71,38 @@ public class ReservationConverterTest extends RequestWorkflowTest{
 		
 		//fail("Not yet implemented");
 	}
-	
-	
+
+	/**
+	 * Set the lease term to the maximum allowable. Should succeed without changes.
+	 *
+	 */
+	public void testSetLeaseTermValid() {
+		ReservationConverter orc = new ReservationConverter();
+		OrcaReservationTerm term = new OrcaReservationTerm();
+		term.setStart(new Date());
+		term.setDuration(14, 0, 0, 0);
+
+		orc.setLeaseTerm(term);
+
+		assertTrue("Valid reservation term should not have been modified", term.getEnd() == orc.leaseEnd);
+		System.out.println("Term end date set to: " + orc.leaseEnd);
+	}
+
+	/**
+	 * Attempt to set the lease term to greater than the maximum allowable.
+	 * The lease term should be updated without errors, but only up to the maximum allowable.
+	 *
+	 */
+	public void testSetLeaseTermInvalid() {
+		ReservationConverter orc = new ReservationConverter();
+		OrcaReservationTerm term = new OrcaReservationTerm();
+		term.setStart(new Date());
+		term.setDuration(30, 0, 0, 0);
+
+		orc.setLeaseTerm(term);
+
+		assertFalse("Invalid reservation term not updated", term.getEnd() == orc.leaseEnd);
+		System.out.println("Term end date updated to: " + orc.leaseEnd);
+	}
 
 }

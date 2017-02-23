@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -172,8 +173,8 @@ public class ReservationConverter implements LayerConstant {
 		return elementCollection;
 	}
 	
-	public ArrayList<TicketReservationMng> getReservations(IOrcaServiceManager sm, Collection<NetworkElement> boundElements, HashMap<String, SiteResourceTypes> typesMap,OrcaReservationTerm OTerm, RequestSlice rSlice)  throws ReservationConverterException, NdlException {
-		setLeaseTerm(OTerm, false);
+	public ArrayList<TicketReservationMng> getReservations(IOrcaServiceManager sm, Collection<NetworkElement> boundElements, HashMap<String, SiteResourceTypes> typesMap,OrcaReservationTerm OTerm, RequestSlice rSlice)  throws NdlException {
+		setLeaseTerm(OTerm);
 		
 		if(firstGroupElement==null)
 			firstGroupElement=new HashMap <String,DomainElement>();
@@ -1933,10 +1934,10 @@ public class ReservationConverter implements LayerConstant {
 		v_ont.removeAll(p);
 	}
 	
-	public void modifyTerm(OntModel manifestModel,OrcaReservationTerm term) throws ReservationConverterException {
+	public void modifyTerm(OntModel manifestModel,OrcaReservationTerm term) {
 		
 		// update the lease term (used when doing modify/add) /ib 11/11/16
-		setLeaseTerm(term, false);
+		setLeaseTerm(term);
 		
 		String query = OntProcessor.createQueryStringReservationTerm();
 		ResultSet rs = OntProcessor.rdfQuery(manifestModel, query);
@@ -1974,30 +1975,49 @@ public class ReservationConverter implements LayerConstant {
 		}
 		//TDB.sync(manifestModel);
 	}
-	
+
 	/**
-	 * Set the term, skip total duration check if recovery set to true
+	 * Set the term.
+	 * If the term is invalid (longer than the maximum duration), the term will be set for the maximum duration.
+	 *
 	 * @param term
-	 * @param recovery
+	 * @param ignoreInvalidityOnRecoveryOrRenew
 	 * @throws ReservationConverterException
 	 */
-	public void setLeaseTerm(OrcaReservationTerm term, boolean recovery)  throws ReservationConverterException {
-		long termDuration = DEFAULT_DURATION; //milliseconds
-		if(term!=null){
-			termDuration = ((long) term.getDurationInSeconds())*1000;
-			if (term.getStart() == null){
-				leaseStart = new Date();
-			}
+	@Deprecated
+	public void setLeaseTerm(OrcaReservationTerm term, boolean ignoreInvalidityOnRecoveryOrRenew)  throws ReservationConverterException {
+		setLeaseTerm(term);
+	}
+
+	/**
+	 * Set the term.
+	 * If the term is invalid (longer than the maximum duration), the term will be set for the maximum duration.
+	 *
+	 * @param term
+	 */
+	public void setLeaseTerm(OrcaReservationTerm term) {
+		if (term == null){
+			term = new OrcaReservationTerm(); // default duration of 1 day
 		}
+
 		if (leaseStart == null){
-			leaseStart=term.getStart();
+			leaseStart = term.getStart();
 		}
+
+		Calendar termEndDateCal = Calendar.getInstance();
+		termEndDateCal.setTime(term.getEnd());
+
+		Calendar systemDefaultEndCal = Calendar.getInstance();
+		systemDefaultEndCal.add(Calendar.MILLISECOND, (int) OrcaXmlrpcHandler.MaxReservationDuration);
 		
-		// after recovery duration can be longer than allowed due to extensions /ib
-		if(!recovery && termDuration > OrcaXmlrpcHandler.MaxReservationDuration) {
-			throw new ReservationConverterException("Slice terms are limited to " + OrcaXmlrpcHandler.MaxReservationDuration/1000/3600 + " hours");
+		// limit reservation terms
+		if(systemDefaultEndCal.before(termEndDateCal)) {
+			logger.warn("Slice terms are limited to " + TimeUnit.MILLISECONDS.toHours(OrcaXmlrpcHandler.MaxReservationDuration) + " hours. " +
+					"Setting end date to system maximum: " + systemDefaultEndCal.getTime());
+			leaseEnd = systemDefaultEndCal.getTime();
+		} else {
+			leaseEnd = term.getEnd();
 		}
-		leaseEnd = new Date(leaseStart.getTime() + termDuration);
 	}
 
 	public Date getLeaseStart() {
@@ -2285,11 +2305,7 @@ public class ReservationConverter implements LayerConstant {
     public void recover(RequestWorkflow w) {
     	// 
     	logger.info("Recovering ReservationConverter for workflow");
-    	try {
-			setLeaseTerm(w.getTerm(), true);
-		} catch (ReservationConverterException e) {
-			e.printStackTrace();
-		}
+    	setLeaseTerm(w.getTerm());
     	recoverElementCollection(w.getBoundElements());
     }
     

@@ -44,7 +44,7 @@ public class OrcaReservationTerm {
 		dMins = 0;
 		dSecs = 0;
 		start = new Date();
-		_setEnd(0, 24, 0, 0);
+		_setEnd(dDays, dHours, dMins, dSecs);
 	}
 	
 	/**
@@ -122,10 +122,17 @@ public class OrcaReservationTerm {
 		if(start==null)
 			start=new Date();
 		long newDuration = newEnd.getTime() - start.getTime();
+
 		dDays = (int) TimeUnit.MILLISECONDS.toDays(newDuration);
-		dHours = (int) TimeUnit.MILLISECONDS.toHours(newDuration - dDays*1000*60*60*24);
-		dMins = (int) TimeUnit.MILLISECONDS.toMinutes(newDuration - dDays*1000*60*60*24 - dHours*1000*60*60);
-		dSecs =(int)  Math.ceil(TimeUnit.MILLISECONDS.toSeconds(newDuration - dDays*1000*60*60*24 - dHours*1000*60*60 - dMins*1000*60));
+		newDuration -= TimeUnit.DAYS.toMillis(dDays);
+
+		dHours = (int) TimeUnit.MILLISECONDS.toHours(newDuration);
+		newDuration -= TimeUnit.HOURS.toMillis(dHours);
+
+		dMins = (int) TimeUnit.MILLISECONDS.toMinutes(newDuration);
+		newDuration -= TimeUnit.MINUTES.toMillis(dMins);
+
+		dSecs =(int)  TimeUnit.MILLISECONDS.toSeconds(newDuration);
 		end = newEnd;
 	}
 	

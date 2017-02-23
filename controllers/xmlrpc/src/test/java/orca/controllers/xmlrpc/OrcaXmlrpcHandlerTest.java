@@ -6,7 +6,9 @@ import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
 import orca.manage.OrcaConverter;
-import orca.manage.beans.*;
+import orca.manage.beans.PropertyMng;
+import orca.manage.beans.SliceMng;
+import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
@@ -14,10 +16,8 @@ import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
 import static org.junit.Assert.*;
@@ -36,6 +36,7 @@ public class OrcaXmlrpcHandlerTest {
             "[\\w\\s]+\\p{Punct}[\\w\\s-]+\\n" + //Request id: 66c2001b-5c86-4747-b451-f072dd17b588
             "(?:\\p{Punct}(?:[\\w\\s]+\\:[\\w\\s.\\/-]+?\\p{Punct}\\s*)+\\n)+" + // [   Slice UID: 66c2001b-5c86-4747-b451-f072dd17b588 | Reservation UID: 0c77a77d-300d-4e68-ab71-5287aa67894e | Resource Type: ncsuvmsite.vm | Resource Units: 1 ]
             "(?:[\\w\\s]+)*\\z"; //No errors reported
+    protected static final SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     /**
      * testCreateSliceWithLiveSM() requires a connection to a running (non-test)
@@ -394,6 +395,9 @@ public class OrcaXmlrpcHandlerTest {
 
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
 
+        String resReq = NdlCommons.readFile(requestFile);
+
+
         MockXmlRpcController controller = new MockXmlRpcController();
         controller.init(reservationMap);
         controller.start();
@@ -410,7 +414,7 @@ public class OrcaXmlrpcHandlerTest {
         Object [] credentials = new Object[0];
 
         // get the reservations that would have been created by a previous call to createSlice()
-        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn, requestFile);
+        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn, resReq);
 
         // add them to the reservationMap in our Mock SM
         addReservationListToMap(reservationsFromRequest, reservationMap);
@@ -470,6 +474,82 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Test RenewSlice() with a valid extended duration
+     */
+    @Test
+    public void testRenewSlice() throws Exception {
+        Calendar systemDefaultEndCal = Calendar.getInstance();
+        systemDefaultEndCal.add(Calendar.MILLISECOND, (int)MaxReservationDuration / 2);
+        String newTermEnd = rfc3339Formatter.format(systemDefaultEndCal.getTime());
+        System.out.println(newTermEnd);
+
+        doTestRenewSlice(newTermEnd);
+
+
+    }
+
+    /**
+     * Test RenewSlice() with an invalid extended duration
+     */
+    @Test
+    public void testRenewSliceOverMax() throws Exception {
+        Calendar systemDefaultEndCal = Calendar.getInstance();
+        systemDefaultEndCal.add(Calendar.MILLISECOND, Integer.MAX_VALUE);
+        String newTermEnd = rfc3339Formatter.format(systemDefaultEndCal.getTime());
+        System.out.println(newTermEnd);
+
+        doTestRenewSlice(newTermEnd);
+
+
+    }
+
+    /**
+     * Call renewSlice with a given newTermEnd
+     *
+     * @param newTermEnd
+     * @throws Exception
+     */
+    protected void doTestRenewSlice(String newTermEnd) throws Exception {
+        Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
+        String requestFile = "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf";
+        String resReq = NdlCommons.readFile(requestFile);
+        String slice_urn = "testRenewSlice";
+
+        // modify the create request to have a current Start Date
+        String newStartDate = rfc3339Formatter.format(new Date());
+        resReq = resReq.replaceAll("2016-12-13T12:15:12\\.633-05:00", newStartDate);
+
+
+        MockXmlRpcController controller = new MockXmlRpcController();
+        controller.init(reservationMap);
+        controller.start();
+
+        OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
+        assertNotNull(orcaXmlrpcHandler);
+        orcaXmlrpcHandler.verifyCredentials = false;
+
+        orcaXmlrpcHandler.instance.setController(controller);
+
+        Map<String, Object> result;
+
+        // setup parameters for modifySlice()
+        Object [] credentials = new Object[0];
+
+        // get the reservations that would have been created by a previous call to createSlice()
+        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn, resReq);
+
+        // add them to the reservationMap in our Mock SM
+        addReservationListToMap(reservationsFromRequest, reservationMap);
+
+
+        result = orcaXmlrpcHandler.renewSlice(slice_urn, credentials, newTermEnd);
+
+        // verify results of renewSlice()
+        assertNotNull(result);
+        assertFalse("renewSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+    }
+
+    /**
      * Craft a userMap required by createSlice() and modifySlice().
      *
      * @return a UserMap with junk values
@@ -520,12 +600,12 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @param orcaXmlrpcHandler
      * @param slice_urn the slice name
-     * @param requestFile
+     * @param resReq
      * @return a list of reservations created.
      * @throws Exception
      */
-    protected ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn, String requestFile) throws Exception {
-        String resReq = NdlCommons.readFile(requestFile);
+    protected ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn, String resReq) throws Exception {
+
         List<Map<String, ?>> users = getUsersMap();
 
         String userDN = "test";

@@ -229,4 +229,17 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
         return true;
     }
+
+    /**
+     * We do not currently have any tests where we need this to fail.
+     *
+     * @param reservation ignored
+     * @param newEndTime ignored
+     * @return always true
+     */
+    @Override
+    public boolean extendReservation(ReservationID reservation, Date newEndTime) {
+        return true;
+    }
+
 }
