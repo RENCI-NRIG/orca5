@@ -96,7 +96,7 @@ cp -a ../. "${BASE_SRC_DIRPATH}"
 # Post-process source
 export BLD_DATE=`date "+%Y%m%d%H%M"`
 export COMMIT=`git rev-parse HEAD`
-sed -i -e "s;@@DATE@@;${BLD_DATE};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
+sed -i -e "s;@@RELEASE@@;${BLD_DATE};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
 sed -i -e "s;@@COMMIT@@;${COMMIT};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
 sed -i -e "s;@@VERSION@@;${VERSION};" "${BASE_SRC_DIRPATH}/redhat/orca-iaas.spec"
 
@@ -105,7 +105,7 @@ cd "${ORCA_BLD}"
 
 # Create tarball
 BUILD_NAME=${BASE_SRC_DIR}-${BLD_DATE}
-rm -rf ${BASE_SRC_DIR}-*
+rm -rf orca-iaas-*-*
 mv ${BASE_SRC_DIR} ${BUILD_NAME}
 tar -czf ${BUILD_NAME}.tar.gz ${BUILD_NAME}
 echo "Built tarball ${BUILD_NAME}.tar.gz"

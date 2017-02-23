@@ -1,12 +1,11 @@
 %global commit @@COMMIT@@
-%global version @@VERSION@@
 
 Summary: ORCA - An infrastructure-as-a-service control framework
 Name: orca-iaas
 # Version is for software
 # Release is for packaging
-Version: %{version}
-Release: @@DATE@@
+Version: @@VERSION@@
+Release: @@RELEASE@@
 #
 BuildRoot: %{_builddir}/%{name}-root
 Source: https://github.com/RENCI-NRIG/orca5/archive/%{commit}/%{name}-%{version}-%{release}.tar.gz
