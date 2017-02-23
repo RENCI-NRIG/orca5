@@ -52,6 +52,9 @@
 							     Ideally, we would only do this on Mac systems,
 							     where the Docker engine is exceptionally slow
 							     at using volume mounted files. -->
+							<!-- normally would want to exclude .git directory,
+							     but it is needed to get the git commit ID.
+							     `git describe` seems to need the full objects dir -->
 							<resource>
 								<targetPath>/orca/</targetPath>
 								<directory>${project.basedir}/../../</directory>
@@ -60,7 +63,6 @@
 									<exclude>**/repo/**/*</exclude>
 									<exclude>**/network/logs/**/*</exclude>
 									<exclude>**/startup/**/*</exclude>
-									<exclude>**/.git/**/*</exclude>
 									<exclude>**/handlers/network/logs/</exclude>
 									<exclude>**/nodeagent/scripts/**/*</exclude>
 									<exclude>**/server/orca/config/runtime/**/*</exclude>
@@ -75,16 +77,6 @@
 									<exclude>**/.project</exclude>
 									<exclude>**/.classpath</exclude>
 									<exclude>**/.settings/**/*</exclude>
-								</excludes>
-							</resource>
-							<!-- normally wouldn't want to include .git directory,
-							     but it is needed to get the git commit ID.
-							     luckily, most of it is small, except for the objects dir. -->
-							<resource>
-								<targetPath>/orca/.git/</targetPath>
-								<directory>${project.basedir}/../../.git/</directory>
-								<excludes>
-									<!--<exclude>objects/**/*</exclude>-->
 								</excludes>
 							</resource>
 						</resources>
