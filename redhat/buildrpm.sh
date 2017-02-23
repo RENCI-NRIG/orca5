@@ -128,7 +128,7 @@ fi
 if [ -n "${INSTALL_RPM}" ]; then
     echo "Preparing to install RPMs..."
     cd "${RPM_BUILD_DIR}/RPMS/x86_64"
-    sudo rpm -Uvh --force "*${VERSION}*.rpm"
+    sudo rpm -Uvh --force "*${BUILD_NAME}*.rpm"
 fi
 
 echo "Done."
