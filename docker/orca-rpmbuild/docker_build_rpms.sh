@@ -33,6 +33,9 @@ echo "done."
 # Create RPM build directories
 mkdir -p "${RPM_BUILD_DIR}/RPMS"
 
+# start in the right directory
+cd "$( dirname "$0" )"
+
 # Build new docker container, that contains current sources
 mvn clean package -Pdocker
 
