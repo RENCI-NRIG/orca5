@@ -136,9 +136,8 @@ public class CloudHandlerTest {
         //System.out.println("domainConnectionList: " + Arrays.toString(cloudHandler.domainConnectionList.entrySet().toArray()));
         assertEquals(numDevicesInRequest, cloudHandler.deviceList.size());
 
-        HashMap<String, OntModel> domainModel = cloudHandler.getDomainModel();
+        // check the manifest IP Address for presence of CIDR notation (Issue #110)
         LinkedList<NetworkElement> deviceList = cloudHandler.getDeviceList();
-
         for (NetworkElement element : deviceList){
             Interface defaultClientInterface = element.getDefaultClientInterface();
             if (defaultClientInterface != null){
