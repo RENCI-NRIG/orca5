@@ -22,9 +22,7 @@ import org.junit.runners.Parameterized;
 import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -143,9 +141,16 @@ public class CloudHandlerTest {
             if (defaultClientInterface != null){
                 OntResource resource = defaultClientInterface.getResource();
                 if (resource != null) {
-                    RDFNode addressProperty = resource.getPropertyValue(NdlCommons.layerLabelIdProperty);
-                    if (addressProperty != null) {
-                        assertFalse("IPAddress property should not contain CIDR", addressProperty.toString().contains("/"));
+                    RDFNode labelProperty = resource.getPropertyValue(NdlCommons.layerLabelIdProperty);
+                    if (labelProperty != null) {
+                        assertTrue("label_ID property should contain CIDR", labelProperty.toString().contains("/"));
+                    }
+
+
+                    OntResource addressProperty = (OntResource) resource.getPropertyValue(NdlCommons.ip4LocalIPAddressProperty);
+                    RDFNode addressLabelProperty = addressProperty.getPropertyValue(NdlCommons.layerLabelIdProperty);
+                    if (addressLabelProperty != null) {
+                        assertFalse("IPAddress property should not contain CIDR", addressLabelProperty.toString().contains("/"));
                     }
                 }
             }
