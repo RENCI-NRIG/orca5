@@ -804,8 +804,10 @@ public class CloudHandler extends MappingHandler{
 		Interface new_intf = new Interface(device_model,url,url);
 		OntResource new_intfResource = new_intf.getResource();
 		new_intfResource.addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(device_model));
-		if(new_ip.cidr!=null)
-			new_intfResource.addProperty(NdlCommons.layerLabelIdProperty,new_ip.cidr);
+		String newAddress = new_ip.getCIDRAddress();
+		if(newAddress!=null) {
+			new_intfResource.addProperty(NdlCommons.layerLabelIdProperty, newAddress);
+		}
 		new_intfResource.addProperty(NdlCommons.ip4NetmaskProperty, netmask);
 		new_intf.setLabel(new_ip);
 		ce.addClientInterface(new_intf);
