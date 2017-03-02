@@ -52,7 +52,7 @@ public class IPAddress extends Label {
 	}
 	
 	public String getCIDRAddress(){
-		if(cidr.indexOf("/")>=0){
+		if(null != cidr && cidr.indexOf("/")>=0){
 			return cidr.split("/")[0];
 		}
 		return cidr;
