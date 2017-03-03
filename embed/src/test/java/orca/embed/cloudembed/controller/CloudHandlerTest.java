@@ -34,8 +34,29 @@ public class CloudHandlerTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", true, 3 },
-                /*{ "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf", false, 5 }*/ // this test does not expose the error correctly
-                { "../controllers/xmlrpc/src/test/resources/20_create_with_netmask.rdf", true, 3}
+                { "../controllers/xmlrpc/src/test/resources/20_create_with_netmask.rdf", true, 3},
+                // run the regression test suite
+                { "src/test/resources/orca/embed/TS1/TS1-1.rdf", true, 1},
+                { "src/test/resources/orca/embed/TS1/TS1-2.rdf", true, 1},
+                { "src/test/resources/orca/embed/TS1/TS1-3.rdf", true, 1},
+                { "src/test/resources/orca/embed/TS1/TS1-4.rdf", true, 4},
+                { "src/test/resources/orca/embed/TS1/TS1-5.rdf", true, 4},
+                { "src/test/resources/orca/embed/TS1/TS1-6.rdf", true, 4},
+                { "src/test/resources/orca/embed/TS1/TS1-7.rdf", true, 8},
+                { "src/test/resources/orca/embed/TS1/TS1-8.rdf", true, 8},
+                { "src/test/resources/orca/embed/TS1/TS1-9.rdf", true, 4},
+                // not sure if TS2+ can be tested correctly here. should it be run by a different handler?
+                { "src/test/resources/orca/embed/TS2/TS2-1.rdf", true, 13},
+                { "src/test/resources/orca/embed/TS2/TS2-2.rdf", true, 13},
+                { "src/test/resources/orca/embed/TS2/TS2-3.rdf", true, 5},
+                { "src/test/resources/orca/embed/TS2/TS2-4.rdf", true, 13},
+                { "src/test/resources/orca/embed/TS2/TS2-6.rdf", true, 11},
+                { "src/test/resources/orca/embed/TS2/TS2-7.rdf", true, 12},
+                { "src/test/resources/orca/embed/TS2/TS2-8.rdf", true, 4},
+                { "src/test/resources/orca/embed/TS2/TS2-9.rdf", true, 3},
+                { "src/test/resources/orca/embed/TS2/TS2-10.rdf", true, 4},
+                { "src/test/resources/orca/embed/TS2/TS2-11.rdf", true, 3},
+                { "src/test/resources/orca/embed/TS2/TS2-12.rdf", true, 45}
         });
     }
 
@@ -58,8 +79,8 @@ public class CloudHandlerTest {
             domain = new Domain("orca/ndl/substrate/uvanlvmsite.rdf");
 
             HashMap<String, Integer> resource = new HashMap<>();
-            resource.put("site.vm", 8); // this must be smaller than the test we expect to fail (4 XO Xlarge)
-            resource.put("site.vlan", 2);
+            resource.put("site.vm", 36);
+            resource.put("site.vlan", 9);
             //resource.put("site.lun", 2);
 
             resourceMap.put(domain, resource);
@@ -78,7 +99,7 @@ public class CloudHandlerTest {
     }
 
     @Test
-    public void runEmbedding_withXOXlargeRequests_tooLarge() throws Exception {
+    public void testRunEmbedding() throws Exception {
         CloudHandler cloudHandler = new CloudHandler();
         List<String> abstractModels = new ArrayList<>();
 
