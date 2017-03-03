@@ -12,7 +12,8 @@ COPY resources /docker-entrypoint-initdb.d
 # renaming and modifying this file is difficult to do in Maven. Easier to do it here
 RUN cp /docker-entrypoint-initdb.d/full.schema.sql /docker-entrypoint-initdb.d/full.schema.12080.sql && \
     cp /docker-entrypoint-initdb.d/full.schema.sql /docker-entrypoint-initdb.d/full.schema.14080.sql && \
-    mv /docker-entrypoint-initdb.d/full.schema.sql /docker-entrypoint-initdb.d/full.schema.test.sql && \
+    cp /docker-entrypoint-initdb.d/full.schema.sql /docker-entrypoint-initdb.d/full.schema.test.sql && \
+    rm /docker-entrypoint-initdb.d/full.schema.sql && \
     sed -e '/USE orca/ s/orca/orca12080/' -i /docker-entrypoint-initdb.d/full.schema.12080.sql && \
     sed -e '/USE orca/ s/orca/orca14080/' -i /docker-entrypoint-initdb.d/full.schema.14080.sql && \
     sed -e '/USE orca/ s/orca/orca_test/' -i /docker-entrypoint-initdb.d/full.schema.test.sql
