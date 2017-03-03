@@ -1,5 +1,8 @@
 package orca.embed.cloudembed.controller;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import orca.embed.EmbedTestHelper;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.RequestReservation;
@@ -9,6 +12,8 @@ import orca.embed.workflow.RequestParserListener;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlRequestParser;
+import orca.ndl.elements.Interface;
+import orca.ndl.elements.NetworkElement;
 import orca.shirako.common.meta.ResourcePoolsDescriptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,8 +22,7 @@ import org.junit.runners.Parameterized;
 import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -29,8 +33,9 @@ public class CloudHandlerTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", true, 3 }/*,
-                { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf", false, 5 }*/ // this test does not expose the error correctly
+                { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", true, 3 },
+                /*{ "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf", false, 5 }*/ // this test does not expose the error correctly
+                { "../controllers/xmlrpc/src/test/resources/20_create_with_netmask.rdf", true, 3}
         });
     }
 
@@ -128,6 +133,28 @@ public class CloudHandlerTest {
         //System.out.println("deviceList: " + Arrays.toString(cloudHandler.deviceList.toArray()));
         //System.out.println("domainConnectionList: " + Arrays.toString(cloudHandler.domainConnectionList.entrySet().toArray()));
         assertEquals(numDevicesInRequest, cloudHandler.deviceList.size());
+
+        // check the manifest IP Address for presence of CIDR notation (Issue #110)
+        LinkedList<NetworkElement> deviceList = cloudHandler.getDeviceList();
+        for (NetworkElement element : deviceList){
+            Interface defaultClientInterface = element.getDefaultClientInterface();
+            if (defaultClientInterface != null){
+                OntResource resource = defaultClientInterface.getResource();
+                if (resource != null) {
+                    RDFNode labelProperty = resource.getPropertyValue(NdlCommons.layerLabelIdProperty);
+                    if (labelProperty != null) {
+                        assertTrue("label_ID property should contain CIDR", labelProperty.toString().contains("/"));
+                    }
+
+
+                    OntResource addressProperty = (OntResource) resource.getPropertyValue(NdlCommons.ip4LocalIPAddressProperty);
+                    RDFNode addressLabelProperty = addressProperty.getPropertyValue(NdlCommons.layerLabelIdProperty);
+                    if (addressLabelProperty != null) {
+                        assertFalse("IPAddress property should not contain CIDR", addressLabelProperty.toString().contains("/"));
+                    }
+                }
+            }
+        }
     }
 
 }

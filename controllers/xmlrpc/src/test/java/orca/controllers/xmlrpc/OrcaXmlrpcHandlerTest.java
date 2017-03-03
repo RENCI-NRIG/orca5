@@ -20,6 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
+import static orca.shirako.common.meta.UnitProperties.UnitEthIPSuffix;
+import static orca.shirako.common.meta.UnitProperties.UnitEthNetmaskSuffix;
+import static orca.shirako.common.meta.UnitProperties.UnitEthPrefix;
 import static org.junit.Assert.*;
 
 public class OrcaXmlrpcHandlerTest {
@@ -219,10 +222,15 @@ public class OrcaXmlrpcHandlerTest {
 
             XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
             for (TicketReservationMng reservation : slice.getComputedReservations()) {
-                String netmask = OrcaConverter.getLocalProperty(reservation, "unit.eth1.netmask");
+                String netmask = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthNetmaskSuffix);
                 if (null != netmask){
                     foundNetmask = true;
                     break;
+                }
+
+                String address = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthIPSuffix);
+                if (null != address) {
+                    assertTrue("Address should contain CIDR", address.contains("/"));
                 }
             }
 

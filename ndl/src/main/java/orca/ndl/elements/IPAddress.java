@@ -52,7 +52,7 @@ public class IPAddress extends Label {
 	}
 	
 	public String getCIDRAddress(){
-		if(cidr.indexOf("/")>=0){
+		if(null != cidr && cidr.indexOf("/")>=0){
 			return cidr.split("/")[0];
 		}
 		return cidr;
@@ -83,7 +83,8 @@ public class IPAddress extends Label {
 		Individual new_ip_rs=om.createIndividual(url, NdlCommons.IPAddressOntClass);
 		OntResource new_ip_ont = om.getOntResource(new_ip_rs);
 		if(new_address!=null){
-			new_ip_ont.addProperty(NdlCommons.layerLabelIdProperty, new_ip.getCIDR());
+			// Issue 110: IP Address in manifest should not contain CIDR
+			new_ip_ont.addProperty(NdlCommons.layerLabelIdProperty, new_ip.getCIDRAddress());
 			new_ip_ont.addProperty(NdlCommons.ip4NetmaskProperty,netmask);
 		}
 		new_ip.setResource(new_ip_ont);
