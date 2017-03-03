@@ -45,7 +45,7 @@ else
 fi
 
 # Docker-on-Mac is a bit slower
-var_sleep=10
+var_sleep=15
 if [[ $OSTYPE == darwin* ]]
 then
   let "var_sleep *= 15"
