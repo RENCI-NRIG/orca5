@@ -42,33 +42,6 @@ public class OrcaXmlrpcHandlerTest {
     protected static final SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     /**
-     * testCreateSliceWithLiveSM() requires a connection to a running (non-test)
-     * SM and AM+Broker.
-     *
-     * This test is slow (taking about 30 seconds), and should be disabled when
-     * a test using a Mock SM is available.
-     *
-     * @throws Exception
-     */
-    //@Test
-    public void testCreateSliceWithLiveSM() throws Exception {
-        // Need to setup a controller
-        // Currently this works if an SM is running locally.  Need to setup a Mock one.
-        XmlRpcController controller = new XmlRpcController();
-        controller.init();
-        controller.start();
-
-        Map<String, Object> result = doTestCreateSlice(controller,
-                "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
-                "createSlice_test_" + controller.getClass().getSimpleName());
-
-        // verify results of createSlice()
-        assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-
-    }
-
-    /**
      * Test that a slice can be created, using MockXmlRpcController
      *
      * Uses a MockXmlRpcController to fake a lot of things, avoiding the need
@@ -79,7 +52,6 @@ public class OrcaXmlrpcHandlerTest {
     @Test
     public void testCreateSliceWithMockSM() throws Exception {
         // Need to setup a controller
-        // Currently this works if an SM is running locally.  Need to setup a Mock one.
         XmlRpcController controller = new MockXmlRpcController();
         controller.init();
         controller.start();
@@ -113,7 +85,6 @@ public class OrcaXmlrpcHandlerTest {
     @Test
     public void testCreateSliceWithNetmask() throws Exception {
         // Need to setup a controller
-        // Currently this works if an SM is running locally.  Need to setup a Mock one.
         XmlRpcController controller = new MockXmlRpcController();
         controller.init();
         controller.start();
@@ -138,60 +109,6 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
-     * Unfortunately this type of error cannot be detected naturally in the controller.
-     *
-     * Uses a MockXmlRpcController to fake a lot of things, avoiding the need
-     * to talk to 'Live' SM or AM+Broker.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testCreateSliceReservationFailureWithMockSM() throws Exception {
-        // empty reservationMap is unchanged in this test
-        Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
-
-        MockXmlRpcController controller = new MockXmlRpcController();
-        controller.init(reservationMap, true);
-        controller.start();
-
-        Map<String, Object> result = doTestCreateSlice(controller,
-                "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf",
-                "createSlice_testFailure_" + controller.getClass().getSimpleName());
-
-        // verify results of createSlice()
-        assertNotNull(result);
-
-        //unfortunately this type of error cannot be detected naturally in the controller
-        //assertTrue("createSlice() should have returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-
-        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
-
-    }
-
-    /**
-     * The Live SM doesn't show reservations as being failed, only `Invalid`
-     *
-     * @throws Exception
-     */
-    //@Test
-    public void testCreateSliceReservationFailureWithLiveSM() throws Exception {
-        XmlRpcController controller = new XmlRpcController();
-        controller.init();
-        controller.start();
-
-        Map<String, Object> result = doTestCreateSlice(controller,
-                "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_tooLarge.rdf",
-                "createSlice_testFailure_" + controller.getClass().getSimpleName());
-
-        // verify results of createSlice()
-        assertNotNull(result);
-        //assertTrue("createSlice() should have returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-
-        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
-
-    }
-
-    /**
      *
      * Used by createSlice() tests
      *
@@ -199,7 +116,7 @@ public class OrcaXmlrpcHandlerTest {
      * @param ndlFile filename of createSlice() request RDF
      * @param slice_urn slice name
      */
-    protected Map<String, Object> doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn){
+    protected static Map<String, Object> doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn){
         OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
         assertNotNull(orcaXmlrpcHandler);
         orcaXmlrpcHandler.verifyCredentials = false;
@@ -225,12 +142,12 @@ public class OrcaXmlrpcHandlerTest {
                 String netmask = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthNetmaskSuffix);
                 if (null != netmask){
                     foundNetmask = true;
-                    break;
+                    //break;
                 }
 
                 String address = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthIPSuffix);
                 if (null != address) {
-                    assertTrue("Address should contain CIDR", address.contains("/"));
+                    assertTrue("Address property should contain CIDR", address.contains("/"));
                 }
             }
 
@@ -562,7 +479,7 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @return a UserMap with junk values
      */
-    private List<Map<String, ?>> getUsersMap() {
+    private static List<Map<String, ?>> getUsersMap() {
         List<Map<String, ?>> users = new ArrayList<>();
         Map<String, Object> userEntry = new HashMap<>();
         List<String> keys = new ArrayList<String>();
@@ -581,7 +498,7 @@ public class OrcaXmlrpcHandlerTest {
      * @param toMatch the character to look for
      * @return the number of times toMatch is present in string
      */
-    private int countMatches(String string, char toMatch){
+    protected static int countMatches(String string, char toMatch){
         int occurrences = 0;
         for(char c : string.toCharArray()){
             if(c == toMatch){
@@ -612,7 +529,7 @@ public class OrcaXmlrpcHandlerTest {
      * @return a list of reservations created.
      * @throws Exception
      */
-    protected ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn, String resReq) throws Exception {
+    protected static ArrayList<TicketReservationMng> getReservationsFromRequest(OrcaXmlrpcHandler orcaXmlrpcHandler, String slice_urn, String resReq) throws Exception {
 
         List<Map<String, ?>> users = getUsersMap();
 
