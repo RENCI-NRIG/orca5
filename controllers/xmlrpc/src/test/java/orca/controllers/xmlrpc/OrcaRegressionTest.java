@@ -24,6 +24,7 @@ public class OrcaRegressionTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 // run the regression test suite
+
                 { "../../embed/src/test/resources/orca/embed/TS1/TS1-1.rdf", true, 1},
                 { "../../embed/src/test/resources/orca/embed/TS1/TS1-2.rdf", true, 1},
                 { "../../embed/src/test/resources/orca/embed/TS1/TS1-3.rdf", true, 1},
@@ -39,8 +40,8 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-4.rdf", true, 13},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-6.rdf", true, 11},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-7.rdf", true, 12},
-                //{ "../../embed/src/test/resources/orca/embed/TS2/TS2-8.rdf", true, 4}, // Fails: VLAN tag allocatable?
-                //{ "../../embed/src/test/resources/orca/embed/TS2/TS2-9.rdf", true, 3}, // Fails: StitchPort URL ?
+                { "../../embed/src/test/resources/orca/embed/TS2/TS2-8.rdf", true, 4-1}, // Shared VLAN does not count as reservation.
+                { "../../embed/src/test/resources/orca/embed/TS2/TS2-9.rdf", true, 3-1}, // StitchPort does not count as reservation?
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-10.rdf", true, 4},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-11.rdf", true, 3},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-12.rdf", true, 45},

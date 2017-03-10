@@ -73,6 +73,12 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             resource.put("site.vlan", 8);
             resourceMap.put(domain, resource);
 
+            domain = new Domain("orca/ndl/substrate/uncNet.rdf");
+            resource = new HashMap<>();
+            //resource.put("site.vm", 1);
+            resource.put("site.vlan", 1);
+            resourceMap.put(domain, resource);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NdlException e) {
