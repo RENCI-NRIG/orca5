@@ -32,8 +32,8 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     /**
      * stolen from CloudHandlerTest.java
      */
-    protected static Map<Domain, Map<String, Integer>> resourceMap;
-    static {
+    protected Map<Domain, Map<String, Integer>> resourceMap;
+    private void populateResourceMap() {
         resourceMap = new HashMap<>();
         Domain domain;
         HashMap<String, Integer> resource;
@@ -75,8 +75,65 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
             domain = new Domain("orca/ndl/substrate/uncNet.rdf");
             resource = new HashMap<>();
-            //resource.put("site.vm", 1);
+            resource.put("site.vlan", 10);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/dukevmsite.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vm", 3);
             resource.put("site.vlan", 1);
+            resourceMap.put(domain, resource);
+
+            //domain = new Domain("orca/ndl/substrate/ben.rdf");
+            //resource = new HashMap<>();
+            //resource.put("site.vlan", 10);
+            //resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/dukeNet.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vlan", 10);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/rciNet.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vlan", 10);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/acisrencivmsite.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vm", 2);
+            resource.put("site.vlan", 1);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/uhoustonvmsite.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vm", 2);
+            resource.put("site.vlan", 1);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/acisrenciNet.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vlan", 9);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/uhoustonNet.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vlan", 10);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/ben-6509.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vlan", 10);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/bbnNet.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vlan", 10);
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/fiuNet.rdf");
+            resource = new HashMap<>();
+            resource.put("site.vlan", 10);
             resourceMap.put(domain, resource);
 
         } catch (IOException e) {
@@ -97,6 +154,9 @@ public class MockOrcaServiceManager extends LocalServiceManager {
         super(manager, authToken);
         this.reservationMap = reservationMap;
         this.failReservation = failReservation;
+        if (null == resourceMap) {
+            populateResourceMap();
+        }
     }
 
     /**

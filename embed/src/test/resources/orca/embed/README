@@ -42,7 +42,7 @@ TS[12345] are success cases, TS6 are failure cases
 
 7 Combination of connected nodes and groups, IP addresses assigned, groups with private VLANs, m1.large, node-level specific images, all nodes and groups bound to RENCI, unbounded reservation
 
-8 Broadcast linke with user specified vlan tag, 3 vms, rcivmsite.
+8 Broadcast link with user specified vlan tag, 3 vms, rcivmsite.
 
 9 Stitching between a switchport and a node.
 
