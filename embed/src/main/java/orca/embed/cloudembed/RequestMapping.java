@@ -202,7 +202,7 @@ try {
     	ComputeElement ne1=null,ne2=null;
     	if(requestConnection.getNe1() instanceof ComputeElement)
     		ne1=(ComputeElement) requestConnection.getNe1(); 
-    	if(requestConnection.getNe1() instanceof ComputeElement)
+    	if(requestConnection.getNe1() instanceof ComputeElement) // FIXME ? getNe2 ?
     		ne2=(ComputeElement) requestConnection.getNe2();
     	if(path!=null) {
 			if (!path.isEmpty()) {				
@@ -252,7 +252,7 @@ try {
 		            }
 					
 					if(!deviceOntList.contains(next_device_ont)){
-						deviceOntList.add(device_ont);
+						deviceOntList.add(device_ont); //FIXME ? next_device_ont ?
 						if(interDomainRequest){
 							next_device = new DomainElement(ontModel, next_device_ont);
 							DomainElement d = (DomainElement) next_device;
