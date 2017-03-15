@@ -2,14 +2,18 @@ package orca.controllers.xmlrpc;
 
 import orca.controllers.OrcaXmlrpcServlet;
 import orca.controllers.mock.MockOrcaConnectionFactory;
+import orca.controllers.xmlrpc.statuswatch.ReservationStatusUpdateThread;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.beans.TicketReservationMng;
+import orca.ndl.NdlCommons;
 import orca.shirako.common.ConfigurationException;
 import orca.shirako.common.ReservationID;
+import orca.shirako.container.Globals;
 import orca.util.ID;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.servlet.ServletContextEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +63,7 @@ public class MockXmlRpcController extends XmlRpcController {
         }
         this.failReservation = failReservation;
 
+        XmlrpcOrcaState.getInstance().resetInstance();
         XmlrpcOrcaState.getInstance().setController(this);
         initConnectionFactory();
     }
@@ -102,7 +107,7 @@ public class MockXmlRpcController extends XmlRpcController {
         xmlrpcHolder.setName("orca-xmlrpc");
         servletHandler.addServlet(xmlrpcHolder, "/orca/xmlrpc");
 
-        ControllerContextListener l = new ControllerContextListener();
+        ControllerContextListener l = new MockControllerContextListener();
         servletHandler.addEventListener(l);
 
         l.start();
@@ -117,6 +122,60 @@ public class MockXmlRpcController extends XmlRpcController {
     @Override
     public ID getBroker(IOrcaServiceManager sm) {
         return new ID();
+    }
+
+    protected class MockControllerContextListener extends ControllerContextListener {
+        public void contextInitialized(ServletContextEvent arg0) {
+        }
+
+        public void contextDestroyed(ServletContextEvent arg0) {
+            stop();
+        }
+
+        public void start() {
+            try {
+                Log.info("Initializing the XMLRPC controller");
+                NdlCommons.init();
+                init();
+                //Log.info("Recovering the XMLRPC controller");
+                //recover();
+                //Log.info("Starting XMLRPC handlers");
+                //setupXmlRpcHandlers();
+                Log.info("Starting support threads");
+                //XmlrpcOrcaState.startThreads();
+                startThreads();
+            } catch (Exception e){
+                Log.fatal("Could not start the XMLRPC controller", e);
+                System.err.println(e.getMessage());
+                System.exit(1);
+            }
+        }
+
+        // start the threads (called from the controller startup code)
+        // original code in XmlrpcOrcaState
+        public void startThreads () {
+            // slice defer thread
+            Globals.Log.info("Starting SliceDeferThread");
+            XmlrpcOrcaState.sdt = new SliceDeferThread();
+            //XmlrpcOrcaState.sdtThread = new Thread(XmlrpcOrcaState.sdt);
+            //XmlrpcOrcaState.sdtThread.setDaemon(true);
+            //XmlrpcOrcaState.sdtThread.setName("SliceDeferThread");
+            //XmlrpcOrcaState.sdtThread.start();
+
+            // modify status thread
+            Globals.Log.info("Scheduling periodic ReservationStatusUpdateThread at " + ReservationStatusUpdateThread.getPeriod() + " sec.");
+            XmlrpcOrcaState.sut = new ReservationStatusUpdateThread();
+            //sutFuture = scheduler.scheduleAtFixedRate(sut, ReservationStatusUpdateThread.getPeriod(),
+            //        ReservationStatusUpdateThread.getPeriod(), TimeUnit.SECONDS);
+
+        }
+
+        private void stop() {
+            try {
+                Log.info("Stopping the XMLRPC controller");
+            } catch (Exception e){
+            }
+        }
     }
 
 }

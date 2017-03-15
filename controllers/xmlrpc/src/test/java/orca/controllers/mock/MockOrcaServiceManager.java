@@ -33,6 +33,12 @@ public class MockOrcaServiceManager extends LocalServiceManager {
      * stolen from CloudHandlerTest.java
      */
     protected Map<Domain, Map<String, Integer>> resourceMap;
+    /*
+     * the tests go a lot quicker with this as a static assignment,
+     * but TS3-3 and others fail when not run independently, somehow,
+     * because the 'ben' domain gets messed up,
+     * resulting in a NPE at orca.ndl.elements.NetworkElement.getRank(NetworkElement.java:268)
+     */
     private void populateResourceMap() {
         resourceMap = new HashMap<>();
         Domain domain;

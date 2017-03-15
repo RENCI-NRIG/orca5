@@ -83,7 +83,7 @@ public class XmlRpcController extends OrcaController {
 		}
 	}
 	  
-	private void setupXmlRpcHandlers() throws ConfigurationException {		
+	protected void setupXmlRpcHandlers() throws ConfigurationException {
 		try {
 			Log.info("Adding XMLRPC Orca handler to global list (namespace 'orca')");
 	        OrcaXmlrpcServlet.addXmlrpcHandler("orca", OrcaXmlrpcHandler.class, false);
