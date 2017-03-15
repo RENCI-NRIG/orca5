@@ -45,16 +45,59 @@ public class MockOrcaServiceManager extends LocalServiceManager {
         HashMap<String, Integer> resource;
 
         try {
-            //domain = new Domain("orca/ndl/substrate/mass.rdf");
-            domain = new Domain("orca/ndl/substrate/uvanlvmsite.rdf");
-
+            /*
+             * VLAN only domains, will all use the same copy of the resource map
+             */
             resource = new HashMap<>();
-            resource.put("site.vm", 8);
-            resource.put("site.vlan", 3);
-            //resource.put("site.lun", 2);
+            resource.put("site.vlan", 9);
 
+            domain = new Domain("orca/ndl/substrate/acisrenciNet.rdf");
             resourceMap.put(domain, resource);
 
+            domain = new Domain("orca/ndl/substrate/bbnNet.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/ben-6509.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/dukeNet.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/fiuNet.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/rciNet.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/uhoustonNet.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/uncNet.rdf");
+            resourceMap.put(domain, resource);
+
+            /*
+             * Add VMs to resources
+             */
+            resource = new HashMap<>();
+            resource.put("site.vlan", 9);
+            resource.put("site.vm", 3);
+
+            domain = new Domain("orca/ndl/substrate/acisrencivmsite.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/bbnvmsite.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/dukevmsite.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/uhoustonvmsite.rdf");
+            resourceMap.put(domain, resource);
+
+
+            /*
+             * These need to be more custom
+             */
             domain = new Domain("orca/ndl/substrate/fiuvmsite.rdf");
             resource = new HashMap<>();
             resource.put("site.vm", 36);
@@ -67,79 +110,10 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             resource.put("site.vlan", 8);
             resourceMap.put(domain, resource);
 
-            domain = new Domain("orca/ndl/substrate/bbnvmsite.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vm", 3);
-            resource.put("site.vlan", 1);
-            resourceMap.put(domain, resource);
-
             domain = new Domain("orca/ndl/substrate/rcivmsite.rdf");
             resource = new HashMap<>();
             resource.put("site.vm", 101);
             resource.put("site.vlan", 8);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/uncNet.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 10);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/dukevmsite.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vm", 3);
-            resource.put("site.vlan", 1);
-            resourceMap.put(domain, resource);
-
-            //domain = new Domain("orca/ndl/substrate/ben.rdf");
-            //resource = new HashMap<>();
-            //resource.put("site.vlan", 10);
-            //resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/dukeNet.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 10);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/rciNet.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 10);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/acisrencivmsite.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vm", 2);
-            resource.put("site.vlan", 1);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/uhoustonvmsite.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vm", 2);
-            resource.put("site.vlan", 1);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/acisrenciNet.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 9);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/uhoustonNet.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 10);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/ben-6509.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 10);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/bbnNet.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 10);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/fiuNet.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vlan", 10);
             resourceMap.put(domain, resource);
 
         } catch (IOException e) {
