@@ -65,7 +65,7 @@ if [ $? -eq 1 ] || [ "$RUNNING" == "false" ]; then
              --net ${DOCKER_NET_NAME} \
              --name ${DOCKER_NAME_MYSQL} \
              --hostname orca-mysql \
-             --publish 3306:3306\
+             --publish 127.0.0.1:3306:3306\
              renci/orca-mysql
 
   # check exit status from docker run, and kill script if not successful
@@ -88,7 +88,7 @@ docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_AM_BROKER} \
            --hostname orca-am-broker \
-           --publish 9010:9010 \
+           --publish 127.0.0.1:9010:9010 \
            --volume ${ORCA_CONFIG_DIR}/am+broker/config:/etc/orca/am+broker-12080/config \
            --volume ${ORCA_CONFIG_DIR}/am+broker/ndl:/etc/orca/am+broker-12080/ndl \
            renci/orca-am-broker \
@@ -111,8 +111,8 @@ docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_SM} \
            --hostname orca-sm \
-           --publish 14080:14080\
-           --publish 9011:9010 \
+           --publish 127.0.0.1:14080:14080\
+           --publish 127.0.0.1:9011:9010 \
            --volume ${ORCA_CONFIG_DIR}/sm/config:/etc/orca/sm-14080/config \
            renci/orca-sm \
            debug # DEBUG mode, for JMX remote monitoring
@@ -135,8 +135,8 @@ docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_CONTROLLER} \
            --hostname orca-controller \
-           --publish 11443:11443 \
-           --publish 9012:9010 \
+           --publish 127.0.0.1:11443:11443 \
+           --publish 127.0.0.1:9012:9010 \
            --volume ${ORCA_CONFIG_DIR}/controller/config:/etc/orca/controller-11080/config \
            renci/orca-controller \
            debug # DEBUG mode, for JMX remote monitoring
