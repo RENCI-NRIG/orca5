@@ -56,7 +56,7 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS3/TS3-10.rdf", true, 56},
                 { "../../embed/src/test/resources/orca/embed/TS3/TS3-11.rdf", true, 42},
                 { "../../embed/src/test/resources/orca/embed/TS3/TS3-12.rdf", true, 10+4}, // extra connecting VLANs
-                //{ "../../embed/src/test/resources/orca/embed/TS3/TS3-13.rdf", true, 10+2}, // TS3-13 Fails in emulation with ERROR: 4:No Edge Domain Exist. This passes in unit test, but i'm not convinced it should be.
+                { "../../embed/src/test/resources/orca/embed/TS3/TS3-13.rdf", true, 10+2},
                 //{ "../../embed/src/test/resources/orca/embed/TS3/TS3-14.rdf", true, 103+5}, // TS3-14 Fails in emulation with ERROR: 4:No Edge Domain Exist. This passes in unit test, but i'm not convinced it should be.
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-1.rdf", true, 5+4}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-2.rdf", true, 5+2}, // extra connecting VLANs

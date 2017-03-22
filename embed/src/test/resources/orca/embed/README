@@ -50,7 +50,8 @@ TS[12345] are success cases, TS6 are failure cases
 
 11 Two node dumb-bell, bound to unc, specific image, ip addresses set 
 
-12 Test NEuca interface and tap creation at large scale.  Note: check for orphan tap devices on each worker after deleting the slice. 
+12 Test NEuca interface and tap creation at large scale.  Note: check for orphan tap devices on each worker after deleting the slice.
+
 
 - Test Suite 3 - Inter-site topology embedding
 
