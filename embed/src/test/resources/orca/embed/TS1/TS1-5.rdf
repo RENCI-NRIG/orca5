@@ -43,7 +43,7 @@
     <time:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</time:days>
     <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain">
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/32384804-db99-4fc3-be1e-cdea3c0013b6#Node4">
@@ -61,7 +61,7 @@
     <collections:element rdf:resource="http://geni-orca.renci.org/owl/32384804-db99-4fc3-be1e-cdea3c0013b6#Node1"/>
     <collections:element rdf:resource="http://geni-orca.renci.org/owl/32384804-db99-4fc3-be1e-cdea3c0013b6#Node4"/>
     <collections:element rdf:resource="http://geni-orca.renci.org/owl/32384804-db99-4fc3-be1e-cdea3c0013b6#Node3"/>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
     <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/32384804-db99-4fc3-be1e-cdea3c0013b6#Term"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
   </rdf:Description>

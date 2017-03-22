@@ -34,7 +34,7 @@
     <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/a5df267f-eaeb-45e9-8a8a-3d11cfae7420#Link63-NodeGroup1"/>
     <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/eucalyptus.owl#EucaM1Large"/>
     <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/gwuvmsite.rdf#gwuvmsite/Domain"/>
     <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/a5df267f-eaeb-45e9-8a8a-3d11cfae7420#TestImage"/>
     <layer:numCE rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</layer:numCE>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
@@ -47,7 +47,7 @@
     <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/a5df267f-eaeb-45e9-8a8a-3d11cfae7420#Link63-NodeGroup0"/>
     <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/eucalyptus.owl#EucaM1Large"/>
     <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/pscvmsite.rdf#pscvmsite/Domain"/>
     <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/a5df267f-eaeb-45e9-8a8a-3d11cfae7420#TestImage"/>
     <layer:numCE rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</layer:numCE>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ServerCloud"/>
@@ -66,13 +66,13 @@
     <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/a5df267f-eaeb-45e9-8a8a-3d11cfae7420#Term"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/pscvmsite.rdf#pscvmsite/Domain">
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/a5df267f-eaeb-45e9-8a8a-3d11cfae7420#Link63-NodeGroup0">
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/gwuvmsite.rdf#gwuvmsite/Domain">
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/a5df267f-eaeb-45e9-8a8a-3d11cfae7420#Link63-NodeGroup1">

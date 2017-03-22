@@ -57,13 +57,16 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             domain = new Domain("orca/ndl/substrate/bbnNet.rdf");
             resourceMap.put(domain, resource);
 
-            domain = new Domain("orca/ndl/substrate/ben-6509.rdf");
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/dukeNet.rdf");
-            resourceMap.put(domain, resource);
-
             domain = new Domain("orca/ndl/substrate/fiuNet.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/gwuNet.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/ion.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/pscNet.rdf");
             resourceMap.put(domain, resource);
 
             domain = new Domain("orca/ndl/substrate/rciNet.rdf");
@@ -72,15 +75,16 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             domain = new Domain("orca/ndl/substrate/uhoustonNet.rdf");
             resourceMap.put(domain, resource);
 
-            domain = new Domain("orca/ndl/substrate/uncNet.rdf");
+            domain = new Domain("orca/ndl/substrate/wvnNet.rdf");
             resourceMap.put(domain, resource);
+
 
             /*
              * Add VMs to resources
              */
             resource = new HashMap<>();
             resource.put("site.vlan", 9);
-            resource.put("site.vm", 3);
+            resource.put("site.vm", 4);
 
             domain = new Domain("orca/ndl/substrate/acisrencivmsite.rdf");
             resourceMap.put(domain, resource);
@@ -88,10 +92,16 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             domain = new Domain("orca/ndl/substrate/bbnvmsite.rdf");
             resourceMap.put(domain, resource);
 
-            domain = new Domain("orca/ndl/substrate/dukevmsite.rdf");
+            domain = new Domain("orca/ndl/substrate/gwuvmsite.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/pscvmsite.rdf");
             resourceMap.put(domain, resource);
 
             domain = new Domain("orca/ndl/substrate/uhoustonvmsite.rdf");
+            resourceMap.put(domain, resource);
+
+            domain = new Domain("orca/ndl/substrate/wvnvmsite.rdf");
             resourceMap.put(domain, resource);
 
 
@@ -102,12 +112,6 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             resource = new HashMap<>();
             resource.put("site.vm", 36);
             resource.put("site.vlan", 9);
-            resourceMap.put(domain, resource);
-
-            domain = new Domain("orca/ndl/substrate/uncvmsite.rdf");
-            resource = new HashMap<>();
-            resource.put("site.vm", 10);
-            resource.put("site.vlan", 8);
             resourceMap.put(domain, resource);
 
             domain = new Domain("orca/ndl/substrate/rcivmsite.rdf");

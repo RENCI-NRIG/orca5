@@ -58,7 +58,7 @@ TS[12345] are success cases, TS6 are failure cases
 
 2 Multiple nodes, no dataplane, m1.large, specific image, nodes partially bounded to RENCI, some unbounded, unbounded reservation 
 
-3 Multiple nodes (5), dataplane interconnect with IP address assignments, m1.large, specific image, some bounded to RENCI, some to UNC, some to Duke, unbounded reservation
+3 Multiple nodes (5), dataplane interconnect with IP address assignments, m1.large, specific image, some bounded to GWU, some to WVN, some to PSC, unbounded reservation
 
 4 Multiple node groups, no connections, private vlans with overlapping address space (172.16.1.10/24 in each), specific image, unbounded nodes, unbounded reservation
 
@@ -66,9 +66,9 @@ TS[12345] are success cases, TS6 are failure cases
 
 6 Multiple node groups, no connections, private vlans (172.16.1.10/24), m1.large, specific image, some bounded to RENCI, some unbounded 
 
-7 Multiple node groups, connections between them, no private vlans, no IP address assignment, specific image, some bounded to RENCI, some to UNC, unbounded reservation
+7 Multiple node groups, connections between them, no private vlans, no IP address assignment, specific image, some bounded to RENCI, some to GWU, unbounded reservation
 
-8 Multiple node groups, connections between them, no private vlans, sane IP address assignments (172.16.[123].0/24) for each inter-group vlan, some bounded to RENCI, some to UNC, unbounded reservation
+8 Multiple node groups, connections between them, no private vlans, sane IP address assignments (172.16.[123].0/24) for each inter-group vlan, some bounded to RENCI, some to GWU, unbounded reservation
 
 9 Single node group, no private vlan IPs, specific image, splittable, unbound reservation
 
@@ -86,9 +86,9 @@ TS[12345] are success cases, TS6 are failure cases
 
 - Test Suite 4 - User-imposed dependency tracking
 
-1 Multiple nodes, dataplane, m1.large, specific image, some bounded to RENCI, some to UNC, additional user-imposed dependencies, unbounded reservation
+1 Multiple nodes, dataplane, m1.large, specific image, some bounded to PSC, some to GWU, additional user-imposed dependencies, unbounded reservation
 
-2 Multiple node groups, dataplane interconnect with IP address assignments (172.16.[123].0/24) for each inter-group vlan, bounded to RENCI and UNC with additional user-imposed dependencies, unbounded reservation
+2 Multiple node groups, dataplane interconnect with IP address assignments (172.16.[123].0/24) for each inter-group vlan, bounded to PSC and GWU with additional user-imposed dependencies, unbounded reservation
 
 3 Router node configuration TS3-12 with node group dependencies on router node
 
