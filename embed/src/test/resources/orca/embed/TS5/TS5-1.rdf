@@ -270,7 +270,7 @@
         <layer:numCE rdf:datatype="&xsd;integer">4</layer:numCE>
         <request:inDomain rdf:resource="&acisrencivmsite;Domain"/>
         <topology:hasInterface rdf:resource="&b4186e84-738f-492d-b9b3-5a4265a1e627;Link0-ACISatRENCI"/>
-        <compute:diskImage rdf:resource="&b4186e84-738f-492d-b9b3-5a4265a1e627;condorworker"/>
+        <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/d9a87f54-a227-4c7e-9e89-3871db67f186#Debian+6+%28squeeze%29"/>
         <domain:hasResourceType rdf:resource="&compute;VM"/>
         <compute:specificCE rdf:resource="&eucalyptus;EucaM1Large"/>
     </compute:ServerCloud>
@@ -309,7 +309,7 @@
     <compute:ServerCloud rdf:about="&b4186e84-738f-492d-b9b3-5a4265a1e627;SiteAtUH">
         <layer:numCE rdf:datatype="&xsd;integer">1</layer:numCE>
         <topology:hasInterface rdf:resource="&b4186e84-738f-492d-b9b3-5a4265a1e627;Link0-SiteAtUH"/>
-        <compute:diskImage rdf:resource="&b4186e84-738f-492d-b9b3-5a4265a1e627;condorworker"/>
+        <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/d9a87f54-a227-4c7e-9e89-3871db67f186#Debian+6+%28squeeze%29"/>
         <domain:hasResourceType rdf:resource="&compute;VM"/>
         <compute:specificCE rdf:resource="&eucalyptus;EucaM1Large"/>
         <request:inDomain rdf:resource="&uhoustonvmsite;Domain"/>
@@ -335,11 +335,11 @@
 
     <!-- http://geni-orca.renci.org/owl/b4186e84-738f-492d-b9b3-5a4265a1e627#condorworker -->
 
-    <compute:DiskImage rdf:about="&b4186e84-738f-492d-b9b3-5a4265a1e627;condorworker">
+    <compute:DiskImage rdf:about="http://geni-orca.renci.org/owl/d9a87f54-a227-4c7e-9e89-3871db67f186#Debian+6+%28squeeze%29">
         <topology:hasURL
-            >http://geni-images.renci.org/images/pegasus/pegasus-deb6-amd64-worker.v7.xml</topology:hasURL>
+            >http://geni-images.renci.org/images/standard/debian/deb6-neuca-v1.0.8.xml</topology:hasURL>
         <topology:hasGUID
-            >fb60daf0453f004ee2fe7903cc7e08b9a645a998</topology:hasGUID>
+            >d1044d9162bd7851e3fc2c57a8251ad6b3641c0c</topology:hasGUID>
     </compute:DiskImage>
     
 
