@@ -61,7 +61,7 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-1.rdf", true, 5+4}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-2.rdf", true, 5+2}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-3.rdf", true, 10+4}, // extra connecting VLANs
-                //{ "../../embed/src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6}, // Fails: can't find path between sites (e.g. RCI and UNC)
+                { "../../embed/src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6+4},
                 //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14} // StitchPort doesn't work?
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
