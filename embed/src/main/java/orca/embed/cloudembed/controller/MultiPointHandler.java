@@ -218,6 +218,7 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 			new_ne.setImageInfo(ne.getImage(), ne.getVMImageURL(),ne.getVMImageHash());
 			new_ne.setPostBootScript(ne.getPostBootScript());
 			new_ne.setModify(ne.isModify());
+			new_ne.setGroup(ne.getGroup());
 			DomainResourceType dType=((NetworkElement) cg.toArray()[0]).getResourceType();
 			int res_count=0;
 			for(NetworkElement e:cg){

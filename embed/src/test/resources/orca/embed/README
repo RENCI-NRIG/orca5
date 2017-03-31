@@ -83,6 +83,7 @@ TS[12345] are success cases, TS6 are failure cases
 
 14 Router node configuration TS3-12 with splittable groups
 
+15 Node Group connect to one other node via broadcast link.  https://github.com/RENCI-NRIG/orca5/issues/117
 
 
 - Test Suite 4 - User-imposed dependency tracking

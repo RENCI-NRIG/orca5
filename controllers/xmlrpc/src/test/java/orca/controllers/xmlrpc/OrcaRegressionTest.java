@@ -58,10 +58,12 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS3/TS3-12.rdf", true, 10+4}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS3/TS3-13.rdf", true, 10+2},
                 { "../../embed/src/test/resources/orca/embed/TS3/TS3-14.rdf", true, 99+5}, // Works here, maybe not correctly in ExoSM.
+                { "../../embed/src/test/resources/orca/embed/TS3/TS3-15.rdf", true, 4+2},
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-1.rdf", true, 5+4}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-2.rdf", true, 5+2}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-3.rdf", true, 10+4}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6+4},
+                //{ "../../embed/src/test/resources/orca/embed/mp.rdf", true, 4+6},
                 //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14} // StitchPort doesn't work?
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*

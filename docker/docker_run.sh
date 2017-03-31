@@ -8,6 +8,23 @@ DOCKER_NAME_SM="orca-sm"
 DOCKER_NAME_CONTROLLER="orca-controller"
 
 DOCKER_NET_NAME="orca"
+DOCKER_ORCA_IMAGE_TAG="latest"
+
+while [[ $# -gt 1 ]]
+do
+key="$1"
+
+case $key in
+    -t|--tag-name)
+    DOCKER_ORCA_IMAGE_TAG="$2"
+    shift # past argument
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift # past argument or value
+done
 
 # remove stopped or running containers
 f_rm_f_docker_container ()
@@ -83,7 +100,7 @@ else
 fi
 
 # Start Orca AM+Broker
-echo -n "docker run ${DOCKER_NAME_AM_BROKER}: "
+echo -n "docker run ${DOCKER_NAME_AM_BROKER}:${DOCKER_ORCA_IMAGE_TAG} "
 docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_AM_BROKER} \
@@ -91,7 +108,7 @@ docker run -d \
            --publish 127.0.0.1:9010:9010 \
            --volume ${ORCA_CONFIG_DIR}/am+broker/config:/etc/orca/am+broker-12080/config \
            --volume ${ORCA_CONFIG_DIR}/am+broker/ndl:/etc/orca/am+broker-12080/ndl \
-           renci/orca-am-broker \
+           renci/orca-am-broker:${DOCKER_ORCA_IMAGE_TAG} \
            debug # DEBUG mode, for JMX remote monitoring
 
 # check exit status from docker run, and kill script if not successful
@@ -106,7 +123,7 @@ sleep ${var_sleep};
 echo " done."
 
 # Start Orca SM
-echo -n "docker run ${DOCKER_NAME_SM}: "
+echo -n "docker run ${DOCKER_NAME_SM}:${DOCKER_ORCA_IMAGE_TAG} "
 docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_SM} \
@@ -114,7 +131,7 @@ docker run -d \
            --publish 127.0.0.1:14080:14080\
            --publish 127.0.0.1:9011:9010 \
            --volume ${ORCA_CONFIG_DIR}/sm/config:/etc/orca/sm-14080/config \
-           renci/orca-sm \
+           renci/orca-sm:${DOCKER_ORCA_IMAGE_TAG} \
            debug # DEBUG mode, for JMX remote monitoring
 
 # check exit status from docker run, and kill script if not successful
@@ -130,7 +147,7 @@ sleep ${var_sleep};
 echo " done."
 
 # Start Orca Controller
-echo -n "docker run ${DOCKER_NAME_CONTROLLER}: "
+echo -n "docker run ${DOCKER_NAME_CONTROLLER}:${DOCKER_ORCA_IMAGE_TAG} "
 docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_CONTROLLER} \
@@ -138,7 +155,7 @@ docker run -d \
            --publish 127.0.0.1:11443:11443 \
            --publish 127.0.0.1:9012:9010 \
            --volume ${ORCA_CONFIG_DIR}/controller/config:/etc/orca/controller-11080/config \
-           renci/orca-controller \
+           renci/orca-controller:${DOCKER_ORCA_IMAGE_TAG} \
            debug # DEBUG mode, for JMX remote monitoring
 
 # check exit status from docker run, and kill script if not successful
