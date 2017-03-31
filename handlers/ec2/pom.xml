@@ -4,12 +4,12 @@
 	<groupId>orca.handlers</groupId>
 	<artifactId>ec2</artifactId>
 	<packaging>jar</packaging>
-	<version>5.1.4</version>
+	<version>5.1.5-SNAPSHOT</version>
 	<name>Orca EC2 Handlers Library</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>handlers</artifactId>
-		<version>5.1.4</version>
+		<version>5.1.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>

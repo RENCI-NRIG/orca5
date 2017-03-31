@@ -4,12 +4,12 @@
 	<groupId>orca.plugins</groupId>
 	<artifactId>ben</artifactId>
 	<packaging>jar</packaging>
-	<version>5.1.4</version>
+	<version>5.1.5-SNAPSHOT</version>
 	<name>Orca BEN Plugins</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>plugins</artifactId>
-		<version>5.1.4</version>
+		<version>5.1.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
