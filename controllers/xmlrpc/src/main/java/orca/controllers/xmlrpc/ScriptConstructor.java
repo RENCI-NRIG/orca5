@@ -376,7 +376,7 @@ public class ScriptConstructor {
             logger.error(e);
         }
         
-        logger.error(writer.toString());
+        logger.error(writer.toString()); //TODO: is this really an error?
         return writer.toString();
 
     }

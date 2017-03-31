@@ -127,6 +127,11 @@ public class InterCloudHandler extends ModifyHandler {
 				this.multipointRequest=false;
 				error=runEmbedding(domain,request.getDomainRequestReservation(domain), domainResourcePools);
 			}
+
+			// when multiple domains are being used, we need to fail if any individual domain has an error.
+			if (null != error){
+				return error;
+			}
 		}
 		if(old_mpRequest != null && mpRequest != null){
 			mp_elements = old_mpRequest.getElements();

@@ -70,7 +70,7 @@ public class CloudHandlerTest {
                 { "src/test/resources/orca/embed/TS3/TS3-11.rdf", true, 42},
                 { "src/test/resources/orca/embed/TS3/TS3-12.rdf", true, 10},
                 { "src/test/resources/orca/embed/TS3/TS3-13.rdf", true, 10},
-                //{ "src/test/resources/orca/embed/TS3/TS3-14.rdf", true, 4},
+                { "src/test/resources/orca/embed/TS3/TS3-14.rdf", true, 99+3},
                 { "src/test/resources/orca/embed/TS4/TS4-1.rdf", true, 5},
                 { "src/test/resources/orca/embed/TS4/TS4-2.rdf", true, 5},
                 { "src/test/resources/orca/embed/TS4/TS4-3.rdf", true, 10},
@@ -116,10 +116,10 @@ public class CloudHandlerTest {
 
         try {
             //domain = new Domain("orca/ndl/substrate/mass.rdf");
-            domain = new Domain("orca/ndl/substrate/uvanlvmsite.rdf");
+            domain = new Domain("orca/ndl/substrate/rcivmsite.rdf");
 
             HashMap<String, Integer> resource = new HashMap<>();
-            resource.put("site.vm", 55);
+            resource.put("site.vm", 132);
             resource.put("site.vlan", 9);
             //resource.put("site.lun", 2);
 
@@ -140,6 +140,9 @@ public class CloudHandlerTest {
 
     @Test
     public void testRunEmbedding() throws Exception {
+        String testName = requestFilename.substring(requestFilename.lastIndexOf('/') + 1);
+        System.out.println("Starting Orca Regression Test " + testName);
+        
         CloudHandler cloudHandler = new CloudHandler();
         List<String> abstractModels = new ArrayList<>();
 
@@ -181,7 +184,7 @@ public class CloudHandlerTest {
 
         //cloudHandler.runEmbedding("http://geni-orca.renci.org/owl/mass.rdf", request, domainResourcePools);
         //err = cloudHandler.runEmbedding("http://geni-orca.renci.org/owl/mass.rdf#mass/Domain", request, domainResourcePools);
-        err = cloudHandler.runEmbedding("http://geni-orca.renci.org/owl/uvanlvmsite.rdf#uvanlvmsite/Domain", request, domainResourcePools);
+        err = cloudHandler.runEmbedding("http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain", request, domainResourcePools);
         if ((err != null) == expected) {
             System.out.println("TestCase: " + requestFilename + " should have passed? " + expected);
             if (expected) {

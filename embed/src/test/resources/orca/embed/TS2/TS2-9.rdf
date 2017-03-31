@@ -29,7 +29,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#Node0">
     <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#Link0-Node0"/>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
     <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#deb6-neuca-v1.0.7"/>
     <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
     <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
@@ -48,7 +48,7 @@
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#Label"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#StitchPort0">
-    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/uncNet.rdf#UNCNet/Juniper/3200/TenGigabitEthernet/1/0/ethernet"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/rciNet.rdf#rciNet/Juniper/3200/TenGigabitEthernet/1/0/ethernet"/>
     <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
   </rdf:Description>
@@ -59,15 +59,15 @@
     <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#Term"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain">
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/uncNet.rdf#UNCNet/Juniper/3200/TenGigabitEthernet/1/0/ethernet">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rciNet.rdf#rciNet/Juniper/3200/TenGigabitEthernet/1/0/ethernet">
     <layer:label rdf:resource="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#Label-1004"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#Link0">
-    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/uncNet.rdf#UNCNet/Juniper/3200/TenGigabitEthernet/1/0/ethernet"/>
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/rciNet.rdf#rciNet/Juniper/3200/TenGigabitEthernet/1/0/ethernet"/>
     <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/70e07bbb-4b4a-49a7-95af-c5297e50d0e6#Link0-Node0"/>
     <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
     <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000000</layer:bandwidth>

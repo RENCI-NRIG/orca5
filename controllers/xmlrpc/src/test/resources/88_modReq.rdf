@@ -33,7 +33,6 @@
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/de483402-5510-49a1-82b1-c19920cd68c4#Node3">
     <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/de483402-5510-49a1-82b1-c19920cd68c4#net1-Node3"/>
     <topology:hasGUID>23a68267-bf26-4421-ad94-b64a06c0e1db</topology:hasGUID>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/uvanlvmsite.rdf#uvanlvmsite/Domain"/>
     <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/de483402-5510-49a1-82b1-c19920cd68c4#PRUTH-Ubuntu-14.04-v0.4"/>
     <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOXlarge"/>
     <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
@@ -49,9 +48,6 @@
     <topology:hasURL>http://geni-images.renci.org/images/pruth/standard/ubuntu/ubuntu-14.04-server.v0.4/ubuntu-14.04-server.v0.4.xml</topology:hasURL>
     <topology:hasGUID>b36c9bc0b8f2f78bc5d9fad9e8286587fa188682</topology:hasGUID>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/uvanlvmsite.rdf#uvanlvmsite/Domain">
-    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/d80b0a81-498a-45cc-b5ad-861e7462e4cd#net1">
     <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/de483402-5510-49a1-82b1-c19920cd68c4#net1-Node3"/>

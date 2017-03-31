@@ -31,7 +31,7 @@
     <layer:label_ID>172.16.1.10</layer:label_ID>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain">
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/c73aca82-0362-4ee3-8bf0-df563dece75f#VLAN2-NodeGroup9-ip-172-16-1-10">
@@ -50,7 +50,7 @@
     <collections:element rdf:resource="http://geni-orca.renci.org/owl/c73aca82-0362-4ee3-8bf0-df563dece75f#NodeGroup9"/>
     <collections:element rdf:resource="http://geni-orca.renci.org/owl/c73aca82-0362-4ee3-8bf0-df563dece75f#NodeGroup7"/>
     <collections:element rdf:resource="http://geni-orca.renci.org/owl/c73aca82-0362-4ee3-8bf0-df563dece75f#NodeGroup8"/>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
     <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/c73aca82-0362-4ee3-8bf0-df563dece75f#Term"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
   </rdf:Description>

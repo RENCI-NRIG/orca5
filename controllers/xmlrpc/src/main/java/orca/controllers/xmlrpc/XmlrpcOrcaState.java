@@ -168,6 +168,14 @@ public final class XmlrpcOrcaState implements Serializable {
 	}
 
 	/**
+	 * probably only useful in Unit tests,
+	 * to make sure each test is independent.
+	 */
+	protected void resetInstance() {
+		slices = new HashMap<>();
+	}
+
+	/**
 	 * Passes in by reference, so it can be modified
 	 * @return
 	 */

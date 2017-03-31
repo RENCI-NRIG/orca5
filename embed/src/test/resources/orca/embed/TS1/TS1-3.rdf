@@ -38,7 +38,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/2a3e73f0-810d-4f66-a635-12709dee151f#">
     <collections:element rdf:resource="http://geni-orca.renci.org/owl/2a3e73f0-810d-4f66-a635-12709dee151f#Node1"/>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/uncvmsite.rdf#uncvmsite/Domain"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain"/>
     <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/2a3e73f0-810d-4f66-a635-12709dee151f#Term"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
   </rdf:Description>

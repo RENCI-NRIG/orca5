@@ -34,7 +34,7 @@ public class DomainElement extends Device {
 	
 	public DomainElement(OntModel model, OntResource domain) {
 		super(model,domain);
-		setParameters(model, domain);
+		//setParameters(model, domain); // this is called from super()
 		//this.name=getDomainPrefix(resource);
 		ce=null;
 		//this.print();

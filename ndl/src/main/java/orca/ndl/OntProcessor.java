@@ -831,6 +831,9 @@ public class OntProcessor extends NdlCommons implements LayerConstant
             		
                 if(solution!=null){	
                 	logger.info("Found the path.\n");
+                	if (logger.isDebugEnabled()){
+                	    logger.debug("Shortest path solution: " + Arrays.toString(solution.toArray()));
+                    }
                     break;
                 }
                 else{
