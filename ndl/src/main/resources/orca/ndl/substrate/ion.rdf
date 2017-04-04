@@ -1000,6 +1000,9 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UIUC/availableVLANSet">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UIUC/availableVLANSet/1"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</collections:size>
     </owl:NamedIndividual>
     
 
@@ -1045,6 +1048,7 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UIUC/VLANLabel/1140">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1140.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -1053,6 +1057,7 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UIUC/VLANLabel/1141">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1141.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
