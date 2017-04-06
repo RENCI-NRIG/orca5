@@ -348,8 +348,18 @@ public class ReservationElementCollection {
 			return;
 		String name = de.getName();
 		this.addMacAddress(de);
-		if(!AllNodeMap.containsKey(name))
-			AllNodeMap.put(name,de);
+
+		// don't include the temporary vm in the list for script construction, to avoid a model closing exception
+		if(!AllNodeMap.containsKey(name)) {
+			AllNodeMap.put(name, de);
+
+			// node needs to be added to groups too
+			String group = null;
+			if (null != de.getCe()) {
+				group = de.getCe().getGroup();
+			}
+			addNodeToGroup(group, de);
+		}
 	}
 	
 	public void remove_vm(String name){
