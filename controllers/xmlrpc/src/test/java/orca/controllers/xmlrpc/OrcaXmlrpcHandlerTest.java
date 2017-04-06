@@ -225,8 +225,9 @@ public class OrcaXmlrpcHandlerTest {
 
         doTestModifySlice("modifySlice_test",
                 "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, reservationPropertyCountMap);
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
 
+        // no additional tests necessary
     }
 
     /**
@@ -249,9 +250,14 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("6ebf0a2f-be44-475b-a878-0cc5d8e016fe", 14);
         reservationPropertyCountMap.put("940dcd2c-6c3c-41f7-9b8e-f6256f590d64", 14);
 
-        doTestModifySlice("modifySlice_testWithNetmaskExisting",
+        List<TicketReservationMng> computedReservations = doTestModifySlice(
+                "modifySlice_testWithNetmaskExisting",
                 "src/test/resources/48_initial_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK, reservationPropertyCountMap);
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK);
+
+        // additional checks
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+        assertNetmaskPropertyPresent(computedReservations);
     }
 
     /**
@@ -275,9 +281,14 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("a3949bc7-0c8e-4d43-ac74-e09aaf174806", 14);
         reservationPropertyCountMap.put("dcaa5e8d-ed44-4729-aab8-4361f108ca22", 22);
 
-        doTestModifySlice("modifySlice_testWithNetmaskNew",
+        List<TicketReservationMng> computedReservations = doTestModifySlice(
+                "modifySlice_testWithNetmaskNew",
                 "src/test/resources/20_create_with_netmask.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, reservationPropertyCountMap);
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+
+        // additional checks
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+        assertNetmaskPropertyPresent(computedReservations);
     }
 
     /**
@@ -302,9 +313,14 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("78289c1e-8b7f-473f-998d-63734343ac29", 19); // Node1
         reservationPropertyCountMap.put("19b380a5-f787-453b-83b4-371750c03799", 19); // Node2
 
-        doTestModifySlice("modifySlice_testModifyRemove",
+        List<TicketReservationMng> computedReservations = doTestModifySlice(
+                "modifySlice_testModifyRemove",
                 "src/test/resources/48_modifyremove_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY, reservationPropertyCountMap);
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+
+        // additional checks
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+        assertNetmaskPropertyPresent(computedReservations);
     }
 
     /**
@@ -313,10 +329,9 @@ public class OrcaXmlrpcHandlerTest {
      * @param requestFile
      * @param modReq
      * @param expectedReservationCount
-     * @param propCountMap
      * @throws Exception
      */
-    protected void doTestModifySlice(String slice_urn, String requestFile, String modReq, int expectedReservationCount, Map<String, Integer> propCountMap) throws Exception {
+    protected static List<TicketReservationMng> doTestModifySlice(String slice_urn, String requestFile, String modReq, int expectedReservationCount) throws Exception {
 
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
 
@@ -366,7 +381,17 @@ public class OrcaXmlrpcHandlerTest {
 
         // check the reservation properties
         slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
-        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+        return slice.getComputedReservations();
+
+    }
+
+    /**
+     * Check all VM reservations for the correct number of localProperties, and fail test by assertion if incorrect.
+     *
+     * @param computedReservations
+     * @param propCountMap
+     */
+    protected void assertExpectedPropertyCounts(List<TicketReservationMng> computedReservations, Map<String, Integer> propCountMap){
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
             System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
@@ -379,9 +404,27 @@ public class OrcaXmlrpcHandlerTest {
                 continue;
             }
 
-            assertEquals("Incorrect number of localProperties",
+            assertEquals("Incorrect number of localProperties for reservation " + reservation.getReservationID(),
                     (long) expected,
                     (long) localProperties.size());
+        }
+    }
+
+
+    /**
+     * Check for the presence of Netmask property in VM reservations, and fail test by assertion if not present.
+     * @param computedReservations
+     */
+    protected void assertNetmaskPropertyPresent(List<TicketReservationMng> computedReservations){
+        for (TicketReservationMng reservation : computedReservations) {
+            List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
+            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+
+            // only check VMs for Netmask
+            System.out.println(reservation.getResourceType());
+            if (!reservation.getResourceType().endsWith("vm")){
+                continue;
+            }
 
             // every VM in our current tests should have a netmask
             // check for netmask in modified reservation
@@ -393,9 +436,8 @@ public class OrcaXmlrpcHandlerTest {
                     break;
                 }
             }
-            assertTrue("Could not find netmask value in computed reservations.", foundNetmask);
+            assertTrue("Could not find netmask value in computed reservation " + reservation.getReservationID(), foundNetmask);
         }
-
     }
 
     /**
@@ -514,7 +556,7 @@ public class OrcaXmlrpcHandlerTest {
      * @param reservationsFromRequest a list of reservations to be added to reservationMap
      * @param reservationMap is modified by adding all reservations from reservationsFromRequest
      */
-    private void addReservationListToMap(ArrayList<TicketReservationMng> reservationsFromRequest, Map<ReservationID, TicketReservationMng> reservationMap) {
+    private static void addReservationListToMap(ArrayList<TicketReservationMng> reservationsFromRequest, Map<ReservationID, TicketReservationMng> reservationMap) {
         for (TicketReservationMng reservation : reservationsFromRequest){
             reservationMap.put(new ReservationID(reservation.getReservationID()), reservation);
         }

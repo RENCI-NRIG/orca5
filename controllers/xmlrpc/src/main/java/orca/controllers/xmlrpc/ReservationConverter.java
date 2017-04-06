@@ -184,7 +184,13 @@ public class ReservationConverter implements LayerConstant {
 		HashMap<String, ReservationRequest> map= formReservations(sm, boundElements, typesMap, rSlice);
 		return setDependency(boundElements, map);
 	}
-	
+
+	/**
+	 * Resource constraints, like memoryCapacity, storageCapacity, numCPUCores
+	 *
+	 * @param request
+	 * @param element
+	 */
 	public void setRequestConstraints(Properties request, NetworkElement element){
 		String pro_prefix = "request.";
 		String p=null;
