@@ -1,15 +1,11 @@
 package orca.controllers.xmlrpc;
 
-import orca.embed.workflow.Domain;
-import orca.ndl.NdlException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
@@ -40,7 +36,7 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-6.rdf", true, 11},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-7.rdf", true, 12},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-8.rdf", true, 4-1}, // Shared VLAN does not count as reservation.
-                //{ "../../embed/src/test/resources/orca/embed/TS2/TS2-9.rdf", true, 3-1}, // StitchPort does not count as reservation?
+                { "../../embed/src/test/resources/orca/embed/TS2/TS2-9.rdf", true, 3-1+1}, // StitchPort does not count as reservation
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-10.rdf", true, 4},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-11.rdf", true, 3},
                 { "../../embed/src/test/resources/orca/embed/TS2/TS2-12.rdf", true, 45},
@@ -64,7 +60,9 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-3.rdf", true, 10+4}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6+4},
                 //{ "../../embed/src/test/resources/orca/embed/mp.rdf", true, 4+6},
-                //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14} // StitchPort doesn't work?
+                //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14-1+11}, // Deprecated. OSG site no longer exists
+                //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-TAG3291-3292.rdf", true, 3-2+4},
+                //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-URLncbi.rdf", true, 3-2+4},
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
                 { "../../embed/src/test/resources/orca/embed/TS8/TS8-1.rdf", true, 12},

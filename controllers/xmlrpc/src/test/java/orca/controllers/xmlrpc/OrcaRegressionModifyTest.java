@@ -4,16 +4,11 @@ import orca.manage.beans.PropertyMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
-import java.util.*;
+import java.util.List;
 
-import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
-import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.CHAR_TO_MATCH_RESERVATION_COUNT;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.EXPECTED_RESERVATION_COUNT_FOR_MODIFY;
-import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.VALID_RESERVATION_SUMMARY_REGEX;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class OrcaRegressionModifyTest {
 
