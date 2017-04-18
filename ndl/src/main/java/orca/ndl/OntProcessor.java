@@ -820,6 +820,10 @@ public class OntProcessor extends NdlCommons implements LayerConstant
             neighborQueue.add(path);
         }
 
+        if (neighborQueue.isEmpty()){
+            logger.warn("Neighbor queue is empty for resource: " + start);
+        }
+
         ArrayList<Resource> candidate, expand;
         boolean valid;
         while (solution == null && !neighborQueue.isEmpty()) {

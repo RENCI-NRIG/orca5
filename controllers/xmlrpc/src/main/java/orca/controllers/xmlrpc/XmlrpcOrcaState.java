@@ -173,6 +173,7 @@ public final class XmlrpcOrcaState implements Serializable {
 	 */
 	protected void resetInstance() {
 		slices = new HashMap<>();
+		controllerAssignedLabel = new HashMap<>();
 	}
 
 	/**
