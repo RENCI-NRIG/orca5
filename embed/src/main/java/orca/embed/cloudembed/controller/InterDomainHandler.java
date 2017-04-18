@@ -102,7 +102,28 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
         LinkedList <Device> domainList=null;
 		SystemNativeError error=null;
 		Iterator<NetworkElement> it = elements.iterator();
-		boolean idmContainsRequest=false;
+
+		//String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
+		//OutputStream fsw = new FileOutputStream(fileName);
+		//requestModel.write(fsw);
+
+		//check all elements, modifying the request for any that are stitching
+		stitching = checkStitching(elements, requestModel); //requestModel being modified here
+		logger.debug("is stitching="+stitching+";isModify="+isModify);
+
+		// add the requestModel only once
+		if(stitching){
+			this.idm.add(requestModel);
+		}
+
+		/*
+		String homeDir = PathGuesser.getOrcaControllerHome();
+		String fileName = "/logs/idm.rdf";
+                        OutputStream fsw = new FileOutputStream(homeDir + fileName);
+                        idm.write(fsw);
+                        fsw.close();
+		*/
+
 		while(it.hasNext()){
 			NetworkConnection element = (NetworkConnection) it.next();
 			logger.debug("Interdomain connection:"+element.getName()+";"
@@ -122,25 +143,6 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				continue;
 			}
 			
-			//String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
-            //OutputStream fsw = new FileOutputStream(fileName);
-            //requestModel.write(fsw);
-			
-			stitching = checkStitching(element, requestModel); //requestModel being modified here
-			if(stitching && !idmContainsRequest){
-				this.idm.add(requestModel);
-				idmContainsRequest=true;
-			}
-
-			logger.debug("is stitiching="+stitching+";isModify="+isModify);
-			/*
-			String homeDir = PathGuesser.getOrcaControllerHome();
-			String fileName = "/logs/idm.rdf";
-                        OutputStream fsw = new FileOutputStream(homeDir + fileName);
-                        idm.write(fsw);
-                        fsw.close();
-			*/
-
 			error=mapper.createConnection(element,interDomainRequest,false,element.getOpenflowCapable());
 			if(error!=null)
 				break;
@@ -232,7 +234,27 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		}			
 		return error;
 	}
-	
+
+	/**
+	 *
+	 * @param elements
+	 * @param requestModel
+	 * @return
+	 */
+	protected boolean checkStitching(Collection<NetworkElement> elements, OntModel requestModel){
+		boolean isStitching = false;
+
+		for (NetworkElement element : elements){
+			if (element instanceof NetworkConnection){
+				if (checkStitching((NetworkConnection) element, requestModel)){
+					isStitching = true;
+				}
+			}
+		}
+
+		return isStitching;
+	}
+
 	protected boolean checkStitching(NetworkConnection element, OntModel requestModel){
 		Resource layer_rs=null;
 		if(element.getResource().hasProperty(NdlCommons.atLayer))
