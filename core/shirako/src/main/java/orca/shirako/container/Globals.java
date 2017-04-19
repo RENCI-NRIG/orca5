@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.security.Security;
-import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Timer;
 
@@ -22,7 +21,6 @@ import orca.shirako.util.SemaphoreMap;
 import orca.util.ChangeClasspath;
 import orca.util.PathGuesser;
 
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -176,7 +174,7 @@ public class Globals {
 			// System.setOut(new PrintStream(new LoggingOutputStream(Log,
 			// Level.INFO), true));
 		} catch (Exception e) {
-			System.err.println("Could not initialize log4j: " + e.getMessage() + "\nORCA_HOME: " + System.getProperty("ORCA_HOME"));
+			System.err.println("Could not initialize log4j: " + e.getMessage());
 		}
 
 		return Logger.getLogger(RootLoggerName);
@@ -211,10 +209,6 @@ public class Globals {
 				Log.info("Orca starting...");
 				Log.info("Home directory: " + HomeDirectory);
 
-				if (!isConfigured()){
-					System.out.println("Home directory: " + HomeDirectory);
-				}
-
 				registerSecurityProvider();
 
 				Log.info("Starting main container initialization...");
@@ -234,26 +228,6 @@ public class Globals {
 				initialized = true;
 			}
 		}
-	}
-
-	/**
-	 Returns true if it appears that log4j have been previously configured. This code
-	 checks to see if there are any appenders defined for log4j which is the
-	 definitive way to tell if log4j is already initialized */
-	private static boolean isConfigured() {
-		Enumeration appenders =  LogManager.getRootLogger().getAllAppenders();
-		if (appenders.hasMoreElements()) {
-			return true;
-		}
-		else {
-			Enumeration loggers = LogManager.getCurrentLoggers() ;
-			while (loggers.hasMoreElements()) {
-				Logger c = (Logger) loggers.nextElement();
-				if (c.getAllAppenders().hasMoreElements())
-					return true;
-			}
-		}
-		return false;
 	}
 
 	private static void loadConfiguration() throws FileNotFoundException, IOException {
