@@ -1,16 +1,20 @@
 package orca.controllers.xmlrpc;
 
+import orca.manage.OrcaConverter;
+import orca.manage.beans.TicketReservationMng;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.CHAR_TO_MATCH_RESERVATION_COUNT;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.VALID_RESERVATION_SUMMARY_REGEX;
+import static orca.controllers.xmlrpc.ReservationConverter.PropertyUnitEC2InstanceType;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
@@ -59,7 +63,8 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-2.rdf", true, 5+2}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS4/TS4-3.rdf", true, 10+4}, // extra connecting VLANs
                 { "../../embed/src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6+4},
-                //{ "../../embed/src/test/resources/orca/embed/mp.rdf", true, 4+6},
+                { "../../embed/src/test/resources/orca/embed/mp.rdf", true, 4+6},
+                { "../../embed/src/test/resources/orca/embed/106_mp.rdf", true, 4+2},
                 //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14-1+11}, // Deprecated. OSG site no longer exists
                 //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-TAG3291-3292.rdf", true, 3-2+4},
                 //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-URLncbi.rdf", true, 3-2+4},
@@ -112,21 +117,26 @@ public class OrcaRegressionTest {
         controller.init();
         controller.start();
 
-        // presence of netmask is examine inside doTestCreateSlice()
-        Map<String, Object> result = OrcaXmlrpcHandlerTest.doTestCreateSlice(controller,
+        List<TicketReservationMng> computedReservations = OrcaXmlrpcHandlerTest.doTestCreateSlice(controller,
                 requestFilename,
-                "createSlice_testRegressionTest_" + testName);
+                "createSlice_testRegressionTest_" + testName,
+                numDevicesInRequest);
 
-        // verify results of createSlice()
-        assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+        if (requestFilename.contains("106_mp")){
+            assertEc2InstanceTypePresent(computedReservations);
+        }
+    }
 
-        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                        ") did not match expected value", numDevicesInRequest,
-                OrcaXmlrpcHandlerTest.countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
+    private void assertEc2InstanceTypePresent(List<TicketReservationMng> computedReservations) {
+        for (TicketReservationMng reservation : computedReservations){
+            // only check VMs for EC2 Instance Type
+            System.out.println(reservation.getResourceType());
+            if (!reservation.getResourceType().endsWith("vm")){
+                continue;
+            }
 
-        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
-
-        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+            String ec2InstanceType = OrcaConverter.getConfigurationProperty(reservation, PropertyUnitEC2InstanceType);
+            assertNotNull("Could not find EC2 Instance Type in reservation " + reservation.getReservationID(), ec2InstanceType);
+        }
     }
 }
