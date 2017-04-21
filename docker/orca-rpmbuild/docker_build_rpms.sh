@@ -44,7 +44,8 @@ DOCKER_NAME_RPMBUILD="orca-rpmbuild"
 f_rm_f_docker_container ${DOCKER_NAME_RPMBUILD}
 
 # Run rpmbuild inside container
-docker run --volume ~/.m2/:/root/.m2/ --name ${DOCKER_NAME_RPMBUILD} renci/orca-rpmbuild
+# we should fix the user/permission issue before we mount ~/.m2/ inside the container
+docker run --name ${DOCKER_NAME_RPMBUILD} renci/orca-rpmbuild
 
 # check exit status, and kill script if not successful
 if [ $? -ne 0 ]
