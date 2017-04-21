@@ -77,3 +77,10 @@ else
   exit 1
 fi
 
+# Copy Orca maven repository out of container, into local storage
+# could potentially use mvn to get local repo dir, but it's not made for programmatic access:
+# mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]' | grep -v '\[WARNING\]'
+echo -n "Copying Orca artifacts in container Maven repository to ~/.m2/ ... "
+docker cp orca-rpmbuild:/root/orca-build/repository/orca/ ~/.m2/repository/ || exit $?
+echo "done."
+
