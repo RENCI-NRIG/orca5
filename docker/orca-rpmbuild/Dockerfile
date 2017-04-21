@@ -13,25 +13,25 @@ RUN if [ "${orca.docker.jre.vendor}" == "openjdk" ]; then \
 
 
 # Install Apache Maven
-ENV apache_maven_tgz apache-maven-3.3.9-bin.tar.gz
+ENV apache_maven_version apache-maven-3.3.9
 
 RUN cd /opt && \
-    curl "http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.3.9/binaries/${apache_maven_tgz}" > ${apache_maven_tgz} && \
-    tar zxf ${apache_maven_tgz} && \
-    rm -f ${apache_maven_tgz}
+    curl "https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/${apache_maven_version}-bin.tar.gz" > ${apache_maven_version}-bin.tar.gz && \
+    tar zxf ${apache_maven_version}-bin.tar.gz && \
+    rm -f ${apache_maven_version}-bin.tar.gz
 
 # Install Apache Ant
-ENV apache_ant_tgz apache-ant-1.9.7-bin.tar.gz
+ENV apache_ant_version apache-ant-1.9.9
 
 RUN cd /opt && \
-    curl "http://mirror.cc.columbia.edu/pub/software/apache//ant/binaries/${apache_ant_tgz}" > ${apache_ant_tgz} && \
-    tar zxf ${apache_ant_tgz} && \
-    rm -f ${apache_ant_tgz}
+    curl "http://archive.apache.org/dist/ant/binaries/${apache_ant_version}-bin.tar.gz" > ${apache_ant_version}-bin.tar.gz && \
+    tar zxf ${apache_ant_version}-bin.tar.gz && \
+    rm -f ${apache_ant_version}-bin.tar.gz
 
-ENV ANT_HOME /opt/apache-ant-1.9.7
+ENV ANT_HOME /opt/${apache_ant_version}
 
 # Setup PATH variable with Maven and Ant
-ENV PATH /opt/apache-maven-3.3.9/bin:$PATH:$ANT_HOME/bin
+ENV PATH /opt/${apache_maven_version}/bin:$PATH:$ANT_HOME/bin
 
 COPY ./docker-entrypoint.sh /
 
