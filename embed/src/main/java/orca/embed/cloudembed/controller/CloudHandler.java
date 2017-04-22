@@ -535,6 +535,17 @@ public class CloudHandler extends MappingHandler{
 				if(!element.isModify() || isInter){
 					logger.info("isInter Existing ce="+existing_ce.getName());
 					edge_device = (DomainElement) existing_ce;
+
+					// check validity of existing_ce
+					if (null == edge_device.getResourcesMap()){
+						logger.info("existing_ce ResourcesMap was null, using new edge_device map.");
+						edge_device.setResourcesMap(map);
+					}
+					if (null == edge_device.getCe().getResourcesMap()){
+						logger.warn("existing_ce CE is not fully formed, using new edge_device CE.");
+						edge_device.setCe(ce);
+					}
+
 					break;
 				}
 				if(element.isModify() && existing_ce.isModify()){
