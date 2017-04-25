@@ -181,7 +181,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				DomainElement source = (DomainElement) domainList.get(0);
 				DomainElement source_link = (DomainElement) domainList.get(1);
 
-				error = doStuff(source, source_link, rr, networkConnection, requestModel, domainResourcePools);
+				error = processEdges(source, source_link, rr, networkConnection, requestModel, domainResourcePools);
 				if (error != null){
 					break;
 				}
@@ -189,7 +189,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 				DomainElement dest = (DomainElement) domainList.get(domainList.size()-1);
 				DomainElement dest_link = (DomainElement) domainList.get(domainList.size()-2);
 
-				error = doStuff(dest, dest_link, rr, networkConnection, requestModel, domainResourcePools);
+				error = processEdges(dest, dest_link, rr, networkConnection, requestModel, domainResourcePools);
 				if (error != null){
 					break;
 				}
@@ -200,7 +200,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	}
 
 	/**
-	 * TODO: rename function to something meaningful
+	 * processes the special cases of different edge nodes in the request: stitching, MP, ng, etc..
 	 *
 	 * @param domainElement
 	 * @param domainElementLink
@@ -210,9 +210,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	 * @param domainResourcePools
 	 * @return
 	 */
-	protected SystemNativeError doStuff(DomainElement domainElement, DomainElement domainElementLink,
-										RequestReservation requestReservation, NetworkConnection networkConnection,
-										OntModel requestModel, DomainResourcePools domainResourcePools) {
+	protected SystemNativeError processEdges(DomainElement domainElement, DomainElement domainElementLink,
+											 RequestReservation requestReservation, NetworkConnection networkConnection,
+											 OntModel requestModel, DomainResourcePools domainResourcePools) {
 		boolean isStitchingDomain = NdlCommons.isStitchingNodeInManifest(domainElement.getResource());
 		boolean isMulticast;
 		SystemNativeError error = null;
