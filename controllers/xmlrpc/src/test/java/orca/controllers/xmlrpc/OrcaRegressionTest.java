@@ -21,6 +21,7 @@ public class OrcaRegressionTest {
         return Arrays.asList(new Object[][] {
                 // run the regression test suite
                 { "../../embed/src/test/resources/orca/embed/TS1/TS1-1.rdf", true, 1},
+                { "../../embed/src/test/resources/orca/embed/TS1/TS1-1.rdf", true, 1},
                 { "../../embed/src/test/resources/orca/embed/TS1/TS1-2.rdf", true, 1},
                 { "../../embed/src/test/resources/orca/embed/TS1/TS1-3.rdf", true, 1},
                 { "../../embed/src/test/resources/orca/embed/TS1/TS1-4.rdf", true, 4},
@@ -61,8 +62,8 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6+4},
                 //{ "../../embed/src/test/resources/orca/embed/mp.rdf", true, 4+6},
                 //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14-1+11}, // Deprecated. OSG site no longer exists
-                //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-TAG3291-3292.rdf", true, 3-2+4},
-                //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-URLncbi.rdf", true, 3-2+4},
+                { "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-TAG3291-3292.rdf", true, 3-2+4},
+                { "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-URLncbi.rdf", true, 3-2+4},
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
                 { "../../embed/src/test/resources/orca/embed/TS8/TS8-1.rdf", true, 12},
