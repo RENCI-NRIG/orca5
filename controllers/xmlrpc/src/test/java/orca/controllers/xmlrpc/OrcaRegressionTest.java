@@ -65,6 +65,7 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6+4},
                 { "../../embed/src/test/resources/orca/embed/mp.rdf", true, 4+6},
                 { "../../embed/src/test/resources/orca/embed/106_mp.rdf", true, 4+2},
+                { "../../embed/src/test/resources/orca/embed/80_mp.rdf", true, 3+6},
                 //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14-1+11}, // Deprecated. OSG site no longer exists
                 //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-TAG3291-3292.rdf", true, 3-2+4},
                 //{ "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-URLncbi.rdf", true, 3-2+4},
