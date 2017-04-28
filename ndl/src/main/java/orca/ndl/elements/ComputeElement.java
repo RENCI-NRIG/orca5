@@ -212,6 +212,12 @@ public class ComputeElement extends NetworkElement {
 			dependencies.add(n);
 	}
 	
+	
+	public void addDependency(HashSet<NetworkElement> set) {
+		if (set != null)
+			dependencies.addAll(set);
+	}
+	
 	public void removeDependency(NetworkElement n) {
 		if (n != null)
 			dependencies.remove(n);

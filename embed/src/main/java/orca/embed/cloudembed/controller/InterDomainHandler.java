@@ -957,6 +957,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
                 boolean isStitchingDomain = NdlCommons.isStitchingNodeInManifest(start.getResource());
                 link_url = start.getURI();
                 if(isStitchingDomain){
+                	link_url = start.getName();
                 	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
                 	OntResource this_intf = idm.getOntResource(intf_next);
                 	for (StmtIterator i_s=this_intf.listProperties(NdlCommons.linkTo);i_s.hasNext();){
@@ -1048,6 +1049,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 
                 link_url = next_Hop.getURI();
                 if(isStitchingDomain){
+                	link_url = start.getName();
                 	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
                 	OntResource this_intf = idm.getOntResource(intf_start);
                 	for (StmtIterator i_s=this_intf.listProperties(NdlCommons.linkTo);i_s.hasNext();){
