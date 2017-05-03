@@ -57,7 +57,7 @@
     <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/620fd496-0287-4d2b-b910-35479f68bec0#VLAN0-Node2-ip-172-16-100-2"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/pscvmsite.rdf#pscvmsite/Domain">
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/620fd496-0287-4d2b-b910-35479f68bec0#TermDuration">
@@ -70,7 +70,7 @@
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/620fd496-0287-4d2b-b910-35479f68bec0#Node1">
     <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/620fd496-0287-4d2b-b910-35479f68bec0#VLAN0-Node1"/>
     <topology:hasGUID>8e688348-f2d7-4dff-9613-dd959e24cdc3</topology:hasGUID>
-    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/dukevmsite.rdf#dukevmsite/Domain"/>
+    <request-schema:inDomain rdf:resource="http://geni-orca.renci.org/owl/pscvmsite.rdf#pscvmsite/Domain"/>
     <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/620fd496-0287-4d2b-b910-35479f68bec0#Centos+6.7+v1.1.0"/>
     <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
     <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>

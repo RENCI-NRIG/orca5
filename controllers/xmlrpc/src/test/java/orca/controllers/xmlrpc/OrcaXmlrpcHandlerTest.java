@@ -56,21 +56,10 @@ public class OrcaXmlrpcHandlerTest {
         controller.init();
         controller.start();
 
-        Map<String, Object> result = doTestCreateSlice(controller,
+        doTestCreateSlice(controller,
                 "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
-                "createSlice_test_" + controller.getClass().getSimpleName());
-
-        // verify results of createSlice()
-        assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-
-        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_CREATE,
-                countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
-
-        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
-
-        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+                "createSlice_test_" + controller.getClass().getSimpleName(),
+                EXPECTED_RESERVATION_COUNT_FOR_CREATE);
 
     }
 
@@ -89,23 +78,12 @@ public class OrcaXmlrpcHandlerTest {
         controller.init();
         controller.start();
 
-        // presence of netmask is examine inside doTestCreateSlice()
-        Map<String, Object> result = doTestCreateSlice(controller,
+        List<TicketReservationMng> computedReservations = doTestCreateSlice(controller,
                 "src/test/resources/20_create_with_netmask.rdf",
-                "createSlice_testWithNetmask_" + controller.getClass().getSimpleName());
+                "createSlice_testWithNetmask_" + controller.getClass().getSimpleName(),
+                EXPECTED_RESERVATION_COUNT_FOR_CREATE);
 
-        // verify results of createSlice()
-        assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-
-        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                        ") did not match expected value", EXPECTED_RESERVATION_COUNT_FOR_CREATE,
-                countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
-
-        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
-
-        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
-
+        assertNetmaskPropertyPresent(computedReservations);
     }
 
     /**
@@ -116,7 +94,7 @@ public class OrcaXmlrpcHandlerTest {
      * @param ndlFile filename of createSlice() request RDF
      * @param slice_urn slice name
      */
-    protected static Map<String, Object> doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn){
+    protected static List<TicketReservationMng> doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn, int expectedReservationCount){
         OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
         assertNotNull(orcaXmlrpcHandler);
         orcaXmlrpcHandler.verifyCredentials = false;
@@ -133,28 +111,22 @@ public class OrcaXmlrpcHandlerTest {
 
         Map<String, Object> result = orcaXmlrpcHandler.createSlice(slice_urn, credentials, resReq, users);
 
-        // check for netmask in modified reservation
-        if (slice_urn.startsWith("createSlice_testWithNetmask_")) {
-            boolean foundNetmask = false;
+        // verify results of createSlice()
+        assertNotNull(result);
+        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
 
-            XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
-            for (TicketReservationMng reservation : slice.getComputedReservations()) {
-                String netmask = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthNetmaskSuffix);
-                if (null != netmask){
-                    foundNetmask = true;
-                    //break;
-                }
+        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
+                        ") did not match expected value", expectedReservationCount,
+                countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
 
-                String address = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthIPSuffix);
-                if (null != address) {
-                    assertTrue("Address property should contain CIDR", address.contains("/"));
-                }
-            }
+        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
 
-            assertTrue("Could not find netmask value in computed reservations.", foundNetmask);
-        }
+        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
 
-        return result;
+        // check the reservation properties
+        XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
+        return slice.getComputedReservations();
+
     }
 
     /**
@@ -415,7 +387,8 @@ public class OrcaXmlrpcHandlerTest {
      * Check for the presence of Netmask property in VM reservations, and fail test by assertion if not present.
      * @param computedReservations
      */
-    protected void assertNetmaskPropertyPresent(List<TicketReservationMng> computedReservations){
+    protected static void
+    assertNetmaskPropertyPresent(List<TicketReservationMng> computedReservations){
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
             System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
@@ -429,14 +402,13 @@ public class OrcaXmlrpcHandlerTest {
             // every VM in our current tests should have a netmask
             // check for netmask in modified reservation
             boolean foundNetmask = false;
-            for (PropertyMng property : localProperties) {
-                //System.out.println(property.getName() + ": " + property.getValue());
-                if (property.getName().equals("unit.eth1.netmask")) {
-                    foundNetmask = true;
-                    break;
-                }
+            String netmask = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthNetmaskSuffix);
+            assertNotNull("Could not find netmask value in computed reservation " + reservation.getReservationID(), netmask);
+
+            String address = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthIPSuffix);
+            if (null != address) {
+                assertTrue("Address property should contain CIDR", address.contains("/"));
             }
-            assertTrue("Could not find netmask value in computed reservation " + reservation.getReservationID(), foundNetmask);
         }
     }
 
