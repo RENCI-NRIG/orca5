@@ -2,9 +2,7 @@
 
 package orca.embed.cloudembed.controller;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
@@ -94,54 +92,59 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 	@SuppressWarnings("unchecked")
 	public SystemNativeError runEmbedding(RequestReservation rr,
 			DomainResourcePools domainResourcePools) throws IOException {
-		//this.request = rr;
+
 		OntModel requestModel=rr.getModel();
-		Collection <NetworkElement> elements = rr.getElements();
 
 		mapper = new RequestMapping(requestModel,this.idm,true); 
         LinkedList <Device> domainList=null;
 		SystemNativeError error=null;
-		Iterator<NetworkElement> it = elements.iterator();
-		boolean idmContainsRequest=false;
-		while(it.hasNext()){
-			NetworkConnection element = (NetworkConnection) it.next();
-			logger.debug("Interdomain connection:"+element.getName()+";"
-					+element.getNe1().getName()+":"+element.getNe1().getInDomain()+":"
-					+element.getNe2().getName()+":"+element.getNe2().getInDomain());
-			if((element.getNe1()==null) || (element.getNe2()==null)){
-				logger.error("This request connection misses the end point(s):nc="+element.getName()+":ne1="+element.getNe1()+";ne2="+element.getNe2());
-				continue;
-			}
-			if((element.getNe1().getInDomain()==null) || (element.getNe2().getInDomain()==null)){
-				logger.error("This request connection misses the end point(s):nc="+element.getName()+":ne1="+element.getNe1().getInDomain()+";ne2="+element.getNe2().getInDomain());
-				continue;
-			}
-			if(element.getNe1().getInDomain().equals(element.getNe2().getInDomain())){
-				RequestReservation intra_request = generateConnectionRequest(requestModel,element,rr.getTerm(),rr.getReservationDomain(),rr.getReservation(),rr.getReservation_rs());
-				runEmbedding(element.getNe1().getInDomain(),intra_request, domainResourcePools);
-				continue;
-			}
-			
-			//String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
-            //OutputStream fsw = new FileOutputStream(fileName);
-            //requestModel.write(fsw);
-			
-			stitching = checkStitching(element, requestModel); //requestModel being modified here
-			if(stitching && !idmContainsRequest){
-				this.idm.add(requestModel);
-				idmContainsRequest=true;
-			}
 
-			logger.debug("is stitiching="+stitching+";isModify="+isModify);
-			/*
-			String homeDir = PathGuesser.getOrcaControllerHome();
-			String fileName = "/logs/idm.rdf";
+		//String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
+		//OutputStream fsw = new FileOutputStream(fileName);
+		//requestModel.write(fsw);
+
+		//check all elements, modifying the request for any that are stitching
+		stitching = checkStitching(rr.getElements(), requestModel);
+		logger.debug("is stitching="+stitching+";isModify="+isModify);
+
+		// add the requestModel only once
+		if(stitching){
+			this.idm.add(requestModel);
+		}
+		/*
+		String homeDir = PathGuesser.getOrcaControllerHome();
+		String fileName = "/logs/idm.rdf";
                         OutputStream fsw = new FileOutputStream(homeDir + fileName);
                         idm.write(fsw);
                         fsw.close();
-			*/
+		*/
 
-			error=mapper.createConnection(element,interDomainRequest,false,element.getOpenflowCapable());
+		for (NetworkElement element : rr.getElements()){
+			if ( ! (element instanceof  NetworkConnection)){
+				continue;
+			}
+
+			NetworkConnection networkConnection = (NetworkConnection) element;
+
+			logger.debug("Interdomain connection:"+networkConnection.getName()+";"
+					+networkConnection.getNe1().getName()+":"+networkConnection.getNe1().getInDomain()+":"
+					+networkConnection.getNe2().getName()+":"+networkConnection.getNe2().getInDomain());
+			if((networkConnection.getNe1()==null) || (networkConnection.getNe2()==null)){
+				logger.error("This request connection misses the end point(s):nc="+networkConnection.getName()+":ne1="+networkConnection.getNe1()+";ne2="+networkConnection.getNe2());
+				continue;
+			}
+			if((networkConnection.getNe1().getInDomain()==null) || (networkConnection.getNe2().getInDomain()==null)){
+				logger.error("This request connection misses the end point(s):nc="+networkConnection.getName()+":ne1="+networkConnection.getNe1().getInDomain()+";ne2="+networkConnection.getNe2().getInDomain());
+				continue;
+			}
+			if(networkConnection.getNe1().getInDomain().equals(networkConnection.getNe2().getInDomain())){
+				RequestReservation intra_request = generateConnectionRequest(requestModel,networkConnection,rr.getTerm(),rr.getReservationDomain(),rr.getReservation(),rr.getReservation_rs());
+				runEmbedding(networkConnection.getNe1().getInDomain(),intra_request, domainResourcePools);
+				continue;
+			}
+
+
+			error=mapper.createConnection(networkConnection,interDomainRequest,false,networkConnection.getOpenflowCapable());
 			if(error!=null)
 				break;
 			NetworkConnection deviceConnection = mapper.getDeviceConnection();
@@ -170,69 +173,94 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 					return error;
 				}
 			}	
-			error = domainDepend(domainList,deviceList,element, rr); //1. dependency computation; 2. forming the deviceList 
+			error = domainDepend(domainList,deviceList,networkConnection, rr); //1. dependency computation; 2. forming the deviceList
 			if(error!=null)
 				break;
 			
 			if(domainList.size()>1){
 				DomainElement source = (DomainElement) domainList.get(0);
 				DomainElement source_link = (DomainElement) domainList.get(1);
-				isStitchingDomain = NdlCommons.isStitchingNodeInManifest(source.getResource());
-				
-				if(isStitchingDomain){
-					source.setAllocatable(false);
-				}else{
-					isMulticast=false;
-					if(source.getCastType()!=null && source.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
-						isMulticast=true;
-					}
-					if((isMulticast!=true) && (source.getNumUnits()>0 || source.getCe().getCeGroup()!=null) ){
-						RequestReservation edgeRequest = generateEdgeRequest(source.getInDomain(),source,source_link,element,
-								rr.getTerm(), requestModel);
-						edgeRequest.setOri_reservationDomain(rr.getReservationDomain());
-						error=runEmbedding(source.getInDomain(),edgeRequest, domainResourcePools);
-						if(error!=null)
-							break;
-						if(source.getCe().getGroup()!=null || (source.getCe().getCeGroup()!=null && source.getCe().getCeGroup().size()>1 )){
-						//if(source.getCe().getGroup()!=null){
-							if(source_link.getFollowedBy()!=null)
-								source_link.getFollowedBy().remove(source);
-							deviceList.remove(source);
-						}
-					}
+
+				error = processEdges(source, source_link, rr, networkConnection, requestModel, domainResourcePools);
+				if (error != null){
+					break;
 				}
+
 				DomainElement dest = (DomainElement) domainList.get(domainList.size()-1);
 				DomainElement dest_link = (DomainElement) domainList.get(domainList.size()-2);
-				isStitchingDomain = NdlCommons.isStitchingNodeInManifest(dest.getResource());
 
-				if(isStitchingDomain){
-					dest.setAllocatable(false);
-				}else{
-					isMulticast=false;
-					if(dest.getCastType()!=null && dest.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
-						isMulticast=true;
-					}
-					if((isMulticast!=true) && (dest.getNumUnits()>0  || dest.getCe().getCeGroup()!=null) ){
-						RequestReservation edgeRequest = generateEdgeRequest(dest.getInDomain(),dest,dest_link,element,
-								rr.getTerm(), requestModel);
-						edgeRequest.setOri_reservationDomain(rr.getReservationDomain());
-						error=runEmbedding(dest.getInDomain(),edgeRequest, domainResourcePools);
-						if(error!=null)
-							break;
-						if(dest.getCe().getGroup()!=null || (dest.getCe().getCeGroup()!=null && dest.getCe().getCeGroup().size()>1)){
-						//if(dest.getCe().getGroup()!=null){
-							if(dest_link.getFollowedBy()!=null)
-								dest_link.getFollowedBy().remove(dest);
-							deviceList.remove(dest);
-						}
-					}
+				error = processEdges(dest, dest_link, rr, networkConnection, requestModel, domainResourcePools);
+				if (error != null){
+					break;
 				}
-			}			
-			domainConnectionList.put(element.getName(), domainList);
+			}
+			domainConnectionList.put(networkConnection.getName(), domainList);
 		}			
 		return error;
 	}
-	
+
+	/**
+	 * processes the special cases of different edge nodes in the request: stitching, MP, ng, etc..
+	 *
+	 * @param domainElement
+	 * @param domainElementLink
+	 * @param requestReservation
+	 * @param networkConnection
+	 * @param requestModel
+	 * @param domainResourcePools
+	 * @return
+	 */
+	protected SystemNativeError processEdges(DomainElement domainElement, DomainElement domainElementLink,
+											 RequestReservation requestReservation, NetworkConnection networkConnection,
+											 OntModel requestModel, DomainResourcePools domainResourcePools) {
+		boolean isStitchingDomain = NdlCommons.isStitchingNodeInManifest(domainElement.getResource());
+		boolean isMulticast;
+		SystemNativeError error = null;
+
+		if (isStitchingDomain) {
+			domainElement.setAllocatable(false);
+		} else {
+			isMulticast = domainElement.getCastType() != null && domainElement.getCastType().equalsIgnoreCase(NdlCommons.multicast);
+
+			if ((!isMulticast) && (domainElement.getNumUnits() > 0 || domainElement.getCe().getCeGroup() != null)) {
+				RequestReservation edgeRequest = generateEdgeRequest(domainElement.getInDomain(), domainElement, domainElementLink, networkConnection,
+						requestReservation.getTerm(), requestModel);
+				edgeRequest.setOri_reservationDomain(requestReservation.getReservationDomain());
+				error = runEmbedding(domainElement.getInDomain(), edgeRequest, domainResourcePools);
+				if (error != null)
+					return error;
+				if (domainElement.getCe().getGroup() != null || (domainElement.getCe().getCeGroup() != null && domainElement.getCe().getCeGroup().size() > 1)) {
+					//if(dest.getCe().getGroup()!=null){
+					if (domainElementLink.getFollowedBy() != null)
+						domainElementLink.getFollowedBy().remove(domainElement);
+					deviceList.remove(domainElement);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 *
+	 * @param elements
+	 * @param requestModel
+	 * @return
+	 */
+	protected boolean checkStitching(Collection<NetworkElement> elements, OntModel requestModel){
+		boolean isStitching = false;
+
+		for (NetworkElement element : elements){
+			if (element instanceof NetworkConnection){
+				if (checkStitching((NetworkConnection) element, requestModel)){
+					isStitching = true;
+				}
+			}
+		}
+
+		return isStitching;
+	}
+
 	protected boolean checkStitching(NetworkConnection element, OntModel requestModel){
 		Resource layer_rs=null;
 		if(element.getResource().hasProperty(NdlCommons.atLayer))
@@ -724,13 +752,13 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 					stitching=true;
 				}
 				else{
+					logger.error("Stitching tag " + label_id + " is not available in domain:"+child_de.getURI());
 					label_id=0;
-					logger.error("Stitching tag is not available in domain:"+child_de.getURI());
 				}
 			}else{	//need to check if the upstream stitching tag has been used in this stitching port
 				if(!isTagAvailable(parent_de, label_id)){
+					logger.error("Stitching tag " + label_id + " is not available anymore in domain:"+child_de.getURI());
 					label_id=0;
-					logger.error("Stitching tag is not available anymore in domain:"+child_de.getURI());
 				}
 					
 			}
@@ -924,58 +952,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
             intf_start = start.getDownNeighbour(start.getModel());
             intf_next = next_Hop.getUpNeighbour(next_Hop.getModel());
             logger.info("link connections..." + i + ":" + domainList.size() +":start url:"+start.getURI()+ ";next_hop:" + next_Hop.getURI());
+
             //source domain
             if (i == 1) {
-                boolean isStitchingDomain = NdlCommons.isStitchingNodeInManifest(start.getResource());
-                link_url = start.getURI();
-                if(isStitchingDomain){
-                	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
-                	OntResource this_intf = idm.getOntResource(intf_next);
-                	for (StmtIterator i_s=this_intf.listProperties(NdlCommons.linkTo);i_s.hasNext();){
-            			OntResource other_intf = idm.getOntResource(i_s.next().getResource());
-            			for (StmtIterator j_s= other_intf.listProperties(NdlCommons.linkTo);j_s.hasNext();){
-                			Resource stitch_intf = j_s.next().getResource();
-                			if(stitch_intf.hasProperty(NdlCommons.hasURNProperty)){
-                				Literal stitch_urn = stitch_intf.getProperty(NdlCommons.hasURNProperty).getLiteral();
-                				manifestModel.add(intf_next,NdlCommons.hasURNProperty, stitch_urn);
-                			}
-            			}
-                	}
-                }else if(start.getCastType()!=null && start.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
-                	link_url = start.getName();
-                	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
-                	link_ont.addProperty(NdlCommons.hasCastType, NdlCommons.multicastOntClass);
-                	rc_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);        	
-                }else{
-                	link_ont = manifestModel.createIndividual(link_url, NdlCommons.computeElementClass);
-                }
-                link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, intf_next);
-                	
-                if(!link_ont.hasProperty(NdlCommons.inDomainProperty)){
-            		domain_name = start.getResourceType().getDomainURL();
-            	}else{
-            		domain_rs=link_ont.getProperty(NdlCommons.inDomainProperty).getResource();
-            		domain_name=domain_rs.getURI();
-            		link_ont.removeProperty(NdlCommons.inDomainProperty,domain_rs);
-            	}
-                if(isStitchingDomain)
-        			link_ont.addProperty(NdlCommons.inDomainProperty,start.getResource());
-        		else{
-        			domain_rs=manifestModel.createResource(domain_name);
-        			link_ont.addProperty(NdlCommons.inDomainProperty,domain_rs);
-        			addDomainProperty(domain_rs,manifestModel);
-        		}
-                
-                link_ont.addProperty(NdlCommons.hasURLProperty,domain_name);
-                link_ont.addProperty(NdlCommons.inConnection, "true", XSDDatatype.XSDboolean);
-                link_ont.addProperty(NdlCommons.inRequestNetworkConnection, rc_ont);
-                if(isStitchingDomain)                
-                	rc_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);
-                if(!domainInConnectionList.contains(link_ont))
-                	domainInConnectionList.add(link_ont);
-                
-                logger.debug("First domain:url=" + link_ont.getURI() 
-                		+ ";d.name= " + start.getName()+";domainName="+domain_name+";rc_ont="+rc_ont.getURI());
+				addEdgeDeviceToTopology(manifestModel, rc_ont, start, intf_next);
             }
 
             //Link connection
@@ -1016,56 +996,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 
             //destination domain
             if (i == domainList.size() - 1) {
-            	boolean isStitchingDomain = NdlCommons.isStitchingNodeInManifest(next_Hop.getResource());
-
-                link_url = next_Hop.getURI();
-                if(isStitchingDomain){
-                	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
-                	OntResource this_intf = idm.getOntResource(intf_start);
-                	for (StmtIterator i_s=this_intf.listProperties(NdlCommons.linkTo);i_s.hasNext();){
-            			OntResource other_intf = idm.getOntResource(i_s.next().getResource());
-            			for (StmtIterator j_s=other_intf.listProperties(NdlCommons.linkTo);j_s.hasNext();){
-                			Resource stitch_intf = j_s.next().getResource();
-                			if(stitch_intf.hasProperty(NdlCommons.hasURNProperty)){
-                				Literal stitch_urn = stitch_intf.getProperty(NdlCommons.hasURNProperty).getLiteral();
-                				manifestModel.add(intf_start,NdlCommons.hasURNProperty, stitch_urn);
-                			}
-            			}
-                	}
-                }else if(next_Hop.getCastType()!=null && next_Hop.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
-                	link_url = next_Hop.getName();
-                	link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
-                	link_ont.addProperty(NdlCommons.hasCastType, NdlCommons.multicastOntClass);
-                	rc_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);        	
-                }else{
-                	link_ont = manifestModel.createIndividual(link_url, NdlCommons.computeElementClass);
-                }
-                link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, intf_start);
-                
-                if(!link_ont.hasProperty(NdlCommons.inDomainProperty)){
-            		domain_name = next_Hop.getResourceType().getDomainURL();
-            	}else{
-            		domain_rs=link_ont.getProperty(NdlCommons.inDomainProperty).getResource();
-            		domain_name=domain_rs.getURI();
-            		link_ont.removeProperty(NdlCommons.inDomainProperty,domain_rs);
-            	}
-                if(isStitchingDomain)
-        			link_ont.addProperty(NdlCommons.inDomainProperty,link_ont);
-        		else{
-        			domain_rs=manifestModel.createResource(domain_name);
-        			link_ont.addProperty(NdlCommons.inDomainProperty,domain_rs);
-        			addDomainProperty(domain_rs,manifestModel);
-        		}
-                link_ont.addProperty(NdlCommons.hasURLProperty,domain_name);
-                link_ont.addProperty(NdlCommons.inConnection, "true", XSDDatatype.XSDboolean);
-                start.getDownNeighbour(start.getModel()).addProperty(NdlCommons.RDF_TYPE, NdlCommons.interfaceOntClass);
-                if(isStitchingDomain)                
-                	rc_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);
-                if(!domainInConnectionList.contains(link_ont))                
-                	domainInConnectionList.add(link_ont);
-                
-                logger.debug("Last domain:url=" + link_ont.getURI() 
-                		+ ";d.name= " +  next_Hop.getName()+";domainName="+domain_name+";rc_ont="+rc_ont.getURI());
+            	addEdgeDeviceToTopology(manifestModel, rc_ont, next_Hop, intf_start);
             }
 
             start = next_Hop;
@@ -1074,7 +1005,75 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
 		//if(stitching)
 		//	this.idm.remove(requestModel);
 	}
-	
+
+	/**
+	 *
+	 * @param manifestModel
+	 * @param topologyOnt
+	 * @param edgeDevice
+	 * @param edgeInterface
+	 */
+	protected void addEdgeDeviceToTopology(OntModel manifestModel, OntResource topologyOnt, Device edgeDevice, OntResource edgeInterface) {
+		String link_url;
+		OntResource link_ont;
+		String domain_name;
+		Resource domain_rs;
+		boolean isStitchingDomain = NdlCommons.isStitchingNodeInManifest(edgeDevice.getResource());
+
+		if(isStitchingDomain){
+			link_url = edgeDevice.getName();
+            link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
+            OntResource this_intf = idm.getOntResource(edgeInterface);
+            for (StmtIterator i_s = this_intf.listProperties(NdlCommons.linkTo); i_s.hasNext();){
+                OntResource other_intf = idm.getOntResource(i_s.next().getResource());
+                for (StmtIterator j_s= other_intf.listProperties(NdlCommons.linkTo);j_s.hasNext();){
+                    Resource stitch_intf = j_s.next().getResource();
+                    if(stitch_intf.hasProperty(NdlCommons.hasURNProperty)){
+                        Literal stitch_urn = stitch_intf.getProperty(NdlCommons.hasURNProperty).getLiteral();
+                        manifestModel.add(edgeInterface,NdlCommons.hasURNProperty, stitch_urn);
+                    }
+                }
+            }
+        }else if(edgeDevice.getCastType()!=null && edgeDevice.getCastType().equalsIgnoreCase(NdlCommons.multicast)){
+			link_url = edgeDevice.getName();
+            link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
+            link_ont.addProperty(NdlCommons.hasCastType, NdlCommons.multicastOntClass);
+            topologyOnt.addProperty(NdlCommons.collectionItemProperty, link_ont);
+        }else{
+			link_url = edgeDevice.getURI();
+			link_ont = manifestModel.createIndividual(link_url, NdlCommons.computeElementClass);
+        }
+		link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, edgeInterface);
+
+		if(!link_ont.hasProperty(NdlCommons.inDomainProperty)){
+            domain_name = edgeDevice.getResourceType().getDomainURL();
+        }else{
+            domain_rs=link_ont.getProperty(NdlCommons.inDomainProperty).getResource();
+            domain_name=domain_rs.getURI();
+            link_ont.removeProperty(NdlCommons.inDomainProperty,domain_rs);
+        }
+		if(isStitchingDomain)
+            link_ont.addProperty(NdlCommons.inDomainProperty, link_ont);
+        else{
+            domain_rs=manifestModel.createResource(domain_name);
+            link_ont.addProperty(NdlCommons.inDomainProperty,domain_rs);
+            addDomainProperty(domain_rs,manifestModel);
+        }
+
+		link_ont.addProperty(NdlCommons.hasURLProperty,domain_name);
+		link_ont.addProperty(NdlCommons.inConnection, "true", XSDDatatype.XSDboolean);
+		link_ont.addProperty(NdlCommons.inRequestNetworkConnection, topologyOnt);
+		edgeInterface.addProperty(NdlCommons.RDF_TYPE, NdlCommons.interfaceOntClass);
+
+		if(isStitchingDomain)
+            topologyOnt.addProperty(NdlCommons.collectionItemProperty, link_ont);
+		if(!domainInConnectionList.contains(link_ont))
+            domainInConnectionList.add(link_ont);
+
+		logger.debug("Added domain:url=" + link_ont.getURI()
+                + ";d.name= " + edgeDevice.getName()+";domainName="+domain_name+";rc_ont="+ topologyOnt.getURI());
+	}
+
 	public RequestMapping getMapper() {
 		return mapper;
 	}

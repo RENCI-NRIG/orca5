@@ -153,7 +153,7 @@ try {
 			}
 		}
 		if(error!=null)
-			System.out.println("Error:"+error.toString());
+			logger.error(error);
 		return error;
 	}
 	

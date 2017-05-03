@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +44,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.tdb.TDB;
+
 import orca.shirako.container.Globals;
 
 public class CloudHandler extends MappingHandler{
@@ -536,6 +538,8 @@ public class CloudHandler extends MappingHandler{
 					logger.info("isInter Existing ce="+existing_ce.getName());
 					edge_device = (DomainElement) existing_ce;
 
+          edge_device.getCe().addDependency((HashSet<NetworkElement>)ce.getDependencies());
+
 					// check validity of existing_ce
 					if (null == edge_device.getResourcesMap()){
 						logger.info("existing_ce ResourcesMap was null, using new edge_device map.");
@@ -551,6 +555,7 @@ public class CloudHandler extends MappingHandler{
 				if(element.isModify() && existing_ce.isModify()){
 					logger.info("isModify Existing ce="+existing_ce.getName());
 					edge_device = (DomainElement) existing_ce;
+					edge_device.getCe().addDependency((HashSet<NetworkElement>)ce.getDependencies());
 					break;
 				}
 				if(element.isModify()){
