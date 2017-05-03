@@ -238,7 +238,9 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 						new_ne.setInterfaceName(c_e, intf.getValue());
 				}
 			}
-		}
+		}else
+			new_ne=ne;
+			
 		return new_ne;
 	}
 	
