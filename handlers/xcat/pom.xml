@@ -4,12 +4,12 @@
 	<groupId>orca.handlers</groupId>
 	<artifactId>xcat</artifactId>
 	<packaging>jar</packaging>
-	<version>5.1.5</version>
+	<version>5.1.6-SNAPSHOT</version>
 	<name>Orca xCAT Handler Library</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>handlers</artifactId>
-		<version>5.1.5</version>
+		<version>5.1.6-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
