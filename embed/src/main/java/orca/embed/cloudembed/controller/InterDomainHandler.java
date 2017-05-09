@@ -1039,12 +1039,13 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
             link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
             link_ont.addProperty(NdlCommons.hasCastType, NdlCommons.multicastOntClass);
             topologyOnt.addProperty(NdlCommons.collectionItemProperty, link_ont);
+            link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, edgeInterface);
         }else{
 			link_url = edgeDevice.getURI();
 			link_ont = manifestModel.createIndividual(link_url, NdlCommons.computeElementClass);
+			link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, edgeInterface);
         }
-		link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, edgeInterface);
-
+		
 		if(!link_ont.hasProperty(NdlCommons.inDomainProperty)){
             domain_name = edgeDevice.getResourceType().getDomainURL();
         }else{
@@ -1053,7 +1054,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant{
             link_ont.removeProperty(NdlCommons.inDomainProperty,domain_rs);
         }
 		if(isStitchingDomain)
-            link_ont.addProperty(NdlCommons.inDomainProperty, link_ont);
+            link_ont.addProperty(NdlCommons.inDomainProperty, edgeDevice.getResource());
         else{
             domain_rs=manifestModel.createResource(domain_name);
             link_ont.addProperty(NdlCommons.inDomainProperty,domain_rs);
