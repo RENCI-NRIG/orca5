@@ -20,9 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
-import static orca.shirako.common.meta.UnitProperties.UnitEthIPSuffix;
-import static orca.shirako.common.meta.UnitProperties.UnitEthNetmaskSuffix;
-import static orca.shirako.common.meta.UnitProperties.UnitEthPrefix;
+import static orca.shirako.common.meta.UnitProperties.*;
 import static org.junit.Assert.*;
 
 public class OrcaXmlrpcHandlerTest {
@@ -78,10 +76,13 @@ public class OrcaXmlrpcHandlerTest {
         controller.init();
         controller.start();
 
-        List<TicketReservationMng> computedReservations = doTestCreateSlice(controller,
+        XmlrpcControllerSlice slice = doTestCreateSlice(controller,
                 "src/test/resources/20_create_with_netmask.rdf",
                 "createSlice_testWithNetmask_" + controller.getClass().getSimpleName(),
                 EXPECTED_RESERVATION_COUNT_FOR_CREATE);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
 
         assertNetmaskPropertyPresent(computedReservations);
     }
@@ -89,12 +90,11 @@ public class OrcaXmlrpcHandlerTest {
     /**
      *
      * Used by createSlice() tests
-     *
-     * @param controller either a 'Live' or Mock XmlRpcController
+     *  @param controller either a 'Live' or Mock XmlRpcController
      * @param ndlFile filename of createSlice() request RDF
      * @param slice_urn slice name
      */
-    protected static List<TicketReservationMng> doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn, int expectedReservationCount){
+    protected static XmlrpcControllerSlice doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn, int expectedReservationCount){
         OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
         assertNotNull(orcaXmlrpcHandler);
         orcaXmlrpcHandler.verifyCredentials = false;
@@ -123,9 +123,10 @@ public class OrcaXmlrpcHandlerTest {
 
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
 
-        // check the reservation properties
+        // return the slice to allow test to check properties
         XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
-        return slice.getComputedReservations();
+
+        return slice;
 
     }
 

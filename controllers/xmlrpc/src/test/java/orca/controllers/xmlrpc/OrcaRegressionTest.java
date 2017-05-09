@@ -1,15 +1,22 @@
 package orca.controllers.xmlrpc;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntResource;
+import orca.embed.workflow.ManifestParserListener;
+import orca.embed.workflow.RequestWorkflow;
 import orca.manage.OrcaConverter;
+import orca.manage.beans.ReservationMng;
 import orca.manage.beans.TicketReservationMng;
+import orca.ndl.NdlException;
+import orca.ndl.NdlManifestParser;
+import orca.ndl.elements.NetworkElement;
+import orca.shirako.container.Globals;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.CHAR_TO_MATCH_RESERVATION_COUNT;
@@ -121,16 +128,26 @@ public class OrcaRegressionTest {
         controller.init();
         controller.start();
 
-        List<TicketReservationMng> computedReservations = OrcaXmlrpcHandlerTest.doTestCreateSlice(controller,
+        XmlrpcControllerSlice slice = OrcaXmlrpcHandlerTest.doTestCreateSlice(controller,
                 requestFilename,
                 "createSlice_testRegressionTest_" + testName,
                 numDevicesInRequest);
 
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
         if (requestFilename.contains("106_mp")){
             assertEc2InstanceTypePresent(computedReservations);
         }
+
+        assertManifestWillProcess(slice);
     }
 
+    /**
+     * Verify that the EC2 Instance type was present
+     * From Issue #106
+     *
+     * @param computedReservations
+     */
     private void assertEc2InstanceTypePresent(List<TicketReservationMng> computedReservations) {
         for (TicketReservationMng reservation : computedReservations){
             // only check VMs for EC2 Instance Type
@@ -141,6 +158,35 @@ public class OrcaRegressionTest {
 
             String ec2InstanceType = OrcaConverter.getConfigurationProperty(reservation, PropertyUnitEC2InstanceType);
             assertNotNull("Could not find EC2 Instance Type in reservation " + reservation.getReservationID(), ec2InstanceType);
+        }
+    }
+
+    /**
+     * Verify that the resulting manifest will process.
+     * Catches errors such as "orca.ndl.NdlException: Path has 1 (odd number) of endpoints"
+     *
+     * @param slice
+     */
+    private void assertManifestWillProcess(XmlrpcControllerSlice slice) {
+        Logger logger = Globals.getLogger(OrcaRegressionTest.class.getSimpleName());
+
+        RequestWorkflow workflow = slice.getWorkflow();
+        List<? extends ReservationMng> computedReservations = slice.getComputedReservations();
+        OntModel manifestModel = workflow.getManifestModel();
+        LinkedList<OntResource> domainInConnectionList = workflow.getDomainInConnectionList();
+        Collection<NetworkElement> boundElements = workflow.getBoundElements();
+
+        // get the manifest from the created slice
+        String manifest = slice.getOrc().getManifest(manifestModel, domainInConnectionList, boundElements, (List<ReservationMng>) computedReservations);
+
+        ManifestParserListener parserListener = new ManifestParserListener(logger);
+        try {
+            NdlManifestParser ndlManifestParser = new NdlManifestParser(manifest, parserListener);
+
+            // verify that the manifest can process
+            ndlManifestParser.processManifest();
+        } catch (NdlException e) {
+            fail(e.toString());
         }
     }
 }
