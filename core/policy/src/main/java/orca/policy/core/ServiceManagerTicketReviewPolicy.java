@@ -156,7 +156,9 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             // Fail the reservation, and remove it from everything
                             logger.info("TicketReview: Closing reservation " + reservation.getReservationID() +
                                     " due to failure in Slice " + slice.getName());
-                            reservation.fail("TicketReview: Closing reservation due to failure in Slice.");
+
+                            // Important: closing a reservation in the SM will also close the reservation in the AM and Broker.
+                            // BUT ONLY if the reservation is not failed.
                             actor.close(reservation); // "perform local close operations and issue close request to authority"
                             calendar.removePending(reservation);
                             pendingNotify.remove(reservation);
