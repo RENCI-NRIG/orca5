@@ -107,6 +107,26 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             break;
                         }
 
+                        // if any tickets are Nascent,
+                        // as soon as we remove the Failed reservation,
+                        // those Nascent tickets might get redeemed.
+                        // we must wait to Close any failed reservations
+                        // until all Nascent tickets are either Ticketed or Failed
+                        if (sliceReservation.isNascent()) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Found Nascent Reservation " +
+                                        sliceReservation.getReservationID() +
+                                        " in Slice " + slice.getName() +
+                                        " when checkPending() for " + reservation.getReservationID());
+                            }
+
+                            sliceStatusMap.put(sliceID, TicketReviewSliceState.Nascent);
+
+                            // once we have found a Nascent reservation, that is what we treat the entire slice
+                            break;
+                        }
+
+                        // track Failed reservations, but need to keep looking for Nascent or Redeemable.
                         if (sliceReservation.isFailed()) {
                             if (logger.isDebugEnabled()) {
                                 logger.debug("Found Failed Reservation " +
@@ -115,13 +135,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                                         " when checkPending() for " + reservation.getReservationID());
                             }
 
-                            // if any tickets are Nascent,
-                            // as soon as we remove the Failed reservation,
-                            // those Nascent tickets might get redeemed.
-                            // we must wait to Close any failed reservations
-                            // until all Nascent tickets are either Ticketed or Failed
-                            if (Objects.equals(sliceStatusMap.get(sliceID), TicketReviewSliceState.Redeemable)) {
-                                sliceStatusMap.put(sliceID, TicketReviewSliceState.Failing);
+                            sliceStatusMap.put(sliceID, TicketReviewSliceState.Failing);
 
                                 // Keep track of which sites had failures
                                 // Using Authority Name would be better than ResourceType,
@@ -142,19 +156,6 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                                     //    failureSites.add(site);
                                     //}
                                 //} // sliceSiteFailure
-                            }
-                        } else if (sliceReservation.isNascent()) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("Found Nascent Reservation " +
-                                        sliceReservation.getReservationID() +
-                                        " in Slice " + slice.getName() +
-                                        " when checkPending() for " + reservation.getReservationID());
-                            }
-
-                            sliceStatusMap.put(sliceID, TicketReviewSliceState.Nascent);
-
-                            // once we have found a Nascent reservation, that is what we treat the entire slice
-                            break;
                         }
                     }
                 }
