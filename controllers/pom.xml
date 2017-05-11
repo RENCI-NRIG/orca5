@@ -4,11 +4,11 @@
 	<groupId>orca</groupId>
 	<artifactId>controllers</artifactId>
 	<packaging>pom</packaging>
-	<version>5.1.6</version>
+	<version>5.1.7-SNAPSHOT</version>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>orca</artifactId>
-		<version>5.1.6</version>
+		<version>5.1.7-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
