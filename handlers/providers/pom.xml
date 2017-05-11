@@ -3,11 +3,11 @@
 	<groupId>orca.handlers.network</groupId>
 	<artifactId>providers</artifactId>
 	<name>Orca Network Provider handlers</name>
-	<version>5.1.6-SNAPSHOT</version>
+	<version>5.1.6</version>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>handlers</artifactId>
-		<version>5.1.6-SNAPSHOT</version>
+		<version>5.1.6</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
