@@ -62,8 +62,8 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
             }
 
             if ((i >= start) && (i < (end - 1))) {
-                assertTrue(r1.getState() == ReservationStates.Closed);
-                assertTrue(r2.getState() == ReservationStates.Closed);
+                assertTrue(r1.isClosed());
+                assertTrue(r2.isClosed());
             }
 
         }
@@ -114,20 +114,21 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
             }
 
             if ( (i == start-3) && !r2demanded ){
-                assertTrue(r1.getState() == ReservationStates.Ticketed);
-                assertTrue(r2.getState() == ReservationStates.Nascent);
+                assertTrue(r1.isTicketed());
+                assertTrue(r2.isNascent());
                 sm.demand(r2.getReservationID());
                 r2demanded = true;
             }
 
             if ((i >= start) && (i < (end - 1))) {
-                assertTrue(r1.getState() == ReservationStates.Active);
-                assertTrue(r2.getState() == ReservationStates.Active);
+                assertTrue(r1.isActive());
+                assertTrue(r2.isActive());
+                //System.out.println("i: " + i + " r1.getState() = " + r1.getState() + " r2.getState() = " + r2.getState());
             }
 
             if (i > end) {
-                assertTrue(r1.getState() == ReservationStates.Closed);
-                assertTrue(r2.getState() == ReservationStates.Closed);
+                assertTrue(r1.isClosed());
+                assertTrue(r2.isClosed());
             }
         }
 
@@ -188,9 +189,9 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
 
             // give plenty of time to make sure the Failed ticket is not closed until Nascent is resolved
             if ( i>2 && !r2demanded ){
-                assertTrue(r1.getState() == ReservationStates.Failed);
-                assertTrue(r2.getState() == ReservationStates.Nascent);
-                assertTrue(r3.getState() == ReservationStates.Ticketed);
+                assertTrue(r1.isFailed());
+                assertTrue(r2.isNascent());
+                assertTrue(r3.isTicketed());
 
                 if (i>6) {
                     sm.demand(r2.getReservationID());
@@ -199,14 +200,16 @@ public class ServiceManagerTicketReviewPolicyTest extends ServiceManagerPolicyTe
             }
 
             if ((i >= start) && (i < (end - 1))) {
-                assertTrue(r1.getState() == ReservationStates.Closed);
-                assertTrue(r2.getState() == ReservationStates.Closed);
-                assertTrue(r3.getState() == ReservationStates.Closed);
+                //System.out.println("i: " + i + " r1.getState() = " + r1.getState() + " r2.getState() = " + r2.getState() + " r3.getState() = " + r3.getState());
+                assertTrue(r1.isClosed());
+                assertTrue(r2.isClosed());
+                assertTrue(r3.isClosed());
             }
 
             if (i > end) {
-                assertTrue(r1.getState() == ReservationStates.Closed);
-                assertTrue(r2.getState() == ReservationStates.Closed);
+                assertTrue(r1.isClosed());
+                assertTrue(r2.isClosed());
+                assertTrue(r3.isClosed());
             }
         }
 

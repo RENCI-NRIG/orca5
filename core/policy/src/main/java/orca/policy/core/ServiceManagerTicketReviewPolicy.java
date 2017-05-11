@@ -67,11 +67,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
             // only want to do this for 'new' tickets
             if (reservation.isFailed() || reservation.isTicketed()) {
                 // check if we've examined this slice already
-                if (Objects.equals(sliceStatusMap.get(sliceID), ReservationStateActive)) {
-                    // we've looked at all of the reservations for this slice, and they are ok
-                    continue;
-
-                } else if (!sliceStatusMap.containsKey(sliceID)) {
+                if (!sliceStatusMap.containsKey(sliceID)) {
                     // set the default status
                     sliceStatusMap.put(sliceID, ReservationStateActive);
 
@@ -98,7 +94,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             break;
                         }
 
-                        if (sliceReservation.getState() == ReservationStateFailed) {
+                        if (sliceReservation.isFailed()) {
                             if (logger.isDebugEnabled()) {
                                 logger.debug("Found Failed Reservation " +
                                         sliceReservation.getReservationID() +
@@ -134,7 +130,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                                     //}
                                 //} // sliceSiteFailure
                             }
-                        } else if (sliceReservation.getState() == ReservationStateNascent) {
+                        } else if (sliceReservation.isNascent()) {
                             if (logger.isDebugEnabled()) {
                                 logger.debug("Found Nascent Reservation " +
                                         sliceReservation.getReservationID() +
