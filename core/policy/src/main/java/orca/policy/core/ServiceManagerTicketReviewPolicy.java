@@ -1,6 +1,5 @@
 package orca.policy.core;
 
-import orca.ndl.DomainResourceType;
 import orca.shirako.api.IReservation;
 import orca.shirako.common.SliceID;
 import orca.shirako.kernel.IKernelSlice;
@@ -9,8 +8,6 @@ import orca.util.persistence.NotPersistent;
 
 import java.util.*;
 
-import static orca.manage.OrcaConstants.*;
-
 /**
  * This implementation of a Service Manager policy is almost identical to the parent
  * ServiceManagerSimplePolicy.
@@ -18,6 +15,9 @@ import static orca.manage.OrcaConstants.*;
  * The only real difference is that it addresses the following issue:
  * https://github.com/RENCI-NRIG/orca5/issues/88
  * Tickets should not be redeemed if any reservations are currently Failed or Nascent.
+ *
+ * This effectively acts as a "gate" between the SM and AM.
+ * All reservations must be Ticketed, before any reservations are allowed to be redeemed.
  *
  */
 public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy {
@@ -28,6 +28,17 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
     public ServiceManagerTicketReviewPolicy(){
         super();
         pendingRedeem = new ReservationSet();
+    }
+
+    /**
+     * Redeemable: the default.  No slice reservations have been found that are either Nascent or Failed.
+     * Nascent: occurs when any reservation is Nascent, i.e. not yet Ticketed.  Will take precedence over Failing.
+     * Failing: occurs when a slice reservation is found that is Failed.
+     */
+    public enum TicketReviewSliceState {
+        Nascent,
+        Failing,
+        Redeemable
     }
 
     /**
@@ -48,7 +59,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
         ReservationSet myPending = calendar.getPending();
 
         // keep track of status of the slice containing each reservation
-        Map<SliceID, Integer> sliceStatusMap = new HashMap<>();
+        Map<SliceID, TicketReviewSliceState> sliceStatusMap = new HashMap<>();
 
         // keep track of which sites (per slice) had a failure
         // Note: this feature is not currently used
@@ -69,7 +80,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                 // check if we've examined this slice already
                 if (!sliceStatusMap.containsKey(sliceID)) {
                     // set the default status
-                    sliceStatusMap.put(sliceID, ReservationStateActive);
+                    sliceStatusMap.put(sliceID, TicketReviewSliceState.Redeemable);
 
                     // examine every reservation contained within the slice,
                     // looking for either a Failed or Nascent reservation
@@ -79,7 +90,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                         // If any Reservations that are being redeemed, that means the slice has already cleared TicketReview.
                         if (sliceReservation.isRedeeming()){
                             // There shouldn't be any Nascent reservations, if a reservation is being Redeemed.
-                            if (sliceStatusMap.get(sliceID) == ReservationStateNascent){
+                            if (sliceStatusMap.get(sliceID) == TicketReviewSliceState.Nascent){
                                 logger.error("TicketReview: Nascent reservation found while Reservation " +
                                         sliceReservation.getReservationID() +
                                         " in Slice " + slice.getName() +
@@ -90,7 +101,9 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             // but if a ticketed reservation is being redeemed,
                             // the failure _should_ be from the AM, not SM,
                             // so it should be ignored by TicketReview
-                            sliceStatusMap.put(sliceID, ReservationStateActive);
+                            sliceStatusMap.put(sliceID, TicketReviewSliceState.Redeemable);
+
+                            // we don't need to look at any other reservations in this slice
                             break;
                         }
 
@@ -107,8 +120,8 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             // those Nascent tickets might get redeemed.
                             // we must wait to Close any failed reservations
                             // until all Nascent tickets are either Ticketed or Failed
-                            if (Objects.equals(sliceStatusMap.get(sliceID), ReservationStateActive)) {
-                                sliceStatusMap.put(sliceID, ReservationStateFailed);
+                            if (Objects.equals(sliceStatusMap.get(sliceID), TicketReviewSliceState.Redeemable)) {
+                                sliceStatusMap.put(sliceID, TicketReviewSliceState.Failing);
 
                                 // Keep track of which sites had failures
                                 // Using Authority Name would be better than ResourceType,
@@ -138,7 +151,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                                         " when checkPending() for " + reservation.getReservationID());
                             }
 
-                            sliceStatusMap.put(sliceID, ReservationStateNascent);
+                            sliceStatusMap.put(sliceID, TicketReviewSliceState.Nascent);
 
                             // once we have found a Nascent reservation, that is what we treat the entire slice
                             break;
@@ -147,7 +160,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                 }
 
                 // take action on the current reservation
-                if (sliceStatusMap.get(sliceID) == ReservationStateFailed) {
+                if (sliceStatusMap.get(sliceID) == TicketReviewSliceState.Failing) {
                     if (reservation.getResources() != null && reservation.getResources().getType() != null) {
                         // only fail the reservation if it from the same site as another failed reservation
                         // Note: this feature is not currently used
@@ -164,7 +177,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                             pendingNotify.remove(reservation);
                         //} // sliceFailureSites
                     }
-                } else if (sliceStatusMap.get(sliceID) == ReservationStateNascent) {
+                } else if (sliceStatusMap.get(sliceID) == TicketReviewSliceState.Nascent) {
                     // save this reservation for later
                     logger.info("Moving reservation " + reservation.getReservationID() +
                             " to pendingRedeem list, due to nascent reservation in slice " + slice.getName());
