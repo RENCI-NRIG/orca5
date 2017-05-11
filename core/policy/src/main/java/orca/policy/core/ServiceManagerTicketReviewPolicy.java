@@ -60,7 +60,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
         }
 
         // check the status of the Slice of each reservation
-        for (IReservation reservation : myPending){
+        for (IReservation reservation : myPending) {
             IKernelSlice slice = (IKernelSlice) reservation.getSlice();
             SliceID sliceID = slice.getSliceID();
 
@@ -79,6 +79,25 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
                     // looking for either a Failed or Nascent reservation
                     // we have to look at everything in a slice once, to determine all/any Sites with failures
                     for (IReservation sliceReservation : slice.getReservations()) {
+
+                        // If any Reservations that are being redeemed, that means the slice has already cleared TicketReview.
+                        if (sliceReservation.isRedeeming()){
+                            // There shouldn't be any Nascent reservations, if a reservation is being Redeemed.
+                            if (sliceStatusMap.get(sliceID) == ReservationStateNascent){
+                                logger.error("TicketReview: Nascent reservation found while Reservation " +
+                                        sliceReservation.getReservationID() +
+                                        " in Slice " + slice.getName() +
+                                        " isRedeeming().");
+                            }
+
+                            // We may have previously found a Failed Reservation,
+                            // but if a ticketed reservation is being redeemed,
+                            // the failure _should_ be from the AM, not SM,
+                            // so it should be ignored by TicketReview
+                            sliceStatusMap.put(sliceID, ReservationStateActive);
+                            break;
+                        }
+
                         if (sliceReservation.getState() == ReservationStateFailed) {
                             if (logger.isDebugEnabled()) {
                                 logger.debug("Found Failed Reservation " +
