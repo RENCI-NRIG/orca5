@@ -160,7 +160,7 @@ public class NdlToRSpecHelper {
 		for(int i=1; i < names.length - 1; i++) 
 			tName += names[i] + ":";
 		// remove last :
-		if (names.length > 1)
+		if ((names.length > 1) && (tName.length() > 1)) 
 			tName = tName.substring(0, tName.length() - 1);
 		else
 			tName = names[0];
@@ -590,6 +590,8 @@ public class NdlToRSpecHelper {
 		
 		String controller="https://ncsu2-hn.exogeni.net:11443/orca/xmlrpc";
 		System.out.println("Site acronym from URL: " + controller + " is " + getControllerForUrl(controller));
+		
+		System.out.println("Massaging 54d52439-8040-47d9-823d-1fae50689981#StitchNode0 " + massageName("54d52439-8040-47d9-823d-1fae50689981#StitchNode0"));
 		
 	}
 }
