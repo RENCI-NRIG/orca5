@@ -1,14 +1,14 @@
 package orca.controllers.xmlrpc;
 
-import orca.manage.beans.PropertyMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
 import org.junit.Test;
 
 import java.util.List;
 
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertBootscriptVelocityTemplating;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertReservationsHaveNetworkInterface;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.EXPECTED_RESERVATION_COUNT_FOR_MODIFY;
-import static org.junit.Assert.assertFalse;
 
 public class OrcaRegressionModifyTest {
 
@@ -47,32 +47,5 @@ public class OrcaRegressionModifyTest {
                 modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
     }
 
-    /**
-     * Check all VM reservations for Bootscripts that have been properly templated by Velocity
-     *
-     * @param computedReservations
-     */
-    protected void assertBootscriptVelocityTemplating(List<TicketReservationMng> computedReservations){
-        for (TicketReservationMng reservation : computedReservations) {
-            List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
 
-            // only check VMs for Bootscript
-            if (!reservation.getResourceType().endsWith("vm")){
-                continue;
-            }
-
-            for (PropertyMng property : localProperties) {
-                //System.out.println(property.getName() + ": " + property.getValue());
-                if (property.getName().equals("unit.instance.config")) {
-                    String bootscript = property.getValue();
-
-                    assertFalse("Bootscript was not properly templated by Velocity: " + bootscript, bootscript.contains("$self"));
-
-                    // don't need to check any other properties for this reservation
-                    break;
-                }
-            }
-        }
-    }
 }

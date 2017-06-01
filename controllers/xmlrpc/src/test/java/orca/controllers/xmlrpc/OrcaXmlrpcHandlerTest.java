@@ -5,8 +5,6 @@ import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
-import orca.manage.OrcaConverter;
-import orca.manage.beans.PropertyMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
@@ -19,8 +17,8 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
-import static orca.shirako.common.meta.UnitProperties.*;
 import static org.junit.Assert.*;
 
 public class OrcaXmlrpcHandlerTest {
@@ -354,64 +352,12 @@ public class OrcaXmlrpcHandlerTest {
 
         // check the reservation properties
         slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
+
         return slice.getComputedReservations();
 
     }
 
-    /**
-     * Check all VM reservations for the correct number of localProperties, and fail test by assertion if incorrect.
-     *
-     * @param computedReservations
-     * @param propCountMap
-     */
-    protected void assertExpectedPropertyCounts(List<TicketReservationMng> computedReservations, Map<String, Integer> propCountMap){
-        for (TicketReservationMng reservation : computedReservations) {
-            List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
 
-            // we probably need better checks on Properties
-
-            // VLANs don't have consistent IDs from the request
-            Integer expected = propCountMap.get(reservation.getReservationID());
-            if (expected == null) {
-                continue;
-            }
-
-            assertEquals("Incorrect number of localProperties for reservation " + reservation.getReservationID(),
-                    (long) expected,
-                    (long) localProperties.size());
-        }
-    }
-
-
-    /**
-     * Check for the presence of Netmask property in VM reservations, and fail test by assertion if not present.
-     * @param computedReservations
-     */
-    protected static void
-    assertNetmaskPropertyPresent(List<TicketReservationMng> computedReservations){
-        for (TicketReservationMng reservation : computedReservations) {
-            List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
-
-            // only check VMs for Netmask
-            System.out.println(reservation.getResourceType());
-            if (!reservation.getResourceType().endsWith("vm")){
-                continue;
-            }
-
-            // every VM in our current tests should have a netmask
-            // check for netmask in modified reservation
-            boolean foundNetmask = false;
-            String netmask = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthNetmaskSuffix);
-            assertNotNull("Could not find netmask value in computed reservation " + reservation.getReservationID(), netmask);
-
-            String address = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthIPSuffix);
-            if (null != address) {
-                assertTrue("Address property should contain CIDR", address.contains("/"));
-            }
-        }
-    }
 
     /**
      * Test RenewSlice() with a valid extended duration
