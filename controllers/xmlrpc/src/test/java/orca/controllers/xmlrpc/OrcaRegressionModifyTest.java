@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertBootscriptVelocityTemplating;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertManifestWillProcess;
 import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertReservationsHaveNetworkInterface;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.EXPECTED_RESERVATION_COUNT_FOR_MODIFY;
 
@@ -22,10 +23,12 @@ public class OrcaRegressionModifyTest {
         // modify request
         String modReq = NdlCommons.readFile("src/test/resources/112_velocityModifyRequest.rdf");
 
-        List<TicketReservationMng> computedReservations = OrcaXmlrpcHandlerTest.doTestModifySlice(
+        XmlrpcControllerSlice slice = OrcaXmlrpcHandlerTest.doTestModifySlice(
                 "modifySlice_testVelocity",
                 "src/test/resources/112_velocityRequest.rdf",
                 modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
         //additional checks
         assertBootscriptVelocityTemplating(computedReservations);
@@ -41,10 +44,14 @@ public class OrcaRegressionModifyTest {
         // modify request
         String modReq = NdlCommons.readFile("src/test/resources/137_modify_request.rdf");
 
-        List<TicketReservationMng> computedReservations = OrcaXmlrpcHandlerTest.doTestModifySlice(
+        XmlrpcControllerSlice slice = OrcaXmlrpcHandlerTest.doTestModifySlice(
                 "modifySlice_testNodeGroup",
                 "src/test/resources/122_request.rdf",
                 modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        assertManifestWillProcess(slice);
     }
 
 

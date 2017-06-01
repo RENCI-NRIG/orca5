@@ -129,54 +129,6 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
-     * If this test runs too slowly, it will fail in the modifySlice() saying that it cannot modify DEAD slices.
-     * The AM+Broker gives this message about the slice:
-     * "<updateData><failed>true</failed><message>Closed while allocating ticket</message></updateData>"
-     * Not sure why.
-     *
-     * @throws Exception
-     */
-    //@Test
-    public void testModifySliceWithLiveSm() throws Exception {
-        XmlRpcController controller = new XmlRpcController();
-        controller.init();
-        controller.start();
-
-        OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
-        assertNotNull(orcaXmlrpcHandler);
-        orcaXmlrpcHandler.verifyCredentials = false;
-
-        orcaXmlrpcHandler.instance.setController(controller);
-
-        Map<String, Object> result;
-
-                // setup parameters for modifySlice()
-        String slice_urn = "modifySlice_test_" + controller.getClass().getSimpleName(); //java.lang.AssertionError: createSlice() returned error: ERROR: duplicate slice urn createSlice_test
-        Object [] credentials = new Object[0];
-
-
-        // need to create a slice first
-        String resReq = NdlCommons.readFile("../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf");
-        List<Map<String, ?>> users = getUsersMap();
-
-        // create the slice, before we can modify it
-        result = orcaXmlrpcHandler.createSlice(slice_urn, credentials, resReq, users);
-        // verify results of createSlice()
-        assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-
-
-        // modify request
-        String modReq = NdlCommons.readFile("src/test/resources/88_modReq.rdf");
-
-        result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
-
-        // verify results of modifySlice()
-        assertNotNull(result);
-        assertFalse("modifySlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-    }
-
-    /**
      * Test that a simple slice modify, using MockXmlRpcController
      * The 'create' part of this request includes netmask information.
      *
@@ -221,10 +173,13 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("6ebf0a2f-be44-475b-a878-0cc5d8e016fe", 14);
         reservationPropertyCountMap.put("940dcd2c-6c3c-41f7-9b8e-f6256f590d64", 14);
 
-        List<TicketReservationMng> computedReservations = doTestModifySlice(
+        XmlrpcControllerSlice slice = doTestModifySlice(
                 "modifySlice_testWithNetmaskExisting",
                 "src/test/resources/48_initial_request.rdf",
                 modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
 
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
@@ -252,10 +207,13 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("a3949bc7-0c8e-4d43-ac74-e09aaf174806", 14);
         reservationPropertyCountMap.put("dcaa5e8d-ed44-4729-aab8-4361f108ca22", 22);
 
-        List<TicketReservationMng> computedReservations = doTestModifySlice(
+        XmlrpcControllerSlice slice = doTestModifySlice(
                 "modifySlice_testWithNetmaskNew",
                 "src/test/resources/20_create_with_netmask.rdf",
                 modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
 
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
@@ -284,10 +242,13 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("78289c1e-8b7f-473f-998d-63734343ac29", 19); // Node1
         reservationPropertyCountMap.put("19b380a5-f787-453b-83b4-371750c03799", 19); // Node2
 
-        List<TicketReservationMng> computedReservations = doTestModifySlice(
+        XmlrpcControllerSlice slice = doTestModifySlice(
                 "modifySlice_testModifyRemove",
                 "src/test/resources/48_modifyremove_request.rdf",
                 modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
 
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
@@ -302,7 +263,7 @@ public class OrcaXmlrpcHandlerTest {
      * @param expectedReservationCount
      * @throws Exception
      */
-    protected static List<TicketReservationMng> doTestModifySlice(String slice_urn, String requestFile, String modReq, int expectedReservationCount) throws Exception {
+    protected static XmlrpcControllerSlice doTestModifySlice(String slice_urn, String requestFile, String modReq, int expectedReservationCount) throws Exception {
 
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
 
@@ -330,12 +291,6 @@ public class OrcaXmlrpcHandlerTest {
         // add them to the reservationMap in our Mock SM
         addReservationListToMap(reservationsFromRequest, reservationMap);
 
-        XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
-        //RequestWorkflow workflow = slice.getWorkflow();
-        //ReservationConverter orc = slice.getOrc();
-        //String manifest = orc.getManifest(workflow.getManifestModel(), workflow.getDomainInConnectionList(), workflow.getBoundElements(), slice.getAllReservations(orcaXmlrpcHandler.instance.getSM()));
-        //System.out.println(manifest);
-
         result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
 
         // verify results of modifySlice()
@@ -351,10 +306,7 @@ public class OrcaXmlrpcHandlerTest {
         assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
 
         // check the reservation properties
-        slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
-
-        return slice.getComputedReservations();
-
+        return orcaXmlrpcHandler.instance.getSlice(slice_urn);
     }
 
 
