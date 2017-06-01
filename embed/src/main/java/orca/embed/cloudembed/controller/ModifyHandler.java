@@ -139,7 +139,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 					err = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
 				if(err!=null)
-					break;
+					break;  //TODO: should return error? otherwise addElement will still get called below?
 			}
 			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId, modifyRequestModel);
 		}
@@ -458,9 +458,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 		try{
 			group_base_ip = getIPRange(firstElement,cde); //<base IP network address,IP range BitSet>
 			if(group_base_ip==null)
-				throw new Exception("group_base_ip is null!");
+				// TODO: why are we throwing an exception that will immediately get caught?
+				throw new Exception("group_base_ip is null!"); //TODO return error? or is this ok?
 		}catch(Exception e){
-			e.printStackTrace();
+			e.printStackTrace(); //TODO return error? or is this ok?
 		}
 		
 		int hole=-1;	
@@ -471,7 +472,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			logger.info("create new node from firstElement:i="+i);
 
 			DomainElement link_device = null;
-			if(firstElement.getPrecededBy()!=null){
+			if(firstElement.getPrecededBy()!=null && group_base_ip != null){
 				parentMap = new HashMap <DomainElement,Integer>();
 				for(Entry <DomainElement,OntResource> parent:firstElement.getPrecededBySet()){
 					link_device = parent.getKey();
