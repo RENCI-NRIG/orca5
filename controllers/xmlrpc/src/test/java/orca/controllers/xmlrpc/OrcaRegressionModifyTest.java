@@ -40,7 +40,7 @@ public class OrcaRegressionModifyTest {
      * @throws Exception
      */
     @Test
-    public void testNodeGroupModify137() throws Exception {
+    public void testNodeGroupModifyIncrease() throws Exception {
         // modify request
         String modReq = NdlCommons.readFile("src/test/resources/137_modify_request.rdf");
 
@@ -52,7 +52,10 @@ public class OrcaRegressionModifyTest {
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
         assertManifestWillProcess(slice);
-    }
 
+        // Nodes added in NodeGroup Increase need to have a Network interface
+        assertReservationsHaveNetworkInterface(computedReservations);
+
+    }
 
 }
