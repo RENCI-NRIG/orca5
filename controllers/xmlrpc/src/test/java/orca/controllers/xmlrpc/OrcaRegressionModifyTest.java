@@ -32,6 +32,22 @@ public class OrcaRegressionModifyTest {
     }
 
     /**
+     * NodeGroup modify was failing on Increase request.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testNodeGroupModify137() throws Exception {
+        // modify request
+        String modReq = NdlCommons.readFile("src/test/resources/137_modify_request.rdf");
+
+        List<TicketReservationMng> computedReservations = OrcaXmlrpcHandlerTest.doTestModifySlice(
+                "modifySlice_testNodeGroup",
+                "src/test/resources/122_request.rdf",
+                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+    }
+
+    /**
      * Check all VM reservations for Bootscripts that have been properly templated by Velocity
      *
      * @param computedReservations
