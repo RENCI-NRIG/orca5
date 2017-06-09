@@ -34,17 +34,19 @@ public class OrcaXmlrpcAssertions {
     protected static void assertExpectedPropertyCounts(List<TicketReservationMng> computedReservations, Map<String, Integer> propCountMap){
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
 
             // we probably need better checks on Properties
 
             // VLANs don't have consistent IDs from the request
-            Integer expected = propCountMap.get(reservation.getReservationID());
+            String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
+            Integer expected = propCountMap.get(hostname);
             if (expected == null) {
                 continue;
             }
 
-            assertEquals("Incorrect number of localProperties for reservation " + reservation.getReservationID(),
+            System.out.println("hostname " + hostname + " had localProperties count " + localProperties.size() + " (" + reservation.getReservationID() + ")");
+            assertEquals("Incorrect number of localProperties for " + hostname + " (" + reservation.getReservationID() + ")",
                     (long) expected,
                     (long) localProperties.size());
         }
@@ -59,10 +61,10 @@ public class OrcaXmlrpcAssertions {
     assertNetmaskPropertyPresent(List<TicketReservationMng> computedReservations){
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
 
             // only check VMs for Netmask
-            System.out.println(reservation.getResourceType());
+            //System.out.println(reservation.getResourceType());
             if (!reservation.getResourceType().endsWith("vm")){
                 continue;
             }
@@ -85,18 +87,44 @@ public class OrcaXmlrpcAssertions {
      * @param computedReservations
      */
     protected static void assertReservationsHaveNetworkInterface(List<TicketReservationMng> computedReservations) {
+        assertReservationsHaveNetworkInterface(computedReservations, null);
+    }
+
+
+    /**
+     * Check for network interface(s) being present, and optionally for the correct number of interfaces
+     * @param computedReservations
+     * @param interfaceCountMap
+     */
+    protected static void assertReservationsHaveNetworkInterface(List<TicketReservationMng> computedReservations, Map<String, Integer> interfaceCountMap) {
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
 
             // only check VMs
-            System.out.println(reservation.getResourceType());
+            //System.out.println(reservation.getResourceType());
             if (!reservation.getResourceType().endsWith("vm")){
                 continue;
             }
 
+            // minimally, the value should not be null
+            String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
             String numInterfaces = OrcaConverter.getLocalProperty(reservation, UnitNumberInterface);
-            assertNotNull("No network interfaces found in reservation " + reservation.getReservationID(), numInterfaces);
+            assertNotNull("No network interfaces found for " + hostname + " (" + reservation.getReservationID() + ")", numInterfaces);
+
+            // optionally check for a specific value
+            if (null == interfaceCountMap){
+                continue;
+            }
+            Integer expected = interfaceCountMap.get(hostname);
+            if (expected == null) {
+                continue;
+            }
+
+            System.out.println("hostname " + hostname + " had Interfaces count " + numInterfaces + " (" + reservation.getReservationID() + ")");
+            assertEquals("Incorrect number of Interfaces for " + hostname + " (" + reservation.getReservationID() + ")",
+                    (long) expected,
+                    (long) Integer.parseInt(numInterfaces));
         }
     }
 

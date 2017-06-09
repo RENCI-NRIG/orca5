@@ -82,6 +82,7 @@ public class OrcaXmlrpcHandlerTest {
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
 
+        assertReservationsHaveNetworkInterface(computedReservations);
         assertNetmaskPropertyPresent(computedReservations);
     }
 
@@ -141,16 +142,18 @@ public class OrcaXmlrpcHandlerTest {
         String modReq = NdlCommons.readFile("src/test/resources/88_modReq.rdf");
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
-        reservationPropertyCountMap.put("d3f12119-0444-441c-bc04-65d94c96680f", 13);
-        reservationPropertyCountMap.put("3e6cc4f7-57ba-46e3-a53c-be63961dca0b", 13);
-        reservationPropertyCountMap.put("23a68267-bf26-4421-ad94-b64a06c0e1db", 13);
+        reservationPropertyCountMap.put("Node0", 13);
+        reservationPropertyCountMap.put("Node1", 13);
+        reservationPropertyCountMap.put("Node3", 13);
 
-
-        doTestModifySlice("modifySlice_test",
+        XmlrpcControllerSlice slice = doTestModifySlice("modifySlice_test",
                 "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
                 modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
 
-        // no additional tests necessary
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        // additional checks
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
     }
 
     /**
@@ -170,8 +173,9 @@ public class OrcaXmlrpcHandlerTest {
         modReq = modReq.replaceAll("64dced03-270a-48a2-a33d-e73494aab1b5", "4dd3f9c5-4555-436f-848a-3b578a5b2083");
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
-        reservationPropertyCountMap.put("6ebf0a2f-be44-475b-a878-0cc5d8e016fe", 14);
-        reservationPropertyCountMap.put("940dcd2c-6c3c-41f7-9b8e-f6256f590d64", 14);
+        reservationPropertyCountMap.put("Node0", 15);
+        reservationPropertyCountMap.put("Node1", 15);
+        reservationPropertyCountMap.put("Link1", 6);
 
         XmlrpcControllerSlice slice = doTestModifySlice(
                 "modifySlice_testWithNetmaskExisting",
@@ -183,6 +187,7 @@ public class OrcaXmlrpcHandlerTest {
 
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+        assertReservationsHaveNetworkInterface(computedReservations);
         assertNetmaskPropertyPresent(computedReservations);
     }
 
@@ -203,9 +208,11 @@ public class OrcaXmlrpcHandlerTest {
         modReq = modReq.replaceAll("110aa696-555b-4726-8502-8e961d3072ce", "029294b2-a517-48d6-b6c5-f9f77a95457c");
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
-        reservationPropertyCountMap.put("c14eff06-360b-40fe-bc57-71a677a569b1", 13);
-        reservationPropertyCountMap.put("a3949bc7-0c8e-4d43-ac74-e09aaf174806", 14);
-        reservationPropertyCountMap.put("dcaa5e8d-ed44-4729-aab8-4361f108ca22", 22);
+        reservationPropertyCountMap.put("Link2", 5);
+        reservationPropertyCountMap.put("Node0", 22);
+        reservationPropertyCountMap.put("Node1", 13);
+        reservationPropertyCountMap.put("Node2", 14);
+        reservationPropertyCountMap.put("Link13", 6);
 
         XmlrpcControllerSlice slice = doTestModifySlice(
                 "modifySlice_testWithNetmaskNew",
@@ -217,7 +224,18 @@ public class OrcaXmlrpcHandlerTest {
 
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+
+        // two of the VMs should have one network interface, one of them should have two interfaces
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 2);
+        reservationInterfaceCountMap.put("Node1", 1);
+        reservationInterfaceCountMap.put("Node2", 1);
+
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
+
         assertNetmaskPropertyPresent(computedReservations);
+
+
     }
 
     /**
@@ -238,9 +256,11 @@ public class OrcaXmlrpcHandlerTest {
 
         // specify the number of properties expected based on VM reservation ID
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
-        reservationPropertyCountMap.put("fd36b984-5709-4ed4-a6fe-4530029139d2", 19); // Node0
-        reservationPropertyCountMap.put("78289c1e-8b7f-473f-998d-63734343ac29", 19); // Node1
-        reservationPropertyCountMap.put("19b380a5-f787-453b-83b4-371750c03799", 19); // Node2
+        reservationPropertyCountMap.put("Link11", 5);
+        reservationPropertyCountMap.put("Node0", 19);
+        reservationPropertyCountMap.put("Node1", 19);
+        reservationPropertyCountMap.put("Node2", 19);
+        reservationPropertyCountMap.put("Link9", 5);
 
         XmlrpcControllerSlice slice = doTestModifySlice(
                 "modifySlice_testModifyRemove",
@@ -252,6 +272,7 @@ public class OrcaXmlrpcHandlerTest {
 
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+        assertReservationsHaveNetworkInterface(computedReservations);
         assertNetmaskPropertyPresent(computedReservations);
     }
 
