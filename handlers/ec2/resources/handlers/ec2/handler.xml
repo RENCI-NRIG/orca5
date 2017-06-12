@@ -365,6 +365,9 @@
 													<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
 													<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
 													<env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
+                                      									<env key="AMI_NAME" value="${ec2.ami.name}" />
+                                        								<env key="AKI_NAME" value="${ec2.aki.name}" />
+                                        								<env key="ARI_NAME" value="${ec2.ari.name}" />
 													<arg value="${shirako.save.unit.manage.ip}" />
 													<arg value="${loginProperty}" />
 													<arg value="${keysProperty}" />
@@ -650,6 +653,9 @@
 								<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
 								<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
 								<env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
+                                       				<env key="AMI_NAME" value="${ec2.ami.name}" />
+                                        			<env key="AKI_NAME" value="${ec2.aki.name}" />
+                                        			<env key="ARI_NAME" value="${ec2.ari.name}" />
 								<arg value="${unit.manage.ip}" />
 								<arg value="${loginProperty}" />
 								<arg value="${keysProperty}" />

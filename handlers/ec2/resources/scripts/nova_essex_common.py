@@ -700,16 +700,37 @@ class VM:
         new_vm_id = None
 
         try:
+            LOG.debug("--- START_VM_EC2 - ami : " + str(ami))
             ami_ec2 = self._get_ec2_image_name(ami)
-            aki_ec2 = self._get_ec2_image_name(aki)
-            ari_ec2 = self._get_ec2_image_name(ari)
+            
+            LOG.debug("--- START_VM_EC2 - aki : " + str(aki))
+	    if str(aki):
+                aki_ec2 = self._get_ec2_image_name(aki)
+            else:
+                aki_ec2 = None
+
+            LOG.debug("--- START_VM_EC2 - ari : " + str(ari))
+	    if str(ari):
+                ari_ec2 = self._get_ec2_image_name(ari)
+            else:
+                ari_ec2 = None
+
         except Exception as e:
             LOG.debug("something in _get_ec2_image_name failed " + str(e) )
             raise Nova_Fatal_Command_Fail, "start_vm_ec2 fatal error: can not get ec2_image name" 
     
-        LOG.debug("ami_ec2 = " + ami_ec2 + ", aki_ec2 = " + aki_ec2 + ", ari_ec2 = " + ari_ec2)
-                                   
-        cmd = ["euca-run-instances",
+        ###LOG.debug("ami_ec2 = " + ami_ec2 + ", aki_ec2 = " + aki_ec2 + ", ari_ec2 = " + ari_ec2)
+        LOG.debug("ami_ec2 = " + ami_ec2)
+
+	if aki_ec2 != None :
+            LOG.debug("aki_ec2 = " + aki_ec2)
+		        
+	if ari_ec2 != None:
+            LOG.debug("ari_ec2 = " + ari_ec2)
+	
+
+        if str(aki) and str(ari):
+            cmd = ["euca-run-instances",
                "-n", "1",
                "--addressing", "private",
                "--kernel", str(aki_ec2),
@@ -718,6 +739,36 @@ class VM:
                "-k", str(ssh_key),
                #"-f", str(user_data_file),
                str(ami_ec2) ]
+	elif str(ari) and not str(aki):
+            cmd = ["euca-run-instances",
+               "-n", "1",
+               "--addressing", "private",
+               "--ramdisk", str(ari_ec2),
+               "--instance-type", str(instance_type),
+               "-k", str(ssh_key),
+               #"-f", str(user_data_file),
+               str(ami_ec2) ]
+	elif not str(ari) and str(aki):
+            cmd = ["euca-run-instances",
+               "-n", "1",
+               "--addressing", "private",
+               "--kernel", str(aki_ec2),
+               "--instance-type", str(instance_type),
+               "-k", str(ssh_key),
+               #"-f", str(user_data_file),
+               str(ami_ec2) ]
+	else: 
+            cmd = ["euca-run-instances",
+               "-n", "1",
+               "--addressing", "private",
+               "--instance-type", str(instance_type),
+               "-k", str(ssh_key),
+               #"-f", str(user_data_file),
+               str(ami_ec2) ]
+
+
+
+
         rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60*30)
         if rtncode != 0:
             LOG.warning("nova boot command with non-zero rtncode " + str(name) + ": " + str(cmd) +
@@ -832,16 +883,18 @@ class VM:
             self._clean_all(new_vm_id)    
             raise VM_Broken_Unpingable('Instance is not pingable: ' + str(new_vm_id), new_vm_id, console_log)
             
-        #ssh test
-        if self._ssh_test_vm(floating_addr, os.environ['EUCA_KEY_DIR']+"/"+str(ssh_key), "root", ssh_retries, 10):
-            LOG.info("VM " + new_vm_id + " is sshable on ip " + floating_addr)
-        else:
-            try:
-                console_log = str(VM.get_console_log_by_ID(new_vm_id))
-            except Exception:
-                console_log = 'Cannot get console log'
-            self._clean_all(new_vm_id)
-            raise VM_Broken_Unsshable('Instance is not sshable: ' + str(new_vm_id), new_vm_id,console_log)
+
+        if str(ami) and str(aki) and str(ari):
+            #ssh test
+            if self._ssh_test_vm(floating_addr, os.environ['EUCA_KEY_DIR']+"/"+str(ssh_key), "root", ssh_retries, 10):
+                LOG.info("VM " + new_vm_id + " is sshable on ip " + floating_addr)
+            else:
+                try:
+                    console_log = str(VM.get_console_log_by_ID(new_vm_id))
+                except Exception:
+                    console_log = 'Cannot get console log'
+                self._clean_all(new_vm_id)
+                raise VM_Broken_Unsshable('Instance is not sshable: ' + str(new_vm_id), new_vm_id,console_log)
 
         #return the new uuid
         return new_vm_id
