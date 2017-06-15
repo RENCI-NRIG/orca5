@@ -1,17 +1,27 @@
-FROM centos:centos6.8
+FROM centos:centos6.9
 
 LABEL description = "A base Orca image, with common packages installed, including either Oracle JDK or OpenJDK" \
       build = "docker build -t orca-base:openjdk ."
 
+RUN yum -y update && yum clean all
 RUN yum -y install epel-release; yum clean all
 RUN yum -y install initscripts glibc glibc.i686 nss-softokn-freebl nss-softokn-freebl.i686 && yum clean all
 
-ENV oracle_rpm jdk-7u79-linux-x64.rpm
+# Java 7 JDK is no longer available for download
+ENV JAVA_VERSION 8u131
+ENV BUILD_VERSION b11
+ENV oracle_rpm jdk-${JAVA_VERSION}-linux-x64.rpm
 
 # conditional build and tag from Maven: oracle
 RUN if [ "${orca.docker.jre.vendor}" == "oracle" ]; then \
 		cd /tmp && \
-		curl --location --insecure --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u79-b15/${oracle_rpm}" > ${oracle_rpm} && \
+		curl \
+			--location \
+			--retry 3 \
+			--insecure \
+			--show-error \
+			--header "Cookie: oraclelicense=accept-securebackup-cookie" \
+			"http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${BUILD_VERSION}/d54c1d3a095b4ff2b6607d096fa80163/${oracle_rpm}" > ${oracle_rpm} && \
 		yum -y install *.rpm && \
 		yum clean all && \
 		rm -f /tmp/${oracle_rpm}; \

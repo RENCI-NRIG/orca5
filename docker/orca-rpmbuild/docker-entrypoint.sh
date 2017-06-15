@@ -7,7 +7,8 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 # Setup Java to conform to buildrpm.sh script
 $(mkdir -p /usr/java)
-$(ln -sf $JAVA_HOME /usr/java/latest)
+# Oracle Java 8 JDK may already have this configured
+$(ln -sfn $JAVA_HOME /usr/java/latest)
 
 # if command starts with an option, prepend our default command
 if [ "${1:0:1}" = '-' ]; then
