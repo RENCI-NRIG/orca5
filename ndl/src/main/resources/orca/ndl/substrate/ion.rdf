@@ -408,6 +408,62 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/Cisco/6509/GigabitEthernet/1/2 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/Cisco/6509/GigabitEthernet/1/2">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/Cisco/6509"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChamelonICAIR</topology:hasName>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-7/0/0.0:link=*</topology:hasURN>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-7/0/0.0:link=*</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet/1"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3280"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3289"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3280 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3280">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3280.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3289 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3289">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3289.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3290 -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/VLANLabel/3290">
@@ -1753,6 +1809,7 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/NetworkService/1/availableVLANSet/All">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/MANLAN/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/NCBI/availableVLANSet/1"/>
@@ -1762,7 +1819,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/NetworkService/1/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/UMass/VLANLabel/533"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">248</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">258</collections:size>
     </owl:NamedIndividual>
     
 
@@ -2475,5 +2532,5 @@
 
 
 
-<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+<!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
 
