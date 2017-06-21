@@ -486,10 +486,11 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/4004"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/2"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/VTS/1"/>
         <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">184</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">194</collections:size>
     </owl:NamedIndividual>
     
 
@@ -626,6 +627,21 @@
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VTS</topology:hasName>
         <rdfs:label>64</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/TenGigabitEthernet/64/uvanl/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/TenGigabitEthernet/64/uvanl/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/4/1/SL/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">64</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -773,6 +789,24 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3330 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3330">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3330.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3339 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3339">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3339.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/4004 -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/4004">
@@ -789,6 +823,17 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/4004"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
         <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</collections:size>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
     </owl:NamedIndividual>
     
 
@@ -842,6 +887,16 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
         <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/1921"/>
         <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/1922"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3330"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3339"/>
     </owl:NamedIndividual>
     
 
@@ -905,6 +960,18 @@
     <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/FourtyGigabitEthernet/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/FourtyGigabitEthernet/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/4/1/CIENA/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/4/1/CIENA/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/4/1/SL/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/TenGigabitEthernet/4/1/SL/ethernet"/>
 </rdf:RDF>
 
 
