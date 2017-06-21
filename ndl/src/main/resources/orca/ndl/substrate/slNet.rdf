@@ -486,7 +486,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/4004"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/2"/>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/VTS/1"/>
         <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
@@ -831,7 +831,7 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL/1"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
         <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
     </owl:NamedIndividual>
@@ -891,9 +891,9 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1 -->
+    <!-- http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL/1 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UNVNL/1">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
         <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3330"/>
         <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/3339"/>

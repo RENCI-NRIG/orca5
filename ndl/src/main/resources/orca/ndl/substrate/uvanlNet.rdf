@@ -449,7 +449,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/uvanlNet.rdf#Uva-nlNet/Force10/S4810/availableVLANSet/6"/>
         <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">91</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">110</collections:size>
     </owl:NamedIndividual>
     
 
