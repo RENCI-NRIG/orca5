@@ -6,6 +6,11 @@ If you have all of the dependencies setup, you should be able to simply do:
 ./docker_build.sh
 ```
 
+Optionally, you can specify the JRE vendor to use (Oracle and OpenJDK are supported) using `-j` or `--jre`
+```
+./docker_build.sh --jre openjdk
+```
+
 Or, you can build individual containers manually using Maven:
 ```
 mvn clean package -Pdocker
@@ -17,7 +22,14 @@ Four runnable Docker images will be created. Use this script to start them all:
 ./docker_run.sh
 ```
 
-Or start them manually in this order:
+You can specify a specific docker image tag using `-t` or `--tag-name`:
+```
+./docker_run.sh --tag-name openjdk
+./docker_run.sh --tag-name 5.1.7-SNAPSHOT-openjdk
+```
+
+### Running the containers manually
+Start them manually in this order:
 
 A MySQL container configured for Orca:
 ```

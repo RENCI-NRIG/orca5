@@ -6,7 +6,28 @@ export ORCA_BLD="${HOME}/orca-build"
 # Define RPM build directory
 RPM_BUILD_DIR="${ORCA_BLD}/rpmbuild"
 
+DOCKER_MVN_CMD="mvn clean package -Pdocker"
+DOCKER_JRE_VENDOR="oracle"
+
+while [[ $# -gt 1 ]]
+do
+key="$1"
+
+case $key in
+    -j|--jre)
+    DOCKER_JRE_VENDOR="$2"
+    shift # past argument
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift # past argument or value
+done
+
+DOCKER_MVN_CMD="${DOCKER_MVN_CMD} -Dorca.docker.jre.vendor=${DOCKER_JRE_VENDOR}"
 # remove stopped or running containers
+
 f_rm_f_docker_container ()
 {
   #container_name="$1"
@@ -37,7 +58,7 @@ mkdir -p "${RPM_BUILD_DIR}/RPMS"
 cd "$( dirname "$0" )"
 
 # Build new docker container, that contains current sources
-mvn clean package -Pdocker || exit $?
+eval "$DOCKER_MVN_CMD" || exit $?
 
 # Remove any previous docker containers of name
 DOCKER_NAME_RPMBUILD="orca-rpmbuild"

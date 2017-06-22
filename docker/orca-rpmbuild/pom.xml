@@ -43,6 +43,7 @@
 						<imageName>renci/${project.artifactId}</imageName>
 						<imageTags>
 							<imageTag>${project.version}-${orca.docker.jre.vendor}</imageTag>
+							<imageTag>${orca.docker.jre.vendor}</imageTag>
 						</imageTags>
 
 						<pushImage>false</pushImage>
