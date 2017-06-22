@@ -1,6 +1,25 @@
 #!/bin/bash
 
 DOCKER_MVN_CMD="mvn clean package -Pdocker"
+DOCKER_JRE_VENDOR="oracle"
+
+while [[ $# -gt 1 ]]
+do
+key="$1"
+
+case $key in
+    -j|--jre)
+    DOCKER_JRE_VENDOR="$2"
+    shift # past argument
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift # past argument or value
+done
+
+DOCKER_MVN_CMD="${DOCKER_MVN_CMD} -Dorca.docker.jre.vendor=${DOCKER_JRE_VENDOR}"
 
 # start in the docker directory
 cd "$( dirname "$0" )"
@@ -28,7 +47,7 @@ f_mvn_build_dir "orca_base"
 
 # Build rpmbuild docker container and RPMs
 pushd orca-rpmbuild
-./docker_build_rpms.sh
+./docker_build_rpms.sh --jre ${DOCKER_JRE_VENDOR}
 
 # save the return value from rpmbuild
 var_ret=$?
