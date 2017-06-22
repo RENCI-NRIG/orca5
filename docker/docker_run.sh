@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ORCA_CONFIG_DIR="/opt/orca-oracle"
+ORCA_CONFIG_DIR="/opt/orca" # JRE Vendor will be appended later, e.g. -oracle
 
 DOCKER_NAME_MYSQL="orca-mysql"
 DOCKER_NAME_AM_BROKER="orca-am-broker"
@@ -8,7 +8,7 @@ DOCKER_NAME_SM="orca-sm"
 DOCKER_NAME_CONTROLLER="orca-controller"
 
 DOCKER_NET_NAME="orca"
-DOCKER_ORCA_IMAGE_TAG="latest"
+DOCKER_ORCA_IMAGE_TAG="oracle"
 
 while [[ $# -gt 1 ]]
 do
@@ -25,6 +25,13 @@ case $key in
 esac
 shift # past argument or value
 done
+
+# get JRE Vendor from tag name
+# https://stackoverflow.com/a/15988793/2955846
+# ${var##*SubStr} # will drop begin of string upto last occur of `SubStr`
+# JRE Vendor is always after a '-' in tag
+DOCKER_JRE_VENDOR=${DOCKER_ORCA_IMAGE_TAG##*-}
+ORCA_CONFIG_DIR=${ORCA_CONFIG_DIR}-${DOCKER_JRE_VENDOR}
 
 # remove stopped or running containers
 f_rm_f_docker_container ()

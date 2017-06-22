@@ -24,7 +24,7 @@ URL: https://github.com/RENCI-NRIG/orca5.git
 # Removing BuildRequires statements, as Ubuntu uses different package naming.
 #BuildRequires:  jdk >= 1.7.0 ant
 #BuildRequires:  jdk >= 1.7.0
-Requires:       jdk >= 1.7.0
+#Requires:       jdk >= 1.7.0 # OpenJDK doesn't match this
 Requires:       orca-iaas-common = %{version}-%{release}
 
 # Set up some useful definitions...
@@ -68,7 +68,7 @@ This package contains configuration shared among all ORCA packages.
 %package controller
 Summary: ORCA XML-RPC Controller
 Group: Applications/System
-Requires: jdk
+#Requires: jdk # OpenJDK doesn't match this
 Requires: orca-iaas-common = %{version}-%{release}
 
 %description controller
