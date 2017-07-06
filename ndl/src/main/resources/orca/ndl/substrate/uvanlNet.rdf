@@ -496,7 +496,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UVANL/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iMind</topology:hasName>
-        <rdfs:label>4/1</rdfs:label>
+        <rdfs:label>3/2</rdfs:label>
     </owl:NamedIndividual>
     
 
