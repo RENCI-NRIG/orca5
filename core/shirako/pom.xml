@@ -64,8 +64,8 @@
 			<artifactId>ant</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
+			<groupId>org.eclipse.jetty.orbit</groupId>
+			<artifactId>javax.servlet</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ws</groupId>
