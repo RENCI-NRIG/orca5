@@ -7,8 +7,11 @@ FROM renci/orca-base:${project.version}-${orca.docker.jre.vendor}
 RUN yum -y install rpm-build git && yum clean all
 
 # Oracle installs the full JDK, but openjdk by default only installs the JRE
-RUN if [ "${orca.docker.jre.vendor}" == "openjdk" ]; then \
+RUN if [ "${orca.docker.jre.vendor}" == "openjdk_1.7" ]; then \
 		yum -y install java-1.7.0-openjdk-devel && yum clean all; \
+	fi
+RUN if [ "${orca.docker.jre.vendor}" == "openjdk_1.8" ]; then \
+		yum -y install java-1.8.0-openjdk-devel && yum clean all; \
 	fi
 
 

@@ -13,7 +13,7 @@ ENV BUILD_VERSION b11
 ENV oracle_rpm jdk-${JAVA_VERSION}-linux-x64.rpm
 
 # conditional build and tag from Maven: oracle
-RUN if [ "${orca.docker.jre.vendor}" == "oracle" ]; then \
+RUN if [ "${orca.docker.jre.vendor}" == "oracle_1.8" ]; then \
 		cd /tmp && \
 		curl \
 			--location \
@@ -28,8 +28,11 @@ RUN if [ "${orca.docker.jre.vendor}" == "oracle" ]; then \
     fi
 
 # conditional build and tag from Maven: openjdk
-RUN if [ "${orca.docker.jre.vendor}" == "openjdk" ]; then \
+RUN if [ "${orca.docker.jre.vendor}" == "openjdk_1.7" ]; then \
 		yum -y install java-1.7.0-openjdk && yum clean all; \
+	fi
+RUN if [ "${orca.docker.jre.vendor}" == "openjdk_1.8" ]; then \
+		yum -y install java-1.8.0-openjdk && yum clean all; \
 	fi
 
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DOCKER_MVN_CMD="mvn clean package -Pdocker"
-DOCKER_JRE_VENDOR="oracle"
+DOCKER_JRE_VENDOR="oracle_1.8"
 
 while [[ $# -gt 1 ]]
 do
