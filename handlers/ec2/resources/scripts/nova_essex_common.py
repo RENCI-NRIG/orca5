@@ -704,13 +704,13 @@ class VM:
             ami_ec2 = self._get_ec2_image_name(ami)
             
             LOG.debug("--- START_VM_EC2 - aki : " + str(aki))
-	    if str(aki):
+            if str(aki):
                 aki_ec2 = self._get_ec2_image_name(aki)
             else:
                 aki_ec2 = None
 
             LOG.debug("--- START_VM_EC2 - ari : " + str(ari))
-	    if str(ari):
+            if str(ari):
                 ari_ec2 = self._get_ec2_image_name(ari)
             else:
                 ari_ec2 = None
@@ -722,52 +722,29 @@ class VM:
         ###LOG.debug("ami_ec2 = " + ami_ec2 + ", aki_ec2 = " + aki_ec2 + ", ari_ec2 = " + ari_ec2)
         LOG.debug("ami_ec2 = " + ami_ec2)
 
-	if aki_ec2 != None :
+        if aki_ec2 != None :
             LOG.debug("aki_ec2 = " + aki_ec2)
-		        
-	if ari_ec2 != None:
+
+        if ari_ec2 != None:
             LOG.debug("ari_ec2 = " + ari_ec2)
-	
 
-        if str(aki) and str(ari):
-            cmd = ["euca-run-instances",
-               "-n", "1",
-               "--addressing", "private",
-               "--kernel", str(aki_ec2),
-               "--ramdisk", str(ari_ec2),
-               "--instance-type", str(instance_type),
-               "-k", str(ssh_key),
-               #"-f", str(user_data_file),
-               str(ami_ec2) ]
-	elif str(ari) and not str(aki):
-            cmd = ["euca-run-instances",
-               "-n", "1",
-               "--addressing", "private",
-               "--ramdisk", str(ari_ec2),
-               "--instance-type", str(instance_type),
-               "-k", str(ssh_key),
-               #"-f", str(user_data_file),
-               str(ami_ec2) ]
-	elif not str(ari) and str(aki):
-            cmd = ["euca-run-instances",
-               "-n", "1",
-               "--addressing", "private",
-               "--kernel", str(aki_ec2),
-               "--instance-type", str(instance_type),
-               "-k", str(ssh_key),
-               #"-f", str(user_data_file),
-               str(ami_ec2) ]
-	else: 
-            cmd = ["euca-run-instances",
-               "-n", "1",
-               "--addressing", "private",
-               "--instance-type", str(instance_type),
-               "-k", str(ssh_key),
-               #"-f", str(user_data_file),
-               str(ami_ec2) ]
+        cmd = ["euca-run-instances",
+          "-n", "1",
+          "--addressing", "private",
+          "--instance-type", str(instance_type),
+          "-k", str(ssh_key),
+          #"-f", str(user_data_file),
+          str(ami_ec2) ]
 
+        if str(aki):
+            cmd.insert(cmd.index("--instance-type"), "--kernel")
+            cmd.insert(cmd.index("--instance-type"), str(aki_ec2))
 
-
+        if str(ari):
+            cmd.insert(cmd.index("--instance-type"), "--ramdisk")
+            cmd.insert(cmd.index("--instance-type"), str(ari_ec2))
+        
+        LOG.debug("--- cmd = " + str(cmd) )
 
         rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60*30)
         if rtncode != 0:
@@ -883,7 +860,12 @@ class VM:
             self._clean_all(new_vm_id)    
             raise VM_Broken_Unpingable('Instance is not pingable: ' + str(new_vm_id), new_vm_id, console_log)
             
-
+        # FIXME: Liveness of the VMs is determined by SSHing presuming SSH server is running.
+        # Common means to determine liveness of VMs is needed.
+        # Currently, liveness check (by ssh) is executed only for VMs that are booted from images
+        # with ami,aki,ari components with the assumption that Unix-based VM images will have aki and ari.
+        # Non-Unix-based (Windows) VMs are booted from images that have only ami and liveness check is bypassed.
+        
         if str(ami) and str(aki) and str(ari):
             #ssh test
             if self._ssh_test_vm(floating_addr, os.environ['EUCA_KEY_DIR']+"/"+str(ssh_key), "root", ssh_retries, 10):
