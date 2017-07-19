@@ -226,7 +226,7 @@ class VM:
         except VM_Does_Not_Exist as e:
             raise e
         except Exception as e:
-            raise Nova_Commnad_Fail, "No value for " + str(field) + " in info for " + str(id)
+            raise Nova_Command_Fail, "No value for " + str(field) + " in info for " + str(id)
 
     @classmethod
     def _get_info_by_name(self, name, field):
@@ -741,8 +741,12 @@ class VM:
             cmd.insert(cmd.index("--instance-type"), str(aki_ec2))
 
         if str(ari):
-            cmd.insert(cmd.index("--instance-type"), "--ramdisk")
-            cmd.insert(cmd.index("--instance-type"), str(ari_ec2))
+            if str(aki):
+                cmd.insert(cmd.index("--instance-type"), "--ramdisk")
+                cmd.insert(cmd.index("--instance-type"), str(ari_ec2))
+            else:
+                LOG.debug("--- ERROR: No aki specified for ari: " + str(ari) )
+                raise Nova_Fatal_Command_Fail, "Fatal command fail: no aki specified for ari: " + str(ari)
         
         LOG.debug("--- cmd = " + str(cmd) )
 
