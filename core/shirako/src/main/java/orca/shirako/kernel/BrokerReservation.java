@@ -9,6 +9,7 @@
 
 package orca.shirako.kernel;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 
@@ -571,7 +572,10 @@ class BrokerReservation extends ReservationServer implements IKernelBrokerReserv
     protected void generateUpdate() {
         logger.debug("Generating update");
         if (callback == null) {
-            logger.warn("Cannot generate update: no callback");
+            logger.warn("Cannot generate update: no callback.");
+            if (logger.isTraceEnabled()){
+                logger.trace("From: " + Arrays.toString(new Throwable().getStackTrace()));
+            }
             return;
         }
 
@@ -617,6 +621,10 @@ class BrokerReservation extends ReservationServer implements IKernelBrokerReserv
             if (ticketed) {
                 failNotify("reservation is not yet ticketed");
                 break;
+            }
+
+            if (logger.isDebugEnabled()){
+                logger.debug("Using policy " + policy.getClass().getSimpleName() + " to bind reservation");
             }
 
             try {

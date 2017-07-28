@@ -702,6 +702,9 @@ public class ServerActorManagementObject extends ActorManagementObject {
 
 			// TODO: use ticketProperties and resourceProperties
 			final ResourceSet rset = new ResourceSet(units, resourceType, rdata);
+			if (logger.isDebugEnabled()){
+				logger.debug("Executing export on actor " + actor.getName() + " " + sa.getName() + "(" + sa.getClass().getSimpleName() + ") " + rset.getReservationID());
+			}
 			// do the actual export
 			ReservationID exported = (ReservationID) actor
 					.executeOnActorThreadAndWait(new IActorRunnable() {

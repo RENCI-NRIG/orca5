@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
@@ -339,7 +340,15 @@ public class ActorDatabase extends MySqlBase implements IDatabase
         Properties p = PersistenceUtils.save(reservation);
         reservation.clearDirty();
 
+        if (logger.isTraceEnabled()){
+            logger.trace("Reservation has persistence properties: " + Arrays.toString(p.entrySet().toArray()));
+        }
+
         Properties set = mapper.javaToMysql(DefaultType, p);
+        if (logger.isTraceEnabled()){
+            logger.trace("Reservation has mapped properties: " + Arrays.toString(set.entrySet().toArray()));
+        }
+
         Connection connection = getConnection();
         
         try {

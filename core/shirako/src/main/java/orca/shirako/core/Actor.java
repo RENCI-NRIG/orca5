@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Vector;
 
+import cern.colt.Arrays;
 import orca.security.AccessMonitor;
 import orca.security.AuthToken;
 import orca.security.Guard;
@@ -749,6 +750,9 @@ public abstract class Actor implements IActor {
 
         for (Properties p : reservations) {
             try {
+                if (logger.isTraceEnabled()){
+                    logger.trace("Reservation has properties: " + Arrays.toString(p.entrySet().toArray()));
+                }
                 recoverReservation(p);
             } catch (OrcaException e) {
                 logger.error("Unexpected error while recoverying reservation", e);
@@ -769,6 +773,9 @@ public abstract class Actor implements IActor {
 
             logger.info("Found reservation #" + r.getReservationID().toHashString() + " in state: "
                     + r.getReservationState());
+            if (logger.isTraceEnabled()){
+                logger.trace(r.toLogString());
+            }
 
             if (r.isClosed()) {
                 logger.info("Reservation #" + r.getReservationID().toHashString()
@@ -780,12 +787,21 @@ public abstract class Actor implements IActor {
 
             logger.debug("Recovering reservation object");
             PersistenceUtils.recover(r, this, p);
+            if (logger.isTraceEnabled()){
+                logger.trace(r.toLogString());
+            }
 
             logger.debug("Registering the reservation with the actor");
             reregister(r);
+            if (logger.isTraceEnabled()){
+                logger.trace(r.toLogString());
+            }
 
             logger.debug("Revisiting with the ShirakoPlugin");
             spi.revisit(r);
+            if (logger.isTraceEnabled()){
+                logger.trace(r.toLogString());
+            }
 
             logger.debug("Revisiting with the actor policy");
             policy.revisit(r);
