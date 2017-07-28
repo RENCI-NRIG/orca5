@@ -7,7 +7,7 @@ RUN yum -y update && yum clean all
 RUN yum -y install epel-release; yum clean all
 RUN yum -y install initscripts glibc glibc.i686 nss-softokn-freebl nss-softokn-freebl.i686 && yum clean all
 
-# Java 7 JDK is no longer available for download
+# Oracle Java 7 JDK is no longer available for download
 ENV JAVA_VERSION 8u131
 ENV BUILD_VERSION b11
 ENV oracle_rpm jdk-${JAVA_VERSION}-linux-x64.rpm
@@ -28,9 +28,6 @@ RUN if [ "${orca.docker.jre.vendor}" == "oracle_1.8" ]; then \
     fi
 
 # conditional build and tag from Maven: openjdk
-RUN if [ "${orca.docker.jre.vendor}" == "openjdk_1.7" ]; then \
-		yum -y install java-1.7.0-openjdk && yum clean all; \
-	fi
 RUN if [ "${orca.docker.jre.vendor}" == "openjdk_1.8" ]; then \
 		yum -y install java-1.8.0-openjdk && yum clean all; \
 	fi
