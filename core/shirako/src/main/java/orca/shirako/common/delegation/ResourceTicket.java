@@ -1,8 +1,10 @@
 package orca.shirako.common.delegation;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 import orca.shirako.common.ResourceVector;
+import orca.shirako.container.Globals;
 import orca.shirako.time.Term;
 import orca.util.ID;
 import orca.util.ResourceType;
@@ -44,6 +46,13 @@ public class ResourceTicket implements Persistable, Recoverable
     	if (factory == null) {
     		throw new IllegalArgumentException("factory");
     	}
+
+    	if (delegation == null){
+            Globals.Log.warn("ResourceDelegation is null");
+            if (Globals.Log.isTraceEnabled()){
+                Globals.Log.trace(Arrays.toString(new Throwable().getStackTrace()));
+            }
+        }
     	
     	this.factory = factory;
         this.delegations = new ResourceDelegation[1];
@@ -60,6 +69,13 @@ public class ResourceTicket implements Persistable, Recoverable
     	if (factory == null) {
     		throw new IllegalArgumentException("factory");
     	}
+
+        if (delegation == null){
+            Globals.Log.warn("ResourceDelegation is null");
+            if (Globals.Log.isTraceEnabled()){
+                Globals.Log.trace(Arrays.toString(new Throwable().getStackTrace()));
+            }
+        }
     	
     	this.factory = factory;
     	this.delegations = new ResourceDelegation[source.delegations.length + 1];
@@ -74,6 +90,13 @@ public class ResourceTicket implements Persistable, Recoverable
     	if (factory == null) {
     		throw new IllegalArgumentException("factory");
     	}
+
+        if (delegation == null){
+            Globals.Log.warn("ResourceDelegation is null");
+            if (Globals.Log.isTraceEnabled()){
+                Globals.Log.trace(Arrays.toString(new Throwable().getStackTrace()));
+            }
+        }
     	
     	this.factory = factory;
         int size = 1;

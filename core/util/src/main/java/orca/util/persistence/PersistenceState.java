@@ -11,18 +11,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import orca.security.AbacUtil;
 import orca.util.Base64;
@@ -271,7 +261,11 @@ class PersistenceState {
 		String savedReferenceValue = pp.getProperty(f.getKey() + "-reference");
 		// we've reset the field earlier, so attempt to get the value of the field
 		Object currentValue = f.get(obj);
-		
+
+		if (logger.isDebugEnabled()){
+			logger.debug("Recovering field " + f.getName() + " with old value " + currentValue + " and new value " + savedValue + " and reference " + savedReferenceValue);
+		}
+
 		if (f.isReferenceField()) {
 			// FIXME: suppress this check for now, sice we end up having problems with some objects
 			// that are set during initialization, e.g., logger			
@@ -410,8 +404,17 @@ class PersistenceState {
 					ID id = ((Referenceable)value).getReference();
 					Properties pid = persistObject(id);
 					PropList.setProperty(saved, key + "-reference", pid);
+					if (logger.isDebugEnabled()){
+						logger.debug("persistObject(): Key " + key + " saved as reference");
+						if (logger.isTraceEnabled()){
+							logger.trace("Value " + value + " Properties " + Arrays.toString(pid.entrySet().toArray()));
+						}
+					}
 				}else {
 					// nothing to do
+					if (logger.isInfoEnabled()){
+						logger.info("persistObject(): Key " + key + " is reference, but not referenceable");
+					}
 				}
 				return;
 			}
@@ -421,7 +424,14 @@ class PersistenceState {
 				Save save = value.getClass().getAnnotation(Save.class);
 				Saver saver = (Saver)ReflectionUtils.createInstance(save.value());
 				PropList.setProperty(saved, key, saver.save(value));
+				if (logger.isDebugEnabled()){
+					logger.debug("persistObject(): Key " + key + " saved using custom saver " + save.value());
+				}
 				return;
+			}
+
+			if (logger.isDebugEnabled()){
+				logger.debug("persistObject(): Key " + key + " to be saved based on type of object " + value.getClass().getSimpleName());
 			}
 			
 			// handle based on the type of the object
@@ -560,6 +570,9 @@ class PersistenceState {
 	}
 
 	public <V extends Persistable> void validateRestore(V original, V restored) throws PersistenceException {
+		if (logger.isDebugEnabled()){
+			logger.debug("Validating restore of type " + original.getClass().getSimpleName() + " original: " + original + " restored: " + restored);
+		}
 		if (original == null) {
 			throw new IllegalArgumentException("original");
 		}
@@ -578,9 +591,13 @@ class PersistenceState {
 		for (FieldState f : fields) {
 			try {
 				if (f.isReferenceField()){
-					//System.out.println("Skipping " + f.getName() + " : reference field");
+					if (logger.isDebugEnabled()) {
+						logger.debug("Skipping " + f.getName() + " : reference field");
+					}
 				}else {
-					//System.out.println("Comparing " + f.getName());
+					if (logger.isDebugEnabled()) {
+						logger.debug("Comparing " + f.getName());
+					}
 					Object originalValue = f.get(original);
 					Object restoredValue = f.get(restored);
 					validateObject(originalValue, restoredValue);

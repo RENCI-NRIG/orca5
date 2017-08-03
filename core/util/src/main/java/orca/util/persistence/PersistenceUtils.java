@@ -95,9 +95,9 @@ public class PersistenceUtils implements PersistenceProperties {
      * @throws PersistenceException
      */
     public static <V extends Persistable> V restore(Properties savedState,
-            boolean overrideCustomRestrorer) throws PersistenceException {
+            boolean overrideCustomRestorer) throws PersistenceException {
         // FIXME: not sure if this is the right classloader
-        return restore(savedState, PersistenceUtils.class.getClassLoader(), overrideCustomRestrorer);
+        return restore(savedState, PersistenceUtils.class.getClassLoader(), overrideCustomRestorer);
     }
 
     public static <V extends Persistable> V restore(Properties savedState, ClassLoader cl)

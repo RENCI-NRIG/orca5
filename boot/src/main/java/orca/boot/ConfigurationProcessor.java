@@ -13,12 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import orca.boot.beans.Actor;
 import orca.boot.beans.Attribute;
@@ -269,13 +264,20 @@ public class ConfigurationProcessor {
      */
     protected void processTopology() throws ConfigurationException {
         if (config.getTopology() != null) {
+            if (Globals.Log.isDebugEnabled()) {
+                Globals.Log.debug("Creating proxies for topology with actor count " + config.getActors().getActor().size());
+            }
             createProxies(config.getTopology().getEdges());
+        } else {
+            Globals.Log.warn("Topology was null with actor count " + config.getActors().getActor().size());
         }
         // process edges that are not in config, but that are now known
         // from registry. query thread will not interfere as it hasn't
         // started yet
-        Globals.Log.debug("Processing entries in registry cache after topology");
-        
+        if (Globals.Log.isDebugEnabled()) {
+            Globals.Log.debug("Processing entries in registry cache after topology");
+        }
+
         if(selectedActorRegistry.contains("Distributed")) {
         	DistributedRemoteRegistryCache.getInstance().singleQueryProcess();
         } else {
@@ -805,6 +807,9 @@ public class ConfigurationProcessor {
         }
 
         // export
+        if (logger.isTraceEnabled()){
+            logger.trace("Using Server Actor " + info.exporter.getClass().getSimpleName() + " to exportResources");
+        }
         info.exported = info.exporter.exportResources(
             		info.rtype,
             		start,

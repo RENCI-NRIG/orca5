@@ -15,6 +15,7 @@ import orca.shirako.common.meta.ResourcePoolDescriptor;
 import orca.shirako.common.meta.ResourcePoolsDescriptor;
 import orca.shirako.container.Globals;
 import orca.shirako.core.PoolManager.CreatePoolResult;
+import orca.shirako.core.Ticket;
 import orca.shirako.plugins.config.AntConfig;
 import orca.shirako.plugins.config.Config;
 import orca.shirako.plugins.config.ConfigurationMapping;
@@ -59,6 +60,10 @@ public class PoolCreator {
         transferInventory();
         // create each resource pool
         for (ResourcePoolDescriptor pool : pools) {
+            if (Globals.Log.isDebugEnabled()){
+                Globals.Log.debug("Creating resource pool " + pool.getResourceTypeLabel() + " of Actor " + this.substrate.getActor().getName());
+            }
+
             // create the factory
             IResourcePoolFactory f = getFactory(pool);
             // obtain the final resource pool descriptor
@@ -77,6 +82,13 @@ public class PoolCreator {
             registerHandler(pool);            
             IClientReservation source = f.createSourceReservation(r.pool);
             try {
+                if (Globals.Log.isDebugEnabled()){
+                    Globals.Log.debug("Adding source reservation to database " + source.toLogString());
+                    if (Globals.Log.isTraceEnabled()) {
+                        Globals.Log.trace("Source reservation has resources of type " + source.getResources().getResources().getClass().getSimpleName());
+                        Globals.Log.trace("Source reservation has delegation of " + ((Ticket) source.getResources().getResources()).getTicket().getDelegation());
+                    }
+                }
                 substrate.getDatabase().addReservation(source);
             } catch (Exception e) {
                 throw new ConfigurationException("Could not add source reservation to database", e);
@@ -94,6 +106,7 @@ public class PoolCreator {
 
     protected void transferInventory() throws ConfigurationException {
         if (inventory == null) {
+            Globals.Log.info("No inventory to process for " + this.substrate.getActor().getName());
             return;
         }
 

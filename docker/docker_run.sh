@@ -8,7 +8,7 @@ DOCKER_NAME_SM="orca-sm"
 DOCKER_NAME_CONTROLLER="orca-controller"
 
 DOCKER_NET_NAME="orca"
-DOCKER_ORCA_IMAGE_TAG="oracle"
+DOCKER_ORCA_IMAGE_TAG="oracle_1.8"
 
 while [[ $# -gt 1 ]]
 do
@@ -112,6 +112,7 @@ docker run -d \
            --net ${DOCKER_NET_NAME} \
            --name ${DOCKER_NAME_AM_BROKER} \
            --hostname orca-am-broker \
+           --publish 127.0.0.1:12080:12080\
            --publish 127.0.0.1:9010:9010 \
            --volume ${ORCA_CONFIG_DIR}/am+broker/config:/etc/orca/am+broker-12080/config \
            --volume ${ORCA_CONFIG_DIR}/am+broker/ndl:/etc/orca/am+broker-12080/ndl \

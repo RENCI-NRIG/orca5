@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import orca.shirako.api.IActor;
 import orca.shirako.common.ResourceVector;
+import orca.shirako.container.Globals;
 import orca.shirako.time.Term;
 import orca.util.ID;
 import orca.util.ResourceType;
@@ -163,7 +164,16 @@ public class SimpleResourceTicketFactory implements IResourceTicketFactory
     {
         assert ticket != null;
         ensureInitialized();
-        return xsm.toXML(ticket);
+
+        if (Globals.Log.isDebugEnabled()){
+            Globals.Log.debug("Ticket has delegations: " + ticket.getDelegation().toString());
+        }
+
+        String xml = xsm.toXML(ticket);
+        if (Globals.Log.isTraceEnabled()){
+            Globals.Log.trace("Ticket converted to XML: " + xml);
+        }
+        return xml;
     }
 
     public ResourceTicket fromXML(String xml)

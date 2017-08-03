@@ -16,6 +16,7 @@ import java.security.PrivateKey;
 import java.security.KeyStore.PasswordProtection;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -53,9 +54,13 @@ public class KeystoreManager {
     public void addTrustedCertificate(String alias, Certificate certificate) {
         synchronized (this) {
             try {
-                logger.debug(path + " adding certificate alias=" + alias);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(path + " adding certificate alias=" + alias);
+                }
                 if (store.containsAlias(alias)) {
-                    logger.debug(path + " alis=" + alias + " is already preasent");
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(path + " alias=" + alias + " is already present");
+                    }
                     return;
                 }
                 store.setCertificateEntry(alias, certificate);
@@ -69,7 +74,9 @@ public class KeystoreManager {
     public void removeTrustedCertificate(String alias) {
         synchronized (this) {
             try {
-                logger.debug(path + " removing certificate alias=" + alias);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(path + " removing certificate alias=" + alias);
+                }
                 if (ActorAlias.equals(alias)){ 
                 	throw new Exception("Cannot remove the actor certificate from its own keystore");                	
                 }
@@ -102,7 +109,12 @@ public class KeystoreManager {
     public Certificate getCertificate(String alias) {
         synchronized (this) {
             try {
-                logger.debug(path + " requesting certificate alias=" + alias);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(path + " requesting certificate alias=" + alias);
+                    if (logger.isTraceEnabled()) {
+                        logger.debug(Arrays.toString(new Throwable().getStackTrace()));
+                    }
+                }
 
                 return store.getCertificate(alias);
             } catch (Exception e) {
