@@ -1,18 +1,17 @@
 <extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
-	id="2b48b4f0-2a36-11df-8a39-0800200c9a66">
-	<name>NLR handler</name>
-	<description>Provides a handler for creating vlans over NLR</description>
+	id="A886268E-9D96-42E2-8A3C-33BAA977DD6A">
+	<name>OESS handler</name>
+	<description>Provides a handler for creating vlans over OESS</description>
 	<plugins>
 
-		<!-- Xen + ZFS root disk -->
 		<plugin id="1" type="10" actorType="3">
-			<name>NLR Handler</name>
-			<description>Provides support for creating VLANs over NLR</description>
+			<name>OESS Handler</name>
+			<description>Provides support for creating circuits over OESS</description>
 			<configurationProperties>
 				<!-- Name of the handler file (relative to /ROOT/handlers) -->
 				<property>
 					<name>handler.file</name>
-					<value>network/handler.xml</value>
+					<value>oess/handler.xml</value>
 				</property>
 			</configurationProperties>
 		</plugin>

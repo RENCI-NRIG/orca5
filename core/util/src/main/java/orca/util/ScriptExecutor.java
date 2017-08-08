@@ -17,6 +17,43 @@ import org.apache.log4j.Logger;
 
 public class ScriptExecutor
 {
+	public static class ReadStream implements Runnable {
+	    String name;
+	    InputStream is;
+	    Thread thread;     
+	    Logger log;
+	    StringBuffer output;
+	    
+	    public ReadStream(String name, InputStream is, Logger log) {
+	        this.name = name;
+	        this.is = is;
+	        this.log = log;
+	        output = new StringBuffer();
+	    }       
+	    public void start () {
+	        thread = new Thread (this);
+	        thread.start ();
+	    }       
+	    public void run () {
+	        try {
+	            InputStreamReader isr = new InputStreamReader (is);
+	            BufferedReader br = new BufferedReader (isr);   
+	            while (true) {
+	                String s = br.readLine();
+	                if (s == null) break;
+	                else 
+	                	output.append(s + "\n");
+	            }
+	            is.close ();    
+	        } catch (Exception ex) {
+	        	log.error("Unable to read process stream in ScriptExecutor");
+	        }
+	    }
+	    public String getOutput() {
+	    	return output.toString();
+	    }
+	}
+	
     protected String command;
     protected String[] cmdArray;
     protected Logger logger;
@@ -33,6 +70,7 @@ public class ScriptExecutor
 
     public ExecutionResult execute() throws Exception
     {
+    	
         if (logger == null) {
             logger = Logger.getLogger(this.getClass().getCanonicalName());
         }
@@ -56,7 +94,6 @@ public class ScriptExecutor
                 logger.debug(sb.toString());
             }
         }
-
         Process proc = null;
 
         if (cmdArray == null) {
@@ -65,6 +102,12 @@ public class ScriptExecutor
             proc = rt.exec(cmdArray);
         }
 
+        ReadStream stdinRstr = new ReadStream("stdin", proc.getInputStream(), logger);
+        ReadStream errRstr = new ReadStream("stderr", proc.getErrorStream(), logger);
+        
+        stdinRstr.start();
+        errRstr.start();
+        /*
         InputStream in = proc.getInputStream();
         InputStreamReader inr = new InputStreamReader(in);
         BufferedReader inbr = new BufferedReader(inr);
@@ -73,16 +116,16 @@ public class ScriptExecutor
         InputStreamReader errr = new InputStreamReader(err);
         BufferedReader errbr = new BufferedReader(errr);
 
+
         String line;
         boolean moreIn = true;
         boolean moreErr = true;
         StringBuffer inb = new StringBuffer();
         StringBuffer eb = new StringBuffer();
 
-        while (moreIn || moreErr) {
+    	while (moreIn || moreErr) {
             if (moreIn) {
                 line = inbr.readLine();
-
                 if (line == null) {
                     moreIn = false;
                 } else {
@@ -108,15 +151,16 @@ public class ScriptExecutor
                 }
             }
         }
+        */
 
         int code = proc.waitFor();
-        inbr.close();
-        errbr.close();
+        //inbr.close();
+        //errbr.close();
 
         ExecutionResult r = new ExecutionResult();
         r.code = code;
-        r.stdout = inb.toString();
-        r.stderr = eb.toString();
+        r.stdout = stdinRstr.getOutput();
+        r.stderr = errRstr.getOutput();
 
         logger.debug("Exit code: " + r.code);
         logger.debug("Stdout: " + r.stdout);

@@ -2,162 +2,233 @@
 <!ENTITY core SYSTEM "../common/core.xml">
 <!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
 <!ENTITY paths SYSTEM "../common/paths.xml">
+<!ENTITY bentasks SYSTEM "../providers/ben.no-na.tasks.xml">
 ]>
-
-<project name="nlrsherpa" basedir=".">
+<project name="oess" basedir=".">
 
 	&paths;
-	&core;    
-	&drivertasks;
-
+	&core;
+	&drivertasks;	
+	&bentasks;
 	
 	<!-- Uncomment for handler testing
-	<property file="nlr.test.properties"/>
+	<property file="oess.test.properties"/>
 	-->
-
-	<target name="load.nlr.tasks" depends="set.classpath">
-		<taskdef resource="orca/handlers/nlr/NLRSherpa.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-	</target>
 	
-	<target name="join" depends="resolve.configuration,load.nlr.tasks">
-		<!-- get the credentials from a file, if needed -->
-		<if>
-			<isset property="nlr.site.properties" />
-			<then>
-				<property file="${nlr.site.properties}" />
-			</then>
-		</if>
+	<target name="join" depends="resolve.configuration,ben.load.tasks">
 
+		<taskdef resource="orca/handlers/nodeagent2/nodeagent2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+		<taskdef resource="orca/handlers/network/oess/oess.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	
+    	<echo message="OESS NA2 HANDLER: JOIN" />
+		<!-- see oess.site.sample.properties and wiki for description
+		of static properties that can be specified in oess.site.properties
+		-->
 		<if>
-			<not>
-				<isset property="NLRSherpa.endpointA" />
-			</not>
+			<isset property="oess.site.properties" />
 			<then>
-				<property name="NLRSherpa.endpointA" value="${config.interface.1}" />
-			</then>
-		</if>
-
-		<if>
-			<not>
-				<isset property="NLRSherpa.endpointZ" />
-			</not>
-			<then>
-				<property name="NLRSherpa.endpointZ" value="${config.interface.2}" />
-			</then>
-		</if>
-
-		<if>
-			<not>
-				<isset property="NLRSherpa.bandwidth" />
-			</not>
-			<then>
-				<property name="NLRSherpa.bandwidth" value="${resource.bandwidth}" />
-			</then>
-			<else>
-				<property name="NLRSherpa.bandwidth" value="" />
-			</else>
-		</if>
-
-		<if>
-			<not>
-				<isset property="unit.vlan.tag" />
-			</not>
-			<then>
-				<property name="unit.vlan.tag" value="" />
+				<property file="${oess.site.properties}" />
 			</then>
 		</if>
 	
-		<!-- 
-		input parameters are credentials, endpointA, endpointZ (NLR hostname:interface), bandwidth and optionally unit.vlan.tag
-		-->
-		<!-- 
-		output parameter is property shirako.save.unit.vlan.tag - indicates the reserved vlan 
-		-->
-                <tstamp prefix="start">
-                        <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-                </tstamp>
+	
+		<!-- This handler requires the following static properties:
+			na2.oess.plugin=oess-plugin    	- name of the OESS plugin in NA2 configuration
+			na2.url=http://localhost:8080  	- URL of NA2
+			na2.password=pass              	- password to NA2
 
-		<echo message="NLR HANDLER: JOIN" />
-		<echo message="Creating NLR vlan from: ${NLRSherpa.endpointA} to: ${NLRSherpa.endpointZ} bandwidth=${NLRSherpa.bandwidth} for tag=${unit.vlan.tag} on ${start.TIME}" />
+			urn.map=					   	- optional map for URNs, same as in OSCARS
+			
+			The NA2 plugin is assumed to be configured for a particular OESS endpoint with credentials and URL
+	    -->
+		<!-- The following properties are provided by the invoking AM:
+			config.interface.1   	 		- a URN of OESS endpoint in the form of urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.houh.net.internet2.edu:port=et-0/3/0.0
+			config.interface.2				- a URN of OESS endpoint
+			resource.bandwidth				- bandwidth in bps
+			config.vlan.tag.1				- tag on 1
+			config.vlan.tag.2				- tag on 2
+		-->
+			
+		<if>
+			<not>
+				<isset property="oess.endpointA" />
+			</not>
+			<then>
+				<property name="oess.endpointA" value="${config.interface.1}" />
+			</then>
+		</if>
+	
+		<if>
+			<not>
+				<isset property="oess.endpointZ" />
+			</not>
+			<then>
+				<property name="oess.endpointZ" value="${config.interface.2}" />
+			</then>
+		</if>
+	
+		<if>
+			<not>
+				<isset property="oess.bw" />
+			</not>
+			<then>
+				<if>
+					<isset property="resource.bandwidth" />
+					<then>
+						<property name="oess.bw" value="${resource.bandwidth}" />
+					</then>
+					<else>
+						<property name="oess.bw" value="" />
+					</else>
+				</if>
+			</then>
+		</if>
+	
+		<if>
+			<isset property="config.vlan.tag.1" />
+			<then>
+				<property name="oess.tagA" value="${config.vlan.tag.1}" />
+			</then>
+		</if>
+	
+		<if>
+			<isset property="config.vlan.tag.2" />
+			<then>
+				<property name="oess.tagZ" value="${config.vlan.tag.2}" />
+			</then>
+		</if>
+	
+		<echo message="creating OESS circuit from ${oess.endpointA}/${oess.tagA} to ${oess.endpointZ}/${oess.tagZ} with bw=${oess.bw}" />
+	
+		<var name="oess.new.endpointA" unset="true" />
+		<var name="oess.new.endpointZ" unset="true" />
+		<oess.remap.urn oldUrn="${oess.endpointA}" newUrnProp="oess.new.endpointA" mapFile="${oess.site.properties}" mapProperty="urn.map" />	
+		<oess.remap.urn oldUrn="${oess.endpointZ}" newUrnProp="oess.new.endpointZ" mapFile="${oess.site.properties}" mapProperty="urn.map" />
+		
+		<var name="oess.endpointA" unset="true" />
+		<var name="oess.endpointZ" unset="true" />
+		<property name="oess.endpointA" value="${oess.new.endpointA}" />
+		<property name="oess.endpointZ" value="${oess.new.endpointZ}" />
+		<var name="oess.new.endpointA" unset="true" />
+		<var name="oess.new.endpointZ" unset="true" />
+	
+		<echo message="after remap from ${oess.endpointA}/${oess.tagA} to ${oess.endpointZ}/${oess.tagZ} with bw=${oess.bw}" />	
+	
 		<var name="shirako.save.unit.vlan.tag" unset="true" />
 		<var name="shirako.save.unit.status" unset="true" />
 		<var name="shirako.save.unit.vlan.reservation" unset="true" />
+		<var name="shirako.save.unit.vlan.idc" unset="true" />
+	
 		<if>
 			<equals arg1="${emulation}" arg2="true" />
 			<then>
-				<property name="shirako.save.unit.vlan.tag" value="256" />
-				<property name="shirako.save.unit.vlan.reservation" value="265|rale.layer2.nlr.net:TenGigabitEthernet2/2|265|chic.layer2.nlr.net:GigabitEthernet9/10|265" />
-				<property name="shirako.target.code" value="0" />
-				<echo message="running under emulation...exiting" />
-				<echo message="Vlan ${shirako.save.unit.vlan.tag} provisioned successfully with reservation ${shirako.save.unit.vlan.reservation}"/>
-			</then>
-			<else>
-				<NLRSherpa.SmartProvisionVlan 
-					login="${NLRSherpa.login}"
-					password="${NLRSherpa.password}"
-					wg="${NLRSherpa.wg}"
-					endpointA="${NLRSherpa.endpointA}"
-					endpointZ="${NLRSherpa.endpointZ}"
-					bandwidth="${NLRSherpa.bandwidth}"
-					vlanId="${unit.vlan.tag}"
-					vlanStatusProperty="shirako.save.unit.status"
-					reservedVlanProperty="shirako.save.unit.vlan.tag"
-					reservationIdProperty="shirako.save.unit.vlan.reservation"
-					exitCodeProperty="NLRSherpa.exitCode" />
-				<echo message="Vlan ${shirako.save.unit.vlan.tag} provisioned with status ${shirako.save.unit.status} and reservation id ${shirako.save.unit.vlan.reservation}"/>
-				<property name="shirako.target.code" value="${NLRSherpa.exitCode}" />
-				<property name="shirako.target.code.message" value="Vlan ${shirako.save.unit.vlan.tag} provisioned with status ${shirako.save.unit.status} and reservation id ${shirako.save.unit.vlan.reservation}" />
-			</else>
-		</if>
-	        <!-- hairpin -->
-       	 	<var name="shirako.save.unit.vlan.url" unset="true" />
-        	<if>
-                	<isset property="unit.vlan.url" />
-                	<then>
-                        	<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
-                	</then>
-        	</if>
 
+	
+				<echo message="RUNNING UNDER EMULATION... EXITING" />
+
+				<property name="shirako.save.unit.vlan.reservation" value="some-reservation-id|${oess.endpointA}|${oess.tagA}|${oess.endpointZ}|${oess.tagZ}" />
+				<property name="shirako.save.unit.vlan.tag" value="${unit.vlan.tag}" />
+				<property name="shirako.save.unit.status" value="ACTIVE" />
+				<echo message="unit.vlan.tag=${shirako.save.unit.vlan.tag} unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>			
+				<echo message="Invoking JOIN on NA2 plugin ${na2.oess.plugin} at ${na2.url}"/>
+	
+				<var name="oess.join.reservation" unset="true" />
+				<var name="code" unset="true" />
+				<var name="message" unset="true" />
+	
+				<!-- NA2 and the plugin do their own locking -->
+				<!-- this collects all properties that start with "oess" and sends them to the NA2 OESS plugin -->
+				<nodeagent2.join baseUrl="${na2.url}" prefix="oess" returnPrefix="oess.return" password="${na2.password}" plugin="${na2.oess.plugin}" 
+						statusProperty="code" errorMsgProperty="message" reservationIdProperty="oess.join.reservation" />
+
+				<if>
+					<not>
+						<equals arg1="${code}" arg2="0" />
+					</not>
+					<then>
+						<echo message="NA2 unable to create OESS circuit: ${message}" />
+						<property name="message" value="NodeAgent unable to create OESS circuit: ${message}" />
+					</then>
+					<else>
+						<property name="shirako.save.unit.vlan.reservation" value="${oess.join.reservation}" />
+						<property name="shirako.save.unit.vlan.tag" value="${unit.vlan.tag}" />
+						<property name="shirako.save.unit.status" value="ACTIVE" />
+						<echo message="NA2 created reservation unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
+					</else>
+				</if>
+			<property name="shirako.target.code" value="${code}" />
+			<property name="shirako.target.code.message" value="${message}" />
+		</else>
+	</if>
+        <!-- hairpin -->
+        <var name="shirako.save.unit.vlan.url" unset="true" />
+        <if>
+                <isset property="unit.vlan.url" />
+                <then>
+                        <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+                </then>
+        </if>
+
+	<echo message="join exit code: ${shirako.target.code}" />
 	</target>
 
-	<target name="leave" depends="resolve.configuration,load.nlr.tasks">
+	<!-- Modify operation is not supported -->
+	<target name="modify" />
+
+	<target name="leave" depends="resolve.configuration,ben.load.tasks">
+	
+		<taskdef resource="orca/handlers/nodeagent2/nodeagent2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+		<taskdef resource="orca/handlers/network/oess/oess.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	
+		<echo message="OESS NA2 HANDLER: LEAVE" />
+
 		<if>
-			<isset property="nlr.site.properties" />
+			<isset property="oess.site.properties" />
 			<then>
-				<property file="${nlr.site.properties}" />
+				<property file="${oess.site.properties}" />
 			</then>
 		</if>
 
-		<!-- input parameter is property unit.vlan.tag, unit.vlan.reservation + credentials -->
-		<echo message="NLR HANDLER: LEAVE" />
-                <tstamp prefix="start">
-                        <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-                </tstamp>
-
-		<echo message="Removing vlan ${unit.vlan.tag} with reservation ${unit.vlan.reservation} on ${start.TIME}" />
+		<!-- This handler requires the following static properties:
+			na2.oess.plugin=oess-plugin    	- name of the OESS plugin in NA2 configuration
+			na2.url=http://localhost:8080  	- URL of NA2
+			na2.password=pass              	- password to NA2
+	
+			urn.map=					   	- optional map for URNs, same as in OSCARS
+			
+			The NA2 plugin is assumed to be configured for a particular OESS endpoint with credentials and URL
+	    -->
+		<!-- The following properties are provided by the invoking AM:
+			unit.vlan.reservation 			- OESS circuit ID
+		-->
+	
+		<echo message="Removing vlan ${unit.vlan.tag} reservation ${unit.vlan.reservation}" />
+	
 		<if>
 			<equals arg1="${emulation}" arg2="true" />
 			<then>
-				<echo message="running under emulation...exiting" />
-				<echo message="Vlan ${unit.vlan.tag} with reservation ${unit.vlan.reservation} destroyed successfully"/>
+				<echo message="RUNNING UNDER EMULATION...EXITING" />
+				<echo message="terminating OESS circuit: ${unit.vlan.reservation}" />
 				<property name="shirako.target.code" value="0" />
 			</then>
 			<else>
-				<NLRSherpa.SmartRemoveVlan
-					login="${NLRSherpa.login}"
-					password="${NLRSherpa.password}"
-					wg="${NLRSherpa.wg}"
-					vlanId="${unit.vlan.tag}"
-					vlanReservationId="${unit.vlan.reservation}"
-					exitCodeProperty="NLRSherpa.removeVlanCode" />
-				<echo message="Removed vlan ${unit.vlan.tag} reservation ${unit.vlan.reservation} with exit code ${NLRSherpa.removeVlanCode}"/>
-				<property name="shirako.target.code" value="${NLRSherpa.removeVlanCode}" />
+				<echo message="Invoking LEAVE on NA2 plugin ${na2.oess.plugin} at ${na2.url} for reservation ${unit.vlan.reservation}"/>
+				<var name="code" unset="true" />	
+				<var name="message" unset="true" />
+	
+				<!-- na2 does its own locking -->
+				<!-- this collects all properties that start with "unit" and sends them to the NA2 OESS plugin -->
+				<nodeagent2.leave baseUrl="${na2.url}" prefix="unit" returnPrefix="oess.return" password="${na2.password}" plugin="${na2.oess.plugin}" 
+					reservationId="${unit.vlan.reservation}" statusProperty="code" errorMsgProperty="message" reservationIdProperty="oess.leave.reservation" />
+	
+				<echo message="NA2 exit code: ${code} with message ${message}" />	
+				<property name="shirako.target.code" value="${code}" />
 			</else>
 		</if>
-	</target>
-
-	<target name="modify">
-		<echo message="NLR HANDLER: MODIFY" />
-		<property name="shirako.target.code" value="0" />
+		<echo message="leave exit code: ${shirako.target.code}" />
 	</target>
 </project>
+
