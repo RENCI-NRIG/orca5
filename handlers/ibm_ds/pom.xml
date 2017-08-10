@@ -4,12 +4,12 @@
 	<groupId>orca.handlers</groupId>
 	<artifactId>ibm_ds</artifactId>
 	<packaging>jar</packaging>
-	<version>5.2.0</version>
+	<version>5.2.1-SNAPSHOT</version>
 	<name>Orca IBM_DS Handlers Library</name>
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>handlers</artifactId>
-		<version>5.2.0</version>
+		<version>5.2.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>

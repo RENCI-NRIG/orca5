@@ -5,12 +5,12 @@
 	<artifactId>server</artifactId>
 	<packaging>jar</packaging>
 	<name>Orca Server</name>
-	<version>5.2.0</version>
+	<version>5.2.1-SNAPSHOT</version>
 
 	<parent>
 		<groupId>orca</groupId>
 		<artifactId>orca</artifactId>
-		<version>5.2.0</version>
+		<version>5.2.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
