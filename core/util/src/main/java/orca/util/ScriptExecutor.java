@@ -107,51 +107,6 @@ public class ScriptExecutor
         
         stdinRstr.start();
         errRstr.start();
-        /*
-        InputStream in = proc.getInputStream();
-        InputStreamReader inr = new InputStreamReader(in);
-        BufferedReader inbr = new BufferedReader(inr);
-
-        InputStream err = proc.getErrorStream();
-        InputStreamReader errr = new InputStreamReader(err);
-        BufferedReader errbr = new BufferedReader(errr);
-
-
-        String line;
-        boolean moreIn = true;
-        boolean moreErr = true;
-        StringBuffer inb = new StringBuffer();
-        StringBuffer eb = new StringBuffer();
-
-    	while (moreIn || moreErr) {
-            if (moreIn) {
-                line = inbr.readLine();
-                if (line == null) {
-                    moreIn = false;
-                } else {
-                    if (inb.length() > 0) {
-                        inb.append("\n");
-                    }
-
-                    inb.append(line);
-                }
-            }
-
-            if (moreErr) {
-                line = errbr.readLine();
-
-                if (line == null) {
-                    moreErr = false;
-                } else {
-                    if (eb.length() > 0) {
-                        eb.append("\n");
-                    }
-
-                    eb.append(line);
-                }
-            }
-        }
-        */
 
         int code = proc.waitFor();
         //inbr.close();
