@@ -1,1 +1,1 @@
-oess.remap.urn=orca.handlers.network.oess.tasks.UrnRemapperTask
+oess.remap.urn=orca.handlers.network.tasks.UrnRemapperTask
