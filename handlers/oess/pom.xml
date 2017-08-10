@@ -1,42 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>handlers</artifactId>
+		<groupId>orca</groupId>
+		<version>5.1.7-SNAPSHOT</version>
+	</parent>
 	<groupId>orca.handlers.network</groupId>
 	<artifactId>oess</artifactId>
-	<name>Orca OESS AL2S Integration</name>
-	<version>4.0-SNAPSHOT</version>
-	<parent>
-		<groupId>orca</groupId>
-		<artifactId>handlers</artifactId>
-		<version>4.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
-	<repositories>
-		<repository>
-			<id>gson</id>
-			<url>http://google-gson.googlecode.com/svn/mavenrepo</url>
-		</repository>
-	</repositories>
+	<packaging>jar</packaging>
+	<name>OESS handler integration with NA2</name>
 	<dependencies>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>1.3</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>net.jcip</groupId>
-			<artifactId>jcip-annotations</artifactId>
-			<version>1.0</version>
-		</dependency>
 		<dependency>
 			<groupId>orca.core</groupId>
 			<artifactId>shirako</artifactId>
@@ -46,6 +19,11 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+			</plugin>
+			<plugin>
 				<groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
 				<artifactId>maven-antrun-extended-plugin</artifactId>
 				<executions>
@@ -54,7 +32,14 @@
 						<phase>package</phase>
 						<configuration>
 							<tasks>
+								<property name="path" refid="maven.plugin.classpath" />
+								<echo message="path is: ${path}" />
+
+								<taskdef resource="net/sf/antcontrib/antlib.xml" />
 								<property name="name.prefix" value="orca.handlers.oess" />
+								<property name="run.classpath" refid="maven.runtime.classpath" />
+								<echo message="${run.classpath}" />
+
 								<delete dir="target/package" />
 								<mkdir dir="target/package" />
 								<mkdir dir="target/package/lib" />
@@ -65,13 +50,16 @@
 										<exclude name="*-sources.jar" />
 									</fileset>
 								</copy>
-								<copy file="${maven.dependency.com.google.code.gson.gson.jar.path}" todir="target/package/lib" flatten="true" />
-								<copy file="${maven.dependency.net.jcip.jcip-annotations.jar.path}" todir="target/package/lib" flatten="true" />
+								<mkdir dir="target/package/scripts" />
+								<copy todir="target/package/scripts">
+									<fileset dir="resources/scripts">
+										<exclude name="install.sh" />
+									</fileset>
+								</copy>
 								<mkdir dir="target/package/handlers" />
 								<copy todir="target/package/handlers">
 									<fileset dir="resources/handlers" />
 								</copy>
-								<copy file="resources/scripts/install.sh" todir="target/package" />
 
 								<mkdir dir="target/package/web" />
 								<copy todir="target/package/web">
@@ -80,6 +68,8 @@
 									</fileset>
 								</copy>
 
+								<copy file="resources/scripts/install.sh" todir="target/package" />
+
 								<copy file="resources/package.xml" todir="target/package" />
 
 								<tar tarfile="target/${name.prefix}.tar" basedir="target/package" />
@@ -87,6 +77,7 @@
 								<delete file="target/${name.prefix}.tar" />
 
 								<attachArtifact file="target/${name.prefix}.tar.gz" classifier="package" type="tar.gz" />
+
 							</tasks>
 						</configuration>
 						<goals>
@@ -94,23 +85,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.4.2</version>
-				<configuration>
-					<systemProperties>
-						<property>
-							<name>login</name>
-							<value>blah</value>
-						</property>
-						<property>
-							<name>password</name>
-							<value>blah</value>
-						</property>
-					</systemProperties>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

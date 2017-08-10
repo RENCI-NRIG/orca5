@@ -20,6 +20,7 @@
 		<module>network</module>
 		<module>providers</module>
 		<module>oscars</module>
+		<module>oess</module>
 		<module>nsi</module>
 		<module>ibm_ds</module>
 		<module>storage_service</module>
