@@ -172,6 +172,7 @@
 								<resolveArtifact groupId="orca.core" artifactId="handlers" classifier="package" type="tar.gz" version="${project.version}" tofile="orca/startup/package-handlers-core.tar.gz" />
 								<resolveArtifact groupId="orca.handlers" artifactId="ec2" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.ec2.tar.gz" />
 								<resolveArtifact groupId="orca.handlers" artifactId="xcat" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.xcat.tar.gz" />
+								<resolveArtifact groupId="orca.handlers.network" artifactId="oess" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.oess.tar.gz" />
 								<resolveArtifact groupId="orca.handlers.network" artifactId="oscars" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.oscars.tar.gz" />
 								<resolveArtifact groupId="orca.handlers.network" artifactId="nsi" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.nsi.tar.gz" />
 								<resolveArtifact groupId="orca.handlers.network" artifactId="providers" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.providers.tar.gz" />
