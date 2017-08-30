@@ -487,12 +487,12 @@ public class ModifyHandler extends UnboundRequestHandler {
 					if(parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)!=null){
 						ip_addr=parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
 						hole = findIPRangeHole(group_base_ip,ip_addr);
-						parentMap.put(link_device, new Integer(hole));
 					} else {
 						// IP Addresses not assigned, but still need to create Node and Interface
 						logger.info("No IP Address assigned, Node and Interface will still be created.");
-						parentMap.put(link_device, -1);
 					}
+					parentMap.put(link_device, hole);
+
 				}
 				DomainElement edge_device=null;
 				for(Entry <DomainElement,Integer> entry: parentMap.entrySet()){
