@@ -138,8 +138,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.INCREASE)){
 					err = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
-				if(err!=null)
+				if(err!=null) {
+					logger.error(err.getMessage());
 					break;  //TODO: should return error? otherwise addElement will still get called below?
+				}
 			}
 			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId, modifyRequestModel);
 		}
@@ -457,11 +459,13 @@ public class ModifyHandler extends UnboundRequestHandler {
 		HashMap <String,IPAddressRange> group_base_ip = null;
 		try{
 			group_base_ip = getIPRange(firstElement,cde); //<base IP network address,IP range BitSet>
-			if(group_base_ip==null)
-				// TODO: why are we throwing an exception that will immediately get caught?
-				throw new Exception("group_base_ip is null!"); //TODO return error? or is this ok?
+			if(group_base_ip==null) {
+				// We may still create a node (and interface), even without an IP
+				// don't throw an exception, just log a message
+				logger.warn("group_base_ip is null!");
+			}
 		}catch(Exception e){
-			e.printStackTrace(); //TODO return error? or is this ok?
+			logger.error(e.getMessage());
 		}
 		
 		int hole=-1;	
@@ -486,6 +490,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 						parentMap.put(link_device, new Integer(hole));
 					} else {
 						// IP Addresses not assigned, but still need to create Node and Interface
+						logger.info("No IP Address assigned, Node and Interface will still be created.");
 						parentMap.put(link_device, -1);
 					}
 				}
@@ -499,7 +504,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 					createInterface(firstElement, edge_device,hole,link_device);
 				}
 			}else{
-				logger.debug("firstElement has no parent!");
+				logger.debug("firstElement has no parent! No interface will be created.");
 				createNewNode(firstElement, -1, null, domainName, manifestOntModel, requestModel, deviceList);
 			}
 		}		
