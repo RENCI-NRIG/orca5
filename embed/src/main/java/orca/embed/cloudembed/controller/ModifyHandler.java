@@ -472,7 +472,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			logger.info("create new node from firstElement:i="+i);
 
 			DomainElement link_device = null;
-			if(firstElement.getPrecededBy()!=null && group_base_ip != null){
+			if(firstElement.getPrecededBy()!=null){
 				parentMap = new HashMap <DomainElement,Integer>();
 				for(Entry <DomainElement,OntResource> parent:firstElement.getPrecededBySet()){
 					link_device = parent.getKey();
@@ -484,6 +484,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 						ip_addr=parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
 						hole = findIPRangeHole(group_base_ip,ip_addr);
 						parentMap.put(link_device, new Integer(hole));
+					} else {
+						// IP Addresses not assigned, but still need to create Node and Interface
+						parentMap.put(link_device, -1);
 					}
 				}
 				DomainElement edge_device=null;
@@ -497,7 +500,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				}
 			}else{
 				logger.debug("firstElement has no parent!");
-				createNewNode(firstElement,-1,null,domainName, manifestOntModel, requestModel, deviceList);
+				createNewNode(firstElement, -1, null, domainName, manifestOntModel, requestModel, deviceList);
 			}
 		}		
 		

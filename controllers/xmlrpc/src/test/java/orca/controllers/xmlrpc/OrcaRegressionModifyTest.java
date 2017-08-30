@@ -35,7 +35,7 @@ public class OrcaRegressionModifyTest {
     }
 
     /**
-     * NodeGroup modify was failing on Increase request.
+     * NodeGroup modify was failing on Increase request, when Auto-IP is not used.
      *
      * @throws Exception
      */
