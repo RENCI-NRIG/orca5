@@ -27,12 +27,56 @@ public class OrcaRegressionModifyTest {
                         5},
                 //NodeGroup modify
                 {"src/test/resources/122_request.rdf",
-                        "src/test/resources/137_modify_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
                         5},
                 //NodeGroup modify
                 {"src/test/resources/137_one_nodegroups_of_size_one_noip_request.rdf",
-                        "src/test/resources/137_one_nodegroups_of_size_one_noip_modify_request.rdf",
-                        3}
+                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf",
+                        3},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_two_noip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf",
+                        4},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf",
+                        5},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_one_autoip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf",
+                        3},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_two_autoip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf",
+                        4},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf",
+                        5},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_one_noip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
+                        4},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_two_noip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
+                        5},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
+                        6},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_one_autoip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
+                        4},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_two_autoip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
+                        5},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
+                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
+                        6}
         });
     }
 
@@ -58,7 +102,7 @@ public class OrcaRegressionModifyTest {
      * @throws Exception
      */
     @Test
-    public void testNodeGroupModifyIncrease() throws Exception {
+    public void testModifyRegressions() throws Exception {
         String testName = requestFilename.substring(requestFilename.lastIndexOf('/') + 1, requestFilename.lastIndexOf('.'));
         testName += "_" + modifyFilename.substring(modifyFilename.lastIndexOf('/') + 1, modifyFilename.lastIndexOf('.'));
 
