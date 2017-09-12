@@ -10,14 +10,12 @@ import orca.manage.beans.ReservationMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlException;
 import orca.ndl.NdlManifestParser;
+import orca.ndl.elements.Interface;
 import orca.ndl.elements.NetworkElement;
 import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static orca.controllers.xmlrpc.ReservationConverter.PropertyUnitEC2InstanceType;
 import static orca.shirako.common.meta.UnitProperties.*;
@@ -154,7 +152,7 @@ public class OrcaXmlrpcAssertions {
      * @param slice
      */
     protected static void assertManifestWillProcess(XmlrpcControllerSlice slice) {
-        Logger logger = Globals.getLogger(OrcaRegressionTest.class.getSimpleName());
+        Logger logger = Globals.getLogger(OrcaXmlrpcAssertions.class.getSimpleName());
 
         RequestWorkflow workflow = slice.getWorkflow();
         List<? extends ReservationMng> computedReservations = slice.getComputedReservations();
@@ -203,5 +201,36 @@ public class OrcaXmlrpcAssertions {
                 }
             }
         }
+    }
+
+    /**
+     * Detects duplicate interface naming from Issue #137
+     *
+     * @param slice
+     */
+    protected static void assertNodeGroupHasNoDuplicateInterfaces(XmlrpcControllerSlice slice) {
+        Logger logger = Globals.getLogger(OrcaXmlrpcAssertions.class.getSimpleName());
+
+        final RequestWorkflow workflow = slice.getWorkflow();
+        final Collection<NetworkElement> boundElements = workflow.getBoundElements();
+
+        assertNotNull(boundElements);
+
+        HashSet<String> interfaceSet = new HashSet<>();
+        for (NetworkElement element: boundElements){
+            final LinkedList<Interface> interfaces = element.getClientInterface();
+
+            // VLANs don't have this list, we can skip them
+            if (null == interfaces){
+                continue;
+            }
+
+            for (Interface clientInterface: interfaces){
+                final String interfaceURI = clientInterface.getURI();
+                final boolean isUnique = interfaceSet.add(interfaceURI);
+                assertTrue("Duplicate clientInterface detected for " + element.getName() + " " + interfaceURI, isUnique);
+            }
+        }
+
     }
 }

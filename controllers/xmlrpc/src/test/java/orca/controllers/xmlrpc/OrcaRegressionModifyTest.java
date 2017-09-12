@@ -10,9 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertBootscriptVelocityTemplating;
-import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertManifestWillProcess;
-import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertReservationsHaveNetworkInterface;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.EXPECTED_RESERVATION_COUNT_FOR_MODIFY;
 
 @RunWith(Parameterized.class)
@@ -128,6 +126,7 @@ public class OrcaRegressionModifyTest {
             System.out.println("Checking for Network Interfaces");
             // Nodes added in NodeGroup Increase need to have a Network interface
             assertReservationsHaveNetworkInterface(computedReservations);
+            assertNodeGroupHasNoDuplicateInterfaces(slice);
         }
 
     }
