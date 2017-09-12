@@ -74,7 +74,15 @@ public class OrcaRegressionModifyTest {
                 //NodeGroup modify
                 {"src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
                         "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
-                        6}
+                        6},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
+                        "src/test/resources/137_nodegroups_delete_one_modify_request.rdf",
+                        3},
+                //NodeGroup modify
+                {"src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
+                        "src/test/resources/137_nodegroups_delete_one_modify_request.rdf",
+                        3}
         });
     }
 
