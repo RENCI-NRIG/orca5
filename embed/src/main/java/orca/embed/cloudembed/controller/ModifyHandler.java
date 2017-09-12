@@ -128,7 +128,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				ModifyElement me = mei.next();
 				logger.debug("ModifyHandler.modifySlice():"+me.getModType());
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.REMOVE)){
-					err=removeElement(me, manifestOnt, nodeGroupMap, deviceList);
+					err=removeElement(me, manifestOnt, nodeGroupMap, firstGroupElement, deviceList);
 				}
 			
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.ADD) || me.getModType().equals(INdlModifyModelListener.ModifyType.MODIFY)){
@@ -476,7 +476,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			logger.info("create new node from firstElement:i="+i);
 
 			DomainElement link_device = null;
-			if(firstElement.getPrecededBy()!=null){
+			if(firstElement.getPrecededBy()!=null && !firstElement.getPrecededBy().isEmpty()){
 				parentMap = new HashMap <DomainElement,Integer>();
 				for(Entry <DomainElement,OntResource> parent:firstElement.getPrecededBySet()){
 					link_device = parent.getKey();
@@ -641,8 +641,12 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 	}
 	
-	protected SystemNativeError removeElement(ModifyElement me,OntModel manifestOntModel, 
-			HashMap <String,Collection <DomainElement>> nodeGroupMap, LinkedList<NetworkElement> deviceList){
+	protected SystemNativeError removeElement(ModifyElement me,
+											  OntModel manifestOntModel,
+											  HashMap<String, Collection<DomainElement>> nodeGroupMap,
+											  HashMap<String, DomainElement> firstGroupElement,
+											  LinkedList<NetworkElement> deviceList)
+	{
 		SystemNativeError error = null;
 		Iterator <NetworkElement> bei = deviceList.iterator();
 		NetworkElement device = null;
@@ -755,7 +759,18 @@ public class ModifyHandler extends UnboundRequestHandler {
 			logger.error("Removed device doesn't exist in domainConnectionList: name: "+device.getName()+";url=" + device.getURI());
 		}
 		//close reservation and modify manifest will be done in ReservationConverter in the controller.
-		
+
+		// we need to check if we are removing the firstGroupElement, and if so, reassign it
+		final String uri = device.getURI();
+		final int i = uri.lastIndexOf("#");
+		final String group = i >= 0 ? uri.substring(i+1) : uri;
+		if (firstGroupElement.get(group).equals(device)){
+			// find a replacement
+			final Collection<DomainElement> domainElements = nodeGroupMap.get(group);
+			final DomainElement next = domainElements.iterator().next();
+			firstGroupElement.put(group, next);
+		}
+
 		return error;
 	}
 	
