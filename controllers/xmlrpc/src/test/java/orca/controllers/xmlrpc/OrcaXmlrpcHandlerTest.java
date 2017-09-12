@@ -277,6 +277,33 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Modifying a NodeGroup,
+     * by first removing the "first" element (0)
+     * and then increasing the NodeGroup size by one.
+     * Part of Issue #137
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testNodeGroupModifyDeleteIncrease() throws Exception {
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/137_nodegroups_delete_one_modify_request.rdf", 3);
+        modifyRequests.put("src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 4);
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "modifySlice_testModifyRemove",
+                "src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        // Nodes added in NodeGroup Increase need to have a Network interface
+        assertReservationsHaveNetworkInterface(computedReservations);
+        assertNodeGroupHasNoDuplicateInterfaces(slice);
+    }
+
+    /**
      *
      * @param slice_urn
      * @param requestFile
@@ -330,6 +357,63 @@ public class OrcaXmlrpcHandlerTest {
         return orcaXmlrpcHandler.instance.getSlice(slice_urn);
     }
 
+    /**
+     *
+     * @param slice_urn
+     * @param requestFile
+     * @param modifyRequests Map of Modify Request filename (key) and expected reservation count (value)
+     * @throws Exception
+     */
+    protected static XmlrpcControllerSlice doTestMultipleModifySlice(String slice_urn, String requestFile, LinkedHashMap<String, Integer> modifyRequests) throws Exception {
+
+        Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
+
+        String resReq = NdlCommons.readFile(requestFile);
+
+        MockXmlRpcController controller = new MockXmlRpcController();
+        controller.init(reservationMap);
+        controller.start();
+
+        OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
+        assertNotNull(orcaXmlrpcHandler);
+        orcaXmlrpcHandler.verifyCredentials = false;
+
+        orcaXmlrpcHandler.instance.setController(controller);
+
+        Map<String, Object> result;
+
+        // setup parameters for modifySlice()
+        Object [] credentials = new Object[0];
+
+        // get the reservations that would have been created by a previous call to createSlice()
+        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn, resReq);
+
+        // add them to the reservationMap in our Mock SM
+        addReservationListToMap(reservationsFromRequest, reservationMap);
+
+        // perform all of the requested Modifies
+        for (Map.Entry<String, Integer> modifyEntry : modifyRequests.entrySet()) {
+            String modReq = NdlCommons.readFile(modifyEntry.getKey());
+            int expectedReservationCount = modifyEntry.getValue();
+
+            result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
+
+            // verify results of modifySlice()
+            assertNotNull(result);
+            assertFalse("modifySlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+
+            assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
+                            ") did not match expected value", expectedReservationCount,
+                    countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
+
+            assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
+
+            assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+        }
+
+        // check the reservation properties
+        return orcaXmlrpcHandler.instance.getSlice(slice_urn);
+    }
 
 
     /**
