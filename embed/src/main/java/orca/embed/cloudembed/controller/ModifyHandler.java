@@ -586,7 +586,16 @@ public class ModifyHandler extends UnboundRequestHandler {
 			url = index>=0? url.substring(0, index):url;
 			try {
 				new_ip = ip.getNewIpAddress(edge_device.getModel(), network_str, ip.netmask, url, hole);
-				url = new_ip.getURI()+"/intf";
+
+				// #137, when IPs are not assigned, duplicate interfaces can be created
+				if (-1 == hole){
+					index = ce.getURI().lastIndexOf("/");
+					String nodeUUID = index > 0 ? ce.getURI().substring(index+1) : UUID.randomUUID().toString();
+					url = new_ip.getURI() + nodeUUID + "/intf";
+				} else {
+					url = new_ip.getURI() + "/intf";
+				}
+
 				if (logger.isTraceEnabled()){
 					logger.trace("new_ip " + new_ip + " using netmask " + ip.netmask);
 				}
