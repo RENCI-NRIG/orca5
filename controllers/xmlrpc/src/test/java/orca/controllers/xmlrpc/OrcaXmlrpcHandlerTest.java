@@ -139,16 +139,17 @@ public class OrcaXmlrpcHandlerTest {
     public void testModifySliceWithMockSm() throws Exception {
 
         // modify request
-        String modReq = NdlCommons.readFile("src/test/resources/88_modReq.rdf");
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/88_modReq.rdf", EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
         reservationPropertyCountMap.put("Node0", 13);
         reservationPropertyCountMap.put("Node1", 13);
         reservationPropertyCountMap.put("Node3", 13);
 
-        XmlrpcControllerSlice slice = doTestModifySlice("modifySlice_test",
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice("modifySlice_test",
                 "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+                modifyRequests);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
@@ -167,20 +168,18 @@ public class OrcaXmlrpcHandlerTest {
     @Test
     public void testModifySliceWithNetmaskOnModify() throws Exception {
         // modify request
-        String modReq = NdlCommons.readFile("src/test/resources/48_modify_request.rdf");
-
-        // modify the modify request to match UUIDs created by create slice
-        modReq = modReq.replaceAll("64dced03-270a-48a2-a33d-e73494aab1b5", "4dd3f9c5-4555-436f-848a-3b578a5b2083");
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/48_modify_request.rdf", EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK);
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
         reservationPropertyCountMap.put("Node0", 15);
         reservationPropertyCountMap.put("Node1", 15);
         reservationPropertyCountMap.put("Link1", 6);
 
-        XmlrpcControllerSlice slice = doTestModifySlice(
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
                 "modifySlice_testWithNetmaskExisting",
                 "src/test/resources/48_initial_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY_WITH_NETMASK);
+                modifyRequests);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
@@ -202,10 +201,8 @@ public class OrcaXmlrpcHandlerTest {
     @Test
     public void testModifySliceWithNetmaskOnAdd() throws Exception {
         // modify request
-        String modReq = NdlCommons.readFile("src/test/resources/48_modifyadd_modify.rdf");
-
-        // modify the modify request to match UUIDs created by create slice
-        modReq = modReq.replaceAll("110aa696-555b-4726-8502-8e961d3072ce", "029294b2-a517-48d6-b6c5-f9f77a95457c");
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/48_modifyadd_modify.rdf", EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
         reservationPropertyCountMap.put("Link2", 5);
@@ -214,10 +211,10 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("Node2", 14);
         reservationPropertyCountMap.put("Link13", 6);
 
-        XmlrpcControllerSlice slice = doTestModifySlice(
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
                 "modifySlice_testWithNetmaskNew",
                 "src/test/resources/20_create_with_netmask.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+                modifyRequests);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
@@ -249,10 +246,8 @@ public class OrcaXmlrpcHandlerTest {
     @Test
     public void testModifySliceWithModifyRemove() throws Exception {
         // modify request
-        String modReq = NdlCommons.readFile("src/test/resources/48_modifyremove_modify.rdf");
-
-        // modify the modify request to match UUIDs created by create slice
-        modReq = modReq.replaceAll("bea9b263-2506-4c7b-b09b-6df7ec2b56fa", "0cacb1fe-7af4-41a4-bfcf-79d7886c8155");
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/48_modifyremove_modify.rdf", EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
 
         // specify the number of properties expected based on VM reservation ID
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
@@ -262,10 +257,10 @@ public class OrcaXmlrpcHandlerTest {
         reservationPropertyCountMap.put("Node2", 19);
         reservationPropertyCountMap.put("Link9", 5);
 
-        XmlrpcControllerSlice slice = doTestModifySlice(
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
                 "modifySlice_testModifyRemove",
                 "src/test/resources/48_modifyremove_request.rdf",
-                modReq, EXPECTED_RESERVATION_COUNT_FOR_MODIFY);
+                modifyRequests);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
@@ -301,60 +296,6 @@ public class OrcaXmlrpcHandlerTest {
         // Nodes added in NodeGroup Increase need to have a Network interface
         assertReservationsHaveNetworkInterface(computedReservations);
         assertNodeGroupHasNoDuplicateInterfaces(slice);
-    }
-
-    /**
-     *
-     * @param slice_urn
-     * @param requestFile
-     * @param modReq
-     * @param expectedReservationCount
-     * @throws Exception
-     */
-    protected static XmlrpcControllerSlice doTestModifySlice(String slice_urn, String requestFile, String modReq, int expectedReservationCount) throws Exception {
-
-        Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
-
-        String resReq = NdlCommons.readFile(requestFile);
-
-
-        MockXmlRpcController controller = new MockXmlRpcController();
-        controller.init(reservationMap);
-        controller.start();
-
-        OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
-        assertNotNull(orcaXmlrpcHandler);
-        orcaXmlrpcHandler.verifyCredentials = false;
-
-        orcaXmlrpcHandler.instance.setController(controller);
-
-        Map<String, Object> result;
-
-        // setup parameters for modifySlice()
-        Object [] credentials = new Object[0];
-
-        // get the reservations that would have been created by a previous call to createSlice()
-        ArrayList<TicketReservationMng> reservationsFromRequest = getReservationsFromRequest(orcaXmlrpcHandler, slice_urn, resReq);
-
-        // add them to the reservationMap in our Mock SM
-        addReservationListToMap(reservationsFromRequest, reservationMap);
-
-        result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
-
-        // verify results of modifySlice()
-        assertNotNull(result);
-        assertFalse("modifySlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
-
-        assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
-                        ") did not match expected value", expectedReservationCount,
-                countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
-
-        assertTrue("Result does not match regex.", ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
-
-        assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
-
-        // check the reservation properties
-        return orcaXmlrpcHandler.instance.getSlice(slice_urn);
     }
 
     /**

@@ -8,6 +8,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
@@ -115,12 +116,13 @@ public class OrcaRegressionModifyTest {
         System.out.println("Starting Orca Regression Modify Test " + testName);
 
         // modify request
-        String modReq = NdlCommons.readFile(modifyFilename);
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put(modifyFilename, numDevicesInRequest);
 
-        XmlrpcControllerSlice slice = OrcaXmlrpcHandlerTest.doTestModifySlice(
+        XmlrpcControllerSlice slice = OrcaXmlrpcHandlerTest.doTestMultipleModifySlice(
                 "modifySlice_test" + testName,
                 requestFilename,
-                modReq, numDevicesInRequest);
+                modifyRequests);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
