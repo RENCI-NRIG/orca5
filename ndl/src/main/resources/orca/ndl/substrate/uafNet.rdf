@@ -564,7 +564,7 @@
 
     <owl:NamedIndividual rdf:about="&uafNet;IBM/G8264/availableVLANSet">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">40</collections:size>
+        <collections:size rdf:datatype="&xsd;int">35</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&uafNet;IBM/G8264/availableVLANSet/AL2S/1"/>
         <collections:element rdf:resource="&uafNet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
@@ -597,7 +597,7 @@
 
     <owl:NamedIndividual rdf:about="&uafNet;IBM/G8264/availableVLANSet/InstaGeni">
         <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">20</collections:size>
+        <collections:size rdf:datatype="&xsd;int">15</collections:size>
         <domain:hasResourceType rdf:resource="&domain;VLAN"/>
         <collections:element rdf:resource="&uafNet;IBM/G8264/availableVLANSet/InstaGeni/1"/>
     </owl:NamedIndividual>
