@@ -146,7 +146,10 @@ public class ModifyHandler extends UnboundRequestHandler {
 			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId, modifyRequestModel);
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
+			err = new SystemNativeError();
+			err.setMessage("Exception generated: " + e.getClass().getSimpleName() + ", " + e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		
 		if(err!=null)
@@ -764,7 +767,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 		final String uri = device.getURI();
 		final int i = uri.lastIndexOf("#");
 		final String group = i >= 0 ? uri.substring(i+1) : uri;
-		if (firstGroupElement.get(group).equals(device)){
+		if (null != firstGroupElement && device.equals(firstGroupElement.get(group))){
 			// find a replacement
 			final Collection<DomainElement> domainElements = nodeGroupMap.get(group);
 			final DomainElement next = domainElements.iterator().next();
