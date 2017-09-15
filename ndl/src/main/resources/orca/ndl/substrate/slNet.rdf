@@ -485,12 +485,11 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#SlNet/IBM/G8052/availableVlanSet/CIENA2/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/VLANLabel/4004"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/1"/>
-        <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/2"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/UVANL/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/availableVLANSet/VTS/1"/>
         <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">194</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">192</collections:size>
     </owl:NamedIndividual>
     
 
