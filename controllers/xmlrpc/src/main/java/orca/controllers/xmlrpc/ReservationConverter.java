@@ -735,8 +735,9 @@ public class ReservationConverter implements LayerConstant {
 				}
 			}
 			if(r.isVM){
-                local.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
-                config.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
+				// the num interfaces property is handled in formInterfaceProperties() now.
+                //local.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
+                //config.setProperty(PropertyParentNumInterface,String.valueOf(num_interface));
                 
                 local.setProperty(PropertyParentNumStorage,String.valueOf(r.numStorageDependencies));
                 config.setProperty(PropertyParentNumStorage,String.valueOf(r.numStorageDependencies));
@@ -813,6 +814,10 @@ public class ReservationConverter implements LayerConstant {
 			ip_addr = intf_name;
 			host_interface = String.valueOf(num_parent+num);
 		}
+
+		// this property needs to be set (or updated) with new interfaces
+		property.setProperty(UnitProperties.UnitNumberInterface, host_interface);
+
 		parent_ip_addr = parent_ip_addr.concat(host_interface).concat(UnitProperties.UnitEthIPSuffix);
 		parent_mac_addr = parent_mac_addr.concat(host_interface).concat(UnitProperties.UnitEthMacSuffix);
 		property_parent_netmask += host_interface + UnitProperties.UnitEthNetmaskSuffix;
@@ -1736,7 +1741,8 @@ public class ReservationConverter implements LayerConstant {
 								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
 							}	
 							Properties property = formInterfaceProperties(parent,site_host_interface, num_interface, p);
-							rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
+							// merge properties into 'local'.  should only be merged into 'rmg' once at the end
+							PropList.mergeProperties(property, local);
 						}
 					}	
 					
@@ -1755,7 +1761,8 @@ public class ReservationConverter implements LayerConstant {
 								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
 							}	
 							Properties property = formInterfaceProperties(parent,site_host_interface, num_interface, p+m_p);
-							rmg.setLocalProperties(OrcaConverter.merge(property,rmg.getLocalProperties()));
+							// merge properties into 'local'.  should only be merged into 'rmg' once at the end
+							PropList.mergeProperties(property, local);
 						}
 					}
 				}

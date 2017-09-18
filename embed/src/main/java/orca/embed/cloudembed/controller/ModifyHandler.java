@@ -128,7 +128,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				ModifyElement me = mei.next();
 				logger.debug("ModifyHandler.modifySlice():"+me.getModType());
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.REMOVE)){
-					err=removeElement(me, manifestOnt, nodeGroupMap, deviceList);
+					err=removeElement(me, manifestOnt, nodeGroupMap, firstGroupElement, deviceList);
 				}
 			
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.ADD) || me.getModType().equals(INdlModifyModelListener.ModifyType.MODIFY)){
@@ -138,13 +138,18 @@ public class ModifyHandler extends UnboundRequestHandler {
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.INCREASE)){
 					err = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
-				if(err!=null)
-					break;
+				if(err!=null) {
+					logger.error(err.getMessage());
+					break;  //TODO: should return error? otherwise addElement will still get called below?
+				}
 			}
 			addedRequest = addElement(domainResourcePools,addList,manifestOnt,sliceId, modifyRequestModel);
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
+			err = new SystemNativeError();
+			err.setMessage("Exception generated: " + e.getClass().getSimpleName() + ", " + e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		
 		if(err!=null)
@@ -457,10 +462,13 @@ public class ModifyHandler extends UnboundRequestHandler {
 		HashMap <String,IPAddressRange> group_base_ip = null;
 		try{
 			group_base_ip = getIPRange(firstElement,cde); //<base IP network address,IP range BitSet>
-			if(group_base_ip==null)
-				throw new Exception("group_base_ip is null!");
+			if(group_base_ip==null) {
+				// We may still create a node (and interface), even without an IP
+				// don't throw an exception, just log a message
+				logger.warn("group_base_ip is null!");
+			}
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		int hole=-1;	
@@ -471,7 +479,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 			logger.info("create new node from firstElement:i="+i);
 
 			DomainElement link_device = null;
-			if(firstElement.getPrecededBy()!=null){
+			if(firstElement.getPrecededBy()!=null && !firstElement.getPrecededBy().isEmpty()){
 				parentMap = new HashMap <DomainElement,Integer>();
 				for(Entry <DomainElement,OntResource> parent:firstElement.getPrecededBySet()){
 					link_device = parent.getKey();
@@ -482,8 +490,12 @@ public class ModifyHandler extends UnboundRequestHandler {
 					if(parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)!=null){
 						ip_addr=parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
 						hole = findIPRangeHole(group_base_ip,ip_addr);
-						parentMap.put(link_device, new Integer(hole));
+					} else {
+						// IP Addresses not assigned, but still need to create Node and Interface
+						logger.info("No IP Address assigned, Node and Interface will still be created.");
 					}
+					parentMap.put(link_device, hole);
+
 				}
 				DomainElement edge_device=null;
 				for(Entry <DomainElement,Integer> entry: parentMap.entrySet()){
@@ -495,8 +507,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 					createInterface(firstElement, edge_device,hole,link_device);
 				}
 			}else{
-				logger.debug("firstElement has no parent!");
-				createNewNode(firstElement,-1,null,domainName, manifestOntModel, requestModel, deviceList);
+				logger.debug("firstElement has no parent! No interface will be created.");
+				createNewNode(firstElement, -1, null, domainName, manifestOntModel, requestModel, deviceList);
 			}
 		}		
 		
@@ -577,7 +589,16 @@ public class ModifyHandler extends UnboundRequestHandler {
 			url = index>=0? url.substring(0, index):url;
 			try {
 				new_ip = ip.getNewIpAddress(edge_device.getModel(), network_str, ip.netmask, url, hole);
-				url = new_ip.getURI()+"/intf";
+
+				// #137, when IPs are not assigned, duplicate interfaces can be created
+				if (-1 == hole){
+					index = ce.getURI().lastIndexOf("/");
+					String nodeUUID = index > 0 ? ce.getURI().substring(index+1) : UUID.randomUUID().toString();
+					url = new_ip.getURI() + nodeUUID + "/intf";
+				} else {
+					url = new_ip.getURI() + "/intf";
+				}
+
 				if (logger.isTraceEnabled()){
 					logger.trace("new_ip " + new_ip + " using netmask " + ip.netmask);
 				}
@@ -623,8 +644,12 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 	}
 	
-	protected SystemNativeError removeElement(ModifyElement me,OntModel manifestOntModel, 
-			HashMap <String,Collection <DomainElement>> nodeGroupMap, LinkedList<NetworkElement> deviceList){
+	protected SystemNativeError removeElement(ModifyElement me,
+											  OntModel manifestOntModel,
+											  HashMap<String, Collection<DomainElement>> nodeGroupMap,
+											  HashMap<String, DomainElement> firstGroupElement,
+											  LinkedList<NetworkElement> deviceList)
+	{
 		SystemNativeError error = null;
 		Iterator <NetworkElement> bei = deviceList.iterator();
 		NetworkElement device = null;
@@ -737,7 +762,18 @@ public class ModifyHandler extends UnboundRequestHandler {
 			logger.error("Removed device doesn't exist in domainConnectionList: name: "+device.getName()+";url=" + device.getURI());
 		}
 		//close reservation and modify manifest will be done in ReservationConverter in the controller.
-		
+
+		// we need to check if we are removing the firstGroupElement, and if so, reassign it
+		final String uri = device.getURI();
+		final int i = uri.lastIndexOf("#");
+		final String group = i >= 0 ? uri.substring(i+1) : uri;
+		if (null != firstGroupElement && device.equals(firstGroupElement.get(group))){
+			// find a replacement
+			final Collection<DomainElement> domainElements = nodeGroupMap.get(group);
+			final DomainElement next = domainElements.iterator().next();
+			firstGroupElement.put(group, next);
+		}
+
 		return error;
 	}
 	

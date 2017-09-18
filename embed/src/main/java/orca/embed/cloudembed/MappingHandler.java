@@ -196,6 +196,10 @@ public class MappingHandler implements IRequestEmbedder {
 				IPAddress base_IPAddr = ip.base_IP;	
 				IPAddressRange ip_range = new IPAddressRange(base_IPAddr.address, base_IPAddr.netmask, ip.getResource(intf.getModel()));
 				InetNetwork base_IP= ip_range.getBase_IP();
+				if (base_IP == null){
+					logger.warn("findIPRange, base_IP is null");
+					return null;
+				}
 				group_base_ip.put(base_IP.getNetwork(),ip_range);
 			}
 		}
