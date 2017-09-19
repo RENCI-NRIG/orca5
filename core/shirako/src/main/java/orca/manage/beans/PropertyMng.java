@@ -94,4 +94,11 @@ public class PropertyMng {
         this.value = value;
     }
 
+    /**
+     *
+     * @return "name: value"
+     */
+    public String toString() {
+        return getName() + ": " + getValue();
+    }
 }

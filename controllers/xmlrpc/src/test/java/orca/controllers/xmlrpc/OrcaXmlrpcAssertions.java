@@ -16,6 +16,8 @@ import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static orca.controllers.xmlrpc.ReservationConverter.PropertyUnitEC2InstanceType;
 import static orca.shirako.common.meta.UnitProperties.*;
@@ -44,12 +46,86 @@ public class OrcaXmlrpcAssertions {
             }
 
             System.out.println("hostname " + hostname + " had localProperties count " + localProperties.size() + " (" + reservation.getReservationID() + ")");
+            System.out.println(Arrays.toString(localProperties.toArray()).replaceAll(",", ",\n").replaceAll("]", "\n]"));
             assertEquals("Incorrect number of localProperties for " + hostname + " (" + reservation.getReservationID() + ")",
                     (long) expected,
                     (long) localProperties.size());
         }
     }
 
+    /**
+     * Check that properties have specific values.
+     * Should be useful to ensure e.g. eth1 and eth2 IP addresses do not change.
+     * 
+     * @param computedReservations
+     * @param reservationProperties
+     */
+    protected static void assertExpectedPropertyValues(List<TicketReservationMng> computedReservations, Map<String, List<PropertyMng>> reservationProperties) {
+        for (TicketReservationMng reservation : computedReservations) {
+            final String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
+
+            List<PropertyMng> expectedProperties = reservationProperties.get(hostname);
+            if (null == expectedProperties){
+                continue;
+            }
+
+            System.out.println("Verifying " + expectedProperties.size() + " expected Properties for " + hostname);
+            for (PropertyMng property : expectedProperties) {
+                final String propertyName = property.getName();
+                final String expectedValue = property.getValue();
+
+                final String actualValue = OrcaConverter.getLocalProperty(reservation, propertyName);
+
+                assertEquals("localProperty " + propertyName + " did not match", expectedValue, actualValue);
+            }
+        }
+    }
+
+    /**
+     * In the case where interfaces are created at the same time, the ordering cannot be guaranteed.
+     * However, the relationship between Link Parent and IP address should be guaranteed.
+     *
+     * @param computedReservations
+     * @param nodeLinkIPsMap
+     */
+    protected static void assertLinkMatchesIPProperty(List<TicketReservationMng> computedReservations, Map<String, Map<String, String>> nodeLinkIPsMap) {
+        for (TicketReservationMng reservation : computedReservations) {
+            List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
+            final String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
+
+            final Map<String, String> linkIPsMap = nodeLinkIPsMap.get(hostname);
+            if (null == linkIPsMap){
+                continue;
+            }
+
+            System.out.println("Verifying " + linkIPsMap.size() + " expected Links for " + hostname);
+            for (String link : linkIPsMap.keySet()) {
+                final String expectedIP = linkIPsMap.get(link);
+
+                // find the matching Link and IP in Properties based on eth number
+                for (PropertyMng localProperty : localProperties) {
+                    if (link.equals(localProperty.getValue())){
+                        final String pattern = UnitEthPrefix + "(\\d+)" + UnitEthParentUrlSuffix;
+                        final Pattern r = Pattern.compile(pattern);
+                        final Matcher m = r.matcher(localProperty.getName());
+
+                        if (m.find()) {
+                            final String ethNumber = m.group(1);
+
+                            final String ipName = UnitEthPrefix + ethNumber + UnitEthIPSuffix;
+
+                            final String actualIP = OrcaConverter.getLocalProperty(reservation, ipName);
+
+                            assertEquals("eth IP did not match for link " + link, expectedIP, actualIP);
+                        } else {
+                            fail("Property name did not match pattern: " + pattern);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Check for the presence of Netmask property in VM reservations, and fail test by assertion if not present.
@@ -208,7 +284,7 @@ public class OrcaXmlrpcAssertions {
      *
      * @param slice
      */
-    protected static void assertNodeGroupHasNoDuplicateInterfaces(XmlrpcControllerSlice slice) {
+    protected static void assertSliceHasNoDuplicateInterfaces(XmlrpcControllerSlice slice) {
         Logger logger = Globals.getLogger(OrcaXmlrpcAssertions.class.getSimpleName());
 
         final RequestWorkflow workflow = slice.getWorkflow();

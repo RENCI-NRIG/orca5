@@ -5,6 +5,7 @@ import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
+import orca.manage.beans.PropertyMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
@@ -206,7 +207,7 @@ public class OrcaXmlrpcHandlerTest {
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
         reservationPropertyCountMap.put("Link2", 5);
-        reservationPropertyCountMap.put("Node0", 22);
+        reservationPropertyCountMap.put("Node0", 22); // after fix of #146: 24git st
         reservationPropertyCountMap.put("Node1", 13);
         reservationPropertyCountMap.put("Node2", 14);
         reservationPropertyCountMap.put("Link13", 6);
@@ -222,6 +223,11 @@ public class OrcaXmlrpcHandlerTest {
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
 
+        // check individual property values
+        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
+        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(reservationProperties);
+        assertExpectedPropertyValues(computedReservations, reservationProperties);
+
         // two of the VMs should have one network interface, one of them should have two interfaces
         Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
         reservationInterfaceCountMap.put("Node0", 2);
@@ -233,6 +239,101 @@ public class OrcaXmlrpcHandlerTest {
         assertNetmaskPropertyPresent(computedReservations);
 
 
+    }
+
+    private void prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(Map<String, List<PropertyMng>> reservationProperties) {
+        List<PropertyMng> nodeProperties;
+        PropertyMng property;
+
+        nodeProperties = new ArrayList<>();
+
+        property = new PropertyMng();
+        property.setName("element.GUID");
+        property.setValue("dcaa5e8d-ed44-4729-aab8-4361f108ca22");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("local.isVM");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("modify.version");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("num.parent.exist");
+        property.setValue("1");
+        //nodeProperties.add(property); // not correctly added until fix of #146
+
+        property = new PropertyMng();
+        property.setName("num.parent.new");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.interface");
+        property.setValue("2");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.storage");
+        property.setValue("0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.slice.name");
+        property.setValue("modifySlice_testWithNetmaskNew");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Node0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.hosteth");
+        property.setValue("vlan-data");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.ip");
+        property.setValue("172.16.0.1/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.netmask");
+        property.setValue("255.255.255.252");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.parent.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link2");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth2.hosteth");
+        property.setValue("vlan-data");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth2.ip");
+        property.setValue("172.16.0.2/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth2.netmask");
+        property.setValue("255.255.255.252");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth2.parent.url");
+        property.setValue("http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13");
+        nodeProperties.add(property);
+
+
+        reservationProperties.put("Node0", nodeProperties);
     }
 
     /**
@@ -265,9 +366,17 @@ public class OrcaXmlrpcHandlerTest {
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
 
+        // These are not exactly the expected values, since we are removing the interface connection
+        // between two nodes.
+        // However, ORCA does not currently remove interface information on Modify
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 2);
+        reservationInterfaceCountMap.put("Node1", 2);
+        reservationInterfaceCountMap.put("Node2", 2);
+
         // additional checks
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
-        assertReservationsHaveNetworkInterface(computedReservations);
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
         assertNetmaskPropertyPresent(computedReservations);
     }
 
@@ -295,7 +404,128 @@ public class OrcaXmlrpcHandlerTest {
 
         // Nodes added in NodeGroup Increase need to have a Network interface
         assertReservationsHaveNetworkInterface(computedReservations);
-        assertNodeGroupHasNoDuplicateInterfaces(slice);
+        assertSliceHasNoDuplicateInterfaces(slice);
+    }
+
+    /**
+     * Start with three nodes, with two nodes each connected to the central node (Node0).
+     * Modify the slice by deleting one of the outer nodes.
+     * Modify the slice by adding a new node, connected to the central node (Node0).
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testNodeWithTwoInterfacesDeleteAdd() throws Exception {
+        // Create Request
+        String createRequestFile = "src/test/resources/146_create_node_with_two_interfaces_request.rdf";
+
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/146_remove_node_modify_request.rdf", 3);
+        modifyRequests.put("src/test/resources/146_add_node_modify_request.rdf", 5);
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "testNodeWithTwoInterfacesDeleteAdd",
+                createRequestFile,
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        // specify the number of properties expected based on VM reservation ID
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        reservationPropertyCountMap.put("Link1", 5);
+        reservationPropertyCountMap.put("Node0", 28); // after fix of #146: 31
+        reservationPropertyCountMap.put("Node2", 13);
+        reservationPropertyCountMap.put("Node3", 14);
+        reservationPropertyCountMap.put("Link2", 6);
+
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+
+        // These are not exactly the expected values.
+        // However, ORCA does not currently remove interface information on Modify
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 3);
+        reservationInterfaceCountMap.put("Node2", 1);
+        reservationInterfaceCountMap.put("Node3", 1);
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
+
+        //
+        assertSliceHasNoDuplicateInterfaces(slice);
+
+        // check individual property values
+        // Note: since eth1 and eth2 are created at the same time, we cannot ensure which one is created first
+        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
+        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(reservationProperties);
+        assertExpectedPropertyValues(computedReservations, reservationProperties);
+
+        // check Link Parent and IP address matches
+        Map<String, String> linkIPsMap = new HashMap<>();
+        linkIPsMap.put("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Link0", "172.16.0.2/30");
+        linkIPsMap.put("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Link1", "172.16.0.5/30");
+        linkIPsMap.put("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Link2", "172.16.0.10/30");
+        Map<String, Map<String, String>> nodeLinkIPsMap = new HashMap<>();
+        nodeLinkIPsMap.put("Node0", linkIPsMap);
+        assertLinkMatchesIPProperty(computedReservations, nodeLinkIPsMap);
+    }
+
+    private void prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(Map<String, List<PropertyMng>> reservationProperties) {
+        List<PropertyMng> nodeProperties;
+        PropertyMng property;
+
+        nodeProperties = new ArrayList<>();
+
+        property = new PropertyMng();
+        property.setName("num.parent.exist");
+        property.setValue("2");
+        //nodeProperties.add(property); // not correctly added until fix of #146
+
+        property = new PropertyMng();
+        property.setName("num.parent.new");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.interface");
+        property.setValue("3");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.storage");
+        property.setValue("0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.slice.name");
+        property.setValue("testNodeWithTwoInterfacesDeleteAdd");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.url");
+        property.setValue("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Node0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth3.hosteth");
+        property.setValue("vlan-data");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth3.ip");
+        property.setValue("172.16.0.10/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth3.netmask");
+        property.setValue("255.255.255.252");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth3.parent.url");
+        property.setValue("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Link2");
+        nodeProperties.add(property);
+
+
+        reservationProperties.put("Node0", nodeProperties);
     }
 
     /**
