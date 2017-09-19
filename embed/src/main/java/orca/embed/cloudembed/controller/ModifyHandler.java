@@ -222,45 +222,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 		this.modifies.clear();
 		this.addedDevices.clear();
 
-		//delete extra added device 
-		for(Device dd:modifiedDevices){
-			logger.debug("Modified device:"+dd.getURI()+";"+dd.getGUID()+";"+deviceList.contains(dd)+";isModify="+dd.isModify());
-			if(this.deviceList.contains(dd)){
-				LinkedList <NetworkElement> existingDevice = new LinkedList<NetworkElement>();
-				for(NetworkElement dd_ori:this.deviceList){
-					DomainElement dd_ori_de = (DomainElement) dd_ori;
-					DomainElement dd_de=(DomainElement) dd;
-					//if(dd_ori.getGUID()==null)
-					//	continue;
-					//if( dd_ori.getGUID().equals(dd.getGUID()) && (dd_ori!=dd) ){
-					if( dd_ori_de.getURI().equals(dd_de.getURI()) && (!dd_ori_de.isModify()) ){
-						//dd_ori_de.copyDependency(dd_de);
-						dd_de.copyDependency(dd_ori_de);
-						existingDevice.add(dd_ori);
-					}		
-				}
-				//this.deviceList.remove(dd);
-				logger.debug("existingDevice size:"+existingDevice.size());
-				this.deviceList.removeAll(existingDevice);
-				for(NetworkElement d_s:existingDevice){
-					String domainName = d_s.getInDomain();
-					LinkedList <Device> domainList = this.domainConnectionList.get(domainName);
-					boolean inDomainConnectionList = false;
-					if(domainList!=null){	//CloudHandler
-						inDomainConnectionList = domainList.remove(d_s);
-						logger.debug("Modify complete remove:"+domainName+";flag="+inDomainConnectionList);
-					}
-					else{
-						for(LinkedList <Device> list:this.domainConnectionList.values()){
-							inDomainConnectionList = list.remove(d_s);
-							logger.debug("Modify complete remove:"+domainName+":inDomainConnectionList="+inDomainConnectionList);
-						}
-					}
-				}
-			}else
-				logger.error("ERROR:Modified device not in the list:"+dd.getName());
-		}
-		
+		// devices are now updated in place, not added/deleted
+
 		//resume all the isModify flag to flase
 		for(NetworkElement d_s:deviceList)
 			d_s.setModify(false);

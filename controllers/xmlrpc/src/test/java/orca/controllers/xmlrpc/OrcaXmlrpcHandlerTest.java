@@ -207,7 +207,7 @@ public class OrcaXmlrpcHandlerTest {
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
         reservationPropertyCountMap.put("Link2", 5);
-        reservationPropertyCountMap.put("Node0", 22); // after fix of #146: 24git st
+        reservationPropertyCountMap.put("Node0", 24);
         reservationPropertyCountMap.put("Node1", 13);
         reservationPropertyCountMap.put("Node2", 14);
         reservationPropertyCountMap.put("Link13", 6);
@@ -265,7 +265,7 @@ public class OrcaXmlrpcHandlerTest {
         property = new PropertyMng();
         property.setName("num.parent.exist");
         property.setValue("1");
-        //nodeProperties.add(property); // not correctly added until fix of #146
+        nodeProperties.add(property);
 
         property = new PropertyMng();
         property.setName("num.parent.new");
@@ -434,7 +434,7 @@ public class OrcaXmlrpcHandlerTest {
         // specify the number of properties expected based on VM reservation ID
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
         reservationPropertyCountMap.put("Link1", 5);
-        reservationPropertyCountMap.put("Node0", 28); // after fix of #146: 31
+        reservationPropertyCountMap.put("Node0", 31);
         reservationPropertyCountMap.put("Node2", 13);
         reservationPropertyCountMap.put("Node3", 14);
         reservationPropertyCountMap.put("Link2", 6);
@@ -477,7 +477,7 @@ public class OrcaXmlrpcHandlerTest {
         property = new PropertyMng();
         property.setName("num.parent.exist");
         property.setValue("2");
-        //nodeProperties.add(property); // not correctly added until fix of #146
+        nodeProperties.add(property);
 
         property = new PropertyMng();
         property.setName("num.parent.new");
