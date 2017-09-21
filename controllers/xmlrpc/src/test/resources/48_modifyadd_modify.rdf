@@ -40,14 +40,14 @@
     <topology:hasGUID>bf7d9b68-893a-4af9-9fc0-6c6f9c8d3772</topology:hasGUID>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkConnection"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node2-ip-172-16-0-1">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node2-ip-172-16-0-5">
     <ip4:netmask>255.255.255.252</ip4:netmask>
-    <layer:label_ID>172.16.0.1</layer:label_ID>
+    <layer:label_ID>172.16.0.5</layer:label_ID>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node0-ip-172-16-0-2">
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node0-ip-172-16-0-6">
     <ip4:netmask>255.255.255.252</ip4:netmask>
-    <layer:label_ID>172.16.0.2</layer:label_ID>
+    <layer:label_ID>172.16.0.6</layer:label_ID>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#modifyElement/c1d4c7d9-c616-4cd4-bd69-da63f65c8fd4">
@@ -63,7 +63,7 @@
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/modify.owl#ModifyReservation"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node0">
-    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node0-ip-172-16-0-2"/>
+    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node0-ip-172-16-0-6"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Node0">
@@ -83,7 +83,7 @@
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/modify.owl#ModifyElement"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node2">
-    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node2-ip-172-16-0-1"/>
+    <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13-Node2-ip-172-16-0-5"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Centos+6.7+v1.1.0">

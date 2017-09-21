@@ -9,8 +9,11 @@ import orca.manage.beans.PropertyMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
+import orca.ndl.elements.DomainElement;
+import orca.ndl.elements.NetworkElement;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
+import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -225,7 +228,7 @@ public class OrcaXmlrpcHandlerTest {
 
         // check individual property values
         Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(reservationProperties);
+        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(reservationProperties, slice.sliceUrn);
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // two of the VMs should have one network interface, one of them should have two interfaces
@@ -241,7 +244,130 @@ public class OrcaXmlrpcHandlerTest {
 
     }
 
-    private void prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(Map<String, List<PropertyMng>> reservationProperties) {
+    /**
+     * Test that a simple slice modify, using MockXmlRpcController
+     * This test modifies the slice to include new VM reservations that include netmask.
+     * Start with two VMs connected with an "Auto-IP" network connection.
+     * Modify by adding a third VM, connected to one of the original two, and "Auto-IP".
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testModifySliceWithNetmaskOnAddInterdomain() throws Exception {
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/48_modifyadd_modify_interdomain.rdf", EXPECTED_RESERVATION_COUNT_FOR_MODIFY+4);
+
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        reservationPropertyCountMap.put("Link2", 5);
+        reservationPropertyCountMap.put("Node0", 24);
+        reservationPropertyCountMap.put("Node1", 13);
+        reservationPropertyCountMap.put("Node2", 13); // 14); // only missing "element.GUID"
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "modifySlice_testWithNetmaskNew_Interdomain",
+                "src/test/resources/20_create_with_netmask_bound_rci.rdf",
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+
+        // additional checks
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+
+        // check individual property values
+        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
+        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(reservationProperties, slice.sliceUrn);
+        removeExpectedPropertiesInterdomain(reservationProperties);
+        assertExpectedPropertyValues(computedReservations, reservationProperties);
+
+        // two of the VMs should have one network interface, one of them should have two interfaces
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 2);
+        reservationInterfaceCountMap.put("Node1", 1);
+        reservationInterfaceCountMap.put("Node2", 1);
+
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
+
+        assertNetmaskPropertyPresent(computedReservations);
+
+
+    }
+
+    /**
+     * Test that a simple slice modify, using MockXmlRpcController
+     * This test modifies the slice to include new VM reservations that include netmask.
+     * Start with two VMs connected with an "Auto-IP" network connection.
+     * Modify by adding a third VM, connected to one of the original two, and "Auto-IP".
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testModifySliceWithNetmaskOnAddMixedDomain() throws Exception {
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/48_modifyadd_modify_mixed_domain.rdf", 7+4);
+
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        reservationPropertyCountMap.put("Link2", 5);
+        reservationPropertyCountMap.put("Node0", 30);
+        reservationPropertyCountMap.put("Node1", 13);
+        reservationPropertyCountMap.put("Node2", 13); // 14); // only missing "element.GUID"
+        reservationPropertyCountMap.put("Node3", 14);
+        reservationPropertyCountMap.put("Link304", 6);
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "modifySlice_testWithNetmaskNew_MixedDomain",
+                "src/test/resources/20_create_with_netmask_bound_rci.rdf",
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+
+        // additional checks
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+
+        // check individual property values
+        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
+        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAddMixedDomain(reservationProperties, slice.sliceUrn);
+        removeExpectedPropertiesInterdomain(reservationProperties);
+        assertExpectedPropertyValues(computedReservations, reservationProperties);
+
+        // two of the VMs should have one network interface, one of them should have two interfaces
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 3);
+        reservationInterfaceCountMap.put("Node1", 1);
+        reservationInterfaceCountMap.put("Node2", 1);
+        reservationInterfaceCountMap.put("Node3", 1);
+
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
+
+        assertNetmaskPropertyPresent(computedReservations);
+
+        // check Link Parent and IP address matches for Intra-Domain links
+        Map<String, String> linkIPsMap = new HashMap<>();
+        linkIPsMap.put("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link2", "172.16.0.1/30");
+        linkIPsMap.put("http://geni-orca.renci.org/owl/6fec4f59-8b7a-4ab0-a922-0e8f161724d5#Link304", "172.16.0.10/30");
+        Map<String, Map<String, String>> nodeLinkIPsMap = new HashMap<>();
+        nodeLinkIPsMap.put("Node0", linkIPsMap);
+        assertLinkMatchesIPProperty(computedReservations, nodeLinkIPsMap);
+    }
+
+    /**
+     * Some properties are not very easy to verify in Interdomain requests,
+     * they will be removed here.
+     *
+     * @param reservationProperties
+     */
+    private void removeExpectedPropertiesInterdomain(Map<String, List<PropertyMng>> reservationProperties) {
+        // in interdomain, cannot verify parent.url
+        for (String node : reservationProperties.keySet()) {
+            final List<PropertyMng> propertyMngs = reservationProperties.get(node);
+            propertyMngs.removeIf(propertyMng -> propertyMng.getName().endsWith(UnitProperties.UnitEthParentUrl));
+        }
+    }
+
+    private void prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
         List<PropertyMng> nodeProperties;
         PropertyMng property;
 
@@ -284,7 +410,7 @@ public class OrcaXmlrpcHandlerTest {
 
         property = new PropertyMng();
         property.setName("unit.slice.name");
-        property.setValue("modifySlice_testWithNetmaskNew");
+        property.setValue(sliceUrn);
         nodeProperties.add(property);
 
         property = new PropertyMng();
@@ -319,7 +445,7 @@ public class OrcaXmlrpcHandlerTest {
 
         property = new PropertyMng();
         property.setName("unit.eth2.ip");
-        property.setValue("172.16.0.2/30");
+        property.setValue("172.16.0.6/30");
         nodeProperties.add(property);
 
         property = new PropertyMng();
@@ -332,6 +458,80 @@ public class OrcaXmlrpcHandlerTest {
         property.setValue("http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13");
         nodeProperties.add(property);
 
+
+        reservationProperties.put("Node0", nodeProperties);
+    }
+
+    private void prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAddMixedDomain(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
+        List<PropertyMng> nodeProperties;
+        PropertyMng property;
+
+        nodeProperties = new ArrayList<>();
+
+        property = new PropertyMng();
+        property.setName("element.GUID");
+        property.setValue("dcaa5e8d-ed44-4729-aab8-4361f108ca22");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("local.isVM");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("modify.version");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("num.parent.exist");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("num.parent.new");
+        property.setValue("2");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.interface");
+        property.setValue("3");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.storage");
+        property.setValue("0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.slice.name");
+        property.setValue(sliceUrn);
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Node0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.hosteth");
+        property.setValue("vlan-data");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.ip");
+        property.setValue("172.16.0.1/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.netmask");
+        property.setValue("255.255.255.252");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.parent.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link2");
+        nodeProperties.add(property);
 
         reservationProperties.put("Node0", nodeProperties);
     }
@@ -455,7 +655,7 @@ public class OrcaXmlrpcHandlerTest {
         // check individual property values
         // Note: since eth1 and eth2 are created at the same time, we cannot ensure which one is created first
         Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(reservationProperties);
+        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(reservationProperties, slice.sliceUrn);
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // check Link Parent and IP address matches
@@ -468,7 +668,7 @@ public class OrcaXmlrpcHandlerTest {
         assertLinkMatchesIPProperty(computedReservations, nodeLinkIPsMap);
     }
 
-    private void prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(Map<String, List<PropertyMng>> reservationProperties) {
+    private void prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
         List<PropertyMng> nodeProperties;
         PropertyMng property;
 
@@ -496,7 +696,7 @@ public class OrcaXmlrpcHandlerTest {
 
         property = new PropertyMng();
         property.setName("unit.slice.name");
-        property.setValue("testNodeWithTwoInterfacesDeleteAdd");
+        property.setValue(sliceUrn);
         nodeProperties.add(property);
 
         property = new PropertyMng();
@@ -524,6 +724,167 @@ public class OrcaXmlrpcHandlerTest {
         property.setValue("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Link2");
         nodeProperties.add(property);
 
+
+        reservationProperties.put("Node0", nodeProperties);
+    }
+
+    /**
+     * Start with three nodes, with two nodes each connected to the central node (Node0).
+     * Modify the slice by deleting one of the outer nodes.
+     * Modify the slice by adding a new node, connected to the central node (Node0).
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testNodeWithTwoInterfacesInterdomainDeleteAdd() throws Exception {
+        // Create Request
+        String createRequestFile = "src/test/resources/146_create_node_with_two_interfaces_interdomain_request.rdf";
+
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/146_remove_node_interdomain_modify_request.rdf", 3+4);
+        modifyRequests.put("src/test/resources/146_add_node_interdomain_modify_request.rdf", 5+8);
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "testNodeWithTwoInterfacesInterdomainDeleteAdd",
+                createRequestFile,
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        // specify the number of properties expected based on VM reservation ID
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        // these seem to be only missing "element.GUID"
+        reservationPropertyCountMap.put("Node0", 30); // 31
+        reservationPropertyCountMap.put("Node2", 12); // 13
+        reservationPropertyCountMap.put("Node3", 13); // 14);
+
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+
+        // These are not exactly the expected values.
+        // However, ORCA does not currently remove interface information on Modify
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 3);
+        reservationInterfaceCountMap.put("Node2", 1);
+        reservationInterfaceCountMap.put("Node3", 1);
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
+
+        //
+        assertSliceHasNoDuplicateInterfaces(slice);
+
+        // check individual property values
+        // Note: since eth1 and eth2 are created at the same time, we cannot ensure which one is created first
+        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
+        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(reservationProperties, slice.sliceUrn);
+        removeExpectedPropertiesInterdomain(reservationProperties);
+        assertExpectedPropertyValues(computedReservations, reservationProperties);
+
+        // can't check that Link Parent and IP address matches very easily in Interdomain
+    }
+
+    /**
+     * Start with five nodes, with four nodes each connected to the central node (Node0).
+     * Of these starting nodes, three nodes are all bound to RCI (including Node0).
+     * The remaining two nodes are bound at UH, for Inter-Domain connection.
+     * Modify the slice by deleting one of the outer nodes from each RCI and UH. (Mixed-Domain modify).
+     * Modify the slice by adding a new node, connected to the central node (Node0),
+     * from each of the RCI and UH domains (Mixed-Domain modify).
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testNodeWithTwoInterfacesMixedDomainDeleteAdd() throws Exception {
+        // Create Request
+        String createRequestFile = "src/test/resources/146_create_node_with_two_interfaces_mixed_domain_request.rdf";
+
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/146_remove_node_mixed_domain_modify_request.rdf", 5+4);
+        modifyRequests.put("src/test/resources/146_add_node_mixed_domain_modify_request.rdf", 9+8);
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "testNodeWithTwoInterfacesMixedDomainDeleteAdd",
+                createRequestFile,
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        // specify the number of properties expected based on VM reservation ID
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        // these seem to be only missing "element.GUID"
+        reservationPropertyCountMap.put("Node0", 51); // ?
+        reservationPropertyCountMap.put("Node2", 12); // 13
+        reservationPropertyCountMap.put("Node3", 13); // 14);
+        reservationPropertyCountMap.put("Node6", 13);
+        reservationPropertyCountMap.put("Node7", 14);
+
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+
+        // These are not exactly the expected values.
+        // However, ORCA does not currently remove interface information on Modify
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 6);
+        reservationInterfaceCountMap.put("Node2", 1);
+        reservationInterfaceCountMap.put("Node3", 1);
+        reservationInterfaceCountMap.put("Node6", 1);
+        reservationInterfaceCountMap.put("Node7", 1);
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
+
+        //
+        assertSliceHasNoDuplicateInterfaces(slice);
+
+        // check individual property values
+        // Note: since eth1 and eth2 are created at the same time, we cannot ensure which one is created first
+        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
+        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAddMixedDomain(reservationProperties, slice.sliceUrn);
+        assertExpectedPropertyValues(computedReservations, reservationProperties);
+
+        // can't check that Link Parent and IP address matches very easily in Interdomain
+        // check Link Parent and IP address matches for Intra-Domain links
+        Map<String, String> linkIPsMap = new HashMap<>();
+        linkIPsMap.put("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link331", "172.16.1.14/30");
+        linkIPsMap.put("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link332", "172.16.1.10/30");
+        linkIPsMap.put("http://geni-orca.renci.org/owl/6fec4f59-8b7a-4ab0-a922-0e8f161724d5#Link370", "172.16.1.24/30");
+        Map<String, Map<String, String>> nodeLinkIPsMap = new HashMap<>();
+        nodeLinkIPsMap.put("Node0", linkIPsMap);
+        assertLinkMatchesIPProperty(computedReservations, nodeLinkIPsMap);
+    }
+
+    private void prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAddMixedDomain(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
+        List<PropertyMng> nodeProperties;
+        PropertyMng property;
+
+        nodeProperties = new ArrayList<>();
+
+        property = new PropertyMng();
+        property.setName("num.parent.exist");
+        property.setValue("4");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("num.parent.new");
+        property.setValue("2");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.interface");
+        property.setValue("6");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.storage");
+        property.setValue("0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.slice.name");
+        property.setValue(sliceUrn);
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.url");
+        property.setValue("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Node0");
+        nodeProperties.add(property);
 
         reservationProperties.put("Node0", nodeProperties);
     }
@@ -567,6 +928,19 @@ public class OrcaXmlrpcHandlerTest {
             String modReq = NdlCommons.readFile(modifyEntry.getKey());
             int expectedReservationCount = modifyEntry.getValue();
 
+            // make any necessary modifications to the modify request
+            if (modifyEntry.getKey().startsWith("src/test/resources/146_remove_node_interdomain_modify_request.rdf")
+                    && slice_urn.startsWith("testNodeWithTwoInterfacesInterdomainDeleteAdd"))
+            {
+                List<String> elementsToModify = getLinkElementsToModify(slice_urn, orcaXmlrpcHandler, "Node1");
+                modReq = getModifiedRequestFor146InterdomainDelete(modReq, elementsToModify);
+            } else if (modifyEntry.getKey().startsWith("src/test/resources/146_remove_node_mixed_domain_modify_request.rdf")
+                    && slice_urn.startsWith("testNodeWithTwoInterfacesMixedDomainDeleteAdd"))
+            {
+                List<String> elementsToModify = getLinkElementsToModify(slice_urn, orcaXmlrpcHandler, "Node1");
+                modReq = getModifiedRequestFor146MixedDomainDelete(modReq, elementsToModify);
+            }
+
             result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
 
             // verify results of modifySlice()
@@ -584,6 +958,128 @@ public class OrcaXmlrpcHandlerTest {
 
         // check the reservation properties
         return orcaXmlrpcHandler.instance.getSlice(slice_urn);
+    }
+
+    private static String getModifiedRequestFor146InterdomainDelete(String modReq, List<String> elementsToModify) {
+        // Modify the Modify Request with the created (random) URLs for the links
+        for (String element : elementsToModify) {
+            if (element.contains("uhNet.rdf")){
+                System.out.println("Found uhNet: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/uhNet.rdf#uhNet/Domain/vlan/d001b872-652e-45af-bd1e-474105d81363/vlan",
+                        element);
+            } else if (element.contains("ion.rdf")){
+                System.out.println("Found ion: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/ion.rdf#ion/Domain/vlan/5a168b1d-9eaa-4051-ac5d-feae36a2f6ab/vlan",
+                        element);
+            } else if (element.contains("nlr.rdf")){
+                System.out.println("Found nlr: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan/098e3edb-12df-48fd-8748-04c6c4088a26/vlan",
+                        element);
+            } else if (element.contains("ben.rdf")){
+                System.out.println("Found ben: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/ben.rdf#ben/Domain/vlan/9d8a08eb-eaa7-4af1-bd2a-f309daa0a4bd/vlan",
+                        element);
+            } else if (element.contains("rciNet.rdf")){
+                System.out.println("Found rciNet: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/rciNet.rdf#rciNet/Domain/vlan/d55b28c3-f686-4393-b0f1-4e3fe5122061/vlan",
+                        element);
+            } else {
+                fail("Reservation contains an unknown domain: " + element);
+            }
+        }
+        return modReq;
+    }
+
+    private static String getModifiedRequestFor146MixedDomainDelete(String modReq, List<String> elementsToModify) {
+        // Modify the Modify Request with the created (random) URLs for the links
+        for (String element : elementsToModify) {
+            if (element.contains("uhNet.rdf")){
+                System.out.println("Found uhNet: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/uhNet.rdf#uhNet/Domain/vlan/41a6bf0d-5063-47b3-9f4c-96aa44e504f0/vlan",
+                        element);
+            } else if (element.contains("ion.rdf")){
+                System.out.println("Found ion: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/ion.rdf#ion/Domain/vlan/0239e47d-bce8-4b2d-bdbb-5cfb1b6b4118/vlan",
+                        element);
+            } else if (element.contains("nlr.rdf")){
+                System.out.println("Found nlr: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan/fb596fc5-99bc-41ff-86a5-c672f016550f/vlan",
+                        element);
+            } else if (element.contains("ben.rdf")){
+                System.out.println("Found ben: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/ben.rdf#ben/Domain/vlan/8bacf107-074d-4206-9ee3-5361a4857bbb/vlan",
+                        element);
+            } else if (element.contains("rciNet.rdf")){
+                System.out.println("Found rciNet: " + element);
+                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/rciNet.rdf#rciNet/Domain/vlan/e0991977-e12b-4b4b-b5d1-53bb485b520e/vlan",
+                        element);
+            } else {
+                fail("Reservation contains an unknown domain: " + element);
+            }
+        }
+        return modReq;
+    }
+
+    /**
+     *
+     * @param slice_urn
+     * @param orcaXmlrpcHandler
+     * @param node
+     * @return
+     */
+    private static List<String> getLinkElementsToModify(String slice_urn, OrcaXmlrpcHandler orcaXmlrpcHandler, String node) {
+        List<String> elementsToModify = new ArrayList<>();
+
+        final Collection<NetworkElement> boundElements;
+        boundElements = orcaXmlrpcHandler.instance.getSlice(slice_urn).workflow.getBoundElements();
+
+        // Start with the Node being deleted, and find the link path up to the connected Node
+        for (NetworkElement element : boundElements) {
+            if (element.getName().endsWith(node)){
+                DomainElement domainElement = (DomainElement) element;
+
+                if (null != domainElement.getPrecededBy()) {
+                    for (DomainElement entry : domainElement.getPrecededBy().keySet()) {
+                        findLinkElementsToModify(elementsToModify, entry);
+                    }
+                }
+
+                if (null != domainElement.getFollowedBy()) {
+                    for (DomainElement entry : domainElement.getFollowedBy().keySet()) {
+                        findLinkElementsToModify(elementsToModify, entry);
+                    }
+                }
+            }
+        }
+        System.out.println(Arrays.toString(elementsToModify.toArray()));
+        return elementsToModify;
+    }
+
+    /**
+     * Follow all PrecededBy and FollowedBy paths to find links between two VM nodes
+     * @param elementsToModify
+     * @param domainElement
+     */
+    private static void findLinkElementsToModify(List<String> elementsToModify, DomainElement domainElement) {
+        if (domainElement.getResourceType().getResourceType().equals("vm")){
+            return;
+        }
+        if (elementsToModify.contains(domainElement.getName())){
+            return;
+        }
+        elementsToModify.add(domainElement.getName());
+
+        if (null != domainElement.getPrecededBy()) {
+            for (DomainElement entry : domainElement.getPrecededBy().keySet()) {
+                findLinkElementsToModify(elementsToModify, entry);
+            }
+        }
+
+        if (null != domainElement.getFollowedBy()) {
+            for (DomainElement entry : domainElement.getFollowedBy().keySet()) {
+                findLinkElementsToModify(elementsToModify, entry);
+            }
+        }
     }
 
 
