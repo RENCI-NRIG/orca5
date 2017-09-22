@@ -90,12 +90,14 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	}
 	
 	/**
-	 * Comparison of networkelements limited to comparing URIs and names
+	 * Comparison of NetworkElements limited to comparing names
+	 * URI is not being compared, as it slightly overloaded in the Modify process.
+	 *
 	 * Not sure why this was previously removed:
 	 * https://github.com/RENCI-NRIG/orca5/commit/e43e81c81ebbed0bfdcd81a5b3e74aac45c8a4ad
 	 */
 	public boolean equals(Object o) {
-		if ((o instanceof NetworkElement) && (uri != null)) {
+		if ((o instanceof NetworkElement) && (name != null)) {
 			NetworkElement neNew = (NetworkElement) o;
 			return name.equals(neNew.name);
 		}
