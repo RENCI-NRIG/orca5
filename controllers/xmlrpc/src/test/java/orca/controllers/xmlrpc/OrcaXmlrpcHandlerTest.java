@@ -1,5 +1,6 @@
 package orca.controllers.xmlrpc;
 
+import com.hp.hpl.jena.ontology.Individual;
 import orca.controllers.OrcaController;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.workflow.RequestWorkflow;
@@ -9,6 +10,8 @@ import orca.manage.beans.PropertyMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
+import orca.ndl.NdlException;
+import orca.ndl.NdlGenerator;
 import orca.ndl.elements.DomainElement;
 import orca.ndl.elements.NetworkElement;
 import orca.shirako.common.ReservationID;
@@ -18,6 +21,8 @@ import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -40,6 +45,9 @@ public class OrcaXmlrpcHandlerTest {
                     "(?:\\p{Punct}[\\w\\s]+\\:[\\w\\s.\\/-]+?\\p{Punct}\\s*[\\w\\s]+\\:[\\w\\s.\\/-]+?\\p{Punct}\\s*[\\w\\s]+\\:[\\w\\s.\\/-]+?\\p{Punct}\\s*[\\w\\s]+\\:\\s*1\\s*?\\p{Punct}\\s*\\n)+" + // [   Slice UID: 66c2001b-5c86-4747-b451-f072dd17b588 | Reservation UID: 0c77a77d-300d-4e68-ab71-5287aa67894e | Resource Type: ncsuvmsite.vm | Resource Units: 1 ]
             "(?:[\\w\\s]+)*\\z"; //No errors reported
     protected static final SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    public static final String IMAGE_URL = "http://geni-images.renci.org/images/standard/centos/centos6.7-v1.1.0/centos6.7-v1.1.0.xml";
+    public static final String IMAGE_HASH = "0c22c525b8a4f0f480f17587557b57a7a111d198";
+    public static final String IMAGE_NAME = "Centos 6.7 v1.1.0";
 
     /**
      * Test that a slice can be created, using MockXmlRpcController
@@ -259,7 +267,7 @@ public class OrcaXmlrpcHandlerTest {
         modifyRequests.put("src/test/resources/48_modifyadd_modify_interdomain.rdf", EXPECTED_RESERVATION_COUNT_FOR_MODIFY+4);
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
-        reservationPropertyCountMap.put("Link2", 5);
+        reservationPropertyCountMap.put("Link1", 5);
         reservationPropertyCountMap.put("Node0", 24);
         reservationPropertyCountMap.put("Node1", 13);
         reservationPropertyCountMap.put("Node2", 13); // 14); // only missing "element.GUID"
@@ -309,7 +317,7 @@ public class OrcaXmlrpcHandlerTest {
         modifyRequests.put("src/test/resources/48_modifyadd_modify_mixed_domain.rdf", 7+4);
 
         Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
-        reservationPropertyCountMap.put("Link2", 5);
+        reservationPropertyCountMap.put("Link1", 5);
         reservationPropertyCountMap.put("Node0", 30);
         reservationPropertyCountMap.put("Node1", 13);
         reservationPropertyCountMap.put("Node2", 13); // 14); // only missing "element.GUID"
@@ -346,7 +354,7 @@ public class OrcaXmlrpcHandlerTest {
 
         // check Link Parent and IP address matches for Intra-Domain links
         Map<String, String> linkIPsMap = new HashMap<>();
-        linkIPsMap.put("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link2", "172.16.0.1/30");
+        linkIPsMap.put("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link1", "172.16.0.1/30");
         linkIPsMap.put("http://geni-orca.renci.org/owl/6fec4f59-8b7a-4ab0-a922-0e8f161724d5#Link304", "172.16.0.10/30");
         Map<String, Map<String, String>> nodeLinkIPsMap = new HashMap<>();
         nodeLinkIPsMap.put("Node0", linkIPsMap);
@@ -890,6 +898,358 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * Adding and removing Nodes one at a time, means that we should always be able to predict
+     * the interface numbering.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testMixedDomainMultiStepModify() throws Exception {
+        // Create Request
+        String createRequestFile = "src/test/resources/20_create_with_netmask_bound_rci.rdf";
+
+        String modifyXML;
+        final String nsGuid = "029294b2-a517-48d6-b6c5-f9f77a95457c";  // matches GUID from createRequestFile
+
+        // generate some modify requests.  a little awkward, since they need to be written to files.
+        modifyXML = generateAddNodeModifyRequest(
+                nsGuid,
+                10,
+                "rcivmsite.rdf#rcivmsite",
+                "http://geni-orca.renci.org/owl/" + nsGuid+ "#Node0",
+                "dcaa5e8d-ed44-4729-aab8-4361f108ca22");
+
+        Path addNode10File = Files.createTempFile("addNode10-", ".rdf");
+        Files.write(addNode10File, modifyXML.getBytes());
+
+        modifyXML = generateRemoveNodeModifyRequest(
+                "http://geni-orca.renci.org/owl/" + nsGuid+ "#",
+                10);
+        Path removeNode10File = Files.createTempFile("removeNode10-", ".rdf");
+        Files.write(removeNode10File, modifyXML.getBytes());
+
+        modifyXML = generateAddNodeModifyRequest(
+                nsGuid,
+                20,
+                "uhvmsite.rdf#uhvmsite",
+                "http://geni-orca.renci.org/owl/" + nsGuid+ "#Node0",
+                "dcaa5e8d-ed44-4729-aab8-4361f108ca22");
+
+        Path addNode20File = Files.createTempFile("addNode20-", ".rdf");
+        Files.write(addNode20File, modifyXML.getBytes());
+
+        modifyXML = generateRemoveInterDomainNodeModifyRequest(
+                "http://geni-orca.renci.org/owl/" + nsGuid+ "#",
+                20);
+        Path removeNode20File = Files.createTempFile("removeNode20-", ".rdf");
+        Files.write(removeNode20File, modifyXML.getBytes());
+
+        modifyXML = generateAddNodeModifyRequest(
+                nsGuid,
+                11,
+                "rcivmsite.rdf#rcivmsite",
+                "http://geni-orca.renci.org/owl/" + nsGuid+ "#Node0",
+                "dcaa5e8d-ed44-4729-aab8-4361f108ca22");
+
+        Path addNode11File = Files.createTempFile("addNode10-", ".rdf");
+        Files.write(addNode11File, modifyXML.getBytes());
+
+        modifyXML = generateAddNodeModifyRequest(
+                nsGuid,
+                21,
+                "uhvmsite.rdf#uhvmsite",
+                "http://geni-orca.renci.org/owl/" + nsGuid+ "#Node0",
+                "dcaa5e8d-ed44-4729-aab8-4361f108ca22");
+
+        Path addNode21File = Files.createTempFile("addNode20-", ".rdf");
+        Files.write(addNode21File, modifyXML.getBytes());
+
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put(addNode10File.toString(), 5);
+        modifyRequests.put(removeNode10File.toString(), 3);
+        modifyRequests.put(addNode20File.toString(), 5+4);
+        modifyRequests.put(removeNode20File.toString(), 3);
+        modifyRequests.put(addNode11File.toString(), 5);
+        modifyRequests.put(addNode21File.toString(), 7+4);
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "testMixedDomainMultiStepModify",
+                createRequestFile,
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        // specify the number of properties expected based on VM reservation ID
+        Map<String, Integer> reservationPropertyCountMap = new HashMap<>();
+        // these seem to be only missing "element.GUID"
+        reservationPropertyCountMap.put("Node0", 39); // ?
+        reservationPropertyCountMap.put("Node1", 13);
+        reservationPropertyCountMap.put("Node11", 14);
+        reservationPropertyCountMap.put("Node21", 13);
+
+        assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
+
+        // These are not exactly the expected values.
+        // However, ORCA does not currently remove interface information on Modify
+        Map<String, Integer> reservationInterfaceCountMap = new HashMap<>();
+        reservationInterfaceCountMap.put("Node0", 5);
+        reservationInterfaceCountMap.put("Node1", 1);
+        reservationInterfaceCountMap.put("Node11", 1);
+        reservationInterfaceCountMap.put("Node21", 1);
+        assertReservationsHaveNetworkInterface(computedReservations, reservationInterfaceCountMap);
+
+        //
+        assertSliceHasNoDuplicateInterfaces(slice);
+
+        // check individual property values
+        // All interfaces are created sequentially; they should always have the same interface property number.
+        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
+        prepareExpectedPropertyValuesMultiStepModify(reservationProperties, slice.sliceUrn);
+        assertExpectedPropertyValues(computedReservations, reservationProperties);
+    }
+
+    private void prepareExpectedPropertyValuesMultiStepModify(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
+        List<PropertyMng> nodeProperties;
+        PropertyMng property;
+
+        nodeProperties = new ArrayList<>();
+
+        property = new PropertyMng();
+        property.setName("element.GUID");
+        property.setValue("dcaa5e8d-ed44-4729-aab8-4361f108ca22");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("local.isVM");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("modify.version");
+        property.setValue("6");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("num.parent.exist");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("num.parent.new");
+        property.setValue("1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.interface");
+        property.setValue("5");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.number.storage");
+        property.setValue("0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.slice.name");
+        property.setValue(sliceUrn);
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Node0");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.ip");
+        property.setValue("172.16.0.1/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth1.parent.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link1");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth2.ip");
+        property.setValue("172.16.10.2/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth2.parent.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link10");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth3.ip");
+        property.setValue("172.16.20.2/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth4.ip");
+        property.setValue("172.16.11.2/30");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth4.parent.url");
+        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link11");
+        nodeProperties.add(property);
+
+        property = new PropertyMng();
+        property.setName("unit.eth5.ip");
+        property.setValue("172.16.21.2/30");
+        nodeProperties.add(property);
+
+
+        reservationProperties.put("Node0", nodeProperties);
+    }
+
+    /**
+     * Remove an existing Node, and the inter-domain links.
+     * This is not a clean process, because the inter-domain links are not known ahead of time.
+     *
+     * @param baseURL
+     * @param existingNodeNumber
+     * @return
+     * @throws NdlException
+     */
+    private String generateRemoveInterDomainNodeModifyRequest(String baseURL, int existingNodeNumber) throws NdlException {
+        String nsGuid = UUID.randomUUID().toString();
+        NdlGenerator ngen = new NdlGenerator(nsGuid, logger, true);
+        final String nm = nsGuid + "/modify";
+        final Individual reservation = ngen.declareModifyReservation(nm);
+
+        // add Remove statements for both Node and Link
+        ngen.declareModifyElementRemoveNode(reservation, baseURL + "Node" + existingNodeNumber, UUID.randomUUID().toString());
+
+        // maybe parameters for the connecting links??
+
+        // GUIDs are arbitrary, will be corrected by getModifiedRequestFor146Delete()
+        ngen.declareModifyElementRemoveLink(
+                reservation,
+                "http://geni-orca.renci.org/owl/uhNet.rdf#uhNet/Domain/vlan/d001b872-652e-45af-bd1e-474105d81363/vlan",
+                UUID.randomUUID().toString());
+        ngen.declareModifyElementRemoveLink(
+                reservation,
+                "http://geni-orca.renci.org/owl/ion.rdf#ion/Domain/vlan/5a168b1d-9eaa-4051-ac5d-feae36a2f6ab/vlan",
+                UUID.randomUUID().toString());
+        ngen.declareModifyElementRemoveLink(
+                reservation,
+                "http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan/098e3edb-12df-48fd-8748-04c6c4088a26/vlan",
+                UUID.randomUUID().toString());
+        ngen.declareModifyElementRemoveLink(
+                reservation,
+                "http://geni-orca.renci.org/owl/ben.rdf#ben/Domain/vlan/9d8a08eb-eaa7-4af1-bd2a-f309daa0a4bd/vlan",
+                UUID.randomUUID().toString());
+        ngen.declareModifyElementRemoveLink(
+                reservation,
+                "http://geni-orca.renci.org/owl/rciNet.rdf#rciNet/Domain/vlan/d55b28c3-f686-4393-b0f1-4e3fe5122061/vlan",
+                UUID.randomUUID().toString());
+
+        // get RDF XML of modify request
+        return ngen.toXMLString();
+    }
+
+    /**
+     * Remove an existing Node and it's corresponding Link
+     *
+     * @param baseURL
+     * @param existingNodeNumber
+     * @return
+     * @throws NdlException
+     */
+    private String generateRemoveNodeModifyRequest(String baseURL, int existingNodeNumber) throws NdlException {
+        String nsGuid = UUID.randomUUID().toString();
+        NdlGenerator ngen = new NdlGenerator(nsGuid, logger, true);
+        final String nm = nsGuid + "/modify";
+        final Individual reservation = ngen.declareModifyReservation(nm);
+
+        // add Remove statements for both Node and Link
+        ngen.declareModifyElementRemoveNode(reservation, baseURL + "Node" + existingNodeNumber, UUID.randomUUID().toString());
+        ngen.declareModifyElementRemoveLink(reservation, baseURL + "Link" + existingNodeNumber, UUID.randomUUID().toString());
+
+        // get RDF XML of modify request
+        return ngen.toXMLString();
+    }
+
+    /**
+     * Create a new node linked to an existing Node.
+     *
+     * @param nsGuid
+     * @param newNodeNumber
+     * @param newNodeDomain
+     * @param existingNodeUrl
+     * @param existingNodeGuid
+     * @return
+     * @throws NdlException
+     */
+    private String generateAddNodeModifyRequest(String nsGuid, int newNodeNumber, String newNodeDomain, String existingNodeUrl, String existingNodeGuid) throws NdlException {
+        if (newNodeNumber <= 0 || newNodeNumber >= 255) {
+            return null;
+        }
+
+        // generate a modify request
+        NdlGenerator ngen = new NdlGenerator(nsGuid, logger, true);
+        final String nm = nsGuid + "/modify";
+        final Individual reservation = ngen.declareModifyReservation(nm);
+
+        // generate a new Node
+        final Individual nodeI = ngen.declareComputeElement("Node" + newNodeNumber);
+
+        // set Node Type on Instance
+        ngen.addVMDomainProperty(nodeI);
+        //ngen.addNodeTypeToCE() //?
+
+        // add Image to Node
+        final Individual imI = ngen.declareDiskImage(IMAGE_URL, IMAGE_HASH, IMAGE_NAME);
+        ngen.addDiskImageToIndividual(imI, nodeI);
+
+        // add Domain to Node
+        final Individual domI = ngen.declareDomain(newNodeDomain);
+        ngen.addNodeToDomain(domI, nodeI);
+
+        // add new Node to reservation
+        ngen.declareModifyElementAddElement(reservation, nodeI);
+
+        // generate Link between new Node and existing Node
+        final Individual edgeI = ngen.declareNetworkConnection("Link" + newNodeNumber);
+        ngen.addGuid(edgeI, UUID.randomUUID().toString());
+        ngen.addResourceToReservation(reservation, edgeI);
+
+        String linkName;
+        Individual intI;
+        Individual ipInd;
+
+        // add interface to new Node
+        linkName = "Link" + newNodeNumber + "-" + "Node" + newNodeNumber;
+        intI = ngen.declareInterface(linkName);
+        ngen.addInterfaceToIndividual(intI, edgeI);
+        ngen.addInterfaceToIndividual(intI, nodeI);
+        ipInd = ngen.addUniqueIPToIndividual("172.16." + newNodeNumber + ".1", linkName, intI);
+        ngen.addNetmaskToIP(ipInd, "255.255.255.252");
+
+        // Need to modify existing Node to add interface
+        Individual modCE = ngen.declareModifiedComputeElement(existingNodeUrl, existingNodeGuid);
+        ngen.declareModifyElementModifyNode(reservation, modCE);
+
+        final int index = existingNodeUrl.lastIndexOf("#");
+        final String existingNode = index >= 0 ? existingNodeUrl.substring(index + 1) : existingNodeUrl;
+
+        // add interface to existing node
+        linkName = "Link" + newNodeNumber + "-" + existingNode;
+        intI = ngen.declareInterface(linkName);
+        ngen.addInterfaceToIndividual(intI, edgeI);
+        ngen.addInterfaceToIndividual(intI, modCE);
+        ipInd = ngen.addUniqueIPToIndividual("172.16." + newNodeNumber + ".2", linkName, intI);
+        ngen.addNetmaskToIP(ipInd, "255.255.255.252");
+
+        ngen.declareModifyElementAddElement(reservation, edgeI);
+
+        // get RDF XML of modify request
+        return ngen.toXMLString();
+    }
+
+    /**
      *
      * @param slice_urn
      * @param requestFile
@@ -929,16 +1289,21 @@ public class OrcaXmlrpcHandlerTest {
             int expectedReservationCount = modifyEntry.getValue();
 
             // make any necessary modifications to the modify request
-            if (modifyEntry.getKey().startsWith("src/test/resources/146_remove_node_interdomain_modify_request.rdf")
+            if (
+                    (modifyEntry.getKey().contains("146_remove_node_interdomain_modify_request.rdf")
                     && slice_urn.startsWith("testNodeWithTwoInterfacesInterdomainDeleteAdd"))
-            {
-                List<String> elementsToModify = getLinkElementsToModify(slice_urn, orcaXmlrpcHandler, "Node1");
-                modReq = getModifiedRequestFor146InterdomainDelete(modReq, elementsToModify);
-            } else if (modifyEntry.getKey().startsWith("src/test/resources/146_remove_node_mixed_domain_modify_request.rdf")
+                    ||
+                    (modifyEntry.getKey().contains("146_remove_node_mixed_domain_modify_request.rdf")
                     && slice_urn.startsWith("testNodeWithTwoInterfacesMixedDomainDeleteAdd"))
+                    )
             {
                 List<String> elementsToModify = getLinkElementsToModify(slice_urn, orcaXmlrpcHandler, "Node1");
-                modReq = getModifiedRequestFor146MixedDomainDelete(modReq, elementsToModify);
+                modReq = getModifiedRequestFor146Delete(modReq, elementsToModify);
+            } else if (modifyEntry.getKey().contains("removeNode20")
+                    && slice_urn.startsWith("testMixedDomainMultiStepModify"))
+            {
+                List<String> elementsToModify = getLinkElementsToModify(slice_urn, orcaXmlrpcHandler, "Node20");
+                modReq = getModifiedRequestFor146Delete(modReq, elementsToModify);
             }
 
             result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
@@ -960,7 +1325,17 @@ public class OrcaXmlrpcHandlerTest {
         return orcaXmlrpcHandler.instance.getSlice(slice_urn);
     }
 
-    private static String getModifiedRequestFor146InterdomainDelete(String modReq, List<String> elementsToModify) {
+    /**
+     * The modify request file used has static GUIDs for the Links between Nodes,
+     * but those GUIDs will be randomly generated by ORCA on slice creation.
+     * This method replaces the URLs (with GUID) for the Links that should be deleted,
+     * using the URLs discovered in the already created slice.
+     *
+     * @param modReq The existing modify request from the static file.
+     * @param elementsToModify A list of Link URLs discovered in the slice, as created by ORCA.
+     * @return the modify request as a String, modified with the Link URLs as present in the 'live' slice.
+     */
+    private static String getModifiedRequestFor146Delete(String modReq, List<String> elementsToModify) {
         // Modify the Modify Request with the created (random) URLs for the links
         for (String element : elementsToModify) {
             if (element.contains("uhNet.rdf")){
@@ -990,42 +1365,12 @@ public class OrcaXmlrpcHandlerTest {
         return modReq;
     }
 
-    private static String getModifiedRequestFor146MixedDomainDelete(String modReq, List<String> elementsToModify) {
-        // Modify the Modify Request with the created (random) URLs for the links
-        for (String element : elementsToModify) {
-            if (element.contains("uhNet.rdf")){
-                System.out.println("Found uhNet: " + element);
-                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/uhNet.rdf#uhNet/Domain/vlan/41a6bf0d-5063-47b3-9f4c-96aa44e504f0/vlan",
-                        element);
-            } else if (element.contains("ion.rdf")){
-                System.out.println("Found ion: " + element);
-                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/ion.rdf#ion/Domain/vlan/0239e47d-bce8-4b2d-bdbb-5cfb1b6b4118/vlan",
-                        element);
-            } else if (element.contains("nlr.rdf")){
-                System.out.println("Found nlr: " + element);
-                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan/fb596fc5-99bc-41ff-86a5-c672f016550f/vlan",
-                        element);
-            } else if (element.contains("ben.rdf")){
-                System.out.println("Found ben: " + element);
-                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/ben.rdf#ben/Domain/vlan/8bacf107-074d-4206-9ee3-5361a4857bbb/vlan",
-                        element);
-            } else if (element.contains("rciNet.rdf")){
-                System.out.println("Found rciNet: " + element);
-                modReq = modReq.replaceAll("http://geni-orca.renci.org/owl/rciNet.rdf#rciNet/Domain/vlan/e0991977-e12b-4b4b-b5d1-53bb485b520e/vlan",
-                        element);
-            } else {
-                fail("Reservation contains an unknown domain: " + element);
-            }
-        }
-        return modReq;
-    }
-
     /**
      *
      * @param slice_urn
      * @param orcaXmlrpcHandler
-     * @param node
-     * @return
+     * @param node The Node being deleted, which will be our starting point in determining all of the Links between this node and it's neighbor node.
+     * @return a list of all of the Link URLs which will need to be modified (deleted).
      */
     private static List<String> getLinkElementsToModify(String slice_urn, OrcaXmlrpcHandler orcaXmlrpcHandler, String node) {
         List<String> elementsToModify = new ArrayList<>();
