@@ -6,6 +6,8 @@ import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
+import orca.manage.OrcaConverter;
+import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
@@ -21,6 +23,8 @@ import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
@@ -235,8 +239,9 @@ public class OrcaXmlrpcHandlerTest {
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
 
         // check individual property values
-        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(reservationProperties, slice.sliceUrn);
+        Map<String, PropertiesMng> reservationProperties = new HashMap<>();
+        InputStream input = new FileInputStream("src/test/resources/48_modifyadd_modify.properties");
+        reservationProperties.put("Node0", OrcaConverter.load(input));
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // two of the VMs should have one network interface, one of them should have two interfaces
@@ -284,9 +289,9 @@ public class OrcaXmlrpcHandlerTest {
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
 
         // check individual property values
-        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(reservationProperties, slice.sliceUrn);
-        removeExpectedPropertiesInterdomain(reservationProperties);
+        Map<String, PropertiesMng> reservationProperties = new HashMap<>();
+        InputStream input = new FileInputStream("src/test/resources/48_modifyadd_modify_interdomain.properties");
+        reservationProperties.put("Node0", OrcaConverter.load(input));
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // two of the VMs should have one network interface, one of them should have two interfaces
@@ -336,9 +341,9 @@ public class OrcaXmlrpcHandlerTest {
         assertExpectedPropertyCounts(computedReservations, reservationPropertyCountMap);
 
         // check individual property values
-        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAddMixedDomain(reservationProperties, slice.sliceUrn);
-        removeExpectedPropertiesInterdomain(reservationProperties);
+        Map<String, PropertiesMng> reservationProperties = new HashMap<>();
+        InputStream input = new FileInputStream("src/test/resources/48_modifyadd_modify_mixed_domain.properties");
+        reservationProperties.put("Node0", OrcaConverter.load(input));
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // two of the VMs should have one network interface, one of them should have two interfaces
@@ -359,189 +364,6 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, Map<String, String>> nodeLinkIPsMap = new HashMap<>();
         nodeLinkIPsMap.put("Node0", linkIPsMap);
         assertLinkMatchesIPProperty(computedReservations, nodeLinkIPsMap);
-    }
-
-    /**
-     * Some properties are not very easy to verify in Interdomain requests,
-     * they will be removed here.
-     *
-     * @param reservationProperties
-     */
-    private void removeExpectedPropertiesInterdomain(Map<String, List<PropertyMng>> reservationProperties) {
-        // in interdomain, cannot verify parent.url
-        for (String node : reservationProperties.keySet()) {
-            final List<PropertyMng> propertyMngs = reservationProperties.get(node);
-            propertyMngs.removeIf(propertyMng -> propertyMng.getName().endsWith(UnitProperties.UnitEthParentUrl));
-        }
-    }
-
-    private void prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAdd(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
-        List<PropertyMng> nodeProperties;
-        PropertyMng property;
-
-        nodeProperties = new ArrayList<>();
-
-        property = new PropertyMng();
-        property.setName("element.GUID");
-        property.setValue("dcaa5e8d-ed44-4729-aab8-4361f108ca22");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("local.isVM");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("modify.version");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.exist");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.new");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.interface");
-        property.setValue("2");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.storage");
-        property.setValue("0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.slice.name");
-        property.setValue(sliceUrn);
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Node0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.hosteth");
-        property.setValue("vlan-data");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.ip");
-        property.setValue("172.16.0.1/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.netmask");
-        property.setValue("255.255.255.252");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.parent.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link2");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth2.hosteth");
-        property.setValue("vlan-data");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth2.ip");
-        property.setValue("172.16.0.6/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth2.netmask");
-        property.setValue("255.255.255.252");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth2.parent.url");
-        property.setValue("http://geni-orca.renci.org/owl/110aa696-555b-4726-8502-8e961d3072ce#Link13");
-        nodeProperties.add(property);
-
-
-        reservationProperties.put("Node0", nodeProperties);
-    }
-
-    private void prepareExpectedPropertyValuesForModifySliceWithNetmaskOnAddMixedDomain(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
-        List<PropertyMng> nodeProperties;
-        PropertyMng property;
-
-        nodeProperties = new ArrayList<>();
-
-        property = new PropertyMng();
-        property.setName("element.GUID");
-        property.setValue("dcaa5e8d-ed44-4729-aab8-4361f108ca22");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("local.isVM");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("modify.version");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.exist");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.new");
-        property.setValue("2");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.interface");
-        property.setValue("3");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.storage");
-        property.setValue("0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.slice.name");
-        property.setValue(sliceUrn);
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Node0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.hosteth");
-        property.setValue("vlan-data");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.ip");
-        property.setValue("172.16.0.1/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.netmask");
-        property.setValue("255.255.255.252");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.parent.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link2");
-        nodeProperties.add(property);
-
-        reservationProperties.put("Node0", nodeProperties);
     }
 
     /**
@@ -662,8 +484,9 @@ public class OrcaXmlrpcHandlerTest {
 
         // check individual property values
         // Note: since eth1 and eth2 are created at the same time, we cannot ensure which one is created first
-        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(reservationProperties, slice.sliceUrn);
+        Map<String, PropertiesMng> reservationProperties = new HashMap<>();
+        InputStream input = new FileInputStream("src/test/resources/146_two_interfaces_delete_add.properties");
+        reservationProperties.put("Node0", OrcaConverter.load(input));
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // check Link Parent and IP address matches
@@ -674,66 +497,6 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, Map<String, String>> nodeLinkIPsMap = new HashMap<>();
         nodeLinkIPsMap.put("Node0", linkIPsMap);
         assertLinkMatchesIPProperty(computedReservations, nodeLinkIPsMap);
-    }
-
-    private void prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
-        List<PropertyMng> nodeProperties;
-        PropertyMng property;
-
-        nodeProperties = new ArrayList<>();
-
-        property = new PropertyMng();
-        property.setName("num.parent.exist");
-        property.setValue("2");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.new");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.interface");
-        property.setValue("3");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.storage");
-        property.setValue("0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.slice.name");
-        property.setValue(sliceUrn);
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.url");
-        property.setValue("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Node0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth3.hosteth");
-        property.setValue("vlan-data");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth3.ip");
-        property.setValue("172.16.0.10/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth3.netmask");
-        property.setValue("255.255.255.252");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth3.parent.url");
-        property.setValue("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Link2");
-        nodeProperties.add(property);
-
-
-        reservationProperties.put("Node0", nodeProperties);
     }
 
     /**
@@ -782,9 +545,9 @@ public class OrcaXmlrpcHandlerTest {
 
         // check individual property values
         // Note: since eth1 and eth2 are created at the same time, we cannot ensure which one is created first
-        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAdd(reservationProperties, slice.sliceUrn);
-        removeExpectedPropertiesInterdomain(reservationProperties);
+        Map<String, PropertiesMng> reservationProperties = new HashMap<>();
+        InputStream input = new FileInputStream("src/test/resources/146_two_interfaces_interdomain_delete_add.properties");
+        reservationProperties.put("Node0", OrcaConverter.load(input));
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // can't check that Link Parent and IP address matches very easily in Interdomain
@@ -843,8 +606,9 @@ public class OrcaXmlrpcHandlerTest {
 
         // check individual property values
         // Note: since eth1 and eth2 are created at the same time, we cannot ensure which one is created first
-        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAddMixedDomain(reservationProperties, slice.sliceUrn);
+        Map<String, PropertiesMng> reservationProperties = new HashMap<>();
+        InputStream input = new FileInputStream("src/test/resources/146_two_interfaces_mixeddomain_delete_add.properties");
+        reservationProperties.put("Node0", OrcaConverter.load(input));
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // can't check that Link Parent and IP address matches very easily in Interdomain
@@ -856,45 +620,6 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, Map<String, String>> nodeLinkIPsMap = new HashMap<>();
         nodeLinkIPsMap.put("Node0", linkIPsMap);
         assertLinkMatchesIPProperty(computedReservations, nodeLinkIPsMap);
-    }
-
-    private void prepareExpectedPropertyValuesForNodeWithTwoInterfacesDeleteAddMixedDomain(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
-        List<PropertyMng> nodeProperties;
-        PropertyMng property;
-
-        nodeProperties = new ArrayList<>();
-
-        property = new PropertyMng();
-        property.setName("num.parent.exist");
-        property.setValue("4");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.new");
-        property.setValue("2");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.interface");
-        property.setValue("6");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.storage");
-        property.setValue("0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.slice.name");
-        property.setValue(sliceUrn);
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.url");
-        property.setValue("http://geni-orca.renci.org/owl/2e33b59b-0e3e-4b40-a64d-d9f3c055326f#Node0");
-        nodeProperties.add(property);
-
-        reservationProperties.put("Node0", nodeProperties);
     }
 
     /**
@@ -1004,104 +729,10 @@ public class OrcaXmlrpcHandlerTest {
 
         // check individual property values
         // All interfaces are created sequentially; they should always have the same interface property number.
-        Map<String, List<PropertyMng>> reservationProperties = new HashMap<>();
-        prepareExpectedPropertyValuesMultiStepModify(reservationProperties, slice.sliceUrn);
+        Map<String, PropertiesMng> reservationProperties = new HashMap<>();
+        InputStream input = new FileInputStream("src/test/resources/146_mixeddomain_multi_step.properties");
+        reservationProperties.put("Node0", OrcaConverter.load(input));
         assertExpectedPropertyValues(computedReservations, reservationProperties);
-    }
-
-    private void prepareExpectedPropertyValuesMultiStepModify(Map<String, List<PropertyMng>> reservationProperties, String sliceUrn) {
-        List<PropertyMng> nodeProperties;
-        PropertyMng property;
-
-        nodeProperties = new ArrayList<>();
-
-        property = new PropertyMng();
-        property.setName("element.GUID");
-        property.setValue("dcaa5e8d-ed44-4729-aab8-4361f108ca22");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("local.isVM");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("modify.version");
-        property.setValue("6");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.exist");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("num.parent.new");
-        property.setValue("1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.interface");
-        property.setValue("5");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.number.storage");
-        property.setValue("0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.slice.name");
-        property.setValue(sliceUrn);
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Node0");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.ip");
-        property.setValue("172.16.0.1/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth1.parent.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link1");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth2.ip");
-        property.setValue("172.16.10.2/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth2.parent.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link10");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth3.ip");
-        property.setValue("172.16.20.2/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth4.ip");
-        property.setValue("172.16.11.2/30");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth4.parent.url");
-        property.setValue("http://geni-orca.renci.org/owl/029294b2-a517-48d6-b6c5-f9f77a95457c#Link11");
-        nodeProperties.add(property);
-
-        property = new PropertyMng();
-        property.setName("unit.eth5.ip");
-        property.setValue("172.16.21.2/30");
-        nodeProperties.add(property);
-
-
-        reservationProperties.put("Node0", nodeProperties);
     }
 
     /**

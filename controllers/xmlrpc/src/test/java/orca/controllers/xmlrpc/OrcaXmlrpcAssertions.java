@@ -5,6 +5,7 @@ import com.hp.hpl.jena.ontology.OntResource;
 import orca.embed.workflow.ManifestParserListener;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.OrcaConverter;
+import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
 import orca.manage.beans.TicketReservationMng;
@@ -56,15 +57,20 @@ public class OrcaXmlrpcAssertions {
     /**
      * Check that properties have specific values.
      * Should be useful to ensure e.g. eth1 and eth2 IP addresses do not change.
-     * 
+     *
      * @param computedReservations
      * @param reservationProperties
      */
-    protected static void assertExpectedPropertyValues(List<TicketReservationMng> computedReservations, Map<String, List<PropertyMng>> reservationProperties) {
+    protected static void assertExpectedPropertyValues(List<TicketReservationMng> computedReservations, Map<String, PropertiesMng> reservationProperties) {
         for (TicketReservationMng reservation : computedReservations) {
             final String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
 
-            List<PropertyMng> expectedProperties = reservationProperties.get(hostname);
+            final PropertiesMng propertiesMng = reservationProperties.get(hostname);
+            if (null == propertiesMng) {
+                continue;
+            }
+
+            List<PropertyMng> expectedProperties = propertiesMng.getProperty();
             if (null == expectedProperties){
                 continue;
             }

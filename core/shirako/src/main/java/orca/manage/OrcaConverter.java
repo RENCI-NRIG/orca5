@@ -1,5 +1,7 @@
 package orca.manage;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +24,27 @@ import orca.util.ID;
 import orca.util.PropList;
 
 public class OrcaConverter {
+
+	/**
+	 * Reads a property list (key and element pairs) from the input
+	 * byte stream, using java.util.Properties.load().
+	 * This property list is then loaded into a PropertiesMng using fill().
+	 *
+	 * The specified stream remains open after this method returns.
+	 *
+	 * @param inStream the InputStream
+	 * @return a new PropertiesMng filled with the Properties from inStream.
+	 * @throws IOException if an error occurred when reading from the
+	 *             input stream.
+	 */
+	public static PropertiesMng load(InputStream inStream) throws IOException {
+
+		Properties props = new Properties();
+		props.load(inStream);
+
+		return fill(props);
+	}
+
 	public static PropertiesMng fill(Properties p) {
 		PropertiesMng mng = new PropertiesMng();
 
