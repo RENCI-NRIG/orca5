@@ -34,10 +34,7 @@ public class OrcaXmlrpcAssertions {
      */
     protected static void assertExpectedPropertyCounts(List<TicketReservationMng> computedReservations, Map<String, Integer> propCountMap){
         for (TicketReservationMng reservation : computedReservations) {
-            List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
-
-            // we probably need better checks on Properties
+            Properties localProperties = OrcaConverter.fill(reservation.getLocalProperties());
 
             // VLANs don't have consistent IDs from the request
             String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
@@ -47,7 +44,7 @@ public class OrcaXmlrpcAssertions {
             }
 
             System.out.println("hostname " + hostname + " had localProperties count " + localProperties.size() + " (" + reservation.getReservationID() + ")");
-            System.out.println(Arrays.toString(localProperties.toArray()).replaceAll(",", ",\n").replaceAll("]", "\n]"));
+            System.out.println(localProperties.toString().replaceAll(",", ",\n").replaceAll("}", "\n}"));
             assertEquals("Incorrect number of localProperties for " + hostname + " (" + reservation.getReservationID() + ")",
                     (long) expected,
                     (long) localProperties.size());
