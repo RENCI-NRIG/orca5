@@ -242,6 +242,7 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, PropertiesMng> reservationProperties = new HashMap<>();
         InputStream input = new FileInputStream("src/test/resources/48_modifyadd_modify.properties");
         reservationProperties.put("Node0", OrcaConverter.load(input));
+        input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // two of the VMs should have one network interface, one of them should have two interfaces
@@ -292,6 +293,7 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, PropertiesMng> reservationProperties = new HashMap<>();
         InputStream input = new FileInputStream("src/test/resources/48_modifyadd_modify_interdomain.properties");
         reservationProperties.put("Node0", OrcaConverter.load(input));
+        input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // two of the VMs should have one network interface, one of them should have two interfaces
@@ -344,6 +346,7 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, PropertiesMng> reservationProperties = new HashMap<>();
         InputStream input = new FileInputStream("src/test/resources/48_modifyadd_modify_mixed_domain.properties");
         reservationProperties.put("Node0", OrcaConverter.load(input));
+        input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // two of the VMs should have one network interface, one of them should have two interfaces
@@ -487,6 +490,7 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, PropertiesMng> reservationProperties = new HashMap<>();
         InputStream input = new FileInputStream("src/test/resources/146_two_interfaces_delete_add.properties");
         reservationProperties.put("Node0", OrcaConverter.load(input));
+        input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // check Link Parent and IP address matches
@@ -548,6 +552,7 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, PropertiesMng> reservationProperties = new HashMap<>();
         InputStream input = new FileInputStream("src/test/resources/146_two_interfaces_interdomain_delete_add.properties");
         reservationProperties.put("Node0", OrcaConverter.load(input));
+        input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // can't check that Link Parent and IP address matches very easily in Interdomain
@@ -609,6 +614,7 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, PropertiesMng> reservationProperties = new HashMap<>();
         InputStream input = new FileInputStream("src/test/resources/146_two_interfaces_mixeddomain_delete_add.properties");
         reservationProperties.put("Node0", OrcaConverter.load(input));
+        input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
 
         // can't check that Link Parent and IP address matches very easily in Interdomain
@@ -732,6 +738,7 @@ public class OrcaXmlrpcHandlerTest {
         Map<String, PropertiesMng> reservationProperties = new HashMap<>();
         InputStream input = new FileInputStream("src/test/resources/146_mixeddomain_multi_step.properties");
         reservationProperties.put("Node0", OrcaConverter.load(input));
+        input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
     }
 
