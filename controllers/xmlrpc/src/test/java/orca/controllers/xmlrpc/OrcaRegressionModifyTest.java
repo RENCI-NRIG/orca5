@@ -1,7 +1,6 @@
 package orca.controllers.xmlrpc;
 
 import orca.manage.beans.TicketReservationMng;
-import orca.ndl.NdlCommons;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -12,7 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
-import static orca.controllers.xmlrpc.OrcaXmlrpcHandlerTest.EXPECTED_RESERVATION_COUNT_FOR_MODIFY;
 
 @RunWith(Parameterized.class)
 public class OrcaRegressionModifyTest {
@@ -83,7 +81,11 @@ public class OrcaRegressionModifyTest {
                 //NodeGroup modify
                 {"src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
                         "src/test/resources/137_nodegroups_delete_one_modify_request.rdf",
-                        3}
+                        3},
+                //add storage modify
+                {"../../embed/src/test/resources/orca/embed/TS1/TS1-2.rdf",
+                        "src/test/resources/146_modify_add_storage_request.rdf",
+                        2}
         });
     }
 
@@ -120,7 +122,7 @@ public class OrcaRegressionModifyTest {
         modifyRequests.put(modifyFilename, numDevicesInRequest);
 
         XmlrpcControllerSlice slice = OrcaXmlrpcHandlerTest.doTestMultipleModifySlice(
-                "modifySlice_test" + testName,
+                "modifySlice_test_" + testName,
                 requestFilename,
                 modifyRequests);
 
@@ -136,7 +138,7 @@ public class OrcaRegressionModifyTest {
             System.out.println("Checking for Network Interfaces");
             // Nodes added in NodeGroup Increase need to have a Network interface
             assertReservationsHaveNetworkInterface(computedReservations);
-            assertNodeGroupHasNoDuplicateInterfaces(slice);
+            assertSliceHasNoDuplicateInterfaces(slice);
         }
 
     }

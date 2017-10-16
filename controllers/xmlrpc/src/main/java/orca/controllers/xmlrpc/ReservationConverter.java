@@ -35,12 +35,7 @@ import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
 import orca.manage.OrcaConverter;
-import orca.manage.beans.LeaseReservationMng;
-import orca.manage.beans.PropertyMng;
-import orca.manage.beans.ReservationMng;
-import orca.manage.beans.ReservationPredecessorMng;
-import orca.manage.beans.TicketReservationMng;
-import orca.manage.beans.UnitMng;
+import orca.manage.beans.*;
 import orca.ndl.*;
 import orca.ndl.INdlModifyModelListener.ModifyType;
 import orca.ndl.elements.ComputeElement;
@@ -791,6 +786,7 @@ public class ReservationConverter implements LayerConstant {
 		String parent_mac_addr = UnitProperties.UnitEthPrefix;
 		String parent_quantum_uuid = UnitProperties.UnitEthPrefix;
 		String property_parent_netmask = UnitProperties.UnitEthPrefix;
+		String property_parent_uuid = UnitProperties.UnitEthPrefix;
 
 		if(parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)!=null)
 			intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
@@ -821,6 +817,7 @@ public class ReservationConverter implements LayerConstant {
 		parent_ip_addr = parent_ip_addr.concat(host_interface).concat(UnitProperties.UnitEthIPSuffix);
 		parent_mac_addr = parent_mac_addr.concat(host_interface).concat(UnitProperties.UnitEthMacSuffix);
 		property_parent_netmask += host_interface + UnitProperties.UnitEthNetmaskSuffix;
+		property_parent_uuid += host_interface + UnitProperties.UnitEthUUIDSuffix;
 			
 		property.setProperty(UnitProperties.UnitEthPrefix + host_interface + UnitProperties.UnitHostEthSuffix, site_host_interface);
 
@@ -862,6 +859,13 @@ public class ReservationConverter implements LayerConstant {
 		}
 		
 		property.setProperty(UnitProperties.UnitEthPrefix+ host_interface + UnitProperties.UnitEthParentUrlSuffix, parent.getKey().getName());
+
+		// not sure how important eth uuid is.
+		// it gets added on Create Slices, but not currently for Modify Slices
+		// it seems to be empty in the parent at this point (in modify slice)
+		if (null != parent.getKey().getGUID()){
+			property.setProperty(property_parent_uuid, parent.getKey().getGUID());
+		}
 
 		return property;
 	}
@@ -1721,7 +1725,15 @@ public class ReservationConverter implements LayerConstant {
 				if(newMap.containsKey(rmg))
 					m_p=newMap.get(rmg);
 				num=p+m_p;
+
+				// "existing reservations" are counted starting at 0+1, incremented by p
+				// "new reservations" are counted starting at num_interface+1, incremented by m_p
+				// what happens if a node is created with two interfaces (eth1 and eth2),
+				// then we modify to remove eth1, and then add a new one.
+				// will the new one become eth2 as well?
+				// maybe it looks like these unit.eth* properties are not removed?
 				for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
+
 					DomainElement parent_de = parent.getKey();
 					String p_uri = parent_de.getName();
 					num++;
@@ -1729,10 +1741,26 @@ public class ReservationConverter implements LayerConstant {
 					logger.debug("ModifiedReservation:parent="+p_uri);
 					ReservationMng p_rmg = r_map.get(p_uri);
 					if(p_rmg!=null  && !p_r.contains(p_rmg)){
-						logger.debug("ModifiedReservation Parent exiting:"+p_uri+";p_rmg="+p_rmg);	
+
+						logger.debug("ModifiedReservation Parent existing:"+p_uri+";p_rmg="+p_rmg);
 						p++;
 						p_r.add(p_rmg);
-						if(!parent_de.getResourceType().getResourceType().endsWith("lun")){
+
+						// Existing interfaces will already have properties, need to skip adding them again
+						// I'm worried about keeping track of the Interface numbering (e.g. eth1 vs eth2)
+						// #146
+						boolean isExistingInterface = false;
+						if(parent.getValue().getProperty(NdlCommons.layerLabelIdProperty)!=null) {
+							String intf_name = parent.getValue().getProperty(NdlCommons.layerLabelIdProperty).getString();
+							for (Entry<Object, Object> property : local.entrySet()) {
+								if (intf_name.equals(property.getValue().toString())){
+									isExistingInterface = true;
+									break;
+								}
+							}
+						}
+
+						if(!isExistingInterface && !parent_de.getResourceType().getResourceType().endsWith("lun")){
 							String site_host_interface = getSiteHostInterface(parent);
 							if(site_host_interface!=null){
 								Properties p_property = new Properties();
@@ -1740,10 +1768,11 @@ public class ReservationConverter implements LayerConstant {
 								p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
 								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
 							}	
-							Properties property = formInterfaceProperties(parent,site_host_interface, num_interface, p);
+							Properties property = formInterfaceProperties(parent,site_host_interface, 0, p);
 							// merge properties into 'local'.  should only be merged into 'rmg' once at the end
 							PropList.mergeProperties(property, local);
 						}
+
 					}	
 					
 					//Parented by an added reservation: new link
@@ -1760,7 +1789,7 @@ public class ReservationConverter implements LayerConstant {
 								p_rmg.setConfigurationProperties(OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
 								p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
 							}	
-							Properties property = formInterfaceProperties(parent,site_host_interface, num_interface, p+m_p);
+							Properties property = formInterfaceProperties(parent,site_host_interface, num_interface, m_p);
 							// merge properties into 'local'.  should only be merged into 'rmg' once at the end
 							PropList.mergeProperties(property, local);
 						}
@@ -1800,7 +1829,7 @@ public class ReservationConverter implements LayerConstant {
 		
 		return reservations;
 	}
-	
+
 	public List<ReservationMng> addReservations(OntModel manifestModel,List<ReservationMng> allRes
 			,HashMap<String, SiteResourceTypes> typesMap, RequestSlice slice,LinkedList <OntResource>addedReservations
 			, LinkedList <NetworkElement> addedDevices) throws Exception{

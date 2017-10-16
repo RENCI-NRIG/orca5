@@ -10,10 +10,10 @@
 package orca.shirako.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.Vector;
 
-import cern.colt.Arrays;
 import orca.security.AccessMonitor;
 import orca.security.AuthToken;
 import orca.security.Guard;

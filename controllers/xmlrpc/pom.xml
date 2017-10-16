@@ -23,6 +23,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<skip>true</skip>
+					<reuseForks>false</reuseForks>
 				</configuration>
 			</plugin>
 			<plugin>
