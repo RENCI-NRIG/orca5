@@ -21,6 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static orca.controllers.xmlrpc.ReservationConverter.PropertyUnitEC2InstanceType;
+import static orca.shirako.common.meta.RequestProperties.RequestBandwidth;
+import static orca.shirako.common.meta.RequestProperties.RequestNumCPUCores;
 import static orca.shirako.common.meta.UnitProperties.*;
 import static org.junit.Assert.*;
 
@@ -309,6 +311,26 @@ public class OrcaXmlrpcAssertions {
                 final boolean isUnique = interfaceSet.add(interfaceURI);
                 assertTrue("Duplicate clientInterface detected for " + element.getName() + " " + interfaceURI, isUnique);
             }
+        }
+
+    }
+
+
+    /**
+     * Controller needs to assigned Core Resource Constraints to the Reservation
+     *
+     * @param computedReservations
+     */
+    protected static void assertReservationsHaveResourceConstraints(List<TicketReservationMng> computedReservations) {
+        for (TicketReservationMng reservation : computedReservations) {
+            Properties requestProperties = OrcaConverter.fill(reservation.getRequestProperties());
+
+            // Skip any VLAN reservations
+            if (null != requestProperties.getProperty(RequestBandwidth)){
+                continue;
+            }
+            assertNotNull("Reservation UID " + reservation.getReservationID() + " is missing core constraint: " + RequestNumCPUCores,
+                    requestProperties.getProperty(RequestNumCPUCores));
         }
 
     }

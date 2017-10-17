@@ -24,6 +24,10 @@ public class OrcaRegressionModifyTest {
                         5},
                 //NodeGroup modify
                 {"src/test/resources/122_request.rdf",
+                        "src/test/resources/122_nodegroups_increase_modify_request.rdf",
+                        23}, // we don't even have 23, but apparently the controller doesn't check
+                //NodeGroup modify
+                {"src/test/resources/122_request.rdf",
                         "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf",
                         5},
                 //NodeGroup modify
@@ -134,7 +138,11 @@ public class OrcaRegressionModifyTest {
         if (requestFilename.contains("112_")) {
             System.out.println("Checking Velocity Templating");
             assertBootscriptVelocityTemplating(computedReservations);
-        } else if (requestFilename.contains("122_") || (requestFilename.contains("137_"))) {
+        }  else if (requestFilename.contains("122_")) {
+            // #122
+            System.out.println("Checking for requested Resource Constraints");
+            assertReservationsHaveResourceConstraints(computedReservations);
+        } else if (requestFilename.contains("137_")) {
             System.out.println("Checking for Network Interfaces");
             // Nodes added in NodeGroup Increase need to have a Network interface
             assertReservationsHaveNetworkInterface(computedReservations);
