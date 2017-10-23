@@ -543,6 +543,7 @@
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Clemson</topology:hasName>
         <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.atla.net.internet2.edu:port=et-3/1/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.atla.net.internet2.edu:port=et-3/1/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -626,6 +627,7 @@
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">duke</topology:hasName>
         <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.rale.net.internet2.edu:port=et-9/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.rale.net.internet2.edu:port=et-9/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
