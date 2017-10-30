@@ -86,6 +86,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	public static final String MSG_RET_FIELD = "msg";
 	public static final String ERR_RET_FIELD = "err";
 	public static final String TICKETED_ENTITIES_FIELD = "ticketedRequestEntities";
+	public static final String TERM_END_FIELD = "termEnd";
 	public static final int BASE_RESERVATION_BUILDER_SIZE = 100;
 	public static final int PER_RESERVATION_BUILDER_SIZE = 180;
 
@@ -142,12 +143,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 	 * in a new Map object of ticketRequestEntities.
 	 *
 	 * @param ret
-	 * @param ticketedRequestEntities
+	 * @param orcaReturnMap
 	 * @return
 	 */
-	private static Map<String, Object> setReturn(Object ret, Map<String, Object> ticketedRequestEntities) {
+	private static Map<String, Object> setReturn(Object ret, Map<String, Object> orcaReturnMap) {
 		Map <String, Object> m = setReturn(ret);
-		m.put(TICKETED_ENTITIES_FIELD, ticketedRequestEntities);
+
+		// add other objects to return map
+		m.putAll(orcaReturnMap);
 		return m;
 	}
 
@@ -401,8 +404,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 						allRes);
 
 				// get Map of requested entities to return to user
-				Map<String, Object> ticketedRequestEntities = ndlSlice.getRequestedEntities();
-
+				Map<String, Object> orcaReturnMap = new HashMap<>();
+				orcaReturnMap.put(TICKETED_ENTITIES_FIELD, ndlSlice.getRequestedEntities());
 
 				// call publishManifest if there are reservations in the slice
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
@@ -413,7 +416,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				//workflow.closeModel(); //close the substrate model, but would break modifying now
 
 				logger.debug("createSlice(): returning result " + result);
-				return setReturn(result.toString(), ticketedRequestEntities);
+				return setReturn(result.toString(), orcaReturnMap);
 			} catch (CredentialException ce) {
 				logger.error("createSlice(): Credential Exception: " + ce.getMessage());
 				return setError("CredentialException encountered: " + ce.getMessage());
@@ -978,9 +981,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				String errMsg = workflow.getErrorMsg();
 				result.append((errMsg == null ? "No errors reported" : errMsg));
 
-				// get Map of requested entities to return to user
-				Map<String, Object> ticketedRequestEntities = ndlSlice.getRequestedEntities();
-
+				Map<String, Object> orcaReturnMap = new HashMap<>();
+				orcaReturnMap.put(TICKETED_ENTITIES_FIELD, ndlSlice.getRequestedEntities());
 
 				// update published manifest
 				if((ndlSlice.getComputedReservations() != null) && (ndlSlice.getComputedReservations().size() > 0)) {
@@ -989,7 +991,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 
 				logger.debug("modifySlice(): returning result " + result);
-				return setReturn(result.toString(), ticketedRequestEntities);
+				return setReturn(result.toString(), orcaReturnMap);
 			} catch (CredentialException ce) {
 				logger.error("modifySlice(): Credential Exception: " + ce.getMessage());
 				return setError("CredentialException encountered: " + ce.getMessage());
@@ -1995,8 +1997,17 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 				}
 				return setError("renewSlice(): " + extMessage);
 			}
-			
-			return setReturn(true);
+
+			// get actual updated term to send to user in return value
+			final OrcaReservationTerm updatedTerm = workflow.getTerm();
+			final Date updatedTermEnd = updatedTerm.getEnd();
+			Calendar updatedEnd = Calendar.getInstance();
+			updatedEnd.setTime(updatedTermEnd);
+
+			Map<String, Object> orcaReturnMap = new HashMap<>();
+			orcaReturnMap.put(TERM_END_FIELD, getRFC3339String(updatedEnd));
+
+			return setReturn(true, orcaReturnMap);
 		} catch (CredentialException ce) {
 			logger.error("renewSlice(): Credential Exception: " + ce.getMessage());
 			return setError("renewSlice(): Credential Exception: " + ce.getMessage());
