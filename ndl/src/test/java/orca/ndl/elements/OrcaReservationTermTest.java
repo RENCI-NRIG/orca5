@@ -10,8 +10,9 @@ import static org.junit.Assert.*;
 
 public class OrcaReservationTermTest {
 
+    // copied from ReservationConverter
     private static final long TWO_WEEKS = TimeUnit.DAYS.toMillis(14);
-    public static final long DEFAULT_MAX_DURATION = TWO_WEEKS;
+    private static final long DEFAULT_MAX_DURATION = TWO_WEEKS;
 
     @Test
     public void getDurationInMinutes() throws Exception {

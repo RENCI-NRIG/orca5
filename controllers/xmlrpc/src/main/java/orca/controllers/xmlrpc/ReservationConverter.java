@@ -76,8 +76,8 @@ public class ReservationConverter implements LayerConstant {
 	static final String SUDO_YES = "yes";
 	static final String OPENSTACK_MAC_DEFAULT_PREFIX = "fe:16:3e:00:";
 	public static final String UNIT_URL_RES = UnitProperties.UnitURL;
-	private static final long TWO_WEEKS = (14*24*3600*1000);
-	private static final long ONE_DAY = (24*3600*1000);
+	private static final long TWO_WEEKS = TimeUnit.DAYS.toMillis(14);
+	private static final long ONE_DAY = TimeUnit.DAYS.toMillis(1);
 	public static final long DEFAULT_MAX_DURATION = TWO_WEEKS;
 	public static final long DEFAULT_DURATION = ONE_DAY;
 	public static final String NO_SSH_KEY_SPECIFIED_STRING = "NO-SSH-KEY-SPECIFIED";

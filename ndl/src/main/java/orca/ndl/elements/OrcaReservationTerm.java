@@ -112,11 +112,13 @@ public class OrcaReservationTerm {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(start);
 
-		// valid reservation terms are all calculated in MilliSeconds
-		cal.add(Calendar.MILLISECOND, Math.toIntExact(TimeUnit.DAYS.toMillis(d)));
-		cal.add(Calendar.MILLISECOND, Math.toIntExact(TimeUnit.HOURS.toMillis(h)));
-		cal.add(Calendar.MILLISECOND, Math.toIntExact(TimeUnit.MINUTES.toMillis(m)));
-		cal.add(Calendar.MILLISECOND, Math.toIntExact(TimeUnit.SECONDS.toMillis(s)));
+		// Daylight savings can cause a mismatch between number of Days and number of Milliseconds.
+		// It would be nice to do everything in Milliseconds,
+		// HOWEVER it doesn't take many days (less than 30) to overflow MAXINT Milliseconds.
+		cal.add(Calendar.DAY_OF_YEAR, d);
+		cal.add(Calendar.HOUR, h);
+		cal.add(Calendar.MINUTE, m);
+		cal.add(Calendar.SECOND, s);
 
 		modifyTerm(cal.getTime());
 	}

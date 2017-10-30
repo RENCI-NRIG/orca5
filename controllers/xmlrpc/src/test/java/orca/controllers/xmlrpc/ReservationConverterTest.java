@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 import orca.embed.RequestWorkflowTest;
 import orca.embed.policyhelpers.DomainResourcePools;
@@ -80,7 +81,11 @@ public class ReservationConverterTest extends RequestWorkflowTest{
 		ReservationConverter orc = new ReservationConverter();
 		OrcaReservationTerm term = new OrcaReservationTerm();
 		term.setStart(new Date());
-		term.setDuration(14, 0, 0, 0);
+
+		// trying to set to exactly the Maximum can cause discrepancies between Days and Milliseconds
+		// (e.g. near Daylight Savings Time changes)
+		final long maxDays = TimeUnit.MILLISECONDS.toDays(ReservationConverter.getMaxDuration());
+		term.setDuration(Math.toIntExact(maxDays - 1), 0, 0, 0);
 
 		orc.setLeaseTerm(term);
 
@@ -97,7 +102,9 @@ public class ReservationConverterTest extends RequestWorkflowTest{
 		ReservationConverter orc = new ReservationConverter();
 		OrcaReservationTerm term = new OrcaReservationTerm();
 		term.setStart(new Date());
-		term.setDuration(30, 0, 0, 0);
+
+		final long maxDays = TimeUnit.MILLISECONDS.toDays(ReservationConverter.getMaxDuration());
+		term.setDuration(Math.toIntExact(maxDays + 1), 0, 0, 0);
 
 		orc.setLeaseTerm(term);
 
