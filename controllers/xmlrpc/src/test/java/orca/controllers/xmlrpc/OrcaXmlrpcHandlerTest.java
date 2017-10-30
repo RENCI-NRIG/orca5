@@ -8,7 +8,6 @@ import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
 import orca.manage.OrcaConverter;
 import orca.manage.beans.PropertiesMng;
-import orca.manage.beans.PropertyMng;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
@@ -18,7 +17,6 @@ import orca.ndl.elements.DomainElement;
 import orca.ndl.elements.NetworkElement;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
-import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -1076,9 +1074,9 @@ public class OrcaXmlrpcHandlerTest {
         String newTermEnd = rfc3339Formatter.format(systemDefaultEndCal.getTime());
         System.out.println(newTermEnd);
 
-        doTestRenewSlice(newTermEnd);
+        final Map<String, Object> result = doTestRenewSlice(newTermEnd);
 
-
+        assertEquals("renewSlice() resulted in non-matching term end", newTermEnd, result.get(TERM_END_FIELD));
     }
 
     /**
@@ -1091,9 +1089,9 @@ public class OrcaXmlrpcHandlerTest {
         String newTermEnd = rfc3339Formatter.format(systemDefaultEndCal.getTime());
         System.out.println(newTermEnd);
 
-        doTestRenewSlice(newTermEnd);
+        final Map<String, Object> result = doTestRenewSlice(newTermEnd);
 
-
+        assertFalse("renewSlice() Over Max should not be resultant end term.", newTermEnd.equals(result.get(TERM_END_FIELD)));
     }
 
     /**
@@ -1102,7 +1100,7 @@ public class OrcaXmlrpcHandlerTest {
      * @param newTermEnd
      * @throws Exception
      */
-    protected void doTestRenewSlice(String newTermEnd) throws Exception {
+    protected Map<String, Object> doTestRenewSlice(String newTermEnd) throws Exception {
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
         String requestFile = "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf";
         String resReq = NdlCommons.readFile(requestFile);
@@ -1140,6 +1138,10 @@ public class OrcaXmlrpcHandlerTest {
         // verify results of renewSlice()
         assertNotNull(result);
         assertFalse("renewSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+
+        assertNotNull(result.get(TERM_END_FIELD));
+
+        return result;
     }
 
     /**
