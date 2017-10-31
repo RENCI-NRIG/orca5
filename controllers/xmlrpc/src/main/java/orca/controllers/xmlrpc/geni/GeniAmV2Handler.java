@@ -605,7 +605,8 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 
             // return the response
             // return the newTermEnd also in the output
-            return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, true, newTermEnd);
+            final String returnedTermEnd = (String) rr.getOrDefault(OrcaXmlrpcHandler.TERM_END_FIELD, newTermEnd);
+            return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, true, returnedTermEnd);
         } catch (CredentialException ce) {
             logger.error("GENI RenewSliver: Credential Exception: " + ce);
             return getStandardApiReturn(ApiReturnCodes.FORBIDDEN.code, null, "Credendial Exception: " + ce);
