@@ -108,7 +108,7 @@ public class OrcaXmlrpcHandlerTest {
      * @param ndlFile filename of createSlice() request RDF
      * @param slice_urn slice name
      */
-    protected static XmlrpcControllerSlice doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn, int expectedReservationCount){
+    public static XmlrpcControllerSlice doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn, int expectedReservationCount){
         OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
         assertNotNull(orcaXmlrpcHandler);
         orcaXmlrpcHandler.verifyCredentials = false;

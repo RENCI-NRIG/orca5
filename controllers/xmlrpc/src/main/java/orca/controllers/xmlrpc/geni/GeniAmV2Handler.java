@@ -52,9 +52,9 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 	public static final String PropertyXmlrpcControllerUrl = "xmlrpc.controller.base.url";
 	public static final String PropertyUseGeniRootLogin = "use.geni.root.login";
 	
-	protected final boolean verifyCredentials;
+	protected boolean verifyCredentials;
 	
-	protected final XmlRpcController controller;
+	protected XmlRpcController controller;
 	protected final OrcaXmlrpcHandler orcaHandler;
 	protected final XmlrpcOrcaState instance;
 
