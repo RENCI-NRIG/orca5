@@ -541,82 +541,80 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 		}
 	}
 
-        public Map<String, Object> RenewSliver(String slice_urn,
-                        Object[] credentials, String newTermEnd, Map<String, Object> options) {
+    public Map<String, Object> RenewSliver(String slice_urn,
+                                           Object[] credentials, String newTermEnd, Map<String, Object> options) {
 
-                try {
-                        logger.info("GENI AM v2 RenewSliver() invoked for " + slice_urn);
-                        Date saExpDate = validateGeniCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, options, verifyCredentials, logger);
+        try {
+            logger.info("GENI AM v2 RenewSliver() invoked for " + slice_urn);
+            Date saExpDate = validateGeniCredential(slice_urn, credentials, new String[]{"*", "pi", "instantiate", "control"}, options, verifyCredentials, logger);
 
-                        // compare slice end date to system default and pick earliest
-                        Calendar systemDefaultEndCal = Calendar.getInstance();
-                        systemDefaultEndCal.add(Calendar.MILLISECOND, (int)OrcaXmlrpcHandler.MaxReservationDuration);
-                        Date sliceEndDate = saExpDate;
+            // compare slice end date to system default and pick earliest
+            Calendar systemDefaultEndCal = Calendar.getInstance();
+            systemDefaultEndCal.add(Calendar.MILLISECOND, (int) OrcaXmlrpcHandler.MaxReservationDuration);
+            Date sliceEndDate = saExpDate;
 
-                        if (saExpDate != null) {
-                                Calendar saExpDateCal = Calendar.getInstance();
-                                saExpDateCal.setTime(saExpDate);
-                                if (systemDefaultEndCal.before(saExpDateCal))
-                                        sliceEndDate = systemDefaultEndCal.getTime();
-                        }
+            if (saExpDate != null) {
+                Calendar saExpDateCal = Calendar.getInstance();
+                saExpDateCal.setTime(saExpDate);
+                if (systemDefaultEndCal.before(saExpDateCal))
+                    sliceEndDate = systemDefaultEndCal.getTime();
+            }
 
-                        // check if "geni_extend_alap" option is present
-                        boolean extend_alap = false;
-                        if(options != null){
-                            Boolean is_alap = (Boolean)options.get(ApiOptionFields.GENI_ALAP.name);
-                            if(is_alap != null){
-                                if(is_alap == true){
-                                    extend_alap = true;
-                                }
-                                else{
-                                    extend_alap = false;
-                                }
-                                logger.info("GENI RenewSliver: geni_extend_alap option found, and set to " + extend_alap);
-                            }
-                        }
-
-                        
-                        // test that new date is not beyond expiration time of the slice or system default
-                        Date termEndDate = parseRFC3339Date(newTermEnd.trim());
-
-                        Calendar cal = Calendar.getInstance();
-                        if (sliceEndDate != null) {
-                                cal.setTime(sliceEndDate);
-                                Calendar termEndDateCal = Calendar.getInstance();
-                                termEndDateCal.setTime(termEndDate);
-                                if (cal.before(termEndDateCal)) { // sliceEndDate is before new term's end date
-                                        if(!extend_alap){ // return error if alap option is false
-                                            return getStandardApiReturn(ApiReturnCodes.BADARGS.code, null, "Requested new end date is after slice expiration or exceeds system default");
-                                        }
-                                        else{ // extend as late as possible
-                                            logger.info("GENI RenewSliver: geni_extend_alap present; requested newTermEnd = " + newTermEnd);
-                                            newTermEnd = getRFC3339String(cal); // cal is the calendar with sliceEndDate
-                                            logger.info("GENI RenewSliver: geni_extend_alap present; using newTermEnd = " + newTermEnd);
-                                        }
-                                }
-                        }
-
-                        // At this point, newTermEnd <= sliceEndDate
-
-                        // submit the request
-                        Map<String, Object> rr = orcaHandler.renewSlice(slice_urn, credentials, newTermEnd);
-                        if ((Boolean)rr.get(OrcaXmlrpcHandler.ERR_RET_FIELD)) {
-                                // error has occurred
-                                return getStandardApiReturn(ApiReturnCodes.BADARGS.code, null, rr.get(OrcaXmlrpcHandler.MSG_RET_FIELD));
-                        }
-
-                        // return the response
-                        // return the newTermEnd also in the output
-                        return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, true, newTermEnd);
-                } catch (CredentialException ce) {
-                        logger.error("GENI RenewSliver: Credential Exception: " + ce);
-                        return getStandardApiReturn(ApiReturnCodes.FORBIDDEN.code, null, "Credendial Exception: " + ce);
-                } catch (Exception e) {
-                        logger.error("GENI RenewSliver: Other Exception: " + e);
-                        e.printStackTrace();
-                        return getStandardApiReturn(ApiReturnCodes.ERROR.code, null, "Other Exception: " + e);
+            // check if "geni_extend_alap" option is present
+            boolean extend_alap = false;
+            if (options != null) {
+                Boolean is_alap = (Boolean) options.get(ApiOptionFields.GENI_ALAP.name);
+                if (is_alap != null) {
+                    if (is_alap == true) {
+                        extend_alap = true;
+                    } else {
+                        extend_alap = false;
+                    }
+                    logger.info("GENI RenewSliver: geni_extend_alap option found, and set to " + extend_alap);
                 }
-        }                                
+            }
+
+
+            // test that new date is not beyond expiration time of the slice or system default
+            Date termEndDate = parseRFC3339Date(newTermEnd.trim());
+
+            Calendar cal = Calendar.getInstance();
+            if (sliceEndDate != null) {
+                cal.setTime(sliceEndDate);
+                Calendar termEndDateCal = Calendar.getInstance();
+                termEndDateCal.setTime(termEndDate);
+                if (cal.before(termEndDateCal)) { // sliceEndDate is before new term's end date
+                    if (!extend_alap) { // return error if alap option is false
+                        return getStandardApiReturn(ApiReturnCodes.BADARGS.code, null, "Requested new end date is after slice expiration or exceeds system default");
+                    } else { // extend as late as possible
+                        logger.info("GENI RenewSliver: geni_extend_alap present; requested newTermEnd = " + newTermEnd);
+                        newTermEnd = getRFC3339String(cal); // cal is the calendar with sliceEndDate
+                        logger.info("GENI RenewSliver: geni_extend_alap present; using newTermEnd = " + newTermEnd);
+                    }
+                }
+            }
+
+            // At this point, newTermEnd <= sliceEndDate
+
+            // submit the request
+            Map<String, Object> rr = orcaHandler.renewSlice(slice_urn, credentials, newTermEnd);
+            if ((Boolean) rr.get(OrcaXmlrpcHandler.ERR_RET_FIELD)) {
+                // error has occurred
+                return getStandardApiReturn(ApiReturnCodes.BADARGS.code, null, rr.get(OrcaXmlrpcHandler.MSG_RET_FIELD));
+            }
+
+            // return the response
+            // return the newTermEnd also in the output
+            return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, true, newTermEnd);
+        } catch (CredentialException ce) {
+            logger.error("GENI RenewSliver: Credential Exception: " + ce);
+            return getStandardApiReturn(ApiReturnCodes.FORBIDDEN.code, null, "Credendial Exception: " + ce);
+        } catch (Exception e) {
+            logger.error("GENI RenewSliver: Other Exception: " + e);
+            e.printStackTrace();
+            return getStandardApiReturn(ApiReturnCodes.ERROR.code, null, "Other Exception: " + e);
+        }
+    }
 
 	
 	public Map<String, Object> Shutdown(String slice_urn, Object[] credentials,
