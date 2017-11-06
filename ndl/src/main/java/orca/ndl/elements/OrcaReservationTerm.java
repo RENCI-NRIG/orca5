@@ -66,15 +66,17 @@ public class OrcaReservationTerm {
 	}
 	
 	public int getDurationInMinutes() {
-                return dDays*24*60 + dHours *60 + dMins;
+                return durationInMinutes(dDays, dHours, dMins);
     }
 	
 	public int getDurationInSeconds() {
-        return 60*getDurationInMinutes()+dSecs;
+        return Math.toIntExact(TimeUnit.MINUTES.toSeconds(getDurationInMinutes())) + dSecs;
 	}
 	
 	private int durationInMinutes(int d, int h, int m) {
-		return d*24*60 + h *60 + m;
+		return Math.toIntExact(TimeUnit.DAYS.toMinutes(d))
+				+ Math.toIntExact(TimeUnit.HOURS.toMinutes(h))
+				+ m;
 	}
 	
 	public void setStart(Date s) {
@@ -110,11 +112,14 @@ public class OrcaReservationTerm {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(start);
 
+		// Daylight savings can cause a mismatch between number of Days and number of Milliseconds.
+		// It would be nice to do everything in Milliseconds,
+		// HOWEVER it doesn't take many days (less than 30) to overflow MAXINT Milliseconds.
 		cal.add(Calendar.DAY_OF_YEAR, d);
 		cal.add(Calendar.HOUR, h);
 		cal.add(Calendar.MINUTE, m);
 		cal.add(Calendar.SECOND, s);
-		
+
 		modifyTerm(cal.getTime());
 	}
 	

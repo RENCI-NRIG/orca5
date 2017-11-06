@@ -178,4 +178,13 @@ public class MockXmlRpcController extends XmlRpcController {
         }
     }
 
+    /**
+     *
+     * @param p property name
+     * @param value new value
+     */
+    public void setProperty(String p, String value) {
+        controllerProperties.setProperty(p, value);
+    }
+
 }
