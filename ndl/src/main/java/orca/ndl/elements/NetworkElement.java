@@ -12,7 +12,6 @@ import orca.ndl.LayerConstant;
 import orca.ndl.NdlCommons;
 import orca.util.persistence.NotPersistent;
 import orca.util.persistence.Persistable;
-import orca.util.persistence.PersistenceUtils;
 import orca.util.persistence.Persistent;
 
 import org.apache.log4j.Logger;
@@ -49,7 +48,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	protected LinkedList<Interface> clientInterface;
 	
 	@Persistent // recursive
-	protected HashMap<String, DomainResource> map;  //interfaces, bandwidth
+	protected HashMap<String, DomainResource> resourcesMap;  //interfaces, bandwidth
 	
 	@Persistent
 	protected String castType;
@@ -232,8 +231,8 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 		}
 		sb.append("\n");
 		sb.append("Interface Bandwidth: ");
-		if (map != null) {
-			for(Entry<String, DomainResource> ee: map.entrySet()) {
+		if (resourcesMap != null) {
+			for(Entry<String, DomainResource> ee: resourcesMap.entrySet()) {
 				sb.append("[ " + ee.getKey() + " <> " + ee.getValue() + " ] ");
 			}
 		}
@@ -347,33 +346,33 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
 	
 	//constraints
     public List<DomainResource> getResources() {
-    	if(map==null)
+    	if(resourcesMap ==null)
     		return null;
-        ArrayList<DomainResource> l = new ArrayList<DomainResource>(map.values().size());
-        for (DomainResource r : map.values()) {
+        ArrayList<DomainResource> l = new ArrayList<DomainResource>(resourcesMap.values().size());
+        for (DomainResource r : resourcesMap.values()) {
             l.add(r);
         }
         return l;
     }
     
     public HashMap<String, DomainResource> getResourcesMap(){
-    	return map;
+    	return resourcesMap;
     }
 
     public void setResourcesMap(HashMap<String, DomainResource> m){
-        map=m;
+        resourcesMap =m;
     }
     
     public DomainResource getResource(String iface) {
-    	if(map==null)
+    	if(resourcesMap ==null)
     		return null;
-    	return map.get(iface);
+    	return resourcesMap.get(iface);
     }
     
     public void addResource(DomainResource resource) {
-    	if(map==null)
-    		map = new HashMap<String, DomainResource>();
-        map.put(resource.getInterface(), resource);
+    	if(resourcesMap ==null)
+    		resourcesMap = new HashMap<String, DomainResource>();
+        resourcesMap.put(resource.getInterface(), resource);
     }
 
 	public boolean isModify() {

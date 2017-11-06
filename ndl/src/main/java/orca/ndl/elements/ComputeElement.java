@@ -96,6 +96,11 @@ public class ComputeElement extends NetworkElement {
 		ce.setFSParam(this.getFSParam());
 		ce.setMntPoint(this.getMntPoint());
 		ce.setDoFormat(this.isDoFormat());
+
+		// #122
+		// NodeGroup modify requests don't have Resource Request / Core Constraint information
+		// so they must be copied from the existing nodes in the NodeGroup.
+		ce.setResourcesMap(this.getResourcesMap());
 		
 		return ce;
 	}

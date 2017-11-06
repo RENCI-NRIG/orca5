@@ -28,7 +28,6 @@ import orca.ndl.INdlModifyModelListener;
 import orca.ndl.INdlModifyModelListener.ModifyType;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
-import orca.ndl.NdlModel;
 import orca.ndl.NdlRequestParser;
 import orca.ndl.elements.ComputeElement;
 import orca.ndl.elements.Device;
@@ -40,12 +39,10 @@ import orca.ndl.elements.NetworkConnection;
 import orca.ndl.elements.NetworkElement;
 import orca.ndl.elements.RequestSlice;
 import orca.shirako.common.meta.UnitProperties;
-import orca.shirako.container.Globals;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -136,7 +133,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 				}
 			
 				if(me.getModType().equals(INdlModifyModelListener.ModifyType.INCREASE)){
-					err = addElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
+					err = addNodeGroupElements(me, manifestOnt, nodeGroupMap, firstGroupElement, requestModel, deviceList);
 				}
 				if(err!=null) {
 					logger.error(err.getMessage());
@@ -389,17 +386,17 @@ public class ModifyHandler extends UnboundRequestHandler {
 		}
 	}
 	
-	protected SystemNativeError  addElements(ModifyElement me,OntModel manifestOntModel, 
-			HashMap <String,Collection <DomainElement>> nodeGroupMap,
-			HashMap <String,DomainElement> firstGroupElement, 
-			OntModel requestModel, LinkedList<NetworkElement> deviceList) throws InetNetworkException, UnknownHostException, Exception{
+	protected SystemNativeError addNodeGroupElements(ModifyElement me, OntModel manifestOntModel,
+													 HashMap <String,Collection <DomainElement>> nodeGroupMap,
+													 HashMap <String,DomainElement> firstGroupElement,
+													 OntModel requestModel, LinkedList<NetworkElement> deviceList) throws InetNetworkException, UnknownHostException, Exception{
 		SystemNativeError error = null;	
 		
 		int units = me.getModifyUnits();
 		String n = me.getSub().getURI();
 		int i = n.lastIndexOf("#");
 		String group = i>=0 ? n.substring(i+1):n;
-		logger.info("addElements() starts, units="+units);
+		logger.info("addNodeGroupElements() starts, units="+units);
 		logger.debug("nodeGroupMap size="+nodeGroupMap.size());
 		Collection <DomainElement> cde = nodeGroupMap.get(group);
 		if((cde==null) || (cde.isEmpty()) ){
@@ -465,13 +462,13 @@ public class ModifyHandler extends UnboundRequestHandler {
 					link_device = entry.getKey();
 					hole = entry.getValue();
 					if(edge_device==null){
-						edge_device=createNewNode(firstElement,hole,link_device,domainName,manifestOntModel, requestModel, deviceList);
+						edge_device= createNewNodeGroupNode(firstElement,hole,link_device,domainName,manifestOntModel, requestModel, deviceList);
 					}
 					createInterface(firstElement, edge_device,hole,link_device);
 				}
 			}else{
 				logger.debug("firstElement has no parent! No interface will be created.");
-				createNewNode(firstElement, -1, null, domainName, manifestOntModel, requestModel, deviceList);
+				createNewNodeGroupNode(firstElement, -1, null, domainName, manifestOntModel, requestModel, deviceList);
 			}
 		}		
 		
@@ -485,8 +482,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 		return error;
 	}	
 	
-	protected DomainElement createNewNode(DomainElement element,int hole,DomainElement link_device, 
-			String domainName,OntModel manifestModel, OntModel requestModel, LinkedList<NetworkElement> deviceList) throws UnknownHostException, InetNetworkException{
+	protected DomainElement createNewNodeGroupNode(DomainElement element, int hole, DomainElement link_device,
+												   String domainName, OntModel manifestModel, OntModel requestModel, LinkedList<NetworkElement> deviceList) throws UnknownHostException, InetNetworkException{
 		
 		ComputeElement ce=null,element_ce=null;
 
