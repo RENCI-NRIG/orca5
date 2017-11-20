@@ -310,7 +310,7 @@ public class MySqlBase implements DatabaseBase
 	             * "feature". We work around this by setting the username as part of
 	             * the URL
 	             */
-	            String url = "jdbc:mysql://" + mySqlServer + ":" + mySqlServerPort + "/" + db + "?user=" + mySqlUser;
+                    String url = "jdbc:mysql://" + mySqlServer + ":" + mySqlServerPort + "/" + db + "?user=" + mySqlUser + "&verifyServerCertificate=false&useSSL=true";
 	            logger.debug("mysql database: " + url);
 	
 	            // register the connection pool
