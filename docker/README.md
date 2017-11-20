@@ -77,8 +77,8 @@ docker exec -it orca-sm bash
 ## Dependencies
 1. Docker must be installed on your system.  You will either need to run the above commands with sudo / as root, or add your current user to the 'docker' group.
 1. Orca needs many configuration files to operate.  These need to be volume mounted into the running containers (the `--volume` options above).
-1. The Orca RPMs must be built before the Docker images can be built.  See the `redhat` module for more details.
-1. Before you run your first Orca docker container, you will need to create a docker network for Orca to use (referenced in the above docker run commands): `docker network create orca`
+1. The [docker_build.sh](https://github.com/RENCI-NRIG/orca5/blob/master/docker/docker_build.sh) script will build the necessary Orca RPMs for you. If you are building the Docker images manually, you will need to prepare the Orca RPMs.  See the `redhat` module for more details on building Orca RPMs.
+1. The [docker_run.sh](https://github.com/RENCI-NRIG/orca5/blob/master/docker/docker_run.sh) script will create a docker network for Orca to use.  If you are running the Docker containers manually, you will need to create a docker network for Orca to use (referenced in the above docker run commands). e.g. `docker network create orca`
 
 ### Using Docker to build RPMs
 Use this script to build the orca-rpmbuild container and build the RPMs.  They will be copied into your `~/orca-build/` directory (which will be created, if it does not exist. The RPMs are built automatically for you if you run the top-level `docker_build.sh` script.
@@ -110,6 +110,6 @@ docker run \
 ## Hopefully-Only-Temporarily Complicated Instructions for Putting it all Together
 1. Build the base docker image, that doesn't depend on any RPMs: `cd docker/orca_base && mvn clean package -Pdocker`
 1. Build the orca-rpmbuild docker image: `cd ../orca-rpmbuild && mvn clean package -Pdocker`
-1. [Build RPMs using Docker](# Using Docker to build RPMs)
+1. [Build RPMs using Docker](#using-docker-to-build-rpms)
 1. Build the remainder of the Orca Docker images: 'cd .. && mvn clean package -Pdocker`
 
