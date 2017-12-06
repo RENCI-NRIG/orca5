@@ -329,7 +329,8 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		HashMap <String, LinkedList <NetworkElement>> domainCount = new HashMap <String, LinkedList <NetworkElement>>();
 		if(con_elements.size()>0){
 			for(NetworkElement e:con_elements){
-				e_domain = e.getInDomain();
+				// #157 - baremetal and VM in same domain must be treated separately
+				e_domain = e.getInDomain() + "/" + e.getResourceType().getResourceType();
 				c_e= (ComputeElement) e;
 				if(e_domain==null){
 					domainCount = new HashMap <String, LinkedList <NetworkElement>>();
