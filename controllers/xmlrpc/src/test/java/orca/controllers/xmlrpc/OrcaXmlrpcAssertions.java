@@ -1,5 +1,6 @@
 package orca.controllers.xmlrpc;
 
+import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 import orca.embed.workflow.ManifestParserListener;
@@ -9,6 +10,7 @@ import orca.manage.beans.PropertiesMng;
 import orca.manage.beans.PropertyMng;
 import orca.manage.beans.ReservationMng;
 import orca.manage.beans.TicketReservationMng;
+import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
 import orca.ndl.NdlManifestParser;
 import orca.ndl.elements.Interface;
@@ -333,5 +335,20 @@ public class OrcaXmlrpcAssertions {
                     requestProperties.getProperty(RequestNumCPUCores));
         }
 
+    }
+
+    /**
+     * The list of NdlCommons.computeElementClass includes both the actual node elements,
+     * and each unique domain for those node elements.
+     * In #157, a domain with both VM and BareMetal node elements would "lose" track of one of those type of elements,
+     * which was exhibited in the domain for the "missing" one to not be present in this list.
+     *
+     * @param manifestModel
+     * @param expectedComputeElements
+     */
+    protected static void assertManifestHasNumberOfComputeElements(OntModel manifestModel, int expectedComputeElements) {
+        final List<Individual> individuals = manifestModel.listIndividuals(NdlCommons.computeElementClass).toList();
+
+        assertEquals("List of Compute Elements did not match expected size.", expectedComputeElements, individuals.size());
     }
 }

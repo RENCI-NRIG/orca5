@@ -113,12 +113,14 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             resource.put("site.vm", 36);
             resource.put("site.vlan", 9);
             resource.put("site.lun", 100);
+            resource.put("site.baremetalce", 2);
             resourceMap.put(domain, resource);
 
             domain = new Domain("orca/ndl/substrate/pscvmsite.rdf");
             resource = new HashMap<>();
             resource.put("site.vm", 150);
             resource.put("site.vlan", 8);
+            resource.put("site.baremetalce", 2);
             resourceMap.put(domain, resource);
 
             domain = new Domain("orca/ndl/substrate/rcivmsite.rdf");

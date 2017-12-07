@@ -66,7 +66,8 @@ public class OrcaRegressionTest {
                 //{ "../../embed/src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14-1+11}, // Deprecated. OSG site no longer exists
                 { "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-TAG3291-3292.rdf", true, 3-2+4},
                 { "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-URLncbi.rdf", true, 3-2+4},
-                { "src/test/resources/146_create_node_with_two_interfaces_interdomain_request.rdf", true, 5+8}
+                { "src/test/resources/146_create_node_with_two_interfaces_interdomain_request.rdf", true, 5+8},
+                { "../../embed/src/test/resources/orca/embed/157_mp_diff_resource_type_request.rdf", true, 4+6}
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
                 { "../../embed/src/test/resources/orca/embed/TS8/TS8-1.rdf", true, 12},
@@ -125,6 +126,8 @@ public class OrcaRegressionTest {
 
         if (requestFilename.contains("106_mp")){
             assertEc2InstanceTypePresent(computedReservations);
+        } else if (requestFilename.contains("157_mp_diff_resource_type_request")){
+            assertManifestHasNumberOfComputeElements(slice.workflow.getManifestModel(), 6);
         }
 
         assertManifestWillProcess(slice);
