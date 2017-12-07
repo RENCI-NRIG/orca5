@@ -325,30 +325,25 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
 		LinkedList <NetworkElement> con_elements = (LinkedList<NetworkElement>) rc.getConnection();
 		String e_domain=null;
 		LinkedList <NetworkElement> elements = null;
-		ComputeElement c_e = null;
 		HashMap <String, LinkedList <NetworkElement>> domainCount = new HashMap <String, LinkedList <NetworkElement>>();
-		if(con_elements.size()>0){
-			for(NetworkElement e:con_elements){
-				// #157 - baremetal and VM in same domain must be treated separately
-				e_domain = e.getInDomain() + "/" + e.getResourceType().getResourceType();
-				c_e= (ComputeElement) e;
-				if(e_domain==null){
-					domainCount = new HashMap <String, LinkedList <NetworkElement>>();
-					break;
-				}
-				if(domainCount.containsKey(e_domain)){
-					domainCount.get(e_domain).add(e);
-					//if(c_e.getGroup()==null)
-					//	c_e.setGroup(c_e.getName());
-				}else{
-					elements = new LinkedList <NetworkElement>();
-					elements.add(e);
-					//if(c_e.getGroup()==null)
-					//	c_e.setGroup(c_e.getName());
-					domainCount.put(e_domain, elements);
-				}
+
+		for (NetworkElement e : con_elements) {
+			// #157 - baremetal and VM in same domain must be treated separately
+			e_domain = e.getInDomain() + "/" + e.getResourceType().getResourceType();
+
+			if (e.getInDomain() == null) {
+				domainCount = new HashMap<String, LinkedList<NetworkElement>>();
+				break;
+			}
+			if (domainCount.containsKey(e_domain)) {
+				domainCount.get(e_domain).add(e);
+			} else {
+				elements = new LinkedList<NetworkElement>();
+				elements.add(e);
+				domainCount.put(e_domain, elements);
 			}
 		}
+
 		return domainCount;
 	}
 }

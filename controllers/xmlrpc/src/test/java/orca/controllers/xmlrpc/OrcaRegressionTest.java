@@ -126,7 +126,7 @@ public class OrcaRegressionTest {
 
         if (requestFilename.contains("106_mp")){
             assertEc2InstanceTypePresent(computedReservations);
-        } else if (requestFilename.contains("157_mp")){
+        } else if (requestFilename.contains("157_mp_diff_resource_type_request")){
             assertManifestHasNumberOfComputeElements(slice.workflow.getManifestModel(), 6);
         }
 
