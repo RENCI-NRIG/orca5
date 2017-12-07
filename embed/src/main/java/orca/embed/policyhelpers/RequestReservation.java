@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import orca.ndl.DomainResourceType;
 import orca.ndl.NdlCommons;
 import orca.ndl.NdlException;
@@ -202,12 +201,20 @@ public class RequestReservation {
 				intraSite=false;
 				if(requestConnection.getConnection().size()>0){//broadcast tree request
 					String connection_domain = null;
-					//if(requestConnection.getCastType().equalsIgnoreCase("Multicast"))
-					//	connection_domain=this.MultiPoint_Domain;
-					//else
-						connection_domain=ifMPConnection(requestConnection);
-					if(connection_domain.equals(RequestReservation.Unbound_Domain))
+
+					// determine if MultiPoint request is "true" multipoint, ie. having more than one domain
+					final Set<String> connectionDomains = ifMPConnection(requestConnection);
+					if (connectionDomains.size() == 1){
+						connection_domain = connectionDomains.iterator().next();
+					} else {
+						connection_domain = RequestReservation.MultiPoint_Domain;
+					}
+
+					// determine if an unbound domain was present
+					if (connectionDomains.contains(RequestReservation.Unbound_Domain)){
 						requestBounded = false;
+					}
+
 					element.setInDomain(connection_domain);
 					setDomainRequestReservation(element,domainRequestReservation);
 					reservationDomain=null;
@@ -279,28 +286,32 @@ public class RequestReservation {
 		
 		return requestBounded;
 	}
-	
-	//decide to call unboundhandler or mphandler which is for bounded inter-domain mp connection
+
+	/**
+	 * Determine all domains in request connection,
+	 * which can be used for multipoint or unbound handler determination
+	 *
+	 * @param rc
+	 * @return The Set of all domains present in request connection
+	 */
 	@SuppressWarnings("unchecked")
-	public String ifMPConnection(NetworkConnection rc){
+	public Set<String> ifMPConnection(NetworkConnection rc){
 		LinkedList <NetworkElement> con_elements = (LinkedList<NetworkElement>)rc.getConnection();
-		String e_domain=null,r_domain=con_elements.getFirst().getInDomain();
-		String connection_domain=null;
-		if(con_elements.size()>0){
-			for(NetworkElement e:con_elements){
-				e_domain = e.getInDomain();
-				if(e_domain==null){
-					connection_domain = RequestReservation.Unbound_Domain;
-					break;
-				}else if(!e_domain.equals(r_domain)){
-					connection_domain = RequestReservation.MultiPoint_Domain;
-					r_domain = connection_domain;
-				}else{
-					connection_domain = e_domain;
-				}
+		String e_domain;
+
+		Set<String> connection_domains = new HashSet<>(con_elements.size());
+
+		for (NetworkElement networkElement : con_elements) {
+			e_domain = networkElement.getInDomain();
+
+			if (e_domain == null) {
+				connection_domains.add(RequestReservation.Unbound_Domain);
+			} else {
+				connection_domains.add(e_domain);
 			}
 		}
-		return connection_domain;
+
+		return connection_domains;
 	}
 	
 	public void setDomainRequestReservation(NetworkElement element, HashMap <String, RequestReservation> dRR){
