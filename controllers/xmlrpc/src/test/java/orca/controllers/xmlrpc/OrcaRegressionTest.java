@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Parameterized.class)
 public class OrcaRegressionTest {
@@ -67,7 +68,10 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-TAG3291-3292.rdf", true, 3-2+4},
                 { "../../embed/src/test/resources/orca/embed/request-stitchport-URLcham-URLncbi.rdf", true, 3-2+4},
                 { "src/test/resources/146_create_node_with_two_interfaces_interdomain_request.rdf", true, 5+8},
-                { "../../embed/src/test/resources/orca/embed/157_mp_diff_resource_type_request.rdf", true, 4+6}
+                { "../../embed/src/test/resources/orca/embed/157_mp_diff_resource_type_request.rdf", true, 4+6},
+                { "../../embed/src/test/resources/orca/embed/158_mp_one_domain_one_unbound_request.rdf", true, 4+0},
+                { "../../embed/src/test/resources/orca/embed/158_mp_two_domain_one_unbound_request.rdf", true, 4+4},
+                { "../../embed/src/test/resources/orca/embed/158_mp_three_domain_one_unbound_request.rdf", false, 4+6}
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
                 { "../../embed/src/test/resources/orca/embed/TS8/TS8-1.rdf", true, 12},
@@ -96,15 +100,15 @@ public class OrcaRegressionTest {
     private String requestFilename;
 
     // Second Parameter -- whether test should pass
-    private boolean expected;
+    private boolean expectedSuccess;
 
     // Third Parameter -- number of Devices / Network Elements requested
     private int numDevicesInRequest;
 
     // JUnit automatically passes in Parameters to constructor
-    public OrcaRegressionTest(String requestFilename, boolean expected, int numDevicesInRequest){
+    public OrcaRegressionTest(String requestFilename, boolean expectedSuccess, int numDevicesInRequest){
         this.requestFilename = requestFilename;
-        this.expected = expected;
+        this.expectedSuccess = expectedSuccess;
         this.numDevicesInRequest = numDevicesInRequest;
     }
 
@@ -120,7 +124,15 @@ public class OrcaRegressionTest {
         XmlrpcControllerSlice slice = OrcaXmlrpcHandlerTest.doTestCreateSlice(controller,
                 requestFilename,
                 "createSlice_testRegressionTest_" + testName,
+                expectedSuccess,
                 numDevicesInRequest);
+
+        // Tests that are expectedSuccess to fail cannot have any extra assertions, and should return here
+        if (!expectedSuccess) {
+            return;
+        }
+
+        assertNotNull("createSlice() returned a Null slice", slice);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 

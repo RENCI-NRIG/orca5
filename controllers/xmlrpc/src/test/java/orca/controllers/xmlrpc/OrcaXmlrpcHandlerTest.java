@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
 import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
@@ -70,7 +69,7 @@ public class OrcaXmlrpcHandlerTest {
         doTestCreateSlice(controller,
                 "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
                 "createSlice_test_" + controller.getClass().getSimpleName(),
-                EXPECTED_RESERVATION_COUNT_FOR_CREATE);
+                true, EXPECTED_RESERVATION_COUNT_FOR_CREATE);
 
     }
 
@@ -92,7 +91,7 @@ public class OrcaXmlrpcHandlerTest {
         XmlrpcControllerSlice slice = doTestCreateSlice(controller,
                 "src/test/resources/20_create_with_netmask.rdf",
                 "createSlice_testWithNetmask_" + controller.getClass().getSimpleName(),
-                EXPECTED_RESERVATION_COUNT_FOR_CREATE);
+                true, EXPECTED_RESERVATION_COUNT_FOR_CREATE);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
@@ -104,11 +103,12 @@ public class OrcaXmlrpcHandlerTest {
     /**
      *
      * Used by createSlice() tests
-     *  @param controller either a 'Live' or Mock XmlRpcController
+     * @param controller either a 'Live' or Mock XmlRpcController
      * @param ndlFile filename of createSlice() request RDF
      * @param slice_urn slice name
+     * @param expectedSuccess
      */
-    public static XmlrpcControllerSlice doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn, int expectedReservationCount){
+    public static XmlrpcControllerSlice doTestCreateSlice(XmlRpcController controller, String ndlFile, String slice_urn, boolean expectedSuccess, int expectedReservationCount){
         OrcaXmlrpcHandler orcaXmlrpcHandler = new OrcaXmlrpcHandler();
         assertNotNull(orcaXmlrpcHandler);
         orcaXmlrpcHandler.verifyCredentials = false;
@@ -127,7 +127,12 @@ public class OrcaXmlrpcHandlerTest {
 
         // verify results of createSlice()
         assertNotNull(result);
-        assertFalse("createSlice() returned error: " + result.get(MSG_RET_FIELD), (boolean) result.get(ERR_RET_FIELD));
+        assertEquals("createSlice() returned error: " + result.get(MSG_RET_FIELD), expectedSuccess, ! (boolean) result.get(ERR_RET_FIELD));
+
+        // Tests that are expected to fail should return here
+        if (!expectedSuccess) {
+            return null;
+        }
 
         assertEquals("Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT +
                         ") did not match expected value", expectedReservationCount,
