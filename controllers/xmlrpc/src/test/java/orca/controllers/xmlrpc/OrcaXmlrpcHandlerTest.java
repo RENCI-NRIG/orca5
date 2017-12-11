@@ -628,6 +628,36 @@ public class OrcaXmlrpcHandlerTest {
     }
 
     /**
+     * #162
+     * Start a new slice with three nodes, in different domains, with no links between them. Create this slice.
+     * Modify the slice by adding a broadcast link between two nodes (A and B). Submit this modify.
+     * Modify the slice by adding a broadcast link between two nodes (B and C). Submit this modify.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test162ModifyAddInterDomainBroadcastLinks() throws Exception {
+        // Create Request
+        String createRequestFile = "src/test/resources/162_interdomain_link_add_request.rdf";
+
+        // modify request
+        LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
+        modifyRequests.put("src/test/resources/162_interdomain_link_add_broadcast_A-B_modify_request.rdf", 3+5);
+        modifyRequests.put("src/test/resources/162_interdomain_link_add_broadcast_B-A_modify_request.rdf", 3+5+3);
+
+        XmlrpcControllerSlice slice = doTestMultipleModifySlice(
+                "test162ModifyAddInterDomainBroadcastLinks",
+                createRequestFile,
+                modifyRequests);
+
+        List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+
+        //
+        assertReservationsHaveNetworkInterface(computedReservations);
+        assertSliceHasNoDuplicateInterfaces(slice);
+    }
+
+    /**
      * Adding and removing Nodes one at a time, means that we should always be able to predict
      * the interface numbering.
      *
