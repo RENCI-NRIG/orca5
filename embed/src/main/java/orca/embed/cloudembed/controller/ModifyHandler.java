@@ -802,7 +802,9 @@ public class ModifyHandler extends UnboundRequestHandler {
 		        	Iterator<NetworkElement> elementIt = elements.iterator();
 		        	while(elementIt.hasNext()){
 		        		element = elementIt.next();
-		        		if(element.getName().equals(connectionName) || element.getURI().equals(connectionName)){
+
+		        		// #162 make sure the element has not been Closed before trying to add it to the manifest
+		        		if(!element.getModel().isClosed() && (element.getName().equals(connectionName) || element.getURI().equals(connectionName))){
 		        			logger.info("Modify CreateManifest InterDomain:element url ="+element.getURI()+";isModify="+element.isModify());
 		        			createManifest(element, manifestModel, manifest, domainList);
 		        		}
