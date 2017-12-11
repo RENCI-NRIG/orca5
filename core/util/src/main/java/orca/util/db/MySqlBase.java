@@ -43,6 +43,7 @@ public class MySqlBase implements DatabaseBase
     public static final String PropertyMySqlPassword = "db.mysql.password";
     public static final String PropertyMySqlDb = "db.mysql.db";
     public static final String PropertyMySqlPool = "db.mysql.pool";
+    public static final String PropertyMySqlConnectionOptions = "db.mysql.connection-options";
 
     /**
      * Helper function to construct a query. Constructs a query of the form
@@ -154,6 +155,14 @@ public class MySqlBase implements DatabaseBase
      */
     @Persistent(key = PropertyMySqlPassword)
     protected String mySqlPasswd;
+    /**
+     * MySql Connections Options. Default empty.
+     * e.g. "&verifyServerCertificate=false&useSSL=true"
+     * https://github.com/RENCI-NRIG/exogeni/issues/173
+     * https://github.com/RENCI-NRIG/orca5/pull/156
+     */
+    @Persistent(key = PropertyMySqlConnectionOptions)
+    protected String mySqlConnectionOptions;
     /**
      * Location of the file to use to create the connection pool
      */
@@ -301,26 +310,26 @@ public class MySqlBase implements DatabaseBase
 	            if (mapFile != null) {
 	                mapper = new MySqlPropertiesMapper(mapFile);
 	            }
-	
+
 	            loadDrivers();
-	
+
 	            /*
 	             * If either username or password is null,
 	             * DriverManagerConnectionFactory will use nulls for both. This is a
 	             * "feature". We work around this by setting the username as part of
 	             * the URL
 	             */
-                    String url = "jdbc:mysql://" + mySqlServer + ":" + mySqlServerPort + "/" + db + "?user=" + mySqlUser + "&verifyServerCertificate=false&useSSL=true";
-	            logger.debug("mysql database: " + url);
-	
+                String url = "jdbc:mysql://" + mySqlServer + ":" + mySqlServerPort + "/" + db + "?user=" + mySqlUser + mySqlConnectionOptions;
+                logger.debug("mysql database: " + url);
+
 	            // register the connection pool
 	            DriverManagerConnectionFactory factory = new DriverManagerConnectionFactory(url, mySqlUser, mySqlPasswd);
 	            MySqlPool.registerPool(factory, joclFileLocation, pool);
-	
+
 	            if (mapper != null) {
 	                mapper.initialize();
 	            }
-	
+
 	            checkDb();
 	            initialized = true;
         	} catch (OrcaException e) {
