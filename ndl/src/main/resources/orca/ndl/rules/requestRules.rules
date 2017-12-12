@@ -60,9 +60,13 @@
 #broadcast links can't have unbound members
 [saneBcastLink2: (?v rb:validation on()) ->
 	[ (?Z rb:violation error('Broadcast links cannot have unbound endpoints', ?X, ?C))
-		<- (?X rdf:type topo:BroadcastConnection), (?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), (?X topo:hasInterface ?I3), 
-		notEqual(?I1, ?I2), notEqual(?I1, ?I3), (?A topo:hasInterface ?I1), (?B topo:hasInterface ?I2), (?C topo:hasInterface ?I3), 
-		notEqual(?A, ?X), notEqual(?B, ?X), notEqual(?C, ?X), (?A req:inDomain ?D1), (?B req:inDomain ?D2), noValue(?C, req:inDomain) ] ]
+		<- (?X rdf:type topo:BroadcastConnection),
+		(?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), (?X topo:hasInterface ?I3),  (?X topo:hasInterface ?I4),
+		notEqual(?I1, ?I2), notEqual(?I1, ?I3), notEqual(?I1, ?I4),
+		notEqual(?I2, ?I3), notEqual(?I2, ?I3), notEqual(?I3, ?I4),
+		(?A topo:hasInterface ?I1), (?B topo:hasInterface ?I2), (?C topo:hasInterface ?I3),  (?D topo:hasInterface ?I4),
+		notEqual(?A, ?X), notEqual(?B, ?X), notEqual(?C, ?X),  notEqual(?D, ?X),
+		(?A req:inDomain ?D1), (?B req:inDomain ?D2), (?C req:inDomain ?D3), noValue(?D, req:inDomain) ] ]
 
 # multi-domain broadcast link domains can't be repeated (commented out since Yufeng's latest embedding code supposed to be able to do this)
 #[saneBcastLink1: (?v rb:validation on()) ->
