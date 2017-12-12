@@ -611,9 +611,9 @@ yxin@renci.org</rdfs:isDefinedBy>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/storage.owl#finerChannel -->
+    <!-- http://geni-orca.renci.org/owl/storage.owl#fibreChannel -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/storage.owl#finerChannel"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/storage.owl#fibreChannel"/>
 </rdf:RDF>
 
 

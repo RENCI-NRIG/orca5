@@ -64,7 +64,7 @@ public class GeniAmV2HandlerTest {
                 controller,
                 "src/test/resources/20_create_with_netmask.rdf",
                 "geniRenewSliver",
-                3);
+                true, 3);
 
         // need to force the slice reservations to be active
         for (TicketReservationMng reservation : slice.getComputedReservations()) {

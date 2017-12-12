@@ -140,6 +140,15 @@ public class RequestWorkflow {
 		}
 		// TODO: check if the request is already fully bound in one domain, preparing for topology splitting 				
 		boolean bound = request.generateGraph(requestElements);
+
+		if (!bound && RequestReservation.MultiPoint_Domain.equals(request.getDomainRequestReservation().keySet().iterator().next())){
+			err = new SystemNativeError();
+			err.setMessage("True MultiPoint requests cannot contain unbound elements. See https://github.com/RENCI-NRIG/orca5/issues/158");
+			err.setAdditional("Please bound all elements in your request");
+			err.setErrno(1);
+			return err;
+		}
+
 		String reservationDomain = request.getReservationDomain();
 		term=request.getTerm();
 		((CloudHandler)embedderAlgorithm).addSubstrateModel(abstractModels);
