@@ -828,7 +828,7 @@
         <ndl:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ben.rdf#Renci/Cisco/6509"/>
         <ndl:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/GigabitEthernet/0/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <ndl:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SciDAS</ndl:hasName>
+        <ndl:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">acisrenciNet</ndl:hasName>
         <rdfs:label>xe-0/0/8</rdfs:label>
     </owl:NamedIndividual>
     
