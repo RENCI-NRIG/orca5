@@ -57,9 +57,9 @@
 		(?A topo:hasInterface ?I1), (?A req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), 
 		(?B topo:hasInterface ?I2), notEqual(?A, ?B), notEqual(?A, ?X), notEqual(?B, ?X), noValue(?B, req:inDomain) ] ]
 		
-#broadcast links can't have unbound members
+#broadcast links can't have unbound members, when three domains are specified. https://github.com/RENCI-NRIG/orca5/issues/158
 [saneBcastLink2: (?v rb:validation on()) ->
-	[ (?Z rb:violation error('Broadcast links cannot have unbound endpoints', ?X, ?C))
+	[ (?Z rb:violation error('MultiPoint Broadcast links cannot have unbound endpoints. Please bound all elements in your request.', ?X, ?D))
 		<- (?X rdf:type topo:BroadcastConnection),
 		(?X topo:hasInterface ?I1), (?X topo:hasInterface ?I2), (?X topo:hasInterface ?I3),  (?X topo:hasInterface ?I4),
 		notEqual(?I1, ?I2), notEqual(?I1, ?I3), notEqual(?I1, ?I4),
