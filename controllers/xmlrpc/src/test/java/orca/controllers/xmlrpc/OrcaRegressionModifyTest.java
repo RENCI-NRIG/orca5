@@ -89,7 +89,19 @@ public class OrcaRegressionModifyTest {
                 //add storage modify
                 {"../../embed/src/test/resources/orca/embed/TS1/TS1-2.rdf",
                         "src/test/resources/146_modify_add_storage_request.rdf",
-                        2}
+                        2},
+                // Interdomain modify
+                {"../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+                        "../../embed/src/test/resources/orca/embed/161_interdomain_simplified_A1_B1_B2_modify_request.rdf",
+                        13},
+                // Interdomain modify
+                {"../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+                        "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_B2_C1_modify_request.rdf",
+                        17},
+                // Interdomain modify
+                {"../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+                        "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_to_B2_modify_request.rdf",
+                        9}
         });
     }
 

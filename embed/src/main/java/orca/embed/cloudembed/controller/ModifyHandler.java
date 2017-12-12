@@ -2,15 +2,8 @@ package orca.embed.cloudembed.controller;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.UUID;
 
 import net.jwhoisserver.utils.InetNetwork;
 import net.jwhoisserver.utils.InetNetworkException;
@@ -185,7 +178,8 @@ public class ModifyHandler extends UnboundRequestHandler {
 		for(ReservationMng ar: a_r){
 			config_ar = OrcaConverter.fill(ar.getConfigurationProperties());
 			local_ar = OrcaConverter.fill(ar.getLocalProperties());
-			String url_ar=config_ar.getProperty(UnitProperties.UnitDomain);
+			String url_ar=config_ar.getProperty(UnitProperties.UnitHostNameUrl);
+
 			if(url_ar==null){
 				logger.error("ar reservation no url property:"+ar.getReservationID());
 				continue;
@@ -193,11 +187,13 @@ public class ModifyHandler extends UnboundRequestHandler {
 			for(ReservationMng mr: m_r){
 				config_mr = OrcaConverter.fill(mr.getConfigurationProperties());
 				local_mr = OrcaConverter.fill(mr.getLocalProperties());
-				String url_mr=config_mr.getProperty(UnitProperties.UnitDomain);
+				String url_mr=config_mr.getProperty(UnitProperties.UnitHostNameUrl);
+
 				if(url_mr==null){
 					logger.error("mr reservation no url property:"+mr.getReservationID());
 					continue;
 				}
+
 				if(url_ar.equals(url_mr)){
 					logger.debug("Modifying via adding storage url_al="+url_ar+";"+";url_ml="+url_mr);
 					logger.debug("config:"+config_ar.toString());
