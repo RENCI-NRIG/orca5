@@ -3,6 +3,7 @@ package orca.controllers.xmlrpc;
 import com.hp.hpl.jena.ontology.Individual;
 import orca.controllers.OrcaController;
 import orca.embed.policyhelpers.DomainResourcePools;
+import orca.embed.policyhelpers.SystemNativeError;
 import orca.embed.workflow.RequestWorkflow;
 import orca.manage.IOrcaServiceManager;
 import orca.manage.OrcaConstants;
@@ -1239,7 +1240,12 @@ public class OrcaXmlrpcHandlerTest {
         RequestWorkflow workflow = ndlSlice.getWorkflow();
         workflow.setGlobalControllerAssignedLabel(orcaXmlrpcHandler.instance.getControllerAssignedLabel());
         workflow.setShared_IP_set(orcaXmlrpcHandler.instance.getShared_IP_set());
-        workflow.run(drp, orcaXmlrpcHandler.abstractModels, resReq, userDN, controller_url, ndlSlice.getSliceID());
+        final SystemNativeError runError = workflow.run(drp, orcaXmlrpcHandler.abstractModels, resReq, userDN, controller_url, ndlSlice.getSliceID());
+
+        // this shouldn't happen, unless we've made an error in creating our tests
+        if (runError != null) {
+            assertFalse("Could not create slice necessary for Modify: " + runError.getMessage(), runError.isError());
+        }
 
         ArrayList<TicketReservationMng> reservations = orc.getReservations(sm, workflow.getBoundElements(), orcaXmlrpcHandler.typesMap, workflow.getTerm(), workflow.getslice());
 
