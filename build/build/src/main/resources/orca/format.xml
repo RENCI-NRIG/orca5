@@ -396,7 +396,7 @@
 <general>
 <beforeOperator>false</beforeOperator>
 <enable>true</enable>
-<lineLength>100</lineLength>
+<lineLength>120</lineLength>
 </general>
 <ondemand>
 <after>
