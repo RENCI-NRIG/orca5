@@ -577,7 +577,7 @@
 						<artifactId>jalopy-maven-plugin</artifactId>
 						<version>1.0-alpha-1</version>
 						<configuration>
-							<convention>orca/format.xml</convention>
+							<convention>build/build/src/main/resources/orca/format.xml</convention>
 							<failOnError>false</failOnError>
 							<srcExcludesPattern>**/beans/**/*.java</srcExcludesPattern>
 						</configuration>
