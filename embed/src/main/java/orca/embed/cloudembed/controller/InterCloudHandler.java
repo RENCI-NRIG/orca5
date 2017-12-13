@@ -139,7 +139,11 @@ public class InterCloudHandler extends ModifyHandler {
 			s_rr.remove(RequestReservation.MultiPoint_Domain);
             request.getElements().removeAll(mp_elements);
             for(NetworkElement ne:this.mpRequest.getElements()){
-            	//ne.setInDomain(RequestReservation.Interdomain_Domain);
+				// #162 make sure the element has not been Closed before trying to add it
+				if (ne.getModel().isClosed()){
+					continue;
+				}
+
             	String domainName=ne.getInDomain();
             	String pureType=ne.getResourceType().getResourceType();
             	if(domainName.endsWith(pureType)){
