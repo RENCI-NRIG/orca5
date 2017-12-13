@@ -392,6 +392,8 @@ class VM:
         
             if i >= retries:
                 raise Nova_Command_Fail, "Failed to allocate floating ip  " + str(i) + " times, giving up: " + str(cmd)
+
+
                       
             time.sleep(timeout)
 
@@ -847,11 +849,21 @@ class VM:
 
         #allocate floating ip
         floating_addr = self._allocate_floating_ip()
-        if floating_addr == None:
-            raise Nova_Command_Fail, 'Nova Failed to allocate floating ip ' + str(new_vm_id)
+        if floating_addr != None:
+            LOG.info("VM " + new_vm_id + " is allocated floating ip " + floating_addr)
+            self._assign_floating_ip(new_vm_id, floating_addr)
+        else:
+            try:
+                console_log = str(VM.get_console_log_by_ID(new_vm_id))
+                LOG.info('Nova failed to allocate floating ip to the VM ' + str(new_vm_id))
+            except Exception:
+                console_log = 'Cannot get console log'
+            self._clean_all(new_vm_id)
+            raise VM_Broken('Nova failed to allocate floating ip to the VM ' + str(new_vm_id), new_vm_id,console_log)
+
                
         #assign floating ip
-        self._assign_floating_ip(new_vm_id, floating_addr)
+        ###self._assign_floating_ip(new_vm_id, floating_addr)
 
         #ping test
         if self._ping_test_vm(floating_addr, ping_retries, 10):
