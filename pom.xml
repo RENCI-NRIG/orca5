@@ -9,6 +9,7 @@
 	<url>https://geni-orca.renci.org/orca-doc</url>
 
 	<modules>
+		<module>tools</module>
 		<module>boot</module>
 		<module>controllers</module>
 		<module>core</module>
@@ -18,7 +19,6 @@
 		<module>plugins</module>
 		<module>server</module>
 		<module>site</module>
-		<module>tools</module>
 		<module>nodeagent</module>
 		<module>docker</module>
 	</modules>

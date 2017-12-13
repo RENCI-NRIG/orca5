@@ -16,6 +16,8 @@
 		<module>axis2repository</module>
 		<module>cmdline</module>
 		<module>config</module>
+		<module>build</module>
+		<module>site-skin</module>
 	</modules>
 
 	<build>
