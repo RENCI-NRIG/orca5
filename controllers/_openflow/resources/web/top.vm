@@ -1,3 +1,0 @@
-#set($pluginRootFolder=false)
-#set($pluginRootFolder=$root.getPackageRoot("e11fd4ce-a727-434c-b17d-00449328b67f"))
-<link rel="stylesheet" type="text/css" media="screen" href="$uri/$pluginRootFolder/style.css"/>
