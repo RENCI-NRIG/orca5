@@ -547,6 +547,11 @@
 
                     <excludes>
                         <exclude>**/beans/**/*.java</exclude>
+                        <exclude>**/web/interdomain/js/**/*</exclude>
+                        <exclude>**/target/surefire-reports/**/*</exclude>
+                        <exclude>**/target/package/**/*</exclude>
+                        <exclude>**/target/classes/**/*</exclude>
+                        <exclude>**/target/pom.xml</exclude>
                     </excludes>
                 </configuration>
 
