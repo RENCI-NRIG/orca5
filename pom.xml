@@ -511,6 +511,50 @@
 					<skip>false</skip>
 				</configuration>
 			</plugin>
+			<plugin>
+				<!-- mvn formatter:format -->
+				<groupId>net.revelc.code.formatter</groupId>
+				<artifactId>formatter-maven-plugin</artifactId>
+				<version>2.6.0</version>
+				<configuration>
+					<configFile>tools/build/src/main/resources/orca/orca_formatter_style.xml</configFile>
+
+					<!-- It's annoying to have to specify the directories.
+					     Might be fixed at a later date:
+					     https://github.com/revelc/formatter-maven-plugin/issues/261
+					     -->
+                                            <directories>
+                                                <directory>boot</directory>
+                                                <directory>build</directory>
+                                                <directory>controllers</directory>
+                                                <directory>docker</directory>
+                                                <directory>docs</directory>
+                                                <directory>embed</directory>
+                                                <directory>handlers</directory>
+                                                <directory>ndl</directory>
+                                                <directory>network</directory>
+                                                <directory>nodeagent</directory>
+                                                <directory>plugins</directory>
+                                                <directory>redhat</directory>
+                                                <directory>server</directory>
+                                                <directory>site</directory>
+                                                <directory>tests</directory>
+                                                <directory>tools</directory>
+                                            </directories>
+
+					<excludes>
+						<exclude>**/beans/**/*.java</exclude>
+					</excludes>
+				</configuration>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<extensions>
 			<!-- Enable our own build tools -->
