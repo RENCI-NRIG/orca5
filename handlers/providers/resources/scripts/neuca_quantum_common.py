@@ -85,6 +85,19 @@ class NEuca_Quantum_Network:
     @classmethod
     def create_network(self, tenant_id, net_type, network, vlan_tag, max_rate=None, burst_rate=None ):
         #name ='vlan:data:101:11111:1111'
+        
+        # https://github.com/RENCI-NRIG/exogeni/issues/97
+        # https://github.com/RENCI-NRIG/orca5/pull/167
+        while True:
+            network_uuid = NEuca_Quantum_Network.get_network_uuid(tenant_id, vlan_tag, network)
+            if network_uuid is None:
+                break
+            else:
+                LOG.debug("neuca_quantum_common: existing quantum network found for vlan: " + vlan_tag + ", network: " + network)
+                LOG.debug("neuca_quantum_common: delete existing quantum network: " + str(network_uuid))
+                NEuca_Quantum_Network.delete_network(tenant_id, network_uuid)
+
+
         name = str(net_type) + ":" + str(network) + ":" + str(vlan_tag)
         
         if max_rate != None:
