@@ -75,7 +75,8 @@ public class VMTest extends ShirakoTest {
     protected ResourceType vmType = null;
 
     protected ReservationState state = null;
-    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin);
+    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None,
+            ReservationStates.NoJoin);
 
     public VMTest(String[] args) {
         super(args);
@@ -90,7 +91,7 @@ public class VMTest extends ShirakoTest {
         if (temp != null) {
             leaseLength = PropList.getIntegerProperty(properties, PropertyLeaseLength);
         }
-        
+
         temp = properties.getProperty(PropertyUnits);
 
         if (temp != null) {
@@ -120,7 +121,7 @@ public class VMTest extends ShirakoTest {
     protected void discoverTypes() {
         Properties request = new Properties();
         request.setProperty(QueryProperties.QueryAction, QueryProperties.QueryActionDisctoverPools);
-        
+
         try {
             Properties response = sm.query(proxy, request);
             ResourcePoolsDescriptor pools = BrokerPolicy.getResourcePools(response);
@@ -131,7 +132,7 @@ public class VMTest extends ShirakoTest {
                 if (attr != null) {
                     int available = attr.getIntValue();
                     System.out.println(" Available units (at time of query): " + available);
-                }                    
+                }
             }
         } catch (RPCException e) {
             throw new RuntimeException(e);
@@ -139,13 +140,14 @@ public class VMTest extends ShirakoTest {
             logger.error("Could not process discover types response", e);
         }
     }
-    
+
     protected IServiceManagerReservation getVMReservation(long cycle) {
         ResourceSet rset = new ResourceSet(1, vmType);
-        rset.getConfigurationProperties().setProperty(ConfigurationProperties.ConfigSSHKey, "thisismysshkey");        
+        rset.getConfigurationProperties().setProperty(ConfigurationProperties.ConfigSSHKey, "thisismysshkey");
         Term term = new Term(clock.date(cycle + ADVANCE_TIME), clock.getMillis((long) leaseLength));
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, proxy);
-                
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, proxy);
+
         AntConfig.setServiceXml(r, noopConfigFile);
         r.setRenewable(true);
         return r;
@@ -157,12 +159,14 @@ public class VMTest extends ShirakoTest {
                 System.out.println("VM reservation transition: from " + from + " to " + to);
                 if (to.equals(doneState)) {
                     ResourceSet leased = reservation.getLeasedResources();
-                    UnitSet uset = (UnitSet)leased.getResources();
+                    UnitSet uset = (UnitSet) leased.getResources();
                     for (Unit u : uset.getSet()) {
-                        System.out.println("unit id=" + u.getID() + " hosted on " + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: " + u.getProperty(UnitProperties.UnitManagementIP));
+                        System.out.println("unit id=" + u.getID() + " hosted on "
+                                + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: "
+                                + u.getProperty(UnitProperties.UnitManagementIP));
                     }
                 }
-            }else {
+            } else {
                 System.out.println("Unknown reservation object: " + obj);
             }
             reservationTransition((IReservation) obj, (ReservationState) from, (ReservationState) to);
@@ -171,7 +175,8 @@ public class VMTest extends ShirakoTest {
 
     protected boolean isExtended(ReservationState state) {
         if (state != null) {
-            return (state.getState() == ReservationStates.ActiveTicketed) && (state.getPending() == ReservationStates.None);
+            return (state.getState() == ReservationStates.ActiveTicketed)
+                    && (state.getPending() == ReservationStates.None);
         }
         return false;
     }
@@ -193,7 +198,7 @@ public class VMTest extends ShirakoTest {
             state = to;
             if (isExtended(to)) {
                 extendCount++;
-            }        
+            }
         }
     }
 
@@ -219,10 +224,10 @@ public class VMTest extends ShirakoTest {
     }
 
     protected synchronized boolean checkDone() {
-        if (isActive(state) ) {
+        if (isActive(state)) {
             if (extendCount > 0) {
                 return true;
-            }            
+            }
             System.out.println("wating for extension. extend count=" + extendCount);
         }
 

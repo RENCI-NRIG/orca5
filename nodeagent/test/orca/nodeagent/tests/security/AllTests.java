@@ -15,16 +15,12 @@ import junit.framework.TestSuite;
 
 import orca.nodeagent.tests.security.known.SecurityTest;
 
-
-public class AllTests
-{
-    public static void main(String[] args)
-    {
+public class AllTests {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         TestSuite suite = new TestSuite("nodeagent security unit tests");
         suite.addTest(SecurityTest.suite());
 

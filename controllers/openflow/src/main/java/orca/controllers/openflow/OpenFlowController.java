@@ -30,68 +30,64 @@ import orca.shirako.time.ActorClock;
 import orca.shirako.time.Term;
 import orca.util.ID;
 
-public class OpenFlowController implements IController, OpenFlowControllerConstants
-{
-	protected IBrokerProxy openflowBrokerProxy;
+public class OpenFlowController implements IController, OpenFlowControllerConstants {
+    protected IBrokerProxy openflowBrokerProxy;
     protected IBrokerProxy vmBrokerProxy;
-    
+
     protected IServiceManager sm;
     protected ISlice slice;
-    protected String root;    
+    protected String root;
     protected ActorClock clock;
 
     protected Logger logger = null;
     protected String noopConfigFile = null;
-        
+
     private boolean initialized = false;
-    
-	public class OpenFlowRequest{
+
+    public class OpenFlowRequest {
         public ID requestId;
         public boolean closed = false;
-        
+
         public IServiceManagerReservation openflowReservation;
         public IServiceManagerReservation vmReservationRenci;
         public IServiceManagerReservation vmReservationDuke;
-                
+
         public boolean isAcive() {
-            return openflowReservation.isActive() && 
-            (vmReservationRenci != null && vmReservationRenci.isActive()) &&
-            (vmReservationDuke != null && vmReservationDuke.isActive());
+            return openflowReservation.isActive() && (vmReservationRenci != null && vmReservationRenci.isActive())
+                    && (vmReservationDuke != null && vmReservationDuke.isActive());
         }
-        
+
         public boolean isTerminal() {
-            return openflowReservation.isTerminal() ||
-            (vmReservationDuke != null && vmReservationDuke.isTerminal()) ||
-            (vmReservationDuke != null && vmReservationRenci.isTerminal());
+            return openflowReservation.isTerminal() || (vmReservationDuke != null && vmReservationDuke.isTerminal())
+                    || (vmReservationDuke != null && vmReservationRenci.isTerminal());
         }
-    }      
+    }
 
     protected HashMap<ID, OpenFlowRequest> requests;
-    
-    public OpenFlowController()
-    {        
-        requests = new HashMap<ID, OpenFlowRequest>(); 
+
+    public OpenFlowController() {
+        requests = new HashMap<ID, OpenFlowRequest>();
     }
-    
+
     protected void getBrokers() {
-    	openflowBrokerProxy = sm.getBroker(OpenFlowBrokerName);
+        openflowBrokerProxy = sm.getBroker(OpenFlowBrokerName);
         if (openflowBrokerProxy == null) {
             throw new RuntimeException("missing OpenFlow broker proxy");
         }
         vmBrokerProxy = sm.getBroker(VMBrokerName);
         if (vmBrokerProxy == null) {
             throw new RuntimeException("missing vm broker proxy");
-        }        
+        }
     }
-       
+
     public IBrokerProxy getVMBroker() {
         return vmBrokerProxy;
     }
 
     public IBrokerProxy getOpenFlowBroker() {
         return openflowBrokerProxy;
-    }    
-    
+    }
+
     // override initialize to call getBrokers
     public void initialize() throws Exception {
         if (!initialized) {
@@ -114,11 +110,10 @@ public class OpenFlowController implements IController, OpenFlowControllerConsta
         }
     }
 
-    public ID addRequest(Term term, int vmsDuke, int vmsRenci) 
-    {        
+    public ID addRequest(Term term, int vmsDuke, int vmsRenci) {
         OpenFlowRequest request = new OpenFlowRequest();
         request.requestId = new ID();
-        
+
         request.openflowReservation = getOpenFlowReservation(term);
         if (vmsRenci > 0) {
             request.vmReservationRenci = getVMReservation(term, ResourceTypeVmRenci, vmsRenci);
@@ -126,15 +121,18 @@ public class OpenFlowController implements IController, OpenFlowControllerConsta
         if (vmsDuke > 0) {
             request.vmReservationDuke = getVMReservation(term, ResourceTypeVmDuke, vmsDuke);
         }
-        
+
         /** change parameter */
-        // BenRequestIDProperty -> OpenFlowRequestIDProperty        
-        request.openflowReservation.getResources().getLocalProperties().setProperty(OpenFlowRequestIDProperty, request.requestId.toString());
-        if (vmsRenci> 0) {
-            request.vmReservationRenci.getResources().getLocalProperties().setProperty(OpenFlowRequestIDProperty, request.requestId.toString());
+        // BenRequestIDProperty -> OpenFlowRequestIDProperty
+        request.openflowReservation.getResources().getLocalProperties().setProperty(OpenFlowRequestIDProperty,
+                request.requestId.toString());
+        if (vmsRenci > 0) {
+            request.vmReservationRenci.getResources().getLocalProperties().setProperty(OpenFlowRequestIDProperty,
+                    request.requestId.toString());
         }
         if (vmsDuke > 0) {
-            request.vmReservationDuke.getResources().getLocalProperties().setProperty(OpenFlowRequestIDProperty, request.requestId.toString());
+            request.vmReservationDuke.getResources().getLocalProperties().setProperty(OpenFlowRequestIDProperty,
+                    request.requestId.toString());
         }
 
         // set the predecessor relationship and the filter
@@ -163,94 +161,98 @@ public class OpenFlowController implements IController, OpenFlowControllerConsta
                 throw new RuntimeException("Failed to demand vm reservation (RENCI)", e);
             }
         }
-        
+
         if (vmsDuke > 0) {
             try {
                 sm.demand(request.vmReservationDuke);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to demand vm reservation (DUKE)", e);
-            }    
-        }        
+            }
+        }
         requests.put(request.requestId, request);
         return request.requestId;
     }
-    
+
     protected IServiceManagerReservation getOpenFlowReservation(Term term) {
         return getOpenFlowReservation(term, ResourceTypeOpenflow, openflowBrokerProxy);
-    }    
+    }
 
     protected IServiceManagerReservation getOpenFlowReservation(Term term, ResourceType type, IBrokerProxy proxy) {
         ResourceSet rset = new ResourceSet(1, type);
         rset.getLocalProperties().setProperty(AntConfig.PropertyXmlFile, noopConfigFile);
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, proxy);
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, proxy);
         r.setRenewable(true);
         return r;
     }
-    
+
     /**
      * Creates a reservation for virtual machines
-     * @param term term
-     * @param type resource type (where to get the virtual machines from)
-     * @param units number of virtual machines
+     * 
+     * @param term
+     *            term
+     * @param type
+     *            resource type (where to get the virtual machines from)
+     * @param units
+     *            number of virtual machines
      * @return
      */
     protected IServiceManagerReservation getVMReservation(Term term, ResourceType type, int units) {
         ResourceSet rset = new ResourceSet(units, type);
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, vmBrokerProxy);
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, vmBrokerProxy);
         rset.getLocalProperties().setProperty(AntConfig.PropertyXmlFile, noopConfigFile);
         r.setRenewable(true);
         return r;
     }
-    
-    public OpenFlowRequest[] getRequests()
-    {
+
+    public OpenFlowRequest[] getRequests() {
         OpenFlowRequest[] result = new OpenFlowRequest[requests.size()];
         requests.values().toArray(result);
         return result;
     }
-    
-    public OpenFlowRequest getRequest(ID id)
-    {
+
+    public OpenFlowRequest getRequest(ID id) {
         return requests.get(id);
     }
 
-	public ISlice getSlice() {
-		return slice;
-	}
+    public ISlice getSlice() {
+        return slice;
+    }
 
-	public void setSlice(ISlice slice) {
-		this.slice = slice;		
-	}
+    public void setSlice(ISlice slice) {
+        this.slice = slice;
+    }
 
-	public Logger getLogger() {
-		return logger;
-	}
+    public Logger getLogger() {
+        return logger;
+    }
 
-	public void setActor(IActor actor) {
-		this.sm = (IServiceManager)actor;		
-	}
-	
-	public IActor getActor() {
+    public void setActor(IActor actor) {
+        this.sm = (IServiceManager) actor;
+    }
+
+    public IActor getActor() {
         return sm;
     }
 
-	public void tick(long cycle) {
-	}
+    public void tick(long cycle) {
+    }
 
-	public void reset(Properties properties) throws Exception {		
-	}
+    public void reset(Properties properties) throws Exception {
+    }
 
-	public Properties save() throws Exception {
-		Properties p = new Properties();
+    public Properties save() throws Exception {
+        Properties p = new Properties();
         save(p);
 
         return p;
-	}
+    }
 
-	public void save(Properties properties) throws Exception {		
-	}
+    public void save(Properties properties) throws Exception {
+    }
 
-	protected void close(IReservation r) {
+    protected void close(IReservation r) {
         try {
             if (r != null) {
                 sm.close(r);
@@ -258,16 +260,16 @@ public class OpenFlowController implements IController, OpenFlowControllerConsta
         } catch (Exception e) {
         }
     }
-	
-	public void close(ID id) {
-		OpenFlowRequest req = getRequest(id);
+
+    public void close(ID id) {
+        OpenFlowRequest req = getRequest(id);
 
         if (req == null) {
             return;
         }
 
         req.closed = true;
-        
+
         if (req.vmReservationDuke != null) {
             close(req.vmReservationDuke);
         }
@@ -275,7 +277,6 @@ public class OpenFlowController implements IController, OpenFlowControllerConsta
             close(req.vmReservationRenci);
         }
         close(req.openflowReservation);
-	}
-	
-	
+    }
+
 }

@@ -17,14 +17,15 @@ import orca.manage.extensions.standard.beans.ResultProxyMng;
 import orca.manage.extensions.standard.controllers.proxies.local.LocalControllerManagementProxy;
 import orca.security.AuthToken;
 
-public class LocalOpenFlowControllerManagementProxy extends LocalControllerManagementProxy implements IOpenFlowControllerManagementProxy {
+public class LocalOpenFlowControllerManagementProxy extends LocalControllerManagementProxy
+        implements IOpenFlowControllerManagementProxy {
     /**
      * The controller manager object.
      */
     private OpenFlowControllerManagerObject manager;
 
     public LocalOpenFlowControllerManagementProxy() {
-    	super();
+        super();
     }
 
     public LocalOpenFlowControllerManagementProxy(OpenFlowControllerManagerObject manager) {
@@ -37,7 +38,8 @@ public class LocalOpenFlowControllerManagementProxy extends LocalControllerManag
         this.manager = (OpenFlowControllerManagerObject) manager;
     }
 
-    public ResultStringMng addRequest(String start, String end, int vmsDuke, int vmsRenci, AuthToken caller) throws Exception {
+    public ResultStringMng addRequest(String start, String end, int vmsDuke, int vmsRenci, AuthToken caller)
+            throws Exception {
         return manager.addRequest(start, end, vmsDuke, vmsRenci, caller);
     }
 
@@ -48,17 +50,17 @@ public class LocalOpenFlowControllerManagementProxy extends LocalControllerManag
     public ResultOpenFlowRequestMng getRequests(String id, AuthToken caller) throws Exception {
         return manager.getRequests(id, caller);
     }
-    
+
     public ResultProxyMng getVMBroker(AuthToken caller) throws Exception {
-    	return manager.getVMBroker(caller);
-    }
-    
-    public ResultProxyMng getOpenFlowBroker(AuthToken caller) throws Exception {
-    	return manager.getOpenFlowBroker(caller);
+        return manager.getVMBroker(caller);
     }
 
-	public ResultMng closeRequest(String id, AuthToken caller) throws Exception {
-		return manager.closeRequest(id, caller);
-	}
+    public ResultProxyMng getOpenFlowBroker(AuthToken caller) throws Exception {
+        return manager.getOpenFlowBroker(caller);
+    }
+
+    public ResultMng closeRequest(String id, AuthToken caller) throws Exception {
+        return manager.closeRequest(id, caller);
+    }
 
 }

@@ -1,8 +1,10 @@
-<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
-                  id="32D9BA89-3D20-4E9E-95CB-1A4681C179AB">
-  <name>Network Device Handler Library</name>
-  <description>Provides handlers to control network devices</description>
-  <plugins>
-  </plugins>
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans" id="32D9BA89-3D20-4E9E-95CB-1A4681C179AB"> 
+    <name>
+         Network Device Handler Library 
+    </name> 
+    <description>
+         Provides handlers to control network devices 
+    </description> 
+    <plugins> 
+    </plugins> 
 </extensionPackage>
-

@@ -14,12 +14,12 @@ import orca.shirako.common.meta.UnitProperties;
 import orca.util.PropList;
 
 /**
- * This class is responsible for converting a NetworkConnection class to a set
- * of properties required by the BenNdlHandler.
+ * This class is responsible for converting a NetworkConnection class to a set of properties required by the
+ * BenNdlHandler.
+ * 
  * @author aydan
  */
-public class PropertiesConverter
-{    
+public class PropertiesConverter {
     public static final String ActionVlanTag = "VLANtag";
     public static final String Server = "server";
 
@@ -28,47 +28,45 @@ public class PropertiesConverter
 
     /**
      * Returns a normalized domain name.
+     * 
      * @param d
      * @return
      */
-    public static String getDomainName(Device d)
-    {
-    	//System.out.println("getDomainName(): d.getResourceType(): " + d.getResourceType().toString() + " | d.getUri(): " + d.getUri() );
+    public static String getDomainName(Device d) {
+        // System.out.println("getDomainName(): d.getResourceType(): " + d.getResourceType().toString() + " |
+        // d.getUri(): " + d.getUri() );
         String temp = d.getURI();
         int index = temp.indexOf(UriSeparator);
         if (index >= 0) {
             int index2 = temp.indexOf(UriSuffix, index);
             if (index2 >= 0) {
-            		String rType = null;
-            		if( (d.getResourceType()==null) || (d.getResourceType().getResourceType()==null)){
-            			rType=null;
-            		}
-            		else{
-            			String [] type = d.getResourceType().getResourceType().split("\\#");
-            			if(type.length==1)
-            				rType=null;
-            			else
-            				rType=type[1];
-            		}
-            		//System.out.println("getDomainName(): rType: " + rType);
-            		if(rType==null){
-                        return temp.substring(index + 1, index2).toLowerCase();
-            		}
-            		else if (rType.equalsIgnoreCase("VM") || rType.equalsIgnoreCase("Testbed")){
-            			return temp.substring(index + 1, index2).toLowerCase();
-            		}
-            		else {
-            			return temp.substring(index + 1, index2).toLowerCase().concat("/").concat(rType.toLowerCase());
-            		}
+                String rType = null;
+                if ((d.getResourceType() == null) || (d.getResourceType().getResourceType() == null)) {
+                    rType = null;
+                } else {
+                    String[] type = d.getResourceType().getResourceType().split("\\#");
+                    if (type.length == 1)
+                        rType = null;
+                    else
+                        rType = type[1];
+                }
+                // System.out.println("getDomainName(): rType: " + rType);
+                if (rType == null) {
+                    return temp.substring(index + 1, index2).toLowerCase();
+                } else if (rType.equalsIgnoreCase("VM") || rType.equalsIgnoreCase("Testbed")) {
+                    return temp.substring(index + 1, index2).toLowerCase();
+                } else {
+                    return temp.substring(index + 1, index2).toLowerCase().concat("/").concat(rType.toLowerCase());
+                }
             }
 
         }
         return null;
     }
+
     //
-    private static void convert(String site, LinkedList<Device> list, Properties p)
-    {
-    	site = site.split("/")[0];
+    private static void convert(String site, LinkedList<Device> list, Properties p) {
+        site = site.split("/")[0];
         for (Device d : list) {
             String name = d.getName();
             if (name == null) {
@@ -82,11 +80,12 @@ public class PropertiesConverter
 
                 for (int i = 0; i < actions.size(); i++) {
                     SwitchingAction a = actions.get(i);
-                    //System.out.println("Action=" + a.getDefaultAction());
+                    // System.out.println("Action=" + a.getDefaultAction());
                     if (Objects.equals(a.getDefaultAction(), LayerConstant.Action.Temporary.toString())) {
                         continue;
                     }
-                    if ((a.getDefaultAction().equals(LayerConstant.Action.VLANtag.toString())) || (name.equals("6509"))) {
+                    if ((a.getDefaultAction().equals(LayerConstant.Action.VLANtag.toString()))
+                            || (name.equals("6509"))) {
                         PropList.setProperty(p, UnitProperties.UnitVlanTag, (int) a.getLabel_ID());
                         PropList.setProperty(p, UnitProperties.UnitBandwidth, a.getBw());
                     } // ignore label id otherwise
@@ -103,31 +102,34 @@ public class PropertiesConverter
                     // unc.polatis.action.1.sport=
                     // unc.polatis.action.1.dport=
 
-                    String ports=ifs.get(0).getName();
-                    String ports2=ifs.get(1).getName();
-                    if(ports==null){
-                    	if(ports2!=null){
-                    		ports=ports2;
-                    	}
-                    }
-                    else{
-                    	if(ports2!=null){
-                    		ports=ports.concat(",").concat(ports2);
-                    	}
+                    String ports = ifs.get(0).getName();
+                    String ports2 = ifs.get(1).getName();
+                    if (ports == null) {
+                        if (ports2 != null) {
+                            ports = ports2;
+                        }
+                    } else {
+                        if (ports2 != null) {
+                            ports = ports.concat(",").concat(ports2);
+                        }
                     }
                     PropList.setProperty(p, site + "." + name + ".action." + (anum + 1) + ".ports", ports);
-                    //System.out.println(site + "." + name + ".action." + (anum + 1) + ".ports=" + ports);
+                    // System.out.println(site + "." + name + ".action." + (anum + 1) + ".ports=" + ports);
 
-                    PropList.setProperty(p, site + "." + name + ".action." + (anum + 1) + ".sport", ifs.get(0).getName());
-                    PropList.setProperty(p, site + "." + name + ".action." + (anum + 1) + ".dport", ifs.get(1).getName());
-                    //System.out.println(site + "." + name + ".action." + (anum + 1) + ".sport=" + ifs.get(0).getName());
-                    //System.out.println(site + "." + name + ".action." + (anum + 1) + ".dport=" + ifs.get(1).getName());
+                    PropList.setProperty(p, site + "." + name + ".action." + (anum + 1) + ".sport",
+                            ifs.get(0).getName());
+                    PropList.setProperty(p, site + "." + name + ".action." + (anum + 1) + ".dport",
+                            ifs.get(1).getName());
+                    // System.out.println(site + "." + name + ".action." + (anum + 1) + ".sport=" +
+                    // ifs.get(0).getName());
+                    // System.out.println(site + "." + name + ".action." + (anum + 1) + ".dport=" +
+                    // ifs.get(1).getName());
                     anum++;
                 }
 
                 // unc.polatis.actions=2
                 PropList.setProperty(p, site + "." + name + ".actions", anum);
-                //System.out.println(site + "." + name + ".actions=" + anum);
+                // System.out.println(site + "." + name + ".actions=" + anum);
 
                 String alist = "";
                 StringBuilder alistSB = new StringBuilder();
@@ -139,16 +141,15 @@ public class PropertiesConverter
                 alist = alist.trim();
 
                 PropList.setProperty(p, site + "." + name + ".actionslist", alist);
-                //System.out.println(site + "." + name + ".actionslist=" + alist);
+                // System.out.println(site + "." + name + ".actionslist=" + alist);
             }
         }
     }
 
-    public static Properties convert(NetworkConnection con)
-    {
+    public static Properties convert(NetworkConnection con) {
         LinkedList<?> list = con.getConnection();
         HashMap<String, LinkedList<Device>> map = new HashMap<String, LinkedList<Device>>();
-        
+
         for (Object o : list) {
             if (o instanceof Device) {
                 Device d = (Device) o;
@@ -167,17 +168,17 @@ public class PropertiesConverter
             LinkedList<Device> l = map.get(key);
             convert(key, l, p);
         }
-        
-        //System.out.println("PROPERTIES: " + p.toString());
+
+        // System.out.println("PROPERTIES: " + p.toString());
         return p;
     }
-    
-    public static Properties convert(String portList){
-    	Properties p = new Properties();
-    	
-       	//System.out.println("Port List: " + portList);
-       	PropList.setProperty(p,UnitProperties.UnitPortList,portList);
-    	return p;
+
+    public static Properties convert(String portList) {
+        Properties p = new Properties();
+
+        // System.out.println("Port List: " + portList);
+        PropList.setProperty(p, UnitProperties.UnitPortList, portList);
+        return p;
     }
-    
+
 }

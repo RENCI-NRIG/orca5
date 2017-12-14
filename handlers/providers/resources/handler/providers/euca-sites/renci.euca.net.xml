@@ -1,93 +1,54 @@
-<!DOCTYPE project [
-<!ENTITY core SYSTEM "../../common/core.xml">
-<!ENTITY paths SYSTEM "../../common/paths.xml">
-<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
-<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
-]>
-
+<!DOCTYPE project> 
+<!--ENTITY paths SYSTEM "../../common/paths.xml"--> 
+<!--ENTITY drivertasks SYSTEM "../../common/drivertasks.xml"--> 
+<!--ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml"-->
+ ]&gt; 
 <project name="renci.euca.net" basedir=".">
-
-	&paths;
-	&core;
-	&drivertasks;
-	&bentasks;
-
-	<!-- <property file="test.properties" /> -->
-	<property file="../ben.properties" />
-	<!-- Uncomment for handler testing
+     &amp;paths; &amp;core; &amp;drivertasks; &amp;bentasks; 
+    <!-- <property file="test.properties" /> --> 
+    <property file="../ben.properties" /> 
+    <!-- Uncomment for handler testing
 	<property file="renci.euca.net.test.properties" />
-	-->
-
-	<target name="join" depends="resolve.configuration,ben.load.tasks">
-		<echo message="RENCI EUCA NET HANDLER: SETUP" />
-		<if>
-			<isset property="eucanet.credentials" />
-			<then>
-				<property file="${eucanet.credentials}" />
-			</then>
-			<else>
-				<echo message="Euca-net credentials properties are not set!" />
-			</else>
-		</if>
-		<!-- enable RENCI EUCA tag on all Euca interfaaces -->
-		<sequential>
-    	<create.vlan 
-    		router="${renci.euca.router}"
-			router.type="ex3200"
-        	vlan.tag="${unit.vlan.tag}"
-			vlan.qos.rate="${unit.vlan.qos.rate}"
-			vlan.qos.burst.size="${unit.vlan.qos.burst.size}"
-        	router.user="${router.user}"
-        	router.password="${router.password}"
-        	router.admin.password="${router.admin.password}" />
-	    <add.trunk.ports 
-			router="${renci.euca.router}"
-			router.type="ex3200"
-			vlan.tag="${unit.vlan.tag}"
-			ports="${config.interface.ports}"
-			router.user="${router.user}"
-	    	router.password="${router.password}"
-	    	router.admin.password="${router.admin.password}" />
-		</sequential>
-		<property name="shirako.target.code" value="${code}" />
-		<echo message="join exit code: ${shirako.target.code}" />
-	</target>
-
-	<target name="leave" depends="resolve.configuration,ben.load.tasks">
-		<echo message="RENCI EUCA NET HANDLER: TEARDOWN" />
-		<if>
-			<isset property="eucanet.credentials" />
-			<then>
-				<property file="${eucanet.credentials}" />
-			</then>
-			<else>
-				<echo message="Euca-net credentials properties are not set!" />
-			</else>
-		</if>
-		<sequential>
-		<remove.trunk.ports
-			router="${renci.euca.router}"
-			router.type="ex3200"
-			vlan.tag="${unit.vlan.tag}"
-			ports="${config.interface.ports}"
-			router.user="${router.user}"
-			router.password="${router.password}"
-			router.admin.password="${router.admin.password}" />
-    	<delete.vlan 
-    		router="${renci.euca.router}"
-			router.type="ex3200"
-        	vlan.tag="${unit.vlan.tag}"
-			vlan.with.qos="${unit.vlan.with.qos}"
-        	router.user="${router.user}"
-        	router.password="${router.password}"
-        	router.admin.password="${router.admin.password}" />
-		</sequential>
-    	<property name="shirako.target.code" value="${code}" />
-		<echo message="leave exit code: ${shirako.target.code}" />
-	</target>
-
-	<target name="modify" depends="resolve.configuration,ben.load.tasks">
-		<echo message="RENCI EUCA NET HANDLER: MODIFY" />
-		<property name="shirako.target.code" value="0" />
-	</target>
+	--> 
+    <target name="join" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="RENCI EUCA NET HANDLER: SETUP" /> 
+        <if> 
+            <isset property="eucanet.credentials" /> 
+            <then> 
+                <property file="${eucanet.credentials}" /> 
+            </then> 
+            <else> 
+                <echo message="Euca-net credentials properties are not set!" /> 
+            </else> 
+        </if> 
+        <!-- enable RENCI EUCA tag on all Euca interfaaces --> 
+        <sequential> 
+            <create.vlan router="${renci.euca.router}" router.type="ex3200" vlan.tag="${unit.vlan.tag}" vlan.qos.rate="${unit.vlan.qos.rate}" vlan.qos.burst.size="${unit.vlan.qos.burst.size}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+            <add.trunk.ports router="${renci.euca.router}" router.type="ex3200" vlan.tag="${unit.vlan.tag}" ports="${config.interface.ports}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+        </sequential> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="join exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="RENCI EUCA NET HANDLER: TEARDOWN" /> 
+        <if> 
+            <isset property="eucanet.credentials" /> 
+            <then> 
+                <property file="${eucanet.credentials}" /> 
+            </then> 
+            <else> 
+                <echo message="Euca-net credentials properties are not set!" /> 
+            </else> 
+        </if> 
+        <sequential> 
+            <remove.trunk.ports router="${renci.euca.router}" router.type="ex3200" vlan.tag="${unit.vlan.tag}" ports="${config.interface.ports}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+            <delete.vlan router="${renci.euca.router}" router.type="ex3200" vlan.tag="${unit.vlan.tag}" vlan.with.qos="${unit.vlan.with.qos}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+        </sequential> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="leave exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="modify" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="RENCI EUCA NET HANDLER: MODIFY" /> 
+        <property name="shirako.target.code" value="0" /> 
+    </target> 
 </project>

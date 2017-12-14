@@ -9,8 +9,8 @@ public abstract class DTNBaseTask extends SyncNetworkBaseTask {
 
     @Override
     protected void makeDevice() {
-    	super.makeDevice();
-    	
+        super.makeDevice();
+
         if (deviceInstance.equalsIgnoreCase(InfineraDTN)) {
             device = new InfineraDTNDevice(deviceAddress, user, password);
         } else {

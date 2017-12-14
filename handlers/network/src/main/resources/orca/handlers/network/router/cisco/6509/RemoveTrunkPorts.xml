@@ -1,23 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script xmlns="http://geni-orca.renci.org/RemoveTrunkPorts"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://geni-orca.renci.org/RemoveTrunkPorts RemoveTrunkPorts.xsd">
-    <action name="RemoveTrunkPorts" parameter="TrunkPorts">
-        <exchange>
-            <send>config t</send>
-            <expect>{$DefaultPrompt}</expect>
-        </exchange>
-        <exchange>
-            <send>interface range {$TrunkPorts}</send>
-            <expect timeout="3000">{$DefaultPrompt}</expect>
-        </exchange>
-        <exchange>
-            <send>switchport trunk allowed vlan remove {$VLANTagName}</send>
-            <expect timeout="3000">{$DefaultPrompt}</expect>
-        </exchange>
-        <exchange>
-            <send>end</send>
-            <expect>{$DefaultPrompt}</expect>
-        </exchange>
-    </action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script xmlns="http://geni-orca.renci.org/RemoveTrunkPorts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/RemoveTrunkPorts RemoveTrunkPorts.xsd"> 
+    <action name="RemoveTrunkPorts" parameter="TrunkPorts"> 
+        <exchange> 
+            <send>
+                 config t 
+            </send> 
+            <expect>
+                 {$DefaultPrompt} 
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                 interface range {$TrunkPorts} 
+            </send> 
+            <expect timeout="3000">
+                 {$DefaultPrompt} 
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                 switchport trunk allowed vlan remove {$VLANTagName} 
+            </send> 
+            <expect timeout="3000">
+                 {$DefaultPrompt} 
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                 end 
+            </send> 
+            <expect>
+                 {$DefaultPrompt} 
+            </expect> 
+        </exchange> 
+    </action> 
 </script>

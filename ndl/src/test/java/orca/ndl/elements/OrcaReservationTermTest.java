@@ -20,7 +20,8 @@ public class OrcaReservationTermTest {
 
         final int durationInMinutes = term.getDurationInMinutes();
 
-        assertEquals("Duration in Minutes did not match expected", TimeUnit.DAYS.toMinutes(NUM_DAYS), durationInMinutes);
+        assertEquals("Duration in Minutes did not match expected", TimeUnit.DAYS.toMinutes(NUM_DAYS),
+                durationInMinutes);
     }
 
     @Test
@@ -31,7 +32,8 @@ public class OrcaReservationTermTest {
 
         final int durationInSeconds = term.getDurationInSeconds();
 
-        assertEquals("Duration in Seconds did not match expected", TimeUnit.DAYS.toSeconds(NUM_DAYS), durationInSeconds);
+        assertEquals("Duration in Seconds did not match expected", TimeUnit.DAYS.toSeconds(NUM_DAYS),
+                durationInSeconds);
     }
 
     @Test

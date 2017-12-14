@@ -15,10 +15,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-public class AttachFiles
-{
-    public static void main(String[] args)
-    {
+public class AttachFiles {
+    public static void main(String[] args) {
         try {
             AttachFiles app = new AttachFiles(args[0], args[1]);
             app.Run();
@@ -36,14 +34,12 @@ public class AttachFiles
 
     String output;
 
-    public AttachFiles(String input, String output)
-    {
+    public AttachFiles(String input, String output) {
         this.input = input;
         this.output = output;
     }
 
-    public void Run() throws Exception
-    {
+    public void Run() throws Exception {
         Document doc = load(input);
         NodeList nodes = doc.getElementsByTagName(ReferenceTag);
 
@@ -70,8 +66,7 @@ public class AttachFiles
         XMLTools.DumpNode(doc, new FileOutputStream(output));
     }
 
-    public static Document load(String filename) throws Exception
-    {
+    public static Document load(String filename) throws Exception {
         // Create a builder factory
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);

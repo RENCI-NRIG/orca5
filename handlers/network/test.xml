@@ -1,554 +1,157 @@
-<!DOCTYPE project [
-<!ENTITY deps SYSTEM "ant/deps.xml">
-]>
-<project name="networkhandlers"
-         basedir="."
-         xmlns:artifact="urn:maven-artifact-ant">
-	
-    &deps;
-
-	<target name="help">
+<!DOCTYPE project>
+ ]&gt; 
+<project name="networkhandlers" basedir="." xmlns:artifact="urn:maven-artifact-ant">
+     &amp;deps; 
+    <target name="help"> 
         <echo>
-			Network handlers test tasks. Use ant -f test.xml -p to list.
-		</echo>
-    </target>
-    
-    <taskdef resource="orca/handlers/network/network.xml"
-             classpathref="run.classpath"
-             loaderref="run.classpath.loader" />
-    <property resource="orca/handlers/network/network.properties"
-              classpathref="run.classpath" />
-
-    <target name="juniper.ex3200.createQoSVlan.parallel">
-	<parallel>
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-                                    vlanTag="251"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-                                    vlanTag="252"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-                                    vlanTag="253"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-                                    vlanTag="254"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-                                    vlanTag="255"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-                                    vlanTag="251"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-                                    vlanTag="252"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-                                    vlanTag="253"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-                                    vlanTag="254"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-                                    vlanTag="255"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-	</parallel>
-    </target>
-
-    <target name="juniper.ex3200.deleteQoSVlan.parallel">
-	<parallel>
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-				    vlanWithQos="true"
-                                    vlanTag="251" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-				    vlanWithQos="true"
-                                    vlanTag="252" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-				    vlanWithQos="true"
-                                    vlanTag="253" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-				    vlanWithQos="true"
-                                    vlanTag="254" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.a}"
-				    vlanWithQos="true"
-                                    vlanTag="255" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-				    vlanWithQos="true"
-                                    vlanTag="251" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-				    vlanWithQos="true"
-                                    vlanTag="252" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-				    vlanWithQos="true"
-                                    vlanTag="253" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-				    vlanWithQos="true"
-                                    vlanTag="254" />
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200.b}"
-				    vlanWithQos="true"
-                                    vlanTag="255" />
-	</parallel>
-    </target>
-
-    <target name="juniper.ex3200.createQoSVlan">
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-                                    vlanTag="${vlan.tag}"
-                                    vlanQosRate="${router.ex3200.qos.rate}"
-                                    vlanQosBurstSize="${router.ex3200.qos.burstSize}" />
-    </target>
-
-    <target name="juniper.ex3200.createVlan">
-        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="juniper.ex3200.deleteQoSVlan">
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-				    vlanWithQos="true"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="juniper.ex3200.deleteVlan">
-        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-				    vlanWithQos="false"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.createQoSVlan">
-        <network.router.8700.create.vlan deviceInstance="${network.device.ciena8700}"
-                                         defaultPrompt="${router.8700.prompt}"
-                                         user="${router.8700.user}"
-                                         password="${router.8700.password}"
-                                         adminPassword="${router.8700.adminpassword}"
-                                         deviceAddress="${router.8700}"
-                                         vlanTag="${vlan.tag}"
-                                         vlanQoSBurstSize="${router.8700.qos.burstSize}"
-                                         vlanQosRate="${router.8700.qos.rate}" />
-    </target>
-
-    <target name="ciena.8700.createVlan">
-        <network.router.8700.create.vlan deviceInstance="${network.device.ciena8700}"
-                                         defaultPrompt="${router.8700.prompt}"
-                                         user="${router.8700.user}"
-                                         password="${router.8700.password}"
-                                         adminPassword="${router.8700.adminpassword}"
-                                         deviceAddress="${router.8700}"
-                                         vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.deleteQoSVlan">
-        <network.router.8700.delete.vlan deviceInstance="${network.device.ciena8700}"
-                                         defaultPrompt="${router.8700.prompt}"
-                                         user="${router.8700.user}"
-                                         password="${router.8700.password}"
-                                         adminPassword="${router.8700.adminpassword}"
-                                         deviceAddress="${router.8700}"
-                                         vlanWithQos="true"
-                                         vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.deleteVlan">
-        <network.router.8700.delete.vlan deviceInstance="${network.device.ciena8700}"
-                                         defaultPrompt="${router.8700.prompt}"
-                                         user="${router.8700.user}"
-                                         password="${router.8700.password}"
-                                         adminPassword="${router.8700.adminpassword}"
-                                         deviceAddress="${router.8700}"
-                                         vlanWithQos="false"
-                                         vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.addTrunkPorts">
-        <network.router.8700.add.trunkPorts deviceInstance="${network.device.ciena8700}"
-                                            defaultPrompt="${router.8700.prompt}"
-                                            user="${router.8700.user}"
-                                            password="${router.8700.password}"
-                                            adminPassword="${router.8700.adminpassword}"
-                                            deviceAddress="${router.8700}"
-                                            ports="${router.8700.ports}"
-                                            vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.addAccessPorts">
-        <network.router.8700.add.accessPorts deviceInstance="${network.device.ciena8700}"
-                                            defaultPrompt="${router.8700.prompt}"
-                                            user="${router.8700.user}"
-                                            password="${router.8700.password}"
-                                            adminPassword="${router.8700.adminpassword}"
-                                            deviceAddress="${router.8700}"
-                                            ports="${router.8700.ports}"
-                                            vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.removeTrunkPorts">
-        <network.router.8700.remove.trunkPorts deviceInstance="${network.device.ciena8700}"
-                                               user="${router.8700.user}"
-                                               defaultPrompt="${router.8700.prompt}"
-                                               password="${router.8700.password}"
-                                               adminPassword="${router.8700.adminpassword}"
-                                               deviceAddress="${router.8700}"
-                                               ports="${router.8700.ports}"
-                                               vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.removeAccessPorts">
-        <network.router.8700.remove.accessPorts deviceInstance="${network.device.ciena8700}"
-                                               user="${router.8700.user}"
-                                               defaultPrompt="${router.8700.prompt}"
-                                               password="${router.8700.password}"
-                                               adminPassword="${router.8700.adminpassword}"
-                                               deviceAddress="${router.8700}"
-                                               ports="${router.8700.ports}"
-                                               vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.mapVLANs">
-        <network.router.8700.map.vlans deviceInstance="${network.device.ciena8700}"
-                                               user="${router.8700.user}"
-                                               defaultPrompt="${router.8700.prompt}"
-                                               password="${router.8700.password}"
-                                               adminPassword="${router.8700.adminpassword}"
-                                               deviceAddress="${router.8700}"
-                                               port="${router.8700.map.port}"
-                                               destinationTag="${router.8700.dst.vlan.tag}"
-                                               sourceTag="${router.8700.src.vlan.tag}" />
-    </target>
-
-    <target name="ciena.8700.unmapVLANs">
-        <network.router.8700.unmap.vlans deviceInstance="${network.device.ciena8700}"
-                                       user="${router.8700.user}"
-                                       defaultPrompt="${router.8700.prompt}"
-                                       password="${router.8700.password}"
-                                       adminPassword="${router.8700.adminpassword}"
-                                       deviceAddress="${router.8700}"
-                                       port="${router.8700.map.port}"
-                                       destinationTag="${router.8700.dst.vlan.tag}"
-                                       sourceTag="${router.8700.src.vlan.tag}" />
-    </target>
-
-    <target name="cisco.6509.createQoSVlan">
-        <network.router.6509.create.vlan deviceInstance="${network.device.cisco6509}"
-                                    user="${router.6509.user}"
-                                    password="${router.6509.password}"
-                                    adminPassword="${router.6509.adminpassword}"
-                                    deviceAddress="${router.6509}"
-                                    vlanTag="${vlan.tag}"
-				                    vlanQoSBurstSize="${router.6509.qos.burstSize}"
-                                    vlanQosRate="${router.6509.qos.rate}" />
-    </target>
-
-    <target name="cisco.6509.createVlan">
-        <network.router.6509.create.vlan deviceInstance="${network.device.cisco6509}"
-                                    user="${router.6509.user}"
-                                    password="${router.6509.password}"
-                                    adminPassword="${router.6509.adminpassword}"
-                                    deviceAddress="${router.6509}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.6509.deleteQoSVlan">
-        <network.router.6509.delete.vlan deviceInstance="${network.device.cisco6509}"
-                                    user="${router.6509.user}"
-                                    password="${router.6509.password}"
-                                    adminPassword="${router.6509.adminpassword}"
-                                    deviceAddress="${router.6509}"
-				    vlanWithQos="true"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.6509.deleteVlan">
-        <network.router.6509.delete.vlan deviceInstance="${network.device.cisco6509}"
-                                    user="${router.6509.user}"
-                                    password="${router.6509.password}"
-                                    adminPassword="${router.6509.adminpassword}"
-                                    deviceAddress="${router.6509}"
-				    vlanWithQos="false"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.6509.addTrunkPorts">
-        <network.router.6509.add.trunkPorts deviceInstance="${network.device.cisco6509}"
-                                    user="${router.6509.user}"
-                                    password="${router.6509.password}"
-                                    adminPassword="${router.6509.adminpassword}"
-                                    deviceAddress="${router.6509}"
-				    ports="${router.6509.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.6509.removeTrunkPorts">
-        <network.router.6509.remove.trunkPorts deviceInstance="${network.device.cisco6509}"
-                                    user="${router.6509.user}"
-                                    password="${router.6509.password}"
-                                    adminPassword="${router.6509.adminpassword}"
-                                    deviceAddress="${router.6509}"
-				    ports="${router.6509.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-	
-    <target name="juniper.ex3200.addAccessPorts">
-        <network.router.ex3200.add.accessPorts deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-				    ports="${router.ex3200.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="juniper.ex3200.removeAccessPorts">
-        <network.router.ex3200.remove.accessPorts deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-				    ports="${router.ex3200.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="juniper.ex3200.addTrunkPorts">
-        <network.router.ex3200.add.trunkPorts deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-				    ports="${router.ex3200.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="juniper.ex3200.removeTrunkPorts">
-        <network.router.ex3200.remove.trunkPorts deviceInstance="${network.device.ex3200}"
-                                    user="${router.ex3200.user}"
-                                    password="${router.ex3200.password}"
-                                    deviceAddress="${router.ex3200}"
-				    ports="${router.ex3200.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-	<!-- Cisco 3400 -->
-    <target name="cisco.3400.createQoSVlan">
-        <network.router.3400.create.vlan deviceInstance="${network.device.cisco3400}"
-                                    user="${router.3400.user}"
-                                    password="${router.3400.password}"
-                                    adminPassword="${router.3400.adminpassword}"
-                                    deviceAddress="${router.3400}"
-                                    vlanTag="${vlan.tag}"
-				    vlanQoSBurstSize="${router.3400.qos.burstSize}"
-                                    vlanQosRate="${router.3400.qos.rate}" />
-    </target>
-
-    <target name="cisco.3400.createVlan">
-        <network.router.3400.create.vlan deviceInstance="${network.device.cisco3400}"
-                                    user="${router.3400.user}"
-                                    password="${router.3400.password}"
-                                    adminPassword="${router.3400.adminpassword}"
-                                    deviceAddress="${router.3400}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.3400.deleteQoSVlan">
-        <network.router.3400.delete.vlan deviceInstance="${network.device.cisco3400}"
-                                    user="${router.3400.user}"
-                                    password="${router.3400.password}"
-                                    adminPassword="${router.3400.adminpassword}"
-                                    deviceAddress="${router.3400}"
-				    vlanWithQos="true"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.3400.deleteVlan">
-        <network.router.3400.delete.vlan deviceInstance="${network.device.cisco3400}"
-                                    user="${router.3400.user}"
-                                    password="${router.3400.password}"
-                                    adminPassword="${router.3400.adminpassword}"
-                                    deviceAddress="${router.3400}"
-				    vlanWithQos="false"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.3400.addTrunkPorts">
-        <network.router.3400.add.trunkPorts deviceInstance="${network.device.cisco3400}"
-                                    user="${router.3400.user}"
-                                    password="${router.3400.password}"
-                                    adminPassword="${router.3400.adminpassword}"
-                                    deviceAddress="${router.3400}"
-				    ports="${router.3400.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-
-    <target name="cisco.3400.removeTrunkPorts">
-        <network.router.3400.remove.trunkPorts deviceInstance="${network.device.cisco3400}"
-                                    user="${router.3400.user}"
-                                    password="${router.3400.password}"
-                                    adminPassword="${router.3400.adminpassword}"
-                                    deviceAddress="${router.3400}"
-				    ports="${router.3400.ports}"
-                                    vlanTag="${vlan.tag}" />
-    </target>
-	
-	<!-- Infinera tests -->
-	
-    <target name="infinera.dtn.createCRS">
-        <network.dtn.create.crs deviceInstance="${network.device.infineradtn}"
-                                user="${dtn.user}"
-                                password="${dtn.password}"
-            					deviceAddress="${dtn}"
-                                srcPort="${dtn.srcPort}"
-                                dstPort="${dtn.dstPort}"
-                                payloadType="${dtn.payloadType}" />
-    </target>
-
-    <target name="infinera.dtn.deleteCRS">
-        <network.dtn.create.crs deviceInstance="${network.device.infineradtn}"
-                                user="${dtn.user}"
-                                password="${dtn.password}"
-            					deviceAddress="${dtn}"
-                                srcPort="${dtn.srcPort}"
-                                dstPort="${dtn.dstPort}"
-                                payloadType="${dtn.payloadType}" />
-    </target>
-    
-	<!-- polatis tests -->
-	
-    <target name="polatis.os.createPatch">
-        <network.os.create.patch deviceInstance="${network.device.polatisos}"
-            user="${os.user}"
-        	password="${os.password}"
-        	deviceAddress="${os}"
-            inputPort="${os.inputPort}"
-            outputPort="${os.outputPort}"
-        />
-    </target>
-
-    <target name="polatis.os.deletePatch">
-        <network.os.delete.patch deviceInstance="${network.device.polatisos}"
-            user="${os.user}"
-        	password="${os.password}"
-        	deviceAddress="${os}"
-            port="${os.inputPort}"
-        />
-    </target>
-
-    <target name="openflow.slice.create">
-        <network.openflow.slice.create deviceInstance="${network.device.openflow}"
-            user="${flowvisor.user}"
-            password="${flowvisor.passwd}"
-            deviceAddress="${flowvisor.url}"
-            name="${flowvisor.slice.name}"
-            passwd="${flowvisor.slice.passwd}"
-            ctrlUrl="${flowvisor.slice.controller}"
-            email="${flowvisor.slice.email}"
-        />
-    </target>
-
-    <target name="openflow.slice.ip.flowspace.add">
-        <network.openflow.slice.ip.flowspace.add deviceInstance="${network.device.openflow}"
-            user="${flowvisor.user}"
-            password="${flowvisor.passwd}"
-            deviceAddress="${flowvisor.url}"
-            name="${flowvisor.slice.name}"
-            srcIP="${flowvisor.slice.flowspace.src.ip}"
-            dstIP="${flowvisor.slice.flowspace.dst.ip}"
-        />
-    </target>
-
-    <target name="openflow.slice.vlan.flowspace.add">
-        <network.openflow.slice.vlan.flowspace.add deviceInstance="${network.device.openflow}"
-            user="${flowvisor.user}"
-            password="${flowvisor.passwd}"
-            deviceAddress="${flowvisor.url}"
-            name="${flowvisor.slice.name}"
-            tag="${flowvisor.slice.vlan.tag}"
-            switchPorts="${flowvisor.slice.switchPorts}"
-        />
-    </target>
-
-    <target name="openflow.slice.delete">
-        <network.openflow.slice.delete deviceInstance="${network.device.openflow}"
-            user="${flowvisor.user}"
-            password="${flowvisor.passwd}"
-            deviceAddress="${flowvisor.url}"
-            name="${flowvisor.slice.name}"
-        />
-    </target>
-
-
+             Network handlers test tasks. Use ant -f test.xml -p to list. 
+        </echo> 
+    </target> 
+    <taskdef resource="orca/handlers/network/network.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
+    <property resource="orca/handlers/network/network.properties" classpathref="run.classpath" /> 
+    <target name="juniper.ex3200.createQoSVlan.parallel"> 
+        <parallel> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanTag="251" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanTag="252" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanTag="253" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanTag="254" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanTag="255" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanTag="251" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanTag="252" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanTag="253" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanTag="254" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanTag="255" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+        </parallel> 
+    </target> 
+    <target name="juniper.ex3200.deleteQoSVlan.parallel"> 
+        <parallel> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanWithQos="true" vlanTag="251" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanWithQos="true" vlanTag="252" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanWithQos="true" vlanTag="253" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanWithQos="true" vlanTag="254" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.a}" vlanWithQos="true" vlanTag="255" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanWithQos="true" vlanTag="251" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanWithQos="true" vlanTag="252" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanWithQos="true" vlanTag="253" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanWithQos="true" vlanTag="254" /> 
+            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200.b}" vlanWithQos="true" vlanTag="255" /> 
+        </parallel> 
+    </target> 
+    <target name="juniper.ex3200.createQoSVlan"> 
+        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" vlanTag="${vlan.tag}" vlanQosRate="${router.ex3200.qos.rate}" vlanQosBurstSize="${router.ex3200.qos.burstSize}" /> 
+    </target> 
+    <target name="juniper.ex3200.createVlan"> 
+        <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="juniper.ex3200.deleteQoSVlan"> 
+        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" vlanWithQos="true" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="juniper.ex3200.deleteVlan"> 
+        <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" vlanWithQos="false" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.createQoSVlan"> 
+        <network.router.8700.create.vlan deviceInstance="${network.device.ciena8700}" defaultPrompt="${router.8700.prompt}" user="${router.8700.user}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" vlanTag="${vlan.tag}" vlanQoSBurstSize="${router.8700.qos.burstSize}" vlanQosRate="${router.8700.qos.rate}" /> 
+    </target> 
+    <target name="ciena.8700.createVlan"> 
+        <network.router.8700.create.vlan deviceInstance="${network.device.ciena8700}" defaultPrompt="${router.8700.prompt}" user="${router.8700.user}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.deleteQoSVlan"> 
+        <network.router.8700.delete.vlan deviceInstance="${network.device.ciena8700}" defaultPrompt="${router.8700.prompt}" user="${router.8700.user}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" vlanWithQos="true" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.deleteVlan"> 
+        <network.router.8700.delete.vlan deviceInstance="${network.device.ciena8700}" defaultPrompt="${router.8700.prompt}" user="${router.8700.user}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" vlanWithQos="false" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.addTrunkPorts"> 
+        <network.router.8700.add.trunkPorts deviceInstance="${network.device.ciena8700}" defaultPrompt="${router.8700.prompt}" user="${router.8700.user}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" ports="${router.8700.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.addAccessPorts"> 
+        <network.router.8700.add.accessPorts deviceInstance="${network.device.ciena8700}" defaultPrompt="${router.8700.prompt}" user="${router.8700.user}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" ports="${router.8700.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.removeTrunkPorts"> 
+        <network.router.8700.remove.trunkPorts deviceInstance="${network.device.ciena8700}" user="${router.8700.user}" defaultPrompt="${router.8700.prompt}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" ports="${router.8700.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.removeAccessPorts"> 
+        <network.router.8700.remove.accessPorts deviceInstance="${network.device.ciena8700}" user="${router.8700.user}" defaultPrompt="${router.8700.prompt}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" ports="${router.8700.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.mapVLANs"> 
+        <network.router.8700.map.vlans deviceInstance="${network.device.ciena8700}" user="${router.8700.user}" defaultPrompt="${router.8700.prompt}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" port="${router.8700.map.port}" destinationTag="${router.8700.dst.vlan.tag}" sourceTag="${router.8700.src.vlan.tag}" /> 
+    </target> 
+    <target name="ciena.8700.unmapVLANs"> 
+        <network.router.8700.unmap.vlans deviceInstance="${network.device.ciena8700}" user="${router.8700.user}" defaultPrompt="${router.8700.prompt}" password="${router.8700.password}" adminPassword="${router.8700.adminpassword}" deviceAddress="${router.8700}" port="${router.8700.map.port}" destinationTag="${router.8700.dst.vlan.tag}" sourceTag="${router.8700.src.vlan.tag}" /> 
+    </target> 
+    <target name="cisco.6509.createQoSVlan"> 
+        <network.router.6509.create.vlan deviceInstance="${network.device.cisco6509}" user="${router.6509.user}" password="${router.6509.password}" adminPassword="${router.6509.adminpassword}" deviceAddress="${router.6509}" vlanTag="${vlan.tag}" vlanQoSBurstSize="${router.6509.qos.burstSize}" vlanQosRate="${router.6509.qos.rate}" /> 
+    </target> 
+    <target name="cisco.6509.createVlan"> 
+        <network.router.6509.create.vlan deviceInstance="${network.device.cisco6509}" user="${router.6509.user}" password="${router.6509.password}" adminPassword="${router.6509.adminpassword}" deviceAddress="${router.6509}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.6509.deleteQoSVlan"> 
+        <network.router.6509.delete.vlan deviceInstance="${network.device.cisco6509}" user="${router.6509.user}" password="${router.6509.password}" adminPassword="${router.6509.adminpassword}" deviceAddress="${router.6509}" vlanWithQos="true" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.6509.deleteVlan"> 
+        <network.router.6509.delete.vlan deviceInstance="${network.device.cisco6509}" user="${router.6509.user}" password="${router.6509.password}" adminPassword="${router.6509.adminpassword}" deviceAddress="${router.6509}" vlanWithQos="false" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.6509.addTrunkPorts"> 
+        <network.router.6509.add.trunkPorts deviceInstance="${network.device.cisco6509}" user="${router.6509.user}" password="${router.6509.password}" adminPassword="${router.6509.adminpassword}" deviceAddress="${router.6509}" ports="${router.6509.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.6509.removeTrunkPorts"> 
+        <network.router.6509.remove.trunkPorts deviceInstance="${network.device.cisco6509}" user="${router.6509.user}" password="${router.6509.password}" adminPassword="${router.6509.adminpassword}" deviceAddress="${router.6509}" ports="${router.6509.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="juniper.ex3200.addAccessPorts"> 
+        <network.router.ex3200.add.accessPorts deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" ports="${router.ex3200.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="juniper.ex3200.removeAccessPorts"> 
+        <network.router.ex3200.remove.accessPorts deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" ports="${router.ex3200.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="juniper.ex3200.addTrunkPorts"> 
+        <network.router.ex3200.add.trunkPorts deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" ports="${router.ex3200.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="juniper.ex3200.removeTrunkPorts"> 
+        <network.router.ex3200.remove.trunkPorts deviceInstance="${network.device.ex3200}" user="${router.ex3200.user}" password="${router.ex3200.password}" deviceAddress="${router.ex3200}" ports="${router.ex3200.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <!-- Cisco 3400 --> 
+    <target name="cisco.3400.createQoSVlan"> 
+        <network.router.3400.create.vlan deviceInstance="${network.device.cisco3400}" user="${router.3400.user}" password="${router.3400.password}" adminPassword="${router.3400.adminpassword}" deviceAddress="${router.3400}" vlanTag="${vlan.tag}" vlanQoSBurstSize="${router.3400.qos.burstSize}" vlanQosRate="${router.3400.qos.rate}" /> 
+    </target> 
+    <target name="cisco.3400.createVlan"> 
+        <network.router.3400.create.vlan deviceInstance="${network.device.cisco3400}" user="${router.3400.user}" password="${router.3400.password}" adminPassword="${router.3400.adminpassword}" deviceAddress="${router.3400}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.3400.deleteQoSVlan"> 
+        <network.router.3400.delete.vlan deviceInstance="${network.device.cisco3400}" user="${router.3400.user}" password="${router.3400.password}" adminPassword="${router.3400.adminpassword}" deviceAddress="${router.3400}" vlanWithQos="true" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.3400.deleteVlan"> 
+        <network.router.3400.delete.vlan deviceInstance="${network.device.cisco3400}" user="${router.3400.user}" password="${router.3400.password}" adminPassword="${router.3400.adminpassword}" deviceAddress="${router.3400}" vlanWithQos="false" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.3400.addTrunkPorts"> 
+        <network.router.3400.add.trunkPorts deviceInstance="${network.device.cisco3400}" user="${router.3400.user}" password="${router.3400.password}" adminPassword="${router.3400.adminpassword}" deviceAddress="${router.3400}" ports="${router.3400.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <target name="cisco.3400.removeTrunkPorts"> 
+        <network.router.3400.remove.trunkPorts deviceInstance="${network.device.cisco3400}" user="${router.3400.user}" password="${router.3400.password}" adminPassword="${router.3400.adminpassword}" deviceAddress="${router.3400}" ports="${router.3400.ports}" vlanTag="${vlan.tag}" /> 
+    </target> 
+    <!-- Infinera tests --> 
+    <target name="infinera.dtn.createCRS"> 
+        <network.dtn.create.crs deviceInstance="${network.device.infineradtn}" user="${dtn.user}" password="${dtn.password}" deviceAddress="${dtn}" srcPort="${dtn.srcPort}" dstPort="${dtn.dstPort}" payloadType="${dtn.payloadType}" /> 
+    </target> 
+    <target name="infinera.dtn.deleteCRS"> 
+        <network.dtn.create.crs deviceInstance="${network.device.infineradtn}" user="${dtn.user}" password="${dtn.password}" deviceAddress="${dtn}" srcPort="${dtn.srcPort}" dstPort="${dtn.dstPort}" payloadType="${dtn.payloadType}" /> 
+    </target> 
+    <!-- polatis tests --> 
+    <target name="polatis.os.createPatch"> 
+        <network.os.create.patch deviceInstance="${network.device.polatisos}" user="${os.user}" password="${os.password}" deviceAddress="${os}" inputPort="${os.inputPort}" outputPort="${os.outputPort}" /> 
+    </target> 
+    <target name="polatis.os.deletePatch"> 
+        <network.os.delete.patch deviceInstance="${network.device.polatisos}" user="${os.user}" password="${os.password}" deviceAddress="${os}" port="${os.inputPort}" /> 
+    </target> 
+    <target name="openflow.slice.create"> 
+        <network.openflow.slice.create deviceInstance="${network.device.openflow}" user="${flowvisor.user}" password="${flowvisor.passwd}" deviceAddress="${flowvisor.url}" name="${flowvisor.slice.name}" passwd="${flowvisor.slice.passwd}" ctrlUrl="${flowvisor.slice.controller}" email="${flowvisor.slice.email}" /> 
+    </target> 
+    <target name="openflow.slice.ip.flowspace.add"> 
+        <network.openflow.slice.ip.flowspace.add deviceInstance="${network.device.openflow}" user="${flowvisor.user}" password="${flowvisor.passwd}" deviceAddress="${flowvisor.url}" name="${flowvisor.slice.name}" srcIP="${flowvisor.slice.flowspace.src.ip}" dstIP="${flowvisor.slice.flowspace.dst.ip}" /> 
+    </target> 
+    <target name="openflow.slice.vlan.flowspace.add"> 
+        <network.openflow.slice.vlan.flowspace.add deviceInstance="${network.device.openflow}" user="${flowvisor.user}" password="${flowvisor.passwd}" deviceAddress="${flowvisor.url}" name="${flowvisor.slice.name}" tag="${flowvisor.slice.vlan.tag}" switchPorts="${flowvisor.slice.switchPorts}" /> 
+    </target> 
+    <target name="openflow.slice.delete"> 
+        <network.openflow.slice.delete deviceInstance="${network.device.openflow}" user="${flowvisor.user}" password="${flowvisor.passwd}" deviceAddress="${flowvisor.url}" name="${flowvisor.slice.name}" /> 
+    </target> 
 </project>

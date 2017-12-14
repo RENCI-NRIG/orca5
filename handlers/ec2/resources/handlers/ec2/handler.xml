@@ -1,23 +1,17 @@
-<!DOCTYPE project [
-<!ENTITY core SYSTEM "../common/core.xml">
-<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
-<!ENTITY paths SYSTEM "../common/paths.xml">
-]>
+<!DOCTYPE project> 
+<!--ENTITY drivertasks SYSTEM "../common/drivertasks.xml"--> 
+<!--ENTITY paths SYSTEM "../common/paths.xml"-->
+ ]&gt; 
 <project name="ec2" basedir=".">
-
-  &paths;
-  &core;
-  &drivertasks;	
-  
-  <!--<property file="test.properties" />-->
-
-	<target name="join" depends="resolve.configuration">
-		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
-		</tstamp>
-		<echo message="EC2 HANDLER: JOIN on ${start.TIME}" />
-		<!-- see ec2.site.sample.properties and wiki for description
+     &amp;paths; &amp;core; &amp;drivertasks; 
+    <!--<property file="test.properties" />--> 
+    <target name="join" depends="resolve.configuration"> 
+        <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
+        <tstamp prefix="start"> 
+            <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" /> 
+        </tstamp> 
+        <echo message="EC2 HANDLER: JOIN on ${start.TIME}" /> 
+        <!-- see ec2.site.sample.properties and wiki for description
 	 of static properties that can be specified in ec2.site.properties
 	-->
 		<if>
@@ -1194,107 +1188,106 @@
 		<echo message="leave: ec2 instance=${unit.ec2.instance}" />
 		<!-- set site-specific properties like the VLAN or PHYS mode
 			 and the interface to operate on
-		-->
-		<if>
-			<isset property="ec2.site.properties" />
-			<then>
-				<property file="${ec2.site.properties}" />
-			</then>
-		</if>
-
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...exiting" />
-				<property name="shirako.target.code" value="0" />
-			</then>
-			<else>
-				<!-- optionally close proxy to this host -->
-				<if>
-					<!-- statically specified in ec2.site.properties -->
-					<equals arg1="${ec2.use.proxy}" arg2="true" />
-					<then>
-						<echo message="obtaining ip address for instance ${unit.ec2.instance}" />
-						<var name="code" unset="true" />
-						<var name="message" unset="true" />
-						<exec executable="${ec2.scripts}/${cloud.type}-get-ip" resultproperty="code" outputproperty="real.ip">
-							<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-							<env key="EC2_HOME" value="${ec2.home}" />
-							<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-							<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-							<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-							<env key="EC2_DIR" value="${ec2.dir}" />
-							<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-							<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-							<arg value="${unit.ec2.instance}" />
-						</exec>
-						<echo message="get-ip exit code: ${code} ip=${real.ip}" />
-						<!-- all properties passed to proxy script should be statically specified in ec2.site.properties.
+		--> 
+        <if> 
+            <isset property="ec2.site.properties" /> 
+            <then> 
+                <property file="${ec2.site.properties}" /> 
+            </then> 
+        </if> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...exiting" /> 
+                <property name="shirako.target.code" value="0" /> 
+            </then> 
+            <else> 
+                <!-- optionally close proxy to this host --> 
+                <if> 
+                    <!-- statically specified in ec2.site.properties --> 
+                    <equals arg1="${ec2.use.proxy}" arg2="true" /> 
+                    <then> 
+                        <echo message="obtaining ip address for instance ${unit.ec2.instance}" /> 
+                        <var name="code" unset="true"></var> 
+                        <var name="message" unset="true"></var> 
+                        <exec executable="${ec2.scripts}/${cloud.type}-get-ip" resultproperty="code" outputproperty="real.ip"> 
+                            <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" /> 
+                            <env key="EC2_HOME" value="${ec2.home}" /> 
+                            <env key="EC2_LOG_DIR" value="${ec2.log.dir}" /> 
+                            <env key="EC2_LOG_FILE" value="${ec2.log.file}" /> 
+                            <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" /> 
+                            <env key="EC2_DIR" value="${ec2.dir}" /> 
+                            <env key="EUCA_KEY_DIR" value="${ec2.keys}" /> 
+                            <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" /> 
+                            <arg value="${unit.ec2.instance}" /> 
+                        </exec> 
+                        <echo message="get-ip exit code: ${code} ip=${real.ip}" /> 
+                        <!-- all properties passed to proxy script should be statically specified in ec2.site.properties.
 							See wiki notes on proxies for meaning of these properties.
-						-->
-						<echo message="un-configuring ${proxy.type} proxy via host ${proxy.proxy.ip}" />
-						<var name="code" unset="true" />
-						<var name="message" unset="true" />
-						<exec executable="${ec2.scripts}/stop-proxy" resultproperty="code" outputproperty="proxy.script.output">
-							<env key="PROXY_TYPE" value="${proxy.type}" />
-							<env key="PROXY_PROXY_IP" value="${proxy.proxy.ip}" />
-							<env key="PROXY_INSTANCE_IP" value="${real.ip}" />
-							<env key="PROXY_USER" value="${proxy.user}" />
-							<env key="PROXY_SSH_KEY" value="${proxy.ssh.key}" />
-							<env key="PROXY_SCRIPT_PATH" value="${proxy.script.path}" />
-						</exec>
-						<var name="real.ip" unset="true" />
-						<echo message="stop-proxy exit code: ${code} ${proxy.script.output}" />
-					</then>
-				</if>
-
-				<var name="code" unset="true" />
-				<var name="message" unset="true" />
-				<echo message="removing instance ifaces: ${unit.ec2.instance}, ${unit.quantum.ifaces}" />
-
-				<if>
-					<equals arg1="${cloud.type}" arg2="nova-essex" />
-					<then>
-						<!-- if neuca-quantum, remove all interfaces -->
-						<var name="code" unset="true" />
-						<var name="remove.iface.output" unset="true" />
-						<exec executable="${ec2.scripts}/neuca-quantum-remove-vm-ifaces" resultproperty="code" outputproperty="remove.iface.output">
-							<env key="EC2_HOME" value="${ec2.home}" />
-							<env key="EC2_DIR" value="${ec2.dir}" />
-							<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-							<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-							<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-							<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-							<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
-							<env key="UNIT_EC2_INSTANCE" value="${unit.ec2.instance}" />
-							<env key="UNIT_QUANTUM_IFACES" value="${unit.quantum.ifaces}" />
-						</exec>
-						<echo>result code: ${code}</echo>
-						<echo>output: ${remove.iface.output}</echo>
-					</then>
-				</if>
-
-				<var name="code" unset="true" />
-				<var name="message" unset="true" />
-				<echo message="terminating instance: ${unit.ec2.instance}" />
-				<exec executable="${ec2.scripts}/${cloud.type}-stop" resultproperty="code" outputproperty="terminate.instance.output">
-					<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-					<env key="EC2_HOME" value="${ec2.home}" />
-					<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-					<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-					<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-					<env key="EC2_DIR" value="${ec2.dir}" />
-					<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-					<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
-					<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
-					<env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
-					<arg value="${unit.ec2.instance}" />
-				</exec>
-				<echo message="terminate-instance exit code: ${code}; ${terminate.instance.output}" />
-				<property name="shirako.target.code" value="${code}" />
-			</else>
-		</if>
-		<echo message="leave exit code: ${shirako.target.code}" />
-	</target>
+						--> 
+                        <echo message="un-configuring ${proxy.type} proxy via host ${proxy.proxy.ip}" /> 
+                        <var name="code" unset="true"></var> 
+                        <var name="message" unset="true"></var> 
+                        <exec executable="${ec2.scripts}/stop-proxy" resultproperty="code" outputproperty="proxy.script.output"> 
+                            <env key="PROXY_TYPE" value="${proxy.type}" /> 
+                            <env key="PROXY_PROXY_IP" value="${proxy.proxy.ip}" /> 
+                            <env key="PROXY_INSTANCE_IP" value="${real.ip}" /> 
+                            <env key="PROXY_USER" value="${proxy.user}" /> 
+                            <env key="PROXY_SSH_KEY" value="${proxy.ssh.key}" /> 
+                            <env key="PROXY_SCRIPT_PATH" value="${proxy.script.path}" /> 
+                        </exec> 
+                        <var name="real.ip" unset="true"></var> 
+                        <echo message="stop-proxy exit code: ${code} ${proxy.script.output}" /> 
+                    </then> 
+                </if> 
+                <var name="code" unset="true"></var> 
+                <var name="message" unset="true"></var> 
+                <echo message="removing instance ifaces: ${unit.ec2.instance}, ${unit.quantum.ifaces}" /> 
+                <if> 
+                    <equals arg1="${cloud.type}" arg2="nova-essex" /> 
+                    <then> 
+                        <!-- if neuca-quantum, remove all interfaces --> 
+                        <var name="code" unset="true"></var> 
+                        <var name="remove.iface.output" unset="true"></var> 
+                        <exec executable="${ec2.scripts}/neuca-quantum-remove-vm-ifaces" resultproperty="code" outputproperty="remove.iface.output"> 
+                            <env key="EC2_HOME" value="${ec2.home}" /> 
+                            <env key="EC2_DIR" value="${ec2.dir}" /> 
+                            <env key="EUCA_KEY_DIR" value="${ec2.keys}" /> 
+                            <env key="EC2_LOG_DIR" value="${ec2.log.dir}" /> 
+                            <env key="EC2_LOG_FILE" value="${ec2.log.file}" /> 
+                            <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" /> 
+                            <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" /> 
+                            <env key="UNIT_EC2_INSTANCE" value="${unit.ec2.instance}" /> 
+                            <env key="UNIT_QUANTUM_IFACES" value="${unit.quantum.ifaces}" /> 
+                        </exec> 
+                        <echo>
+                             result code: ${code} 
+                        </echo> 
+                        <echo>
+                             output: ${remove.iface.output} 
+                        </echo> 
+                    </then> 
+                </if> 
+                <var name="code" unset="true"></var> 
+                <var name="message" unset="true"></var> 
+                <echo message="terminating instance: ${unit.ec2.instance}" /> 
+                <exec executable="${ec2.scripts}/${cloud.type}-stop" resultproperty="code" outputproperty="terminate.instance.output"> 
+                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" /> 
+                    <env key="EC2_HOME" value="${ec2.home}" /> 
+                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" /> 
+                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" /> 
+                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" /> 
+                    <env key="EC2_DIR" value="${ec2.dir}" /> 
+                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" /> 
+                    <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" /> 
+                    <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" /> 
+                    <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" /> 
+                    <arg value="${unit.ec2.instance}" /> 
+                </exec> 
+                <echo message="terminate-instance exit code: ${code}; ${terminate.instance.output}" /> 
+                <property name="shirako.target.code" value="${code}" /> 
+            </else> 
+        </if> 
+        <echo message="leave exit code: ${shirako.target.code}" /> 
+    </target> 
 </project>
-

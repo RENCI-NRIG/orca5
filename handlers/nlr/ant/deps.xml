@@ -1,105 +1,82 @@
 <!--
     User-specific project build properties. Properties defined in this file have
     precedence over properties defined in build.properties
--->
-<property file="${basedir}/ant/user.properties" />
+--> 
+<property file="${basedir}/ant/user.properties" /> 
 <!-- 
      Project buld properties.
--->
-<property file="${basedir}/ant/build.properties" />
+--> 
+<property file="${basedir}/ant/build.properties" /> 
 <!--
     User-specific project test properties. Properties defined in this file have
     precedence over properties defined in tests.properties
--->
-<property file="${basedir}/ant/user.tests.properties" />
+--> 
+<property file="${basedir}/ant/user.tests.properties" /> 
 <!-- 
      Project test properties.
--->
-<property file="${basedir}/ant/tests.properties" />
+--> 
+<property file="${basedir}/ant/tests.properties" /> 
 <!--
      Private properties (logins and such - live outside the SVN tree)
      NLRSherpa.login, NLRSherpa.password and NLRSherpa.wg are expected
      to be there.
--->
-<property file="/tmp/NLRSherpa.properties" />
-
-<!-- The maven ant lib must be on the classpath -->
-<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" />
-
-<!-- Link to the POM -->
-<artifact:pom file="pom.xml" id="maven.project" />
-
-<!-- Declare the main orca repository -->
-<artifact:remoteRepository id="orca" url="${orca.repository.url}" />
-
-<!-- Obtain the orca build tools jar -->
-<artifact:dependencies pathId="top.classpath">
-  <dependency groupId="orca.tools" artifactId="build" version="${orca.tools.build.version}" />
-  <remoteRepository refid="orca" />
-</artifact:dependencies>
-
-<!-- Load the tasks and types from the orca build tools jar -->
-<taskdef resource="orca/tools/build/build.xml" classpathref="top.classpath" />
-
-<!-- Define classpaths -->
-
-<!-- Classpath for compiling -->
- <artifact:dependencies
-    filesetId="compile.fileset"
-    useScope="compile"
-    >
-   <pom refid="maven.project"/>
- </artifact:dependencies>
-
- <path id="compile.classpath">
-   <filesetnopom>
-     <fileset refid="compile.fileset" />
-   </filesetnopom>
-   <pathelement location="${basedir}" />
- </path>
-
- <!-- Classpath for execution -->
- <artifact:dependencies
-    filesetId="run.fileset"
-    useScope="runtime"
-    >
-   <pom refid="maven.project"/>
- </artifact:dependencies>
-
- <path id="run.classpath">
-   <filesetnopom>
-     <fileset refid="run.fileset" />
-   </filesetnopom>
-   <filesetnopom>
-     <fileset refid="compile.fileset" />
-   </filesetnopom>
-   <pathelement location="${basedir}" />
-   <pathelement location="${basedir}/target/classes" />
-   <pathelement location="${axis2.dir}" />
- </path>
-
- <!-- Classpath for testing -->
-
- <artifact:dependencies
-     filesetId="test.fileset"
-     useScope="test"
-     >
-   <pom refid="maven.project"/>
- </artifact:dependencies>
- 
- <path id="test.classpath">
-   <filesetnopom>
-     <fileset refid="test.fileset" />
-   </filesetnopom>
-   <filesetnopom>
-     <fileset refid="run.fileset" />
-   </filesetnopom>
-   <filesetnopom>
-     <fileset refid="compile.fileset" />
-   </filesetnopom>
-   <pathelement location="${basedir}" />
- </path>
- 
- <taskdef resource="net/sf/antcontrib/antlib.xml">
-   <classpath refid="compile.classpath" />
- </taskdef>
+--> 
+<property file="/tmp/NLRSherpa.properties" /> 
+<!-- The maven ant lib must be on the classpath --> 
+<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" /> 
+<!-- Link to the POM --> 
+<artifact:pom file="pom.xml" id="maven.project" /> 
+<!-- Declare the main orca repository --> 
+<artifact:remoteRepository id="orca" url="${orca.repository.url}" /> 
+<!-- Obtain the orca build tools jar --> 
+<artifact:dependencies pathId="top.classpath"> 
+    <dependency groupId="orca.tools" artifactId="build" version="${orca.tools.build.version}" /> 
+    <remoteRepository refid="orca" /> 
+</artifact:dependencies> 
+<!-- Load the tasks and types from the orca build tools jar --> 
+<taskdef resource="orca/tools/build/build.xml" classpathref="top.classpath" /> 
+<!-- Define classpaths --> 
+<!-- Classpath for compiling --> 
+<artifact:dependencies filesetId="compile.fileset" useScope="compile"> 
+    <pom refid="maven.project" /> 
+</artifact:dependencies> 
+<path id="compile.classpath"> 
+    <filesetnopom> 
+        <fileset refid="compile.fileset" /> 
+    </filesetnopom> 
+    <pathelement location="${basedir}" /> 
+</path> 
+<!-- Classpath for execution --> 
+<artifact:dependencies filesetId="run.fileset" useScope="runtime"> 
+    <pom refid="maven.project" /> 
+</artifact:dependencies> 
+<path id="run.classpath"> 
+    <filesetnopom> 
+        <fileset refid="run.fileset" /> 
+    </filesetnopom> 
+    <filesetnopom> 
+        <fileset refid="compile.fileset" /> 
+    </filesetnopom> 
+    <pathelement location="${basedir}" /> 
+    <pathelement location="${basedir}/target/classes" /> 
+    <pathelement location="${axis2.dir}" /> 
+</path> 
+<!-- Classpath for testing --> 
+<artifact:dependencies filesetId="test.fileset" useScope="test"> 
+    <pom refid="maven.project" /> 
+</artifact:dependencies> 
+<path id="test.classpath"> 
+    <filesetnopom> 
+        <fileset refid="test.fileset" /> 
+    </filesetnopom> 
+    <filesetnopom> 
+        <fileset refid="run.fileset" /> 
+    </filesetnopom> 
+    <filesetnopom> 
+        <fileset refid="compile.fileset" /> 
+    </filesetnopom> 
+    <pathelement location="${basedir}" /> 
+</path> 
+<taskdef resource="net/sf/antcontrib/antlib.xml"> 
+    <classpath refid="compile.classpath" /> 
+</taskdef>

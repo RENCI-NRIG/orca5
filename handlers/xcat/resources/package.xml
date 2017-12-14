@@ -1,22 +1,33 @@
-<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
-                  id="0E8DE311-FA3F-448A-873E-AE45DF7BBC01">
-  <name>xCAT Handler Library</name>
-  <description>Provides xCAT handler.</description>
-  <plugins>
-
-    <!-- xCAT -->
-    <plugin id="1" type="10" actorType="3">
-      <name>xCAT Handler</name>
-      <description>Provides support for xCAT provisioned bare metal nodes.</description>
-      <configurationTemplate>xcat/config.baremetal</configurationTemplate>
-      <configurationProperties>
-        <!-- Name of the handler file (relative to /ROOT/handlers) -->
-        <property>
-          <name>handler.file</name>
-          <value>xcat/handler.xml</value>
-        </property>
-      </configurationProperties>
-    </plugin>
-  </plugins>
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans" id="0E8DE311-FA3F-448A-873E-AE45DF7BBC01"> 
+    <name>
+         xCAT Handler Library 
+    </name> 
+    <description>
+         Provides xCAT handler. 
+    </description> 
+    <plugins> 
+        <!-- xCAT --> 
+        <plugin id="1" type="10" actorType="3"> 
+            <name>
+                 xCAT Handler 
+            </name> 
+            <description>
+                 Provides support for xCAT provisioned bare metal nodes. 
+            </description> 
+            <configurationTemplate>
+                 xcat/config.baremetal 
+            </configurationTemplate> 
+            <configurationProperties> 
+                <!-- Name of the handler file (relative to /ROOT/handlers) --> 
+                <property> 
+                    <name>
+                         handler.file 
+                    </name> 
+                    <value>
+                         xcat/handler.xml 
+                    </value> 
+                </property> 
+            </configurationProperties> 
+        </plugin> 
+    </plugins> 
 </extensionPackage>
-

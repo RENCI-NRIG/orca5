@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.Cisco3400;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class RemoveTrunkPortsTask extends Cisco3400BaseTask {

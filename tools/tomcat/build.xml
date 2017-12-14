@@ -1,75 +1,65 @@
-<project name="tomcatlib" default="compile" basedir=".">
-  <property name="compile.debug" value="true" />
-  <property name="compile.optimize" value="off" />
-  <property name="compile.deprecation" value="on" />
-  <property name="compile.source" value="1.5" />
-
-  <property name="project.version" value="1.0beta1" />
-  <property name="project.id" value="${ant.project.name}-${project.version}" />
-
-  <property name="build.sysclasspath" value="ignore" />
-  <property name="src" value="${basedir}/src" />
-  <property name="build.dir" value="${basedir}/build-ant" />
-  <property name="classes.dir" value="${build.dir}/classes" />
-  <property name="dist.dir" value="${basedir}/dist" />
-  
-  <path id="compile.classpath">
-    <fileset dir="${basedir}/lib">
-      <include name="*.jar" />
-    </fileset>
-    <pathelement location="${basedir}/lib/" />
-  </path>
-
-  <path id="compile.sourcepath">
-    <pathelement location="${src}" />
-  </path>
-
-  <path id="run.classpath">
-    <pathelement location="${basedir}" />
-    <fileset dir="${basedir}/lib">
-      <include name="*.jar" />
-    </fileset>
-    <fileset dir="${basedir}/dist">
-      <include name="*.jar" />
-    </fileset>
-    <pathelement location="${build.dir}/classes" />
-    <pathelement location="${basedir}/lib" />
-  </path>
-
-  <target name="help">
-  </target>
-
-  <!-- Clean Target -->
-  <target name="clean" description="Delete the build and dist directories">
-    <delete dir="${build.dir}" />
-    <delete dir="${dist.dir}" />
-  </target>
-
-  <!-- Prepare directories -->
-  <target name="prepare">
-    <tstamp />
-    <echo message="-------- ${ant.project.name} ${project.version} --------" />
-    <mkdir dir="${build.dir}" />
-    <mkdir dir="${classes.dir}" />
-    <mkdir dir="${dist.dir}" />
-
-  </target>
-
-  <target name="compile" depends="prepare">
-    <echo message="Compiling files" />
-    <javac srcdir="${src}" destdir="${classes.dir}" deprecation="false" failonerror="true" debug="true">
-      <classpath refid="compile.classpath" />
-    </javac>
-    <jar jarfile="${dist.dir}/shirako.tomcat.server-${project.version}.jar">
-      <fileset dir="${classes.dir}">
-        <include name="shirako/util/tomcat/ShirakoWebappClassLoader*" />
-      </fileset>
-    </jar>
-    <jar jarfile="${dist.dir}/shirako.tomcat.common-${project.version}.jar">
-      <fileset dir="${classes.dir}">
-        <include name="shirako/util/tomcat/IShirakoWebappClassLoader*" />
-        <include name="shirako/util/tomcat/ShirakoURLClassLoader*" />        
-      </fileset>
-    </jar>
-  </target>
+<project name="tomcatlib" default="compile" basedir="."> 
+    <property name="compile.debug" value="true" /> 
+    <property name="compile.optimize" value="off" /> 
+    <property name="compile.deprecation" value="on" /> 
+    <property name="compile.source" value="1.5" /> 
+    <property name="project.version" value="1.0beta1" /> 
+    <property name="project.id" value="${ant.project.name}-${project.version}" /> 
+    <property name="build.sysclasspath" value="ignore" /> 
+    <property name="src" value="${basedir}/src" /> 
+    <property name="build.dir" value="${basedir}/build-ant" /> 
+    <property name="classes.dir" value="${build.dir}/classes" /> 
+    <property name="dist.dir" value="${basedir}/dist" /> 
+    <path id="compile.classpath"> 
+        <fileset dir="${basedir}/lib"> 
+            <include name="*.jar" /> 
+        </fileset> 
+        <pathelement location="${basedir}/lib/" /> 
+    </path> 
+    <path id="compile.sourcepath"> 
+        <pathelement location="${src}" /> 
+    </path> 
+    <path id="run.classpath"> 
+        <pathelement location="${basedir}" /> 
+        <fileset dir="${basedir}/lib"> 
+            <include name="*.jar" /> 
+        </fileset> 
+        <fileset dir="${basedir}/dist"> 
+            <include name="*.jar" /> 
+        </fileset> 
+        <pathelement location="${build.dir}/classes" /> 
+        <pathelement location="${basedir}/lib" /> 
+    </path> 
+    <target name="help"> 
+    </target> 
+    <!-- Clean Target --> 
+    <target name="clean" description="Delete the build and dist directories"> 
+        <delete dir="${build.dir}" /> 
+        <delete dir="${dist.dir}" /> 
+    </target> 
+    <!-- Prepare directories --> 
+    <target name="prepare"> 
+        <tstamp /> 
+        <echo message="-------- ${ant.project.name} ${project.version} --------" /> 
+        <mkdir dir="${build.dir}" /> 
+        <mkdir dir="${classes.dir}" /> 
+        <mkdir dir="${dist.dir}" /> 
+    </target> 
+    <target name="compile" depends="prepare"> 
+        <echo message="Compiling files" /> 
+        <javac srcdir="${src}" destdir="${classes.dir}" deprecation="false" failonerror="true" debug="true"> 
+            <classpath refid="compile.classpath" /> 
+        </javac> 
+        <jar jarfile="${dist.dir}/shirako.tomcat.server-${project.version}.jar"> 
+            <fileset dir="${classes.dir}"> 
+                <include name="shirako/util/tomcat/ShirakoWebappClassLoader*" /> 
+            </fileset> 
+        </jar> 
+        <jar jarfile="${dist.dir}/shirako.tomcat.common-${project.version}.jar"> 
+            <fileset dir="${classes.dir}"> 
+                <include name="shirako/util/tomcat/IShirakoWebappClassLoader*" /> 
+                <include name="shirako/util/tomcat/ShirakoURLClassLoader*" /> 
+            </fileset> 
+        </jar> 
+    </target> 
 </project>

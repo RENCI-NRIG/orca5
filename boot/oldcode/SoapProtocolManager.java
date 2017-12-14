@@ -246,5 +246,3 @@ public static final String PropetyClientConfig = "orca/soap/wsdd/deployFilterCli
         args[1] = extractFilterConfiguration();
         Admin.main(args);
     }
-    
-    

@@ -39,15 +39,14 @@ public class PortNDLControl extends ResourceControl {
     protected PortHandler handler;
 
     /**
-     * This control can have only one reservation waiting for the completion of
-     * a configuration action. This flag indicates if an action is in progress.
-     * If this flag is true, the control is going to delay all requests for new
+     * This control can have only one reservation waiting for the completion of a configuration action. This flag
+     * indicates if an action is in progress. If this flag is true, the control is going to delay all requests for new
      * resources until the configuration action completes.
      */
     protected boolean inprogress = false;
 
     synchronized void setInprogress(boolean val) {
-      inprogress = val;
+        inprogress = val;
     }
 
     @Override
@@ -66,12 +65,12 @@ public class PortNDLControl extends ResourceControl {
         if (substrateFile == null) {
             substrateFile = PropList.getRequiredProperty(set.getLocalProperties(), PropertySubstrateFile);
         }
-        
+
         if (substrateFile == null) {
             throw new ConfigurationException("Missing substrate file property");
         }
-            
-        //System.out.println("Substrate file: " + substrateFile);
+
+        // System.out.println("Substrate file: " + substrateFile);
         handler = new PortHandler(substrateFile);
 
     }
@@ -99,7 +98,6 @@ public class PortNDLControl extends ResourceControl {
         Properties ticketProperties = rt.getProperties();
         // get the requested lease term
         Term term = r.getRequestedTerm();
-        
 
         // convert to cycles
         long start = authority.getActorClock().cycle(term.getNewStartTime());
@@ -125,16 +123,17 @@ public class PortNDLControl extends ResourceControl {
                 setInprogress(true);
                 // FIXME: get this from the client request
                 String requestSpec = requested.getConfigurationProperties().getProperty(PropertyRequestNdl);
-                
+
                 RequestReservation rr = handler.getRequestReservation(requestSpec);
                 handler.handleRequest(rr);
                 String uri = rr.getReservation();
-                String portList=handler.getPortListToString(uri);
-                
+                String portList = handler.getPortListToString(uri);
+
                 Properties handlerProperties = BenNdlPropertiesConverter.convert(portList, logger);
 
                 ResourceData rd = new ResourceData();
-                PropList.setProperty(rd.getResourceProperties(), UnitProperties.UnitPortList, handlerProperties.getProperty(UnitProperties.UnitPortList));
+                PropList.setProperty(rd.getResourceProperties(), UnitProperties.UnitPortList,
+                        handlerProperties.getProperty(UnitProperties.UnitPortList));
                 PropList.setProperty(rd.getLocalProperties(), PropertyRequestID, uri);
 
                 UnitSet gained = new UnitSet(authority.getShirakoPlugin());
@@ -184,18 +183,18 @@ public class PortNDLControl extends ResourceControl {
         } catch (Exception e) {
             u = null;
         }
-        //Do nothing, the setup and teardown interface lists are the same.
-        //if (u != null) {
-            String uri = u.getProperty(PropertyRequestID);
-            // unset the setup properties
-            //String portList = handler.getPortListToString();
-            //Properties setupProperties = BenNdlPropertiesConverter.convert(portList);
-            //u.unsetProperties(setupProperties);
-            // set the teardown properties
-            //NetworkConnection teardown = handler.getConnectionTeardownActions(uri);
-            //Properties teardownProperties = BenNdlPropertiesConverter.convert(teardown);
-            //u.mergeProperties(teardownProperties);
-        //}
+        // Do nothing, the setup and teardown interface lists are the same.
+        // if (u != null) {
+        String uri = u.getProperty(PropertyRequestID);
+        // unset the setup properties
+        // String portList = handler.getPortListToString();
+        // Properties setupProperties = BenNdlPropertiesConverter.convert(portList);
+        // u.unsetProperties(setupProperties);
+        // set the teardown properties
+        // NetworkConnection teardown = handler.getConnectionTeardownActions(uri);
+        // Properties teardownProperties = BenNdlPropertiesConverter.convert(teardown);
+        // u.mergeProperties(teardownProperties);
+        // }
     }
 
     protected void releaseResources(Unit u) throws Exception {
@@ -219,23 +218,21 @@ public class PortNDLControl extends ResourceControl {
     }
 
     public void revisit(IReservation r) throws Exception {
-        UnitSet uset = (UnitSet) (r.getResources().getResources());   
+        UnitSet uset = (UnitSet) (r.getResources().getResources());
         for (Unit u : uset.getSet()) {
             try {
                 /*
-                 * No need for locking. No other thread is accessing nodes of
-                 * recovered reservations. State cannot be Closed, since closed
-                 * nodes are filtered in NodeGroup.revisit(Actor).
+                 * No need for locking. No other thread is accessing nodes of recovered reservations. State cannot be
+                 * Closed, since closed nodes are filtered in NodeGroup.revisit(Actor).
                  */
-                switch (u.getState()){
-                  default:
-                        throw new RuntimeException("Revisit for BenNdlControl is not supported yet");                   
+                switch (u.getState()) {
+                default:
+                    throw new RuntimeException("Revisit for BenNdlControl is not supported yet");
                 }
             } catch (Exception e) {
                 fail(u, "revisit with vlancontrol", e);
             }
         }
     }
-
 
 }

@@ -34,14 +34,15 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
 
     @Override
     protected void registerProtocols() {
-        ProxyProtocolDescriptor p = new ProxyProtocolDescriptor(ManageExtensionsApiConstants.ProtocolLocal, LocalOpenFlowControllerManagementProxy.class.getCanonicalName());
+        ProxyProtocolDescriptor p = new ProxyProtocolDescriptor(ManageExtensionsApiConstants.ProtocolLocal,
+                LocalOpenFlowControllerManagementProxy.class.getCanonicalName());
         proxies = new ProxyProtocolDescriptor[] { p };
     }
 
     public ResultStringMng addRequest(String start, String end, int vmsDuke, int vmsRenci, AuthToken caller) {
         ResultStringMng result = new ResultStringMng();
         result.setStatus(new ResultMng());
-        
+
         if ((start == null) || (end == null) || vmsDuke < 0 || vmsRenci < 0 || (vmsDuke + vmsRenci == 0)) {
             result.getStatus().setCode(ManageExtensionsApiConstants.ErrorInvalidArguments);
         } else {
@@ -78,13 +79,16 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param id the id to set
+         * @param id
+         *            the id to set
          */
         public void setId(String id) {
             this.id = id;
         }
 
-        /**R
+        /**
+         * R
+         * 
          * @return the start
          */
         public String getStart() {
@@ -92,7 +96,8 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param start the start to set
+         * @param start
+         *            the start to set
          */
         public void setStart(String start) {
             this.start = start;
@@ -106,7 +111,8 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param end the end to set
+         * @param end
+         *            the end to set
          */
         public void setEnd(String end) {
             this.end = end;
@@ -121,7 +127,8 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param ofSlice the OpenFlow Slice to set
+         * @param ofSlice
+         *            the OpenFlow Slice to set
          */
         /** Rename method: setVlanTag -> setOpenFlowSlice */
         public void setOfSlice(String ofSlice) {
@@ -136,7 +143,8 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param ridDuke the ridDuke to set
+         * @param ridDuke
+         *            the ridDuke to set
          */
         public void setRidDuke(String ridDuke) {
             this.ridDuke = ridDuke;
@@ -150,7 +158,8 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param ridRenci the ridRenci to set
+         * @param ridRenci
+         *            the ridRenci to set
          */
         public void setRidRenci(String ridRenci) {
             this.ridRenci = ridRenci;
@@ -164,7 +173,8 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param vmsduke the vmsduke to set
+         * @param vmsduke
+         *            the vmsduke to set
          */
         public void setVmsDuke(int vmsduke) {
             this.vmsduke = vmsduke;
@@ -178,12 +188,13 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param vmsrenci the vmsrenci to set
+         * @param vmsrenci
+         *            the vmsrenci to set
          */
         public void setVmsRenci(int vmsrenci) {
             this.vmsrenci = vmsrenci;
         }
-        
+
         public boolean getClosed() {
             return closed;
         }
@@ -204,7 +215,8 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param status the status to set
+         * @param status
+         *            the status to set
          */
         public void setStatus(ResultMng status) {
             this.status = status;
@@ -218,12 +230,13 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
 
         /**
-         * @param result the result to set
+         * @param result
+         *            the result to set
          */
         public void setResult(OpenFlowRequestMng[] result) {
             this.result = result;
         }
-        
+
     }
 
     /** Change parameter: BenRequest -> OpenFlowRequest */
@@ -231,7 +244,7 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         OpenFlowRequestMng result = new OpenFlowRequestMng();
 
         result.id = r.requestId.toString();
-        
+
         /** vlanReservation -> openflowReservation */
         result.start = r.openflowReservation.getTerm().getStartTime().toString();
         result.end = r.openflowReservation.getTerm().getEndTime().toString();
@@ -295,7 +308,6 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
         }
         return result;
     }
-    
 
     public ResultProxyMng getVMBroker(AuthToken caller) {
         ResultProxyMng result = new ResultProxyMng();
@@ -343,5 +355,5 @@ public class OpenFlowControllerManagerObject extends ControllerManagerObject {
             }
         }
         return result;
-    }    
+    }
 }

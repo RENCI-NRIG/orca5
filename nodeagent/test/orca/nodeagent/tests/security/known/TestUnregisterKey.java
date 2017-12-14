@@ -17,32 +17,26 @@ import orca.nodeagent.documents.UnregisterKeyResultElement;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
-
-public class TestUnregisterKey
-{
+public class TestUnregisterKey {
     String serviceLocation;
     String repositoryPath;
     String configFile;
 
-    public TestUnregisterKey()
-    {
+    public TestUnregisterKey() {
         serviceLocation = "http://localhost:8080/axis2/services/NodeAgentService";
         repositoryPath = "../lib/external";
         configFile = "test/orca/nodeagent/tests/security/known/client.axis2.xml";
     }
 
-    public TestUnregisterKey(String serviceLocation, String repositoryPath, String configFile)
-    {
+    public TestUnregisterKey(String serviceLocation, String repositoryPath, String configFile) {
         this.serviceLocation = serviceLocation;
         this.repositoryPath = repositoryPath;
         this.configFile = configFile;
     }
 
-    public int run() throws Exception
-    {
-        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-            repositoryPath,
-            configFile);
+    public int run() throws Exception {
+        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repositoryPath,
+                configFile);
 
         NodeAgentServiceStub stub = new NodeAgentServiceStub(cc, serviceLocation);
 
@@ -61,8 +55,7 @@ public class TestUnregisterKey
         return res;
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         TestUnregisterKey test2 = null;
         test2 = new TestUnregisterKey();
         test2.run();

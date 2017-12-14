@@ -17,33 +17,27 @@ import orca.nodeagent.documents.TestFuncResultElement;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
-
-public class TestSecurityNotEnabled
-{
+public class TestSecurityNotEnabled {
     String serviceLocation;
     String repositoryPath;
     String configFile;
 
-    public TestSecurityNotEnabled()
-    {
+    public TestSecurityNotEnabled() {
         serviceLocation = "http://localhost:9123/axis2/services/NodeAgentService";
-        //serviceLocation = "http://shirako068.cod.cs.duke.edu:6/axis2/services/NodeAgentService";
+        // serviceLocation = "http://shirako068.cod.cs.duke.edu:6/axis2/services/NodeAgentService";
         repositoryPath = null;
         configFile = "test/orca/nodeagent/tests/nosecurity/client.axis2.nosign.xml";
     }
 
-    public TestSecurityNotEnabled(String location, String repository, String config)
-    {
+    public TestSecurityNotEnabled(String location, String repository, String config) {
         this.serviceLocation = location;
         this.repositoryPath = repository;
         this.configFile = config;
     }
 
-    public void run() throws Exception
-    {
-        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-            repositoryPath,
-            configFile);
+    public void run() throws Exception {
+        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repositoryPath,
+                configFile);
         NodeAgentServiceStub stub = new NodeAgentServiceStub(cc, serviceLocation);
 
         System.out.println("Connecting to service: " + serviceLocation);
@@ -56,8 +50,7 @@ public class TestSecurityNotEnabled
         System.out.println("TestFuncResult is: " + trf.getTestFuncResultElement());
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         TestSecurityNotEnabled test = null;
         test = new TestSecurityNotEnabled();
         test.run();

@@ -1,138 +1,107 @@
-<!DOCTYPE project [
-<!ENTITY core SYSTEM "../../../common/core.xml">
-<!ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml">
-<!ENTITY paths SYSTEM "../../../common/paths.xml">
-<!ENTITY bentasks SYSTEM "../ben.tasks.xml">
-]>
+<!DOCTYPE project> 
+<!--ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml"--> 
+<!--ENTITY paths SYSTEM "../../../common/paths.xml"--> 
+<!--ENTITY bentasks SYSTEM "../ben.tasks.xml"-->
+ ]&gt; 
 <project name="vlan-handler" basedir=".">
-
-	&paths;
-	&core;    
-	&drivertasks;
-	&bentasks;
-
-	<target name="join" depends="resolve.configuration,ben.load.tasks">
-		<if>
-			<isset property="unit.net.vlan" />
-			<then>
-				<var name="code" value="0" />
-				<for list="${routers}" param="router" delimiter=" " parallel="false">
-					<sequential>
-						<if>
-							<equals arg1="${code}" arg2="0" />
-							<then>
-								<echo message="enabling vlan ${unit.net.vlan} on router @{router}" />
-								<var name="service.location" value="${na.protocol}://${@{router}.service.ip}:${na.port}/${na.uri}" />
-								<echo message="service.location=${service.location}" />
-								<if>
-									<equals arg1="${emulation}" arg2="true" />
-									<then>
-										<echo message="running under emulation...nothing to do" />
-										<var name="code" value="0" />
-									</then>
-									<else>
-										<limit maxwait="${operation.timeout}" failonerror="true">
-											<var name="code" unset="true" />
-											<network.Cisco6509.CreateVLAN 
-												location="${service.location}"
-												repository="${axis2.repository}"
-												config="${axis2.config}"
-												driverId="${vlan.6509.driver.id}"
-												exitCodeProperty="code" 
-												deviceAddress="@{router}"
-												UID="${router.user}"
-												PWD="${router.password}"
-												adminPWD="${router.admin.password}"
-												tagNm="${unit.net.vlan}"
-												vlanNm="orca vlan ${unit.net.vlan}"
-												/>
-											<if>
-												<equals arg1="0" arg2="${code}" />
-												<then>
-													<echo message="vlan ${unit.net.vlan} created successfully on router @{router}" />
-												</then>
-												<else>
-													<echo message="vlan ${unit.net.vlan} creation on @{router} failed. code=${code}" />
-												</else>
-											</if>
-										</limit>
-									</else>
-								</if>
-							</then>
-						</if>
-					</sequential>
-				</for>
-			</then>
-			<else>
-				<echo message="missing vlan tag" />
-				<var name="code" value="1" />
-			</else>
-		</if>
-		<property name="shirako.target.code" value="${code}" />
-		<echo message="join exit code: ${shirako.target.code}" />
-	</target>
-
-	<target name="leave" depends="resolve.configuration,ben.load.tasks">
-		<if>
-			<isset property="unit.net.vlan" />
-			<then>
-				<var name="code" value="0" />
-				<for list="${routers}" param="router" delimiter=" " parallel="false">
-					<sequential>
-						<if>
-							<equals arg1="${code}" arg2="0" />
-							<then>
-								<echo message="deleting vlan ${unit.net.vlan} on router @{router}" />
-								<var name="service.location" value="${na.protocol}://${@{router}.service.ip}:${na.port}/${na.uri}" />
-								<echo message="service.location=${service.location}" />
-								<if>
-									<equals arg1="${emulation}" arg2="true" />
-									<then>
-										<echo message="running under emulation...nothing to do" />
-										<var name="code" value="0" />
-									</then>
-									<else>
-										<limit maxwait="${operation.timeout}" failonerror="true">
-											<var name="code" unset="true" />
-											<network.Cisco6509.DeleteVLAN 
-												location="${service.location}"
-												repository="${axis2.repository}"
-												config="${axis2.config}"
-												driverId="${vlan.6509.driver.id}"
-												exitCodeProperty="code" 
-												deviceAddress="@{router}"
-												UID="${router.user}"
-												PWD="${router.password}"
-												adminPWD="${router.admin.password}"
-												tagNm="${unit.net.vlan}"
-												/>
-											<if>
-												<equals arg1="0" arg2="${code}" />
-												<then>
-													<echo message="vlan ${unit.net.vlan} deleted successfully on router @{router}" />
-												</then>
-												<else>
-													<echo message="vlan ${unit.net.vlan} deletion on @{router} failed. code=${code}" />
-												</else>
-											</if>
-										</limit>
-									</else>
-								</if>
-							</then>
-						</if>
-					</sequential>
-				</for>
-			</then>
-			<else>
-				<echo message="missing vlan tag" />
-				<var name="code" value="1" />
-			</else>
-		</if>
-		<property name="shirako.target.code" value="${code}" />
-		<echo message="leave exit code: ${shirako.target.code}" />
-	</target>
-
-	<target name="modify" depends="resolve.configuration">
-		<property name="shirako.target.code" value="0" />
-	</target>
+     &amp;paths; &amp;core; &amp;drivertasks; &amp;bentasks; 
+    <target name="join" depends="resolve.configuration,ben.load.tasks"> 
+        <if> 
+            <isset property="unit.net.vlan" /> 
+            <then> 
+                <var name="code" value="0"></var> 
+                <for list="${routers}" param="router" delimiter=" " parallel="false"> 
+                    <sequential> 
+                        <if> 
+                            <equals arg1="${code}" arg2="0" /> 
+                            <then> 
+                                <echo message="enabling vlan ${unit.net.vlan} on router @{router}" /> 
+                                <var name="service.location" value="${na.protocol}://${@{router}.service.ip}:${na.port}/${na.uri}"></var> 
+                                <echo message="service.location=${service.location}" /> 
+                                <if> 
+                                    <equals arg1="${emulation}" arg2="true" /> 
+                                    <then> 
+                                        <echo message="running under emulation...nothing to do" /> 
+                                        <var name="code" value="0"></var> 
+                                    </then> 
+                                    <else> 
+                                        <limit maxwait="${operation.timeout}" failonerror="true"> 
+                                            <var name="code" unset="true"></var> 
+                                            <network.Cisco6509.CreateVLAN location="${service.location}" repository="${axis2.repository}" config="${axis2.config}" driverId="${vlan.6509.driver.id}" exitCodeProperty="code" deviceAddress="@{router}" UID="${router.user}" PWD="${router.password}" adminPWD="${router.admin.password}" tagNm="${unit.net.vlan}" vlanNm="orca vlan ${unit.net.vlan}" /> 
+                                            <if> 
+                                                <equals arg1="0" arg2="${code}" /> 
+                                                <then> 
+                                                    <echo message="vlan ${unit.net.vlan} created successfully on router @{router}" /> 
+                                                </then> 
+                                                <else> 
+                                                    <echo message="vlan ${unit.net.vlan} creation on @{router} failed. code=${code}" /> 
+                                                </else> 
+                                            </if> 
+                                        </limit> 
+                                    </else> 
+                                </if> 
+                            </then> 
+                        </if> 
+                    </sequential> 
+                </for> 
+            </then> 
+            <else> 
+                <echo message="missing vlan tag" /> 
+                <var name="code" value="1"></var> 
+            </else> 
+        </if> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="join exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
+        <if> 
+            <isset property="unit.net.vlan" /> 
+            <then> 
+                <var name="code" value="0"></var> 
+                <for list="${routers}" param="router" delimiter=" " parallel="false"> 
+                    <sequential> 
+                        <if> 
+                            <equals arg1="${code}" arg2="0" /> 
+                            <then> 
+                                <echo message="deleting vlan ${unit.net.vlan} on router @{router}" /> 
+                                <var name="service.location" value="${na.protocol}://${@{router}.service.ip}:${na.port}/${na.uri}"></var> 
+                                <echo message="service.location=${service.location}" /> 
+                                <if> 
+                                    <equals arg1="${emulation}" arg2="true" /> 
+                                    <then> 
+                                        <echo message="running under emulation...nothing to do" /> 
+                                        <var name="code" value="0"></var> 
+                                    </then> 
+                                    <else> 
+                                        <limit maxwait="${operation.timeout}" failonerror="true"> 
+                                            <var name="code" unset="true"></var> 
+                                            <network.Cisco6509.DeleteVLAN location="${service.location}" repository="${axis2.repository}" config="${axis2.config}" driverId="${vlan.6509.driver.id}" exitCodeProperty="code" deviceAddress="@{router}" UID="${router.user}" PWD="${router.password}" adminPWD="${router.admin.password}" tagNm="${unit.net.vlan}" /> 
+                                            <if> 
+                                                <equals arg1="0" arg2="${code}" /> 
+                                                <then> 
+                                                    <echo message="vlan ${unit.net.vlan} deleted successfully on router @{router}" /> 
+                                                </then> 
+                                                <else> 
+                                                    <echo message="vlan ${unit.net.vlan} deletion on @{router} failed. code=${code}" /> 
+                                                </else> 
+                                            </if> 
+                                        </limit> 
+                                    </else> 
+                                </if> 
+                            </then> 
+                        </if> 
+                    </sequential> 
+                </for> 
+            </then> 
+            <else> 
+                <echo message="missing vlan tag" /> 
+                <var name="code" value="1"></var> 
+            </else> 
+        </if> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="leave exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="modify" depends="resolve.configuration"> 
+        <property name="shirako.target.code" value="0" /> 
+    </target> 
 </project>

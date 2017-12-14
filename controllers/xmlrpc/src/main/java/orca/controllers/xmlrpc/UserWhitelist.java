@@ -10,77 +10,77 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A white list is a collection of patterns or usernames that the incoming
- * user should match before being allowed further. Used in Orca's create slice to
- * match DNs or URNs from certs.
+ * A white list is a collection of patterns or usernames that the incoming user should match before being allowed
+ * further. Used in Orca's create slice to match DNs or URNs from certs.
+ * 
  * @author ibaldin
  *
  */
 public class UserWhitelist {
-	private static final String LINE_SEPARATOR = "line.separator";
-	List<String> list;
+    private static final String LINE_SEPARATOR = "line.separator";
+    List<String> list;
 
-	public UserWhitelist(String wl) {
-		initialize(wl);
-	}
+    public UserWhitelist(String wl) {
+        initialize(wl);
+    }
 
-	public UserWhitelist(File f) throws Exception {
-		if (!f.exists()) 
-			throw new Exception("Whitelist file " + f.getName() + " does not exist");
-		
-		initialize(fileToString(f));
-	}
-	
-	private void initialize(String wl) {
-		list = new ArrayList<String>(Arrays.asList(wl.split(System.getProperty(LINE_SEPARATOR))));
-		Iterator<String> it = list.iterator();
-		while(it.hasNext()) {
-			String s = it.next();
-			if (s.startsWith("#"))
-				it.remove();
-		}
-	}
-	
-	public boolean onWhiteList(String s) {
-		// see if s matches one of the patterns on whitelist
+    public UserWhitelist(File f) throws Exception {
+        if (!f.exists())
+            throw new Exception("Whitelist file " + f.getName() + " does not exist");
 
-		if ((s == null) || (s.length() == 0))
-			return false;
+        initialize(fileToString(f));
+    }
 
-		s = s.trim();
+    private void initialize(String wl) {
+        list = new ArrayList<String>(Arrays.asList(wl.split(System.getProperty(LINE_SEPARATOR))));
+        Iterator<String> it = list.iterator();
+        while (it.hasNext()) {
+            String s = it.next();
+            if (s.startsWith("#"))
+                it.remove();
+        }
+    }
 
-		for (String pat: list) {
-			if (s.indexOf(pat) > 0) {
-				return true;
-			}
+    public boolean onWhiteList(String s) {
+        // see if s matches one of the patterns on whitelist
 
-			if (s.matches(pat)) {
-				return true;
-			}
-		}
+        if ((s == null) || (s.length() == 0))
+            return false;
 
-		return false;
+        s = s.trim();
 
-	}
+        for (String pat : list) {
+            if (s.indexOf(pat) > 0) {
+                return true;
+            }
 
-	public static String fileToString(File f) throws Exception {
-		StringBuilder sb;
+            if (s.matches(pat)) {
+                return true;
+            }
+        }
 
-		BufferedReader bin = null;
-		FileInputStream is = new FileInputStream(f);
-		bin = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        return false;
 
-		sb = new StringBuilder();
-		String line = null;
-		while((line = bin.readLine()) != null) {
-			sb.append(line);
-			// re-add line separator
-			sb.append(System.getProperty(LINE_SEPARATOR));
-		}
+    }
 
-		bin.close();
-		is.close();
+    public static String fileToString(File f) throws Exception {
+        StringBuilder sb;
 
-		return sb.toString();
-	}
+        BufferedReader bin = null;
+        FileInputStream is = new FileInputStream(f);
+        bin = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+        sb = new StringBuilder();
+        String line = null;
+        while ((line = bin.readLine()) != null) {
+            sb.append(line);
+            // re-add line separator
+            sb.append(System.getProperty(LINE_SEPARATOR));
+        }
+
+        bin.close();
+        is.close();
+
+        return sb.toString();
+    }
 }

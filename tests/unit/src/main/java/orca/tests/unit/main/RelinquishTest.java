@@ -52,13 +52,14 @@ public class RelinquishTest extends ShirakoTest {
     protected ActorClock clock = null;
     protected ISlice slice = null;
     protected String noopConfigFile = null;
-    protected ReservationState cancelState = null;    
+    protected ReservationState cancelState = null;
     protected Object mutex = new Object();
     protected boolean done = false;
     protected ResourceType resourceType = new ResourceType("vm");
 
     protected ReservationState state = null;
-    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin);
+    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None,
+            ReservationStates.NoJoin);
 
     public RelinquishTest(String[] args) {
         super(args);
@@ -85,7 +86,8 @@ public class RelinquishTest extends ShirakoTest {
     protected IServiceManagerReservation getReservation(long cycle) {
         ResourceSet rset = new ResourceSet(1, resourceType);
         Term term = new Term(clock.date(cycle + ADVANCE_TIME), clock.getMillis((long) leaseLength));
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, proxy);
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, proxy);
         AntConfig.setServiceXml(r, noopConfigFile);
         r.setRenewable(true);
         return r;
@@ -95,7 +97,7 @@ public class RelinquishTest extends ShirakoTest {
         public void transition(Object obj, IState from, IState to) {
             if (obj == reservation) {
                 System.out.println("VM reservation transition: from " + from + " to " + to);
-                state = (ReservationState) to;   
+                state = (ReservationState) to;
                 boolean cancelled = false;
                 if (cancelState != null && cancelState.equals(state)) {
                     cancelState = null;
@@ -140,8 +142,8 @@ public class RelinquishTest extends ShirakoTest {
         return doneState.equals(state);
     }
 
-    protected void testCancel(ReservationState instate) throws Exception{
-        System.out.println("Testing cancel in state: " + instate);       
+    protected void testCancel(ReservationState instate) throws Exception {
+        System.out.println("Testing cancel in state: " + instate);
         // isue the reservation to be cancelled
         cancelState = instate;
         long cycle = sm.getCurrentCycle();
@@ -166,7 +168,7 @@ public class RelinquishTest extends ShirakoTest {
             throw new RuntimeException("First reservation did not close properly");
         }
         System.out.println("First reservation cancelled");
-        
+
         // issue the second reservation: it must become active
         cycle = sm.getCurrentCycle();
         reservation = getReservation(cycle);
@@ -197,17 +199,23 @@ public class RelinquishTest extends ShirakoTest {
             throw new RuntimeException("Second reservation did not close properly");
         }
     }
-    
+
     @Override
     protected void runTest() {
         try {
             setupTest();
-            testCancel(new ReservationState(ReservationStates.Nascent, ReservationStates.None, ReservationStates.NoJoin));
-            testCancel(new ReservationState(ReservationStates.Nascent, ReservationStates.Ticketing, ReservationStates.NoJoin));
-            testCancel(new ReservationState(ReservationStates.Ticketed, ReservationStates.None, ReservationStates.NoJoin));
-            testCancel(new ReservationState(ReservationStates.Ticketed, ReservationStates.None, ReservationStates.BlockedRedeem));
-            testCancel(new ReservationState(ReservationStates.Ticketed, ReservationStates.Redeeming, ReservationStates.NoJoin));
-            testCancel(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+            testCancel(
+                    new ReservationState(ReservationStates.Nascent, ReservationStates.None, ReservationStates.NoJoin));
+            testCancel(new ReservationState(ReservationStates.Nascent, ReservationStates.Ticketing,
+                    ReservationStates.NoJoin));
+            testCancel(
+                    new ReservationState(ReservationStates.Ticketed, ReservationStates.None, ReservationStates.NoJoin));
+            testCancel(new ReservationState(ReservationStates.Ticketed, ReservationStates.None,
+                    ReservationStates.BlockedRedeem));
+            testCancel(new ReservationState(ReservationStates.Ticketed, ReservationStates.Redeeming,
+                    ReservationStates.NoJoin));
+            testCancel(
+                    new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
         } catch (Exception e) {
             logger.error("runTest", e);
             logger.error("Test failed.");

@@ -1,153 +1,82 @@
-<!DOCTYPE project [
-<!ENTITY deps SYSTEM "ant/deps.xml">
-]>
+<!DOCTYPE project>
+ ]&gt; 
 <project name="networkhandlers" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-    &deps;
-
-    <target name="help">
-	<echo>
-		Test tasks for NLR Sherpa driver. Use ant -f test.xml -p to list.
-	</echo>
-    </target>
-    <taskdef resource="orca/handlers/nlr/NLRSherpa.xml"
-             classpathref="run.classpath"
-             loaderref="run.classpath.loader" />
-<!--
+     &amp;deps; 
+    <target name="help"> 
+        <echo>
+             Test tasks for NLR Sherpa driver. Use ant -f test.xml -p to list. 
+        </echo> 
+    </target> 
+    <taskdef resource="orca/handlers/nlr/NLRSherpa.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
+    <!--
 	REMOVE ALL VLANS
--->
-    <property file="${nlr.properties}" />
-
-    <target name="removeAllVlans" description="Remove all ORCA-provisioned VLANs from the system (use with caution)!">
-        <NLRSherpa.RemoveAllVlans
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message}" />
-    </target>
-<!--
+--> 
+    <property file="${nlr.properties}" /> 
+    <target name="removeAllVlans" description="Remove all ORCA-provisioned VLANs from the system (use with caution)!"> 
+        <NLRSherpa.RemoveAllVlans login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message}" /> 
+    </target> 
+    <!--
 	REMOVE ALL VLAN RESERVATIONS
--->
-    <target name="removeAllReservations" description="Remave all vlan tag reservations from the system (use with caution)!">
-        <NLRSherpa.RemoveAllReservations 
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message}" />
-    </target>
-<!--
+--> 
+    <target name="removeAllReservations" description="Remave all vlan tag reservations from the system (use with caution)!"> 
+        <NLRSherpa.RemoveAllReservations login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message}" /> 
+    </target> 
+    <!--
 	RESERVE FIRST AVAILABEL VLAN ID
--->
-    <target name="reserveAnyVlanId" description="Reserve first available vlan id. Safe to use.">
-        <NLRSherpa.ReserveAnyVlanId 
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   reservedVlanProperty="NLRSherpa.reservedVlan"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} reserved vlan: ${NLRSherpa.reservedVlan}" />
-    </target>
-<!--
+--> 
+    <target name="reserveAnyVlanId" description="Reserve first available vlan id. Safe to use."> 
+        <NLRSherpa.ReserveAnyVlanId login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" reservedVlanProperty="NLRSherpa.reservedVlan" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} reserved vlan: ${NLRSherpa.reservedVlan}" /> 
+    </target> 
+    <!--
 	UNRESERVE VLAN ID
--->
-    <target name="unreserveVlanId" description="Unreserve given vlan id.">
-        <NLRSherpa.UnreserveVlanId 
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   vlanId="${NLRSherpa.vlan_id}"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} unreserved vlan: ${NLRSherpa.vlan_id}" />
-    </target>
-<!--
+--> 
+    <target name="unreserveVlanId" description="Unreserve given vlan id."> 
+        <NLRSherpa.UnreserveVlanId login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" vlanId="${NLRSherpa.vlan_id}" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} unreserved vlan: ${NLRSherpa.vlan_id}" /> 
+    </target> 
+    <!--
 	RESERVE SPECIFIC VLAN ID
--->
-    <target name="reserveVlanId" description="Reserve given vlan id.">
-        <NLRSherpa.ReserveVlanId 
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   vlanId="${NLRSherpa.vlan_id}"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} reserved vlan: ${NLRSherpa.vlan_id}" />
-    </target>
-<!--
+--> 
+    <target name="reserveVlanId" description="Reserve given vlan id."> 
+        <NLRSherpa.ReserveVlanId login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" vlanId="${NLRSherpa.vlan_id}" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} reserved vlan: ${NLRSherpa.vlan_id}" /> 
+    </target> 
+    <!--
 	PROVISION A GIVEN VLAN
--->
-    <target name="provisionVlan" description="Provision a vlan with a given tag between two ports on NLR (use with caution!)">
-
-        <NLRSherpa.ProvisionVlan 
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   vlanId="${NLRSherpa.vlan_id}"
-			   endpointA="${NLRSherpa.endpointA}"
-			   endpointZ="${NLRSherpa.endpointZ}"
-			   bandwidth="${NLRSherpa.bandwidth}"
-			   vlanStatusProperty="NLRSherpa.vlanStatus"
-			   reservedVlanProperty="NLRSherpa.reservedVlan"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} vlan status: ${NLRSherpa.vlanStatus} reserved vlan: ${NLRSherpa.reservedVlan}" />
-    </target>
-<!--
+--> 
+    <target name="provisionVlan" description="Provision a vlan with a given tag between two ports on NLR (use with caution!)"> 
+        <NLRSherpa.ProvisionVlan login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" vlanId="${NLRSherpa.vlan_id}" endpointA="${NLRSherpa.endpointA}" endpointZ="${NLRSherpa.endpointZ}" bandwidth="${NLRSherpa.bandwidth}" vlanStatusProperty="NLRSherpa.vlanStatus" reservedVlanProperty="NLRSherpa.reservedVlan" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} vlan status: ${NLRSherpa.vlanStatus} reserved vlan: ${NLRSherpa.reservedVlan}" /> 
+    </target> 
+    <!--
 	SMAR PROVISION A GIVEN VLAN (VLAN TAG IS OPTIONAL)
--->
-    <target name="smartProvisionVlan" description="Provision a vlan (with a tag if given) between two ports on NLR (use with caution!)">
-
-        <NLRSherpa.SmartProvisionVlan 
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   endpointA="${NLRSherpa.endpointA}"
-			   endpointZ="${NLRSherpa.endpointZ}"
-			   bandwidth="${NLRSherpa.bandwidth}"
-			   vlanId="265"
-			   vlanStatusProperty="NLRSherpa.vlanStatus"
-			   reservedVlanProperty="NLRSherpa.reservedVlan"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} vlan status: ${NLRSherpa.vlanStatus} reserved vlan: ${NLRSherpa.reservedVlan}" />
-    </target>
-<!--
+--> 
+    <target name="smartProvisionVlan" description="Provision a vlan (with a tag if given) between two ports on NLR (use with caution!)"> 
+        <NLRSherpa.SmartProvisionVlan login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" endpointA="${NLRSherpa.endpointA}" endpointZ="${NLRSherpa.endpointZ}" bandwidth="${NLRSherpa.bandwidth}" vlanId="265" vlanStatusProperty="NLRSherpa.vlanStatus" reservedVlanProperty="NLRSherpa.reservedVlan" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} vlan status: ${NLRSherpa.vlanStatus} reserved vlan: ${NLRSherpa.reservedVlan}" /> 
+    </target> 
+    <!--
 	PROVISION ANY VLAN
--->
-    <target name="provisionAnyVlan" description="Provision a vlan between two ports on NLR. Return provisioned vlan id as a property. (use with caution!)">
-
-        <NLRSherpa.ProvisionAnyVlan 
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   endpointA="${NLRSherpa.endpointA}"
-			   endpointZ="${NLRSherpa.endpointZ}"
-			   bandwidth="${NLRSherpa.bandwidth}"
-			   vlanStatusProperty="NLRSherpa.vlanStatus"
-			   reservedVlanProperty="NLRSherpa.reservedVlan"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message}, vlan status: ${NLRSherpa.vlanStatus} reserved vlan: ${NLRSherpa.reservedVlan}" />
-    </target>
-<!--
+--> 
+    <target name="provisionAnyVlan" description="Provision a vlan between two ports on NLR. Return provisioned vlan id as a property. (use with caution!)"> 
+        <NLRSherpa.ProvisionAnyVlan login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" endpointA="${NLRSherpa.endpointA}" endpointZ="${NLRSherpa.endpointZ}" bandwidth="${NLRSherpa.bandwidth}" vlanStatusProperty="NLRSherpa.vlanStatus" reservedVlanProperty="NLRSherpa.reservedVlan" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message}, vlan status: ${NLRSherpa.vlanStatus} reserved vlan: ${NLRSherpa.reservedVlan}" /> 
+    </target> 
+    <!--
 	REMOVE A PROVISIONED VLAN
--->
-    <target name="removeVlan" description="Remove a provisioned vlan with a given tag on NLR (use with caution!)">
-        <NLRSherpa.RemoveVlan
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   vlanId="${NLRSherpa.vlan_id}"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} " />
-    </target>
-<!--
+--> 
+    <target name="removeVlan" description="Remove a provisioned vlan with a given tag on NLR (use with caution!)"> 
+        <NLRSherpa.RemoveVlan login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" vlanId="${NLRSherpa.vlan_id}" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} " /> 
+    </target> 
+    <!--
 	SMART REMOVE A PROVISIONED VLAN
--->
-    <target name="smartRemoveVlan" description="Smart remove a provisioned vlan with a given tag on NLR  and attempt to re-reserve the tag (use with caution!)">
-        <NLRSherpa.SmartRemoveVlan
-			   login="${NLRSherpa.login}"
-			   password="${NLRSherpa.password}"
-			   wg="${NLRSherpa.wg}"
-			   vlanId="${NLRSherpa.vlan_id}"
-                           exitCodeProperty="exitCode" />
-        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} " />
-    </target>
-
+--> 
+    <target name="smartRemoveVlan" description="Smart remove a provisioned vlan with a given tag on NLR  and attempt to re-reserve the tag (use with caution!)"> 
+        <NLRSherpa.SmartRemoveVlan login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" vlanId="${NLRSherpa.vlan_id}" exitCodeProperty="exitCode" /> 
+        <echo message="exitCode: ${exitCode}, exitMessage: ${exitCode.message} " /> 
+    </target> 
 </project>

@@ -19,27 +19,20 @@ import orca.tools.axis2.Axis2ClientConfigurationManager;
 
 import org.apache.axis2.context.ConfigurationContext;
 
-
-public class ConfiguratorManagerTest extends TestCase
-{
-    public ConfiguratorManagerTest()
-    {
+public class ConfiguratorManagerTest extends TestCase {
+    public ConfiguratorManagerTest() {
     }
 
-    public void testCreate() throws Exception
-    {
-        ConfigurationContext context = Axis2ClientConfigurationManager.getInstance()
-                                                                      .getContext(null, null);
+    public void testCreate() throws Exception {
+        ConfigurationContext context = Axis2ClientConfigurationManager.getInstance().getContext(null, null);
         Assert.assertNotNull(context);
 
-        ConfigurationContext context2 = Axis2ClientConfigurationManager.getInstance()
-                                                                       .getContext(null, null);
+        ConfigurationContext context2 = Axis2ClientConfigurationManager.getInstance().getContext(null, null);
         Assert.assertNotNull(context2);
         Assert.assertSame(context, context2);
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(ConfiguratorManagerTest.class);
     }
 }

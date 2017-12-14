@@ -66,7 +66,8 @@ public class VMQueueTest extends ShirakoTest {
 
     protected ReservationState state = null;
     protected ReservationState qstate = null;
-    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin);
+    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None,
+            ReservationStates.NoJoin);
 
     public VMQueueTest(String[] args) {
         super(args);
@@ -105,7 +106,8 @@ public class VMQueueTest extends ShirakoTest {
         ResourceSet rset = new ResourceSet(1, vmType);
         PropertiesManager.setElasticTime(rset, true);
         Term term = new Term(clock.date(cycle + ADVANCE_TIME), clock.getMillis((long) leaseLength));
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, proxy);
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, proxy);
 
         AntConfig.setServiceXml(r, noopConfigFile);
         r.setRenewable(true);
@@ -118,22 +120,26 @@ public class VMQueueTest extends ShirakoTest {
                 System.out.println("VM reservation transition: from " + from + " to " + to);
                 if (to.equals(doneState)) {
                     ResourceSet leased = reservation.getLeasedResources();
-                    UnitSet uset = (UnitSet)leased.getResources();
+                    UnitSet uset = (UnitSet) leased.getResources();
                     for (Unit u : uset.getSet()) {
-                        System.out.println("unit id=" + u.getID() + " hosted on " + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: " + u.getProperty(UnitProperties.UnitManagementIP));
+                        System.out.println("unit id=" + u.getID() + " hosted on "
+                                + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: "
+                                + u.getProperty(UnitProperties.UnitManagementIP));
                     }
                 }
             } else if (obj == qreservation) {
                 System.out.println("queued VM reservation transition: from " + from + " to " + to);
                 if (to.equals(doneState)) {
                     ResourceSet leased = qreservation.getLeasedResources();
-                    UnitSet uset = (UnitSet)leased.getResources();
+                    UnitSet uset = (UnitSet) leased.getResources();
                     for (Unit u : uset.getSet()) {
-                        System.out.println("unit id=" + u.getID() + " hosted on " + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: " + u.getProperty(UnitProperties.UnitManagementIP));
+                        System.out.println("unit id=" + u.getID() + " hosted on "
+                                + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: "
+                                + u.getProperty(UnitProperties.UnitManagementIP));
                     }
                 }
             }
-            
+
             else {
                 System.out.println("Unknown reservation object: " + obj);
             }
@@ -143,7 +149,8 @@ public class VMQueueTest extends ShirakoTest {
 
     protected boolean isExtended(ReservationState state) {
         if (state != null) {
-            return (state.getState() == ReservationStates.ActiveTicketed) && (state.getPending() == ReservationStates.None);
+            return (state.getState() == ReservationStates.ActiveTicketed)
+                    && (state.getPending() == ReservationStates.None);
         }
         return false;
     }
@@ -171,7 +178,7 @@ public class VMQueueTest extends ShirakoTest {
             state = to;
             if (isExtended(to)) {
                 extendCount++;
-            }        
+            }
         } else if (r == qreservation) {
             qstate = to;
             if (isExtended(to)) {
@@ -208,11 +215,11 @@ public class VMQueueTest extends ShirakoTest {
         } else {
             toCheck = qstate;
         }
-            
-        if (isActive(toCheck) ) {
+
+        if (isActive(toCheck)) {
             if (extendCount > 0) {
                 return true;
-            }            
+            }
             System.out.println("wating for extension. extend count=" + extendCount);
         }
 
@@ -257,7 +264,7 @@ public class VMQueueTest extends ShirakoTest {
         } else {
             toCheck = qstate;
         }
-        
+
         if (close) {
             if (!(isClosed(toCheck))) {
                 return ExitCodeUnexpectedState;
@@ -276,7 +283,7 @@ public class VMQueueTest extends ShirakoTest {
             setupTest();
             issueRequests();
             // wait until the first extend
-            int code = monitor(true, false);    
+            int code = monitor(true, false);
             if (code != ExitCodeOK) {
                 throw new Exception("monitor returned non-zero code: " + code);
             }

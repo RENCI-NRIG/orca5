@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script srcVLAN="" dstVLAN="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/AddTrunkPort" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/AddTrunkPort AddTrunkPort.xsd ">
-    <action name="AddTrunkPort">
-        <exchange>
-            <send>qos-flow create qos-flow-sub-port {$qosPort} parent-sub-port {$subPort} classifier-precedence 1800 ingress-meter-profile {$QoSPolicyName}</send>
-        </exchange>
-	</action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script srcVLAN="" dstVLAN="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/AddTrunkPort" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/AddTrunkPort AddTrunkPort.xsd "> 
+    <action name="AddTrunkPort"> 
+        <exchange> 
+            <send>
+                 qos-flow create qos-flow-sub-port {$qosPort} parent-sub-port {$subPort} classifier-precedence 1800 ingress-meter-profile {$QoSPolicyName} 
+            </send> 
+        </exchange> 
+    </action> 
 </script>

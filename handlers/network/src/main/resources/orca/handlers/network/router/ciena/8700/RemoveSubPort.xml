@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script xmlns="http://geni-orca.renci.org/RemoveTrunkPorts"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://geni-orca.renci.org/RemoveTrunkPorts RemoveTrunkPorts.xsd">
-    <action name="RemoveSubPort" parameter="subPort">
-        <exchange>
-            <send>virtual-switch interface detach sub-port {$subPort}</send>
-        </exchange>
-        <exchange>
-            <send>sub-port delete sub-port {$subPort}</send>
-        </exchange>
-    </action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script xmlns="http://geni-orca.renci.org/RemoveTrunkPorts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/RemoveTrunkPorts RemoveTrunkPorts.xsd"> 
+    <action name="RemoveSubPort" parameter="subPort"> 
+        <exchange> 
+            <send>
+                 virtual-switch interface detach sub-port {$subPort} 
+            </send> 
+        </exchange> 
+        <exchange> 
+            <send>
+                 sub-port delete sub-port {$subPort} 
+            </send> 
+        </exchange> 
+    </action> 
 </script>

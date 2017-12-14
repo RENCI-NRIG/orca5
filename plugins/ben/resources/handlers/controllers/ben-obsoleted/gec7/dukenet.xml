@@ -1,55 +1,30 @@
-<!DOCTYPE project [
-<!ENTITY core SYSTEM "../../../common/core.xml">
-<!ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml">
-<!ENTITY paths SYSTEM "../../../common/paths.xml">
-<!ENTITY bentasks SYSTEM "../ben.tasks.xml">
-]>
-
+<!DOCTYPE project> 
+<!--ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml"--> 
+<!--ENTITY paths SYSTEM "../../../common/paths.xml"--> 
+<!--ENTITY bentasks SYSTEM "../ben.tasks.xml"-->
+ ]&gt; 
 <project name="dukenet" basedir=".">
-
-	&paths;
-	&core;
-	&drivertasks;
-	&bentasks;
-
-	<!-- <property file="test.properties" /> -->
-	<property file="../ben.properties" />
-	<!--
+     &amp;paths; &amp;core; &amp;drivertasks; &amp;bentasks; 
+    <!-- <property file="test.properties" /> --> 
+    <property file="../ben.properties" /> 
+    <!--
 	<property file="dukenet.test.properties" />
-    	-->
-	<target name="join" depends="resolve.configuration,ben.load.tasks">
-		<echo message="DUKE NET HANDLER: SETUP" />
-		<!-- enable DUKE.NET tag on all VM interfaaces -->
-		<enable.vlan 
-			service.location="${duke.router.service.location}"
-			router="${duke.router}"
-			vlan.tag="${unit.vlan.tag}"
-			ports="${config.interface.1};${config.interface.2}"
-			router.user="${router.user}"
-			router.password="${router.password}"
-			router.admin.password="${router.admin.password}"
-			/>
-		<property name="shirako.target.code" value="${code}" />
-		<echo message="join exit code: ${shirako.target.code}" />
-	</target>
-
-	<target name="leave" depends="resolve.configuration,ben.load.tasks">
-		<echo message="DUKE NET HANDLER: TEARDOWN" />
-		<disable.vlan 
-			service.location="${duke.router.service.location}"
-			router="${duke.router}"
-			vlan.tag="${unit.vlan.tag}"
-			ports="${config.interface.1};${config.interface.2}"
-			router.user="${router.user}"
-			router.password="${router.password}"
-			router.admin.password="${router.admin.password}"
-			/>
-    	<property name="shirako.target.code" value="${code}" />
-		<echo message="leave exit code: ${shirako.target.code}" />
-	</target>
-
-	<target name="modify" depends="resolve.configuration,ben.load.tasks">
-		<echo message="DUKE NET HANDLER: MODIFY" />
-		<property name="shirako.target.code" value="0" />
-	</target>
+    	--> 
+    <target name="join" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="DUKE NET HANDLER: SETUP" /> 
+        <!-- enable DUKE.NET tag on all VM interfaaces --> 
+        <enable.vlan service.location="${duke.router.service.location}" router="${duke.router}" vlan.tag="${unit.vlan.tag}" ports="${config.interface.1};${config.interface.2}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="join exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="DUKE NET HANDLER: TEARDOWN" /> 
+        <disable.vlan service.location="${duke.router.service.location}" router="${duke.router}" vlan.tag="${unit.vlan.tag}" ports="${config.interface.1};${config.interface.2}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="leave exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="modify" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="DUKE NET HANDLER: MODIFY" /> 
+        <property name="shirako.target.code" value="0" /> 
+    </target> 
 </project>

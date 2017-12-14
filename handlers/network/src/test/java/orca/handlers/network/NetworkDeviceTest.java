@@ -31,7 +31,7 @@ public abstract class NetworkDeviceTest extends TestCase {
             throw new RuntimeException(e);
         }
     }
-    
+
     protected void configureDevice(INetworkDevice device) {
         String temp = props.getProperty(PropertyEmulation);
         if (temp != null) {

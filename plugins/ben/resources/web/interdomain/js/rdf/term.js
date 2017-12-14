@@ -8,27 +8,32 @@
 // W3C open source licence 2005.
 //
 
-RDFTracking = 0  // Are we requiring reasons for statements?
+RDFTracking = 0 // Are we requiring reasons for statements?
 
 //takes in an object and makes it an object if it's a literal
 function makeTerm(val) {
     //  fyi("Making term from " + val)
-    if (typeof val == 'object') return val;
-    if (typeof val == 'string') return new RDFLiteral(val);
-    if (typeof val == 'undefined') return undefined;
+    if (typeof val == 'object')
+        return val;
+    if (typeof val == 'string')
+        return new RDFLiteral(val);
+    if (typeof val == 'undefined')
+        return undefined;
     alert("Can't make term from " + val + " of type " + typeof val) // @@ add numbers
 }
-
-
 
 //	Symbol
 
 function RDFEmpty() {
-	return this;
+    return this;
 }
 RDFEmpty.prototype.termType = 'empty'
-RDFEmpty.prototype.toString = function () { return "" }
-RDFEmpty.prototype.toNT = function () { return "" }
+RDFEmpty.prototype.toString = function() {
+    return ""
+}
+RDFEmpty.prototype.toNT = function() {
+    return ""
+}
 
 function RDFSymbol_toNT(x) {
     return ("<" + x.uri + ">")
@@ -42,15 +47,14 @@ function RDFSymbol(uri) {
     this.uri = uri
     return this
 }
-	
+
 RDFSymbol.prototype.termType = 'symbol'
 RDFSymbol.prototype.toString = toNT
 RDFSymbol.prototype.toNT = toNT
 
-
 //	Blank Node
 
-var RDFNextId = 0;  // Gobal genid
+var RDFNextId = 0; // Gobal genid
 RDFGenidPrefix = "genid:"
 NTAnonymousNodePrefix = "_:n"
 
@@ -67,7 +71,7 @@ RDFBlankNode.prototype.termType = 'bnode'
 RDFBlankNode.prototype.toNT = function() {
     return NTAnonymousNodePrefix + this.id
 }
-RDFBlankNode.prototype.toString = RDFBlankNode.prototype.toNT  
+RDFBlankNode.prototype.toString = RDFBlankNode.prototype.toNT
 
 //	Literal
 
@@ -75,8 +79,8 @@ RDFBlankNode.prototype.toString = RDFBlankNode.prototype.toNT
 
 function RDFLiteral(value, lang, datatype) {
     this.value = value
-    this.lang=lang;	  // string
-    this.datatype=datatype;  // term
+    this.lang = lang; // string
+    this.datatype = datatype; // term
     this.toString = RDFLiteralToString
     this.toNT = RDFLiteral_toNT
     //if (LiteralSmush[this.toNT()]) return LiteralSmush[this.toNT()];
@@ -89,18 +93,18 @@ RDFLiteral.prototype.termType = 'literal'
 function RDFLiteral_toNT() {
     var str = this.value
     if (typeof str != 'string') {
-	throw Error("Value of RDF literal is not string: "+str)
+        throw Error("Value of RDF literal is not string: " + str)
     }
-    str = str.replace(/\\/g, '\\\\');  // escape
+    str = str.replace(/\\/g, '\\\\'); // escape
     str = str.replace(/\"/g, '\\"');
     str = '"' + str + '"'
 
-    if (this.datatype){
-    //alert(this.datatype.termType+"   "+typeof this.datatype)
-	str = str + '^^' + this.datatype//.toNT()
+    if (this.datatype) {
+        //alert(this.datatype.termType+"   "+typeof this.datatype)
+        str = str + '^^' + this.datatype//.toNT()
     }
     if (this.lang) {
-	str = str + "@" + this.lang
+        str = str + "@" + this.lang
     }
     return str
 }
@@ -108,8 +112,8 @@ function RDFLiteral_toNT() {
 function RDFLiteralToString() {
     return this.value
 }
-    
-RDFLiteral.prototype.toString = RDFLiteralToString   
+
+RDFLiteral.prototype.toString = RDFLiteralToString
 RDFLiteral.prototype.toNT = RDFLiteral_toNT
 
 function RDFCollection() {
@@ -123,13 +127,13 @@ RDFCollection.prototype.termType = 'collection'
 RDFCollection.prototype.toNT = function() {
     return NTAnonymousNodePrefix + this.id
 }
-RDFCollection.prototype.toString = RDFCollection.prototype.toNT 
+RDFCollection.prototype.toString = RDFCollection.prototype.toNT
 
-RDFCollection.prototype.append = function (el) {
+RDFCollection.prototype.append = function(el) {
     this.elements.push(el)
 }
 
-RDFCollection.prototype.close = function () {
+RDFCollection.prototype.close = function() {
     this.closed = true
 }
 
@@ -140,26 +144,23 @@ RDFCollection.prototype.close = function () {
 //   The reason can point to provenece or inference
 //
 function RDFStatement_toNT() {
-    return (this.subject.toNT() + " "
-	    + this.predicate.toNT() + " "
-	    +  this.object.toNT() +" .")
+    return (this.subject.toNT() + " " + this.predicate.toNT() + " " + this.object.toNT() + " .")
 }
 
 function RDFStatement(subject, predicate, object, why) {
     this.subject = makeTerm(subject)
     this.predicate = makeTerm(predicate)
     this.object = makeTerm(object)
-    if (typeof why !='undefined') {
-	this.why = why
+    if (typeof why != 'undefined') {
+        this.why = why
     } else if (RDFTracking) {
-	fyi("WARNING: No reason on "+subject+" "+predicate+" "+object)
+        fyi("WARNING: No reason on " + subject + " " + predicate + " " + object)
     }
     return this
 }
 
 RDFStatement.prototype.toNT = RDFStatement_toNT
 RDFStatement.prototype.toString = RDFStatement_toNT
-	
 
 //	Formula
 //
@@ -174,12 +175,12 @@ function RDFFormula() {
 }
 
 /*function RDFQueryFormula() {
-	this.statements = []
-	this.constraints = []
-	this.initBindings = []
-	this.optional = []
-	return this
-}*/
+ this.statements = []
+ this.constraints = []
+ this.initBindings = []
+ this.optional = []
+ return this
+ }*/
 
 function RDFFormula_toNT() {
     return "{\n" + this.statements.join('\n') + "}"
@@ -189,7 +190,7 @@ function RDFFormula_toNT() {
 //RDFQueryFormula.termType = 'queryFormula'
 RDFFormula.prototype.termType = 'formula'
 RDFFormula.prototype.toNT = RDFFormula_toNT
-RDFFormula.prototype.toString = RDFFormula_toNT   
+RDFFormula.prototype.toString = RDFFormula_toNT
 
 RDFFormula.prototype.add = function(subj, pred, obj, why) {
     this.statements.push(new RDFStatement(subj, pred, obj, why))
@@ -197,9 +198,9 @@ RDFFormula.prototype.add = function(subj, pred, obj, why) {
 
 // Convenience methods on a formula allow the creation of new RDF terms:
 
-RDFFormula.prototype.sym = function(uri,name) {
+RDFFormula.prototype.sym = function(uri, name) {
     if (name != null) {
-	uri = this.namespaces[uri] + name
+        uri = this.namespaces[uri] + name
     }
     return new RDFSymbol(uri)
 }
@@ -216,14 +217,13 @@ RDFFormula.prototype.formula = function() {
     return new RDFFormula()
 }
 
-RDFFormula.prototype.collection = function () {
+RDFFormula.prototype.collection = function() {
     return new RDFCollection()
 }
 
-
 /*RDFFormula.prototype.queryFormula = function() {
-	return new RDFQueryFormula()
-}*/
+ return new RDFQueryFormula()
+ }*/
 
 RDFVariableBase = "varid:"; // We deem variabe x to be the symbol varid:x 
 
@@ -237,7 +237,8 @@ function RDFVariable(rel) {
 RDFVariable.prototype.termType = 'variable';
 RDFVariable.prototype.toNT = function() {
     if (this.uri.slice(0, RDFVariableBase.length) == RDFVariableBase) {
-	return '?'+ this.uri.slice(RDFVariableBase.length);} // @@ poor man's refTo
+        return '?' + this.uri.slice(RDFVariableBase.length);
+    } // @@ poor man's refTo
     return '?' + this.uri;
 };
 
@@ -250,11 +251,12 @@ RDFFormula.prototype.variable = function(name) {
 
 RDFVariable.prototype.hashString = RDFVariable.prototype.toNT;
 
-
 // The namespace function generator 
 
 function Namespace(nsuri) {
-    return function(ln) { return new RDFSymbol(nsuri+ln) }
+    return function(ln) {
+        return new RDFSymbol(nsuri + ln)
+    }
 }
 
 // Parse a single token
@@ -265,15 +267,16 @@ function Namespace(nsuri) {
 
 RDFFormula.prototype.fromNT = function(str) {
     var len = str.length
-    var ch = str.slice(0,1)
-    if (ch == '<') return this.sym(str.slice(1,len-1))
+    var ch = str.slice(0, 1)
+    if (ch == '<')
+        return this.sym(str.slice(1, len - 1))
     if (ch == '_') {
-	var x = new RDFBlankNode()
-	x.id = parseInt(str.slice(3))
-	RDFNextId--
-	return x
+        var x = new RDFBlankNode()
+        x.id = parseInt(str.slice(3))
+        RDFNextId--
+        return x
     }
-    alert("Can't yet convert from NT: '"+str+"', "+str[0])
+    alert("Can't yet convert from NT: '" + str + "', " + str[0])
 }
 
 // ends

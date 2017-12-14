@@ -28,17 +28,13 @@ import java.io.StringWriter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-
-public class KeyMasterMessage
-{
+public class KeyMasterMessage {
     Document xmldoc = null;
 
-    public KeyMasterMessage()
-    {
+    public KeyMasterMessage() {
     }
 
-    public void createXMLDocument(String[] nodes)
-    {
+    public void createXMLDocument(String[] nodes) {
         xmldoc = new DocumentImpl();
 
         Element root = xmldoc.createElement("keymastermessage");
@@ -53,8 +49,7 @@ public class KeyMasterMessage
         xmldoc.appendChild(root);
     }
 
-    public void setNode(String nodeName, String value)
-    {
+    public void setNode(String nodeName, String value) {
         NodeList nl = xmldoc.getChildNodes();
         Node keyMasterMessageNode = nl.item(0);
 
@@ -73,8 +68,7 @@ public class KeyMasterMessage
         }
     }
 
-    public void serializeXMLDocument()
-    {
+    public void serializeXMLDocument() {
         try {
             OutputFormat of = new OutputFormat("XML", "ISO-8859-1", true);
             FileOutputStream fos = new FileOutputStream("km.xml");
@@ -87,8 +81,7 @@ public class KeyMasterMessage
         }
     }
 
-    public String getXMLDocumentAsString()
-    {
+    public String getXMLDocumentAsString() {
         try {
             StringWriter strWriter = new StringWriter();
             OutputFormat of = new OutputFormat("XML", "ISO-8859-1", true);
@@ -108,8 +101,7 @@ public class KeyMasterMessage
         }
     }
 
-    public void buildXMLDocument(String xmlString)
-    {
+    public void buildXMLDocument(String xmlString) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = factory.newDocumentBuilder();
@@ -130,8 +122,7 @@ public class KeyMasterMessage
         }
     }
 
-    public String getNode(String nodeName)
-    {
+    public String getNode(String nodeName) {
         NodeList nl = xmldoc.getChildNodes();
         Node keyMasterMessageNode = nl.item(0);
 
@@ -150,8 +141,7 @@ public class KeyMasterMessage
         return null;
     }
 
-    public byte[] getBytes()
-    {
+    public byte[] getBytes() {
         StringWriter sw = new StringWriter();
         OutputFormat of = new OutputFormat("XML", "ISO-8859-1", true);
         of.setIndent(1);
@@ -173,14 +163,11 @@ public class KeyMasterMessage
         return res;
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         /*
-         * KeyMasterMessage km = new KeyMasterMessage();
-         * km.setSSHPublicKey("1234567890abcdef");
-         * km.setNodeIP("192.168.1.100"); km.setAuthorityIP("192.168.1.1");
-         * km.setTimestamp("2007:04:30"); km.setEpoch("1984");
-         * km.serializeXMLDocument();
+         * KeyMasterMessage km = new KeyMasterMessage(); km.setSSHPublicKey("1234567890abcdef");
+         * km.setNodeIP("192.168.1.100"); km.setAuthorityIP("192.168.1.1"); km.setTimestamp("2007:04:30");
+         * km.setEpoch("1984"); km.serializeXMLDocument();
          */
     }
 }

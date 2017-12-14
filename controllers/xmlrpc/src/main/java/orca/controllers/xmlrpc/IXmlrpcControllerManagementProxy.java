@@ -5,7 +5,6 @@
 
 package orca.controllers.xmlrpc;
 
-
 import orca.security.AuthToken;
 
 /**

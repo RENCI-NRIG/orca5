@@ -1,11 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script xmlns="http://geni-orca.renci.org/CreateCRS"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://geni-orca.renci.org/CreateCRS CreateCRS.xsd">
-	<action name="CreateCRS">
-		<exchange>
-			<send>ENT-CRS::{$srcPort},{$dstPort}:{$ctag}::2way:PAYLOAD={$payloadType};</send>
-			<expect>COMPLD</expect>
-		</exchange>
-	</action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script xmlns="http://geni-orca.renci.org/CreateCRS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/CreateCRS CreateCRS.xsd"> 
+    <action name="CreateCRS"> 
+        <exchange> 
+            <send>
+                 ENT-CRS::{$srcPort},{$dstPort}:{$ctag}::2way:PAYLOAD={$payloadType}; 
+            </send> 
+            <expect>
+                 COMPLD 
+            </expect> 
+        </exchange> 
+    </action> 
 </script>

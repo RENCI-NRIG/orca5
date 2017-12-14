@@ -1,211 +1,197 @@
-<target name="test.reset.inventory" description="tests if a container's inventory can be reset">
-	<if>
-		<isset property="config" />
-		<then>
-			<delete file="super.properties" />
-			<delete dir="logs" />
-			<delete dir="log" />        
-			<echo message="Running reset inventory test..." />
-			<java classname="orca.tests.core.ResetInventoryTest" Fork="Yes" failonerror="true">
-				<classpath refid="run.classpath" />
-				<arg value="${config}" />
-			</java>
-			<echo message="Test complete. Please inspect log file for errors." />
-		</then>
-		<else>
-			<echo message="usage: -Dconfig=&lt;path to config file&gt;" />
-		</else>
-	</if>
+<target name="test.reset.inventory" description="tests if a container's inventory can be reset"> 
+    <if> 
+        <isset property="config" /> 
+        <then> 
+            <delete file="super.properties" /> 
+            <delete dir="logs" /> 
+            <delete dir="log" /> 
+            <echo message="Running reset inventory test..." /> 
+            <java classname="orca.tests.core.ResetInventoryTest" Fork="Yes" failonerror="true"> 
+                <classpath refid="run.classpath" /> 
+                <arg value="${config}" /> 
+            </java> 
+            <echo message="Test complete. Please inspect log file for errors." /> 
+        </then> 
+        <else> 
+            <echo message="usage: -Dconfig=&lt;path to config file>" /> 
+        </else> 
+    </if> 
+</target> 
+<target name="test.unit.reservation.emulation" description="performs a minimal reservation unit test (emulation mode)."> 
+    <var name="my.test.unit.reservation.emulation.config" unset="true"></var> 
+    <if> 
+        <isset property="config" /> 
+        <then> 
+            <property name="my.test.unit.reservation.emulation.config" value="${config}" /> 
+        </then> 
+        <else> 
+            <property name="my.test.unit.reservation.emulation.config" value="${test.unit.reservation.emulation.config}" /> 
+        </else> 
+    </if> 
+    <delete dir="logs" /> 
+    <echo message="running reservation unit test (emulation mode)..." /> 
+    <echo message="configuration file: ${my.test.unit.reservation.emulation.config}" /> 
+    <echo message="lease length: ${test.unit.reservation.emulation.leaseLength}" /> 
+    <echo message="units:${test.unit.reservation.emulation.units}" /> 
+    <java classname="orca.tests.unit.main.ReservationTest" Fork="Yes" failonerror="true"> 
+        <classpath refid="run.classpath" /> 
+        <arg value="${my.test.unit.reservation.emulation.config}" /> 
+        <arg value="do.not.recover=true" /> 
+        <arg value="manual=false" /> 
+        <arg value="leaseLength=${test.unit.reservation.emulation.leaseLength}" /> 
+        <arg value="units=${test.unit.reservation.emulation.units}" /> 
+    </java> 
+</target> 
+<target name="test.unit.reservation.real" description="performs a minimal reservation unit test (real mode)."> 
+    <var name="my.test.unit.reservation.real.config" unset="true"></var> 
+    <if> 
+        <isset property="config" /> 
+        <then> 
+            <property name="my.test.unit.reservation.real.config" value="${config}" /> 
+        </then> 
+        <else> 
+            <property name="my.test.unit.reservation.real.config" value="${test.unit.reservation.real.config}" /> 
+        </else> 
+    </if> 
+    <delete dir="logs" /> 
+    <echo message="running reservation unit test (real mode)..." /> 
+    <echo message="configuration file: ${my.test.unit.reservation.real.config}" /> 
+    <echo message="lease length: ${test.unit.reservation.real.leaseLength}" /> 
+    <echo message="units: ${test.unit.reservation.real.units}" /> 
+    <java classname="orca.tests.unit.main.ReservationTest" Fork="Yes" failonerror="true"> 
+        <classpath refid="run.classpath" /> 
+        <arg value="${my.test.unit.reservation.real.config}" /> 
+        <arg value="do.not.recover=true" /> 
+        <arg value="manual=false" /> 
+        <arg value="clean.machines=true" /> 
+        <arg value="leaseLength=${test.unit.reservation.real.leaseLength}" /> 
+        <arg value="units=${test.unit.reservation.real.units}" /> 
+    </java> 
+</target> 
+<target name="test.unit.recovery.emulation" description="runs the recovery emulation tests"> 
+    <var name="my.test.unit.recovery.emulation.config" unset="true"></var> 
+    <if> 
+        <isset property="config" /> 
+        <then> 
+            <property name="my.test.unit.recovery.emulation.config" value="${config}" /> 
+        </then> 
+        <else> 
+            <property name="my.test.unit.recovery.emulation.config" value="${test.unit.recovery.emulation.config}" /> 
+        </else> 
+    </if> 
+    <delete dir="logs" /> 
+    <echo message="running reservation recovery unit test (emulation mode)..." /> 
+    <echo message="configuration file: ${my.test.unit.recovery.emulation.config}" /> 
+    <echo message="lease length: ${test.unit.recovery.emulation.leaseLength}" /> 
+    <echo message="units:${test.unit.recovery.emulation.units}" /> 
+    <java classname="orca.tests.unit.recovery.RecoveryTest" Fork="Yes"> 
+        <classpath refid="run.classpath" /> 
+        <arg value="${my.test.unit.recovery.emulation.config}" /> 
+        <arg value="do.not.recover=true" /> 
+        <arg value="manual=false" /> 
+        <arg value="leaseLength=${test.unit.recovery.emulation.leaseLength}" /> 
+        <arg value="units=${test.unit.recovery.emulation.units}" /> 
+    </java> 
+</target> 
+<target name="test.unit.vlan.emulation" description="performs a vm + vlan instantiation test (emulation mode)."> 
+    <var name="my.test.vlan.emulation.config" unset="true"></var> 
+    <if> 
+        <isset property="config" /> 
+        <then> 
+            <property name="my.test.unit.vlan.emulation.config" value="${config}" /> 
+        </then> 
+        <else> 
+            <property name="my.test.unit.vlan.emulation.config" value="${test.unit.vlan.emulation.config}" /> 
+        </else> 
+    </if> 
+    <delete dir="logs" /> 
+    <echo message="running vlan unit test (emulation mode)..." /> 
+    <echo message="configuration file: ${my.test.unit.vlan.emulation.config}" /> 
+    <echo message="lease length: ${test.unit.vlan.emulation.leaseLength}" /> 
+    <echo message="units:${test.unit.vlan.emulation.units}" /> 
+    <java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
+        <classpath refid="run.classpath" /> 
+        <arg value="${my.test.unit.vlan.emulation.config}" /> 
+        <arg value="do.not.recover=true" /> 
+        <arg value="manual=false" /> 
+        <arg value="clean=true" /> 
+        <arg value="leaseLength=${test.unit.vlan.emulation.leaseLength}" /> 
+        <arg value="units=${test.unit.vlan.emulation.units}" /> 
+    </java> 
+</target> 
+<target name="test.unit.vlan.real" description="performs a vm + vlan instantiation test (real mode)."> 
+    <if> 
+        <isset property="config" /> 
+        <then> 
+            <property name="my.config" value="${config}" /> 
+        </then> 
+        <else> 
+            <property name="my.config" value="${test.unit.vlan.real.config}" /> 
+        </else> 
+    </if> 
+    <if> 
+        <isset property="units" /> 
+        <then> 
+            <property name="my.units" value="${units}" /> 
+        </then> 
+        <else> 
+            <property name="my.units" value="${test.unit.vlan.real.units}" /> 
+        </else> 
+    </if> 
+    <if> 
+        <isset property="leaseLength" /> 
+        <then> 
+            <property name="my.leaseLength" value="${leaseLength}" /> 
+        </then> 
+        <else> 
+            <property name="my.leaseLength" value="${test.unit.vlan.real.leaseLength}" /> 
+        </else> 
+    </if> 
+    <delete dir="logs" /> 
+    <echo message="running vlan unit test (real mode)..." /> 
+    <echo message="configuration file: ${my.config}" /> 
+    <echo message="lease length: ${my.leaseLength}" /> 
+    <echo message="units:${my.units}" /> 
+    <java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
+        <classpath refid="run.classpath" /> 
+        <arg value="${my.config}" /> 
+        <arg value="do.not.recover=true" /> 
+        <arg value="manual=false" /> 
+        <arg value="clean.machines=true" /> 
+        <arg value="leaseLength=${my.leaseLength}" /> 
+        <arg value="units=${my.units}" /> 
+    </java> 
+</target> 
+<target name="test.ben.controller" description="runs the ben controller test"> 
+    <var name="myconfig" unset="true"></var> 
+    <var name="myttl" unset="true"></var> 
+    <if> 
+        <isset property="config" /> 
+        <then> 
+            <property name="myconfig" value="${config}" /> 
+        </then> 
+        <else> 
+            <property name="myconfig" value="renci/demo2.xml" /> 
+        </else> 
+    </if> 
+    <if> 
+        <isset property="ttl" /> 
+        <then> 
+            <property name="myttl" value="${ttl}" /> 
+        </then> 
+        <else> 
+            <property name="myttl" value="600000" /> 
+        </else> 
+    </if> 
+    <delete dir="logs" /> 
+    <echo message="running ben controller test..." /> 
+    <echo message="configuration file: ${myconfig}" /> 
+    <java classname="orca.controllers.ben.nlr.BenNlrControllerTest" Fork="Yes" failonerror="true"> 
+        <classpath refid="run.classpath" /> 
+        <arg value="${myconfig}" /> 
+        <arg value="do.not.recover=true" /> 
+        <arg value="manual=false" /> 
+        <arg value="clean.machines=true" /> 
+        <arg value="time.to.live=${myttl}" /> 
+    </java> 
 </target>
-
-<target name="test.unit.reservation.emulation" description="performs a minimal reservation unit test (emulation mode).">
-	<var name="my.test.unit.reservation.emulation.config" unset="true" />
-	<if>
-		<isset property="config" />
-		<then>
-			<property name="my.test.unit.reservation.emulation.config" value="${config}" />
-		</then>
-		<else>
-			<property name="my.test.unit.reservation.emulation.config" value="${test.unit.reservation.emulation.config}" />
-		</else>
-	</if>
-	<delete dir="logs" />
-	<echo message="running reservation unit test (emulation mode)..." />
-	<echo message="configuration file: ${my.test.unit.reservation.emulation.config}" />
-	<echo message="lease length: ${test.unit.reservation.emulation.leaseLength}" />
-	<echo message="units:${test.unit.reservation.emulation.units}" /> 
-	<java classname="orca.tests.unit.main.ReservationTest" Fork="Yes"  failonerror="true">
-		<classpath refid="run.classpath" />
-		<arg value="${my.test.unit.reservation.emulation.config}" />
-		<arg value="do.not.recover=true" />
-		<arg value="manual=false" />
-		<arg value="leaseLength=${test.unit.reservation.emulation.leaseLength}" />
-		<arg value="units=${test.unit.reservation.emulation.units}" />
-	</java>
-</target>
-
-<target name="test.unit.reservation.real" description="performs a minimal reservation unit test (real mode).">
-	<var name="my.test.unit.reservation.real.config" unset="true" />
-	<if>
-		<isset property="config" />
-		<then>
-			<property name="my.test.unit.reservation.real.config" value="${config}" />
-		</then>
-		<else>
-			<property name="my.test.unit.reservation.real.config" value="${test.unit.reservation.real.config}" />
-		</else>
-	</if>
-	<delete dir="logs" />
-	<echo message="running reservation unit test (real mode)..." />
-	<echo message="configuration file: ${my.test.unit.reservation.real.config}" />
-	<echo message="lease length: ${test.unit.reservation.real.leaseLength}" />
-	<echo message="units: ${test.unit.reservation.real.units}" />
-	<java classname="orca.tests.unit.main.ReservationTest" Fork="Yes" failonerror="true">
-		<classpath refid="run.classpath" />
-		<arg value="${my.test.unit.reservation.real.config}" />
-		<arg value="do.not.recover=true" />
-		<arg value="manual=false" />
-		<arg value="clean.machines=true" />
-		<arg value="leaseLength=${test.unit.reservation.real.leaseLength}" />
-		<arg value="units=${test.unit.reservation.real.units}" />
-	</java>
-</target>
-
-<target name="test.unit.recovery.emulation" description="runs the recovery emulation tests">
-	<var name="my.test.unit.recovery.emulation.config" unset="true" />
-	<if>
-		<isset property="config" />
-		<then>
-			<property name="my.test.unit.recovery.emulation.config" value="${config}" />
-		</then>
-		<else>
-			<property name="my.test.unit.recovery.emulation.config" value="${test.unit.recovery.emulation.config}" />
-		</else>
-	</if>
-	<delete dir="logs" />
-	<echo message="running reservation recovery unit test (emulation mode)..." />
-	<echo message="configuration file: ${my.test.unit.recovery.emulation.config}" />
-	<echo message="lease length: ${test.unit.recovery.emulation.leaseLength}" />
-	<echo message="units:${test.unit.recovery.emulation.units}" /> 
-	<java classname="orca.tests.unit.recovery.RecoveryTest" Fork="Yes">
-		<classpath refid="run.classpath" />
-		<arg value="${my.test.unit.recovery.emulation.config}" />
-		<arg value="do.not.recover=true" />
-		<arg value="manual=false" />
-		<arg value="leaseLength=${test.unit.recovery.emulation.leaseLength}" />
-		<arg value="units=${test.unit.recovery.emulation.units}" />
-	</java>
-</target>
-
-<target name="test.unit.vlan.emulation" description="performs a vm + vlan instantiation test (emulation mode).">
-	<var name="my.test.vlan.emulation.config" unset="true" />
-	<if>
-		<isset property="config" />
-		<then>
-			<property name="my.test.unit.vlan.emulation.config" value="${config}" />
-		</then>
-		<else>
-			<property name="my.test.unit.vlan.emulation.config" value="${test.unit.vlan.emulation.config}" />
-		</else>
-	</if>
-	<delete dir="logs" />
-	<echo message="running vlan unit test (emulation mode)..." />
-	<echo message="configuration file: ${my.test.unit.vlan.emulation.config}" />
-	<echo message="lease length: ${test.unit.vlan.emulation.leaseLength}" />
-	<echo message="units:${test.unit.vlan.emulation.units}" /> 
-	<java classname="orca.tests.unit.main.VlanTest" Fork="Yes"  failonerror="true">
-		<classpath refid="run.classpath" />
-		<arg value="${my.test.unit.vlan.emulation.config}" />
-		<arg value="do.not.recover=true" />
-		<arg value="manual=false" />
-		<arg value="clean=true" />
-		<arg value="leaseLength=${test.unit.vlan.emulation.leaseLength}" />
-		<arg value="units=${test.unit.vlan.emulation.units}" />
-	</java>
-</target>
-
-
-<target name="test.unit.vlan.real" description="performs a vm + vlan instantiation test (real mode).">
-	<if>
-		<isset property="config" />
-		<then>
-			<property name="my.config" value="${config}" />
-		</then>
-		<else>
-			<property name="my.config" value="${test.unit.vlan.real.config}" />
-		</else>
-	</if>
-	<if>
-		<isset property="units" />
-		<then>
-			<property name="my.units" value="${units}" />
-		</then>
-		<else>
-			<property name="my.units" value="${test.unit.vlan.real.units}" />
-		</else>
-	</if>
-	<if>
-		<isset property="leaseLength" />
-		<then>
-			<property name="my.leaseLength" value="${leaseLength}" />
-		</then>
-		<else>
-			<property name="my.leaseLength" value="${test.unit.vlan.real.leaseLength}" />
-		</else>
-	</if>
-		
-	<delete dir="logs" />
-	<echo message="running vlan unit test (real mode)..." />
-	<echo message="configuration file: ${my.config}" />
-	<echo message="lease length: ${my.leaseLength}" />
-	<echo message="units:${my.units}" /> 
-	<java classname="orca.tests.unit.main.VlanTest" Fork="Yes"  failonerror="true">
-		<classpath refid="run.classpath" />
-		<arg value="${my.config}" />
-		<arg value="do.not.recover=true" />
-		<arg value="manual=false" />
-		<arg value="clean.machines=true" />
-		<arg value="leaseLength=${my.leaseLength}" />
-		<arg value="units=${my.units}" />
-	</java>
-</target>
-
-<target name="test.ben.controller" description="runs the ben controller test">
-	<var name="myconfig" unset="true" />
-	<var name="myttl" unset="true" />
-
-	<if>
-		<isset property="config" />
-		<then>
-			<property name="myconfig" value="${config}" />
-		</then>
-		<else>
-			<property name="myconfig" value="renci/demo2.xml" />
-		</else>
-	</if>
-
-	<if>
-		<isset property="ttl" />
-		<then>
-			<property name="myttl" value="${ttl}" />
-		</then>
-		<else>
-			<property name="myttl" value="600000" />
-		</else>
-	</if>
-	
-	
-	<delete dir="logs" />
-	<echo message="running ben controller test..." />
-	<echo message="configuration file: ${myconfig}" />
-	<java classname="orca.controllers.ben.nlr.BenNlrControllerTest" Fork="Yes"  failonerror="true">
-		<classpath refid="run.classpath" />
-		<arg value="${myconfig}" />
-		<arg value="do.not.recover=true" />
-		<arg value="manual=false" />
-		<arg value="clean.machines=true" />
-		<arg value="time.to.live=${myttl}" />
-	</java>
-</target>
-
-

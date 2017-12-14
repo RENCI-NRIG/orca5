@@ -15,9 +15,7 @@ import orca.nodeagent.drivers.DriverBaseTask;
 
 import org.apache.tools.ant.BuildException;
 
-
-public class RegisterAuthorityKeyTask extends DriverBaseTask
-{
+public class RegisterAuthorityKeyTask extends DriverBaseTask {
     // install the certificate in the service authority and get the certificate
     // installed in local keystore
     String keyStoreLocation;
@@ -27,38 +25,31 @@ public class RegisterAuthorityKeyTask extends DriverBaseTask
     String keyAlias;
     String serverKey;
 
-    public void setKeystore(String keyStoreLocation)
-    {
+    public void setKeystore(String keyStoreLocation) {
         this.keyStoreLocation = keyStoreLocation;
     }
 
-    public void setKeystorePassword(String password)
-    {
+    public void setKeystorePassword(String password) {
         keyStorePassword = password;
     }
 
-    public void setAuthorityIP(String ip)
-    {
+    public void setAuthorityIP(String ip) {
         authorityIP = ip;
     }
 
-    public void setKeyPassword(String pass)
-    {
+    public void setKeyPassword(String pass) {
         keyPassword = pass;
     }
 
-    public void setKey(String key)
-    {
+    public void setKey(String key) {
         this.keyAlias = key;
     }
 
-    public void setServerKey(String key)
-    {
+    public void setServerKey(String key) {
         this.serverKey = key;
     }
 
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         try {
             super.execute();
 
@@ -95,14 +86,8 @@ public class RegisterAuthorityKeyTask extends DriverBaseTask
                 throw new BuildException("stub could not be initialized");
             }
 
-            KeyMasterClient kmc = new KeyMasterClient(location,
-                                                      stub,
-                                                      keyStoreLocation,
-                                                      keyStorePassword,
-                                                      keyAlias,
-                                                      keyPassword,
-                                                      authorityIP,
-                                                      serverKey);
+            KeyMasterClient kmc = new KeyMasterClient(location, stub, keyStoreLocation, keyStorePassword, keyAlias,
+                    keyPassword, authorityIP, serverKey);
 
             try {
                 int code = kmc.callRegisterAuthorityKey();

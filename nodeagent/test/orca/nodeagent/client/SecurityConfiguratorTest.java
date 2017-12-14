@@ -18,24 +18,18 @@ import junit.framework.TestSuite;
 import orca.nodeagent.tests.drivers.DriverTest;
 import orca.tools.axis2.Axis2ClientSecurityConfigurator;
 
-
-public class SecurityConfiguratorTest extends TestCase
-{
+public class SecurityConfiguratorTest extends TestCase {
     String actorID = "myactor";
 
-    public SecurityConfiguratorTest()
-    {
+    public SecurityConfiguratorTest() {
     }
 
-    public void testCreate()
-    {
-        int code = Axis2ClientSecurityConfigurator.getInstance()
-                                                      .createActorConfiguration(".", actorID);
+    public void testCreate() {
+        int code = Axis2ClientSecurityConfigurator.getInstance().createActorConfiguration(".", actorID);
         Assert.assertEquals(code, 0);
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(SecurityConfiguratorTest.class);
     }
 }

@@ -45,8 +45,7 @@ import org.apache.log4j.Logger;
 /**
  * Tests recovery from a specific condition
  */
-public class RecoveryTester
-{
+public class RecoveryTester {
     public static final int ExitCodeOK = 0;
     public static final int ExitCodeErrorStartActor = 5;
     public static final int ExitCodeInternalError = 10;
@@ -73,7 +72,7 @@ public class RecoveryTester
     /**
      * The ant driver file for client-side join/leave operations.
      */
-    protected String configFile = DefaultConfigFile;    
+    protected String configFile = DefaultConfigFile;
     /**
      * Lease length (in cycles).
      */
@@ -156,10 +155,8 @@ public class RecoveryTester
     /**
      * Listener for state changes at the reservation layer
      */
-    protected IStateChangeListener reservationListener = new IStateChangeListener()
-    {
-        public void transition(Object obj, IState from, IState to)
-        {
+    protected IStateChangeListener reservationListener = new IStateChangeListener() {
+        public void transition(Object obj, IState from, IState to) {
             reservationTransition((IReservation) obj, (ReservationState) from, (ReservationState) to);
         }
     };
@@ -167,18 +164,14 @@ public class RecoveryTester
     /**
      * Listener for state changes at the database layer.
      */
-    protected IStateChangeListener databaseListener = new IStateChangeListener()
-    {
-        public void transition(Object obj, IState from, IState to) throws Exception
-        {
+    protected IStateChangeListener databaseListener = new IStateChangeListener() {
+        public void transition(Object obj, IState from, IState to) throws Exception {
             databaseTransition((IReservation) obj, (ReservationState) from, (ReservationState) to);
         }
     };
 
-    protected IEventListener eventLisener = new IEventListener()
-    {
-        public void notify(IEvent event)
-        {
+    protected IEventListener eventLisener = new IEventListener() {
+        public void notify(IEvent event) {
             notifyEvent(event);
         }
     };
@@ -204,15 +197,13 @@ public class RecoveryTester
      */
     protected int testMode;
 
-    public RecoveryTester(int testMode, ReservationState state)
-    {
+    public RecoveryTester(int testMode, ReservationState state) {
         this.testMode = testMode;
         this.stateToCheck = state;
         logger = Globals.getLogger("recovery.tester");
     }
 
-    public RecoveryResult runTest()
-    {
+    public RecoveryResult runTest() {
         try {
             init();
             issueRequest();
@@ -223,41 +214,40 @@ public class RecoveryTester
                 }
             }
             return new RecoveryResult(code, finalState);
-        } catch (Exception e){
-            throw new RuntimeException(e);            
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             clean();
         }
     }
 
-    protected void checkUnits(IReservation r)
-    {
+    protected void checkUnits(IReservation r) {
         boolean match = true;
 
         switch (r.getState()) {
-            case ReservationStates.Ticketed:
-                if (!(r instanceof IAuthorityReservation)) {
+        case ReservationStates.Ticketed:
+            if (!(r instanceof IAuthorityReservation)) {
+                match = (r.getUnits() == units);
+            }
+            break;
+        case ReservationStates.Active:
+            if (r.getPendingState() == ReservationStates.None) {
+                if (r instanceof IAuthorityReservation) {
                     match = (r.getUnits() == units);
-                }
-                break;
-            case ReservationStates.Active:
-                if (r.getPendingState() == ReservationStates.None) {
-                    if (r instanceof IAuthorityReservation) {
-                        match = (r.getUnits() == units);
-                        // match = (match && (r.getLeasedUnits() == units));
-                    } else {
-                        IServiceManagerReservation rc = (IServiceManagerReservation) r;
-                        synchronized (rc) {
-                            if (rc.getJoinState() == ReservationStates.NoJoin) {
-                                if (!rc.isPendingRecover()) {
-                                    match = (r.getUnits() == units);
-                                    match = (match && (r.getLeasedUnits() == units));
-                                }
+                    // match = (match && (r.getLeasedUnits() == units));
+                } else {
+                    IServiceManagerReservation rc = (IServiceManagerReservation) r;
+                    synchronized (rc) {
+                        if (rc.getJoinState() == ReservationStates.NoJoin) {
+                            if (!rc.isPendingRecover()) {
+                                match = (r.getUnits() == units);
+                                match = (match && (r.getLeasedUnits() == units));
                             }
                         }
                     }
                 }
-                break;
+            }
+            break;
         }
 
         if (!match) {
@@ -268,12 +258,12 @@ public class RecoveryTester
 
     /**
      * Reservation transition event handler
+     * 
      * @param r
      * @param from
      * @param to
      */
-    protected synchronized void reservationTransition(IReservation r, ReservationState from, ReservationState to)
-    {
+    protected synchronized void reservationTransition(IReservation r, ReservationState from, ReservationState to) {
         boolean print = false;
         IActor actor = r.getActor();
         assert actor != null;
@@ -286,7 +276,8 @@ public class RecoveryTester
             if (currentReservationAgent == null && r instanceof IBrokerReservation) {
                 currentReservationAgent = (IBrokerReservation) r;
                 print = true;
-            } else if (currentReservationAgent != null && currentReservationAgent.getReservationID().equals(r.getReservationID())) {
+            } else if (currentReservationAgent != null
+                    && currentReservationAgent.getReservationID().equals(r.getReservationID())) {
                 print = true;
             }
         } else {
@@ -294,7 +285,8 @@ public class RecoveryTester
             if (currentReservationSite == null && r instanceof IAuthorityReservation) {
                 currentReservationSite = (IAuthorityReservation) r;
                 print = true;
-            } else if (currentReservationSite != null && currentReservationSite.getReservationID().equals(r.getReservationID())) {
+            } else if (currentReservationSite != null
+                    && currentReservationSite.getReservationID().equals(r.getReservationID())) {
                 print = true;
             }
         }
@@ -312,68 +304,69 @@ public class RecoveryTester
 
     protected boolean pleaseStop = false;
 
-    protected void notifyEvent(IEvent e)
-    {
+    protected void notifyEvent(IEvent e) {
         switch (e.getComponent()) {
-            case Event.ComponentKernel:
-                switch (e.getId()) {
-                    case orca.shirako.kernel.KernelLocation.LocationServiceUpdateLease:
-                        if (testMode == TestModeServiceManager && !recoverying) {
-                            if (e.getActor().getName().equals(NameSM)) {
-                                if (stateToCheck.equals(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.Joining))) {
-                                    IReservation r = (IReservation) e.getSubject();
-                                    if (currentReservationSM != null && r.getReservationID().equals(currentReservationSM.getReservationID())) {
-                                        // pleaseStop = true;
-                                        // stopActor(NameSM);
-                                    }
-                                }
+        case Event.ComponentKernel:
+            switch (e.getId()) {
+            case orca.shirako.kernel.KernelLocation.LocationServiceUpdateLease:
+                if (testMode == TestModeServiceManager && !recoverying) {
+                    if (e.getActor().getName().equals(NameSM)) {
+                        if (stateToCheck.equals(new ReservationState(ReservationStates.Active, ReservationStates.None,
+                                ReservationStates.Joining))) {
+                            IReservation r = (IReservation) e.getSubject();
+                            if (currentReservationSM != null
+                                    && r.getReservationID().equals(currentReservationSM.getReservationID())) {
+                                // pleaseStop = true;
+                                // stopActor(NameSM);
                             }
                         }
-                        break;
+                    }
                 }
                 break;
+            }
+            break;
 
-            case Event.ComponentNodeGroup:
-                switch (e.getId()) {
-                    case NodeGroup.LocationTransferIn:
-                        if (testMode == TestModeServiceManager && pleaseStop) {
-                            if (e.getActor().getName().equals(NameSM)) {
-                                pleaseStop = false;
-                                stopActor(NameSM);
-                            }
-                        } else if (testMode == TestModeAuthority && pleaseStop) {
-                            if (e.getActor().getName().equals(NameAuthority)) {
-                                pleaseStop = false;
-                                stopActor(NameAuthority);
-                            }
-                        }
-                        break;
+        case Event.ComponentNodeGroup:
+            switch (e.getId()) {
+            case NodeGroup.LocationTransferIn:
+                if (testMode == TestModeServiceManager && pleaseStop) {
+                    if (e.getActor().getName().equals(NameSM)) {
+                        pleaseStop = false;
+                        stopActor(NameSM);
+                    }
+                } else if (testMode == TestModeAuthority && pleaseStop) {
+                    if (e.getActor().getName().equals(NameAuthority)) {
+                        pleaseStop = false;
+                        stopActor(NameAuthority);
+                    }
                 }
                 break;
+            }
+            break;
         }
     }
 
     /**
      * Database state transition event handler
+     * 
      * @param r
      * @param from
      * @param to
      * @throws Exception
      */
-    protected void databaseTransition(IReservation r, ReservationState from, ReservationState to) throws Exception
-    {
+    protected void databaseTransition(IReservation r, ReservationState from, ReservationState to) throws Exception {
         boolean print = true;
 
         switch (testMode) {
-            case TestModeServiceManager:
-                dbTransitionSM(r, from, to);
-                break;
-            case TestModeAgent:
-                dbTransitionAgent(r, from, to);
-                break;
-            case TestModeAuthority:
-                dbTransitionAuthority(r, from, to);
-                break;
+        case TestModeServiceManager:
+            dbTransitionSM(r, from, to);
+            break;
+        case TestModeAgent:
+            dbTransitionAgent(r, from, to);
+            break;
+        case TestModeAuthority:
+            dbTransitionAuthority(r, from, to);
+            break;
         }
 
         if (print) {
@@ -390,20 +383,21 @@ public class RecoveryTester
 
     /**
      * Checks if the reservation has extended
+     * 
      * @param r
      * @param from
      * @param to
      * @throws Exception
      */
-    protected void checkExtended(IReservation r, ReservationState from, ReservationState to) throws Exception
-    {
+    protected void checkExtended(IReservation r, ReservationState from, ReservationState to) throws Exception {
         IActor actor = r.getActor();
         assert actor != null;
 
         if (actor.getName().equals(NameSM)) {
             if (to.getState() == ReservationStates.ActiveTicketed && to.getPending() == ReservationStates.None) {
                 if (stateToCheck != null) {
-                    if (stateToCheck.getState() == ReservationStates.ActiveTicketed || stateToCheck.getState() == ReservationStates.Active) {
+                    if (stateToCheck.getState() == ReservationStates.ActiveTicketed
+                            || stateToCheck.getState() == ReservationStates.Active) {
                         if (count == 1) {
                             hasExtended = true;
                         } else {
@@ -419,14 +413,14 @@ public class RecoveryTester
 
     /**
      * Database event handler for a service manager
+     * 
      * @param r
      * @param from
      * @param to
      * @return
      * @throws Exception
      */
-    protected boolean dbTransitionSM(IReservation r, ReservationState from, ReservationState to) throws Exception
-    {
+    protected boolean dbTransitionSM(IReservation r, ReservationState from, ReservationState to) throws Exception {
         boolean print = true;
 
         IActor actor = r.getActor();
@@ -434,7 +428,8 @@ public class RecoveryTester
 
         if (actor.getName().equals(NameSM)) {
             if (currentReservationSM != null && r.getReservationID().equals(currentReservationSM.getReservationID())) {
-                if (stateToCheck != null && stateToCheck.equals(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.Joining))) {
+                if (stateToCheck != null && stateToCheck.equals(new ReservationState(ReservationStates.Active,
+                        ReservationStates.None, ReservationStates.Joining))) {
                     if (!recoverying) {
                         pleaseStop = true;
                     }
@@ -452,20 +447,23 @@ public class RecoveryTester
         return print;
     }
 
-    protected boolean dbTransitionAuthority(IReservation r, ReservationState from, ReservationState to) throws Exception
-    {
+    protected boolean dbTransitionAuthority(IReservation r, ReservationState from, ReservationState to)
+            throws Exception {
         boolean print = true;
 
         IActor actor = r.getActor();
         assert actor != null;
 
         if (actor.getName().equals(NameAuthority)) {
-            if (currentReservationSite != null && r.getReservationID().equals(currentReservationSite.getReservationID())) {
-                if (stateToCheck != null && !recoverying && (stateToCheck.equals(new ReservationState(ReservationStates.Ticketed, ReservationStates.Priming)))) {
+            if (currentReservationSite != null
+                    && r.getReservationID().equals(currentReservationSite.getReservationID())) {
+                if (stateToCheck != null && !recoverying && (stateToCheck
+                        .equals(new ReservationState(ReservationStates.Ticketed, ReservationStates.Priming)))) {
                     if (stateToCheck.equals(to) && !recoverying) {
                         pleaseStop = true;
                     }
-                } else if (stateToCheck != null & stateToCheck.equals(new ReservationState(ReservationStates.Active, ReservationStates.Priming))) {
+                } else if (stateToCheck != null & stateToCheck
+                        .equals(new ReservationState(ReservationStates.Active, ReservationStates.Priming))) {
                     if (stateToCheck.equals(to) && !recoverying) {
                         stopActor(NameAuthority);
                     }
@@ -484,20 +482,21 @@ public class RecoveryTester
 
     /**
      * Database event handler for an agent
+     * 
      * @param r
      * @param from
      * @param to
      * @return
      * @throws Exception
      */
-    protected boolean dbTransitionAgent(IReservation r, ReservationState from, ReservationState to) throws Exception
-    {
+    protected boolean dbTransitionAgent(IReservation r, ReservationState from, ReservationState to) throws Exception {
         boolean print = false;
         IActor actor = r.getActor();
         assert actor != null;
 
         if (actor.getName().equals(NameAgent)) {
-            if (currentReservationAgent != null && r.getReservationID().equals(currentReservationAgent.getReservationID())) {
+            if (currentReservationAgent != null
+                    && r.getReservationID().equals(currentReservationAgent.getReservationID())) {
                 print = true;
                 if (!recoverying) {
                     if (stateToCheck != null && to.equals(stateToCheck)) {
@@ -511,11 +510,12 @@ public class RecoveryTester
 
     /**
      * Recovers the specified actor
-     * @param actorName actor name
+     * 
+     * @param actorName
+     *            actor name
      * @return
      */
-    protected int recover(String actorName)
-    {
+    protected int recover(String actorName) {
         boolean done = false;
         boolean waitingForCompletion = false;
         long start = 0;
@@ -545,7 +545,8 @@ public class RecoveryTester
                 count = 0;
                 int code = 0;
                 try {
-                    StandardContainerManagerObject mo = (StandardContainerManagerObject)Globals.getContainer().getContainerManagerObject();
+                    StandardContainerManagerObject mo = (StandardContainerManagerObject) Globals.getContainer()
+                            .getContainerManagerObject();
                     ResultMng result = mo.startActor(actorName);
                     code = result.getCode();
                 } catch (Exception e) {
@@ -610,10 +611,10 @@ public class RecoveryTester
 
     /**
      * Checks if the service manager reservation has reached a final state
+     * 
      * @return
      */
-    protected synchronized boolean checkDone()
-    {
+    protected synchronized boolean checkDone() {
         boolean result = false;
 
         if (currentStateSM != null) {
@@ -631,7 +632,9 @@ public class RecoveryTester
                     writer.flush();
                 }
                 result = true;
-            } else if (currentStateSM.getState() == ReservationStates.Active && currentStateSM.getPending() == ReservationStates.None && currentStateSM.getJoining() == ReservationStates.NoJoin && hasExtended) {
+            } else if (currentStateSM.getState() == ReservationStates.Active
+                    && currentStateSM.getPending() == ReservationStates.None
+                    && currentStateSM.getJoining() == ReservationStates.NoJoin && hasExtended) {
                 System.out.println("Reservation is active. We are done");
                 if (writer != null) {
                     writer.println("Reservation is active");
@@ -649,8 +652,7 @@ public class RecoveryTester
         return result;
     }
 
-    protected int removeReservation(String actorName, IReservation r)
-    {
+    protected int removeReservation(String actorName, IReservation r) {
         int code = 0;
         try {
             IActor actor = ActorRegistry.getActor(actorName);
@@ -687,20 +689,21 @@ public class RecoveryTester
         return code;
     }
 
-    protected synchronized boolean getRecoverying()
-    {
+    protected synchronized boolean getRecoverying() {
         return recoverying;
     }
 
     /**
      * Stops the actor
-     * @param name actor name
+     * 
+     * @param name
+     *            actor name
      * @throws Exception
      */
-    protected void stopActor(String name)
-    {
+    protected void stopActor(String name) {
         try {
-            StandardContainerManagerObject mo = (StandardContainerManagerObject)Globals.getContainer().getContainerManagerObject();
+            StandardContainerManagerObject mo = (StandardContainerManagerObject) Globals.getContainer()
+                    .getContainerManagerObject();
             mo.stopActor(name);
             System.out.println("Reached desired state. Actor stopped");
             if (writer != null) {
@@ -714,10 +717,9 @@ public class RecoveryTester
             throw new RuntimeException(e);
         }
         /*
-         * We need to throw the exception to terminate the current operation.
-         * The actor thread would be stopped by the stopActor thread but
-         * requests that come from other actors come on separate threads. The
-         * exception here will stop such a request.
+         * We need to throw the exception to terminate the current operation. The actor thread would be stopped by the
+         * stopActor thread but requests that come from other actors come on separate threads. The exception here will
+         * stop such a request.
          */
         throw new TestException("actor is stopped forcefully");
     }
@@ -725,8 +727,7 @@ public class RecoveryTester
     /**
      * Performs the necessary initialization before running the test
      */
-    protected void init() throws Exception
-    {
+    protected void init() throws Exception {
         timeout = 5 * leaseLength;
         sm = (IServiceManager) ActorRegistry.getActor(NameSM);
         if (sm == null) {
@@ -758,8 +759,7 @@ public class RecoveryTester
     /**
      * Cleans up after the test is complete
      */
-    protected void clean()
-    {
+    protected void clean() {
         Globals.getContainer().unregisterDatabaseListener(databaseListener);
         Globals.getContainer().unregisterReservationListener(reservationListener);
         sm.getShirakoPlugin().getDatabase().unregisterReservationListener(databaseListener);
@@ -768,8 +768,7 @@ public class RecoveryTester
     /**
      * Issues a reservation request
      */
-    protected void issueRequest()
-    {
+    protected void issueRequest() {
         IServiceManagerReservation r = createReservation(sm.getCurrentCycle());
         r.registerListener(reservationListener);
         sm.getShirakoPlugin().getDatabase().registerReservationListener(databaseListener);
@@ -781,19 +780,14 @@ public class RecoveryTester
         currentReservationSM = r;
     }
 
-    protected IServiceManagerReservation createReservation(long cycle)
-    {
+    protected IServiceManagerReservation createReservation(long cycle) {
         ResourceSet rset = new ResourceSet(units, rtype);
         Properties request = rset.getRequestProperties();
         ActorClock clock = Globals.getContainer().getActorClock();
 
         Term term = new Term(clock.date(cycle + advanceTime), clock.getMillis((long) leaseLength));
-        ICodClientReservation r = (ICodClientReservation) CodServiceManagerReservationFactory.getInstance()
-        .create(
-rset,
-term,
-slice,
-sm.getDefaultBroker());
+        ICodClientReservation r = (ICodClientReservation) CodServiceManagerReservationFactory.getInstance().create(rset,
+                term, slice, sm.getDefaultBroker());
 
         // 90 - 400 - 500
         ResourceProperties.setMax(request, ResourceProperties.PropertyCpu, 1);
@@ -807,7 +801,7 @@ sm.getDefaultBroker());
 
         r.setServiceConfig(configFile);
         r.setRenewable(true);
-        
+
         PropertiesManager.setElasticTime(rset, true);
 
         return r;
@@ -816,8 +810,7 @@ sm.getDefaultBroker());
     /**
      * Calls up to a default broker to query and set the advance time.
      */
-    protected void getAdvanceTime()
-    {
+    protected void getAdvanceTime() {
         Properties myProps = new Properties();
         myProps.setProperty("advanceTime", "null");
         try {
@@ -831,12 +824,12 @@ sm.getDefaultBroker());
 
     /**
      * Converts the states to a string
+     * 
      * @param from
      * @param to
      * @return
      */
-    protected String getStates(ReservationState from, ReservationState to)
-    {
+    protected String getStates(ReservationState from, ReservationState to) {
         StringBuffer sb = new StringBuffer();
         sb.append("from: ");
         if (from != null) {
@@ -854,11 +847,11 @@ sm.getDefaultBroker());
 
     /**
      * Returns the actor this reservation belongs to
+     * 
      * @param r
      * @return
      */
-    protected String getActor(IReservation r)
-    {
+    protected String getActor(IReservation r) {
         String msg;
         IActor actor = r.getActor();
         if (actor != null) {
@@ -872,87 +865,87 @@ sm.getDefaultBroker());
 
     /**
      * Returns the name of the tested actor
+     * 
      * @return
      */
-    protected String getActorName()
-    {
+    protected String getActorName() {
         String actorName = null;
 
         switch (testMode) {
-            case TestModeServiceManager:
-                actorName = NameSM;
-                break;
-            case TestModeAgent:
-                actorName = NameAgent;
-                break;
-            case TestModeAuthority:
-                actorName = NameAuthority;
-                break;
+        case TestModeServiceManager:
+            actorName = NameSM;
+            break;
+        case TestModeAgent:
+            actorName = NameAgent;
+            break;
+        case TestModeAuthority:
+            actorName = NameAuthority;
+            break;
         }
         return actorName;
     }
 
     /**
-     * @param cyclesToWait the cyclesToWait to set
+     * @param cyclesToWait
+     *            the cyclesToWait to set
      */
-    public void setCyclesToWait(long cyclesToWait)
-    {
+    public void setCyclesToWait(long cyclesToWait) {
         this.cyclesToWait = cyclesToWait;
     }
 
     /**
-     * @param elasticTime the elasticTime to set
+     * @param elasticTime
+     *            the elasticTime to set
      */
-    public void setElasticTime(boolean elasticTime)
-    {
+    public void setElasticTime(boolean elasticTime) {
         this.elasticTime = elasticTime;
     }
 
     /**
-     * @param leaseLength the leaseLength to set
+     * @param leaseLength
+     *            the leaseLength to set
      */
-    public void setLeaseLength(long leaseLength)
-    {
+    public void setLeaseLength(long leaseLength) {
         this.leaseLength = leaseLength;
     }
 
     /**
-     * @param rtype the rtype to set
+     * @param rtype
+     *            the rtype to set
      */
-    public void setRtype(ResourceType rtype)
-    {
+    public void setRtype(ResourceType rtype) {
         this.rtype = rtype;
     }
 
     /**
-     * @param stateToCheck the stateToCheck to set
+     * @param stateToCheck
+     *            the stateToCheck to set
      */
-    public void setStateToCheck(ReservationState stateToCheck)
-    {
+    public void setStateToCheck(ReservationState stateToCheck) {
         this.stateToCheck = stateToCheck;
     }
 
     /**
-     * @param testMode the testMode to set
+     * @param testMode
+     *            the testMode to set
      */
-    public void setTestMode(int testMode)
-    {
+    public void setTestMode(int testMode) {
         this.testMode = testMode;
     }
 
     /**
-     * @param units the units to set
+     * @param units
+     *            the units to set
      */
-    public void setUnits(int units)
-    {
+    public void setUnits(int units) {
         this.units = units;
     }
 
     /**
-     * @param writer the writer to set
+     * @param writer
+     *            the writer to set
      */
-    public void setWriter(PrintWriter writer)
-    {
+    public void setWriter(PrintWriter writer) {
         this.writer = writer;
     }
 }

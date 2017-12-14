@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<request srcPort="" dstPort="" ctag="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/DeleteCRSRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/DeleteCRSRequest DeleteCRSRequest.xsd ">
-  <script>DTNLog_on</script>
-  <script>DTNDeleteCRS</script>
-  <script>DTNLog_off</script>
+<?xml version="1.0" encoding="UTF-8"?> 
+<request srcPort="" dstPort="" ctag="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/DeleteCRSRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/DeleteCRSRequest DeleteCRSRequest.xsd "> 
+    <script>DTNLog_on</script> 
+    <script>DTNDeleteCRS</script> 
+    <script>DTNLog_off</script> 
 </request>

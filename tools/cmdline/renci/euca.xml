@@ -1,66 +1,106 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-    <actors>
-        <actor>
-            <type>site</type>
-            <name>site</name>
-            <pools>
-                <pool>
-                    <type>vm</type>
-                    <label>Eucalyptus Virtual Machine</label>
-                    <description>A virtual machine</description>
-                    <units>10</units>
-                    <start>2010-01-30T00:00:00</start>
-                    <end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml" />
-                    <attributes>
-                        <attribute>
-							<key>resource.memory</key>
-                            <label>Memory</label>
-                            <value>128</value>
-                            <unit>MB</unit>
-                            <type>integer</type>
-                        </attribute>
-                        <attribute>
-							<key>resource.cpu</key>
-                            <label>CPU</label>
-                            <value>1/2 of 2GHz Intel Xeon</value>
-                            <type>String</type>
-                        </attribute>
-                    </attributes>
-					<properties>
-						<property name="ip.list" value="192.168.1.2/24" />
-						<property name="ip.subnet" value="255.255.255.0" />
-					</properties>
-                </pool>
-            </pools>
-            <controls>
-                <control type="vm" class="orca.policy.core.SimpleVMControl" />
-            </controls>
-        </actor>
-        <actor>
-            <type>broker</type>
-            <name>broker</name>
-        </actor>
-        <actor>
-            <type>service</type>
-            <name>service</name>
-        </actor>
-    </actors>
-    <topology>
-        <edges>
-            <edge>
-                <from name="service" type="service" />
-                <to name="broker" type="broker" />
-            </edge>
-            <edge>
-                <from name="broker" type="broker" />
-                <to name="site" type="site" />
-                <rset>
-                    <type>vm</type>
-                    <units>10</units>
-                </rset>
-            </edge>
-        </edges>
-    </topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 site 
+            </name> 
+            <pools> 
+                <pool> 
+                    <type>
+                         vm 
+                    </type> 
+                    <label>Eucalyptus Virtual Machine</label> 
+                    <description>
+                         A virtual machine 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.1.2/24" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 broker 
+            </type> 
+            <name>
+                 broker 
+            </name> 
+        </actor> 
+        <actor> 
+            <type>
+                 service 
+            </type> 
+            <name>
+                 service 
+            </name> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="broker" type="broker" /> 
+                <to name="site" type="site" /> 
+                <rset> 
+                    <type>
+                         vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

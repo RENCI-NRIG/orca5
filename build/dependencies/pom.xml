@@ -1,26 +1,52 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>orca</groupId>
-  <artifactId>dependencies</artifactId>
-  <version>1.0</version>
-  <packaging>pom</packaging>
-  <name>Orca Dependencies</name>
-  <description>
-    Helper poms to simplify dependencies management
-  </description>
-  <parent>
-	  <groupId>orca</groupId>
-	  <artifactId>orca</artifactId>
-	  <version>1.0</version>
-  </parent>
- <modules>
-    <module>ant</module>
-    <module>antcontrib</module>
-    <module>axiom</module>
-    <module>axis2</module>
-    <module>jaxb</module>    
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+    <modelVersion>
+         4.0.0 
+    </modelVersion> 
+    <groupId>
+         orca 
+    </groupId> 
+    <artifactId>
+         dependencies 
+    </artifactId> 
+    <version>
+         1.0 
+    </version> 
+    <packaging>
+         pom 
+    </packaging> 
+    <name>
+         Orca Dependencies 
+    </name> 
+    <description>
+         Helper poms to simplify dependencies management 
+    </description> 
+    <parent> 
+        <groupId>
+             orca 
+        </groupId> 
+        <artifactId>
+             orca 
+        </artifactId> 
+        <version>
+             1.0 
+        </version> 
+    </parent> 
+    <modules> 
+        <module>
+             ant 
+        </module> 
+        <module>
+             antcontrib 
+        </module> 
+        <module>
+             axiom 
+        </module> 
+        <module>
+             axis2 
+        </module> 
+        <module>
+             jaxb 
+        </module> 
+    </modules> 
 </project>

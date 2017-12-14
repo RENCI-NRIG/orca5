@@ -16,9 +16,7 @@ import orca.nodeagent.client.KeyMasterClient;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
-
-public class TestAddAuthorityKey
-{
+public class TestAddAuthorityKey {
     String keyAlias;
     String clientPassword;
     char[] clientPasswordChar;
@@ -29,13 +27,11 @@ public class TestAddAuthorityKey
     String keyStoreLocation;
     String authorityIP;
 
-    public TestAddAuthorityKey() throws Exception
-    {
+    public TestAddAuthorityKey() throws Exception {
         location = "http://localhost:9123/axis2/services/NodeAgentService";
 
         ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-            "../lib/external",
-            "test/orca/nodeagent/tests/nosecurity/client.axis2.nosign.xml");
+                "../lib/external", "test/orca/nodeagent/tests/nosecurity/client.axis2.nosign.xml");
         stub = new NodeAgentServiceStub(cc, location);
         keyStoreLocation = "test/orca/nodeagent/tests/security/known/client.jks";
         authorityIP = "192.168.1.1";
@@ -46,10 +42,8 @@ public class TestAddAuthorityKey
         keyAlias = "clientkey";
     }
 
-    public TestAddAuthorityKey(String location, NodeAgentServiceStub stub, String keyStoreLocation,
-                               String keyStorePass, String keyAlias, String keyPass,
-                               String authorityIP)
-    {
+    public TestAddAuthorityKey(String location, NodeAgentServiceStub stub, String keyStoreLocation, String keyStorePass,
+            String keyAlias, String keyPass, String authorityIP) {
         this.location = location;
         this.stub = stub;
         this.keyStoreLocation = keyStoreLocation;
@@ -61,25 +55,17 @@ public class TestAddAuthorityKey
         this.keyAlias = keyAlias;
     }
 
-    public int run() throws Exception
-    {
+    public int run() throws Exception {
         System.out.println("Connecting to " + location);
 
-        KeyMasterClient kmc = new KeyMasterClient(location,
-                                                  stub,
-                                                  keyStoreLocation,
-                                                  clientStorePassword,
-                                                  keyAlias,
-                                                  clientPassword,
-                                                  authorityIP,
-                                                  "serverKey");
+        KeyMasterClient kmc = new KeyMasterClient(location, stub, keyStoreLocation, clientStorePassword, keyAlias,
+                clientPassword, authorityIP, "serverKey");
         int code = kmc.callRegisterAuthorityKey();
 
         return code;
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         TestAddAuthorityKey test = null;
         test = new TestAddAuthorityKey();
         test.run();

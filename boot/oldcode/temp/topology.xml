@@ -10,8 +10,8 @@
     SM->Agent
     Agent<->Agent
     Agent->Authority
--->
-<topology>
-  <link from="actor name" to="actor name" />
-  <link from="actor name" to="actor name" />
+--> 
+<topology> 
+    <link from="actor name" to="actor name" /> 
+    <link from="actor name" to="actor name" /> 
 </topology>

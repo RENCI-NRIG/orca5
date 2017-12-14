@@ -9,65 +9,62 @@ import orca.shirako.time.Term;
 import orca.tests.core.ControllerTest;
 import orca.util.ID;
 
-public class OpenFlowControllerTest extends ControllerTest implements
-		OpenFlowControllerConstants {
-	public OpenFlowControllerTest(String[] args) {
-		super(args);
-	}
+public class OpenFlowControllerTest extends ControllerTest implements OpenFlowControllerConstants {
+    public OpenFlowControllerTest(String[] args) {
+        super(args);
+    }
 
-	protected void prepare() throws Exception {
-		Properties p = new Properties();
+    protected void prepare() throws Exception {
+        Properties p = new Properties();
 
-		p.setProperty(OpenFlowControllerFactory.PropertySliceName,
-				"openflowsimpleslice");
-		startController("service", MyPackageId, OpenFlowControllerId, p);
-	}
+        p.setProperty(OpenFlowControllerFactory.PropertySliceName, "openflowsimpleslice");
+        startController("service", MyPackageId, OpenFlowControllerId, p);
+    }
 
-	@Override
-	protected void runTest() {
-		try {
-			prepare();
-			OpenFlowController cont = (OpenFlowController) getController();
-			assert cont != null;
+    @Override
+    protected void runTest() {
+        try {
+            prepare();
+            OpenFlowController cont = (OpenFlowController) getController();
+            assert cont != null;
 
-			System.out.println("OpenFlow Controller started successfully");
+            System.out.println("OpenFlow Controller started successfully");
 
-			long now = System.currentTimeMillis();
-			Term term = new Term(new Date(now), new Date(now + 1000 * 60 * 2));
-			ID rid = cont.addRequest(term, 1, 1);
+            long now = System.currentTimeMillis();
+            Term term = new Term(new Date(now), new Date(now + 1000 * 60 * 2));
+            ID rid = cont.addRequest(term, 1, 1);
 
-			OpenFlowRequest r = cont.getRequest(rid);
-			System.out.println("Added request. ID=" + rid);
-			while (true) {
-				if (r.isAcive()) {
-					System.out.println("Request is active");
-					break;
-				} else {
-					if (r.isTerminal()) {
-						System.out.println("A failure accurred");
-						throw new RuntimeException(
-								"OpenFlow request is terminal");
-					}
-				}
-				Thread.sleep(1000);
-			}
+            OpenFlowRequest r = cont.getRequest(rid);
+            System.out.println("Added request. ID=" + rid);
+            while (true) {
+                if (r.isAcive()) {
+                    System.out.println("Request is active");
+                    break;
+                } else {
+                    if (r.isTerminal()) {
+                        System.out.println("A failure accurred");
+                        throw new RuntimeException("OpenFlow request is terminal");
+                    }
+                }
+                Thread.sleep(1000);
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Test failed");
-			System.exit(-1);
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Test failed");
+            System.exit(-1);
+        }
 
-		System.out.println("Test successful");
-		System.exit(0);
-	}
+        System.out.println("Test successful");
+        System.exit(0);
+    }
 
-	public static void main(String[] args) throws Exception {
-		if (args.length > 0) {
-			OpenFlowControllerTest test = new OpenFlowControllerTest(args);
-			test.run();
-		} else {
-			System.out.println("Insufficient arguments");
-		}
-	}
+    public static void main(String[] args) throws Exception {
+        if (args.length > 0) {
+            OpenFlowControllerTest test = new OpenFlowControllerTest(args);
+            test.run();
+        } else {
+            System.out.println("Insufficient arguments");
+        }
+    }
 }

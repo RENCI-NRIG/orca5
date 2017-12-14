@@ -1,162 +1,266 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-	<actors>
-		<actor>
-			<type>site</type>
-			<name>ben-vlan-site</name>
-			<description>BEN VLAN site authority</description>
-			<inventory>6509-renci,6509-duke</inventory>
-			<pools>
-				<pool>
-					<type>ben.vlan</type>
-					<label>BEN Vlan</label>
-					<units>100</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="standard/vlan/handler.xml" />
-					<properties>
-						<property name="vlan.tag.start" value="2" />
-						<property name="vlan.tag.end" value="101" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="ben.vlan" class="orca.policy.core.VlanControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>broker</type>
-			<name>ben-vlan-broker</name>
-			<description>BEN VLAN broker</description>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>renci-vm-site</name>
-			<description>Euca site authority at RENCI</description>
-			<pools>
-				<pool>
-					<type>renci.vm</type>
-					<label>Virtual Machine at RENCI</label>
-					<description>A virtual machine at the RENCI Eucalyptus cloud</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>
-							<property name="ec2.keys" value="/opt/orca/ec2-renci" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.201.1/24" />
-						<property name="ip.subnet" value="255.255.255.0" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="renci.vm" class="orca.policy.core.SimpleVMControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>duke-vm-site</name>
-			<description>Euca site authority at DUKE</description>
-			<pools>
-				<pool>
-					<type>duke.vm</type>
-					<label>Virtual Machine at DUKE</label>
-					<description>A virtual machine at the DUKE Eucalyptus cloud</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>
-							<property name="ec2.keys" value="/opt/orca/ec2-duke" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.202.1/24" />
-						<property name="ip.subnet" value="255.255.255.0" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="duke.vm" class="orca.policy.core.SimpleVMControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>broker</type>
-			<name>vm-broker</name>
-			<description>VM broker</description>
-		</actor>
-		<actor>
-			<type>service</type>
-			<name>service</name>
-		</actor>
-	</actors>
-	<topology>
-		<edges>
-			<edge>
-				<from name="service" type="service" />
-				<to name="ben-vlan-broker" type="broker" />
-			</edge>
-			<edge>
-				<from name="service" type="service" />
-				<to name="vm-broker" type="broker" />
-			</edge>
-			<edge>
-				<from name="ben-vlan-broker" type="broker" />
-				<to name="ben-vlan-site" type="site" />
-				<rset>
-					<type>ben.vlan</type>
-					<units>100</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="vm-broker" type="broker" />
-				<to name="renci-vm-site" type="site" />
-				<rset>
-					<type>renci.vm</type>
-					<units>10</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="vm-broker" type="broker" />
-				<to name="duke-vm-site" type="site" />
-				<rset>
-					<type>duke.vm</type>
-					<units>10</units>
-				</rset>
-			</edge>
-		</edges>
-	</topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 ben-vlan-site 
+            </name> 
+            <description>
+                 BEN VLAN site authority 
+            </description> 
+            <inventory>
+                 6509-renci,6509-duke 
+            </inventory> 
+            <pools> 
+                <pool> 
+                    <type>
+                         ben.vlan 
+                    </type> 
+                    <label>BEN Vlan</label> 
+                    <units>
+                         100 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="standard/vlan/handler.xml" /> 
+                    <properties> 
+                        <property name="vlan.tag.start" value="2" /> 
+                        <property name="vlan.tag.end" value="101" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="ben.vlan" class="orca.policy.core.VlanControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 broker 
+            </type> 
+            <name>
+                 ben-vlan-broker 
+            </name> 
+            <description>
+                 BEN VLAN broker 
+            </description> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 renci-vm-site 
+            </name> 
+            <description>
+                 Euca site authority at RENCI 
+            </description> 
+            <pools> 
+                <pool> 
+                    <type>
+                         renci.vm 
+                    </type> 
+                    <label>Virtual Machine at RENCI</label> 
+                    <description>
+                         A virtual machine at the RENCI Eucalyptus cloud 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/opt/orca/ec2-renci" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.201.1/24" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 duke-vm-site 
+            </name> 
+            <description>
+                 Euca site authority at DUKE 
+            </description> 
+            <pools> 
+                <pool> 
+                    <type>
+                         duke.vm 
+                    </type> 
+                    <label>Virtual Machine at DUKE</label> 
+                    <description>
+                         A virtual machine at the DUKE Eucalyptus cloud 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/opt/orca/ec2-duke" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.202.1/24" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 broker 
+            </type> 
+            <name>
+                 vm-broker 
+            </name> 
+            <description>
+                 VM broker 
+            </description> 
+        </actor> 
+        <actor> 
+            <type>
+                 service 
+            </type> 
+            <name>
+                 service 
+            </name> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="ben-vlan-broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="vm-broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="ben-vlan-broker" type="broker" /> 
+                <to name="ben-vlan-site" type="site" /> 
+                <rset> 
+                    <type>
+                         ben.vlan 
+                    </type> 
+                    <units>
+                         100 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="vm-broker" type="broker" /> 
+                <to name="renci-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                         renci.vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="vm-broker" type="broker" /> 
+                <to name="duke-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                         duke.vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

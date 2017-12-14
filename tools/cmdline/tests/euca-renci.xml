@@ -1,78 +1,118 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-    <actors>
-        <actor>
-            <type>site</type>
-            <name>site</name>
-            <pools>
-                <pool>
-                    <type>vm</type>
-                    <label>Eucalyptus Virtual Machine</label>
-                    <description>A virtual machine</description>
-                    <units>10</units>
-                    <start>2010-01-30T00:00:00</start>
-                    <end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>	
-							<!-- 
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 site 
+            </name> 
+            <pools> 
+                <pool> 
+                    <type>
+                         vm 
+                    </type> 
+                    <label>Eucalyptus Virtual Machine</label> 
+                    <description>
+                         A virtual machine 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <!-- 
 							By default the handler assumes that the keys are under $ORCA_HOME/ec2. 
 							If you want the handler to use keys from a different location, specify it here.
 							Note: it must be an absolute path.
-							-->
-							<!-- <property name="ec2.keys" value="path_to_keys_dir" /> -->
-							<property name="unit.vlan.tag" value="20" />
-						</properties>
-					</handler>
-                    <attributes>
-                        <attribute>
-							<key>resource.memory</key>
-                            <label>Memory</label>
-                            <value>128</value>
-                            <unit>MB</unit>
-                            <type>integer</type>
-                        </attribute>
-                        <attribute>
-							<key>resource.cpu</key>
-                            <label>CPU</label>
-                            <value>1/2 of 2GHz Intel Xeon</value>
-                            <type>String</type>
-                        </attribute>
-                    </attributes>
-					<properties>
-						<property name="ip.list" value="192.168.201.24,192.168.201.25,192.168.201.26" />
-						<property name="ip.subnet" value="255.255.255.0" />
-						<property name="ip.gateway" value="192.168.201.1" />
-						<property name="data.subnet" value="255.255.0.0" />
-					</properties>
-                </pool>
-            </pools>
-            <controls>
-                <control type="vm" class="orca.policy.core.SimpleVMControl" />
-            </controls>
-        </actor>
-        <actor>
-            <type>broker</type>
-            <name>broker</name>
-        </actor>
-        <actor>
-            <type>service</type>
-            <name>service</name>
-        </actor>
-    </actors>
-    <topology>
-        <edges>
-            <edge>
-                <from name="service" type="service" />
-                <to name="broker" type="broker" />
-            </edge>
-            <edge>
-                <from name="broker" type="broker" />
-                <to name="site" type="site" />
-                <rset>
-                    <type>vm</type>
-                    <units>10</units>
-                </rset>
-            </edge>
-        </edges>
-    </topology>
+							--> 
+                            <!-- <property name="ec2.keys" value="path_to_keys_dir" /> --> 
+                            <property name="unit.vlan.tag" value="20" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.201.24,192.168.201.25,192.168.201.26" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                        <property name="ip.gateway" value="192.168.201.1" /> 
+                        <property name="data.subnet" value="255.255.0.0" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 broker 
+            </type> 
+            <name>
+                 broker 
+            </name> 
+        </actor> 
+        <actor> 
+            <type>
+                 service 
+            </type> 
+            <name>
+                 service 
+            </name> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="broker" type="broker" /> 
+                <to name="site" type="site" /> 
+                <rset> 
+                    <type>
+                         vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

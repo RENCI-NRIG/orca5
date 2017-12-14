@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.Cisco6509;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class UnmapVLANSTask extends Cisco6509BaseTask {

@@ -34,29 +34,28 @@ import orca.shirako.kernel.ResourceSet;
 import orca.shirako.util.ResourceData;
 import orca.util.ResourceType;
 
-
 /**
  * A class with utility functions for processing configuration files
+ * 
  * @author aydan
  */
-public class ConfigurationTools
-{
+public class ConfigurationTools {
     public static final String URLSeparator = ":";
 
-    public static void attachConfigurationProperties(Object obj, Properties p)
-                                              throws Exception
-    {
+    public static void attachConfigurationProperties(Object obj, Properties p) throws Exception {
         callMethod(obj, "configure", p.getClass(), p);
     }
 
     /**
      * Sets the specified property of the given object.
-     * @param object The object
-     * @param param Parameter desciption
+     * 
+     * @param object
+     *            The object
+     * @param param
+     *            Parameter desciption
      * @throws Exception
      */
-    public static void attachParameter(Object object, Parameter param) throws Exception
-    {
+    public static void attachParameter(Object object, Parameter param) throws Exception {
         Class<?> cl = null;
 
         Object obj = getObject(param);
@@ -72,14 +71,16 @@ public class ConfigurationTools
 
     /**
      * Calls a method with no parameters
-     * @param object The object to make the call on
-     * @param methodName The method name
+     * 
+     * @param object
+     *            The object to make the call on
+     * @param methodName
+     *            The method name
      * @throws Exception
      */
-    public static Object callMethod(Object object, String methodName) throws Exception
-    {
+    public static Object callMethod(Object object, String methodName) throws Exception {
         // create the argument array
-        Class<?>[] arguments = new Class[] {  };
+        Class<?>[] arguments = new Class[] {};
 
         // get the method
         Method method = object.getClass().getMethod(methodName, arguments);
@@ -90,15 +91,20 @@ public class ConfigurationTools
 
     /**
      * Calls a method on the specified object
-     * @param object The object
-     * @param methodName The name of the method to be called
-     * @param argumentClass The class of the argument
-     * @param argument The argument
+     * 
+     * @param object
+     *            The object
+     * @param methodName
+     *            The name of the method to be called
+     * @param argumentClass
+     *            The class of the argument
+     * @param argument
+     *            The argument
      * @throws Exception
      */
-    public static Object callMethod(Object object, String methodName, Class<?> argumentClass,
-                                    Object argument) throws Exception {
-        Globals.Log.debug("Calling method: " + object.getClass().getCanonicalName() + "." +  methodName );
+    public static Object callMethod(Object object, String methodName, Class<?> argumentClass, Object argument)
+            throws Exception {
+        Globals.Log.debug("Calling method: " + object.getClass().getCanonicalName() + "." + methodName);
         // create the argument array
         Class<?>[] arguments = new Class[] { argumentClass };
 
@@ -111,26 +117,30 @@ public class ConfigurationTools
 
     /**
      * Calls a method on the specified object that takes a single parameter
-     * @param object The object
-     * @param methodName The name of the method to be called
-     * @param argumentClass The name of the class of the argument
-     * @param argument The argument
+     * 
+     * @param object
+     *            The object
+     * @param methodName
+     *            The name of the method to be called
+     * @param argumentClass
+     *            The name of the class of the argument
+     * @param argument
+     *            The argument
      * @throws Exception
      */
-    public static Object callMethod(Object object, String methodName, String argumentClass,
-                                    Object argument) throws Exception
-    {
+    public static Object callMethod(Object object, String methodName, String argumentClass, Object argument)
+            throws Exception {
         return callMethod(object, methodName, Class.forName(argumentClass), argument);
     }
 
     /**
      * Creates an object instance and sets up its custom parameters
+     * 
      * @param inst
      * @return
      * @throws Exception
      */
-    public static Object createInstance(Instance inst) throws Exception
-    {
+    public static Object createInstance(Instance inst) throws Exception {
         Class<?> objectClass = Class.forName(inst.getClassName());
         Object result = objectClass.newInstance();
 
@@ -167,8 +177,7 @@ public class ConfigurationTools
         return result;
     }
 
-    public static Object createInstance(String className) throws Exception
-    {
+    public static Object createInstance(String className) throws Exception {
         Class<?> objectClass = Class.forName(className);
 
         return objectClass.newInstance();
@@ -176,12 +185,13 @@ public class ConfigurationTools
 
     /**
      * Decodes a private key
-     * @param data The CryptoKey bean
+     * 
+     * @param data
+     *            The CryptoKey bean
      * @return PrivateKey
      * @throws Exception
      */
-    public static PrivateKey decodePrivateKey(CryptoKey data) throws Exception
-    {
+    public static PrivateKey decodePrivateKey(CryptoKey data) throws Exception {
         if (data == null) {
             return null;
         }
@@ -194,12 +204,13 @@ public class ConfigurationTools
 
     /**
      * Decodes a public key
-     * @param data The CryptoKey bean
+     * 
+     * @param data
+     *            The CryptoKey bean
      * @return PublicKey
      * @throws Exception
      */
-    public static PublicKey decodePublicKey(CryptoKey data) throws Exception
-    {
+    public static PublicKey decodePublicKey(CryptoKey data) throws Exception {
         if (data == null) {
             return null;
         }
@@ -213,12 +224,13 @@ public class ConfigurationTools
 
     /**
      * Extracts an object from a Parameter bean
-     * @param param The parameter bean
+     * 
+     * @param param
+     *            The parameter bean
      * @return The object
      * @throws Exception
      */
-    public static Object getObject(Parameter param) throws Exception
-    {
+    public static Object getObject(Parameter param) throws Exception {
         String type = param.getType();
 
         if (type.equals("string")) {
@@ -244,8 +256,7 @@ public class ConfigurationTools
         throw new Exception("Unsupported parameter type!");
     }
 
-    public static java.util.Properties getProperties(orca.boot.beans.Properties beanProperties)
-    {
+    public static java.util.Properties getProperties(orca.boot.beans.Properties beanProperties) {
         java.util.Properties properties = new java.util.Properties();
 
         if (beanProperties != null) {
@@ -264,11 +275,12 @@ public class ConfigurationTools
 
     /**
      * Converts a boot.beans.SimpleParameters to java.util.Properties
-     * @param param The SimpleParameters bean
+     * 
+     * @param param
+     *            The SimpleParameters bean
      * @return Properties
      */
-    public static Properties getProperties(SimpleParameters param)
-    {
+    public static Properties getProperties(SimpleParameters param) {
         Properties properties = new Properties();
 
         if (param != null) {
@@ -287,11 +299,11 @@ public class ConfigurationTools
 
     /**
      * Converts a boot.beans.Rdata to slices.ResourceData
+     * 
      * @param beanRData
      * @return
      */
-    public static ResourceData getResourceData(Rdata beanRData)
-    {
+    public static ResourceData getResourceData(Rdata beanRData) {
         ResourceData rdata = new ResourceData();
 
         if (beanRData != null) {
@@ -330,24 +342,22 @@ public class ConfigurationTools
 
     /**
      * Converts a boot.beans.Rset to slices.ResourceSet
-     * @param rset The Rset bean
+     * 
+     * @param rset
+     *            The Rset bean
      * @return ResourceSet
      */
-    public static ResourceSet getResourceSet(Rset rset)
-    {
-        return new ResourceSet(rset.getUnits(),
-                               new ResourceType(rset.getType()),
-                               getResourceData(rset.getResourceData()));
+    public static ResourceSet getResourceSet(Rset rset) {
+        return new ResourceSet(rset.getUnits(), new ResourceType(rset.getType()),
+                getResourceData(rset.getResourceData()));
     }
 
-    public static String getURLPath(String path) throws Exception
-    {
+    public static String getURLPath(String path) throws Exception {
         String result = path;
         int index = path.indexOf(URLSeparator);
 
         if (path.charAt(index + 1) != '/') {
-            result = path.substring(0, index + 1) +
-                     Globals.HomeDirectory + path.substring(index + 1);
+            result = path.substring(0, index + 1) + Globals.HomeDirectory + path.substring(index + 1);
         }
 
         return result;
@@ -355,12 +365,13 @@ public class ConfigurationTools
 
     /**
      * Loads data from a properties file
-     * @param location The file path
+     * 
+     * @param location
+     *            The file path
      * @return
      * @throws Exception
      */
-    public static Properties loadProperties(String location) throws Exception
-    {
+    public static Properties loadProperties(String location) throws Exception {
         URL url = new URL(location);
         InputStream is = url.openStream();
 
@@ -370,13 +381,13 @@ public class ConfigurationTools
 
         return p;
     }
-    
-//    public static Certificate decodeCertificate(byte[] certificate) throws Exception
-//    {
-//        CertificateFactory factory = CertificateFactory.getInstance("X.509");
-//        ByteArrayInputStream is = new ByteArrayInputStream(certificate);
-//        Certificate cert = factory.generateCertificate(is);
-//        is.close();
-//        return cert;
-//    }
+
+    // public static Certificate decodeCertificate(byte[] certificate) throws Exception
+    // {
+    // CertificateFactory factory = CertificateFactory.getInstance("X.509");
+    // ByteArrayInputStream is = new ByteArrayInputStream(certificate);
+    // Certificate cert = factory.generateCertificate(is);
+    // is.close();
+    // return cert;
+    // }
 }

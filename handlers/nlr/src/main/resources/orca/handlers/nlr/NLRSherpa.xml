@@ -1,13 +1,13 @@
-<?xml version="1.0"?>
-<antlib>
-	<taskdef name="NLRSherpa.RemoveAllReservations" classname="orca.handlers.nlr.tasks.RemoveAllReservations"/>
-	<taskdef name="NLRSherpa.RemoveAllVlans" classname="orca.handlers.nlr.tasks.RemoveAllVlans"/>
-	<taskdef name="NLRSherpa.ReserveVlanId" classname="orca.handlers.nlr.tasks.ReserveVlanId"/>
-	<taskdef name="NLRSherpa.UnreserveVlanId" classname="orca.handlers.nlr.tasks.UnreserveVlanId"/>
-	<taskdef name="NLRSherpa.ReserveAnyVlanId" classname="orca.handlers.nlr.tasks.ReserveAnyVlanId"/>
-	<taskdef name="NLRSherpa.ProvisionVlan" classname="orca.handlers.nlr.tasks.ProvisionVlan"/>
-	<taskdef name="NLRSherpa.ProvisionAnyVlan" classname="orca.handlers.nlr.tasks.ProvisionAnyVlan"/>
-	<taskdef name="NLRSherpa.RemoveVlan" classname="orca.handlers.nlr.tasks.RemoveVlan"/>
-	<taskdef name="NLRSherpa.SmartProvisionVlan" classname="orca.handlers.nlr.tasks.SmartProvisionVlan"/>
-	<taskdef name="NLRSherpa.SmartRemoveVlan" classname="orca.handlers.nlr.tasks.SmartRemoveVlan"/>
+<?xml version="1.0"?> 
+<antlib> 
+    <taskdef name="NLRSherpa.RemoveAllReservations" classname="orca.handlers.nlr.tasks.RemoveAllReservations" /> 
+    <taskdef name="NLRSherpa.RemoveAllVlans" classname="orca.handlers.nlr.tasks.RemoveAllVlans" /> 
+    <taskdef name="NLRSherpa.ReserveVlanId" classname="orca.handlers.nlr.tasks.ReserveVlanId" /> 
+    <taskdef name="NLRSherpa.UnreserveVlanId" classname="orca.handlers.nlr.tasks.UnreserveVlanId" /> 
+    <taskdef name="NLRSherpa.ReserveAnyVlanId" classname="orca.handlers.nlr.tasks.ReserveAnyVlanId" /> 
+    <taskdef name="NLRSherpa.ProvisionVlan" classname="orca.handlers.nlr.tasks.ProvisionVlan" /> 
+    <taskdef name="NLRSherpa.ProvisionAnyVlan" classname="orca.handlers.nlr.tasks.ProvisionAnyVlan" /> 
+    <taskdef name="NLRSherpa.RemoveVlan" classname="orca.handlers.nlr.tasks.RemoveVlan" /> 
+    <taskdef name="NLRSherpa.SmartProvisionVlan" classname="orca.handlers.nlr.tasks.SmartProvisionVlan" /> 
+    <taskdef name="NLRSherpa.SmartRemoveVlan" classname="orca.handlers.nlr.tasks.SmartRemoveVlan" /> 
 </antlib>

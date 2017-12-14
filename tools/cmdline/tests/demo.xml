@@ -1,259 +1,349 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-    <global>
-        <startTime>-1</startTime>
-        <cycleMillis>1000</cycleMillis>
-        <firstTick>0</firstTick>
-        <manualTicks>false</manualTicks>
-        <containerGuid>583c10bfdbd326ba:41946007:114e182f09d:-8000</containerGuid>
-        <locations>
-            <location protocol="local" />
-        </locations>
-        <database>
-            <className>orca.manage.container.db.MySqlContainerManagementDatabase</className>
-            <properties>
-                <property name="db.mysql.server" value="localhost" />
-                <property name="db.mysql.db" value="orca" />
-                <property name="db.mysql.user" value="orca" />
-                <property name="db.mysql.password" value="" />
-            </properties>
-        </database>
-    </global>
-    <actors>
-        <actor>
-            <name>ben-vlan-site</name>
-            <description>BEN VLAN site authority</description>
-            <instance>
-                <className>orca.shirako.core.Authority</className>
-            </instance>
-            <mapper>
-                <className>orca.policy.core.AuthorityCalendarPolicy</className>
-                <parameters>
-                    <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
-                        <instance>
-                            <className>orca.cod.control.VlanControl</className>
-                            <properties>
-                                <property name="resource.types" value="ben.vlan" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </mapper>
-            <plugin>
-                <className>orca.cod.plugins.SiteBase</className>
-                <properties>
-                    <!-- Resource pool configuration -->
-                    <property name="resource.pools.count" value="1" />
-                    <!-- 	First resource pool configuration -->
-                    <property name="resource.pool.name.0" value="ben vlan" />
-                    <property name="resource.pool.type.0" value="ben.vlan" />
-                    <property name="resource.pool.properties.0" value="vlan.tag.start=2,vlan.tag.end=101" />
-                    <property name="resource.pool.ticket.units.0" value="100" />
-                    <property name="resource.pool.ticket.start.0" value="0" />
-                    <property name="resource.pool.ticket.end.0" value="10000000" />
-                    <!-- Handler configuration -->
-                    <!-- FIXME: use the real handler -->
-                    <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
-                    <property name="resource.pool.handler.pluginId.0" value="1" />
-                    <property name="resource.pool.handler.properties.0" value="server.name=demo-zfs-server,server.guid=583c10bfdbd326ba:-6692ff28:1168c1874d3:-8000,server.ip=10.10.10.2,server.base=sata/images/shirako/,server.control=10.10.0.1" />
-                </properties>
-                <parameters>
-                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
-                            <properties>
-                                <property name="db.mysql.server" value="localhost" />
-                                <property name="db.mysql.db" value="orca" />
-                                <property name="db.mysql.user" value="orca" />
-                                <property name="db.mysql.password" value="" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.config.CodAntConfig</className>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </plugin>
-        </actor>
-        <actor>
-            <name>ben-vlan-broker</name>
-            <description>BEN VLAN broker</description>
-            <instance>
-                <className>orca.shirako.core.Broker</className>
-            </instance>
-            <mapper>
-                <className>orca.policy.core.BrokerSimplerUnitsPolicy</className>
-            </mapper>
-            <plugin>
-                <className>orca.shirako.plugins.ShirakoPlugin</className>
-                <parameters>
-                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
-                        <instance>
-                            <className>orca.shirako.plugins.db.MySqlClientDatabase</className>
-                            <properties>
-                                <property name="db.mysql.server" value="localhost" />
-                                <property name="db.mysql.db" value="orca" />
-                                <property name="db.mysql.user" value="orca" />
-                                <property name="db.mysql.password" value="" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </plugin>
-        </actor>
-        <actor>
-            <name>renci-vm-site</name>
-            <description>VM site authority at RENCI</description>
-            <instance>
-                <className>orca.shirako.core.Authority</className>
-            </instance>
-            <mapper>
-                <className>orca.policy.core.AuthorityCalendarPolicy</className>
-                <parameters>
-                    <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
-                        <instance>
-                            <className>orca.cod.control.VMControl</className>
-                            <properties>
-                                <property name="resource.types" value="renci.vm" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </mapper>
-            <plugin>
-                <className>orca.cod.plugins.SiteBase</className>
-                <properties>
-                    <!-- Storage servers to be transferred to this site -->
-                    <property name="inventory.storage" value="go-nfs" />
-                    <!-- Physical machines to be transferred to this site -->
-                    <property name="inventory.machines" value="go-1 go-2 go-3" />
-                    <!-- Resource pool configuration -->
-                    <property name="resource.pools.count" value="1" />
-                    <!-- 	First resource pool configuration -->
-                    <property name="resource.pool.name.0" value="RENCI VM pool" />
-                    <property name="resource.pool.type.0" value="renci.vm" />
-                    <property name="resource.pool.properties.0" value="total.memory=1024,total.cpu=100,total.bandwidth=1000,capacity=3" />
-                    <property name="resource.pool.machines.0" value="go-1 go-2 go-3" />
-                    <!--    Source ticket configuration -->
-                    <property name="resource.pool.ticket.units.0" value="9" />
-                    <property name="resource.pool.ticket.start.0" value="0" />
-                    <property name="resource.pool.ticket.end.0" value="10000000" />
-                    <!-- Handler configuration -->
-                    <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
-                    <property name="resource.pool.handler.pluginId.0" value="1" />
-                    <property name="resource.pool.handler.properties.0" value="server.name=go-nfs,server.guid=3b171f41-c84e-4c05-b9b2-c8d6e9e47209,server.ip=192.168.201.16,server.base=rpool/images/orca,server.control=192.168.201.12" />
-                </properties>
-                <parameters>
-                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
-                            <properties>
-                                <property name="db.mysql.server" value="localhost" />
-                                <property name="db.mysql.db" value="orca" />
-                                <property name="db.mysql.user" value="orca" />
-                                <property name="db.mysql.password" value="" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.config.CodAntConfig</className>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </plugin>
-        </actor>
-        <actor>
-            <name>vm-broker</name>
-            <description>VM broker</description>
-            <instance>
-                <className>orca.shirako.core.Broker</className>
-            </instance>
-            <mapper>
-                <className>orca.policy.core.BrokerSimpleUnitsPolicy</className>
-            </mapper>
-            <plugin>
-                <className>orca.shirako.plugins.ShirakoPlugin</className>
-                <parameters>
-                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
-                        <instance>
-                            <className>orca.shirako.plugins.db.MySqlClientDatabase</className>
-                            <properties>
-                                <property name="db.mysql.server" value="localhost" />
-                                <property name="db.mysql.db" value="orca" />
-                                <property name="db.mysql.user" value="orca" />
-                                <property name="db.mysql.password" value="" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </plugin>
-        </actor>
-        <actor>
-            <name>service</name>
-            <description>Service Manager</description>
-            <instance>
-                <className>orca.shirako.core.ServiceManager</className>
-            </instance>
-            <mapper>
-                <className>orca.policy.core.ServiceManagerSimplePolicy</className>
-            </mapper>
-            <plugin>
-                <className>orca.cod.plugins.ServiceManagerCodPlugin</className>
-                <parameters>
-                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.db.MySqlCodDatabase</className>
-                            <properties>
-                                <property name="db.mysql.server" value="localhost" />
-                                <property name="db.mysql.db" value="orca" />
-                                <property name="db.mysql.user" value="orca" />
-                                <property name="db.mysql.password" value="" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
-                        <instance>
-                            <className>orca.shirako.plugins.config.AntConfig</className>
-                            <properties>
-                                <property name="config.count" value="1" />
-                                <property name="config.type.0" value="1" />
-                                <property name="config.file.0" value="handlers/common/noop.xml" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </plugin>
-        </actor>
-    </actors>
-    <topology>
-        <edges>
-            <edge>
-                <from name="service" type="sm" />
-                <to name="ben-vlan-broker" type="agent" />
-            </edge>
-            <edge>
-                <from name="service" type="sm" />
-                <to name="vm-broker" type="agent" />
-            </edge>
-            <edge>
-                <from name="ben-vlan-broker" type="agent" />
-                <to name="ben-vlan-site" type="authority" />
-                <rset>
-                    <type>ben.vlan</type>
-                    <units>100</units>
-                </rset>
-            </edge>
-            <edge>
-                <from name="vm-broker" type="agent" />
-                <to name="renci-vm-site" type="authority" />
-                <rset>
-                    <type>renci.vm</type>
-                    <units>9</units>
-                </rset>
-            </edge>
-        </edges>
-    </topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <global> 
+        <startTime>
+             -1 
+        </startTime> 
+        <cycleMillis>
+             1000 
+        </cycleMillis> 
+        <firstTick>
+             0 
+        </firstTick> 
+        <manualTicks>
+             false 
+        </manualTicks> 
+        <containerGuid>
+             583c10bfdbd326ba:41946007:114e182f09d:-8000 
+        </containerGuid> 
+        <locations> 
+            <location protocol="local" /> 
+        </locations> 
+        <database> 
+            <className>
+                 orca.manage.container.db.MySqlContainerManagementDatabase 
+            </className> 
+            <properties> 
+                <property name="db.mysql.server" value="localhost" /> 
+                <property name="db.mysql.db" value="orca" /> 
+                <property name="db.mysql.user" value="orca" /> 
+                <property name="db.mysql.password" value="" /> 
+            </properties> 
+        </database> 
+    </global> 
+    <actors> 
+        <actor> 
+            <name>
+                 ben-vlan-site 
+            </name> 
+            <description>
+                 BEN VLAN site authority 
+            </description> 
+            <instance> 
+                <className>
+                     orca.shirako.core.Authority 
+                </className> 
+            </instance> 
+            <mapper> 
+                <className>
+                     orca.policy.core.AuthorityCalendarPolicy 
+                </className> 
+                <parameters> 
+                    <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.cod.control.VlanControl 
+                            </className> 
+                            <properties> 
+                                <property name="resource.types" value="ben.vlan" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </mapper> 
+            <plugin> 
+                <className>
+                     orca.cod.plugins.SiteBase 
+                </className> 
+                <properties> 
+                    <!-- Resource pool configuration --> 
+                    <property name="resource.pools.count" value="1" /> 
+                    <!-- 	First resource pool configuration --> 
+                    <property name="resource.pool.name.0" value="ben vlan" /> 
+                    <property name="resource.pool.type.0" value="ben.vlan" /> 
+                    <property name="resource.pool.properties.0" value="vlan.tag.start=2,vlan.tag.end=101" /> 
+                    <property name="resource.pool.ticket.units.0" value="100" /> 
+                    <property name="resource.pool.ticket.start.0" value="0" /> 
+                    <property name="resource.pool.ticket.end.0" value="10000000" /> 
+                    <!-- Handler configuration --> 
+                    <!-- FIXME: use the real handler --> 
+                    <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" /> 
+                    <property name="resource.pool.handler.pluginId.0" value="1" /> 
+                    <property name="resource.pool.handler.properties.0" value="server.name=demo-zfs-server,server.guid=583c10bfdbd326ba:-6692ff28:1168c1874d3:-8000,server.ip=10.10.10.2,server.base=sata/images/shirako/,server.control=10.10.0.1" /> 
+                </properties> 
+                <parameters> 
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
+                            </className> 
+                            <properties> 
+                                <property name="db.mysql.server" value="localhost" /> 
+                                <property name="db.mysql.db" value="orca" /> 
+                                <property name="db.mysql.user" value="orca" /> 
+                                <property name="db.mysql.password" value="" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.cod.plugins.config.CodAntConfig 
+                            </className> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </plugin> 
+        </actor> 
+        <actor> 
+            <name>
+                 ben-vlan-broker 
+            </name> 
+            <description>
+                 BEN VLAN broker 
+            </description> 
+            <instance> 
+                <className>
+                     orca.shirako.core.Broker 
+                </className> 
+            </instance> 
+            <mapper> 
+                <className>
+                     orca.policy.core.BrokerSimplerUnitsPolicy 
+                </className> 
+            </mapper> 
+            <plugin> 
+                <className>
+                     orca.shirako.plugins.ShirakoPlugin 
+                </className> 
+                <parameters> 
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.shirako.plugins.db.MySqlClientDatabase 
+                            </className> 
+                            <properties> 
+                                <property name="db.mysql.server" value="localhost" /> 
+                                <property name="db.mysql.db" value="orca" /> 
+                                <property name="db.mysql.user" value="orca" /> 
+                                <property name="db.mysql.password" value="" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </plugin> 
+        </actor> 
+        <actor> 
+            <name>
+                 renci-vm-site 
+            </name> 
+            <description>
+                 VM site authority at RENCI 
+            </description> 
+            <instance> 
+                <className>
+                     orca.shirako.core.Authority 
+                </className> 
+            </instance> 
+            <mapper> 
+                <className>
+                     orca.policy.core.AuthorityCalendarPolicy 
+                </className> 
+                <parameters> 
+                    <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.cod.control.VMControl 
+                            </className> 
+                            <properties> 
+                                <property name="resource.types" value="renci.vm" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </mapper> 
+            <plugin> 
+                <className>
+                     orca.cod.plugins.SiteBase 
+                </className> 
+                <properties> 
+                    <!-- Storage servers to be transferred to this site --> 
+                    <property name="inventory.storage" value="go-nfs" /> 
+                    <!-- Physical machines to be transferred to this site --> 
+                    <property name="inventory.machines" value="go-1 go-2 go-3" /> 
+                    <!-- Resource pool configuration --> 
+                    <property name="resource.pools.count" value="1" /> 
+                    <!-- 	First resource pool configuration --> 
+                    <property name="resource.pool.name.0" value="RENCI VM pool" /> 
+                    <property name="resource.pool.type.0" value="renci.vm" /> 
+                    <property name="resource.pool.properties.0" value="total.memory=1024,total.cpu=100,total.bandwidth=1000,capacity=3" /> 
+                    <property name="resource.pool.machines.0" value="go-1 go-2 go-3" /> 
+                    <!--    Source ticket configuration --> 
+                    <property name="resource.pool.ticket.units.0" value="9" /> 
+                    <property name="resource.pool.ticket.start.0" value="0" /> 
+                    <property name="resource.pool.ticket.end.0" value="10000000" /> 
+                    <!-- Handler configuration --> 
+                    <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" /> 
+                    <property name="resource.pool.handler.pluginId.0" value="1" /> 
+                    <property name="resource.pool.handler.properties.0" value="server.name=go-nfs,server.guid=3b171f41-c84e-4c05-b9b2-c8d6e9e47209,server.ip=192.168.201.16,server.base=rpool/images/orca,server.control=192.168.201.12" /> 
+                </properties> 
+                <parameters> 
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
+                            </className> 
+                            <properties> 
+                                <property name="db.mysql.server" value="localhost" /> 
+                                <property name="db.mysql.db" value="orca" /> 
+                                <property name="db.mysql.user" value="orca" /> 
+                                <property name="db.mysql.password" value="" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.cod.plugins.config.CodAntConfig 
+                            </className> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </plugin> 
+        </actor> 
+        <actor> 
+            <name>
+                 vm-broker 
+            </name> 
+            <description>
+                 VM broker 
+            </description> 
+            <instance> 
+                <className>
+                     orca.shirako.core.Broker 
+                </className> 
+            </instance> 
+            <mapper> 
+                <className>
+                     orca.policy.core.BrokerSimpleUnitsPolicy 
+                </className> 
+            </mapper> 
+            <plugin> 
+                <className>
+                     orca.shirako.plugins.ShirakoPlugin 
+                </className> 
+                <parameters> 
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.shirako.plugins.db.MySqlClientDatabase 
+                            </className> 
+                            <properties> 
+                                <property name="db.mysql.server" value="localhost" /> 
+                                <property name="db.mysql.db" value="orca" /> 
+                                <property name="db.mysql.user" value="orca" /> 
+                                <property name="db.mysql.password" value="" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </plugin> 
+        </actor> 
+        <actor> 
+            <name>
+                 service 
+            </name> 
+            <description>
+                 Service Manager 
+            </description> 
+            <instance> 
+                <className>
+                     orca.shirako.core.ServiceManager 
+                </className> 
+            </instance> 
+            <mapper> 
+                <className>
+                     orca.policy.core.ServiceManagerSimplePolicy 
+                </className> 
+            </mapper> 
+            <plugin> 
+                <className>
+                     orca.cod.plugins.ServiceManagerCodPlugin 
+                </className> 
+                <parameters> 
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.cod.plugins.db.MySqlCodDatabase 
+                            </className> 
+                            <properties> 
+                                <property name="db.mysql.server" value="localhost" /> 
+                                <property name="db.mysql.db" value="orca" /> 
+                                <property name="db.mysql.user" value="orca" /> 
+                                <property name="db.mysql.password" value="" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
+                        <instance> 
+                            <className>
+                                 orca.shirako.plugins.config.AntConfig 
+                            </className> 
+                            <properties> 
+                                <property name="config.count" value="1" /> 
+                                <property name="config.type.0" value="1" /> 
+                                <property name="config.file.0" value="handlers/common/noop.xml" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </plugin> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="sm" /> 
+                <to name="ben-vlan-broker" type="agent" /> 
+            </edge> 
+            <edge> 
+                <from name="service" type="sm" /> 
+                <to name="vm-broker" type="agent" /> 
+            </edge> 
+            <edge> 
+                <from name="ben-vlan-broker" type="agent" /> 
+                <to name="ben-vlan-site" type="authority" /> 
+                <rset> 
+                    <type>
+                         ben.vlan 
+                    </type> 
+                    <units>
+                         100 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="vm-broker" type="agent" /> 
+                <to name="renci-vm-site" type="authority" /> 
+                <rset> 
+                    <type>
+                         renci.vm 
+                    </type> 
+                    <units>
+                         9 
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

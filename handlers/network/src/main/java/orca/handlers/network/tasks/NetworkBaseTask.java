@@ -17,7 +17,7 @@ public abstract class NetworkBaseTask extends OrcaAntTask {
     protected abstract void makeDevice() throws CommandException;
 
     protected void configureDevice(INetworkDevice device) {
-        String temp =  (getProject().getProperty(PropertyEmulation));
+        String temp = (getProject().getProperty(PropertyEmulation));
         if (temp != null) {
             temp = temp.trim();
             if (temp.equalsIgnoreCase("true")) {
@@ -25,7 +25,7 @@ public abstract class NetworkBaseTask extends OrcaAntTask {
             }
         }
     }
-    
+
     @Override
     public void execute() throws BuildException {
         try {
@@ -41,7 +41,7 @@ public abstract class NetworkBaseTask extends OrcaAntTask {
             if (deviceAddress == null) {
                 throw new RuntimeException("Missing device address");
             }
-            
+
             if (deviceInstance == null) {
                 throw new RuntimeException("Missing device instance name");
             }

@@ -44,9 +44,7 @@ import org.apache.axiom.attachments.utils.IOUtils;
 import org.apache.axis2.util.Base64;
 import org.apache.log4j.Logger;
 
-
-public class NodeAgentService
-{
+public class NodeAgentService {
     public static String PropertyExceptionMessage = "driver.exception.message";
     public static String PropertyExceptionStack = "driver.exception.stack";
     public static String AuthHash = "AUTH_HASH";
@@ -72,16 +70,14 @@ public class NodeAgentService
     // filename to load the cmdline from (only for testing purposes)
     protected String testCmdLineFile = NodeAgentConstants.TestCmdLineFile;
 
-    protected NodeAgentService()
-    {
+    protected NodeAgentService() {
         logger = Logger.getLogger(this.getClass().getCanonicalName());
         factory = new DriverFactory();
         factory.setDriversRoot(dataFolder + "/drivers/");
         loadDrivers();
     }
 
-    protected void loadDrivers()
-    {
+    protected void loadDrivers() {
         try {
             logger.debug("Root folder: " + root);
             logger.debug("Data folder: " + dataFolder);
@@ -94,18 +90,15 @@ public class NodeAgentService
         }
     }
 
-    public String getRoot()
-    {
+    public String getRoot() {
         return root;
     }
 
-    public String getDataFolder()
-    {
+    public String getDataFolder() {
         return dataFolder;
     }
 
-    protected synchronized int expandPackage(DriverId id, DataHandler pkg, boolean fresh)
-    {
+    protected synchronized int expandPackage(DriverId id, DataHandler pkg, boolean fresh) {
         logger.debug("Trying to expand package: fresh=" + fresh);
 
         int code = 0;
@@ -189,13 +182,16 @@ public class NodeAgentService
 
     /**
      * Installs the specified driver
-     * @param id Driver id
-     * @param className Class name
-     * @param path Path to jar file
+     * 
+     * @param id
+     *            Driver id
+     * @param className
+     *            Class name
+     * @param path
+     *            Path to jar file
      * @return
      */
-    public int installDriver(DriverId id, String className, DataHandler pkg)
-    {
+    public int installDriver(DriverId id, String className, DataHandler pkg) {
         int code = 0;
 
         try {
@@ -230,12 +226,13 @@ public class NodeAgentService
 
     /**
      * Removes the package folder and its contents.
-     * @param id driver identifier
+     * 
+     * @param id
+     *            driver identifier
      * @return exit code
      * @throws Exception
      */
-    protected int removePackage(DriverId id) throws Exception
-    {
+    protected int removePackage(DriverId id) throws Exception {
         String command = "rm -rf " + factory.getDriverRoot(id);
         DriverScriptExecutor exec = new DriverScriptExecutor(command);
         DriverScriptExecutionResult result = exec.execute();
@@ -245,13 +242,16 @@ public class NodeAgentService
 
     /**
      * Upgrades the specified driver
-     * @param id Driver id
-     * @param className Class name
-     * @param path Path to jar file
+     * 
+     * @param id
+     *            Driver id
+     * @param className
+     *            Class name
+     * @param path
+     *            Path to jar file
      * @return
      */
-    public int upgradeDriver(DriverId id, String className, DataHandler pkg)
-    {
+    public int upgradeDriver(DriverId id, String className, DataHandler pkg) {
         int code = 0;
 
         try {
@@ -284,11 +284,12 @@ public class NodeAgentService
 
     /**
      * Uninstalls the specified driver
-     * @param id Driver id
+     * 
+     * @param id
+     *            Driver id
      * @return
      */
-    public int uninstall(DriverId id)
-    {
+    public int uninstall(DriverId id) {
         int code = 0;
 
         try {
@@ -312,12 +313,12 @@ public class NodeAgentService
 
     /**
      * Executes the specified script passing the given arguments
+     * 
      * @param name
      * @param arguments
      * @return
      */
-    public DriverScriptExecutionResult executeScript(String name, String arguments)
-    {
+    public DriverScriptExecutionResult executeScript(String name, String arguments) {
         DriverScriptExecutionResult r = new DriverScriptExecutionResult();
 
         try {
@@ -392,14 +393,18 @@ public class NodeAgentService
 
     /**
      * Executes the specified operation on the given driver
-     * @param driverId Driver identifier
-     * @param actionId Action identifier
-     * @param in Incoming properties list
-     * @param out Outgoing properties list
+     * 
+     * @param driverId
+     *            Driver identifier
+     * @param actionId
+     *            Action identifier
+     * @param in
+     *            Incoming properties list
+     * @param out
+     *            Outgoing properties list
      * @return
      */
-    public int executeDriver(DriverId driverId, String actionId, Properties in, Properties out)
-    {
+    public int executeDriver(DriverId driverId, String actionId, Properties in, Properties out) {
         logger.debug("DriverId: " + driverId);
         logger.debug("ActionId: " + actionId);
         logger.debug("Properties: " + in.toString());
@@ -433,16 +438,20 @@ public class NodeAgentService
 
     /**
      * Executes the specified operation on the given driver for the given object
-     * @param driverId Driver identifier
-     * @param objectId Object identifier
-     * @param actionId Action identifier
-     * @param in Incoming properties list
-     * @param out Outgoing properties list
+     * 
+     * @param driverId
+     *            Driver identifier
+     * @param objectId
+     *            Object identifier
+     * @param actionId
+     *            Action identifier
+     * @param in
+     *            Incoming properties list
+     * @param out
+     *            Outgoing properties list
      * @return
      */
-    public int executeObjectDriver(DriverId driverId, String objectId, String actionId,
-                                   Properties in, Properties out)
-    {
+    public int executeObjectDriver(DriverId driverId, String objectId, String actionId, Properties in, Properties out) {
         logger.debug("DriverId: " + driverId);
         logger.debug("ObjectId: " + objectId);
         logger.debug("ActionId: " + actionId);
@@ -476,14 +485,15 @@ public class NodeAgentService
     }
 
     /**
-     * register the public key/certificate with the service (the certificate is
-     * stored in the keystore)
-     * @param alias used to store the certificate in the server keystore
-     * @param certificateEncoding - certificate enconded in bytes
+     * register the public key/certificate with the service (the certificate is stored in the keystore)
+     * 
+     * @param alias
+     *            used to store the certificate in the server keystore
+     * @param certificateEncoding
+     *            - certificate enconded in bytes
      * @return 0 success 1 error
      */
-    public int registerKey(String alias, byte[] certificateEncoding)
-    {
+    public int registerKey(String alias, byte[] certificateEncoding) {
         logger.debug("registerKey called for alias " + alias);
 
         ByteArrayInputStream inStream = new ByteArrayInputStream(certificateEncoding);
@@ -538,11 +548,12 @@ public class NodeAgentService
 
     /**
      * uregister the public key/certificate associated with alias
-     * @param alias of the certificate to be removed from the server keystore
+     * 
+     * @param alias
+     *            of the certificate to be removed from the server keystore
      * @return 0 success 1 error
      */
-    public int unregisterKey(String alias)
-    {
+    public int unregisterKey(String alias) {
         MerlinKeyRegister mr = MerlinKeyRegister.getInstance();
 
         if (mr == null) {
@@ -564,23 +575,24 @@ public class NodeAgentService
     }
 
     /**
-     * Registers the authority key with the node. Used to claim the node either
-     * by the Authority or Service Manager.
-     * @param alias authority alias
-     * @param certificateEncoding certificate
-     * @param message parameters passed to the node (Authority IP, timestamp
-     *            ...)
-     * @param signature signature of the message
+     * Registers the authority key with the node. Used to claim the node either by the Authority or Service Manager.
+     * 
+     * @param alias
+     *            authority alias
+     * @param certificateEncoding
+     *            certificate
+     * @param message
+     *            parameters passed to the node (Authority IP, timestamp ...)
+     * @param signature
+     *            signature of the message
      * @return
      */
-    public RegisterAuthorityKeyResultElement registerAuthorityKey(String alias,
-                                                                  byte[] certificateEncoding,
-                                                                  byte[] message, byte[] signature)
-    {
+    public RegisterAuthorityKeyResultElement registerAuthorityKey(String alias, byte[] certificateEncoding,
+            byte[] message, byte[] signature) {
         logger.debug("registerAuthorityKey requested for alias " + alias);
 
         if (getCalled() == true) // function already called
-         {
+        {
             RegisterAuthorityKeyResultElement gskre = buildServiceKeyResultElement();
 
             return gskre;
@@ -696,7 +708,7 @@ public class NodeAgentService
                 return gskre;
             } else {
                 RegisterAuthorityKeyResultElement gskre = errorServiceKeyResultElement(
-                    NodeAgentConstants.CodeInternalError);
+                        NodeAgentConstants.CodeInternalError);
 
                 return gskre;
             }
@@ -705,10 +717,10 @@ public class NodeAgentService
 
     /**
      * Retrieves the service public key.
+     * 
      * @return
      */
-    public GetServiceKeyResultElement getServiceKey()
-    {
+    public GetServiceKeyResultElement getServiceKey() {
         logger.debug("getServiceKey invoked");
 
         GetServiceKeyResultElement gskre = new GetServiceKeyResultElement();
@@ -773,12 +785,11 @@ public class NodeAgentService
     }
 
     /**
-     * Constructs the reply message in case of successful authority key
-     * registration.
+     * Constructs the reply message in case of successful authority key registration.
+     * 
      * @return
      */
-    private RegisterAuthorityKeyResultElement buildServiceKeyResultElement()
-    {
+    private RegisterAuthorityKeyResultElement buildServiceKeyResultElement() {
         RegisterAuthorityKeyResultElement gskre = new RegisterAuthorityKeyResultElement();
 
         try {
@@ -842,13 +853,13 @@ public class NodeAgentService
     }
 
     /**
-     * Builds an error message to return to the Authority in case of a fault
-     * during authority key registration.
-     * @param val error returned
+     * Builds an error message to return to the Authority in case of a fault during authority key registration.
+     * 
+     * @param val
+     *            error returned
      * @return
      */
-    private RegisterAuthorityKeyResultElement errorServiceKeyResultElement(int val)
-    {
+    private RegisterAuthorityKeyResultElement errorServiceKeyResultElement(int val) {
         RegisterAuthorityKeyResultElement gskre = new RegisterAuthorityKeyResultElement();
         gskre.setCode(val);
         gskre.setKey(new byte[1]);
@@ -859,11 +870,11 @@ public class NodeAgentService
 
     /**
      * Constructs a string from the given stack trace
+     * 
      * @param trace
      * @return
      */
-    public String getStackTraceString(Exception e)
-    {
+    public String getStackTraceString(Exception e) {
         StackTraceElement[] trace = e.getStackTrace();
 
         StringBuffer sb = new StringBuffer();
@@ -879,29 +890,29 @@ public class NodeAgentService
 
     /**
      * Returns the logger
+     * 
      * @return
      */
-    public Logger getLogger()
-    {
+    public Logger getLogger() {
         return logger;
     }
 
     /**
      * Returns the singleton instance
+     * 
      * @return
      */
-    public static NodeAgentService getInstance()
-    {
+    public static NodeAgentService getInstance() {
         return instance;
     }
 
     /**
      * Helper function: Generate a certificate from a an array of bytes.
+     * 
      * @param certificateEncoding
      * @return
      */
-    private Certificate generateCertificate(byte[] certificateEncoding)
-    {
+    private Certificate generateCertificate(byte[] certificateEncoding) {
         ByteArrayInputStream inStream = new ByteArrayInputStream(certificateEncoding);
 
         Certificate cert = null;
@@ -922,17 +933,13 @@ public class NodeAgentService
     }
 
     /**
-     * Helper function: Compute the hexadecimal representation of a computed
-     * digest.
+     * Helper function: Compute the hexadecimal representation of a computed digest.
+     * 
      * @param digest
      * @return
      */
-    private String toHexString(byte[] digest)
-    {
-        char[] hexValues = {
-                               '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
-                               'E', 'F'
-                           };
+    private String toHexString(byte[] digest) {
+        char[] hexValues = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
         StringBuffer stringBuf = new StringBuffer();
         int len = digest.length;
 
@@ -951,13 +958,13 @@ public class NodeAgentService
     }
 
     /**
-     * Checks if the hash value provided on the boot commandline equals the hash
-     * value computed over the received certificate.
+     * Checks if the hash value provided on the boot commandline equals the hash value computed over the received
+     * certificate.
+     * 
      * @param certificateEnconding
      * @return
      */
-    private int verifyCertificateHash(byte[] certificateEnconding)
-    {
+    private int verifyCertificateHash(byte[] certificateEnconding) {
         // verify the certificate provided
         Certificate cert = generateCertificate(certificateEnconding);
 
@@ -1015,15 +1022,14 @@ public class NodeAgentService
     }
 
     /**
-     * Verifies if the message provided by the controller is signed with its
-     * certificate.
+     * Verifies if the message provided by the controller is signed with its certificate.
+     * 
      * @param certificateEnconding
      * @param message
      * @param signature
      * @return
      */
-    private int verifyMessageSignature(byte[] certificateEnconding, byte[] message, byte[] signature)
-    {
+    private int verifyMessageSignature(byte[] certificateEnconding, byte[] message, byte[] signature) {
         Certificate cert = generateCertificate(certificateEnconding);
 
         if (cert == null) {
@@ -1082,10 +1088,10 @@ public class NodeAgentService
 
     /**
      * Retrieves the parameters from the boot command line.
+     * 
      * @return
      */
-    private int loadCmdLineParameters()
-    {
+    private int loadCmdLineParameters() {
         // read hash from the cmdline
         try {
             RandomAccessFile rf = new RandomAccessFile("/proc/cmdline", "r");
@@ -1152,13 +1158,12 @@ public class NodeAgentService
     }
 
     /**
-     * For testing purposes: retrieves the boot command line parameters from a
-     * file.
+     * For testing purposes: retrieves the boot command line parameters from a file.
+     * 
      * @param filename
      * @return
      */
-    private int loadCmdLineParametersFromFile(String filename)
-    {
+    private int loadCmdLineParametersFromFile(String filename) {
         InputStream in = NodeAgentServiceStub.class.getClassLoader().getResourceAsStream(filename);
 
         if (in == null) {
@@ -1240,15 +1245,15 @@ public class NodeAgentService
     }
 
     /**
-     * Verifies the recived message parameters. Currently only the node IP is
-     * verified. Timestamp validation is not implemented.
+     * Verifies the recived message parameters. Currently only the node IP is verified. Timestamp validation is not
+     * implemented.
+     * 
      * @param msgNodeIP
      * @param msgTimestamp
      * @param msgAuthIP
      * @return
      */
-    private int checkMessageParameters(String msgNodeIP, String msgTimestamp, String msgAuthIP)
-    {
+    private int checkMessageParameters(String msgNodeIP, String msgTimestamp, String msgAuthIP) {
         // check if IP provided == node own IP
         // try {
         // InetAddress addr = InetAddress.getLocalHost();
@@ -1273,20 +1278,19 @@ public class NodeAgentService
 
     /**
      * Sets the called flag once the registerAuthorityKey was called.
+     * 
      * @param flag
      */
-    public synchronized void setCalled(boolean flag)
-    {
+    public synchronized void setCalled(boolean flag) {
         called = flag;
     }
 
     /**
-     * Gets the called flag value (used to test if the registerAuthorityKey
-     * function was called.).
+     * Gets the called flag value (used to test if the registerAuthorityKey function was called.).
+     * 
      * @return
      */
-    public synchronized boolean getCalled()
-    {
+    public synchronized boolean getCalled() {
         return called;
     }
 }

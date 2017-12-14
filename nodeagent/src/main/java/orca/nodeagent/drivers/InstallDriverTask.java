@@ -14,12 +14,9 @@ import orca.nodeagent.tools.DriverTool;
 
 import org.apache.tools.ant.BuildException;
 
-
-public class InstallDriverTask extends DriverManagementTask
-{
+public class InstallDriverTask extends DriverManagementTask {
     @Override
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         super.execute();
 
         try {

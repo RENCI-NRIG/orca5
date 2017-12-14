@@ -20,9 +20,7 @@ import orca.nodeagent.NodeAgentServiceStub;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
-
-public class NoSecurityTest extends TestCase
-{
+public class NoSecurityTest extends TestCase {
     protected String serviceLocation = null;
     protected String repositoryPath = null;
     protected String configFile = null;
@@ -34,15 +32,11 @@ public class NoSecurityTest extends TestCase
     TestGetServiceKey tgsk;
     TestSecurityNotEnabled tsne;
 
-    public NoSecurityTest()
-    {
-        this(System.getenv("na.location"),
-             System.getenv("na.repository"),
-             System.getenv("na.config"));
+    public NoSecurityTest() {
+        this(System.getenv("na.location"), System.getenv("na.repository"), System.getenv("na.config"));
     }
 
-    public NoSecurityTest(String location, String repository, String config)
-    {
+    public NoSecurityTest(String location, String repository, String config) {
         if (location == null) {
             throw new RuntimeException("Location cannot be null");
         }
@@ -60,8 +54,7 @@ public class NoSecurityTest extends TestCase
         this.configFile = config;
     }
 
-    public void setSecurityParameters()
-    {
+    public void setSecurityParameters() {
         keyStoreLocation = System.getenv("na.keystorelocation");
 
         if (keyStoreLocation == null) {
@@ -89,20 +82,18 @@ public class NoSecurityTest extends TestCase
 
     /**
      * Returns a stub to the node agent service
+     * 
      * @return
      * @throws Exception
      */
-    protected NodeAgentServiceStub getStub() throws Exception
-    {
-        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-            repositoryPath,
-            configFile);
+    protected NodeAgentServiceStub getStub() throws Exception {
+        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repositoryPath,
+                configFile);
 
         return new NodeAgentServiceStub(cc, serviceLocation);
     }
 
-    public void test() throws Exception
-    {
+    public void test() throws Exception {
         System.out.println("Running nosecurity suite ...");
 
         tsne = new TestSecurityNotEnabled(serviceLocation, repositoryPath, configFile);
@@ -118,44 +109,27 @@ public class NoSecurityTest extends TestCase
         NodeAgentServiceStub stub = getStub();
         setSecurityParameters();
 
-        System.out.println(
-            "Testing getServiceKey ... assuming that registerAuthorityKey was NOT invoked.");
-        tgsk = new TestGetServiceKey(serviceLocation,
-                                     stub,
-                                     keyStoreLocation,
-                                     keyStorePass,
-                                     keyPass,
-                                     authorityIP);
+        System.out.println("Testing getServiceKey ... assuming that registerAuthorityKey was NOT invoked.");
+        tgsk = new TestGetServiceKey(serviceLocation, stub, keyStoreLocation, keyStorePass, keyPass, authorityIP);
 
         int retVal = tgsk.run();
         Assert.assertTrue(
-            "getServiceKey succeeded instead of failing ... code = " + retVal +
-            "\n check if registerAuhorityKey was invoked/server.jks has been created on the service side",
-            retVal != 0);
-        System.out.println(
-            "Testing getServiceKey failed ... registerAuthorityKey was NOT invoked ... OK");
+                "getServiceKey succeeded instead of failing ... code = " + retVal
+                        + "\n check if registerAuhorityKey was invoked/server.jks has been created on the service side",
+                retVal != 0);
+        System.out.println("Testing getServiceKey failed ... registerAuthorityKey was NOT invoked ... OK");
 
         System.out.println("Testing registerAuthorityKey ... ");
 
-        taak = new TestAddAuthorityKey(serviceLocation,
-                                       stub,
-                                       keyStoreLocation,
-                                       keyStorePass,
-                                       "clientkey",
-                                       keyPass,
-                                       authorityIP);
+        taak = new TestAddAuthorityKey(serviceLocation, stub, keyStoreLocation, keyStorePass, "clientkey", keyPass,
+                authorityIP);
         retVal = taak.run();
         Assert.assertEquals("registerAuthorityKey invocation failed ... code " + retVal, retVal, 0);
         System.out.println("Testing registerAuthorityKey ... OK");
 
         System.out.println("Testing getServiceKey ... assuming that registerAuthorityKey was invoked.");
 
-        tgsk = new TestGetServiceKey(serviceLocation,
-                                     stub,
-                                     keyStoreLocation,
-                                     keyStorePass,
-                                     keyPass,
-                                     authorityIP);
+        tgsk = new TestGetServiceKey(serviceLocation, stub, keyStoreLocation, keyStorePass, keyPass, authorityIP);
         retVal = tgsk.run();
         Assert.assertTrue("getServiceKey failed ... code = " + retVal, retVal == 0);
         System.out.println("Testing getServiceKey ... registerAuthorityKey was invoked ... OK");
@@ -163,8 +137,7 @@ public class NoSecurityTest extends TestCase
         System.out.println("Nosecurity suite completed");
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(NoSecurityTest.class);
     }
 }

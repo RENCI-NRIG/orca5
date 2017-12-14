@@ -103,20 +103,23 @@ public class ConfigurationProcessor {
     protected HashMap<ID, ActorPoolsState> pools;
     protected String defaultActorRegistry = "orca.shirako.container.RemoteRegistryCache";
     protected String selectedActorRegistry = null;
+
     public ConfigurationProcessor(Configuration config) {
         this.config = config;
         this.logger = Globals.getLogger(this.getClass().getCanonicalName());
         this.toExport = new ArrayList<ExportInfo>();
         this.actors = new ArrayList<IActor>();
         this.pools = new HashMap<ID, ActorPoolsState>();
-        selectedActorRegistry=defaultActorRegistry;
-        if(Globals.getContainer().getConfiguration().getProperty(OrcaContainer.PropertyRegistryClass)!=null) {
-        	selectedActorRegistry = Globals.getContainer().getConfiguration().getProperty(OrcaContainer.PropertyRegistryClass);
+        selectedActorRegistry = defaultActorRegistry;
+        if (Globals.getContainer().getConfiguration().getProperty(OrcaContainer.PropertyRegistryClass) != null) {
+            selectedActorRegistry = Globals.getContainer().getConfiguration()
+                    .getProperty(OrcaContainer.PropertyRegistryClass);
         }
     }
 
     /**
      * Instantiates the configuration
+     * 
      * @throws Exception
      */
     public void process() throws ConfigurationException {
@@ -156,6 +159,7 @@ public class ConfigurationProcessor {
 
     /**
      * Instantiates all actors
+     * 
      * @throws ConfigurationException
      */
     protected void createActors() throws ConfigurationException {
@@ -179,7 +183,8 @@ public class ConfigurationProcessor {
         for (IActor actor : actors) {
             logger.debug("Creating security configuration for actor: " + actor.getName());
             if (configurator.createActorConfiguration(Globals.HomeDirectory, actor.getGuid().toString()) != 0) {
-                throw new ConfigurationException("Cannot create actor security configuration: actorName=" + actor.getName());
+                throw new ConfigurationException(
+                        "Cannot create actor security configuration: actorName=" + actor.getName());
             }
             logger.debug("Created security configuration for actor: " + actor.getName());
             logger.debug("Initializing actor keystore for: " + actor.getName());
@@ -194,14 +199,16 @@ public class ConfigurationProcessor {
 
     /**
      * Performs final actor initialization
+     * 
      * @throws Exception
      */
     protected void initializeActors() throws ConfigurationException {
         for (IActor actor : actors) {
             try {
-            	orca.shirako.core.Actor.actorCount++;
+                orca.shirako.core.Actor.actorCount++;
                 actor.initialize();
-                actor.getIdentity().setCertificate((X509Certificate)actor.getShirakoPlugin().getKeyStore().getActorCertificate());
+                actor.getIdentity()
+                        .setCertificate((X509Certificate) actor.getShirakoPlugin().getKeyStore().getActorCertificate());
             } catch (Exception e) {
                 throw new ConfigurationException("Actor failed to initialize: " + actor.getName(), e);
             }
@@ -220,6 +227,7 @@ public class ConfigurationProcessor {
 
     /**
      * Creates a default slice per actor
+     * 
      * @throws Exception
      */
     protected void createDefaultSlice() throws ConfigurationException {
@@ -241,7 +249,8 @@ public class ConfigurationProcessor {
             if (actor instanceof IAuthority) {
                 if (actor.getShirakoPlugin() instanceof AuthoritySubstrate) {
                     ActorPoolsState state = pools.get(actor.getGuid());
-                    PoolCreator creator = new PoolCreator((AuthoritySubstrate) actor.getShirakoPlugin(), state.descriptor, state.inventory);
+                    PoolCreator creator = new PoolCreator((AuthoritySubstrate) actor.getShirakoPlugin(),
+                            state.descriptor, state.inventory);
                     creator.process();
                 }
             }
@@ -260,12 +269,14 @@ public class ConfigurationProcessor {
 
     /**
      * Processes the topology section
+     * 
      * @throws Exception
      */
     protected void processTopology() throws ConfigurationException {
         if (config.getTopology() != null) {
             if (Globals.Log.isDebugEnabled()) {
-                Globals.Log.debug("Creating proxies for topology with actor count " + config.getActors().getActor().size());
+                Globals.Log.debug(
+                        "Creating proxies for topology with actor count " + config.getActors().getActor().size());
             }
             createProxies(config.getTopology().getEdges());
         } else {
@@ -278,17 +289,18 @@ public class ConfigurationProcessor {
             Globals.Log.debug("Processing entries in registry cache after topology");
         }
 
-        if(selectedActorRegistry.contains("Distributed")) {
-        	DistributedRemoteRegistryCache.getInstance().singleQueryProcess();
+        if (selectedActorRegistry.contains("Distributed")) {
+            DistributedRemoteRegistryCache.getInstance().singleQueryProcess();
         } else {
-        	RemoteRegistryCache.getInstance().singleQueryProcess();
+            RemoteRegistryCache.getInstance().singleQueryProcess();
         }
-   	 
-      //  
+
+        //
     }
 
     /**
      * Exports and claims resources
+     * 
      * @throws Exception
      */
     protected void processExports() throws ConfigurationException {
@@ -305,6 +317,7 @@ public class ConfigurationProcessor {
 
     /**
      * Exports and claims resources
+     * 
      * @throws Exception
      */
     protected void processClaims() throws ConfigurationException {
@@ -315,7 +328,9 @@ public class ConfigurationProcessor {
 
     /**
      * Creates an actor.
-     * @param actor description
+     * 
+     * @param actor
+     *            description
      * @throws ConfigurationException
      */
     protected void createActor(Actor actor) throws ConfigurationException {
@@ -346,9 +361,11 @@ public class ConfigurationProcessor {
         if (actorType != null) {
             if (actorType.equalsIgnoreCase(OrcaConstants.SM) || actorType.equalsIgnoreCase(OrcaConstants.SERVICE)) {
                 oActor = new ServiceManager();
-            } else if (actorType.equalsIgnoreCase(OrcaConstants.AGENT) || actorType.equalsIgnoreCase(OrcaConstants.BROKER)) {
+            } else if (actorType.equalsIgnoreCase(OrcaConstants.AGENT)
+                    || actorType.equalsIgnoreCase(OrcaConstants.BROKER)) {
                 oActor = new Broker();
-            } else if (actorType.equalsIgnoreCase(OrcaConstants.SITE) || actorType.equalsIgnoreCase(OrcaConstants.AUTHORITY)) {
+            } else if (actorType.equalsIgnoreCase(OrcaConstants.SITE)
+                    || actorType.equalsIgnoreCase(OrcaConstants.AUTHORITY)) {
                 oActor = new Authority();
             } else {
                 throw new ConfigurationException("Unsupported actor type: " + actorType);
@@ -407,7 +424,7 @@ public class ConfigurationProcessor {
                 // FIXME: somewhat of a hack, but the database settings
                 // are not accessible through Globals.getConfiguration()
                 Properties p = PersistenceUtils.save(Globals.getContainer().getDatabase());
-                 if (shirakoPlugin instanceof Substrate) {
+                if (shirakoPlugin instanceof Substrate) {
                     db = new SubstrateActorDatabase();
                 } else {
                     db = new ServerActorDatabase();
@@ -427,7 +444,8 @@ public class ConfigurationProcessor {
     }
 
     protected IPolicy makeSitePolicy(IActor oActor, Actor actor) throws ConfigurationException {
-        if (actor.getControls() == null || actor.getControls().getControl() == null || actor.getControls().getControl().size() == 0) {
+        if (actor.getControls() == null || actor.getControls().getControl() == null
+                || actor.getControls().getControl().size() == 0) {
             throw new ConfigurationException("Missing authority policy but no control has been specified");
         }
         IPolicy policy = new AuthorityCalendarPolicy();
@@ -446,7 +464,7 @@ public class ConfigurationProcessor {
                 if (cprops.size() > 0) {
                     ConfigurationTools.attachConfigurationProperties(control, cprops);
                 }
-                
+
                 // map the control types to it
                 if (c.getTypes() == null || c.getTypes().getType() == null || c.getTypes().getType().size() == 0) {
                     if (c.getType() == null) {
@@ -458,7 +476,7 @@ public class ConfigurationProcessor {
                         control.addType(new ResourceType(t));
                     }
                 }
-                
+
                 // register the control with the policy
                 ((AuthorityCalendarPolicy) policy).registerControl(control);
             } catch (ConfigurationException e) {
@@ -525,6 +543,7 @@ public class ConfigurationProcessor {
 
     /**
      * Performs actor-independent setup.
+     * 
      * @param actor
      * @return
      * @throws Exception
@@ -539,6 +558,7 @@ public class ConfigurationProcessor {
 
     /**
      * Performs actor-dependent initialization
+     * 
      * @param oActor
      * @param actor
      */
@@ -637,6 +657,7 @@ public class ConfigurationProcessor {
 
     /**
      * Creates all proxies.
+     * 
      * @param edges
      * @throws Exception
      */
@@ -650,48 +671,50 @@ public class ConfigurationProcessor {
 
     /**
      * Form partial cache entry based on vertex information in config
+     * 
      * @param actor
      * @param v
      * @return guid of the actor
      * @throws ConfigurationException
      */
     protected String vertexToRegistryCache(IActor actor, Vertex v) throws ConfigurationException {
-    	HashMap<String, String> res = new HashMap<String, String>();
-    	
-    	Globals.Log.debug("Adding vertex for " + v.getName());
-    	if (v.getName() == null) 
-    			throw new ConfigurationException("Actor must specify a name");
-    	
-    	res.put(RemoteRegistryCache.ActorName, v.getName());
-    	if (v.getGuid() != null){
-    		res.put(RemoteRegistryCache.ActorGuid, v.getGuid());
-    	}else {
-    		// consult the actor for guid
-    		if (actor.getGuid() == null) {
-    			throw new ConfigurationException("Cannot find any GUID for actor " + actor.getName());
-    		}
-    		Globals.Log.debug("Using guid " + actor.getGuid().toString());
-    		res.put(RemoteRegistryCache.ActorGuid, actor.getGuid().toString());
-    	}
-    	if (v.getLocation() != null) {
-    		res.put(RemoteRegistryCache.ActorLocation, v.getLocation().getUrl());
-    		res.put(RemoteRegistryCache.ActorProtocol, v.getLocation().getProtocol());
-    	} else {
-    		res.put(RemoteRegistryCache.ActorProtocol, OrcaConstants.ProtocolLocal);
-    	}
-    	if (v.getCertificate() != null) {
-    		res.put(RemoteRegistryCache.ActorCert64, Base64.encodeBytes(v.getCertificate()));
-    	} // do nothing for local actors - done in registerActor()
-    	res.put(RemoteRegistryCache.ActorType, v.getType().toLowerCase());
+        HashMap<String, String> res = new HashMap<String, String>();
 
-    	// add to the cache (local entries will exist and will be merged)
-    	RemoteRegistryCache.getInstance().addPartialCacheEntry(res.get(RemoteRegistryCache.ActorGuid), res);
-    	
-    	return res.get(RemoteRegistryCache.ActorGuid);
+        Globals.Log.debug("Adding vertex for " + v.getName());
+        if (v.getName() == null)
+            throw new ConfigurationException("Actor must specify a name");
+
+        res.put(RemoteRegistryCache.ActorName, v.getName());
+        if (v.getGuid() != null) {
+            res.put(RemoteRegistryCache.ActorGuid, v.getGuid());
+        } else {
+            // consult the actor for guid
+            if (actor.getGuid() == null) {
+                throw new ConfigurationException("Cannot find any GUID for actor " + actor.getName());
+            }
+            Globals.Log.debug("Using guid " + actor.getGuid().toString());
+            res.put(RemoteRegistryCache.ActorGuid, actor.getGuid().toString());
+        }
+        if (v.getLocation() != null) {
+            res.put(RemoteRegistryCache.ActorLocation, v.getLocation().getUrl());
+            res.put(RemoteRegistryCache.ActorProtocol, v.getLocation().getProtocol());
+        } else {
+            res.put(RemoteRegistryCache.ActorProtocol, OrcaConstants.ProtocolLocal);
+        }
+        if (v.getCertificate() != null) {
+            res.put(RemoteRegistryCache.ActorCert64, Base64.encodeBytes(v.getCertificate()));
+        } // do nothing for local actors - done in registerActor()
+        res.put(RemoteRegistryCache.ActorType, v.getType().toLowerCase());
+
+        // add to the cache (local entries will exist and will be merged)
+        RemoteRegistryCache.getInstance().addPartialCacheEntry(res.get(RemoteRegistryCache.ActorGuid), res);
+
+        return res.get(RemoteRegistryCache.ActorGuid);
     }
-    
+
     /**
      * Processes an edge.
+     * 
      * @param edge
      * @throws Exception
      */
@@ -702,53 +725,59 @@ public class ConfigurationProcessor {
         /*
          * We only like edges broker->site and service->broker
          */
-        
+
         /*
-         * Reverse the edge if it connects site->broker or broker->service 
+         * Reverse the edge if it connects site->broker or broker->service
          */
-        if ( (from.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY) || from.getType().equalsIgnoreCase(OrcaConstants.SITE)) &&
-        		( to.getType().equalsIgnoreCase(OrcaConstants.BROKER) || to.getType().equalsIgnoreCase(OrcaConstants.AGENT)) ) {
-        	Vertex tmp = from;
-        	from = to;
-        	to = tmp;
-        	// the edge may be used for other things, so we'll reverse it as well
-        	edge.setTo(to);
-        	edge.setFrom(from);
+        if ((from.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY)
+                || from.getType().equalsIgnoreCase(OrcaConstants.SITE))
+                && (to.getType().equalsIgnoreCase(OrcaConstants.BROKER)
+                        || to.getType().equalsIgnoreCase(OrcaConstants.AGENT))) {
+            Vertex tmp = from;
+            from = to;
+            to = tmp;
+            // the edge may be used for other things, so we'll reverse it as well
+            edge.setTo(to);
+            edge.setFrom(from);
         }
-        
-        if ( ( from.getType().equalsIgnoreCase(OrcaConstants.BROKER) || from.getType().equalsIgnoreCase(OrcaConstants.AGENT))
-        		&& ( to.getType().equalsIgnoreCase(OrcaConstants.SERVICE) || to.getType().equalsIgnoreCase(OrcaConstants.SM)) ) {
-        	Vertex tmp = from;
-        	from = to;
-        	to = tmp;
-        	// the edge may be used for other things, so we'll reverse it as well        	
-        	edge.setTo(to);
-        	edge.setFrom(from);
+
+        if ((from.getType().equalsIgnoreCase(OrcaConstants.BROKER)
+                || from.getType().equalsIgnoreCase(OrcaConstants.AGENT))
+                && (to.getType().equalsIgnoreCase(OrcaConstants.SERVICE)
+                        || to.getType().equalsIgnoreCase(OrcaConstants.SM))) {
+            Vertex tmp = from;
+            from = to;
+            to = tmp;
+            // the edge may be used for other things, so we'll reverse it as well
+            edge.setTo(to);
+            edge.setFrom(from);
         }
-        
+
         /*
-         * Check if this is a valid edge (error if authority -> * or sm ->
-         * authority).
+         * Check if this is a valid edge (error if authority -> * or sm -> authority).
          */
-        if (from.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY) || from.getType().equalsIgnoreCase(OrcaConstants.SITE)) {
+        if (from.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY)
+                || from.getType().equalsIgnoreCase(OrcaConstants.SITE)) {
             throw new ConfigurationException("Invalid edge type: an edge cannot start at an authority");
         }
-        
+
         // edges between actors of same type aren't allowed unless the actors are both brokers
         if (from.getType().equalsIgnoreCase(to.getType()) && from.getType().equalsIgnoreCase(OrcaConstants.BROKER)) {
-        	throw new ConfigurationException("Invalid edge between actors of same type");
+            throw new ConfigurationException("Invalid edge between actors of same type");
         }
-        
-        // edges SM->site or vice versa are not allowed
-        if ((from.getType().equalsIgnoreCase(OrcaConstants.SERVICE) || from.getType().equalsIgnoreCase(OrcaConstants.SM)) &&
-        		(to.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY) || to.getType().equalsIgnoreCase(OrcaConstants.SITE)))
-        	throw new ConfigurationException("Edges between SMs and sites are not allowed");
 
-        if ((to.getType().equalsIgnoreCase(OrcaConstants.SERVICE) || to.getType().equalsIgnoreCase(OrcaConstants.SM)) &&
-        		(from.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY) || from.getType().equalsIgnoreCase(OrcaConstants.SITE)))
-        	throw new ConfigurationException("Edges between SMs and sites are not allowed");
-        
-        
+        // edges SM->site or vice versa are not allowed
+        if ((from.getType().equalsIgnoreCase(OrcaConstants.SERVICE)
+                || from.getType().equalsIgnoreCase(OrcaConstants.SM))
+                && (to.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY)
+                        || to.getType().equalsIgnoreCase(OrcaConstants.SITE)))
+            throw new ConfigurationException("Edges between SMs and sites are not allowed");
+
+        if ((to.getType().equalsIgnoreCase(OrcaConstants.SERVICE) || to.getType().equalsIgnoreCase(OrcaConstants.SM))
+                && (from.getType().equalsIgnoreCase(OrcaConstants.AUTHORITY)
+                        || from.getType().equalsIgnoreCase(OrcaConstants.SITE)))
+            throw new ConfigurationException("Edges between SMs and sites are not allowed");
+
         IOrcaContainer cont = Orca.connect();
         IActor fromActor = ActorRegistry.getActor(from.getName());
         IActor toActor = ActorRegistry.getActor(to.getName());
@@ -756,27 +785,26 @@ public class ConfigurationProcessor {
         /* convert beans to maps for further processing */
         String fromGuid = vertexToRegistryCache(fromActor, from);
         String toGuid = vertexToRegistryCache(toActor, to);
-        
+
         try {
-        	if (fromGuid == null || toGuid == null){
-        		throw new RuntimeException("Both fromGuid and toGuid must be defined");
-        	}
+            if (fromGuid == null || toGuid == null) {
+                throw new RuntimeException("Both fromGuid and toGuid must be defined");
+            }
             // establish new edge in topology and register a client if necessary
-        	ClientMng client = null;
-        		if(selectedActorRegistry.contains("Distributed")) {
-        		  client = DistributedRemoteRegistryCache.getInstance().establishEdge(new ID(fromGuid), new ID(toGuid));
-        	 } else {
-        	      client = RemoteRegistryCache.getInstance().establishEdge(new ID(fromGuid), new ID(toGuid));
-        	 }
-        	
-        	
-  
+            ClientMng client = null;
+            if (selectedActorRegistry.contains("Distributed")) {
+                client = DistributedRemoteRegistryCache.getInstance().establishEdge(new ID(fromGuid), new ID(toGuid));
+            } else {
+                client = RemoteRegistryCache.getInstance().establishEdge(new ID(fromGuid), new ID(toGuid));
+            }
+
             // parse all explicit exports of that edge. the client will not be returned if there is a cert problem
             if (client != null) {
-            	parseExports(edge, client, (IOrcaServerActor)cont.getActor(new ID(toGuid)));
+                parseExports(edge, client, (IOrcaServerActor) cont.getActor(new ID(toGuid)));
             }
         } catch (Exception e) {
-            throw new ConfigurationException("Could not process exports from: " + toActor.getName() + " to:" + fromActor.getName() + ": " + e.toString());
+            throw new ConfigurationException("Could not process exports from: " + toActor.getName() + " to:"
+                    + fromActor.getName() + ": " + e.toString());
         }
     }
 
@@ -784,6 +812,7 @@ public class ConfigurationProcessor {
 
     /**
      * Exports resources
+     * 
      * @param info
      * @throws Exception
      */
@@ -799,58 +828,56 @@ public class ConfigurationProcessor {
         }
 
         Date end = info.end;
-        if (end == null){
+        if (end == null) {
             // no end in config: export for a year from now
             // export for one year
             long length = 1000 * 60 * 60 * 24 * 365;
-        	end = new Date(start.getTime() + length);
+            end = new Date(start.getTime() + length);
         }
 
         // export
-        if (logger.isTraceEnabled()){
+        if (logger.isTraceEnabled()) {
             logger.trace("Using Server Actor " + info.exporter.getClass().getSimpleName() + " to exportResources");
         }
-        info.exported = info.exporter.exportResources(
-            		info.rtype,
-            		start,
-            		end,
-            		info.units,
-            		null, 
-            		null,
-            		null,
-            		new AuthToken(info.client.getName(), new ID(info.client.getGuid())));            
-        if (info.exported == null){
-        	throw new ConfigurationException("Could not export resources from actor: " + info.exporter.getName() + " to actor: " + info.client.getName(), info.exporter.getLastError());
+        info.exported = info.exporter.exportResources(info.rtype, start, end, info.units, null, null, null,
+                new AuthToken(info.client.getName(), new ID(info.client.getGuid())));
+        if (info.exported == null) {
+            throw new ConfigurationException("Could not export resources from actor: " + info.exporter.getName()
+                    + " to actor: " + info.client.getName(), info.exporter.getLastError());
         }
     }
 
     /**
      * Claims resources
+     * 
      * @param info
      * @throws Exception
      */
     protected void claim(ExportInfo info) throws ConfigurationException {
         // FIXME: use guid
-    	IOrcaContainer cont = Orca.connect();
-        IOrcaClientActor client =  (IOrcaClientActor)cont.getActor(new ID(info.client.getGuid()));
-        if (client == null){
-        	logger.info(info.client.getName() + " is a remote client. Not performing claim");
-        	return;
+        IOrcaContainer cont = Orca.connect();
+        IOrcaClientActor client = (IOrcaClientActor) cont.getActor(new ID(info.client.getGuid()));
+        if (client == null) {
+            logger.info(info.client.getName() + " is a remote client. Not performing claim");
+            return;
         }
 
         logger.info("Claiming resources from " + info.exporter.getName() + " to " + info.client.getName());
 
         ReservationMng r = client.claimResources(info.exporter.getGuid(), info.exported);
-        if (r != null){
-        	logger.info("Successfully initiated claim for resources from " + info.exporter.getName() + " to " + info.client.getName());
-        }else {
-        	logger.error("Could not initiate claim for resources from " + info.exporter.getName() + " to " + info.client.getName() + ": " + client.getLastError());
+        if (r != null) {
+            logger.info("Successfully initiated claim for resources from " + info.exporter.getName() + " to "
+                    + info.client.getName());
+        } else {
+            logger.error("Could not initiate claim for resources from " + info.exporter.getName() + " to "
+                    + info.client.getName() + ": " + client.getLastError());
         }
     }
 
     /**
-     * Registers the required certificates so that from and to can communicate. This function appears to be deprecated /ib, 
-     * cert registration is now done in OrcaContainer.establishEdge()
+     * Registers the required certificates so that from and to can communicate. This function appears to be deprecated
+     * /ib, cert registration is now done in OrcaContainer.establishEdge()
+     * 
      * @param from
      * @param to
      * @throws Exception
@@ -915,7 +942,8 @@ public class ConfigurationProcessor {
                 Rset rset = (Rset) i.next();
 
                 if (rset != null) {
-                    ExportInfo info = new ExportInfo(toActor, client, rset.getUnits(), new ResourceType(rset.getType()));
+                    ExportInfo info = new ExportInfo(toActor, client, rset.getUnits(),
+                            new ResourceType(rset.getType()));
                     if (rset.getStart() != null) {
                         info.start = rset.getStart().toGregorianCalendar().getTime();
                     }
@@ -931,23 +959,25 @@ public class ConfigurationProcessor {
         }
     }
 
-//    protected IProxy getProxy(String protocol, IActorIdentity identity, ActorLocation location, String type) throws ConfigurationException {
-//        try {
-//            IProxy proxy = ActorRegistry.getProxy(protocol, identity.getName());
-//
-//            if (proxy == null) {
-//                proxy = ProxyFactory.newProxy(protocol, identity, location, type);
-//                ActorRegistry.registerProxy(proxy);
-//            }
-//            return proxy;
-//        } catch (Exception e) {
-//            throw new ConfigurationException("Could not obtain proxy for actor: " + identity.getName() + " protocol: " + protocol, e);
-//        }
-//    }
+    // protected IProxy getProxy(String protocol, IActorIdentity identity, ActorLocation location, String type) throws
+    // ConfigurationException {
+    // try {
+    // IProxy proxy = ActorRegistry.getProxy(protocol, identity.getName());
+    //
+    // if (proxy == null) {
+    // proxy = ProxyFactory.newProxy(protocol, identity, location, type);
+    // ActorRegistry.registerProxy(proxy);
+    // }
+    // return proxy;
+    // } catch (Exception e) {
+    // throw new ConfigurationException("Could not obtain proxy for actor: " + identity.getName() + " protocol: " +
+    // protocol, e);
+    // }
+    // }
 
     /**
-     * Converts an authority proxy to an agent proxy. Used during initial setup
-     * for export and claim.
+     * Converts an authority proxy to an agent proxy. Used during initial setup for export and claim.
+     * 
      * @param authorityProxy
      * @return
      * @throws ConfigurationException

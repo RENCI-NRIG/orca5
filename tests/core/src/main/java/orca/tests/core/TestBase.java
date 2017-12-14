@@ -17,11 +17,8 @@ import java.io.File;
 
 import java.net.URL;
 
-
-public class TestBase
-{
-    public static void fixClassPath()
-    {
+public class TestBase {
+    public static void fixClassPath() {
         try {
             File f = new File(PathGuesser.getRealBase());
             URL url = f.toURL();

@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.Cisco6509;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class DeleteVLANTask extends Cisco6509BaseTask {
@@ -15,9 +14,9 @@ public class DeleteVLANTask extends Cisco6509BaseTask {
             }
 
             if (withQoS.equals("true"))
-            	router.deleteVLAN(vlanTag, true);
+                router.deleteVLAN(vlanTag, true);
             else
-            	router.deleteVLAN(vlanTag, false);
+                router.deleteVLAN(vlanTag, false);
             setResult(0);
         } catch (BuildException e) {
             throw e;

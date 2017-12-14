@@ -17,36 +17,30 @@ import orca.nodeagent.documents.TestFuncResultElement;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
-
-public class TestAuthorizedClient
-{
+public class TestAuthorizedClient {
     String serviceLocation;
     String repositoryPath;
     String configFile;
 
-    public TestAuthorizedClient()
-    {
+    public TestAuthorizedClient() {
         serviceLocation = "http://localhost:8080/axis2/services/NodeAgentService";
         repositoryPath = "../lib/external";
         configFile = "test/orca/nodeagent/tests/security/known/client.axis2.xml";
     }
 
-    public TestAuthorizedClient(String serviceLocation, String repositoryPath, String configFile)
-    {
+    public TestAuthorizedClient(String serviceLocation, String repositoryPath, String configFile) {
         this.serviceLocation = serviceLocation;
         this.repositoryPath = repositoryPath;
         this.configFile = configFile;
     }
 
-    public int run() throws Exception
-    {
+    public int run() throws Exception {
         System.out.println("here");
         System.out.print(repositoryPath);
         System.out.print(configFile);
 
-        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-            repositoryPath,
-            configFile);
+        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repositoryPath,
+                configFile);
 
         NodeAgentServiceStub stub = new NodeAgentServiceStub(cc, serviceLocation);
 
@@ -60,8 +54,7 @@ public class TestAuthorizedClient
         return 0;
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         TestAuthorizedClient test = null;
         test = new TestAuthorizedClient();
         test.run();

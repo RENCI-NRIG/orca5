@@ -1,22 +1,14 @@
-<!DOCTYPE project [
-<!ENTITY core SYSTEM "../../common/core.xml">
-<!ENTITY paths SYSTEM "../../common/paths.xml">
-<!ENTITY drivertasks SYSTEM "../../common/drivertasks.xml">
-<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
-]>
-
+<!DOCTYPE project> 
+<!--ENTITY paths SYSTEM "../../common/paths.xml"--> 
+<!--ENTITY drivertasks SYSTEM "../../common/drivertasks.xml"--> 
+<!--ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml"-->
+ ]&gt; 
 <project name="quantum" basedir=".">
-
-	&paths;
-	&core;
-	&drivertasks;
-	&bentasks;
-
-	<!-- Uncomment for handler testing
+     &amp;paths; &amp;core; &amp;drivertasks; &amp;bentasks; 
+    <!-- Uncomment for handler testing
 	<property file="quantum.test.properties" />
-	-->
-
-	<!-- 
+	--> 
+    <!-- 
 		Controller must supply
 			unit.openflow.slice.ctrl.url - [optional] User OF Controller URL
 			unit.openflow.slice.email - [optional] User OF slice email
@@ -34,84 +26,82 @@
                         #tenant that uses orca
                         quantum.tenant.id=geni-orca
 
-	-->
-	<target name="join" depends="resolve.configuration,ben.load.tasks">
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-		</tstamp>
-
-		<echo message="Quantum Handler: JOIN on ${start.TIME}" />
-		<if>
-			<isset property="quantum.properties" />
-			<then>
-				<property file="${quantum.properties}" />
-			</then>
-			<else>
-				<echo message="Quantum properties are not set!" />
-			</else>
-		</if>
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...exiting" />
-				<!-- hairpin -->
-				<var name="shirako.save.unit.vlan.url" unset="true" />
-				<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
-				<property name="shirako.target.code" value="0" />
-			</then>
-			<else>
-				<echo message="About to create quantum network, use.neuca.quantum = ${use.neuca.quantum}" />
-				<var name="create.network.output" unset="true" />
-				<var name="code" unset="true" />
-				<var name="message" unset="true" />
-				<echo message="PROVIDER_DIR =${provider.dir}" />
-				<echo message="PROVIDER_LOG_DIR= ${provider.log.dir}" />
-				<echo message="PROVIDER_LOG_FILE= ${provider.log.file}" />
-				<echo message="PROVIDER_LOG_LEVEL= ${provider.log.level}" />
-				<echo message="QUANTUM_TENANT_ID = ${quantum.tenant.id}" />
-				<echo message="QUANTUM_NET_TYPE = ipv4" />
-				<echo message="QUANTUM_NET_NETWORK= ${unit.quantum.netname}" />
-				<echo message="QUANTUM_NET_VLAN= ${unit.vlan.tag}" />
-				<echo message="QUANTUM_MAX_RATE= ${unit.vlan.qos.rate}" />
-				<echo message="QUANTUM_BURST_RATE= ${unit.vlan.qos.burst.size}" />
-				<exec executable="${provider.scripts}/neuca-quantum-create-net" resultproperty="code" outputproperty="create.network.output">
-					<env key="PROVIDER_DIR" value="${provider.dir}" />
-					<env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
-					<env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
-					<env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
-					<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
-					<env key="QUANTUM_NET_TYPE" value="ipv4" />
-					<env key="QUANTUM_NET_NETWORK" value="${unit.quantum.netname}" />
-					<env key="QUANTUM_NET_VLAN" value="${unit.vlan.tag}" />
-					<env key="QUANTUM_MAX_RATE" value="${unit.vlan.qos.rate}" />
-					<env key="QUANTUM_BURST_RATE" value="${unit.vlan.qos.burst.size}" />
-				</exec>
-				<echo message="exit code ${code}, ${create.network.output}" />
-				<if>
-					<not>
-						<equals arg1="${code}" arg2="0" />
-					</not>
-					<then>
-						<echo message="unable to create quantum network: exit code ${code}, ${create.network.output}" />
-						<property name="message" value="unable to create instance: exit code ${code}, ${create.network.output}" />
-					</then>
-					<else>
-						<var name="shirako.save.unit.quantum.net.uuid" unset="true" />
-						<property name="shirako.save.unit.quantum.net.uuid" value="${create.network.output}" />
-					</else>
-				</if>
-				<echo message="shirako.save.unit.quantum.net.uuid = ${shirako.save.unit.quantum.net.uuid}, create.network.output = ${create.network.output}" />
-				<!-- hairpin the url property so the user sees it too -->
-				<var name="shirako.save.unit.vlan.url" unset="true" />
-				<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
-				<property name="shirako.target.code" value="${code}" />
-				<property name="shirako.target.code.message" value="${message}" />
-			</else>
-		</if>
-		<echo message="join exit code: ${shirako.target.code} with message: ${shirako.target.code.message}" />
-	</target>
-
-	<!-- 
+	--> 
+    <target name="join" depends="resolve.configuration,ben.load.tasks"> 
+        <tstamp prefix="start"> 
+            <format property="TIME" pattern="MM/dd/yyyy hh:mm" /> 
+        </tstamp> 
+        <echo message="Quantum Handler: JOIN on ${start.TIME}" /> 
+        <if> 
+            <isset property="quantum.properties" /> 
+            <then> 
+                <property file="${quantum.properties}" /> 
+            </then> 
+            <else> 
+                <echo message="Quantum properties are not set!" /> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...exiting" /> 
+                <!-- hairpin --> 
+                <var name="shirako.save.unit.vlan.url" unset="true"></var> 
+                <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" /> 
+                <property name="shirako.target.code" value="0" /> 
+            </then> 
+            <else> 
+                <echo message="About to create quantum network, use.neuca.quantum = ${use.neuca.quantum}" /> 
+                <var name="create.network.output" unset="true"></var> 
+                <var name="code" unset="true"></var> 
+                <var name="message" unset="true"></var> 
+                <echo message="PROVIDER_DIR =${provider.dir}" /> 
+                <echo message="PROVIDER_LOG_DIR= ${provider.log.dir}" /> 
+                <echo message="PROVIDER_LOG_FILE= ${provider.log.file}" /> 
+                <echo message="PROVIDER_LOG_LEVEL= ${provider.log.level}" /> 
+                <echo message="QUANTUM_TENANT_ID = ${quantum.tenant.id}" /> 
+                <echo message="QUANTUM_NET_TYPE = ipv4" /> 
+                <echo message="QUANTUM_NET_NETWORK= ${unit.quantum.netname}" /> 
+                <echo message="QUANTUM_NET_VLAN= ${unit.vlan.tag}" /> 
+                <echo message="QUANTUM_MAX_RATE= ${unit.vlan.qos.rate}" /> 
+                <echo message="QUANTUM_BURST_RATE= ${unit.vlan.qos.burst.size}" /> 
+                <exec executable="${provider.scripts}/neuca-quantum-create-net" resultproperty="code" outputproperty="create.network.output"> 
+                    <env key="PROVIDER_DIR" value="${provider.dir}" /> 
+                    <env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" /> 
+                    <env key="PROVIDER_LOG_FILE" value="${provider.log.file}" /> 
+                    <env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" /> 
+                    <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" /> 
+                    <env key="QUANTUM_NET_TYPE" value="ipv4" /> 
+                    <env key="QUANTUM_NET_NETWORK" value="${unit.quantum.netname}" /> 
+                    <env key="QUANTUM_NET_VLAN" value="${unit.vlan.tag}" /> 
+                    <env key="QUANTUM_MAX_RATE" value="${unit.vlan.qos.rate}" /> 
+                    <env key="QUANTUM_BURST_RATE" value="${unit.vlan.qos.burst.size}" /> 
+                </exec> 
+                <echo message="exit code ${code}, ${create.network.output}" /> 
+                <if> 
+                    <not> 
+                        <equals arg1="${code}" arg2="0" /> 
+                    </not> 
+                    <then> 
+                        <echo message="unable to create quantum network: exit code ${code}, ${create.network.output}" /> 
+                        <property name="message" value="unable to create instance: exit code ${code}, ${create.network.output}" /> 
+                    </then> 
+                    <else> 
+                        <var name="shirako.save.unit.quantum.net.uuid" unset="true"></var> 
+                        <property name="shirako.save.unit.quantum.net.uuid" value="${create.network.output}" /> 
+                    </else> 
+                </if> 
+                <echo message="shirako.save.unit.quantum.net.uuid = ${shirako.save.unit.quantum.net.uuid}, create.network.output = ${create.network.output}" /> 
+                <!-- hairpin the url property so the user sees it too --> 
+                <var name="shirako.save.unit.vlan.url" unset="true"></var> 
+                <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" /> 
+                <property name="shirako.target.code" value="${code}" /> 
+                <property name="shirako.target.code.message" value="${message}" /> 
+            </else> 
+        </if> 
+        <echo message="join exit code: ${shirako.target.code} with message: ${shirako.target.code.message}" /> 
+    </target> 
+    <!-- 
 		Controller must supply
 			unit.vlan.tag [mandatory]
 			
@@ -123,59 +113,57 @@
                         
                         #tenant that uses orca
                         quantum.tenant.id=geni-orca
-	-->
-	<target name="leave" depends="resolve.configuration,ben.load.tasks">
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-		</tstamp>
-
-		<echo message="Quantum Handler: LEAVE on ${start.TIME}" />
-		<if>
-			<isset property="quantum.properties" />
-			<then>
-				<property file="${quantum.properties}" />
-			</then>
-			<else>
-				<echo message="Quantum credentials properties are not set!" />
-			</else>
-		</if>
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...exiting" />
-				<property name="shirako.target.code" value="0" />
-			</then>
-			<else>
-				<echo message="About to call neuca-quantum-delete-net, use.neuca.quantum = ${use.neuca.quantum}" />
-				<var name="create.network.output" unset="true" />
-				<var name="code" unset="true" />
-				<var name="message" unset="true" />
-				<exec executable="${provider.scripts}/neuca-quantum-delete-net" resultproperty="code" outputproperty="create.network.output">
-					<env key="PROVIDER_DIR" value="${provider.dir}" />
-					<env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
-					<env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
-					<env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
-					<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
-					<env key="QUANTUM_NET_UUID" value="${unit.quantum.net.uuid}" />
-				</exec>
-				<echo message="exit code ${code}, ${create.network.output}" />
-				<if>
-					<not>
-						<equals arg1="${code}" arg2="0" />
-					</not>
-					<then>
-						<echo message="unable to create quantum network: exit code ${code}, ${create.instance.output}" />
-						<property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
-					</then>
-				</if>
-			</else>
-		</if>
-		<property name="shirako.target.code" value="${code}" />
-		<echo message="leave exit code: ${shirako.target.code}" />
-	</target>
-
-	<target name="modify" depends="resolve.configuration,ben.load.tasks">
-		<echo message="Quantum Handler: MODIFY" />
-		<property name="shirako.target.code" value="0" />
-	</target>
+	--> 
+    <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
+        <tstamp prefix="start"> 
+            <format property="TIME" pattern="MM/dd/yyyy hh:mm" /> 
+        </tstamp> 
+        <echo message="Quantum Handler: LEAVE on ${start.TIME}" /> 
+        <if> 
+            <isset property="quantum.properties" /> 
+            <then> 
+                <property file="${quantum.properties}" /> 
+            </then> 
+            <else> 
+                <echo message="Quantum credentials properties are not set!" /> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...exiting" /> 
+                <property name="shirako.target.code" value="0" /> 
+            </then> 
+            <else> 
+                <echo message="About to call neuca-quantum-delete-net, use.neuca.quantum = ${use.neuca.quantum}" /> 
+                <var name="create.network.output" unset="true"></var> 
+                <var name="code" unset="true"></var> 
+                <var name="message" unset="true"></var> 
+                <exec executable="${provider.scripts}/neuca-quantum-delete-net" resultproperty="code" outputproperty="create.network.output"> 
+                    <env key="PROVIDER_DIR" value="${provider.dir}" /> 
+                    <env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" /> 
+                    <env key="PROVIDER_LOG_FILE" value="${provider.log.file}" /> 
+                    <env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" /> 
+                    <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" /> 
+                    <env key="QUANTUM_NET_UUID" value="${unit.quantum.net.uuid}" /> 
+                </exec> 
+                <echo message="exit code ${code}, ${create.network.output}" /> 
+                <if> 
+                    <not> 
+                        <equals arg1="${code}" arg2="0" /> 
+                    </not> 
+                    <then> 
+                        <echo message="unable to create quantum network: exit code ${code}, ${create.instance.output}" /> 
+                        <property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" /> 
+                    </then> 
+                </if> 
+            </else> 
+        </if> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="leave exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="modify" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="Quantum Handler: MODIFY" /> 
+        <property name="shirako.target.code" value="0" /> 
+    </target> 
 </project>

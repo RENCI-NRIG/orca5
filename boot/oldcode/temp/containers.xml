@@ -1,23 +1,43 @@
 <!--
     This file maps actors to containers
--->
-<containers>
-  <container>
-    <name>Container name</name>
-    <dns>DNS name for this container</dns>
-    <actors>
-      <actor>actor name</actor>
-      <actor>actor name</actor>
-      <actor>actor name</actor>
-    </actors>
-  </container>
-  <container>
-    <name>Container name</name>
-    <dns>DNS name for this container</dns>
-    <actors>
-      <actor>actor name</actor>
-      <actor>actor name</actor>
-      <actor>actor name</actor>
-    </actors>
-  </container>
+--> 
+<containers> 
+    <container> 
+        <name>
+             Container name 
+        </name> 
+        <dns>
+             DNS name for this container 
+        </dns> 
+        <actors> 
+            <actor>
+                 actor name 
+            </actor> 
+            <actor>
+                 actor name 
+            </actor> 
+            <actor>
+                 actor name 
+            </actor> 
+        </actors> 
+    </container> 
+    <container> 
+        <name>
+             Container name 
+        </name> 
+        <dns>
+             DNS name for this container 
+        </dns> 
+        <actors> 
+            <actor>
+                 actor name 
+            </actor> 
+            <actor>
+                 actor name 
+            </actor> 
+            <actor>
+                 actor name 
+            </actor> 
+        </actors> 
+    </container> 
 </containers>

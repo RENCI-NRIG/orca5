@@ -21,27 +21,27 @@ import orca.shirako.api.ISlice;
 import orca.shirako.kernel.SliceFactory;
 
 public class OpenFlowControllerFactory implements ControllerFactory, OpenFlowControllerConstants {
-	public static final String PropertySliceName = "sliceName";    
-    
-    protected IActor actor;    
+    public static final String PropertySliceName = "sliceName";
+
+    protected IActor actor;
     protected OpenFlowController cont;
     protected OpenFlowControllerManagerObject managerObject;
     protected PortalPluginDescriptor desc;
-    
-    protected String sliceName = "openflow";  
-        
+
+    protected String sliceName = "openflow";
+
     protected OpenFlowController makeController() {
         return new OpenFlowController();
     }
-    
+
     protected OpenFlowControllerManagerObject makeManagerObject() {
         return new OpenFlowControllerManagerObject(cont, actor);
     }
-        
+
     public String getPortalPluginClassName() {
         return OpenFlowControllerPortalPlugin.class.getCanonicalName();
     }
-    
+
     public void create() throws Exception {
         if (!(actor instanceof IServiceManager)) {
             throw new Exception("Invalid actor type");
@@ -50,11 +50,11 @@ public class OpenFlowControllerFactory implements ControllerFactory, OpenFlowCon
         if (sliceName == null) {
             throw new Exception("Missing slice name");
         }
-        
+
         ISlice slice = (ISlice) SliceFactory.getInstance().create(sliceName);
-        
-        actor.registerSlice(slice);        
-        
+
+        actor.registerSlice(slice);
+
         cont = makeController();
         cont.setActor(actor);
         cont.setSlice(slice);
@@ -73,7 +73,7 @@ public class OpenFlowControllerFactory implements ControllerFactory, OpenFlowCon
         desc.setActorName(actor.getName());
         desc.setSliceName(sliceName);
         desc.setPackageId(MyPackageId);
-        
+
         System.out.println("=== OpenFlowControllerFactory.ends...");
     }
 

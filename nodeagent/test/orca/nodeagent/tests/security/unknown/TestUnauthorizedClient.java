@@ -17,32 +17,26 @@ import orca.nodeagent.documents.TestFuncResultElement;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.ConfigurationContextFactory;
 
-
-public class TestUnauthorizedClient
-{
+public class TestUnauthorizedClient {
     String serviceLocation;
     String repositoryPath;
     String configFile;
 
-    public TestUnauthorizedClient()
-    {
+    public TestUnauthorizedClient() {
         serviceLocation = "http://localhost:8080/axis2/services/NodeAgentService";
         repositoryPath = "../lib/external";
         configFile = "test/orca/nodeagent/tests/security/unknown/2client.axis2.xml";
     }
 
-    public TestUnauthorizedClient(String serviceLocation, String repositoryPath, String configFile)
-    {
+    public TestUnauthorizedClient(String serviceLocation, String repositoryPath, String configFile) {
         this.serviceLocation = serviceLocation;
         this.repositoryPath = repositoryPath;
         this.configFile = configFile;
     }
 
-    public int run() throws Exception
-    {
-        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-            repositoryPath,
-            configFile);
+    public int run() throws Exception {
+        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repositoryPath,
+                configFile);
 
         NodeAgentServiceStub stub = new NodeAgentServiceStub(cc, serviceLocation);
 
@@ -55,8 +49,7 @@ public class TestUnauthorizedClient
         return 0;
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         TestUnauthorizedClient t = new TestUnauthorizedClient();
         t.run();
     }

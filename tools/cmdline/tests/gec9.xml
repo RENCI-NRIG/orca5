@@ -1,570 +1,984 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-	<actors>
-		<actor>
-			<type>site</type>
-			<name>duke-vm-site</name>
-			<guid>9b12d036-23e7-11df-b3a3-000c29b1c193</guid>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>duke.vm</type>
-					<label>Eucalyptus Virtual Machine (DUKE)</label>
-					<description>A virtual machine</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>	
-							<property name="ec2.keys" value="/home/orca/orca-2.0/tools/cmdline/ec2" />
-							<property name="unit.vlan.tag" value="13" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>dukevmsite</value>
-						</attribute>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.206.3/24" />
-						<property name="ip.subnet" value="255.255.255.0" />
-						<property name="ip.gateway" value="192.168.206.1" />
-						<property name="data.subnet" value="255.255.0.0" />
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/dukevmsite.rdf" />
-					</properties>
-				</pool>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-                                        <type>duke.GEPort</type>
-                                        <label>DUKE Gigabit Ethernet Port</label>
-                                        <description>GigE port on 6509 at DUKE</description>
-                                        <units>40</units>
-                                        <start>2010-01-30T00:00:00</start>
-                                        <end>2011-01-30T00:00:00</end>
-                                        <handler path="common/noop.xml" />
-                                        <attributes>
-                                                <attribute>
-                                                        <key>resource.domain</key>
-                                                        <type>String</type>
-                                                        <value>dukevmsite/GEPort</value>
-                                                </attribute>
-                                                <attribute>                                                        
-							<key>resource.class.invfortype</key>
-                                                        <type>Class</type>
-                                                        <value>orca.controllers.ben.broker.NDLVlanInventory</value>
-                                                </attribute>
-                                        </attributes>
-                                        <properties>
-                                                <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/dukevmsite.rdf" />
-                                        </properties>
-                                </pool>
-			</pools>
-			<controls>
-				<control type="duke.vm" class="orca.policy.core.SimpleVMControl" />
-				<control type="duke.GEPort" class="orca.controllers.ben.control.PortNDLControl" />
-			</controls>
-		</actor>
-		<!-- NOT TO BE USED FOR THE DEMO -->
-		<actor>
-			<type>site</type>
-			<name>unc-vm-site</name>
-			<guid>993c8fb0-8867-11df-ac05-000c29b1c193</guid>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>unc.vm</type>
-					<label>Eucalyptus Virtual Machine (DUKE)</label>
-					<description>A virtual machine</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>	
-							<property name="ec2.keys" value="/home/orca/orca-2.0/tools/cmdline/ec2" />
-							<property name="unit.vlan.tag" value="13" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>uncvmsite</value>
-						</attribute>
-							<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.206.3/24" />
-						<property name="ip.subnet" value="255.255.255.0" />
-						<property name="ip.gateway" value="192.168.206.1" />
-						<property name="data.subnet" value="255.255.0.0" />
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/uncvmsite.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="unc.vm" class="orca.policy.core.SimpleVMControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>renci-vm-site</name>
-			<guid>19f1b53b-f081-4544-81fa-b0467bff73c1</guid>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>renci.vm</type>
-					<label>Eucalyptus Virtual Machine (RENCI)</label>
-					<description>A virtual machine</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>	
-							<property name="ec2.keys" value="/opt/orca/ec2-renci" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>rencivmsite</value>
-						</attribute>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.201.20-29" />
-						<property name="ip.subnet" value="255.255.255.0" />
-						<property name="ip.gateway" value="192.168.201.1" />
-						<property name="data.subnet" value="255.255.0.0" />
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/rencivmsite.rdf" />
-					</properties>
-				</pool>
-                                <pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-                                        <type>renci.GEPort</type>
-                                        <label>RENCI Gigabit Ethernet Port</label>
-                                        <description>GigE port on 6509 at RENCI</description>
-                                        <units>40</units>
-                                        <start>2010-01-30T00:00:00</start>
-                                        <end>2011-01-30T00:00:00</end>
-                                        <handler path="common/noop.xml" />
-                                        <attributes>                          
-						<attribute>
-                                                        <key>resource.domain</key>
-                                                        <type>String</type>
-                                                        <value>rencivmsite/GEPort</value>
-                                                </attribute>
-                                                <attribute>
-                                                        <key>resource.class.invfortype</key>
-                                                        <type>Class</type>
-                                                        <value>orca.controllers.ben.broker.NDLVlanInventory</value>
-                                                </attribute>
-                                        </attributes>
-                                        <properties>
-                                    		<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/rencivmsite.rdf" />
-                                        </properties>
-                                </pool>
-			</pools>
-			<controls>
-				<control type="renci.vm" class="orca.policy.core.SimpleVMControl" />
-				<control type="renci.GEPort" class="orca.controllers.ben.control.PortNDLControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>vise-site</name>
-			<guid>9df4de98-23e7-11df-b49f-000c29b1c193</guid>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
-					<type>vise.testbed</type>
-					<label>ViSE Testbed</label>
-					<description>The ViSE Testbed</description>
-					<units>1</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="common/noop.xml" />
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>umass</value>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/mass.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="vise.testbed" class="orca.policy.core.UnitsControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>duke-net-site</name>
-			<guid>a0b1324e-23e7-11df-85d1-000c29b1c193</guid>
-			<description>DUKE NET site authority</description>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>duke.vlan</type>
-					<label>DUKE NET VLAN</label>
-					<description>A VLAN over DUKE NET</description>
-					<units>4</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="common/noop.xml" />
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>dukenet</value>
-						</attribute>
-						<attribute>
-							<key>resource.class.invfortype</key>
-							<type>Class</type>
-							<value>orca.controllers.ben.broker.NDLVlanInventory</value>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="vlan.tag.start" value="11" />
-						<property name="vlan.tag.end" value="14" />
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/dukeNet.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="duke.vlan" class="orca.policy.core.VlanControl" />
-			</controls>
-		</actor>
-		<!-- NOT TO BE USED FOR THE DEMO -->
-		<actor>
-			<type>site</type>
-			<name>unc-net-site</name>
-			<guid>634db10e-8867-11df-a8f0-000c29b1c193</guid>
-			<description>UNC NET site authority</description>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>unc.vlan</type>
-					<label>UNC NET VLAN</label>
-					<description>A VLAN over UNC NET</description>
-					<units>4</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="common/noop.xml" />
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>uncnet</value>
-						</attribute>
-						<attribute>
-							<key>resource.class.invfortype</key>
-							<type>Class</type>
-							<value>orca.controllers.ben.broker.NDLVlanInventory</value>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="vlan.tag.start" value="11" />
-						<property name="vlan.tag.end" value="14" />
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/uncNet.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="unc.vlan" class="orca.policy.core.VlanControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>renci-net-site</name>
-			<guid>2a135201-9562-40c1-8dab-2fc6f5c9bd2f</guid>
-			<description>RENCI NET site authority</description>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>renci.vlan</type>
-					<label>RENCI NET VLAN</label>
-					<description>A VLAN over RENCI NET</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="controllers/ben/gec8/renci.euca.net.xml" />
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>rencinet</value>
-						</attribute>
-						<attribute>
-							<key>resource.class.invfortype</key>
-							<type>Class</type>
-							<value>orca.controllers.ben.broker.NDLVlanInventory</value>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="vlan.tag.start" value="11" />
-						<property name="vlan.tag.end" value="20" />
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/renciNet.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="renci.vlan" class="orca.policy.core.VlanControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>ben-site</name>
-			<guid>a3a84424-23e7-11df-a8ff-000c29b1c193</guid>
-			<description>BEN site authority</description>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>ben.vlan</type>
-					<label>BEN VLAN</label>
-					<description>A VLAN over BEN</description>
-					<units>100</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="controllers/ben/gec9/ben.xml" />
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>ben</value>
-						</attribute>
-						<attribute>
-							<key>resource.class.invfortype</key>
-							<type>Class</type>
-							<value>orca.controllers.ben.broker.NDLVlanInventory</value>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/ben-6509.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="ben.vlan" class="orca.controllers.ben.control.BenNdlControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>nlr-site</name>
-			<description>NLR site authority</description>
-			<guid>a6bac0d8-23e7-11df-8b63-000c29b1c193</guid>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>nlr.vlan</type>
-					<label>NLR VLAN</label>
-					<description>A VLAN over NLR</description>
-					<units>100</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="nlr/handler.xml">
-						<properties>
-							<property name="NLRSherpa.bandwidth" value="100000" />
-							<property name="nlr.credentials" value="/home/orca/orca-2.0/tools/cmdline/config/nlr.properties" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>nlr</value>
-						</attribute>
-						<attribute>
-							<key>resource.class.invfortype</key>
-							<type>Class</type>
-							<value>orca.controllers.ben.broker.NDLVlanInventory</value>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/nlr.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="nlr.vlan" class="orca.policy.core.UnitsControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>starlight-site</name>
-			<description>Starlight site authority</description>
-			<guid>a9c9cd6e-23e7-11df-af97-000c29b1c193</guid>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>starlight.vlan</type>
-					<label>Starlight VLAN</label>
-					<description>A VLAN over Starlight</description>
-					<units>100</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="controllers/ben/gec8/starlight.xml" />
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>starlight</value>
-						</attribute>
-						<attribute>
-							<key>resource.class.invfortype</key>
-							<type>Class</type>
-							<value>orca.controllers.ben.broker.NDLVlanInventory</value>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/starlight.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="starlight.vlan" class="orca.policy.core.UnitsControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>broker</type>
-			<name>ndl-broker</name>
-			<guid>acaa0b8e-23e7-11df-b278-000c29b1c193</guid>
-			<policy class="orca.policy.core.BrokerSimplerUnitsPolicy">
-				<properties>
-					<property name="queue.type" value="fifo" />
-				</properties>
-			</policy>
-		</actor>
-		<actor>
-			<type>service</type>
-			<name>service</name>
-			<guid>af7b4558-23e7-11df-bf65-000c29b1c193</guid>
-		</actor>
-	</actors>
-	<topology>
-		<edges>
-			<edge>
-				<from name="service" type="service" />
-				<to name="ndl-broker" type="broker" />
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="duke-vm-site" type="site" />
-				<rset>
-					<type>duke.vm</type>
-					<units>10</units>
-				</rset>
-				<rset>
-					<type>duke.GEPort</type>
-					<units>40</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="duke-net-site" type="site" />
-				<rset>
-					<type>duke.vlan</type>
-					<units>4</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="ben-site" type="site" />
-				<rset>
-					<type>ben.vlan</type>
-					<units>100</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="nlr-site" type="site" />
-				<rset>
-					<type>nlr.vlan</type>
-					<units>100</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="starlight-site" type="site" />
-				<rset>
-					<type>starlight.vlan</type>
-					<units>10</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="vise-site" type="site" />
-				<rset>
-					<type>vise.testbed</type>
-					<units>1</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="renci-vm-site" type="site" />
-				<rset>
-					<type>renci.vm</type>
-					<units>10</units>
-				</rset>
-				<rset>
-					<type>renci.GEPort</type>
-					<units>40</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="renci-net-site" type="site" />
-				<rset>
-					<type>renci.vlan</type>
-					<units>10</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="unc-vm-site" type="site" />
-				<rset>
-					<type>unc.vm</type>
-					<units>10</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="unc-net-site" type="site" />
-				<rset>
-					<type>unc.vlan</type>
-					<units>4</units>
-				</rset>
-			</edge>
-		</edges>
-	</topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 duke-vm-site 
+            </name> 
+            <guid>
+                 9b12d036-23e7-11df-b3a3-000c29b1c193 
+            </guid> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         duke.vm 
+                    </type> 
+                    <label>Eucalyptus Virtual Machine (DUKE)</label> 
+                    <description>
+                         A virtual machine 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/home/orca/orca-2.0/tools/cmdline/ec2" /> 
+                            <property name="unit.vlan.tag" value="13" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 dukevmsite 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.206.3/24" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                        <property name="ip.gateway" value="192.168.206.1" /> 
+                        <property name="data.subnet" value="255.255.0.0" /> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/dukevmsite.rdf" /> 
+                    </properties> 
+                </pool> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         duke.GEPort 
+                    </type> 
+                    <label>DUKE Gigabit Ethernet Port</label> 
+                    <description>
+                         GigE port on 6509 at DUKE 
+                    </description> 
+                    <units>
+                         40 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="common/noop.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 dukevmsite/GEPort 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/dukevmsite.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="duke.GEPort" class="orca.controllers.ben.control.PortNDLControl" /> 
+            </controls> 
+        </actor> 
+        <!-- NOT TO BE USED FOR THE DEMO --> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 unc-vm-site 
+            </name> 
+            <guid>
+                 993c8fb0-8867-11df-ac05-000c29b1c193 
+            </guid> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         unc.vm 
+                    </type> 
+                    <label>Eucalyptus Virtual Machine (DUKE)</label> 
+                    <description>
+                         A virtual machine 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/home/orca/orca-2.0/tools/cmdline/ec2" /> 
+                            <property name="unit.vlan.tag" value="13" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 uncvmsite 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.206.3/24" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                        <property name="ip.gateway" value="192.168.206.1" /> 
+                        <property name="data.subnet" value="255.255.0.0" /> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/uncvmsite.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="unc.vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 renci-vm-site 
+            </name> 
+            <guid>
+                 19f1b53b-f081-4544-81fa-b0467bff73c1 
+            </guid> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         renci.vm 
+                    </type> 
+                    <label>Eucalyptus Virtual Machine (RENCI)</label> 
+                    <description>
+                         A virtual machine 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/opt/orca/ec2-renci" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 rencivmsite 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.201.20-29" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                        <property name="ip.gateway" value="192.168.201.1" /> 
+                        <property name="data.subnet" value="255.255.0.0" /> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/rencivmsite.rdf" /> 
+                    </properties> 
+                </pool> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         renci.GEPort 
+                    </type> 
+                    <label>RENCI Gigabit Ethernet Port</label> 
+                    <description>
+                         GigE port on 6509 at RENCI 
+                    </description> 
+                    <units>
+                         40 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="common/noop.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 rencivmsite/GEPort 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/rencivmsite.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="renci.GEPort" class="orca.controllers.ben.control.PortNDLControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 vise-site 
+            </name> 
+            <guid>
+                 9df4de98-23e7-11df-b49f-000c29b1c193 
+            </guid> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         vise.testbed 
+                    </type> 
+                    <label>ViSE Testbed</label> 
+                    <description>
+                         The ViSE Testbed 
+                    </description> 
+                    <units>
+                         1 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="common/noop.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 umass 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/mass.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="vise.testbed" class="orca.policy.core.UnitsControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 duke-net-site 
+            </name> 
+            <guid>
+                 a0b1324e-23e7-11df-85d1-000c29b1c193 
+            </guid> 
+            <description>
+                 DUKE NET site authority 
+            </description> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         duke.vlan 
+                    </type> 
+                    <label>DUKE NET VLAN</label> 
+                    <description>
+                         A VLAN over DUKE NET 
+                    </description> 
+                    <units>
+                         4 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="common/noop.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 dukenet 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="vlan.tag.start" value="11" /> 
+                        <property name="vlan.tag.end" value="14" /> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/dukeNet.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="duke.vlan" class="orca.policy.core.VlanControl" /> 
+            </controls> 
+        </actor> 
+        <!-- NOT TO BE USED FOR THE DEMO --> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 unc-net-site 
+            </name> 
+            <guid>
+                 634db10e-8867-11df-a8f0-000c29b1c193 
+            </guid> 
+            <description>
+                 UNC NET site authority 
+            </description> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         unc.vlan 
+                    </type> 
+                    <label>UNC NET VLAN</label> 
+                    <description>
+                         A VLAN over UNC NET 
+                    </description> 
+                    <units>
+                         4 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="common/noop.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 uncnet 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="vlan.tag.start" value="11" /> 
+                        <property name="vlan.tag.end" value="14" /> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/uncNet.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="unc.vlan" class="orca.policy.core.VlanControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 renci-net-site 
+            </name> 
+            <guid>
+                 2a135201-9562-40c1-8dab-2fc6f5c9bd2f 
+            </guid> 
+            <description>
+                 RENCI NET site authority 
+            </description> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         renci.vlan 
+                    </type> 
+                    <label>RENCI NET VLAN</label> 
+                    <description>
+                         A VLAN over RENCI NET 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="controllers/ben/gec8/renci.euca.net.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 rencinet 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="vlan.tag.start" value="11" /> 
+                        <property name="vlan.tag.end" value="20" /> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/renciNet.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="renci.vlan" class="orca.policy.core.VlanControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 ben-site 
+            </name> 
+            <guid>
+                 a3a84424-23e7-11df-a8ff-000c29b1c193 
+            </guid> 
+            <description>
+                 BEN site authority 
+            </description> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         ben.vlan 
+                    </type> 
+                    <label>BEN VLAN</label> 
+                    <description>
+                         A VLAN over BEN 
+                    </description> 
+                    <units>
+                         100 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="controllers/ben/gec9/ben.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 ben 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/ben-6509.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="ben.vlan" class="orca.controllers.ben.control.BenNdlControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 nlr-site 
+            </name> 
+            <description>
+                 NLR site authority 
+            </description> 
+            <guid>
+                 a6bac0d8-23e7-11df-8b63-000c29b1c193 
+            </guid> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         nlr.vlan 
+                    </type> 
+                    <label>NLR VLAN</label> 
+                    <description>
+                         A VLAN over NLR 
+                    </description> 
+                    <units>
+                         100 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="nlr/handler.xml"> 
+                        <properties> 
+                            <property name="NLRSherpa.bandwidth" value="100000" /> 
+                            <property name="nlr.credentials" value="/home/orca/orca-2.0/tools/cmdline/config/nlr.properties" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 nlr 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/nlr.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="nlr.vlan" class="orca.policy.core.UnitsControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 starlight-site 
+            </name> 
+            <description>
+                 Starlight site authority 
+            </description> 
+            <guid>
+                 a9c9cd6e-23e7-11df-af97-000c29b1c193 
+            </guid> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         starlight.vlan 
+                    </type> 
+                    <label>Starlight VLAN</label> 
+                    <description>
+                         A VLAN over Starlight 
+                    </description> 
+                    <units>
+                         100 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="controllers/ben/gec8/starlight.xml" /> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 starlight 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.class.invfortype 
+                            </key> 
+                            <type>
+                                 Class 
+                            </type> 
+                            <value>
+                                 orca.controllers.ben.broker.NDLVlanInventory 
+                            </value> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/starlight.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="starlight.vlan" class="orca.policy.core.UnitsControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 broker 
+            </type> 
+            <name>
+                 ndl-broker 
+            </name> 
+            <guid>
+                 acaa0b8e-23e7-11df-b278-000c29b1c193 
+            </guid> 
+            <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
+                <properties> 
+                    <property name="queue.type" value="fifo" /> 
+                </properties> 
+            </policy> 
+        </actor> 
+        <actor> 
+            <type>
+                 service 
+            </type> 
+            <name>
+                 service 
+            </name> 
+            <guid>
+                 af7b4558-23e7-11df-bf65-000c29b1c193 
+            </guid> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="ndl-broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="duke-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                         duke.vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+                <rset> 
+                    <type>
+                         duke.GEPort 
+                    </type> 
+                    <units>
+                         40 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="duke-net-site" type="site" /> 
+                <rset> 
+                    <type>
+                         duke.vlan 
+                    </type> 
+                    <units>
+                         4 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="ben-site" type="site" /> 
+                <rset> 
+                    <type>
+                         ben.vlan 
+                    </type> 
+                    <units>
+                         100 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="nlr-site" type="site" /> 
+                <rset> 
+                    <type>
+                         nlr.vlan 
+                    </type> 
+                    <units>
+                         100 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="starlight-site" type="site" /> 
+                <rset> 
+                    <type>
+                         starlight.vlan 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="vise-site" type="site" /> 
+                <rset> 
+                    <type>
+                         vise.testbed 
+                    </type> 
+                    <units>
+                         1 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="renci-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                         renci.vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+                <rset> 
+                    <type>
+                         renci.GEPort 
+                    </type> 
+                    <units>
+                         40 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="renci-net-site" type="site" /> 
+                <rset> 
+                    <type>
+                         renci.vlan 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="unc-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                         unc.vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="unc-net-site" type="site" /> 
+                <rset> 
+                    <type>
+                         unc.vlan 
+                    </type> 
+                    <units>
+                         4 
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

@@ -29,21 +29,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
- * This is a simple example of validating an XML
- * Signature using the JSR 105 API. It assumes the key needed to
- * validate the signature is contained in a KeyValue KeyInfo.
+ * This is a simple example of validating an XML Signature using the JSR 105 API. It assumes the key needed to validate
+ * the signature is contained in a KeyValue KeyInfo.
  */
 public class XmlDigitalSigValidator {
 
-        
-	protected static Logger logger = OrcaController.getLogger(XmlDigitalSigValidator.class.getSimpleName());
-        //protected static Logger logger = Logger.getLogger(XmlDigitalSigValidator.class.getName());
-	
+    protected static Logger logger = OrcaController.getLogger(XmlDigitalSigValidator.class.getSimpleName());
+    // protected static Logger logger = Logger.getLogger(XmlDigitalSigValidator.class.getName());
+
     public static void validate(Document doc) throws XMLSignatureException, MarshalException {
 
         // Find Signature element
-        NodeList nl =
-            doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
+        NodeList nl = doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
         if (nl.getLength() == 0) {
             throw new XMLSignatureException("Cannot find Signature element");
         }
@@ -52,18 +49,17 @@ public class XmlDigitalSigValidator {
         // document containing the XMLSignature
         XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
 
-        for(int itr = 0; itr < nl.getLength(); itr++){
-        	// Create a DOMValidateContext and specify a KeyValue KeySelector
+        for (int itr = 0; itr < nl.getLength(); itr++) {
+            // Create a DOMValidateContext and specify a KeyValue KeySelector
             // and document context
-            DOMValidateContext valContext = new DOMValidateContext
-                (new KeyValueKeySelector(), nl.item(itr));
+            DOMValidateContext valContext = new DOMValidateContext(new KeyValueKeySelector(), nl.item(itr));
 
             // unmarshal the XMLSignature
             XMLSignature signature = fac.unmarshalXMLSignature(valContext);
 
             KeyValueKeySelector keyValueKeySelector = new KeyValueKeySelector();
             DOMValidateContext docContext = new DOMValidateContext(keyValueKeySelector, doc.getDocumentElement());
-            
+
             // Validate the XMLSignature (generated above)
             boolean coreValidity = signature.validate(docContext);
 
@@ -74,36 +70,30 @@ public class XmlDigitalSigValidator {
                 logger.debug("signature validation status: " + sv);
                 // check the validation status of each Reference
                 Iterator<?> i = signature.getSignedInfo().getReferences().iterator();
-                for (int j=0; i.hasNext(); j++) {
-                    boolean refValid =
-                        ((Reference) i.next()).validate(docContext);
-                    logger.debug("ref["+j+"] validity status: " + refValid);
+                for (int j = 0; i.hasNext(); j++) {
+                    boolean refValid = ((Reference) i.next()).validate(docContext);
+                    logger.debug("ref[" + j + "] validity status: " + refValid);
                 }
             } else {
-            	logger.debug("Signature passed core validation");
+                logger.debug("Signature passed core validation");
             }
         }
     }
 
     /**
-     * KeySelector which retrieves the public key out of the
-     * KeyValue element and returns it.
-     * NOTE: If the key algorithm doesn't match signature algorithm,
-     * then the public key will be ignored.
+     * KeySelector which retrieves the public key out of the KeyValue element and returns it. NOTE: If the key algorithm
+     * doesn't match signature algorithm, then the public key will be ignored.
      */
     private static class KeyValueKeySelector extends KeySelector {
-    	
-    	//private List<X509Certificate> signerCertificateChain = new ArrayList<X509Certificate>();
-    	
-        public KeySelectorResult select(KeyInfo keyInfo,
-                                        KeySelector.Purpose purpose,
-                                        AlgorithmMethod method,
-                                        XMLCryptoContext context)
-            throws KeySelectorException {
+
+        // private List<X509Certificate> signerCertificateChain = new ArrayList<X509Certificate>();
+
+        public KeySelectorResult select(KeyInfo keyInfo, KeySelector.Purpose purpose, AlgorithmMethod method,
+                XMLCryptoContext context) throws KeySelectorException {
             if (keyInfo == null) {
                 throw new KeySelectorException("Null KeyInfo object!");
             }
-            
+
             SignatureMethod sm = (SignatureMethod) method;
             List<?> list = keyInfo.getContent();
 
@@ -112,7 +102,7 @@ public class XmlDigitalSigValidator {
                 if (xmlStructure instanceof KeyValue) {
                     PublicKey pk = null;
                     try {
-                        pk = ((KeyValue)xmlStructure).getPublicKey();
+                        pk = ((KeyValue) xmlStructure).getPublicKey();
                     } catch (KeyException ke) {
                         throw new KeySelectorException(ke);
                     }
@@ -121,40 +111,39 @@ public class XmlDigitalSigValidator {
                         return new SimpleKeySelectorResult(pk);
                     }
                 }
-                /*else if (xmlStructure instanceof X509Data){
-                	List<?> x509Data = ((X509Data)xmlStructure).getContent();
-                	for (int x509DataItr = 0; x509DataItr < x509Data.size(); x509DataItr++) {
-                        if (x509Data.get(x509DataItr) instanceof X509Certificate) {
-                        	signerCertificateChain.add(((X509Certificate)x509Data.get(x509DataItr)));
-                        }
-                	}
-                }*/
+                /*
+                 * else if (xmlStructure instanceof X509Data){ List<?> x509Data = ((X509Data)xmlStructure).getContent();
+                 * for (int x509DataItr = 0; x509DataItr < x509Data.size(); x509DataItr++) { if
+                 * (x509Data.get(x509DataItr) instanceof X509Certificate) {
+                 * signerCertificateChain.add(((X509Certificate)x509Data.get(x509DataItr))); } } }
+                 */
             }
             throw new KeySelectorException("No KeyValue element found!");
         }
 
-        //FIXME: this should also work for key types other than DSA/RSA
+        // FIXME: this should also work for key types other than DSA/RSA
         static boolean algEquals(String algURI, String algName) {
-            if (algName.equalsIgnoreCase("DSA") &&
-                algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1)) {
+            if (algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1)) {
                 return true;
-            } else if (algName.equalsIgnoreCase("RSA") &&
-                       algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1)) {
+            } else if (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1)) {
                 return true;
             } else {
                 return false;
             }
         }
-        
-        //public List<X509Certificate> getSignerCertificateChain() { return signerCertificateChain; }
+
+        // public List<X509Certificate> getSignerCertificateChain() { return signerCertificateChain; }
     }
 
     private static class SimpleKeySelectorResult implements KeySelectorResult {
         private PublicKey pk;
+
         SimpleKeySelectorResult(PublicKey pk) {
             this.pk = pk;
         }
 
-        public Key getKey() { return pk; }
+        public Key getKey() {
+            return pk;
+        }
     }
 }

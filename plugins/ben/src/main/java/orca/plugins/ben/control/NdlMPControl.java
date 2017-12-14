@@ -25,158 +25,163 @@ import orca.util.PropList;
 
 public class NdlMPControl extends BenNdlControl {
 
-	{
-		propertiesConverter = NlrNdlPropertiesConverter.class;
-		try {
-			propertiesConverterConvertMethod = propertiesConverter.getDeclaredMethod("convert", NetworkConnection.class, NetworkHandler.class, Logger.class);
-		} catch(NoSuchMethodException nme) {
-			System.out.println("Unable to find appropriate convert method in " + propertiesConverter.getCanonicalName());
-			Method[] methods = propertiesConverter.getMethods();
-			for (Method m: methods) {
-				System.out.println("Method " + m);
-			}
-		}
-	}
-	
-	@Override
-	public void donate(IClientReservation r) throws Exception {
-		logger.debug("NdlMpControl.donate() for " + r + " is called");
-		if (handler != null) {
-			throw new Exception("only a single source reservation is supported");
-		}        
-		String substrateFile = getSubstrateFile(r);
-		logger.info("NdlMPControl.donate(): substrate file: " + substrateFile);
-		handler = new MultiPointNetworkHandler(substrateFile, 
-				Globals.TdbPersistentDirectory + Globals.PathSep + r.getActor().getGuid());
-	}
-	
-	/**
-	 * {@overide}
-	 */
-	public ResourceSet assign(IAuthorityReservation r) throws Exception {
-		logger.debug("NdlMpControl.assign() for " + r + " is called");
-		if (handler == null) {
-			throw new Exception("no inventory");
-		}
+    {
+        propertiesConverter = NlrNdlPropertiesConverter.class;
+        try {
+            propertiesConverterConvertMethod = propertiesConverter.getDeclaredMethod("convert", NetworkConnection.class,
+                    NetworkHandler.class, Logger.class);
+        } catch (NoSuchMethodException nme) {
+            System.out
+                    .println("Unable to find appropriate convert method in " + propertiesConverter.getCanonicalName());
+            Method[] methods = propertiesConverter.getMethods();
+            for (Method m : methods) {
+                System.out.println("Method " + m);
+            }
+        }
+    }
 
-		if (inprogress || closeInProgress > 0) {
-			// we can handle only one request at a time
-			// delay this request until the current request completes
-			return null;
-		}
+    @Override
+    public void donate(IClientReservation r) throws Exception {
+        logger.debug("NdlMpControl.donate() for " + r + " is called");
+        if (handler != null) {
+            throw new Exception("only a single source reservation is supported");
+        }
+        String substrateFile = getSubstrateFile(r);
+        logger.info("NdlMPControl.donate(): substrate file: " + substrateFile);
+        handler = new MultiPointNetworkHandler(substrateFile,
+                Globals.TdbPersistentDirectory + Globals.PathSep + r.getActor().getGuid());
+    }
 
-		// get the currently assigned resources (if any)
-		ResourceSet current = r.getResources();
-		// determine if this is a new lease or an extension request
-		if (current == null) {
+    /**
+     * {@overide}
+     */
+    public ResourceSet assign(IAuthorityReservation r) throws Exception {
+        logger.debug("NdlMpControl.assign() for " + r + " is called");
+        if (handler == null) {
+            throw new Exception("no inventory");
+        }
 
-			ResourceSet r_set = formResourceSet(r);
-			if (r_set==null) {
-				return null;
-			} else
-				return r_set;
-		} else {
-			// extend automatically
-			return new ResourceSet(null, null, null, type, null);
-		}
-	}
+        if (inprogress || closeInProgress > 0) {
+            // we can handle only one request at a time
+            // delay this request until the current request completes
+            return null;
+        }
 
-	@Override
-	protected ResourceSet formResourceSet(IAuthorityReservation r){
-		Properties ticketProperties = getTicketProperties(r);
-		RequestReservation rr = handleRequest(r);
-		
-		if (rr == null)
-			return null;
-		String uri = rr.getReservation();
-		NetworkConnection con = handler.getConnection(uri);
+        // get the currently assigned resources (if any)
+        ResourceSet current = r.getResources();
+        // determine if this is a new lease or an extension request
+        if (current == null) {
 
-		Properties handlerProperties = NlrNdlPropertiesConverter.convert(con, handler, logger);
-		if(handlerProperties==null)
-			return null;
-		UnitSet gained = null;
-		ResourceData rd = null;
-		try{
-			rd = new ResourceData();
-			PropList.setProperty(rd.getResourceProperties(), UnitProperties.UnitVlanTag, handlerProperties.getProperty(UnitProperties.UnitVlanTag));
-			PropList.setProperty(rd.getLocalProperties(), PropertyRequestID, uri);
+            ResourceSet r_set = formResourceSet(r);
+            if (r_set == null) {
+                return null;
+            } else
+                return r_set;
+        } else {
+            // extend automatically
+            return new ResourceSet(null, null, null, type, null);
+        }
+    }
 
-			gained = new UnitSet(authority.getShirakoPlugin());
+    @Override
+    protected ResourceSet formResourceSet(IAuthorityReservation r) {
+        Properties ticketProperties = getTicketProperties(r);
+        RequestReservation rr = handleRequest(r);
 
-			Unit u = new Unit();
-			u.setResourceType(type);
-			u.setProperty(UnitProperties.UnitVlanTag, handlerProperties.getProperty(UnitProperties.UnitVlanTag));
-			// if the broker allocated specific bandwidth, set it as a property on the unit
-			if (ticketProperties.containsKey(ResourceProperties.ResourceBandwidth)) {
-				long bw = Long.parseLong(ticketProperties.getProperty(ResourceProperties.ResourceBandwidth));
-				long burst = bw / 8;
-				u.setProperty(UnitProperties.UnitVlanQoSRate, Long.toString(bw));
-				u.setProperty(UnitProperties.UnitVlanQoSBurstSize, Long.toString(burst));
-			}
+        if (rr == null)
+            return null;
+        String uri = rr.getReservation();
+        NetworkConnection con = handler.getConnection(uri);
 
-			// attach the handler properties to the node properties list
-			u.mergeProperties(handlerProperties);
-			u.setProperty(PropertyRequestID, uri);
+        Properties handlerProperties = NlrNdlPropertiesConverter.convert(con, handler, logger);
+        if (handlerProperties == null)
+            return null;
+        UnitSet gained = null;
+        ResourceData rd = null;
+        try {
+            rd = new ResourceData();
+            PropList.setProperty(rd.getResourceProperties(), UnitProperties.UnitVlanTag,
+                    handlerProperties.getProperty(UnitProperties.UnitVlanTag));
+            PropList.setProperty(rd.getLocalProperties(), PropertyRequestID, uri);
 
-			gained.add(u);
-		}catch(Exception e){
-			return null;
-		}
-		return new ResourceSet(gained, null, null, type, rd);
-	}
-	
-//	@Override
-//	public synchronized void close(IReservation reservation) {
-//		logger.debug("NdlMPControl.close(): for reservation: " + reservation.getReservationID());
-//
-//		//super.close(reservation);
-//
-//		Unit u = null;
-//
-//		try {
-//			u = ((UnitSet) reservation.getResources().getResources()).getSet().iterator().next();
-//		} catch (Exception e) {
-//			u = null;
-//		}
-//
-//		setcloseInProgress();
-//		if (u != null) {   
-//			String uri = u.getProperty(PropertyRequestID);
-//			logger.debug("NdlMPControl.close(): found unit for reservation: " + reservation.getReservationID() + " requestID=" + uri);
-//			// unset the setup properties
-//			NetworkConnection con = handler.getConnection(uri);
-//			Properties setupProperties = NlrNdlPropertiesConverter.convert(con, handler, logger);
-//			u.unsetProperties(setupProperties);
-//			// set the teardown properties
-//			NetworkConnection teardown = handler.getConnectionTeardownActions(uri);
-//			Properties teardownProperties = NlrNdlPropertiesConverter.convert(con, (MultiPointNetworkHandler)handler, logger);
-//			u.mergeProperties(teardownProperties);  
-//
-//			closeConnectionCleanup(u);
-//			/*
-//			String requestID = u.getProperty(PropertyRequestID);
-//			try {
-//				handler.releaseReservation(requestID);
-//			} catch (Exception e) {
-//				logger.error("NdlMPControl.close(): Exception: " + e);
-//				e.printStackTrace();
-//			}
-//			*/	
-//		} else {
-//			unsetcloseInProgress();
-//			logger.debug("NdlMPControl.close(): missing unit for reservation " + reservation.getReservationID());
-//		}
-//	}
-	
-	@Override
-	public void recoveryStarting() {
-		logger.info("Beginning NdlMPControl recovery");
-	}
+            gained = new UnitSet(authority.getShirakoPlugin());
 
-	@Override
-	public void recoveryEnded() {
-		logger.info("Completing NdlMPControl recovery");
-		logger.debug("Restored NdlMPControl resource type: " + type);
-		logger.debug("with NetworkHandler: " + handler);
-	}
+            Unit u = new Unit();
+            u.setResourceType(type);
+            u.setProperty(UnitProperties.UnitVlanTag, handlerProperties.getProperty(UnitProperties.UnitVlanTag));
+            // if the broker allocated specific bandwidth, set it as a property on the unit
+            if (ticketProperties.containsKey(ResourceProperties.ResourceBandwidth)) {
+                long bw = Long.parseLong(ticketProperties.getProperty(ResourceProperties.ResourceBandwidth));
+                long burst = bw / 8;
+                u.setProperty(UnitProperties.UnitVlanQoSRate, Long.toString(bw));
+                u.setProperty(UnitProperties.UnitVlanQoSBurstSize, Long.toString(burst));
+            }
+
+            // attach the handler properties to the node properties list
+            u.mergeProperties(handlerProperties);
+            u.setProperty(PropertyRequestID, uri);
+
+            gained.add(u);
+        } catch (Exception e) {
+            return null;
+        }
+        return new ResourceSet(gained, null, null, type, rd);
+    }
+
+    // @Override
+    // public synchronized void close(IReservation reservation) {
+    // logger.debug("NdlMPControl.close(): for reservation: " + reservation.getReservationID());
+    //
+    // //super.close(reservation);
+    //
+    // Unit u = null;
+    //
+    // try {
+    // u = ((UnitSet) reservation.getResources().getResources()).getSet().iterator().next();
+    // } catch (Exception e) {
+    // u = null;
+    // }
+    //
+    // setcloseInProgress();
+    // if (u != null) {
+    // String uri = u.getProperty(PropertyRequestID);
+    // logger.debug("NdlMPControl.close(): found unit for reservation: " + reservation.getReservationID() + "
+    // requestID=" + uri);
+    // // unset the setup properties
+    // NetworkConnection con = handler.getConnection(uri);
+    // Properties setupProperties = NlrNdlPropertiesConverter.convert(con, handler, logger);
+    // u.unsetProperties(setupProperties);
+    // // set the teardown properties
+    // NetworkConnection teardown = handler.getConnectionTeardownActions(uri);
+    // Properties teardownProperties = NlrNdlPropertiesConverter.convert(con, (MultiPointNetworkHandler)handler,
+    // logger);
+    // u.mergeProperties(teardownProperties);
+    //
+    // closeConnectionCleanup(u);
+    // /*
+    // String requestID = u.getProperty(PropertyRequestID);
+    // try {
+    // handler.releaseReservation(requestID);
+    // } catch (Exception e) {
+    // logger.error("NdlMPControl.close(): Exception: " + e);
+    // e.printStackTrace();
+    // }
+    // */
+    // } else {
+    // unsetcloseInProgress();
+    // logger.debug("NdlMPControl.close(): missing unit for reservation " + reservation.getReservationID());
+    // }
+    // }
+
+    @Override
+    public void recoveryStarting() {
+        logger.info("Beginning NdlMPControl recovery");
+    }
+
+    @Override
+    public void recoveryEnded() {
+        logger.info("Completing NdlMPControl recovery");
+        logger.debug("Restored NdlMPControl resource type: " + type);
+        logger.debug("with NetworkHandler: " + handler);
+    }
 }

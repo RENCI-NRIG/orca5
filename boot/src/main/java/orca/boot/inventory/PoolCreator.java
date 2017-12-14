@@ -29,7 +29,7 @@ public class PoolCreator {
     protected ResourcePoolsDescriptor pools;
     protected String inventory;
     protected IOrcaContainer cont;
-    
+
     public PoolCreator(AuthoritySubstrate substrate, ResourcePoolsDescriptor pools, String inventory) {
         this.substrate = substrate;
         this.pools = pools;
@@ -43,25 +43,26 @@ public class PoolCreator {
         } else {
             Globals.Log.info("Creating resource pool factory class=" + rd.getPoolFactory());
             try {
-                f = (IResourcePoolFactory)Misc.createInstance(rd.getPoolFactory());
+                f = (IResourcePoolFactory) Misc.createInstance(rd.getPoolFactory());
             } catch (Exception e) {
                 throw new ConfigurationException("Could not instantiate class=" + rd.getPoolFactory(), e);
             }
-            
+
         }
         f.setSubstrate(substrate);
         f.setDescriptor(rd);
         return f;
     }
-    
+
     public void process() throws ConfigurationException {
-    	cont = Orca.connect();
+        cont = Orca.connect();
         // transfer all inventory to the actor
         transferInventory();
         // create each resource pool
         for (ResourcePoolDescriptor pool : pools) {
-            if (Globals.Log.isDebugEnabled()){
-                Globals.Log.debug("Creating resource pool " + pool.getResourceTypeLabel() + " of Actor " + this.substrate.getActor().getName());
+            if (Globals.Log.isDebugEnabled()) {
+                Globals.Log.debug("Creating resource pool " + pool.getResourceTypeLabel() + " of Actor "
+                        + this.substrate.getActor().getName());
             }
 
             // create the factory
@@ -74,19 +75,23 @@ public class PoolCreator {
             // save the resource pool properties onto the local properties list
             ResourceData.mergeProperties(pool.getPoolProperties(), rd.getLocalProperties());
             // create the resource pool
-            CreatePoolResult r = substrate.getPoolManager().createPool(new SliceID(), pool.getResourceTypeLabel(), pool.getResourceType(), rd);
+            CreatePoolResult r = substrate.getPoolManager().createPool(new SliceID(), pool.getResourceTypeLabel(),
+                    pool.getResourceType(), rd);
             if (r.code != 0) {
-                throw new ConfigurationException("Could not create resource pool: " + pool.getResourceTypeLabel() + ". error=" + r.code);
+                throw new ConfigurationException(
+                        "Could not create resource pool: " + pool.getResourceTypeLabel() + ". error=" + r.code);
             }
             // register the handler for this pool
-            registerHandler(pool);            
+            registerHandler(pool);
             IClientReservation source = f.createSourceReservation(r.pool);
             try {
-                if (Globals.Log.isDebugEnabled()){
+                if (Globals.Log.isDebugEnabled()) {
                     Globals.Log.debug("Adding source reservation to database " + source.toLogString());
                     if (Globals.Log.isTraceEnabled()) {
-                        Globals.Log.trace("Source reservation has resources of type " + source.getResources().getResources().getClass().getSimpleName());
-                        Globals.Log.trace("Source reservation has delegation of " + ((Ticket) source.getResources().getResources()).getTicket().getDelegation());
+                        Globals.Log.trace("Source reservation has resources of type "
+                                + source.getResources().getResources().getClass().getSimpleName());
+                        Globals.Log.trace("Source reservation has delegation of "
+                                + ((Ticket) source.getResources().getResources()).getTicket().getDelegation());
                     }
                 }
                 substrate.getDatabase().addReservation(source);
@@ -98,7 +103,7 @@ public class PoolCreator {
             // commit any changes made to the slice properties
             try {
                 substrate.getPoolManager().updatePool(r.pool);
-            } catch (Exception e){
+            } catch (Exception e) {
                 throw new ConfigurationException(e);
             }
         }
@@ -115,8 +120,8 @@ public class PoolCreator {
         while (st.hasMoreTokens()) {
             String name = st.nextToken();
             if (!cont.transferInventory(new UnitID(name), substrate.getActor().getGuid())) {
-                Globals.Log.error("Error while transferring inventory item (" + name + ") to site " + substrate.getActor().getName() + 
-                		" :" + cont.getLastError());
+                Globals.Log.error("Error while transferring inventory item (" + name + ") to site "
+                        + substrate.getActor().getName() + " :" + cont.getLastError());
             }
         }
     }
@@ -125,7 +130,7 @@ public class PoolCreator {
         if (pool.getInventory() == null) {
             return;
         }
-     
+
         StringTokenizer st = new StringTokenizer(pool.getInventory(), ",");
 
         while (st.hasMoreTokens()) {
@@ -133,17 +138,20 @@ public class PoolCreator {
             try {
                 substrate.getSubstrateDatabase().transfer(new UnitID(name), slice.getSliceID());
             } catch (Exception e) {
-                throw new ConfigurationException("Error while transferring inventory item: " + name  +" into pool: " + slice.getName(), e);
+                throw new ConfigurationException(
+                        "Error while transferring inventory item: " + name + " into pool: " + slice.getName(), e);
             }
         }
     }
-                
+
     protected String getPathFromPlugin(ResourcePoolDescriptor pool, Properties out) throws ConfigurationException {
         if (pool.getHandlerPackageId() != null && pool.getHandlerPluginId() != null) {
-            Plugin plugin = Globals.getContainer().getPluginManager().getPlugin(pool.getHandlerPackageId(), pool.getHandlerPluginId());
+            Plugin plugin = Globals.getContainer().getPluginManager().getPlugin(pool.getHandlerPackageId(),
+                    pool.getHandlerPluginId());
 
             if (plugin == null) {
-                throw new ConfigurationException("No such plugin: " + pool.getHandlerPackageId() + ":" + pool.getHandlerPluginId());
+                throw new ConfigurationException(
+                        "No such plugin: " + pool.getHandlerPackageId() + ":" + pool.getHandlerPluginId());
             }
 
             if (!(plugin.getPluginType() == Plugin.TypeHandler)) {
@@ -203,9 +211,8 @@ public class PoolCreator {
         map.setConfigFile(path);
 
         /*
-         * If the client passed properties, we need to merge them with the
-         * existing properties. Properties can be passed either in
-         * getConfigurationProperties() or in getConfigurationString()
+         * If the client passed properties, we need to merge them with the existing properties. Properties can be passed
+         * either in getConfigurationProperties() or in getConfigurationString()
          */
         PropList.mergeProperties(pool.getHandlerProperties(), p);
         // attach the properties

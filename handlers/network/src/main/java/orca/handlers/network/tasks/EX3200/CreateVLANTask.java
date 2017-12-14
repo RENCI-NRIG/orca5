@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.EX3200;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class CreateVLANTask extends EX3200BaseTask {
@@ -31,8 +30,8 @@ public class CreateVLANTask extends EX3200BaseTask {
     public void setVlanQosRate(String qosRate) {
         this.qosRate = qosRate;
     }
-    
+
     public void setVlanQoSBurstSize(String qosBurstSize) {
-    	this.qosBurstSize = qosBurstSize;
+        this.qosBurstSize = qosBurstSize;
     }
 }

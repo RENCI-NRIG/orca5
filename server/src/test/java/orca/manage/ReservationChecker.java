@@ -72,30 +72,27 @@ public class ReservationChecker extends RecoveryTest {
 
     protected void handleStateTransition(ReservationStateTransitionEvent event) {
         IReservation r = event.getReservation();
-        System.out.println("(transition) actor: " + r.getActor().getName() + " "
-                + r.getClass().getSimpleName() + "  #" + r.getReservationID().toHashString()
-                + " in slice " + r.getSlice().getName() + " state: " + r.getReservationState());
+        System.out.println("(transition) actor: " + r.getActor().getName() + " " + r.getClass().getSimpleName() + "  #"
+                + r.getReservationID().toHashString() + " in slice " + r.getSlice().getName() + " state: "
+                + r.getReservationState());
 
     }
 
     protected void handleDbUpdate(ReservationDatabaseUpdateEvent event) {
         IReservation r = event.getReservation();
-        System.out.println("(db: " + (event.IsBefore() ? "before" : "after") + ") actor: "
-                + r.getActor().getName() + " " + r.getClass().getSimpleName() + "  #"
-                + r.getReservationID().toHashString() + " in slice " + r.getSlice().getName()
-                + " state: " + r.getReservationState());
+        System.out.println("(db: " + (event.IsBefore() ? "before" : "after") + ") actor: " + r.getActor().getName()
+                + " " + r.getClass().getSimpleName() + "  #" + r.getReservationID().toHashString() + " in slice "
+                + r.getSlice().getName() + " state: " + r.getReservationState());
     }
 
     protected void handleRPC(OutboundRPCEvent event) {
         RPCRequest request = event.getRequest();
-        System.out.println("(out) actor: " + request.getActor().getName() + " type "
-                + request.getRequestType());
+        System.out.println("(out) actor: " + request.getActor().getName() + " type " + request.getRequestType());
     }
 
     protected void handleRPC(InboundRPCEvent event) {
         IncomingRPC request = event.GetRequest();
-        System.out.println("(in) actor: " + event.getActor().getName() + " type "
-                + request.getRequestType());
+        System.out.println("(in) actor: " + event.getActor().getName() + " type " + request.getRequestType());
     }
 
     protected void awaitCondition() throws InterruptedException {
@@ -192,15 +189,13 @@ public class ReservationChecker extends RecoveryTest {
         // ReservationStates.Redeeming,
         // ReservationStates.NoJoin)));
 
-//        list.add(new ReservationTransitionFailureCondition(SM_GUID,
-//                new ReservationState(ReservationStates.Active,
-//                        ReservationStates.None,
-//                        ReservationStates.BlockedJoin)));
+        // list.add(new ReservationTransitionFailureCondition(SM_GUID,
+        // new ReservationState(ReservationStates.Active,
+        // ReservationStates.None,
+        // ReservationStates.BlockedJoin)));
 
         list.add(new ReservationTransitionFailureCondition(SM_GUID,
-                new ReservationState(ReservationStates.Active,
-                        ReservationStates.None,
-                        ReservationStates.Joining)));
+                new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.Joining)));
 
         for (int i = 0; i < list.size(); ++i) {
             checkCondition(list.get(i));

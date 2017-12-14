@@ -14,10 +14,8 @@ import orca.tests.core.ShirakoTest;
 
 import orca.util.PropList;
 
-
 /**
- * This class tests the processing of a single reservation. Execute it using the
- * following parameters:
+ * This class tests the processing of a single reservation. Execute it using the following parameters:
  * <p>
  * <b>&lt;config file&gt; do.not.recover=true manual=false</b>
  * </p>
@@ -28,13 +26,11 @@ import orca.util.PropList;
  * <li>units: number of units</li>
  * </ul>
  */
-public class ReservationTest extends ShirakoTest
-{
+public class ReservationTest extends ShirakoTest {
     public static final String PropertyLeaseLength = "leaseLength";
     public static final String PropertyUnits = "units";
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         if (args.length > 0) {
             ShirakoTest test = new ReservationTest(args);
             test.run();
@@ -53,14 +49,12 @@ public class ReservationTest extends ShirakoTest
      */
     protected int units = 2;
 
-    public ReservationTest(String[] args)
-    {
+    public ReservationTest(String[] args) {
         super(args);
     }
 
     @Override
-    protected void readParameters() throws Exception
-    {
+    protected void readParameters() throws Exception {
         super.readParameters();
 
         String temp = properties.getProperty(PropertyLeaseLength);
@@ -77,8 +71,7 @@ public class ReservationTest extends ShirakoTest
     }
 
     @Override
-    protected void runTest()
-    {
+    protected void runTest() {
         try {
             DefaultReservationTester tester = new DefaultReservationTester();
             tester.setLeaseLength(leaseLength);

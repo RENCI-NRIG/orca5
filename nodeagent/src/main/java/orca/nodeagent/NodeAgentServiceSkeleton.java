@@ -36,23 +36,20 @@ import orca.nodeagent.util.Serializer;
 
 import org.apache.log4j.Logger;
 
-
-public class NodeAgentServiceSkeleton
-{
+public class NodeAgentServiceSkeleton {
     protected NodeAgentService service = NodeAgentService.getInstance();
     protected Logger logger = service.getLogger();
 
-    public NodeAgentServiceSkeleton()
-    {
+    public NodeAgentServiceSkeleton() {
     }
 
     /**
      * Executes the specified script
+     * 
      * @param arg
      * @return
      */
-    public ScriptResultElement executeScript(ScriptElement arg)
-    {
+    public ScriptResultElement executeScript(ScriptElement arg) {
         logger.info("Received an executeScript request");
 
         String scriptName = arg.getScript();
@@ -71,11 +68,11 @@ public class NodeAgentServiceSkeleton
 
     /**
      * Installs a driver.
+     * 
      * @param arg
      * @return
      */
-    public ResultElement installDriver(DriverElement arg)
-    {
+    public ResultElement installDriver(DriverElement arg) {
         logger.info("Received an install driver request");
 
         String className = arg.getClassName();
@@ -97,11 +94,11 @@ public class NodeAgentServiceSkeleton
 
     /**
      * Upgrades an already installed driver
+     * 
      * @param arg
      * @return
      */
-    public ResultElement upgradeDriver(DriverElement arg)
-    {
+    public ResultElement upgradeDriver(DriverElement arg) {
         logger.info("Received an upgrade driver request");
 
         String className = arg.getClassName();
@@ -123,11 +120,11 @@ public class NodeAgentServiceSkeleton
 
     /**
      * Uninstalls an installed driver
+     * 
      * @param arg
      * @return
      */
-    public ResultElement uninstallDriver(DriverElement arg)
-    {
+    public ResultElement uninstallDriver(DriverElement arg) {
         logger.info("Received an uninstall driver request");
 
         String id = arg.getDriverId();
@@ -145,11 +142,11 @@ public class NodeAgentServiceSkeleton
 
     /**
      * Invokes an action on a driver
+     * 
      * @param arg
      * @return
      */
-    public ResultElement executeDriver(DriverRequestElement arg)
-    {
+    public ResultElement executeDriver(DriverRequestElement arg) {
         logger.info("Received an executeDriver request");
 
         String strDriverId = arg.getDriverId();
@@ -172,11 +169,11 @@ public class NodeAgentServiceSkeleton
 
     /**
      * Invokes an action on a driver
+     * 
      * @param arg
      * @return
      */
-    public ResultElement executeObjectDriver(DriverObjectRequestElement arg)
-    {
+    public ResultElement executeObjectDriver(DriverObjectRequestElement arg) {
         logger.info("Received an executeDriver request");
 
         String strDriverId = arg.getDriverId();
@@ -206,11 +203,12 @@ public class NodeAgentServiceSkeleton
 
     /**
      * Ionut's test function
-     * @param in - just an int
+     * 
+     * @param in
+     *            - just an int
      * @return - just an int
      */
-    public TestFuncResultElement testFunc(TestFuncElement in)
-    {
+    public TestFuncResultElement testFunc(TestFuncElement in) {
         logger.debug("Param1 received in testFunc " + in.getTestFuncElement());
 
         int ret = in.getTestFuncElement() + 10;
@@ -226,11 +224,11 @@ public class NodeAgentServiceSkeleton
 
     /**
      * registers a public key/certificate with the server
+     * 
      * @param rk
      * @return
      */
-    public RegisterKeyResultElement registerKey(RegisterKeyElement rk)
-    {
+    public RegisterKeyResultElement registerKey(RegisterKeyElement rk) {
         logger.info("Received registerKey request");
 
         String alias = rk.getAlias();
@@ -246,11 +244,11 @@ public class NodeAgentServiceSkeleton
 
     /**
      * unregister a public key/certificate with the server
+     * 
      * @param urk
      * @return
      */
-    public UnregisterKeyResultElement unregisterKey(UnregisterKeyElement urk)
-    {
+    public UnregisterKeyResultElement unregisterKey(UnregisterKeyElement urk) {
         logger.info("Received an unregisterKey request");
 
         String alias = urk.getAlias();
@@ -265,27 +263,23 @@ public class NodeAgentServiceSkeleton
 
     /**
      * register the first key/certificate with the server
+     * 
      * @param rfk
      * @return
      */
 
     /*
-     * public RegisterFirstKeyResultElement
-     * registerFirstKey(RegisterFirstKeyElement rfk) { logger.info("Received
-     * registerFirstKey request"); String alias = rfk.getAlias(); byte[]
-     * certificateEncoding = rfk.getPublickey(); String password =
-     * rfk.getPassword(); int result = service.registerFirstKey(password, alias,
-     * certificateEncoding); RegisterFirstKeyResultElement rfkr = new
-     * RegisterFirstKeyResultElement();
+     * public RegisterFirstKeyResultElement registerFirstKey(RegisterFirstKeyElement rfk) { logger.info("Received
+     * registerFirstKey request"); String alias = rfk.getAlias(); byte[] certificateEncoding = rfk.getPublickey();
+     * String password = rfk.getPassword(); int result = service.registerFirstKey(password, alias, certificateEncoding);
+     * RegisterFirstKeyResultElement rfkr = new RegisterFirstKeyResultElement();
      * rfkr.setRegisterFirstKeyResultElement(result); return rfkr; }
      */
 
     /**
-     * register the authority key with the service this should be the first
-     * function called
+     * register the authority key with the service this should be the first function called
      */
-    public RegisterAuthorityKeyResultElement registerAuthorityKey(RegisterAuthorityKeyElement rak)
-    {
+    public RegisterAuthorityKeyResultElement registerAuthorityKey(RegisterAuthorityKeyElement rak) {
         logger.info("Received registerAuthorityKey request");
 
         String alias = rak.getAlias();
@@ -293,28 +287,23 @@ public class NodeAgentServiceSkeleton
         byte[] message = rak.getRequest();
         byte[] signature = rak.getSignature();
 
-        RegisterAuthorityKeyResultElement gskre = service.registerAuthorityKey(alias,
-                                                                               certificateEnconding,
-                                                                               message,
-                                                                               signature);
+        RegisterAuthorityKeyResultElement gskre = service.registerAuthorityKey(alias, certificateEnconding, message,
+                signature);
 
         return gskre;
     }
 
-    public GetServiceKeyResultElement getServiceKey(GetServiceKeyElement gske)
-    {
+    public GetServiceKeyResultElement getServiceKey(GetServiceKeyElement gske) {
         GetServiceKeyResultElement gskre = service.getServiceKey();
 
         return gskre;
     }
 
     /*
-     * ====================================================================
-     * Helper functions
+     * ==================================================================== Helper functions
      * ====================================================================
      */
-    protected ResultElement sendResult(int code, Properties p)
-    {
+    protected ResultElement sendResult(int code, Properties p) {
         ResultElement result = new ResultElement();
         result.setCode(code);
         result.setProperties(Serializer.serialize(p));
@@ -322,8 +311,7 @@ public class NodeAgentServiceSkeleton
         return result;
     }
 
-    protected ScriptResultElement sendExecuteScriptResult(int code, String stdout, String stderr)
-    {
+    protected ScriptResultElement sendExecuteScriptResult(int code, String stdout, String stderr) {
         String message = NodeAgentConstants.getMessage(code);
         ScriptResultElement result = new ScriptResultElement();
         result.setCode(code);

@@ -1,127 +1,203 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-	<actors>
-		<actor>
-			<type>site</type>
-			<name>openflow-site</name>
-			<guid>5a3a0bce-84dc-4cdd-b6ae-8c5718359cc4</guid>
-			<pools>
-				<pool>
-					<type>openflow</type>
-					<label>OpenFlow slice</label>
-					<description>A slice over OpenFlow substrate</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="network/openflow/handler.xml" >
-						<properties>
-							<property name="flowvisor.base" value="/home/ngkim/flowvisor" />
-							<property name="flowvisor.conf.d" value="conf.d" />
-							<property name="flowvisor.name" value="renci" />
-							<property name="flowvisor.id" value="20" />
-							<property name="controller.host" value="210.125.84.65" />
-							<property name="controller.port" value="2525" />
-							<property name="flowspace.01" value="allow:" />
-							<property name="allowedports.01" value="0,1,2,3	nfgist01" />
-							<property name="allowedports.02" value="0,1,2,3	nfgist02" />
-							<property name="allowedports.03" value="0,1 ofgist01" />
-						</properties>
-					</handler>
-					<properties>
-						<property name="openflow.slice.start" value="2" />
-						<property name="openflow.slice.end" value="11" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="openflow" class="orca.policy.core.OpenFlowControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>renci-vm-site</name>
-			<guid>19f1b53b-f081-4544-81fa-b0467bff73c1</guid>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>renci.vm</type>
-					<label>Eucalyptus Virtual Machine (RENCI)</label>
-					<description>A virtual machine</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>	
-							<property name="ec2.keys" value="/opt/orca/ec2-renci" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.domain</key>
-							<type>String</type>
-							<value>rencivmsite</value>
-						</attribute>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.201.20-29" />
-						<property name="ip.subnet" value="255.255.255.0" />
-						<property name="ip.gateway" value="192.168.201.1" />
-						<property name="data.subnet" value="255.255.0.0" />
-						<property name="substrate.file" value="orca/network/rencivmsite.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="renci.vm" class="orca.policy.core.SimpleVMControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>broker</type>
-			<name>ndl-broker</name>
-			<guid>27163b6d-c5bd-4413-aedb-ba306c5eec18</guid>
-			<description>OpenFlow Broker</description>
-		</actor>
-		<actor>
-			<type>service</type>
-			<name>service</name>
-			<guid>e095db95-ebeb-4e0a-a218-2919b96deaf3</guid>
-			<description>Service Manager</description>
-		</actor>
-	</actors>
-	<topology>
-		<edges>
-			<edge>
-				<from name="service" type="service" />
-				<to name="ndl-broker" type="broker" />
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="openflow-site" type="site" />
-				<rset>
-					<type>openflow</type>
-					<units>10</units>
-				</rset>
-			</edge>
-			<edge>
-				<from name="ndl-broker" type="broker" />
-				<to name="renci-vm-site" type="site" />
-				<rset>
-					<type>renci.vm</type>
-					<units>10</units>
-				</rset>
-			</edge>
-		</edges>
-	</topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 openflow-site 
+            </name> 
+            <guid>
+                 5a3a0bce-84dc-4cdd-b6ae-8c5718359cc4 
+            </guid> 
+            <pools> 
+                <pool> 
+                    <type>
+                         openflow 
+                    </type> 
+                    <label>OpenFlow slice</label> 
+                    <description>
+                         A slice over OpenFlow substrate 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="network/openflow/handler.xml"> 
+                        <properties> 
+                            <property name="flowvisor.base" value="/home/ngkim/flowvisor" /> 
+                            <property name="flowvisor.conf.d" value="conf.d" /> 
+                            <property name="flowvisor.name" value="renci" /> 
+                            <property name="flowvisor.id" value="20" /> 
+                            <property name="controller.host" value="210.125.84.65" /> 
+                            <property name="controller.port" value="2525" /> 
+                            <property name="flowspace.01" value="allow:" /> 
+                            <property name="allowedports.01" value="0,1,2,3	nfgist01" /> 
+                            <property name="allowedports.02" value="0,1,2,3	nfgist02" /> 
+                            <property name="allowedports.03" value="0,1 ofgist01" /> 
+                        </properties> 
+                    </handler> 
+                    <properties> 
+                        <property name="openflow.slice.start" value="2" /> 
+                        <property name="openflow.slice.end" value="11" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="openflow" class="orca.policy.core.OpenFlowControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 site 
+            </type> 
+            <name>
+                 renci-vm-site 
+            </name> 
+            <guid>
+                 19f1b53b-f081-4544-81fa-b0467bff73c1 
+            </guid> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                         renci.vm 
+                    </type> 
+                    <label>Eucalyptus Virtual Machine (RENCI)</label> 
+                    <description>
+                         A virtual machine 
+                    </description> 
+                    <units>
+                         10 
+                    </units> 
+                    <start>
+                         2010-01-30T00:00:00 
+                    </start> 
+                    <end>
+                         2011-01-30T00:00:00 
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/opt/orca/ec2-renci" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                 resource.domain 
+                            </key> 
+                            <type>
+                                 String 
+                            </type> 
+                            <value>
+                                 rencivmsite 
+                            </value> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.memory 
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                 128 
+                            </value> 
+                            <unit>
+                                 MB 
+                            </unit> 
+                            <type>
+                                 integer 
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                 resource.cpu 
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                 1/2 of 2GHz Intel Xeon 
+                            </value> 
+                            <type>
+                                 String 
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.201.20-29" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                        <property name="ip.gateway" value="192.168.201.1" /> 
+                        <property name="data.subnet" value="255.255.0.0" /> 
+                        <property name="substrate.file" value="orca/network/rencivmsite.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                 broker 
+            </type> 
+            <name>
+                 ndl-broker 
+            </name> 
+            <guid>
+                 27163b6d-c5bd-4413-aedb-ba306c5eec18 
+            </guid> 
+            <description>
+                 OpenFlow Broker 
+            </description> 
+        </actor> 
+        <actor> 
+            <type>
+                 service 
+            </type> 
+            <name>
+                 service 
+            </name> 
+            <guid>
+                 e095db95-ebeb-4e0a-a218-2919b96deaf3 
+            </guid> 
+            <description>
+                 Service Manager 
+            </description> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="ndl-broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="openflow-site" type="site" /> 
+                <rset> 
+                    <type>
+                         openflow 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="ndl-broker" type="broker" /> 
+                <to name="renci-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                         renci.vm 
+                    </type> 
+                    <units>
+                         10 
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

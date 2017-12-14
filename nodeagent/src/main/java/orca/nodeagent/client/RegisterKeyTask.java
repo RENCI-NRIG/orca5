@@ -21,15 +21,12 @@ import java.io.FileInputStream;
 
 import javax.security.cert.X509Certificate;
 
-
-public class RegisterKeyTask extends DriverBaseTask
-{
+public class RegisterKeyTask extends DriverBaseTask {
     protected String keyAlias;
     protected String certificateFile;
 
     @Override
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         super.execute();
 
         try {
@@ -67,13 +64,11 @@ public class RegisterKeyTask extends DriverBaseTask
         }
     }
 
-    public void setKeyAlias(String keyAlias)
-    {
+    public void setKeyAlias(String keyAlias) {
         this.keyAlias = keyAlias;
     }
 
-    public void setCertificateFile(String certificateFile)
-    {
+    public void setCertificateFile(String certificateFile) {
         this.certificateFile = certificateFile;
     }
 }

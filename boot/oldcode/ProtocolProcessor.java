@@ -55,4 +55,3 @@ import orca.shirako.api.IProxy;
             folder.delete();
         }
     }
-

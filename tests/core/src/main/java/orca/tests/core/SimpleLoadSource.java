@@ -29,9 +29,9 @@ import orca.shirako.time.Term;
 import org.apache.log4j.Logger;
 
 /**
- * Very simple demand. Creates demand either once (if
- * <code>oneRequestOnly</code> used) or on every cycle. Only bids for one
- * resource type and the same number of resources and term length every time.
+ * Very simple demand. Creates demand either once (if <code>oneRequestOnly</code> used) or on every cycle. Only bids for
+ * one resource type and the same number of resources and term length every time.
+ * 
  * @author grit
  */
 public class SimpleLoadSource implements ILoadSource {
@@ -42,11 +42,10 @@ public class SimpleLoadSource implements ILoadSource {
     public static final String PropertySliceName = "sliceName";
 
     /**
-     * The amount of time over specific policy decisions the SM must add when
-     * communicating with other actors (e.g. redeem() and renew()). Clock skew
-     * must be at least one if the SM is ticked after the agent and/or authority
-     * At some point in time we may want this to not be static and learn it from
-     * what we see in the system, but for now it is static.
+     * The amount of time over specific policy decisions the SM must add when communicating with other actors (e.g.
+     * redeem() and renew()). Clock skew must be at least one if the SM is ticked after the agent and/or authority At
+     * some point in time we may want this to not be static and learn it from what we see in the system, but for now it
+     * is static.
      */
     public static final long CLOCK_SKEW = 1;
 
@@ -91,8 +90,8 @@ public class SimpleLoadSource implements ILoadSource {
     protected boolean unsetAdvance = true;
 
     /**
-     * The advance time. Indicates how early the SM needs to bid to a particular
-     * broker to make the correct allocation cycle.
+     * The advance time. Indicates how early the SM needs to bid to a particular broker to make the correct allocation
+     * cycle.
      */
     protected long advanceTime = 0;
 
@@ -120,9 +119,10 @@ public class SimpleLoadSource implements ILoadSource {
     }
 
     /**
-     * Make a bid to the SM. This policy makes one reservation request per
-     * bidding cycle.
-     * @param cycle the current cycle
+     * Make a bid to the SM. This policy makes one reservation request per bidding cycle.
+     * 
+     * @param cycle
+     *            the current cycle
      */
     protected void bid(long cycle) {
         if (oneRequestOnly && !firstDemand) {
@@ -135,7 +135,8 @@ public class SimpleLoadSource implements ILoadSource {
         // get the advance time from the agent
         // for now - term length is 10 cycles
         Term term = new Term(clock.date(cycle + advanceTime), clock.getMillis(leaseLength));
-        IClientReservation c = ServiceManagerReservationFactory.getInstance().create(rset, term, slice, sm.getDefaultBroker());
+        IClientReservation c = ServiceManagerReservationFactory.getInstance().create(rset, term, slice,
+                sm.getDefaultBroker());
 
         // allow this reservation to be renewed
         c.setRenewable(true);
@@ -212,7 +213,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set the lease length
-     * @param lease length of the lease
+     * 
+     * @param lease
+     *            length of the lease
      */
     public void setLeaseLength(int lease) {
         this.leaseLength = lease;
@@ -220,7 +223,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set the lease length
-     * @param lease length of the lease
+     * 
+     * @param lease
+     *            length of the lease
      */
     public void setLeaseLength(Integer lease) {
         this.leaseLength = lease.intValue();
@@ -228,7 +233,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set one request or multiple
-     * @param value <code>true</code> if one request only
+     * 
+     * @param value
+     *            <code>true</code> if one request only
      */
     public void setOneRequestOnly(boolean value) {
         this.oneRequestOnly = value;
@@ -236,7 +243,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set one request or multiple
-     * @param value <code>true</code> if one request only
+     * 
+     * @param value
+     *            <code>true</code> if one request only
      */
     public void setOneRequestOnly(Boolean value) {
         this.oneRequestOnly = value.booleanValue();
@@ -244,7 +253,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set the resource type
-     * @param resType resource type
+     * 
+     * @param resType
+     *            resource type
      */
     public void setResourceType(ResourceType resType) {
         this.resourceType = resType;
@@ -252,7 +263,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set the resource type
-     * @param resType resource type
+     * 
+     * @param resType
+     *            resource type
      */
     public void setResourceType(String resType) {
         this.resourceType = new ResourceType(resType);
@@ -260,7 +273,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set the units
-     * @param u units
+     * 
+     * @param u
+     *            units
      */
     public void setUnits(int u) {
         this.units = u;
@@ -268,7 +283,9 @@ public class SimpleLoadSource implements ILoadSource {
 
     /**
      * Set the units
-     * @param u units
+     * 
+     * @param u
+     *            units
      */
     public void setUnits(Integer u) {
         this.units = u.intValue();
@@ -279,8 +296,7 @@ public class SimpleLoadSource implements ILoadSource {
      */
     public void tick(long cycle) {
         /*
-         * Do nothing on the first cycle: not all actors may be fully
-         * initialized at this point.
+         * Do nothing on the first cycle: not all actors may be fully initialized at this point.
          */
         if (previousCycle == -1) {
             previousCycle = cycle;

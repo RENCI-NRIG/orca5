@@ -10,8 +10,7 @@ public class ReservationTransitionFailureCondition extends FailureCondition {
     private ReservationID rid;
     private ReservationState state;
 
-    public ReservationTransitionFailureCondition(ID actorID, ReservationState state,
-            ReservationID rid) {
+    public ReservationTransitionFailureCondition(ID actorID, ReservationState state, ReservationID rid) {
         super(actorID);
         this.state = state;
         this.rid = rid;

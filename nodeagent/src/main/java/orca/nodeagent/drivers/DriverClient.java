@@ -17,13 +17,10 @@ import orca.tools.axis2.Axis2ClientConfigurationManager;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.log4j.Logger;
 
-
 /**
- * <code>DriverClient</code> is the base class for all driver client
- * implementations.
+ * <code>DriverClient</code> is the base class for all driver client implementations.
  */
-public class DriverClient
-{
+public class DriverClient {
     /**
      * Location of node agent service.
      */
@@ -52,13 +49,17 @@ public class DriverClient
 
     /**
      * Creates a new driver client.
-     * @param id driver identifier
-     * @param location node agent service location
-     * @param repository axis2 repository location
-     * @param config axis2 configuration file
+     * 
+     * @param id
+     *            driver identifier
+     * @param location
+     *            node agent service location
+     * @param repository
+     *            axis2 repository location
+     * @param config
+     *            axis2 configuration file
      */
-    public DriverClient(DriverId id, String location, String repository, String config)
-    {
+    public DriverClient(DriverId id, String location, String repository, String config) {
         if ((id == null) || (location == null)) {
             throw new IllegalArgumentException();
         }
@@ -72,11 +73,13 @@ public class DriverClient
 
     /**
      * Creates a new driver client.
-     * @param id driver identifier
-     * @param stub node agent service client stub
+     * 
+     * @param id
+     *            driver identifier
+     * @param stub
+     *            node agent service client stub
      */
-    public DriverClient(DriverId id, NodeAgentServiceStub stub)
-    {
+    public DriverClient(DriverId id, NodeAgentServiceStub stub) {
         if ((id == null) || (stub == null)) {
             throw new IllegalArgumentException();
         }
@@ -88,11 +91,11 @@ public class DriverClient
 
     /**
      * Returns a stub for communicating with the node agent service.
+     * 
      * @return node agent service stub
      * @throws Exception
      */
-    protected synchronized NodeAgentServiceStub getStub() throws Exception
-    {
+    protected synchronized NodeAgentServiceStub getStub() throws Exception {
         if (stub == null) {
             // if (repository != null || config != null) {
             // ConfigurationContext cc =
@@ -102,26 +105,24 @@ public class DriverClient
             // } else {
             // stub = new NodeAgentServiceStub(location);
             // }
-            
+
             message("Creating axis2 configuration context: repository=" + repository + " config=" + config);
-            
-            ConfigurationContext context = Axis2ClientConfigurationManager.getInstance().getContext(
-                repository,
-                config);
+
+            ConfigurationContext context = Axis2ClientConfigurationManager.getInstance().getContext(repository, config);
             message("Creating service stub: location=" + location);
             stub = new NodeAgentServiceStub(context, location);
         }
 
         return stub;
     }
-    
-    protected void reportError(Exception e){
+
+    protected void reportError(Exception e) {
         // print it first
         System.err.println("An error occurred: " + e.getMessage());
         e.printStackTrace();
         logger.error(e);
     }
-    
+
     protected void message(String message) {
         logger.debug(message);
         System.out.println(message);

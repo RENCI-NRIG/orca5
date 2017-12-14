@@ -23,12 +23,10 @@ import orca.shirako.time.Term;
 import orca.shirako.util.ResourceData;
 import orca.util.PropList;
 
-public class ResourcePoolFactory implements IResourcePoolFactory
-{
+public class ResourcePoolFactory implements IResourcePoolFactory {
     /**
-     * The resource pool descriptor.
-     * Its initial version is passed during initialization. The factory
-     * can manipulate it as it sees fit and returns it back the the PoolCreator.
+     * The resource pool descriptor. Its initial version is passed during initialization. The factory can manipulate it
+     * as it sees fit and returns it back the the PoolCreator.
      */
     protected ResourcePoolDescriptor desc;
     /**
@@ -47,25 +45,23 @@ public class ResourcePoolFactory implements IResourcePoolFactory
     /**
      * Modifies the resource pool descriptor as needed
      */
-    protected void updateDescriptor() throws ConfigurationException
-    {
+    protected void updateDescriptor() throws ConfigurationException {
         /*
-         * Use this function to modify the resource pool descriptor, as needed.
-         * For example, you can define attributes and resource pool properties
-         * needed by the resource pool. Resource pool attributes will become
-         * resource properties (of the pool/slice and source reservation), while
-         * properties attached to the resource pool descriptor will become local
-         * properties.
+         * Use this function to modify the resource pool descriptor, as needed. For example, you can define attributes
+         * and resource pool properties needed by the resource pool. Resource pool attributes will become resource
+         * properties (of the pool/slice and source reservation), while properties attached to the resource pool
+         * descriptor will become local properties.
          */
     }
 
     /**
      * Creates the term for the source reservation.
+     * 
      * @throws ConfigurationException
      */
     protected Term createTerm() throws ConfigurationException {
         ActorClock clock = substrate.getActor().getActorClock();
-        
+
         long now = Globals.getContainer().getCurrentCycle();
         Date start = desc.getStart();
         if (start == null) {
@@ -82,6 +78,7 @@ public class ResourcePoolFactory implements IResourcePoolFactory
 
     /**
      * Creates the resource ticket for the source reservation
+     * 
      * @param state
      * @throws ConfigurationException
      */
@@ -90,16 +87,17 @@ public class ResourcePoolFactory implements IResourcePoolFactory
         // that we want to be certified and protected by the signature. For now this properties list is empty, but
         // we may consider making this properties list contain all resource properties.
         try {
-            ResourceDelegation rd = substrate.getTicketFactory().makeDelegation(desc.getUnits(), term, desc.getResourceType());
-            return  substrate.getTicketFactory().makeTicket(rd);
+            ResourceDelegation rd = substrate.getTicketFactory().makeDelegation(desc.getUnits(), term,
+                    desc.getResourceType());
+            return substrate.getTicketFactory().makeTicket(rd);
         } catch (Exception e) {
             throw new ConfigurationException("Could not make ticket", e);
         }
     }
-    
+
     /**
-     * Use this function to set additional resource and local properties to be associated
-     * with the source reservation.
+     * Use this function to set additional resource and local properties to be associated with the source reservation.
+     * 
      * @return
      * @throws ConfigurationException
      */
@@ -113,10 +111,9 @@ public class ResourcePoolFactory implements IResourcePoolFactory
         rdata.getResourceProperties().setProperty("pool.name", slice.getName());
         return rdata;
     }
-    
-    public IClientReservation createSourceReservation(ISlice slice) throws ConfigurationException
-    {
-        this.slice = slice;        
+
+    public IClientReservation createSourceReservation(ISlice slice) throws ConfigurationException {
+        this.slice = slice;
         Term term = createTerm();
         ResourceTicket resourceTicket = createResourceTicket(term);
         Ticket ticket = new Ticket(resourceTicket, substrate, proxy);
@@ -125,23 +122,21 @@ public class ResourcePoolFactory implements IResourcePoolFactory
         IClientReservation r = ClientReservationFactory.getInstance().create(resources, term, slice);
         ClientReservationFactory.getInstance().setAsSource(r);
         return r;
-       
+
     }
 
-    public ResourcePoolDescriptor getDescriptor() throws ConfigurationException
-    {
+    public ResourcePoolDescriptor getDescriptor() throws ConfigurationException {
         updateDescriptor();
         return desc;
     }
 
-    public void setDescriptor(ResourcePoolDescriptor desc) throws ConfigurationException
-    {
+    public void setDescriptor(ResourcePoolDescriptor desc) throws ConfigurationException {
         this.desc = desc;
     }
-    
-    public void setSubstrate(ISubstrate substrate) throws ConfigurationException{
+
+    public void setSubstrate(ISubstrate substrate) throws ConfigurationException {
         this.substrate = substrate;
-        AuthToken auth = substrate.getActor().getIdentity();        
+        AuthToken auth = substrate.getActor().getIdentity();
         try {
             proxy = (IAuthorityProxy) ActorRegistry.getProxy(IProxy.ProxyTypeLocal, auth.getName());
             if (proxy == null) {

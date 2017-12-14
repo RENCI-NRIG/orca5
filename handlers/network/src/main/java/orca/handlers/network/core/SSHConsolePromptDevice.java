@@ -5,17 +5,16 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringEscapeUtils;
 
-
 /**
  * A device that shows a predictable prompt over an SSH connection.
  *
- * This class makes use of the fact that while there is no mechanism in the SSH
- * protocol to determine the end of a command after a shell we can recognize
- * a fixed prompt pattern instead of waiting until command output has stopped.
+ * This class makes use of the fact that while there is no mechanism in the SSH protocol to determine the end of a
+ * command after a shell we can recognize a fixed prompt pattern instead of waiting until command output has stopped.
  */
 public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
 
     protected abstract String getPromptPattern();
+
     private final Pattern promptPattern;
 
     public SSHConsolePromptDevice(String deviceAddress, String uid, String password) {
@@ -23,7 +22,6 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
 
         promptPattern = Pattern.compile(getPromptPattern());
     }
-
 
     @Override
     public void executeCommand(String cmd, String response, String timeout) throws CommandException {
@@ -60,12 +58,10 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
     /**
      * Clear initial response buffer.
      *
-     * Waits for at least 2 seconds of output and then matches the device
-     * specific prompt.
+     * Waits for at least 2 seconds of output and then matches the device specific prompt.
      * 
-     * XXX: this override is a compatilibity hack so that connect() does not
-     * need to be modified in the parent class. This should be fixed once the
-     * code is stabilized.
+     * XXX: this override is a compatilibity hack so that connect() does not need to be modified in the parent class.
+     * This should be fixed once the code is stabilized.
      */
     @Override
     protected byte[] getOutput(int timeout) throws IOException {

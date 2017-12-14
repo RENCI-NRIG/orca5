@@ -1,31 +1,21 @@
-<!DOCTYPE project [
-<!ENTITY core SYSTEM "../../../common/core.xml">
-<!ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml">
-<!ENTITY paths SYSTEM "../../../common/paths.xml">
-<!ENTITY bentasks SYSTEM "../ben.tasks.xml">
-]>
-
+<!DOCTYPE project> 
+<!--ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml"--> 
+<!--ENTITY paths SYSTEM "../../../common/paths.xml"--> 
+<!--ENTITY bentasks SYSTEM "../ben.tasks.xml"-->
+ ]&gt; 
 <project name="bencomplex" basedir=".">
-
-	&paths;
-	&core;
-	&drivertasks;
-	&bentasks;
-
-	<!-- <property file="test.properties" /> -->
-    <property file="../ben.properties" />
-
+     &amp;paths; &amp;core; &amp;drivertasks; &amp;bentasks; 
+    <!-- <property file="test.properties" /> --> 
+    <property file="../ben.properties" /> 
     <!--
     <property file="starlight.test.properties" />
-    -->
-
-    <property name="unit.vlan.tag" value="533" />
-    
-    <target name="join" depends="resolve.configuration,ben.load.tasks">
-        <echo message="STARLIGHT HANDLER: SETUP" />
-        <var name="code" value="0" />
-        <echo message="Stitching NLR and STARLIGHT vlans" />
-<!--
+    --> 
+    <property name="unit.vlan.tag" value="533" /> 
+    <target name="join" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="STARLIGHT HANDLER: SETUP" /> 
+        <var name="code" value="0"></var> 
+        <echo message="Stitching NLR and STARLIGHT vlans" /> 
+        <!--
 	CISCO DRIVER IS NOT MODULAR ENOUGH TO DO THIS FOR NOW - THIS WILL BE DONE MANUALLY 
         <echo message="enabling STARLIGHT vlan ${unit.vlan.tag} on ${starlight.router}: ${nlr.edge.interface}" />
         <enable.vlan service.location="${starlight.router.service.location}"
@@ -35,38 +25,23 @@
                      router.user="${router.user}"
                      router.password="${router.password}"
                      router.admin.password="${router.admin.password}" />
--->
-        <if>
-            <equals arg1="0" arg2="${code}" />
-            <then>
-                <echo message="mapping STARLIGHT and NLR vlans: ${unit.vlan.tag} ${nlr.unit.vlan.tag} on ${starlight.router}: ${nlr.edge.interface}" />
-                <map.vlans service.location="${starlight.router.service.location}"
-                           router="${starlight.router}"
-                           src.vlan.tag="${nlr.unit.vlan.tag}"
-                           dst.vlan.tag="${unit.vlan.tag}"
-                           port="${nlr.edge.interface}"
-                           router.user="${router.user}"
-                           router.password="${router.password}"
-                           router.admin.password="${router.admin.password}" />
-            </then>
-        </if>   
-        <property name="shirako.target.code" value="${code}" />
-        <echo message="starlight join exit code: ${shirako.target.code}" />
-    </target>
-
-    <target name="leave" depends="resolve.configuration,ben.load.tasks">
-        <echo message="STARLIGHT HANDLER: TEARDOWN" />
-        <var name="code" value="0" />
-        <echo message="unmapping STARLIGHT and NLR vlans: ${unit.vlan.tag} ${nlr.unit.vlan.tag} on ${starlight.router}: ${nlr.edge.interface}" />
-        <unmap.vlans service.location="${starlight.router.service.location}"
-                     router="${starlight.router}"
-                     src.vlan.tag="${nlr.unit.vlan.tag}"
-                     dst.vlan.tag="${unit.vlan.tag}"
-                     port="${nlr.edge.interface}"
-                     router.user="${router.user}"
-                     router.password="${router.password}"
-                     router.admin.password="${router.admin.password}" />
-<!--
+--> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="mapping STARLIGHT and NLR vlans: ${unit.vlan.tag} ${nlr.unit.vlan.tag} on ${starlight.router}: ${nlr.edge.interface}" /> 
+                <map.vlans service.location="${starlight.router.service.location}" router="${starlight.router}" src.vlan.tag="${nlr.unit.vlan.tag}" dst.vlan.tag="${unit.vlan.tag}" port="${nlr.edge.interface}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+            </then> 
+        </if> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="starlight join exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="STARLIGHT HANDLER: TEARDOWN" /> 
+        <var name="code" value="0"></var> 
+        <echo message="unmapping STARLIGHT and NLR vlans: ${unit.vlan.tag} ${nlr.unit.vlan.tag} on ${starlight.router}: ${nlr.edge.interface}" /> 
+        <unmap.vlans service.location="${starlight.router.service.location}" router="${starlight.router}" src.vlan.tag="${nlr.unit.vlan.tag}" dst.vlan.tag="${unit.vlan.tag}" port="${nlr.edge.interface}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+        <!--
 	CISCO DRIVER DOES NOT SUPPORT THIS DUE TO MULARITY ISSUES
         <echo message="disabling BEN vlan ${unit.vlan.tag} on ${starlight.router}: ${nlr.edge.interface}" />
         <disable.vlan service.location="${starlight.router.service.location}"
@@ -76,13 +51,12 @@
                       router.user="${router.user}"
                       router.password="${router.password}"
                       router.admin.password="${router.admin.password}" />
--->
-        <property name="shirako.target.code" value="${code}" />
-        <echo message="startlight leave exit code: ${shirako.target.code}" />
-    </target>
-
-    <target name="modify" depends="resolve.configuration,ben.load.tasks">
-        <echo message="STARLIGHT HANDLER: MODIFY" />
-        <property name="shirako.target.code" value="0" />
-    </target>
+--> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="startlight leave exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="modify" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="STARLIGHT HANDLER: MODIFY" /> 
+        <property name="shirako.target.code" value="0" /> 
+    </target> 
 </project>

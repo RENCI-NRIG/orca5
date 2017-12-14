@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.QFX3500;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class AddTrunkPortsTask extends QFX3500BaseTask {
@@ -19,7 +18,7 @@ public class AddTrunkPortsTask extends QFX3500BaseTask {
             }
             // commented out for now - on QFX we add all vlans
             // to trunk ports by hand /ib 4/12/13
-            //router.addTrunkPortsToVLAN(vlanTag, ports);    
+            // router.addTrunkPortsToVLAN(vlanTag, ports);
             setResult(0);
         } catch (BuildException e) {
             throw e;

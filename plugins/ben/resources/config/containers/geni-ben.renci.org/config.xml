@@ -1,33 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-	<actors>
-		<actor>
-			<type>service</type>
-			<name>service</name>
-			<guid>af7b4558-23e7-11df-bf65-000c29b1c193</guid>
-		</actor>
-	</actors>
-	<topology>
-		<edges>
-			<edge>
-				<from name="service" type="service" />
-				<to name="broker" type="broker" guid="acaa0b8e-23e7-11df-b278-000c29b1c193">
-					<location protocol="soapaxis2" url="http://geni-test.renci.org:8080/orca/services/broker" />
-<certificate>
-MIICbTCCAdagAwIBAgIES4mPjjANBgkqhkiG9w0BAQUFADB7MQswCQYDVQQGEwJVUzELMAkGA1UE
-CBMCTkMxDzANBgNVBAcTBkR1cmhhbTENMAsGA1UEChMEb3JjYTEQMA4GA1UECxMHc2hpcmFrbzEt
-MCsGA1UEAxMkYWNhYTBiOGUtMjNlNy0xMWRmLWIyNzgtMDAwYzI5YjFjMTkzMB4XDTEwMDIyNzIx
-MzMwMloXDTIwMDIyNTIxMzMwMlowezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5DMQ8wDQYDVQQH
-EwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNVBAMTJGFjYWEw
-YjhlLTIzZTctMTFkZi1iMjc4LTAwMGMyOWIxYzE5MzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkC
-gYEAlWEqiVWyq11CVyIxyRGMo6eI3QUbywyyLm6PFi+CidjFRHIfOKDONOgGMGvH/MICJh5YZuRs
-PEbbCP5yacvOzVVReQAKxG6wwttsKQbDFcPKZeNhiaWVZVRXamCNNaqbWw76GSAGy4lIMh2Qa1ik
-141XKMH8WX1HCeShCvtOEOkCAwEAATANBgkqhkiG9w0BAQUFAAOBgQCS4xK2IUBQlsu/+QSZWkRI
-AQeX+ZdJEjYMrMy1wHlnDPAuHSuwoP01sGNNvR9zRu+r3OY7Gx795vhiQqvsvzqLTlUL+Ve66BAz
-LJ9Iq8xrv7OOj3QeDyahdjPuWBeSs15t/TexfzlpzK2OXBpTAxia2Br3dx0yyKm7lNlKtRfz6g==
-</certificate>
-				</to>
-			</edge>
-		</edges>
-	</topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                 service 
+            </type> 
+            <name>
+                 service 
+            </name> 
+            <guid>
+                 af7b4558-23e7-11df-bf65-000c29b1c193 
+            </guid> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="broker" type="broker" guid="acaa0b8e-23e7-11df-b278-000c29b1c193"> 
+                    <location protocol="soapaxis2" url="http://geni-test.renci.org:8080/orca/services/broker" /> 
+                    <certificate>
+                         MIICbTCCAdagAwIBAgIES4mPjjANBgkqhkiG9w0BAQUFADB7MQswCQYDVQQGEwJVUzELMAkGA1UE CBMCTkMxDzANBgNVBAcTBkR1cmhhbTENMAsGA1UEChMEb3JjYTEQMA4GA1UECxMHc2hpcmFrbzEt MCsGA1UEAxMkYWNhYTBiOGUtMjNlNy0xMWRmLWIyNzgtMDAwYzI5YjFjMTkzMB4XDTEwMDIyNzIx MzMwMloXDTIwMDIyNTIxMzMwMlowezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5DMQ8wDQYDVQQH EwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNVBAMTJGFjYWEw YjhlLTIzZTctMTFkZi1iMjc4LTAwMGMyOWIxYzE5MzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkC gYEAlWEqiVWyq11CVyIxyRGMo6eI3QUbywyyLm6PFi+CidjFRHIfOKDONOgGMGvH/MICJh5YZuRs PEbbCP5yacvOzVVReQAKxG6wwttsKQbDFcPKZeNhiaWVZVRXamCNNaqbWw76GSAGy4lIMh2Qa1ik 141XKMH8WX1HCeShCvtOEOkCAwEAATANBgkqhkiG9w0BAQUFAAOBgQCS4xK2IUBQlsu/+QSZWkRI AQeX+ZdJEjYMrMy1wHlnDPAuHSuwoP01sGNNvR9zRu+r3OY7Gx795vhiQqvsvzqLTlUL+Ve66BAz LJ9Iq8xrv7OOj3QeDyahdjPuWBeSs15t/TexfzlpzK2OXBpTAxia2Br3dx0yyKm7lNlKtRfz6g== 
+                    </certificate> 
+                </to> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

@@ -17,22 +17,18 @@ import orca.drivers.IDriver;
 
 import java.util.Properties;
 
-
 /**
  * A simple driver used for testing purposes.
  */
-public class TestDriver implements IDriver
-{
+public class TestDriver implements IDriver {
     public static DriverId MyDriverId = new DriverId("bfc1aa30-451d-11db-b0de-0800200c9a66");
     public static String TestAction = "test";
     protected DriverFactory factory;
 
-    public TestDriver()
-    {
+    public TestDriver() {
     }
 
-    public int dispatch(String actionId, Properties in, Properties out) throws Exception
-    {
+    public int dispatch(String actionId, Properties in, Properties out) throws Exception {
         int code = 0;
 
         if (actionId.equals(TestAction)) {
@@ -50,34 +46,27 @@ public class TestDriver implements IDriver
         return code;
     }
 
-    public int dispatch2(String objectId, String actionId, Properties in, Properties out)
-                  throws Exception
-    {
+    public int dispatch2(String objectId, String actionId, Properties in, Properties out) throws Exception {
         return 0;
     }
 
-    public DriverId getId()
-    {
+    public DriverId getId() {
         return MyDriverId;
     }
 
-    public int initialize() throws Exception
-    {
+    public int initialize() throws Exception {
         return 0;
     }
 
-    public int cleanup() throws Exception
-    {
+    public int cleanup() throws Exception {
         return 0;
     }
 
-    public boolean isStateful()
-    {
+    public boolean isStateful() {
         return false;
     }
 
-    public void setFactory(DriverFactory factory)
-    {
+    public void setFactory(DriverFactory factory) {
         this.factory = factory;
     }
 }

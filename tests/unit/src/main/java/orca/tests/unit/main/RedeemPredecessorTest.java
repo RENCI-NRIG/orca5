@@ -57,7 +57,7 @@ public class RedeemPredecessorTest extends ShirakoTest {
      * Number of predecessors.
      */
     protected int numPreds = 2;
-    
+
     protected IServiceManagerReservation reservation = null;
     protected List<IServiceManagerReservation> preds = new ArrayList<IServiceManagerReservation>();
     protected IServiceManager sm = null;
@@ -71,9 +71,11 @@ public class RedeemPredecessorTest extends ShirakoTest {
     protected ResourceType vmType = new ResourceType("vm");
 
     protected ReservationState state = null;
-    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin);
-    protected ReservationState redeemingState = new ReservationState(ReservationStates.Ticketing, ReservationStates.Redeeming, ReservationStates.NoJoin);
-    
+    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None,
+            ReservationStates.NoJoin);
+    protected ReservationState redeemingState = new ReservationState(ReservationStates.Ticketing,
+            ReservationStates.Redeeming, ReservationStates.NoJoin);
+
     public RedeemPredecessorTest(String[] args) {
         super(args);
     }
@@ -110,7 +112,8 @@ public class RedeemPredecessorTest extends ShirakoTest {
     protected IServiceManagerReservation getVMReservation(long cycle) {
         ResourceSet rset = new ResourceSet(units, vmType);
         Term term = new Term(clock.date(cycle + ADVANCE_TIME), clock.getMillis((long) leaseLength));
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, proxy);
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, proxy);
 
         AntConfig.setServiceXml(r, noopConfigFile);
         r.setRenewable(true);
@@ -123,25 +126,27 @@ public class RedeemPredecessorTest extends ShirakoTest {
                 System.out.println("VM reservation transition: from " + from + " to " + to);
                 if (to.equals(doneState)) {
                     ResourceSet leased = reservation.getLeasedResources();
-                    UnitSet uset = (UnitSet)leased.getResources();
+                    UnitSet uset = (UnitSet) leased.getResources();
                     for (Unit u : uset.getSet()) {
-                        System.out.println("unit id=" + u.getID() + " hosted on " + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: " + u.getProperty(UnitProperties.UnitManagementIP));
+                        System.out.println("unit id=" + u.getID() + " hosted on "
+                                + u.getProperty(UnitProperties.UnitParentHostName) + " has ip: "
+                                + u.getProperty(UnitProperties.UnitManagementIP));
                     }
                 } else if (to.equals(redeemingState)) {
                     Properties config = reservation.getResources().getConfigurationProperties();
-                    System.out.println("Configuration properties: " + config);  
+                    System.out.println("Configuration properties: " + config);
                     String value = config.getProperty(TestProperty);
                     if (value == null) {
                         System.out.println("Missing property");
                         System.exit(1);
                     }
                     String[] temp = value.split(",");
-                    if (temp.length != numPreds*units) {
-                        System.out.println("Expected: " + numPreds*units + " entries but found: " + temp.length);
+                    if (temp.length != numPreds * units) {
+                        System.out.println("Expected: " + numPreds * units + " entries but found: " + temp.length);
                         System.exit(1);
                     }
                 }
-            }else {
+            } else {
                 System.out.println("Unknown reservation object: " + obj);
             }
             reservationTransition((IReservation) obj, (ReservationState) from, (ReservationState) to);
@@ -150,7 +155,8 @@ public class RedeemPredecessorTest extends ShirakoTest {
 
     protected boolean isExtended(ReservationState state) {
         if (state != null) {
-            return (state.getState() == ReservationStates.ActiveTicketed) && (state.getPending() == ReservationStates.None);
+            return (state.getState() == ReservationStates.ActiveTicketed)
+                    && (state.getPending() == ReservationStates.None);
         }
         return false;
     }
@@ -159,8 +165,8 @@ public class RedeemPredecessorTest extends ShirakoTest {
         long cycle = sm.getCurrentCycle();
         reservation = getVMReservation(cycle);
         reservation.registerListener(reservationListener);
-        
-        for (int i = 0; i < numPreds; i++){
+
+        for (int i = 0; i < numPreds; i++) {
             IServiceManagerReservation r = getVMReservation(cycle);
             Properties filter = new Properties();
             filter.setProperty(UnitProperties.UnitManagementIP, TestProperty);
@@ -184,7 +190,7 @@ public class RedeemPredecessorTest extends ShirakoTest {
             state = to;
             if (isExtended(to)) {
                 extendCount++;
-            }        
+            }
         }
     }
 
@@ -210,10 +216,10 @@ public class RedeemPredecessorTest extends ShirakoTest {
     }
 
     protected synchronized boolean checkDone() {
-        if (isActive(state) ) {
+        if (isActive(state)) {
             if (extendCount > 0) {
                 return true;
-            }            
+            }
             System.out.println("wating for extension. extend count=" + extendCount);
         }
 

@@ -12,20 +12,19 @@ package orca.nodeagent;
 import java.io.File;
 
 /**
- * Resolves the Root path for code running inside the node agent service. Do not
- * use this class to resolve root paths for code running inside shirako.
+ * Resolves the Root path for code running inside the node agent service. Do not use this class to resolve root paths
+ * for code running inside shirako.
  */
 public class RootPathResolver {
     /**
-     * Environment variable declaring the home directory for the node agent
-     * service.
+     * Environment variable declaring the home directory for the node agent service.
      */
     public static final String NAHOME = "NA_HOME";
 
     /**
-     * Returns the root path. The root path will equal to the contents of the
-     * environment variable NA_HOME (when defined), or to the current working
-     * directory.
+     * Returns the root path. The root path will equal to the contents of the environment variable NA_HOME (when
+     * defined), or to the current working directory.
+     * 
      * @return root path
      */
     public static String getRoot() {
@@ -38,6 +37,7 @@ public class RootPathResolver {
 
     /**
      * Returns the current working directory.
+     * 
      * @return current working directory
      */
     public static String getDefaultRoot() {

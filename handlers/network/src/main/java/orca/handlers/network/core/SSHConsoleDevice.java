@@ -60,7 +60,7 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
                 if (response.equals("eof") || isEmulationEnabled()) {
                     return;
                 }
-                
+
                 String output = null;
                 String pattern = "/" + response + "/m";
 
@@ -132,7 +132,7 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
             }
             logger.debug("Connection to: " + deviceAddress + " setup successfully");
         } catch (IOException e) {
-        	throw new CommandException(e);
+            throw new CommandException(e);
         }
     }
 
@@ -176,7 +176,6 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
 
         return buffer;
     }
-
 
     /**
      * Send a command over stdin

@@ -1,832 +1,565 @@
 <!--
 This file contains definitions of tasks used by the ben package
--->
-
-
-<target name="ben.load.tasks" depends="load.tasks">
-	<!--  all network driver task declarations -->
-	<taskdef resource="orca/handlers/network/network.xml"  classpathref="run.classpath" loaderref="run.classpath.loader" />
-    <property resource="orca/handlers/network/network.properties" classpathref="run.classpath" />
-</target>
-
-<macrodef name="atomic.sequence.start.macro" description="marks the beginning of the critical section on this device">
-	<attribute name="device" description="the target device" />
-	<attribute name="timeout" default="300"/>
-	<sequential>
-	<limit maxwait="@{timeout}" failonerror="false">
-		<echo message="Starting atomic sequence for @{device}" />
-		<atomic.sequence.start 
-			device="@{device}"
-			/>
-		<echo message="Entered atomic sequence for @{device}" />
-	</limit>
-	</sequential>
-</macrodef>
-
-<macrodef name="atomic.sequence.stop.macro" description="marks the end of the critical section on this device">
-	<attribute name="device" description="the target device" />
-	<attribute name="timeout" default="300" />
-	<sequential>
-	<limit maxwait="@{timeout}" failonerror="false">
-		<echo message="Stopping atomic sequence for @{device}" />
-		<atomic.sequence.stop 
-			device="@{device}"
-			/>
-	</limit>
-	</sequential>
-</macrodef>
-
-<macrodef name="atomic.sequence.clear.macro" description="deletes semaphore from a map for this device">
-	<attribute name="device" description="the name of the device semaphore" />
-	<attribute name="timeout" default="300" />
-	<sequential>
-	<limit maxwait="@{timeout}" failonerror="false">
-		<echo message="Deleting semaphore for for @{device}" />
-		<atomic.sequence.clear
-			device="@{device}"
-			/>
-	</limit>
-	</sequential>
-</macrodef>
-
-<macrodef name="create.vlan" description="enables the specified vlan">
-	<attribute name="router" description="router address" />
-	<attribute name="vlan.tag" description="vlan tag to enable" />
-	<attribute name="vlan.qos.rate" description="vlan bandwidth, 0 is best-effort" />
-	<attribute name="vlan.qos.burst.size" description="vlan burst size"/>
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="router.admin.password" description="admin password, Cisco6509 only"/>
-	<attribute name="router.type" description="device type: Cisco6509, Cisco3400, ex3200, qfx3500 or g8264"/>
-	<attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" />
-	<sequential>
-		<echo message="enabling vlan @{vlan.tag} on router @{router} bw=@{vlan.qos.rate} burst=@{vlan.qos.burst.size}" />
-		<echo message="router.user: @{router.user}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<!-- Cisco 6509 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco6509" />
-						<then>
-							<network.router.6509.create.vlan 
-								deviceInstance="${network.device.cisco6509}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanQoSBurstSize="@{vlan.qos.burst.size}"
-                                vlanQosRate="@{vlan.qos.rate}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- Cisco 3400 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco3400" />
-						<then>
-							<network.router.3400.create.vlan 
-								deviceInstance="${network.device.cisco3400}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanQoSBurstSize="@{vlan.qos.burst.size}"
-                                vlanQosRate="@{vlan.qos.rate}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- EX3200  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="ex3200" />
-						<then>
-							<network.router.ex3200.create.vlan 
-								deviceInstance="${network.device.ex3200}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanQoSBurstSize="@{vlan.qos.burst.size}"
-                                vlanQosRate="@{vlan.qos.rate}"
-							/>
-						</then>
-					</if>
-					<!-- QFX3500 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="qfx3500" />
-						<then>
-							<network.router.qfx3500.create.vlan 
-								deviceInstance="${network.device.qfx3500}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanQoSBurstSize="@{vlan.qos.burst.size}"
-                                vlanQosRate="@{vlan.qos.rate}"
-							/>
-						</then>
-					</if>
-					<!-- G8264 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="g8264" />
-						<then>
-							<network.router.g8264.create.vlan 
-								deviceInstance="${network.device.g8264}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanQoSBurstSize="@{vlan.qos.burst.size}"
-                                vlanQosRate="@{vlan.qos.rate}"
-							/>
-						</then>
-					</if>
-                    <!-- Ciena8700 -->
-                    <if>
-                        <equals arg1="@{router.type}" arg2="ciena8700" />
-                        <then>
-                            <network.router.8700.create.vlan
-                                deviceInstance="${network.device.ciena8700}"
-                                exitCodeProperty="code"
-                                user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-                            />
-                        </then>
-                    </if>
-					<!-- Router type check -->
-					<if>
-						<and>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco6509" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco3400" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="ex3200" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="qfx3500" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="g8264" />
-							</not>
-                            <not>
-                                <equals arg1="@{router.type}" arg2="ciena8700" />
-                            </not>
-						</and>
-						<then>
-							<echo message="Unknown router type @{router.type}" />
-							<property name="code" value="-1" />
-						</then>
-					</if>
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="vlan @{vlan.tag} created successfully on router @{router}" />
-			</then>
-			<else>
-				<echo message="vlan @{vlan.tag} creation on @{router} failed. code=${code}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-
-<macrodef name="delete.vlan" description="disables the specified vlan">
-	<attribute name="router" description="router address" />
-	<attribute name="vlan.tag" description="vlan tag to disable" />
-	<attribute name="vlan.with.qos" description="true if vlan had QoS settings"/>
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="router.admin.password" />
-	<attribute name="router.type" description="Router type Cisco6509, Cisco3400, ex3200, qfx3500 or g8264"/>
-	<attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" />
-	<sequential>
-		<echo message="disabling vlan @{vlan.tag} (qos status @{vlan.with.qos}) on router @{router}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<!-- Cisco 6509 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco6509" />
-						<then>
-							<network.router.6509.delete.vlan 
-								deviceInstance="${network.device.cisco6509}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanWithQos="@{vlan.with.qos}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- Cisco 3400 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco3400" />
-						<then>
-							<network.router.3400.delete.vlan 
-								deviceInstance="${network.device.cisco3400}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanWithQos="@{vlan.with.qos}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- EX3200  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="ex3200" />
-						<then>
-							<network.router.ex3200.delete.vlan 
-								deviceInstance="${network.device.ex3200}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanWithQos="@{vlan.with.qos}"
-							/>
-						</then>
-					</if>
-					<!-- QFX3500  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="qfx3500" />
-						<then>
-							<network.router.qfx3500.delete.vlan 
-								deviceInstance="${network.device.qfx3500}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanWithQos="@{vlan.with.qos}"
-							/>
-						</then>
-					</if>	
-					<!-- G8264  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="g8264" />
-						<then>
-							<network.router.g8264.delete.vlan 
-								deviceInstance="${network.device.g8264}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			vlanWithQos="@{vlan.with.qos}"
-							/>
-						</then>
-					</if>
-                    <!-- Ciena8700  -->
-                    <if>
-                    <equals arg1="@{router.type}" arg2="ciena8700" />
-                    <then>
-                        <network.router.8700.delete.vlan
-                                deviceInstance="${network.device.ciena8700}"
-                                exitCodeProperty="code"
-                                user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanWithQos="@{vlan.with.qos}"
-                                vlanTag="@{vlan.tag}"
-                        />
-                    </then>
-                    </if>
-					<!-- Router type check -->
-					<if>
-						<and>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco6509" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco3400" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="ex3200" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="qfx3500" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="g8264" />
-							</not>
-                                                        <not>
-                                                                <equals arg1="@{router.type}" arg2="ciena8700" />
-                                                        </not>
-						</and>
-						<then>
-							<echo message="Unknown router type @{router.type}" />
-							<property name="code" value="-1" />
-						</then>
-					</if>				
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="vlan @{vlan.tag} deleted successfully on router @{router}" />
-			</then>
-			<else>
-				<echo message="vlan @{vlan.tag} deletion on @{router} failed. code=${code}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-
-<macrodef name="add.trunk.ports" description="add trunk ports to vlan">
-	<attribute name="router" description="router address" />
-	<attribute name="vlan.tag" description="vlan tag to disable" />
-	<attribute name="ports" description="trunk ports to add" />
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="router.admin.password" />
-	<attribute name="router.type" description="Router type Cisco6509 or ex3200"/>
-	<attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" />
-	<sequential>
-		<echo message="adding ports @{ports} to vlan @{vlan.tag} on router @{router}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<!-- Cisco 6509 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco6509" />
-						<then>
-							<network.router.6509.add.trunkPorts 
-								deviceInstance="${network.device.cisco6509}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- Cisco 3400 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco3400" />
-						<then>
-							<network.router.3400.add.trunkPorts 
-								deviceInstance="${network.device.cisco3400}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- EX3200  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="ex3200" />
-						<then>
-							<network.router.ex3200.add.trunkPorts 
-								deviceInstance="${network.device.ex3200}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-							/>
-						</then>
-					</if>	
-					<!-- QFX3500  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="qfx3500" />
-						<then>
-							<network.router.qfx3500.add.trunkPorts 
-								deviceInstance="${network.device.qfx3500}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-							/>
-						</then>
-					</if>
-					<!-- G8264  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="g8264" />
-						<then>
-							<network.router.g8264.add.trunkPorts 
-								deviceInstance="${network.device.g8264}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-							/>
-						</then>
-					</if>
-                    <!-- Ciena8700  -->
-                    <if>
-                        <equals arg1="@{router.type}" arg2="ciena8700" />
-                        <then>
-                            <network.router.8700.add.trunkPorts
-                                deviceInstance="${network.device.ciena8700}"
-                                exitCodeProperty="code"
-                                vlanTag="@{vlan.tag}"
-                                user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                ports="@{ports}"
-                                />
-                        </then>
-                    </if>
-					<!-- Router type check -->
-					<if>
-						<and>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco6509" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco3400" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="ex3200" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="qfx3500" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="g8264" />
-							</not>
-                            <not>
-                                <equals arg1="@{router.type}" arg2="ciena8700" />
-                            </not>
-						</and>
-						<then>
-							<echo message="Unknown router type @{router.type}" />
-							<property name="code" value="-1" />
-						</then>
-					</if>				
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="vlan @{vlan.tag} added ports @{ports} on router @{router}" />
-			</then>
-			<else>
-				<echo message="vlan @{vlan.tag} addition of ports @{ports} on @{router} failed. code=${code}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="remove.trunk.ports" description="remove trunk ports to vlan">
-	<attribute name="router" description="router address" />
-	<attribute name="vlan.tag" description="vlan tag to disable" />
-	<attribute name="ports" description="trunk ports to add" />
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="router.admin.password" />
-	<attribute name="router.type" description="Router type Cisco6509 or ex3200"/>
-	<attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" />
-	<sequential>
-		<echo message="removing ports @{ports} from vlan @{vlan.tag} on router @{router}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<!-- Cisco 6509 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco6509" />
-						<then>
-							<network.router.6509.remove.trunkPorts 
-								deviceInstance="${network.device.cisco6509}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- Cisco 3400 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco3400" />
-						<then>
-							<network.router.3400.remove.trunkPorts 
-								deviceInstance="${network.device.cisco3400}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-                                defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!-- EX3200  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="ex3200" />
-						<then>
-							<network.router.ex3200.remove.trunkPorts 
-								deviceInstance="${network.device.ex3200}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-							/>
-						</then>
-					</if>	
-					<!-- QFX3500  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="qfx3500" />
-						<then>
-							<network.router.qfx3500.remove.trunkPorts 
-								deviceInstance="${network.device.qfx3500}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-							/>
-						</then>
-					</if>	
-					<!-- G8264  -->
-					<if>
-						<equals arg1="@{router.type}" arg2="g8264" />
-						<then>
-							<network.router.g8264.remove.trunkPorts 
-								deviceInstance="${network.device.g8264}"
-								exitCodeProperty="code" 
-								user="@{router.user}"
-                                password="@{router.password}"
-                                deviceAddress="@{router}"
-                                vlanTag="@{vlan.tag}"
-				    			ports="@{ports}"
-							/>
-						</then>
-					</if>
-                    <!-- Ciena8700  -->
-                    <if>
-                        <equals arg1="@{router.type}" arg2="ciena8700" />
-                        <then>
-                            <network.router.8700.remove.trunkPorts
-                                deviceInstance="${network.device.ciena8700}"
-                                exitCodeProperty="code"
-                                user="@{router.user}"
-                                password="@{router.password}"
-                                adminPassword="@{router.admin.password}"
-                                deviceAddress="@{router}"
-                                ports="@{ports}"
-                                vlanTag="@{vlan.tag}"
-                            />
-                        </then>
-                    </if>
-					<!-- Router type check -->
-					<if>
-						<and>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco6509" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco3400" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="ex3200" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="qfx3500" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="g8264" />
-							</not>
-                            <not>
-                                <equals arg1="@{router.type}" arg2="ciena8700" />
-                            </not>
-						</and>
-						<then>
-							<echo message="Unknown router type @{router.type}" />
-							<property name="code" value="-1" />
-						</then>
-					</if>				
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="vlan @{vlan.tag} removed ports @{ports} on router @{router}" />
-			</then>
-			<else>
-				<echo message="vlan @{vlan.tag} removal of ports @{ports} on @{router} failed. code=${code}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="map.vlans" description="maps the specified vlans">
-	<attribute name="router" description="router address" />
-	<attribute name="router.type" description="Cisco6509 or qfx3500" />
-	<attribute name="port" description="port for mapping" />
-	<attribute name="src.vlan.tag" description="source vlan tag" />
-	<attribute name="dst.vlan.tag" description="destination vlan tag" />
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="router.admin.password" />
-	<attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" />
-	<sequential>
-		<echo message="mapping vlan tags @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<!-- Cisco 6509 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco6509" />
-						<then>
-						<network.router.6509.map.vlans 
-							deviceInstance="${network.device.cisco6509}"
-							exitCodeProperty="code" 
-							deviceAddress="@{router}"
-							user="@{router.user}"
-							password="@{router.password}"
-							adminPassword="@{router.admin.password}"
-							sourceTag="@{src.vlan.tag}"
-							destinationTag="@{dst.vlan.tag}"
-							port="@{port}"
-                       	 	defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!--  QFX3500 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="qfx3500" />
-						<then>
-						<!--  tags are intentionally swapped /ib -->
-						<network.router.qfx3500.map.vlans 
-							deviceInstance="${network.device.qfx3500}"
-							exitCodeProperty="code" 
-							deviceAddress="@{router}"
-							user="@{router.user}"
-							password="@{router.password}"
-							sourceTag="@{dst.vlan.tag}"
-							destinationTag="@{src.vlan.tag}"
-							port="@{port}"
-							/>
-						</then>
-					</if>
-					<!-- Router type check -->
-					<if>
-						<and>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco6509" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="qfx3500" />
-							</not>
-						</and>
-						<then>
-							<echo message="Unknown router type @{router.type}" />
-							<property name="code" value="-1" />
-						</then>
-					</if>				
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="successfully mapped @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
-			</then>
-			<else>
-				<echo message="failed to map @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}. code=${code}" />
-			</else>
-		</if>
-
-	</sequential>
-</macrodef>
-
-<macrodef name="unmap.vlans" description="unmaps the specified vlans">
-	<attribute name="router" description="router address" />
-	<attribute name="router.type" description="Cisco6509 or qfx3500" />
-	<attribute name="src.vlan.tag" description="source vlan tag" />
-	<attribute name="dst.vlan.tag" description="destination vlan tag" />
-	<attribute name="port" description="port" />
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="router.admin.password" />
-	<attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" />
-	<sequential>
-		<echo message="unmapping vlan tags @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<!-- Cisco 6509 -->
-					<if>
-						<equals arg1="@{router.type}" arg2="Cisco6509" />
-						<then>
-						<network.router.6509.unmap.vlans 
-							deviceInstance="${network.device.cisco6509}"
-							exitCodeProperty="code" 
-							deviceAddress="@{router}"
-							user="@{router.user}"
-							password="@{router.password}"
-							adminPassword="@{router.admin.password}"
-							sourceTag="@{src.vlan.tag}"
-							destinationTag="@{dst.vlan.tag}"
-							port="@{port}"
-                       	 	defaultPrompt="@{router.default.prompt}"
-							/>
-						</then>
-					</if>
-					<!--  QFX3500 -->
-					<!--  src dst vlan tags swapped on purpose /ib -->
-					<if>
-						<equals arg1="@{router.type}" arg2="qfx3500" />
-						<then>
-						<!--  Unmap is not needed for QFX because the mapping
-						is stored as part of vlan definition and the vlan was removed above -->
-						<echo message="Unmap is a no-op on QFX, doing nothing"/>
-						<property name="code" value="0" />
-						<!-- 
+--> 
+<target name="ben.load.tasks" depends="load.tasks"> 
+    <!--  all network driver task declarations --> 
+    <taskdef resource="orca/handlers/network/network.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
+    <property resource="orca/handlers/network/network.properties" classpathref="run.classpath" /> 
+</target> 
+<macrodef name="atomic.sequence.start.macro" description="marks the beginning of the critical section on this device"> 
+    <attribute name="device" description="the target device" /> 
+    <attribute name="timeout" default="300" /> 
+    <sequential> 
+        <limit maxwait="@{timeout}" failonerror="false"> 
+            <echo message="Starting atomic sequence for @{device}" /> 
+            <atomic.sequence.start device="@{device}" /> 
+            <echo message="Entered atomic sequence for @{device}" /> 
+        </limit> 
+    </sequential> 
+</macrodef> 
+<macrodef name="atomic.sequence.stop.macro" description="marks the end of the critical section on this device"> 
+    <attribute name="device" description="the target device" /> 
+    <attribute name="timeout" default="300" /> 
+    <sequential> 
+        <limit maxwait="@{timeout}" failonerror="false"> 
+            <echo message="Stopping atomic sequence for @{device}" /> 
+            <atomic.sequence.stop device="@{device}" /> 
+        </limit> 
+    </sequential> 
+</macrodef> 
+<macrodef name="atomic.sequence.clear.macro" description="deletes semaphore from a map for this device"> 
+    <attribute name="device" description="the name of the device semaphore" /> 
+    <attribute name="timeout" default="300" /> 
+    <sequential> 
+        <limit maxwait="@{timeout}" failonerror="false"> 
+            <echo message="Deleting semaphore for for @{device}" /> 
+            <atomic.sequence.clear device="@{device}" /> 
+        </limit> 
+    </sequential> 
+</macrodef> 
+<macrodef name="create.vlan" description="enables the specified vlan"> 
+    <attribute name="router" description="router address" /> 
+    <attribute name="vlan.tag" description="vlan tag to enable" /> 
+    <attribute name="vlan.qos.rate" description="vlan bandwidth, 0 is best-effort" /> 
+    <attribute name="vlan.qos.burst.size" description="vlan burst size" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="router.admin.password" description="admin password, Cisco6509 only" /> 
+    <attribute name="router.type" description="device type: Cisco6509, Cisco3400, ex3200, qfx3500 or g8264" /> 
+    <attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" /> 
+    <sequential> 
+        <echo message="enabling vlan @{vlan.tag} on router @{router} bw=@{vlan.qos.rate} burst=@{vlan.qos.burst.size}" /> 
+        <echo message="router.user: @{router.user}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <!-- Cisco 6509 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                        <then> 
+                            <network.router.6509.create.vlan deviceInstance="${network.device.cisco6509}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanQoSBurstSize="@{vlan.qos.burst.size}" vlanQosRate="@{vlan.qos.rate}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Cisco 3400 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                        <then> 
+                            <network.router.3400.create.vlan deviceInstance="${network.device.cisco3400}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanQoSBurstSize="@{vlan.qos.burst.size}" vlanQosRate="@{vlan.qos.rate}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- EX3200  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ex3200" /> 
+                        <then> 
+                            <network.router.ex3200.create.vlan deviceInstance="${network.device.ex3200}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanQoSBurstSize="@{vlan.qos.burst.size}" vlanQosRate="@{vlan.qos.rate}" /> 
+                        </then> 
+                    </if> 
+                    <!-- QFX3500 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                        <then> 
+                            <network.router.qfx3500.create.vlan deviceInstance="${network.device.qfx3500}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanQoSBurstSize="@{vlan.qos.burst.size}" vlanQosRate="@{vlan.qos.rate}" /> 
+                        </then> 
+                    </if> 
+                    <!-- G8264 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="g8264" /> 
+                        <then> 
+                            <network.router.g8264.create.vlan deviceInstance="${network.device.g8264}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanQoSBurstSize="@{vlan.qos.burst.size}" vlanQosRate="@{vlan.qos.rate}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Ciena8700 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                        <then> 
+                            <network.router.8700.create.vlan deviceInstance="${network.device.ciena8700}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Router type check --> 
+                    <if> 
+                        <and> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ex3200" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="g8264" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                            </not> 
+                        </and> 
+                        <then> 
+                            <echo message="Unknown router type @{router.type}" /> 
+                            <property name="code" value="-1" /> 
+                        </then> 
+                    </if> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="vlan @{vlan.tag} created successfully on router @{router}" /> 
+            </then> 
+            <else> 
+                <echo message="vlan @{vlan.tag} creation on @{router} failed. code=${code}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="delete.vlan" description="disables the specified vlan"> 
+    <attribute name="router" description="router address" /> 
+    <attribute name="vlan.tag" description="vlan tag to disable" /> 
+    <attribute name="vlan.with.qos" description="true if vlan had QoS settings" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="router.admin.password" /> 
+    <attribute name="router.type" description="Router type Cisco6509, Cisco3400, ex3200, qfx3500 or g8264" /> 
+    <attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" /> 
+    <sequential> 
+        <echo message="disabling vlan @{vlan.tag} (qos status @{vlan.with.qos}) on router @{router}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <!-- Cisco 6509 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                        <then> 
+                            <network.router.6509.delete.vlan deviceInstance="${network.device.cisco6509}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanWithQos="@{vlan.with.qos}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Cisco 3400 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                        <then> 
+                            <network.router.3400.delete.vlan deviceInstance="${network.device.cisco3400}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanWithQos="@{vlan.with.qos}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- EX3200  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ex3200" /> 
+                        <then> 
+                            <network.router.ex3200.delete.vlan deviceInstance="${network.device.ex3200}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanWithQos="@{vlan.with.qos}" /> 
+                        </then> 
+                    </if> 
+                    <!-- QFX3500  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                        <then> 
+                            <network.router.qfx3500.delete.vlan deviceInstance="${network.device.qfx3500}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanWithQos="@{vlan.with.qos}" /> 
+                        </then> 
+                    </if> 
+                    <!-- G8264  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="g8264" /> 
+                        <then> 
+                            <network.router.g8264.delete.vlan deviceInstance="${network.device.g8264}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" vlanWithQos="@{vlan.with.qos}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Ciena8700  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                        <then> 
+                            <network.router.8700.delete.vlan deviceInstance="${network.device.ciena8700}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanWithQos="@{vlan.with.qos}" vlanTag="@{vlan.tag}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Router type check --> 
+                    <if> 
+                        <and> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ex3200" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="g8264" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                            </not> 
+                        </and> 
+                        <then> 
+                            <echo message="Unknown router type @{router.type}" /> 
+                            <property name="code" value="-1" /> 
+                        </then> 
+                    </if> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="vlan @{vlan.tag} deleted successfully on router @{router}" /> 
+            </then> 
+            <else> 
+                <echo message="vlan @{vlan.tag} deletion on @{router} failed. code=${code}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="add.trunk.ports" description="add trunk ports to vlan"> 
+    <attribute name="router" description="router address" /> 
+    <attribute name="vlan.tag" description="vlan tag to disable" /> 
+    <attribute name="ports" description="trunk ports to add" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="router.admin.password" /> 
+    <attribute name="router.type" description="Router type Cisco6509 or ex3200" /> 
+    <attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" /> 
+    <sequential> 
+        <echo message="adding ports @{ports} to vlan @{vlan.tag} on router @{router}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <!-- Cisco 6509 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                        <then> 
+                            <network.router.6509.add.trunkPorts deviceInstance="${network.device.cisco6509}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Cisco 3400 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                        <then> 
+                            <network.router.3400.add.trunkPorts deviceInstance="${network.device.cisco3400}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- EX3200  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ex3200" /> 
+                        <then> 
+                            <network.router.ex3200.add.trunkPorts deviceInstance="${network.device.ex3200}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" /> 
+                        </then> 
+                    </if> 
+                    <!-- QFX3500  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                        <then> 
+                            <network.router.qfx3500.add.trunkPorts deviceInstance="${network.device.qfx3500}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" /> 
+                        </then> 
+                    </if> 
+                    <!-- G8264  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="g8264" /> 
+                        <then> 
+                            <network.router.g8264.add.trunkPorts deviceInstance="${network.device.g8264}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Ciena8700  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                        <then> 
+                            <network.router.8700.add.trunkPorts deviceInstance="${network.device.ciena8700}" exitCodeProperty="code" vlanTag="@{vlan.tag}" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" ports="@{ports}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Router type check --> 
+                    <if> 
+                        <and> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ex3200" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="g8264" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                            </not> 
+                        </and> 
+                        <then> 
+                            <echo message="Unknown router type @{router.type}" /> 
+                            <property name="code" value="-1" /> 
+                        </then> 
+                    </if> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="vlan @{vlan.tag} added ports @{ports} on router @{router}" /> 
+            </then> 
+            <else> 
+                <echo message="vlan @{vlan.tag} addition of ports @{ports} on @{router} failed. code=${code}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="remove.trunk.ports" description="remove trunk ports to vlan"> 
+    <attribute name="router" description="router address" /> 
+    <attribute name="vlan.tag" description="vlan tag to disable" /> 
+    <attribute name="ports" description="trunk ports to add" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="router.admin.password" /> 
+    <attribute name="router.type" description="Router type Cisco6509 or ex3200" /> 
+    <attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" /> 
+    <sequential> 
+        <echo message="removing ports @{ports} from vlan @{vlan.tag} on router @{router}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <!-- Cisco 6509 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                        <then> 
+                            <network.router.6509.remove.trunkPorts deviceInstance="${network.device.cisco6509}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Cisco 3400 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                        <then> 
+                            <network.router.3400.remove.trunkPorts deviceInstance="${network.device.cisco3400}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!-- EX3200  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ex3200" /> 
+                        <then> 
+                            <network.router.ex3200.remove.trunkPorts deviceInstance="${network.device.ex3200}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" /> 
+                        </then> 
+                    </if> 
+                    <!-- QFX3500  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                        <then> 
+                            <network.router.qfx3500.remove.trunkPorts deviceInstance="${network.device.qfx3500}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" /> 
+                        </then> 
+                    </if> 
+                    <!-- G8264  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="g8264" /> 
+                        <then> 
+                            <network.router.g8264.remove.trunkPorts deviceInstance="${network.device.g8264}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{router}" vlanTag="@{vlan.tag}" ports="@{ports}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Ciena8700  --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                        <then> 
+                            <network.router.8700.remove.trunkPorts deviceInstance="${network.device.ciena8700}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" deviceAddress="@{router}" ports="@{ports}" vlanTag="@{vlan.tag}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Router type check --> 
+                    <if> 
+                        <and> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco3400" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ex3200" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="g8264" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="ciena8700" /> 
+                            </not> 
+                        </and> 
+                        <then> 
+                            <echo message="Unknown router type @{router.type}" /> 
+                            <property name="code" value="-1" /> 
+                        </then> 
+                    </if> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="vlan @{vlan.tag} removed ports @{ports} on router @{router}" /> 
+            </then> 
+            <else> 
+                <echo message="vlan @{vlan.tag} removal of ports @{ports} on @{router} failed. code=${code}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="map.vlans" description="maps the specified vlans"> 
+    <attribute name="router" description="router address" /> 
+    <attribute name="router.type" description="Cisco6509 or qfx3500" /> 
+    <attribute name="port" description="port for mapping" /> 
+    <attribute name="src.vlan.tag" description="source vlan tag" /> 
+    <attribute name="dst.vlan.tag" description="destination vlan tag" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="router.admin.password" /> 
+    <attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" /> 
+    <sequential> 
+        <echo message="mapping vlan tags @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <!-- Cisco 6509 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                        <then> 
+                            <network.router.6509.map.vlans deviceInstance="${network.device.cisco6509}" exitCodeProperty="code" deviceAddress="@{router}" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" sourceTag="@{src.vlan.tag}" destinationTag="@{dst.vlan.tag}" port="@{port}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!--  QFX3500 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                        <then> 
+                            <!--  tags are intentionally swapped /ib --> 
+                            <network.router.qfx3500.map.vlans deviceInstance="${network.device.qfx3500}" exitCodeProperty="code" deviceAddress="@{router}" user="@{router.user}" password="@{router.password}" sourceTag="@{dst.vlan.tag}" destinationTag="@{src.vlan.tag}" port="@{port}" /> 
+                        </then> 
+                    </if> 
+                    <!-- Router type check --> 
+                    <if> 
+                        <and> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                            </not> 
+                        </and> 
+                        <then> 
+                            <echo message="Unknown router type @{router.type}" /> 
+                            <property name="code" value="-1" /> 
+                        </then> 
+                    </if> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="successfully mapped @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" /> 
+            </then> 
+            <else> 
+                <echo message="failed to map @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}. code=${code}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="unmap.vlans" description="unmaps the specified vlans"> 
+    <attribute name="router" description="router address" /> 
+    <attribute name="router.type" description="Cisco6509 or qfx3500" /> 
+    <attribute name="src.vlan.tag" description="source vlan tag" /> 
+    <attribute name="dst.vlan.tag" description="destination vlan tag" /> 
+    <attribute name="port" description="port" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="router.admin.password" /> 
+    <attribute name="router.default.prompt" description="default prompt produced by device" default="you-should-define-this" /> 
+    <sequential> 
+        <echo message="unmapping vlan tags @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <!-- Cisco 6509 --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                        <then> 
+                            <network.router.6509.unmap.vlans deviceInstance="${network.device.cisco6509}" exitCodeProperty="code" deviceAddress="@{router}" user="@{router.user}" password="@{router.password}" adminPassword="@{router.admin.password}" sourceTag="@{src.vlan.tag}" destinationTag="@{dst.vlan.tag}" port="@{port}" defaultPrompt="@{router.default.prompt}" /> 
+                        </then> 
+                    </if> 
+                    <!--  QFX3500 --> 
+                    <!--  src dst vlan tags swapped on purpose /ib --> 
+                    <if> 
+                        <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                        <then> 
+                            <!--  Unmap is not needed for QFX because the mapping
+						is stored as part of vlan definition and the vlan was removed above --> 
+                            <echo message="Unmap is a no-op on QFX, doing nothing" /> 
+                            <property name="code" value="0" /> 
+                            <!-- 
 						<network.router.qfx3500.unmap.vlans 
 							deviceInstance="${network.device.qfx3500}"
 							exitCodeProperty="code" 
@@ -837,315 +570,245 @@ This file contains definitions of tasks used by the ben package
 							destinationTag="@{src.vlan.tag}"
 							port="@{port}"
 							/>
-							-->
-						</then>
-					</if>
-					<!-- Router type check -->
-					<if>
-						<and>
-							<not>
-								<equals arg1="@{router.type}" arg2="Cisco6509" />
-							</not>
-							<not>
-								<equals arg1="@{router.type}" arg2="qfx3500" />
-							</not>
-						</and>
-						<then>
-							<echo message="Unknown router type @{router.type}" />
-							<property name="code" value="-1" />
-						</then>
-					</if>	
-				</limit>
-
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="successfully unmapped @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" />
-			</then>
-			<else>
-				<echo message="failed to unmap @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}. code=${code}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="polatis.connect" description="creates a unidirectional crossconnect on polatis">
-	<attribute name="polatis" description="polatis address" />
-	<attribute name="src.port" description="input port" />
-	<attribute name="dst.port" description="destination port" />
-	<attribute name="user" description="user name to use" />
-	<attribute name="password"  />
-
-	<sequential>
-		<echo message="creating crossconnect on @{polatis}: @{src.port}:@{dst.port}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<network.os.create.patch
-						deviceInstance="${network.device.polatisos}"
-						exitCodeProperty="code" 
-						deviceAddress="@{polatis}"
-						user="@{user}"
-						password="@{password}"
-						inputPort="@{src.port}"
-						outputPort="@{dst.port}" 
-					/>
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="crossconnect @{src.port}:@{dst.port} created successfully on polatis: @{polatis}" />
-			</then>
-			<else>
-				<echo message="crossconnect @{src.port}:@{dst.port} failed on polatis: @{polatis}" />
-			</else>
-		</if>
-
-	</sequential>
-</macrodef>
-
-<macrodef name="polatis.disconnect" description="idsconnects a unidirectional crossconnect on polatis">
-	<attribute name="polatis" description="polatis address" />
-	<attribute name="src.port" description="port" />
-	<attribute name="user" description="user name to use" />
-	<attribute name="password"  />
-
-	<sequential>
-		<echo message="disconnecting crossconnect on @{polatis}: port=@{src.port}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<network.os.delete.patch
-						deviceInstance="${network.device.polatisos}"
-						exitCodeProperty="code" 
-						deviceAddress="@{polatis}"
-						user="@{user}"
-						password="@{password}"
-						port="@{src.port}"
-					/>
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="port @{src.port} successfully disconnected on polatis: @{polatis}" />
-			</then>
-			<else>
-				<echo message="port @{src.port} failed to disonnect on polatis: @{polatis}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="dtn.connect" description="creates a crossconnect on dtn">
-	<attribute name="dtn" description="dtn address" />
-	<attribute name="src.port" description="input port" />
-	<attribute name="dst.port" description="destination port" />
-	<attribute name="user" description="user name to use" />
-	<attribute name="password"  />
-	<attribute name="dtn.payload.type" />
-
-	<sequential>
-		<echo message="creating crossconnect on @{dtn}: @{src.port}:@{dst.port}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<network.dtn.create.crs
-						deviceInstance="${network.device.infineradtn}"
-						exitCodeProperty="code" 
-						deviceAddress="@{dtn}"
-						user="@{user}"
-						password="@{password}"
-						srcPort="@{src.port}"
-						dstPort="@{dst.port}" 
-						payloadType="@{dtn.payload.type}"
-						/>
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="crossconnect @{src.port}:@{dst.port} created successfully on DTN: @{dtn}" />
-			</then>
-			<else>
-				<echo message="crossconnect @{src.port}:@{dst.port} failed on DTN: @{dtn}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="dtn.disconnect" description="disconnects a previously created crossconnect on dtn">
-	<attribute name="dtn" description="dtn address" />
-	<attribute name="src.port" description="input port" />
-	<attribute name="dst.port" description="destination port" />
-	<attribute name="user" description="user name to use" />
-	<attribute name="password"  />
-	<attribute name="dtn.payload.type" />
-	<sequential>
-		<echo message="destroying crossconnect on @{dtn}: @{src.port}:@{dst.port}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<network.dtn.delete.crs
-						deviceInstance="${network.device.infineradtn}"
-						exitCodeProperty="code" 
-						deviceAddress="@{dtn}"
-						user="@{user}"
-						password="@{password}"
-						srcPort="@{src.port}"
-						dstPort="@{dst.port}" 
-						/>
-				</limit>
-			</else>
-		</if>
-		<if>
-			<equals arg1="0" arg2="${code}" />
-			<then>
-				<echo message="crossconnect @{src.port}:@{dst.port} deleted successfully on DTN: @{dtn}" />
-			</then>
-			<else>
-				<echo message="deleting crossconnect @{src.port}:@{dst.port} failed on DTN: @{dtn}" />
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="create.openflow.slice" description="creates an openflow slice">
-	<attribute name="url" description="flowvisor url" />
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="slice.name" />
-	<attribute name="slice.email" />
-	<attribute name="slice.pass" />
-	<attribute name="slice.ctrl.url" description="OF controller URL" />
-	<sequential>
-		<echo message="creating OpenFlow slice @{slice.name} on flowvisor @{url}" />
-		<echo message="router.user: @{router.user}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<network.openflow.slice.create
-						deviceInstance="${network.device.openflow}"
-						exitCodeProperty="code" 
-						user="@{router.user}"
-                    	password="@{router.password}"
-						deviceAddress="@{url}"
-						name="@{slice.name}"
-						passwd="@{slice.pass}"
-						ctrlUrl="@{slice.ctrl.url}"
-						email="@{slice.email}"
-						/>
-				</limit>
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="delete.openflow.slice" description="deletes an openflow slice">
-	<attribute name="url" description="flowvisor url" />
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="slice.name" />
-	<sequential>
-		<echo message="deleting OpenFlow slice @{slice.name} on flowvisor @{url}" />
-		<echo message="router.user: @{router.user}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<network.openflow.slice.delete
-						deviceInstance="${network.device.openflow}"
-						exitCodeProperty="code" 
-						user="@{router.user}"
-                    	password="@{router.password}"
-						deviceAddress="@{url}"
-						name="@{slice.name}"
-						/>
-				</limit>
-			</else>
-		</if>
-	</sequential>
-</macrodef>
-
-<macrodef name="add.openflow.vlan.flowspace" description="adds VLAN flowspace to existing slice">
-	<attribute name="url" description="flowvisor url" />
-	<attribute name="router.user" description="user name for the router" />
-	<attribute name="router.password" />
-	<attribute name="slice.name" />
-	<attribute name="vlan.tag" />
-	<attribute name="ports" />
-	<sequential>
-		<echo message="adding VLAN flowspace for tag @{vlan.tag} with ports @{ports} in slice @{slice.name} on flowvisor @{url}" />
-		<echo message="router.user: @{router.user}" />
-		<var name="code" value="0" />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
-				<echo message="running under emulation...nothing to do" />
-				<var name="code" value="0" />
-			</then>
-			<else>
-				<limit maxwait="${operation.timeout}" failonerror="true">
-					<var name="code" unset="true" />
-					<network.openflow.slice.vlan.flowspace.add
-						deviceInstance="${network.device.openflow}"
-						exitCodeProperty="code" 
-						user="@{router.user}"
-                    	password="@{router.password}"
-						deviceAddress="@{url}"
-						name="@{slice.name}"
-						tag="@{vlan.tag}"
-            			switchPorts="@{ports}"
-						/>
-				</limit>
-			</else>
-		</if>
-	</sequential>
+							--> 
+                        </then> 
+                    </if> 
+                    <!-- Router type check --> 
+                    <if> 
+                        <and> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="Cisco6509" /> 
+                            </not> 
+                            <not> 
+                                <equals arg1="@{router.type}" arg2="qfx3500" /> 
+                            </not> 
+                        </and> 
+                        <then> 
+                            <echo message="Unknown router type @{router.type}" /> 
+                            <property name="code" value="-1" /> 
+                        </then> 
+                    </if> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="successfully unmapped @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}" /> 
+            </then> 
+            <else> 
+                <echo message="failed to unmap @{src.vlan.tag}:@{dst.vlan.tag} on router @{router}. code=${code}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="polatis.connect" description="creates a unidirectional crossconnect on polatis"> 
+    <attribute name="polatis" description="polatis address" /> 
+    <attribute name="src.port" description="input port" /> 
+    <attribute name="dst.port" description="destination port" /> 
+    <attribute name="user" description="user name to use" /> 
+    <attribute name="password" /> 
+    <sequential> 
+        <echo message="creating crossconnect on @{polatis}: @{src.port}:@{dst.port}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <network.os.create.patch deviceInstance="${network.device.polatisos}" exitCodeProperty="code" deviceAddress="@{polatis}" user="@{user}" password="@{password}" inputPort="@{src.port}" outputPort="@{dst.port}" /> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="crossconnect @{src.port}:@{dst.port} created successfully on polatis: @{polatis}" /> 
+            </then> 
+            <else> 
+                <echo message="crossconnect @{src.port}:@{dst.port} failed on polatis: @{polatis}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="polatis.disconnect" description="idsconnects a unidirectional crossconnect on polatis"> 
+    <attribute name="polatis" description="polatis address" /> 
+    <attribute name="src.port" description="port" /> 
+    <attribute name="user" description="user name to use" /> 
+    <attribute name="password" /> 
+    <sequential> 
+        <echo message="disconnecting crossconnect on @{polatis}: port=@{src.port}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <network.os.delete.patch deviceInstance="${network.device.polatisos}" exitCodeProperty="code" deviceAddress="@{polatis}" user="@{user}" password="@{password}" port="@{src.port}" /> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="port @{src.port} successfully disconnected on polatis: @{polatis}" /> 
+            </then> 
+            <else> 
+                <echo message="port @{src.port} failed to disonnect on polatis: @{polatis}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="dtn.connect" description="creates a crossconnect on dtn"> 
+    <attribute name="dtn" description="dtn address" /> 
+    <attribute name="src.port" description="input port" /> 
+    <attribute name="dst.port" description="destination port" /> 
+    <attribute name="user" description="user name to use" /> 
+    <attribute name="password" /> 
+    <attribute name="dtn.payload.type" /> 
+    <sequential> 
+        <echo message="creating crossconnect on @{dtn}: @{src.port}:@{dst.port}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <network.dtn.create.crs deviceInstance="${network.device.infineradtn}" exitCodeProperty="code" deviceAddress="@{dtn}" user="@{user}" password="@{password}" srcPort="@{src.port}" dstPort="@{dst.port}" payloadType="@{dtn.payload.type}" /> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="crossconnect @{src.port}:@{dst.port} created successfully on DTN: @{dtn}" /> 
+            </then> 
+            <else> 
+                <echo message="crossconnect @{src.port}:@{dst.port} failed on DTN: @{dtn}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="dtn.disconnect" description="disconnects a previously created crossconnect on dtn"> 
+    <attribute name="dtn" description="dtn address" /> 
+    <attribute name="src.port" description="input port" /> 
+    <attribute name="dst.port" description="destination port" /> 
+    <attribute name="user" description="user name to use" /> 
+    <attribute name="password" /> 
+    <attribute name="dtn.payload.type" /> 
+    <sequential> 
+        <echo message="destroying crossconnect on @{dtn}: @{src.port}:@{dst.port}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <network.dtn.delete.crs deviceInstance="${network.device.infineradtn}" exitCodeProperty="code" deviceAddress="@{dtn}" user="@{user}" password="@{password}" srcPort="@{src.port}" dstPort="@{dst.port}" /> 
+                </limit> 
+            </else> 
+        </if> 
+        <if> 
+            <equals arg1="0" arg2="${code}" /> 
+            <then> 
+                <echo message="crossconnect @{src.port}:@{dst.port} deleted successfully on DTN: @{dtn}" /> 
+            </then> 
+            <else> 
+                <echo message="deleting crossconnect @{src.port}:@{dst.port} failed on DTN: @{dtn}" /> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="create.openflow.slice" description="creates an openflow slice"> 
+    <attribute name="url" description="flowvisor url" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="slice.name" /> 
+    <attribute name="slice.email" /> 
+    <attribute name="slice.pass" /> 
+    <attribute name="slice.ctrl.url" description="OF controller URL" /> 
+    <sequential> 
+        <echo message="creating OpenFlow slice @{slice.name} on flowvisor @{url}" /> 
+        <echo message="router.user: @{router.user}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <network.openflow.slice.create deviceInstance="${network.device.openflow}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{url}" name="@{slice.name}" passwd="@{slice.pass}" ctrlUrl="@{slice.ctrl.url}" email="@{slice.email}" /> 
+                </limit> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="delete.openflow.slice" description="deletes an openflow slice"> 
+    <attribute name="url" description="flowvisor url" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="slice.name" /> 
+    <sequential> 
+        <echo message="deleting OpenFlow slice @{slice.name} on flowvisor @{url}" /> 
+        <echo message="router.user: @{router.user}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <network.openflow.slice.delete deviceInstance="${network.device.openflow}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{url}" name="@{slice.name}" /> 
+                </limit> 
+            </else> 
+        </if> 
+    </sequential> 
+</macrodef> 
+<macrodef name="add.openflow.vlan.flowspace" description="adds VLAN flowspace to existing slice"> 
+    <attribute name="url" description="flowvisor url" /> 
+    <attribute name="router.user" description="user name for the router" /> 
+    <attribute name="router.password" /> 
+    <attribute name="slice.name" /> 
+    <attribute name="vlan.tag" /> 
+    <attribute name="ports" /> 
+    <sequential> 
+        <echo message="adding VLAN flowspace for tag @{vlan.tag} with ports @{ports} in slice @{slice.name} on flowvisor @{url}" /> 
+        <echo message="router.user: @{router.user}" /> 
+        <var name="code" value="0"></var> 
+        <if> 
+            <equals arg1="${emulation}" arg2="true" /> 
+            <then> 
+                <echo message="running under emulation...nothing to do" /> 
+                <var name="code" value="0"></var> 
+            </then> 
+            <else> 
+                <limit maxwait="${operation.timeout}" failonerror="true"> 
+                    <var name="code" unset="true"></var> 
+                    <network.openflow.slice.vlan.flowspace.add deviceInstance="${network.device.openflow}" exitCodeProperty="code" user="@{router.user}" password="@{router.password}" deviceAddress="@{url}" name="@{slice.name}" tag="@{vlan.tag}" switchPorts="@{ports}" /> 
+                </limit> 
+            </else> 
+        </if> 
+    </sequential> 
 </macrodef>

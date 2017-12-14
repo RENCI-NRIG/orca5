@@ -22,17 +22,14 @@ import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 
-
-public class TestRegisterKey
-{
+public class TestRegisterKey {
     String serviceLocation;
     String repositoryPath;
     String configFile;
     String trudyKeyStoreLocation;
     char[] trudyStorePasswordChar;
 
-    public TestRegisterKey()
-    {
+    public TestRegisterKey() {
         serviceLocation = "http://localhost:8080/axis2/services/NodeAgentService";
         repositoryPath = "../lib/external";
         configFile = "test/orca/nodeagent/tests/security/known/client.axis2.xml";
@@ -41,8 +38,7 @@ public class TestRegisterKey
     }
 
     public TestRegisterKey(String serviceLocation, String repositoryPath, String configFile,
-                           String trudyKeyStoreLocation, String trudyStorePass)
-    {
+            String trudyKeyStoreLocation, String trudyStorePass) {
         this.serviceLocation = serviceLocation;
         this.repositoryPath = repositoryPath;
         this.configFile = configFile;
@@ -50,11 +46,9 @@ public class TestRegisterKey
         this.trudyStorePasswordChar = trudyStorePass.toCharArray();
     }
 
-    public int run() throws Exception
-    {
-        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-            repositoryPath,
-            configFile);
+    public int run() throws Exception {
+        ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repositoryPath,
+                configFile);
 
         NodeAgentServiceStub stub = new NodeAgentServiceStub(cc, serviceLocation);
 
@@ -77,8 +71,7 @@ public class TestRegisterKey
         return res;
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         TestRegisterKey test1 = null;
 
         test1 = new TestRegisterKey();

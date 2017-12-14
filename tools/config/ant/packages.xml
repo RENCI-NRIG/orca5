@@ -1,91 +1,80 @@
-<macrodef name="resolve.file" description="resolves a file from the maven repository">
-	<attribute name="groupId" />
-	<attribute name="artifactId" />
-	<attribute name="classifier" />
-	<attribute name="type" />
-	<attribute name="version" />
-	<sequential>
-		<var name="key" unset="true" />
-		<property name="key" value="@{groupId}.@{artifiactId}.@{classifier}.@{type}" />
-		<artifact:dependencies pathID="${key}.path" filesetID="${key}.fileset">
-			<dependency groupId="@{groupId}" artifactId="@{artifactId}" version="@{version}" classifier="@{classifier}" type="@{type}" />
-			<remoteRepository refid="orca" />
-		</artifact:dependencies>
-		<delete dir="tmp" />
-		<mkdir dir="tmp" />
-		<!-- copy all dependencies to tmp -->
-		<copy todir="tmp">
-			<fileset refid="${key}.fileset" />
-		</copy>
-		<!-- select only the dependencies of the needed type -->
-		<fileset id="tmp" dir="tmp">
-			<include name="**/*.@{type}" />
-		</fileset>
-		<!-- convert to a path string -->
-		<var name="tmp.path.unix" unset="true" />
-		<pathconvert targetos="unix" property="tmp.path.unix" refid="tmp">
-			<map from="${basedir}/tmp/" to="" />
-		</pathconvert>
-		<!-- go through the path string and copy the matches -->
-		<for list="${tmp.path.unix}" delimiter=":" param="file">
-			<sequential>
-				<var name="file.name" unset="true" />
-				<!-- replacce / with . -->
-				<propertyregex property="file.name" input="@{file}" regexp="/" replace="." casesensitive="false" />
-				<echo message="${file.name}" />
-				<if>
-					<contains string="${file.name}" substring="@{groupId}.@{artifactId}.@{version}.@{artifactId}-@{version}-@{classifier}.@{type}" />
-					<then>
-						<copy file="tmp/@{file}" tofile="${install.dir}/@{groupId}.@{artifactId}.@{type}" />
-					</then>
-				</if>
-			</sequential>
-		</for>
-		<delete dir="tmp" />
-	</sequential>
-</macrodef>
-
-<target name="get.drivers" >
-	<resolve.file groupId="orca.drivers.iscsi" artifactId="netapp" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
-	<resolve.file groupId="orca.drivers.localdisk" artifactId="core" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
-	<resolve.file groupId="orca.drivers.machine" artifactId="linux" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
-	<resolve.file groupId="orca.drivers.nfs" artifactId="zfs" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
-	<resolve.file groupId="orca.drivers.vmm" artifactId="xen" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
-<!--
+<macrodef name="resolve.file" description="resolves a file from the maven repository"> 
+    <attribute name="groupId" /> 
+    <attribute name="artifactId" /> 
+    <attribute name="classifier" /> 
+    <attribute name="type" /> 
+    <attribute name="version" /> 
+    <sequential> 
+        <var name="key" unset="true"></var> 
+        <property name="key" value="@{groupId}.@{artifiactId}.@{classifier}.@{type}" /> 
+        <artifact:dependencies pathID="${key}.path" filesetID="${key}.fileset"> 
+            <dependency groupId="@{groupId}" artifactId="@{artifactId}" version="@{version}" classifier="@{classifier}" type="@{type}" /> 
+            <remoteRepository refid="orca" /> 
+        </artifact:dependencies> 
+        <delete dir="tmp" /> 
+        <mkdir dir="tmp" /> 
+        <!-- copy all dependencies to tmp --> 
+        <copy todir="tmp"> 
+            <fileset refid="${key}.fileset" /> 
+        </copy> 
+        <!-- select only the dependencies of the needed type --> 
+        <fileset id="tmp" dir="tmp"> 
+            <include name="**/*.@{type}" /> 
+        </fileset> 
+        <!-- convert to a path string --> 
+        <var name="tmp.path.unix" unset="true"></var> 
+        <pathconvert targetos="unix" property="tmp.path.unix" refid="tmp"> 
+            <map from="${basedir}/tmp/" to=""></map> 
+        </pathconvert> 
+        <!-- go through the path string and copy the matches --> 
+        <for list="${tmp.path.unix}" delimiter=":" param="file"> 
+            <sequential> 
+                <var name="file.name" unset="true"></var> 
+                <!-- replacce / with . --> 
+                <propertyregex property="file.name" input="@{file}" regexp="/" replace="." casesensitive="false" /> 
+                <echo message="${file.name}" /> 
+                <if> 
+                    <contains string="${file.name}" substring="@{groupId}.@{artifactId}.@{version}.@{artifactId}-@{version}-@{classifier}.@{type}" /> 
+                    <then> 
+                        <copy file="tmp/@{file}" tofile="${install.dir}/@{groupId}.@{artifactId}.@{type}" /> 
+                    </then> 
+                </if> 
+            </sequential> 
+        </for> 
+        <delete dir="tmp" /> 
+    </sequential> 
+</macrodef> 
+<target name="get.drivers"> 
+    <resolve.file groupId="orca.drivers.iscsi" artifactId="netapp" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" /> 
+    <resolve.file groupId="orca.drivers.localdisk" artifactId="core" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" /> 
+    <resolve.file groupId="orca.drivers.machine" artifactId="linux" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" /> 
+    <resolve.file groupId="orca.drivers.nfs" artifactId="zfs" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" /> 
+    <resolve.file groupId="orca.drivers.vmm" artifactId="xen" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" /> 
+    <!--
 	<resolve.file groupId="orca.drivers.network" artifactId="Cisco6509" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
 	<resolve.file groupId="orca.drivers.network" artifactId="InfineraDTN" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
 	<resolve.file groupId="orca.drivers.network" artifactId="Polatis" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
--->
-</target>
-
-<target name="get.nah">
-	<resolve.file groupId="orca" artifactId="nodeagenthost" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" />
-</target>
-
-<target name="get.na">
-	<resolve.file groupId="orca" artifactId="nodeagent" classifier="package" version="2.1-SNAPSHOT" type="aar" />
-</target>
-
-<!-- FIXME: rebuild axis2repository with package classifier -->
-<artifact:dependencies pathID="axis2repository.classpath" filesetID="axis2repository.fileset" versionsId="axis2repository.versions">
-	<dependency groupId="orca.tools" artifactId="axis2repository" version="${axis2repository.version}" type="tar.gz" />
-	<remoteRepository refid="orca" />
-</artifact:dependencies>
-
-<target name="get.axis2repository" description="retrieves the axis2 repository package">
-	<delete dir="tmp" />
-	<mkdir dir="tmp" />
-
-	<copy todir="tmp">
-		<fileset refid="axis2repository.fileset" />
-	</copy>
-
-	<gunzip src="tmp/orca/tools/axis2repository/${axis2repository.version}/axis2repository-${axis2repository.version}.tar.gz"
-		dest="tmp/repo.tar" />
-
-	<untar src="tmp/repo.tar" dest="axis2repository" />
-
-	<delete dir="tmp" />
-</target>
-
+--> 
+</target> 
+<target name="get.nah"> 
+    <resolve.file groupId="orca" artifactId="nodeagenthost" classifier="package" version="2.1-SNAPSHOT" type="tar.gz" /> 
+</target> 
+<target name="get.na"> 
+    <resolve.file groupId="orca" artifactId="nodeagent" classifier="package" version="2.1-SNAPSHOT" type="aar" /> 
+</target> 
+<!-- FIXME: rebuild axis2repository with package classifier --> 
+<artifact:dependencies pathID="axis2repository.classpath" filesetID="axis2repository.fileset" versionsId="axis2repository.versions"> 
+    <dependency groupId="orca.tools" artifactId="axis2repository" version="${axis2repository.version}" type="tar.gz" /> 
+    <remoteRepository refid="orca" /> 
+</artifact:dependencies> 
+<target name="get.axis2repository" description="retrieves the axis2 repository package"> 
+    <delete dir="tmp" /> 
+    <mkdir dir="tmp" /> 
+    <copy todir="tmp"> 
+        <fileset refid="axis2repository.fileset" /> 
+    </copy> 
+    <gunzip src="tmp/orca/tools/axis2repository/${axis2repository.version}/axis2repository-${axis2repository.version}.tar.gz" dest="tmp/repo.tar" /> 
+    <untar src="tmp/repo.tar" dest="axis2repository" /> 
+    <delete dir="tmp" /> 
+</target> 
 <target name="get.packages" depends="get.drivers,get.nah,get.na,get.axis2repository" description="retrieves all required packages" />

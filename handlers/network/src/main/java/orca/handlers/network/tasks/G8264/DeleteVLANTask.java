@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.G8264;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class DeleteVLANTask extends G8264BaseTask {
@@ -15,9 +14,9 @@ public class DeleteVLANTask extends G8264BaseTask {
             }
 
             if (withQoS.equals("true"))
-            	router.deleteVLAN(vlanTag, true);
+                router.deleteVLAN(vlanTag, true);
             else
-            	router.deleteVLAN(vlanTag, false);
+                router.deleteVLAN(vlanTag, false);
             setResult(0);
         } catch (BuildException e) {
             throw e;
@@ -29,7 +28,7 @@ public class DeleteVLANTask extends G8264BaseTask {
     public void setVlanTag(String value) {
         this.vlanTag = value;
     }
-    
+
     public void setVlanWithQoS(String withQoS) {
         this.withQoS = withQoS.toLowerCase();
     }

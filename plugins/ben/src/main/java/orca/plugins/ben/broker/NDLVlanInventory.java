@@ -18,12 +18,11 @@ import orca.shirako.core.Ticket;
 import orca.shirako.kernel.ResourceSet;
 import orca.util.CompressEncode;
 
-
 public class NDLVlanInventory extends InventoryForType {
     protected int available;
     protected int total;
     protected DomainResources ifaces;
-    
+
     @Override
     public void donate(IClientReservation source) {
         super.donate(source);
@@ -33,43 +32,43 @@ public class NDLVlanInventory extends InventoryForType {
         Ticket cset = (Ticket) rset.getResources();
         // resource ticket
         ResourceTicket ticket = cset.getTicket();
-        available = total = ticket.getUnits();    
-        
+        available = total = ticket.getUnits();
+
         ResourcePoolAttributeDescriptor attr = rpd.getAttribute(ResourceProperties.ResourceNdlAbstractDomain);
         if (attr == null) {
             throw new RuntimeException("Missing abstract NDL model");
         }
 
-        String model = null;        
+        String model = null;
         // extract the domain resources
         try {
-        	model = CompressEncode.decodeDecompress(attr.getValue());
+            model = CompressEncode.decodeDecompress(attr.getValue());
         } catch (DataFormatException dfe) {
-        	// maybe it is not compressed so just keep going
-        	model = attr.getValue();
+            // maybe it is not compressed so just keep going
+            model = attr.getValue();
         }
-        
+
         try {
-        	Domain domain=new Domain();
-			ifaces = domain.getDomainResources(model,total);
-			model = domain.getDomain_model_str();
-			if(model!=null){
-				attr.setValue(CompressEncode.compressEncode(model));
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NdlException ee) {
-			ee.printStackTrace();
-		}catch (RuntimeException eee) {
-			eee.printStackTrace();
-			available = total =0;
-			ticket.getDelegation().setUnits(0);
-		}
+            Domain domain = new Domain();
+            ifaces = domain.getDomainResources(model, total);
+            model = domain.getDomain_model_str();
+            if (model != null) {
+                attr.setValue(CompressEncode.compressEncode(model));
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NdlException ee) {
+            ee.printStackTrace();
+        } catch (RuntimeException eee) {
+            eee.printStackTrace();
+            available = total = 0;
+            ticket.getDelegation().setUnits(0);
+        }
         // note: we ignore the type and count embedded in ifaces since
-        // these are passed by orca's core        
-    }    
-    
+        // these are passed by orca's core
+    }
+
     protected void allocate(String sbw, String start, String end, Properties result) {
         if (sbw != null && (start != null || end != null)) {
             long bw = 0;
@@ -78,9 +77,9 @@ public class NDLVlanInventory extends InventoryForType {
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Invalid bandwitdh: " + sbw);
             }
-                            
+
             DomainResource sdr = null, edr = null;
-            if (start != null) { 
+            if (start != null) {
                 sdr = ifaces.getResource(start);
                 if (sdr == null) {
                     throw new IllegalArgumentException("Interface " + start + " does not exist");
@@ -92,8 +91,8 @@ public class NDLVlanInventory extends InventoryForType {
                     throw new IllegalArgumentException("Interface " + end + "  does not exist");
                 }
             }
-            
-            if (sdr != null && edr != null) {            
+
+            if (sdr != null && edr != null) {
                 if (sdr.getBandwidth() >= bw && edr.getBandwidth() >= bw) {
                     sdr.reserveBandwidth(bw);
                     edr.reserveBandwidth(bw);
@@ -103,11 +102,14 @@ public class NDLVlanInventory extends InventoryForType {
                         result.setProperty(ResourceProperties.ResourceEndIface, end);
                     }
                 } else {
-                    throw new RuntimeException("Insufficient bandwidth to meet request:bw="+bw+";sdr bw="+sdr.toString()+";edr bw="+edr.toString());
+                    throw new RuntimeException("Insufficient bandwidth to meet request:bw=" + bw + ";sdr bw="
+                            + sdr.toString() + ";edr bw=" + edr.toString());
                 }
-            }else {
+            } else {
                 DomainResource dr = sdr;
-                if (dr == null) {dr = edr;}
+                if (dr == null) {
+                    dr = edr;
+                }
                 if (dr.getBandwidth() >= bw) {
                     dr.reserveBandwidth(bw);
                     if (result != null) {
@@ -119,14 +121,14 @@ public class NDLVlanInventory extends InventoryForType {
                         }
                     }
                 } else {
-                    throw new RuntimeException("Insufficient bandwitdth to meet request:bw="+bw+";dr bw="+dr.toString());
-                }                    
-            }       
+                    throw new RuntimeException(
+                            "Insufficient bandwitdth to meet request:bw=" + bw + ";dr bw=" + dr.toString());
+                }
+            }
         }
         available--;
     }
-    
-    
+
     public Properties allocate(int count, Properties request) {
         if (count != 1) {
             throw new IllegalArgumentException("Count can only be 1");
@@ -134,25 +136,25 @@ public class NDLVlanInventory extends InventoryForType {
         if (available <= 0) {
             throw new IllegalStateException("No available units");
         }
-        
+
         Properties result = new Properties();
         String bw = request.getProperty(RequestProperties.RequestBandwidth);
         String start = request.getProperty(RequestProperties.RequestStartIface);
         String end = request.getProperty(RequestProperties.RequestEndIface);
-        
+
         allocate(bw, start, end, result);
         return result;
     }
-    
+
     public Properties allocate(int count, Properties request, Properties resource) {
-        throw new IllegalStateException("Extends with increase are not valid for VLANS");        
+        throw new IllegalStateException("Extends with increase are not valid for VLANS");
     }
-    
+
     public void allocateRevisit(int count, Properties resource) {
         if (count != 1) {
             throw new IllegalStateException("Count can only be 1");
         }
-        
+
         if (available <= 0) {
             throw new IllegalStateException("No available units");
         }
@@ -164,12 +166,11 @@ public class NDLVlanInventory extends InventoryForType {
         allocate(bw, start, end, null);
     }
 
-    
     public void free(int count, Properties resource) {
         if (count != 1) {
             throw new IllegalStateException("Count can only be 1");
         }
-        
+
         String sbw = resource.getProperty(ResourceProperties.ResourceBandwidth);
         String start = resource.getProperty(ResourceProperties.ResourceStartIface);
         String end = resource.getProperty(ResourceProperties.ResourceEndIface);
@@ -181,7 +182,7 @@ public class NDLVlanInventory extends InventoryForType {
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Invalid bandwitdh: " + sbw);
             }
-            
+
             DomainResource sdr = null;
             if (start != null) {
                 sdr = ifaces.getResource(start);
@@ -204,18 +205,17 @@ public class NDLVlanInventory extends InventoryForType {
                 edr.releaseBandwidth(bw);
             }
         }
-        available++;        
+        available++;
     }
 
-    
     public Properties free(int count, Properties request, Properties resource) {
-        throw new IllegalStateException("Extends with decrease are not valid for VLANS");        
+        throw new IllegalStateException("Extends with decrease are not valid for VLANS");
     }
 
     public int getFree() {
         return available;
     }
-    
+
     public int getAllocated() {
         return total - available;
     }

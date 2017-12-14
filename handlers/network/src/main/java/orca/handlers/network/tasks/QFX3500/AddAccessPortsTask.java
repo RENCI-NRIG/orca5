@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.QFX3500;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class AddAccessPortsTask extends QFX3500BaseTask {
@@ -17,7 +16,7 @@ public class AddAccessPortsTask extends QFX3500BaseTask {
             if (ports == null) {
                 throw new Exception("Missing ports");
             }
-            router.addAccessPortsToVLAN(vlanTag, ports);    
+            router.addAccessPortsToVLAN(vlanTag, ports);
             setResult(0);
         } catch (BuildException e) {
             throw e;

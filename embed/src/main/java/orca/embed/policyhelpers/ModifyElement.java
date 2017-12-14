@@ -6,49 +6,48 @@ import orca.ndl.INdlModifyModelListener;
 import orca.ndl.INdlModifyModelListener.ModifyType;
 
 public class ModifyElement {
-	Resource sub,obj;
-	INdlModifyModelListener.ModifyType modType = null;
-	int modifyUnits;
-	
-	public ModifyElement(Resource s,ModifyType t, Resource o, int number){
-		sub = s;
-		modType = t;
-		obj =o;
-		
-		modifyUnits = number;
-	}
+    Resource sub, obj;
+    INdlModifyModelListener.ModifyType modType = null;
+    int modifyUnits;
 
-	public Resource getSub() {
-		return sub;
-	}
+    public ModifyElement(Resource s, ModifyType t, Resource o, int number) {
+        sub = s;
+        modType = t;
+        obj = o;
 
-	public void setSub(Resource sub) {
-		this.sub = sub;
-	}
+        modifyUnits = number;
+    }
 
-	public Resource getObj() {
-		return obj;
-	}
+    public Resource getSub() {
+        return sub;
+    }
 
-	public void setObj(Resource obj) {
-		this.obj = obj;
-	}
+    public void setSub(Resource sub) {
+        this.sub = sub;
+    }
 
-	public INdlModifyModelListener.ModifyType getModType() {
-		return modType;
-	}
+    public Resource getObj() {
+        return obj;
+    }
 
-	public void setModType(INdlModifyModelListener.ModifyType modType) {
-		this.modType = modType;
-	}
+    public void setObj(Resource obj) {
+        this.obj = obj;
+    }
 
-	public int getModifyUnits() {
-		return modifyUnits;
-	}
+    public INdlModifyModelListener.ModifyType getModType() {
+        return modType;
+    }
 
-	public void setModifyUnits(int modifyUnits) {
-		this.modifyUnits = modifyUnits;
-	}
-	
-	
+    public void setModType(INdlModifyModelListener.ModifyType modType) {
+        this.modType = modType;
+    }
+
+    public int getModifyUnits() {
+        return modifyUnits;
+    }
+
+    public void setModifyUnits(int modifyUnits) {
+        this.modifyUnits = modifyUnits;
+    }
+
 }

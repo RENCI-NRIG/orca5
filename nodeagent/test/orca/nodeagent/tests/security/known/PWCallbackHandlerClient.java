@@ -18,11 +18,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
-
-public class PWCallbackHandlerClient implements CallbackHandler
-{
-    public void handle(Callback[] callbacks) throws UnsupportedCallbackException, IOException
-    {
+public class PWCallbackHandlerClient implements CallbackHandler {
+    public void handle(Callback[] callbacks) throws UnsupportedCallbackException, IOException {
         String clientPassword = "clientkeypass";
 
         for (int i = 0; i < callbacks.length; i++) {
@@ -47,8 +44,7 @@ public class PWCallbackHandlerClient implements CallbackHandler
                 }
             } else {
                 throw new UnsupportedCallbackException(callbacks[i],
-                                                       "Unrecognized Callback of type " +
-                                                       (callbacks[i]).getClass().getName());
+                        "Unrecognized Callback of type " + (callbacks[i]).getClass().getName());
             }
         }
 

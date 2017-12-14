@@ -6,12 +6,12 @@ import orca.handlers.network.core.CommandException;
 
 public class Cisco6509Device extends CiscoRouterDevice implements IMappingRouterDevice {
 
-    public Cisco6509Device(String deviceAddress, String uid, String password, String adminPassword, 
-    		String defaultPrompt) {
+    public Cisco6509Device(String deviceAddress, String uid, String password, String adminPassword,
+            String defaultPrompt) {
         super(deviceAddress, uid, password, adminPassword, defaultPrompt);
         basepath = "/orca/handlers/network/router/cisco/6509";
     }
-    
+
     public void mapVLANs(String sourceTag, String destinationTag, String port) throws CommandException {
         Properties p = getProperties();
         p.setProperty(PropertySrcVLAN, sourceTag);

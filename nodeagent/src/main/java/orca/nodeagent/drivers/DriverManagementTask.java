@@ -12,15 +12,12 @@ package orca.nodeagent.drivers;
 
 import org.apache.tools.ant.BuildException;
 
-
-public class DriverManagementTask extends DriverBaseTask
-{
+public class DriverManagementTask extends DriverBaseTask {
     protected String driverClass;
     protected String driverPackage;
 
     @Override
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         super.execute();
 
         if (driverId == null) {
@@ -28,13 +25,11 @@ public class DriverManagementTask extends DriverBaseTask
         }
     }
 
-    public void setDriverClass(String driverClass)
-    {
+    public void setDriverClass(String driverClass) {
         this.driverClass = driverClass;
     }
 
-    public void setDriverPackage(String driverPackage)
-    {
+    public void setDriverPackage(String driverPackage) {
         this.driverPackage = driverPackage;
     }
 }
