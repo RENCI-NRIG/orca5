@@ -56,41 +56,38 @@ try:
     #DO THE WORK                                                                                                                                                                                       
     LOG.debug("nova-essex-prepare-key: " + str(sys.argv))
 
-    if str(os.environ['AMI_NAME']) and str(os.environ['AKI_NAME']) and str(os.environ['ARI_NAME']):
-        if len(sys.argv) == 4:
+    if len(sys.argv) == 4:
     
-            instance_ip = sys.argv[1].strip("'")
-            user_ssh_key = sys.argv[2].strip("'")
+        instance_ip = sys.argv[1].strip("'")
+        user_ssh_key = sys.argv[2].strip("'")
     
-            VM.prepare_key(instance_ip,user_ssh_key, os.environ['EUCA_KEY_DIR']+"/"+os.environ['EC2_SSH_KEY'])
+        VM.prepare_key(instance_ip,user_ssh_key, os.environ['EUCA_KEY_DIR']+"/"+os.environ['EC2_SSH_KEY'])
     
-            LOG.info("nova-essex-prepare-key: Success " + str(instance_ip) + ": " + str(user_ssh_key))
-        elif len(sys.argv) == 5:
-            instance_ip = sys.argv[1].strip("'")
-            user_name =  sys.argv[2].strip("'")
+        LOG.info("nova-essex-prepare-key: Success " + str(instance_ip) + ": " + str(user_ssh_key))
+    elif len(sys.argv) == 5:
+        instance_ip = sys.argv[1].strip("'")
+        user_name =  sys.argv[2].strip("'")
             
-            user_ssh_keys = sys.argv[3].strip("'").split('\n')
-            shouldSudo = sys.argv[4].strip("'")
-            LOG.debug("nova-essex-prepare-key: argv = " + str(sys.argv))
+        user_ssh_keys = sys.argv[3].strip("'").split('\n')
+        shouldSudo = sys.argv[4].strip("'")
+        LOG.debug("nova-essex-prepare-key: argv = " + str(sys.argv))
     
-            LOG.debug("instance_ip = " + str(instance_ip))
-            LOG.debug("user_name = " + str(user_name))
-            LOG.debug("user_ssh_keys (" + str(len(user_ssh_keys))  + ") = " + str(user_ssh_keys))
-            LOG.debug("shouldSudo = " + str(shouldSudo))
+        LOG.debug("instance_ip = " + str(instance_ip))
+        LOG.debug("user_name = " + str(user_name))
+        LOG.debug("user_ssh_keys (" + str(len(user_ssh_keys))  + ") = " + str(user_ssh_keys))
+        LOG.debug("shouldSudo = " + str(shouldSudo))
     
-            while user_ssh_keys.count('') > 0:
-                user_ssh_keys.remove('')
+        while user_ssh_keys.count('') > 0:
+            user_ssh_keys.remove('')
                 
     
-            for i in user_ssh_keys:
-                LOG.debug("user_ssh_keys -- " + str(i))
+        for i in user_ssh_keys:
+            LOG.debug("user_ssh_keys -- " + str(i))
     
-            VM.prepare_keys(instance_ip,user_name,user_ssh_keys, shouldSudo, os.environ['EUCA_KEY_DIR']+"/"+os.environ['EC2_SSH_KEY'])
-        else:
-            LOG.error("nova-essex-prepare-key: invalid argv length (" + str(len(sys.argv)) + "), argv = " + str(sys.argv))
-            sys.exit(1)
-
-
+        VM.prepare_keys(instance_ip,user_name,user_ssh_keys, shouldSudo, os.environ['EUCA_KEY_DIR']+"/"+os.environ['EC2_SSH_KEY'])
+    else:
+        LOG.error("nova-essex-prepare-key: invalid argv length (" + str(len(sys.argv)) + "), argv = " + str(sys.argv))
+        sys.exit(1)
 
 except Exception as e:
     LOG.error("nova-essex-prepare-key: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
