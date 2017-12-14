@@ -58,6 +58,20 @@
         </dependency> 
         <dependency> 
             <groupId>
+                 orca.controllers 
+            </groupId> 
+            <artifactId>
+                 xmlrpc 
+            </artifactId> 
+            <version>
+                 ${project.version} 
+            </version> 
+            <type>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
+            <groupId>
                  orca 
             </groupId> 
             <artifactId>
