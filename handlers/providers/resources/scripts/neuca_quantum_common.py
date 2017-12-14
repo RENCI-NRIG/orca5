@@ -92,7 +92,7 @@ class NEuca_Quantum_Network:
             network_uuid = NEuca_Quantum_Network.get_network_uuid(tenant_id, vlan_tag, network)
             if network_uuid is None:
                 break
-            else
+            else:
                 LOG.debug("neuca_quantum_common: existing quantum network found for vlan: " + vlan_tag + ", network: " + network)
                 LOG.debug("neuca_quantum_common: delete existing quantum network: " + str(network_uuid))
                 NEuca_Quantum_Network.delete_network(tenant_id, network_uuid)
