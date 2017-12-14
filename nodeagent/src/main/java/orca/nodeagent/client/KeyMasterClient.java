@@ -49,7 +49,8 @@ public class KeyMasterClient {
     String keyAlias;
     String serverKey;
 
-    public KeyMasterClient(String location, NodeAgentServiceStub stub, String keyStoreLocation, String keyStorePass, String keyAlias, String keyPass, String authorityIP, String serverKey) {
+    public KeyMasterClient(String location, NodeAgentServiceStub stub, String keyStoreLocation, String keyStorePass,
+            String keyAlias, String keyPass, String authorityIP, String serverKey) {
         this.location = location;
         this.stub = stub;
         this.keyStoreLocation = keyStoreLocation;
@@ -65,6 +66,7 @@ public class KeyMasterClient {
 
     /**
      * Calls the registerAuthorityKey function (plays the KeyMaster protocol).
+     * 
      * @return
      * @throws Exception
      */
@@ -95,7 +97,7 @@ public class KeyMasterClient {
 
         rke.setRequest(messageByte); // set message to send
 
-        //printKeyMasterMessage(messageByte); // print the message to be sent
+        // printKeyMasterMessage(messageByte); // print the message to be sent
 
         // compute the signature over the message sent
         Signature sig = Signature.getInstance("MD5withRSA");
@@ -167,6 +169,7 @@ public class KeyMasterClient {
 
     /**
      * Calls the getServiceKey function (used for recovery).
+     * 
      * @return
      * @throws Exception
      */
@@ -208,6 +211,7 @@ public class KeyMasterClient {
 
     /**
      * Creates the message to be sent to the KeyMaster.
+     * 
      * @return
      */
     private byte[] createKeyMasterMessage() {
@@ -244,6 +248,7 @@ public class KeyMasterClient {
 
     /**
      * Creates a KeyMasterMessage object from the KeyMaster reply.
+     * 
      * @param decryptBytesDoc
      * @return
      */
@@ -256,6 +261,7 @@ public class KeyMasterClient {
 
     /**
      * Prints a KeyMasterMessage represented in byte[].
+     * 
      * @param messageByte
      */
     private void printKeyMasterMessage(byte[] messageByte) {
@@ -394,8 +400,8 @@ public class KeyMasterClient {
     }
 
     /**
-     * Helper function used to compute the hexadecimal representation of a
-     * digest.
+     * Helper function used to compute the hexadecimal representation of a digest.
+     * 
      * @param digest
      * @return
      */
@@ -420,6 +426,7 @@ public class KeyMasterClient {
 
     /**
      * Generates a certificate from byte encoding.
+     * 
      * @param certificateEncoding
      * @return
      */

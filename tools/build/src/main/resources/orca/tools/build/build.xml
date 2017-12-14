@@ -1,4 +1,4 @@
-<antlib>
-  <taskdef resource="orca/tools/build/tasks.properties" />
-  <typedef name="filesetnopom" classname="orca.tools.build.FileSetNoPom" />     
+<antlib> 
+    <taskdef resource="orca/tools/build/tasks.properties" /> 
+    <typedef name="filesetnopom" classname="orca.tools.build.FileSetNoPom" /> 
 </antlib>

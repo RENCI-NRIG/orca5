@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.QFX3500;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class UnmapVLANSTask extends QFX3500BaseTask {

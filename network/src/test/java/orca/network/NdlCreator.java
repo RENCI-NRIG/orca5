@@ -20,49 +20,46 @@ import orca.network.policyhelpers.SystemNativeError;
 
 public class NdlCreator {
 
-	public native void print();
-	public native SystemNativeError system(String commandline);
-	
-	private static final Logger log = Logger.getLogger(Ndl.class);
-	
-	public NdlCreator() {
-		JniLoader   loader = new JniLoader("syscall");
+    public native void print();
 
-		if( loader != null )
-		{
-			SystemNativeError   error = loader.loadJni();
-			String  message = "Error loading JNI: " + error.getMessage()
-		+ " (" + error.getErrno() + ")";
+    public native SystemNativeError system(String commandline);
 
-			if( error.getAdditional() != null && !error.getAdditional().isEmpty() )
-				message += ": " + error.getAdditional();
-			if( error.getErrno() != 0 )
-				log.error( message );
-		}
-	}
-	
-	public void create() {
-	      System.out.println("From the C++\n");
-	      print();
+    private static final Logger log = Logger.getLogger(Ndl.class);
+
+    public NdlCreator() {
+        JniLoader loader = new JniLoader("syscall");
+
+        if (loader != null) {
+            SystemNativeError error = loader.loadJni();
+            String message = "Error loading JNI: " + error.getMessage() + " (" + error.getErrno() + ")";
+
+            if (error.getAdditional() != null && !error.getAdditional().isEmpty())
+                message += ": " + error.getAdditional();
+            if (error.getErrno() != 0)
+                log.error(message);
+        }
+    }
+
+    public void create() {
+        System.out.println("From the C++\n");
+        print();
         // create an empty graph
         Model model = ModelFactory.createDefaultModel();
 
-       // create the resource
-       Resource r = model.createResource();                                     
+        // create the resource
+        Resource r = model.createResource();
 
-      // add the property
-      r.addProperty(RDFS.label, model.createLiteral("chat", "en"))
-       .addProperty(RDFS.label, model.createLiteral("chat", "fr"))
-       .addProperty(RDFS.label, model.createLiteral("<em>chat</em>", true));
-      
-      r = model.createResource();
-      
-      r.addProperty(RDFS.label, "11")
-      .addLiteral(RDFS.label, 11);
+        // add the property
+        r.addProperty(RDFS.label, model.createLiteral("chat", "en"))
+                .addProperty(RDFS.label, model.createLiteral("chat", "fr"))
+                .addProperty(RDFS.label, model.createLiteral("<em>chat</em>", true));
 
-      // write out the graph
-      model.write(new PrintWriter(System.out));
+        r = model.createResource();
 
+        r.addProperty(RDFS.label, "11").addLiteral(RDFS.label, 11);
 
-	}
+        // write out the graph
+        model.write(new PrintWriter(System.out));
+
+    }
 }

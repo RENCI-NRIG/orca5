@@ -20,9 +20,7 @@ import orca.nodeagent.drivers.DriverBaseTask;
 import org.apache.axis2.util.Base64;
 import org.apache.tools.ant.BuildException;
 
-
-public class GetServiceKeyTask extends DriverBaseTask
-{
+public class GetServiceKeyTask extends DriverBaseTask {
     /**
      * Property to store the resulting certificate (base64-encoded)
      */
@@ -33,8 +31,7 @@ public class GetServiceKeyTask extends DriverBaseTask
      */
     protected String certificateFile;
 
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         super.execute();
 
         try {
@@ -69,13 +66,11 @@ public class GetServiceKeyTask extends DriverBaseTask
         }
     }
 
-    public void setCertificateProperty(String value)
-    {
+    public void setCertificateProperty(String value) {
         this.certificateProperty = value;
     }
 
-    public void setCertificateFile(String value)
-    {
+    public void setCertificateFile(String value) {
         this.certificateFile = value;
     }
 }

@@ -63,13 +63,14 @@ public class EucaTest extends ShirakoTest {
     protected ISlice slice = null;
     protected String noopConfigFile = null;
     protected int extendCount = 0;
-    protected String sshKey =  null;
-    
+    protected String sshKey = null;
+
     // note: we can find these using query
     protected ResourceType vmType = new ResourceType("vm");
 
     protected ReservationState state = null;
-    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin);
+    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None,
+            ReservationStates.NoJoin);
 
     public EucaTest(String[] args) {
         super(args);
@@ -85,11 +86,11 @@ public class EucaTest extends ShirakoTest {
             leaseLength = PropList.getIntegerProperty(properties, PropertyLeaseLength);
         }
         timeout = 2 * leaseLength;
-        
+
         sshKey = properties.getProperty(PropertySshKey);
         if (sshKey != null) {
             sshKey = readFileAsString(sshKey);
-        }            
+        }
     }
 
     private static String readFileAsString(String filePath) throws java.io.IOException {
@@ -98,7 +99,7 @@ public class EucaTest extends ShirakoTest {
         f.read(buffer);
         return new String(buffer);
     }
-        
+
     protected void setupTest() {
         sm = (IServiceManager) ActorRegistry.getActor(ServiceManager);
         if (sm == null) {
@@ -119,20 +120,21 @@ public class EucaTest extends ShirakoTest {
     protected IServiceManagerReservation getVMReservation(long cycle) {
         ResourceSet rset = new ResourceSet(1, vmType);
         Term term = new Term(clock.date(cycle + ADVANCE_TIME), clock.getMillis((long) leaseLength));
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, proxy);
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, proxy);
 
         if (sshKey != null) {
             r.setConfigurationProperty(ConfigurationProperties.ConfigSSHKey, sshKey);
         }
-        
+
         r.setConfigurationProperty(UnitProperties.UnitVlanTag, "25");
         r.setConfigurationProperty(UnitProperties.UnitVlanHostEth, "eth0");
-        //r.setConfigurationProperty("unit.eth1.vlan.tag", "20");
-	// For physical
-        //r.setConfigurationProperty("unit.eth1.mode", "phys");
-        //r.setConfigurationProperty("unit.eth1.hosteth", "eth0");
-        //r.setConfigurationProperty("unit.eth1.ip", "2.2.2.2/24");
-                           
+        // r.setConfigurationProperty("unit.eth1.vlan.tag", "20");
+        // For physical
+        // r.setConfigurationProperty("unit.eth1.mode", "phys");
+        // r.setConfigurationProperty("unit.eth1.hosteth", "eth0");
+        // r.setConfigurationProperty("unit.eth1.ip", "2.2.2.2/24");
+
         AntConfig.setServiceXml(r, noopConfigFile);
         r.setRenewable(true);
         return r;
@@ -144,12 +146,14 @@ public class EucaTest extends ShirakoTest {
                 System.out.println("VM reservation transition: from " + from + " to " + to);
                 if (to.equals(doneState)) {
                     ResourceSet leased = reservation.getLeasedResources();
-                    UnitSet uset = (UnitSet)leased.getResources();
+                    UnitSet uset = (UnitSet) leased.getResources();
                     for (Unit u : uset.getSet()) {
-                        System.out.println("unit id=" + u.getID() + " ec2instace: " + u.getProperty(UnitProperties.UnitEC2Instance)+ " has management ip: " + u.getProperty(UnitProperties.UnitManagementIP));
+                        System.out.println(
+                                "unit id=" + u.getID() + " ec2instace: " + u.getProperty(UnitProperties.UnitEC2Instance)
+                                        + " has management ip: " + u.getProperty(UnitProperties.UnitManagementIP));
                     }
                 }
-            }else {
+            } else {
                 System.out.println("Unknown reservation object: " + obj);
             }
             reservationTransition((IReservation) obj, (ReservationState) from, (ReservationState) to);
@@ -158,7 +162,8 @@ public class EucaTest extends ShirakoTest {
 
     protected boolean isExtended(ReservationState state) {
         if (state != null) {
-            return (state.getState() == ReservationStates.ActiveTicketed) && (state.getPending() == ReservationStates.None);
+            return (state.getState() == ReservationStates.ActiveTicketed)
+                    && (state.getPending() == ReservationStates.None);
         }
         return false;
     }
@@ -177,10 +182,10 @@ public class EucaTest extends ShirakoTest {
 
     protected synchronized void reservationTransition(IReservation r, ReservationState from, ReservationState to) {
         if (r == reservation) {
-            state = to;          
+            state = to;
             if (isExtended(to)) {
                 extendCount++;
-            }        
+            }
         }
     }
 
@@ -206,10 +211,10 @@ public class EucaTest extends ShirakoTest {
     }
 
     protected synchronized boolean checkDone() {
-        if (isActive(state) ) {          
+        if (isActive(state)) {
             if (extendCount > 0) {
                 return true;
-            }            
+            }
             System.out.println("wating for extension. extend count=" + extendCount);
         }
 

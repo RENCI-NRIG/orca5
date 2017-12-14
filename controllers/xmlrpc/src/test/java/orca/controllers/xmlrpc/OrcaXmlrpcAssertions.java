@@ -36,7 +36,8 @@ public class OrcaXmlrpcAssertions {
      * @param computedReservations
      * @param propCountMap
      */
-    protected static void assertExpectedPropertyCounts(List<TicketReservationMng> computedReservations, Map<String, Integer> propCountMap){
+    protected static void assertExpectedPropertyCounts(List<TicketReservationMng> computedReservations,
+            Map<String, Integer> propCountMap) {
         for (TicketReservationMng reservation : computedReservations) {
             Properties localProperties = OrcaConverter.fill(reservation.getLocalProperties());
 
@@ -47,22 +48,24 @@ public class OrcaXmlrpcAssertions {
                 continue;
             }
 
-            System.out.println("hostname " + hostname + " had localProperties count " + localProperties.size() + " (" + reservation.getReservationID() + ")");
+            System.out.println("hostname " + hostname + " had localProperties count " + localProperties.size() + " ("
+                    + reservation.getReservationID() + ")");
             System.out.println(localProperties.toString().replaceAll(",", ",\n").replaceAll("}", "\n}"));
-            assertEquals("Incorrect number of localProperties for " + hostname + " (" + reservation.getReservationID() + ")",
-                    (long) expected,
-                    (long) localProperties.size());
+            assertEquals(
+                    "Incorrect number of localProperties for " + hostname + " (" + reservation.getReservationID() + ")",
+                    (long) expected, (long) localProperties.size());
         }
     }
 
     /**
-     * Check that properties have specific values.
-     * Should be useful to ensure e.g. eth1 and eth2 IP addresses do not change.
+     * Check that properties have specific values. Should be useful to ensure e.g. eth1 and eth2 IP addresses do not
+     * change.
      *
      * @param computedReservations
      * @param reservationProperties
      */
-    protected static void assertExpectedPropertyValues(List<TicketReservationMng> computedReservations, Map<String, PropertiesMng> reservationProperties) {
+    protected static void assertExpectedPropertyValues(List<TicketReservationMng> computedReservations,
+            Map<String, PropertiesMng> reservationProperties) {
         for (TicketReservationMng reservation : computedReservations) {
             final String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
 
@@ -72,7 +75,7 @@ public class OrcaXmlrpcAssertions {
             }
 
             List<PropertyMng> expectedProperties = propertiesMng.getProperty();
-            if (null == expectedProperties){
+            if (null == expectedProperties) {
                 continue;
             }
 
@@ -89,19 +92,20 @@ public class OrcaXmlrpcAssertions {
     }
 
     /**
-     * In the case where interfaces are created at the same time, the ordering cannot be guaranteed.
-     * However, the relationship between Link Parent and IP address should be guaranteed.
+     * In the case where interfaces are created at the same time, the ordering cannot be guaranteed. However, the
+     * relationship between Link Parent and IP address should be guaranteed.
      *
      * @param computedReservations
      * @param nodeLinkIPsMap
      */
-    protected static void assertLinkMatchesIPProperty(List<TicketReservationMng> computedReservations, Map<String, Map<String, String>> nodeLinkIPsMap) {
+    protected static void assertLinkMatchesIPProperty(List<TicketReservationMng> computedReservations,
+            Map<String, Map<String, String>> nodeLinkIPsMap) {
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
             final String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
 
             final Map<String, String> linkIPsMap = nodeLinkIPsMap.get(hostname);
-            if (null == linkIPsMap){
+            if (null == linkIPsMap) {
                 continue;
             }
 
@@ -111,7 +115,7 @@ public class OrcaXmlrpcAssertions {
 
                 // find the matching Link and IP in Properties based on eth number
                 for (PropertyMng localProperty : localProperties) {
-                    if (link.equals(localProperty.getValue())){
+                    if (link.equals(localProperty.getValue())) {
                         final String pattern = UnitEthPrefix + "(\\d+)" + UnitEthParentUrlSuffix;
                         final Pattern r = Pattern.compile(pattern);
                         final Matcher m = r.matcher(localProperty.getName());
@@ -136,24 +140,26 @@ public class OrcaXmlrpcAssertions {
 
     /**
      * Check for the presence of Netmask property in VM reservations, and fail test by assertion if not present.
+     * 
      * @param computedReservations
      */
-    protected static void
-    assertNetmaskPropertyPresent(List<TicketReservationMng> computedReservations){
+    protected static void assertNetmaskPropertyPresent(List<TicketReservationMng> computedReservations) {
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+            // System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " +
+            // localProperties.size());
 
             // only check VMs for Netmask
-            //System.out.println(reservation.getResourceType());
-            if (!reservation.getResourceType().endsWith("vm")){
+            // System.out.println(reservation.getResourceType());
+            if (!reservation.getResourceType().endsWith("vm")) {
                 continue;
             }
 
             // every VM in our current tests should have a netmask
             // check for netmask in modified reservation
             String netmask = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthNetmaskSuffix);
-            assertNotNull("Could not find netmask value in computed reservation " + reservation.getReservationID(), netmask);
+            assertNotNull("Could not find netmask value in computed reservation " + reservation.getReservationID(),
+                    netmask);
 
             String address = OrcaConverter.getLocalProperty(reservation, UnitEthPrefix + "1" + UnitEthIPSuffix);
             if (null != address) {
@@ -171,30 +177,33 @@ public class OrcaXmlrpcAssertions {
         assertReservationsHaveNetworkInterface(computedReservations, null);
     }
 
-
     /**
      * Check for network interface(s) being present, and optionally for the correct number of interfaces
+     * 
      * @param computedReservations
      * @param interfaceCountMap
      */
-    protected static void assertReservationsHaveNetworkInterface(List<TicketReservationMng> computedReservations, Map<String, Integer> interfaceCountMap) {
+    protected static void assertReservationsHaveNetworkInterface(List<TicketReservationMng> computedReservations,
+            Map<String, Integer> interfaceCountMap) {
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            //System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+            // System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " +
+            // localProperties.size());
 
             // only check VMs
-            //System.out.println(reservation.getResourceType());
-            if (!reservation.getResourceType().endsWith("vm")){
+            // System.out.println(reservation.getResourceType());
+            if (!reservation.getResourceType().endsWith("vm")) {
                 continue;
             }
 
             // minimally, the value should not be null
             String hostname = OrcaConverter.getLocalProperty(reservation, UnitHostName);
             String numInterfaces = OrcaConverter.getLocalProperty(reservation, UnitNumberInterface);
-            assertNotNull("No network interfaces found for " + hostname + " (" + reservation.getReservationID() + ")", numInterfaces);
+            assertNotNull("No network interfaces found for " + hostname + " (" + reservation.getReservationID() + ")",
+                    numInterfaces);
 
             // optionally check for a specific value
-            if (null == interfaceCountMap){
+            if (null == interfaceCountMap) {
                 continue;
             }
             Integer expected = interfaceCountMap.get(hostname);
@@ -202,35 +211,35 @@ public class OrcaXmlrpcAssertions {
                 continue;
             }
 
-            System.out.println("hostname " + hostname + " had Interfaces count " + numInterfaces + " (" + reservation.getReservationID() + ")");
+            System.out.println("hostname " + hostname + " had Interfaces count " + numInterfaces + " ("
+                    + reservation.getReservationID() + ")");
             assertEquals("Incorrect number of Interfaces for " + hostname + " (" + reservation.getReservationID() + ")",
-                    (long) expected,
-                    (long) Integer.parseInt(numInterfaces));
+                    (long) expected, (long) Integer.parseInt(numInterfaces));
         }
     }
 
     /**
-     * Verify that the EC2 Instance type was present
-     * From Issue #106
+     * Verify that the EC2 Instance type was present From Issue #106
      *
      * @param computedReservations
      */
     protected static void assertEc2InstanceTypePresent(List<TicketReservationMng> computedReservations) {
-        for (TicketReservationMng reservation : computedReservations){
+        for (TicketReservationMng reservation : computedReservations) {
             // only check VMs for EC2 Instance Type
             System.out.println(reservation.getResourceType());
-            if (!reservation.getResourceType().endsWith("vm")){
+            if (!reservation.getResourceType().endsWith("vm")) {
                 continue;
             }
 
             String ec2InstanceType = OrcaConverter.getConfigurationProperty(reservation, PropertyUnitEC2InstanceType);
-            assertNotNull("Could not find EC2 Instance Type in reservation " + reservation.getReservationID(), ec2InstanceType);
+            assertNotNull("Could not find EC2 Instance Type in reservation " + reservation.getReservationID(),
+                    ec2InstanceType);
         }
     }
 
     /**
-     * Verify that the resulting manifest will process.
-     * Catches errors such as "orca.ndl.NdlException: Path has 1 (odd number) of endpoints"
+     * Verify that the resulting manifest will process. Catches errors such as "orca.ndl.NdlException: Path has 1 (odd
+     * number) of endpoints"
      *
      * @param slice
      */
@@ -244,7 +253,8 @@ public class OrcaXmlrpcAssertions {
         Collection<NetworkElement> boundElements = workflow.getBoundElements();
 
         // get the manifest from the created slice
-        String manifest = slice.getOrc().getManifest(manifestModel, domainInConnectionList, boundElements, (List<ReservationMng>) computedReservations);
+        String manifest = slice.getOrc().getManifest(manifestModel, domainInConnectionList, boundElements,
+                (List<ReservationMng>) computedReservations);
 
         ManifestParserListener parserListener = new ManifestParserListener(logger);
         try {
@@ -262,22 +272,24 @@ public class OrcaXmlrpcAssertions {
      *
      * @param computedReservations
      */
-    protected static void assertBootscriptVelocityTemplating(List<TicketReservationMng> computedReservations){
+    protected static void assertBootscriptVelocityTemplating(List<TicketReservationMng> computedReservations) {
         for (TicketReservationMng reservation : computedReservations) {
             List<PropertyMng> localProperties = reservation.getLocalProperties().getProperty();
-            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count " + localProperties.size());
+            System.out.println("reservation: " + reservation.getReservationID() + " had localProperties count "
+                    + localProperties.size());
 
             // only check VMs for Bootscript
-            if (!reservation.getResourceType().endsWith("vm")){
+            if (!reservation.getResourceType().endsWith("vm")) {
                 continue;
             }
 
             for (PropertyMng property : localProperties) {
-                //System.out.println(property.getName() + ": " + property.getValue());
+                // System.out.println(property.getName() + ": " + property.getValue());
                 if (property.getName().equals("unit.instance.config")) {
                     String bootscript = property.getValue();
 
-                    assertFalse("Bootscript was not properly templated by Velocity: " + bootscript, bootscript.contains("$self"));
+                    assertFalse("Bootscript was not properly templated by Velocity: " + bootscript,
+                            bootscript.contains("$self"));
 
                     // don't need to check any other properties for this reservation
                     break;
@@ -300,23 +312,23 @@ public class OrcaXmlrpcAssertions {
         assertNotNull(boundElements);
 
         HashSet<String> interfaceSet = new HashSet<>();
-        for (NetworkElement element: boundElements){
+        for (NetworkElement element : boundElements) {
             final LinkedList<Interface> interfaces = element.getClientInterface();
 
             // VLANs don't have this list, we can skip them
-            if (null == interfaces){
+            if (null == interfaces) {
                 continue;
             }
 
-            for (Interface clientInterface: interfaces){
+            for (Interface clientInterface : interfaces) {
                 final String interfaceURI = clientInterface.getURI();
                 final boolean isUnique = interfaceSet.add(interfaceURI);
-                assertTrue("Duplicate clientInterface detected for " + element.getName() + " " + interfaceURI, isUnique);
+                assertTrue("Duplicate clientInterface detected for " + element.getName() + " " + interfaceURI,
+                        isUnique);
             }
         }
 
     }
-
 
     /**
      * Controller needs to assigned Core Resource Constraints to the Reservation
@@ -328,27 +340,28 @@ public class OrcaXmlrpcAssertions {
             Properties requestProperties = OrcaConverter.fill(reservation.getRequestProperties());
 
             // Skip any VLAN reservations
-            if (null != requestProperties.getProperty(RequestBandwidth)){
+            if (null != requestProperties.getProperty(RequestBandwidth)) {
                 continue;
             }
-            assertNotNull("Reservation UID " + reservation.getReservationID() + " is missing core constraint: " + RequestNumCPUCores,
-                    requestProperties.getProperty(RequestNumCPUCores));
+            assertNotNull("Reservation UID " + reservation.getReservationID() + " is missing core constraint: "
+                    + RequestNumCPUCores, requestProperties.getProperty(RequestNumCPUCores));
         }
 
     }
 
     /**
-     * The list of NdlCommons.computeElementClass includes both the actual node elements,
-     * and each unique domain for those node elements.
-     * In #157, a domain with both VM and BareMetal node elements would "lose" track of one of those type of elements,
-     * which was exhibited in the domain for the "missing" one to not be present in this list.
+     * The list of NdlCommons.computeElementClass includes both the actual node elements, and each unique domain for
+     * those node elements. In #157, a domain with both VM and BareMetal node elements would "lose" track of one of
+     * those type of elements, which was exhibited in the domain for the "missing" one to not be present in this list.
      *
      * @param manifestModel
      * @param expectedComputeElements
      */
-    protected static void assertManifestHasNumberOfComputeElements(OntModel manifestModel, int expectedComputeElements) {
+    protected static void assertManifestHasNumberOfComputeElements(OntModel manifestModel,
+            int expectedComputeElements) {
         final List<Individual> individuals = manifestModel.listIndividuals(NdlCommons.computeElementClass).toList();
 
-        assertEquals("List of Compute Elements did not match expected size.", expectedComputeElements, individuals.size());
+        assertEquals("List of Compute Elements did not match expected size.", expectedComputeElements,
+                individuals.size());
     }
 }

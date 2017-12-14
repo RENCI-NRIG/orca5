@@ -1,90 +1,140 @@
-<extensionPackage
-		xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans"
-		id="f7ec610c-d838-4239-87fc-869a8cbf848e">
-	<name>BEN Extension package</name>
-	<description>Provides controllers and guest packages for using BEN</description>
-	<plugins>
-
-		<!-- service manager controllers -->
-		<plugin id="1" type="6" factory="true" actorType="1">
-			<name>BEN Simple controller</name>
-			<description>BEN Controller</description>
-			<className>orca.controllers.ben.simple.BenSimpleControllerFactory</className>
-		</plugin>
-
-		<plugin id="2" type="6" factory="true" actorType="1">
-			<name>BEN NLR controller</name>
-			<description>BEN NLR Controller</description>
-			<className>orca.controllers.ben.nlr.BenNlrControllerFactory</className>
-		</plugin>
-		
-		<!-- Site authority handlers -->
-
- 		<plugin id="3" type="10" actorType="3">
-      		<name>BEN VLAN Handler</name>
-      		<description>Provides support for creating VLANS in BEN</description>
-      		<configurationProperties>
-	        <!-- Name of the handler file (relative to /ROOT/handlers) -->
-	        <property>
-	          <name>handler.file</name>
-	          <value>controllers/ben-obsoleted/bensimple/handler.xml</value>
-	        </property>
-	      </configurationProperties>
-    	</plugin>
-
- 		<plugin id="4" type="10" actorType="3">
-      		<name>BEN NDL VLAN Handler</name>
-      		<description>Provides support for creating VLANS in BEN (NDL)</description>
-      		<configurationProperties>
-	        <!-- Name of the handler file (relative to /ROOT/handlers) -->
-	        <property>
-	          <name>handler.file</name>
-	          <value>controllers/ben-obsoleted/bencomplex/handler.xml</value>
-	        </property>
-	      </configurationProperties>
-    	</plugin>
-
- 		<plugin id="5" type="10" actorType="3">
-      		<name>DUKE NET VLAN Handler</name>
-      		<description>Provides support for creating VLANS in DUKE NET</description>
-      		<configurationProperties>
-	        <!-- Name of the handler file (relative to /ROOT/handlers) -->
-	        <property>
-	          <name>handler.file</name>
-	          <value>controllers/ben-obsoleted/dukenet/handler.xml</value>
-	        </property>
-	      </configurationProperties>
-    	</plugin>
-
- 		<plugin id="6" type="10" actorType="3">
-      		<name>NLR VLAN Handler</name>
-      		<description>Provides support for creating VLANS in NLR</description>
-      		<configurationProperties>
-	        <!-- Name of the handler file (relative to /ROOT/handlers) -->
-	        <property>
-	          <name>handler.file</name>
-	          <value>controllers/ben-obsoleted/nlr/handler.xml</value>
-	        </property>
-	      </configurationProperties>
-    	</plugin>
-
-		<plugin id="7" type="6" factory="true" actorType="1">
-			<name>Interdomain controller</name>
-			<description>Interdomain Controller</description>
-			<className>orca.controllers.ben.interdomain.InterDomainControllerFactory</className>
-		</plugin>
-
-		<plugin id="8" type="10" actorType="3">
-      		<name>BEN GEC7 Handler</name>
-      		<description>Provides support for creating VLANS in BEN (GEC7 version)</description>
-      		<configurationProperties>
-	        <!-- Name of the handler file (relative to /ROOT/handlers) -->
-	        <property>
-	          <name>handler.file</name>
-	          <value>controllers/ben-obsoleted/gec7/ben.xml</value>
-	        </property>
-	      </configurationProperties>
-    	</plugin>
-
-	</plugins>  
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans" id="f7ec610c-d838-4239-87fc-869a8cbf848e"> 
+    <name>
+        BEN Extension package
+    </name> 
+    <description>
+        Provides controllers and guest packages for using BEN
+    </description> 
+    <plugins> 
+        <!-- service manager controllers --> 
+        <plugin id="1" type="6" factory="true" actorType="1"> 
+            <name>
+                BEN Simple controller
+            </name> 
+            <description>
+                BEN Controller
+            </description> 
+            <className>
+                orca.controllers.ben.simple.BenSimpleControllerFactory
+            </className> 
+        </plugin> 
+        <plugin id="2" type="6" factory="true" actorType="1"> 
+            <name>
+                BEN NLR controller
+            </name> 
+            <description>
+                BEN NLR Controller
+            </description> 
+            <className>
+                orca.controllers.ben.nlr.BenNlrControllerFactory
+            </className> 
+        </plugin> 
+        <!-- Site authority handlers --> 
+        <plugin id="3" type="10" actorType="3"> 
+            <name>
+                BEN VLAN Handler
+            </name> 
+            <description>
+                Provides support for creating VLANS in BEN
+            </description> 
+            <configurationProperties> 
+                <!-- Name of the handler file (relative to /ROOT/handlers) --> 
+                <property> 
+                    <name>
+                        handler.file
+                    </name> 
+                    <value>
+                        controllers/ben-obsoleted/bensimple/handler.xml
+                    </value> 
+                </property> 
+            </configurationProperties> 
+        </plugin> 
+        <plugin id="4" type="10" actorType="3"> 
+            <name>
+                BEN NDL VLAN Handler
+            </name> 
+            <description>
+                Provides support for creating VLANS in BEN (NDL)
+            </description> 
+            <configurationProperties> 
+                <!-- Name of the handler file (relative to /ROOT/handlers) --> 
+                <property> 
+                    <name>
+                        handler.file
+                    </name> 
+                    <value>
+                        controllers/ben-obsoleted/bencomplex/handler.xml
+                    </value> 
+                </property> 
+            </configurationProperties> 
+        </plugin> 
+        <plugin id="5" type="10" actorType="3"> 
+            <name>
+                DUKE NET VLAN Handler
+            </name> 
+            <description>
+                Provides support for creating VLANS in DUKE NET
+            </description> 
+            <configurationProperties> 
+                <!-- Name of the handler file (relative to /ROOT/handlers) --> 
+                <property> 
+                    <name>
+                        handler.file
+                    </name> 
+                    <value>
+                        controllers/ben-obsoleted/dukenet/handler.xml
+                    </value> 
+                </property> 
+            </configurationProperties> 
+        </plugin> 
+        <plugin id="6" type="10" actorType="3"> 
+            <name>
+                NLR VLAN Handler
+            </name> 
+            <description>
+                Provides support for creating VLANS in NLR
+            </description> 
+            <configurationProperties> 
+                <!-- Name of the handler file (relative to /ROOT/handlers) --> 
+                <property> 
+                    <name>
+                        handler.file
+                    </name> 
+                    <value>
+                        controllers/ben-obsoleted/nlr/handler.xml
+                    </value> 
+                </property> 
+            </configurationProperties> 
+        </plugin> 
+        <plugin id="7" type="6" factory="true" actorType="1"> 
+            <name>
+                Interdomain controller
+            </name> 
+            <description>
+                Interdomain Controller
+            </description> 
+            <className>
+                orca.controllers.ben.interdomain.InterDomainControllerFactory
+            </className> 
+        </plugin> 
+        <plugin id="8" type="10" actorType="3"> 
+            <name>
+                BEN GEC7 Handler
+            </name> 
+            <description>
+                Provides support for creating VLANS in BEN (GEC7 version)
+            </description> 
+            <configurationProperties> 
+                <!-- Name of the handler file (relative to /ROOT/handlers) --> 
+                <property> 
+                    <name>
+                        handler.file
+                    </name> 
+                    <value>
+                        controllers/ben-obsoleted/gec7/ben.xml
+                    </value> 
+                </property> 
+            </configurationProperties> 
+        </plugin> 
+    </plugins> 
 </extensionPackage>

@@ -18,36 +18,32 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
-
-public class PWCallbackHandlerClient implements CallbackHandler
-{
-    public void handle(Callback[] callbacks) throws UnsupportedCallbackException, IOException
-    {
+public class PWCallbackHandlerClient implements CallbackHandler {
+    public void handle(Callback[] callbacks) throws UnsupportedCallbackException, IOException {
         String clientPassword = "clientkeypass";
 
         for (int i = 0; i < callbacks.length; i++) {
             if (callbacks[i] instanceof WSPasswordCallback) {
                 WSPasswordCallback callback = (WSPasswordCallback) callbacks[i];
 
-                //System.out.println("Callback type " + callback.getClass().getName());
-                //System.out.println("Callback usage " + callback.getUsage());
+                // System.out.println("Callback type " + callback.getClass().getName());
+                // System.out.println("Callback usage " + callback.getUsage());
                 if (callback.getUsage() == WSPasswordCallback.SIGNATURE) {
-                    //System.out.println("callback of type SIGNATURE");
+                    // System.out.println("callback of type SIGNATURE");
                     callback.setPassword(clientPassword);
                 }
 
                 if (callback.getUsage() == WSPasswordCallback.KEY_NAME) {
-                    //System.out.println("Callback for setting key not implemented!");
+                    // System.out.println("Callback for setting key not implemented!");
                 }
 
                 if (callback.getUsage() == WSPasswordCallback.DECRYPT) {
-                    //System.out.println("callback of type DECRYPT");
+                    // System.out.println("callback of type DECRYPT");
                     callback.setPassword(clientPassword);
                 }
             } else {
                 throw new UnsupportedCallbackException(callbacks[i],
-                                                       "Unrecognized Callback of type " +
-                                                       (callbacks[i]).getClass().getName());
+                        "Unrecognized Callback of type " + (callbacks[i]).getClass().getName());
             }
         }
 

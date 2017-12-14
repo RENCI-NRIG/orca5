@@ -44,8 +44,8 @@ import orca.tests.core.SimpleLoadSource;
 import org.apache.log4j.Logger;
 
 /**
- * Tests a single reservation end-to-end. Assumes all actors this reservation
- * interacts with belong to the same container.
+ * Tests a single reservation end-to-end. Assumes all actors this reservation interacts with belong to the same
+ * container.
  */
 public class ReservationTestTool {
     public static final int ExitCodeOK = 0;
@@ -221,6 +221,7 @@ public class ReservationTestTool {
 
     /**
      * Checks if the service manager reservation has reached a final state
+     * 
      * @return
      */
     protected synchronized boolean checkDone() {
@@ -233,7 +234,10 @@ public class ReservationTestTool {
             } else if (currentStateSM.getState() == ReservationStates.Closed) {
                 logger.debug("Reservation is closed");
                 result = true;
-            } else if ((currentStateSM.getState() == ReservationStates.Active) && (currentStateSM.getPending() == ReservationStates.None) && (currentStateSM.getJoining() == ReservationStates.NoJoin) && (extendCount == desiredExtendCount)) {
+            } else if ((currentStateSM.getState() == ReservationStates.Active)
+                    && (currentStateSM.getPending() == ReservationStates.None)
+                    && (currentStateSM.getJoining() == ReservationStates.NoJoin)
+                    && (extendCount == desiredExtendCount)) {
                 logger.debug("Reservation is active. We are done");
                 result = true;
             } else {
@@ -252,6 +256,7 @@ public class ReservationTestTool {
 
     /**
      * Checks if the reservation has extended
+     * 
      * @param r
      * @param from
      * @param to
@@ -270,12 +275,15 @@ public class ReservationTestTool {
 
     /**
      * Checks the final reservation states for correctness.
-     * @param close true if closing
+     * 
+     * @param close
+     *            true if closing
      * @return
      */
     protected int checkFinalStates(boolean close) {
         if (!close) {
-            if (!(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin).equals(finalStateSM))) {
+            if (!(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin)
+                    .equals(finalStateSM))) {
                 return ExitCodeUnexpectedStateSM;
             }
 
@@ -283,7 +291,8 @@ public class ReservationTestTool {
                 return ExitCodeUnexpectedStateSite;
             }
         } else {
-            if (!(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin).equals(finalStateSM))) {
+            if (!(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin)
+                    .equals(finalStateSM))) {
                 return ExitCodeUnexpectedStateSM;
             }
 
@@ -301,46 +310,48 @@ public class ReservationTestTool {
 
     /**
      * Checks if the reservations hold the requested units.
+     * 
      * @param r
      */
     protected void checkUnits(IReservation r) {
         boolean match = true;
 
         switch (r.getState()) {
-            case ReservationStates.Ticketed:
+        case ReservationStates.Ticketed:
 
-                if (!(r instanceof IAuthorityReservation)) {
+            if (!(r instanceof IAuthorityReservation)) {
+                match = (r.getUnits() == units);
+            }
+
+            break;
+
+        case ReservationStates.Active:
+
+            if (r.getPendingState() == ReservationStates.None) {
+                if (r instanceof IAuthorityReservation) {
                     match = (r.getUnits() == units);
-                }
+                    match = (match && (r.getLeasedUnits() == units));
+                } else {
+                    IServiceManagerReservation rc = (IServiceManagerReservation) r;
 
-                break;
-
-            case ReservationStates.Active:
-
-                if (r.getPendingState() == ReservationStates.None) {
-                    if (r instanceof IAuthorityReservation) {
-                        match = (r.getUnits() == units);
-                        match = (match && (r.getLeasedUnits() == units));
-                    } else {
-                        IServiceManagerReservation rc = (IServiceManagerReservation) r;
-
-                        synchronized (rc) {
-                            if (rc.getJoinState() == ReservationStates.NoJoin) {
-                                if (!rc.isPendingRecover()) {
-                                    match = (r.getUnits() == units);
-                                    match = (match && (r.getLeasedUnits() == units));
-                                }
+                    synchronized (rc) {
+                        if (rc.getJoinState() == ReservationStates.NoJoin) {
+                            if (!rc.isPendingRecover()) {
+                                match = (r.getUnits() == units);
+                                match = (match && (r.getLeasedUnits() == units));
                             }
                         }
                     }
                 }
+            }
 
-                break;
+            break;
         }
 
         if (!match) {
             mismatchCount++;
-            logger.error("units count mismatch: r.getUnits()=" + r.getUnits() + ", units=" + units + ", r.getLeasedUnits()=" + r.getLeasedUnits());
+            logger.error("units count mismatch: r.getUnits()=" + r.getUnits() + ", units=" + units
+                    + ", r.getLeasedUnits()=" + r.getLeasedUnits());
         }
     }
 
@@ -353,6 +364,7 @@ public class ReservationTestTool {
 
     /**
      * Creates a reservation object
+     * 
      * @param cycle
      * @return
      */
@@ -362,17 +374,25 @@ public class ReservationTestTool {
         ActorClock clock = Globals.getContainer().getActorClock();
 
         Term term = new Term(clock.date(cycle + advanceTime), clock.getMillis((long) leaseLength));
-        IServiceManagerReservation r = ServiceManagerReservationFactory.getInstance().create(rset, term, slice, sm.getDefaultBroker());
+        IServiceManagerReservation r = ServiceManagerReservationFactory.getInstance().create(rset, term, slice,
+                sm.getDefaultBroker());
 
         // 90 - 400 - 500
         ResourceProperties.setMax(request, orca.policy.core.util.ResourceProperties.PropertyCpu, cpu);
-        orca.policy.core.util.ResourceProperties.setMin(request, orca.policy.core.util.ResourceProperties.PropertyCpu, cpu);
-        orca.policy.core.util.ResourceProperties.setMax(request, orca.policy.core.util.ResourceProperties.PropertyMemory, memory);
-        orca.policy.core.util.ResourceProperties.setMin(request, orca.policy.core.util.ResourceProperties.PropertyMemory, memory);
-        orca.policy.core.util.ResourceProperties.setMax(request, orca.policy.core.util.ResourceProperties.PropertyBandwidth, bandwidth);
-        orca.policy.core.util.ResourceProperties.setMin(request, orca.policy.core.util.ResourceProperties.PropertyBandwidth, bandwidth);
-        orca.policy.core.util.ResourceProperties.setMax(request, orca.policy.core.util.ResourceProperties.PropertyUnits, units);
-        orca.policy.core.util.ResourceProperties.setMin(request, orca.policy.core.util.ResourceProperties.PropertyUnits, units);
+        orca.policy.core.util.ResourceProperties.setMin(request, orca.policy.core.util.ResourceProperties.PropertyCpu,
+                cpu);
+        orca.policy.core.util.ResourceProperties.setMax(request,
+                orca.policy.core.util.ResourceProperties.PropertyMemory, memory);
+        orca.policy.core.util.ResourceProperties.setMin(request,
+                orca.policy.core.util.ResourceProperties.PropertyMemory, memory);
+        orca.policy.core.util.ResourceProperties.setMax(request,
+                orca.policy.core.util.ResourceProperties.PropertyBandwidth, bandwidth);
+        orca.policy.core.util.ResourceProperties.setMin(request,
+                orca.policy.core.util.ResourceProperties.PropertyBandwidth, bandwidth);
+        orca.policy.core.util.ResourceProperties.setMax(request, orca.policy.core.util.ResourceProperties.PropertyUnits,
+                units);
+        orca.policy.core.util.ResourceProperties.setMin(request, orca.policy.core.util.ResourceProperties.PropertyUnits,
+                units);
 
         // request.setProperty(BrokerWorstFitMultiplePoolsPolicyPlugin.PropertyPoolId,
         // "shirako");
@@ -385,6 +405,7 @@ public class ReservationTestTool {
 
     /**
      * Returns the actor this reservation belongs to.
+     * 
      * @param r
      * @return
      */
@@ -422,6 +443,7 @@ public class ReservationTestTool {
 
     /**
      * Converts the states to a string.
+     * 
      * @param from
      * @param to
      * @return
@@ -451,11 +473,13 @@ public class ReservationTestTool {
     protected void init() throws Exception {
         timeout = 5 * leaseLength;
 
-        StandardContainerManagerObject man = (StandardContainerManagerObject) Globals.getContainer().getContainerManagerObject();
+        StandardContainerManagerObject man = (StandardContainerManagerObject) Globals.getContainer()
+                .getContainerManagerObject();
         ResultActorMng result = man.getServiceManagers();
 
         if (result.getStatus().getCode() != 0) {
-            throw new RuntimeException("An error occurred while obtaining service managers. Exit code: " + result.getStatus().getCode());
+            throw new RuntimeException(
+                    "An error occurred while obtaining service managers. Exit code: " + result.getStatus().getCode());
         }
 
         ActorMng[] sms = result.getResult();
@@ -512,7 +536,9 @@ public class ReservationTestTool {
 
     /**
      * Monitors the state transitions of the reservation.
-     * @param close true if monitoring reservation closing
+     * 
+     * @param close
+     *            true if monitoring reservation closing
      * @return
      */
     protected int monitor(boolean close) {
@@ -544,6 +570,7 @@ public class ReservationTestTool {
 
     /**
      * Reservation transition event handler
+     * 
      * @param r
      * @param from
      * @param to
@@ -553,31 +580,31 @@ public class ReservationTestTool {
         assert actor != null;
 
         switch (actor.getType()) {
-            case Actor.TypeServiceManager:
-                currentStateSM = to;
+        case Actor.TypeServiceManager:
+            currentStateSM = to;
 
-                break;
+            break;
 
-            case Actor.TypeBroker:
-                currentStateAgent = to;
+        case Actor.TypeBroker:
+            currentStateAgent = to;
 
-                if ((currentReservationAgent == null) && r instanceof IBrokerReservation) {
-                    currentReservationAgent = (IBrokerReservation) r;
-                }
+            if ((currentReservationAgent == null) && r instanceof IBrokerReservation) {
+                currentReservationAgent = (IBrokerReservation) r;
+            }
 
-                break;
+            break;
 
-            case Actor.TypeSiteAuthority:
-                currentStateSite = to;
+        case Actor.TypeSiteAuthority:
+            currentStateSite = to;
 
-                if ((currentReservationSite == null) && r instanceof IAuthorityReservation) {
-                    currentReservationSite = (IAuthorityReservation) r;
-                }
+            if ((currentReservationSite == null) && r instanceof IAuthorityReservation) {
+                currentReservationSite = (IAuthorityReservation) r;
+            }
 
-                break;
+            break;
 
-            default:
-                throw new RuntimeException("Invalid actor type");
+        default:
+            throw new RuntimeException("Invalid actor type");
         }
 
         checkUnits(r);
@@ -587,6 +614,7 @@ public class ReservationTestTool {
 
     /**
      * Run the test
+     * 
      * @return
      */
     public int runTest() throws Exception {
@@ -620,7 +648,9 @@ public class ReservationTestTool {
 
     /**
      * Sets the bandwidth share
-     * @param bandwidth the bandwidth to set
+     * 
+     * @param bandwidth
+     *            the bandwidth to set
      */
     public void setBandwidth(int bandwidth) {
         this.bandwidth = bandwidth;
@@ -628,6 +658,7 @@ public class ReservationTestTool {
 
     /**
      * Sets the client-side ant XML driver file
+     * 
      * @param configFile
      */
     public void setConfigFile(String configFile) {
@@ -636,7 +667,9 @@ public class ReservationTestTool {
 
     /**
      * Sets the cpu share
-     * @param cpu the cpu to set
+     * 
+     * @param cpu
+     *            the cpu to set
      */
     public void setCpu(int cpu) {
         this.cpu = cpu;
@@ -644,7 +677,9 @@ public class ReservationTestTool {
 
     /**
      * Sets the elastic time flag
-     * @param elasticTime the elasticTime to set
+     * 
+     * @param elasticTime
+     *            the elasticTime to set
      */
     public void setElasticTime(boolean elasticTime) {
         this.elasticTime = elasticTime;
@@ -652,7 +687,9 @@ public class ReservationTestTool {
 
     /**
      * Sets the lease length
-     * @param leaseLength the leaseLength to set
+     * 
+     * @param leaseLength
+     *            the leaseLength to set
      */
     public void setLeaseLength(long leaseLength) {
         this.leaseLength = leaseLength;
@@ -660,7 +697,9 @@ public class ReservationTestTool {
 
     /**
      * Sets the memory share
-     * @param memory the memory to set
+     * 
+     * @param memory
+     *            the memory to set
      */
     public void setMemory(int memory) {
         this.memory = memory;
@@ -668,7 +707,9 @@ public class ReservationTestTool {
 
     /**
      * Sets the resource type
-     * @param rtype the rtype to set
+     * 
+     * @param rtype
+     *            the rtype to set
      */
     public void setRtype(ResourceType rtype) {
         this.rtype = rtype;
@@ -676,7 +717,9 @@ public class ReservationTestTool {
 
     /**
      * Sets the number of units to request
-     * @param units the units to set
+     * 
+     * @param units
+     *            the units to set
      */
     public void setUnits(int units) {
         this.units = units;

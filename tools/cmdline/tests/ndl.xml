@@ -1,33 +1,50 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
 <!--
 NOTE: this file is just for testing purposes: it is used to test the calculation of the abstract NDL model,
 given the full NDL substrate definition. Do not use this file for anything else!
--->
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-	<actors>
-		<actor>
-			<type>site</type>
-			<name>ndl-site</name>
-			<guid>5F55BCA3-67AE-4CF2-9006-8E87AA287C31</guid>
-			<description>Test site authority</description>
-			<pools>
-				<pool factory="orca.boot.inventory.NdlResourcePoolFactory">
-					<type>test.vlan</type>
-					<label>Test VLAN</label>
-					<description>A VLAN over Test site</description>
-					<units>100</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="controllers/ben/gec7/ben.xml" />
-					<properties>
-						<property name="substrate.file" value="orca/network/ben-6509.rdf" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="test.vlan" class="orca.policy.core.VlanControl" />
-			</controls>
-		</actor>
-	</actors>
+--> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                site
+            </type> 
+            <name>
+                ndl-site
+            </name> 
+            <guid>
+                5F55BCA3-67AE-4CF2-9006-8E87AA287C31
+            </guid> 
+            <description>
+                Test site authority
+            </description> 
+            <pools> 
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                    <type>
+                        test.vlan
+                    </type> 
+                    <label>Test VLAN</label> 
+                    <description>
+                        A VLAN over Test site
+                    </description> 
+                    <units>
+                        100
+                    </units> 
+                    <start>
+                        2010-01-30T00:00:00
+                    </start> 
+                    <end>
+                        2011-01-30T00:00:00
+                    </end> 
+                    <handler path="controllers/ben/gec7/ben.xml" /> 
+                    <properties> 
+                        <property name="substrate.file" value="orca/network/ben-6509.rdf" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="test.vlan" class="orca.policy.core.VlanControl" /> 
+            </controls> 
+        </actor> 
+    </actors> 
 </configuration>
-

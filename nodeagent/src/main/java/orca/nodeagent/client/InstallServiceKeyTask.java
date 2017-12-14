@@ -21,9 +21,7 @@ import java.security.cert.CertificateFactory;
 import org.apache.axis2.util.Base64;
 import org.apache.tools.ant.BuildException;
 
-
-public class InstallServiceKeyTask extends AntBaseTask
-{
+public class InstallServiceKeyTask extends AntBaseTask {
     protected String keystore;
     protected String password;
     protected String certificateString;
@@ -32,8 +30,7 @@ public class InstallServiceKeyTask extends AntBaseTask
     protected KeyStore ks = null;
     protected Certificate certificate = null;
 
-    protected void loadKeyStore() throws Exception
-    {
+    protected void loadKeyStore() throws Exception {
         FileInputStream fis = null;
 
         try {
@@ -47,8 +44,7 @@ public class InstallServiceKeyTask extends AntBaseTask
         }
     }
 
-    protected void loadCertificate() throws Exception
-    {
+    protected void loadCertificate() throws Exception {
         InputStream is = null;
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
@@ -68,8 +64,7 @@ public class InstallServiceKeyTask extends AntBaseTask
         }
     }
 
-    protected void addCertificate() throws Exception
-    {
+    protected void addCertificate() throws Exception {
         Certificate cert = ks.getCertificate(keyAlias);
 
         if (cert == null) {
@@ -95,8 +90,7 @@ public class InstallServiceKeyTask extends AntBaseTask
         }
     }
 
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         super.execute();
 
         try {
@@ -131,28 +125,23 @@ public class InstallServiceKeyTask extends AntBaseTask
         }
     }
 
-    public void setCertificate(String value)
-    {
+    public void setCertificate(String value) {
         this.certificateString = value;
     }
 
-    public void setCertificateFile(String value)
-    {
+    public void setCertificateFile(String value) {
         this.certificateFile = value;
     }
 
-    public void setKeystore(String value)
-    {
+    public void setKeystore(String value) {
         this.keystore = value;
     }
 
-    public void setPassword(String value)
-    {
+    public void setPassword(String value) {
         this.password = value;
     }
 
-    public void setAlias(String value)
-    {
+    public void setAlias(String value) {
         this.keyAlias = value;
     }
 }

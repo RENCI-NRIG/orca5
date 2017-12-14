@@ -12,14 +12,16 @@ public class PolatisOSDeviceTest extends NetworkDeviceTest {
     public static final String PropertyOSCtag = "os.ctag";
 
     protected OSDevice getDevice() {
-        OSDevice device = new PolatisOSDevice(props.getProperty(PropertyOS), props.getProperty(PropertyOSUser), props.getProperty(PropertyOSPassword));
+        OSDevice device = new PolatisOSDevice(props.getProperty(PropertyOS), props.getProperty(PropertyOSUser),
+                props.getProperty(PropertyOSPassword));
         configureDevice(device);
         return device;
     }
 
     public void testCreatePatch() throws Exception {
         OSDevice device = getDevice();
-        device.createPatch(props.getProperty(PropertyOSInputPort), props.getProperty(PropertyOSOutputPort), props.getProperty(PropertyOSCtag));
+        device.createPatch(props.getProperty(PropertyOSInputPort), props.getProperty(PropertyOSOutputPort),
+                props.getProperty(PropertyOSCtag));
     }
 
     public void testDeletePatch() throws Exception {

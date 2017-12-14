@@ -20,15 +20,11 @@ import orca.tools.axis2.Axis2ClientSecurityConfigurator;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.tools.ant.BuildException;
 
-
-public abstract class DriverBaseTask extends AntBaseTask
-{
+public abstract class DriverBaseTask extends AntBaseTask {
     /**
-     * Controls whether client stubs should be created with security turned on
-     * or off. Possible values: yes|no. If axis2 security is set then the task
-     * will read the "root.dir" and "actor.id" properties. If these properties
-     * are defined, the task will try to create a configuration context with the
-     * security settings for the given actor.
+     * Controls whether client stubs should be created with security turned on or off. Possible values: yes|no. If axis2
+     * security is set then the task will read the "root.dir" and "actor.id" properties. If these properties are
+     * defined, the task will try to create a configuration context with the security settings for the given actor.
      */
     public static final String PropertyAxis2Security = "axis2.security";
     public static final String PropertyActorID = "actor.id";
@@ -52,43 +48,42 @@ public abstract class DriverBaseTask extends AntBaseTask
     // protected String serviceIP;
 
     /**
-     * @param driverId the driverId to set
+     * @param driverId
+     *            the driverId to set
      */
-    public void setDriverId(String driverId)
-    {
+    public void setDriverId(String driverId) {
         this.driverId = driverId;
     }
 
     /**
      * Sets the service location
+     * 
      * @param location
      */
-    public void setLocation(String location)
-    {
+    public void setLocation(String location) {
         this.location = location;
     }
 
     /**
      * Sets the path to the local repository
+     * 
      * @param repository
      */
-    public void setRepository(String repository)
-    {
+    public void setRepository(String repository) {
         this.repository = repository;
     }
 
     /**
      * Sets the path to the local axis2.xml
+     * 
      * @param config
      */
-    public void setConfig(String config)
-    {
+    public void setConfig(String config) {
         this.config = config;
     }
 
     @Override
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         super.execute();
 
         try {
@@ -99,8 +94,7 @@ public abstract class DriverBaseTask extends AntBaseTask
         }
     }
 
-    protected void resolveSecurity() throws Exception
-    {
+    protected void resolveSecurity() throws Exception {
         String actorID = null;
         String rootDir = null;
 
@@ -126,11 +120,11 @@ public abstract class DriverBaseTask extends AntBaseTask
 
     /**
      * Returns a service stub
+     * 
      * @return
      * @throws Exception
      */
-    protected NodeAgentServiceStub getStub() throws Exception
-    {
+    protected NodeAgentServiceStub getStub() throws Exception {
         // if (repository != null || config != null) {
         // ConfigurationContext cc =
         // ConfigurationContextFactory.createConfigurationContextFromFileSystem(repository,
@@ -140,22 +134,20 @@ public abstract class DriverBaseTask extends AntBaseTask
         // return new NodeAgentServiceStub(location);
         // }
         message("Creating axis2 configuration context: repository=" + repository + " config=" + config);
-        
-        ConfigurationContext context = Axis2ClientConfigurationManager.getInstance()
-                                                                      .getContext(repository, config);
+
+        ConfigurationContext context = Axis2ClientConfigurationManager.getInstance().getContext(repository, config);
 
         message("Creating service stub: location=" + location);
         return new NodeAgentServiceStub(context, location);
     }
 
-    public Properties getProperties() throws Exception
-    {
+    public Properties getProperties() throws Exception {
         return new Properties();
     }
-    
+
     protected void message(String message) {
         logger.debug(message);
         System.out.println(message);
     }
-    
+
 }

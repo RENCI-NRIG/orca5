@@ -2,6 +2,7 @@ package orca.handlers.network.router;
 
 /**
  * This file contains constants used to configure 6509 router.
+ * 
  * @author dee
  */
 public interface RouterConstants {
@@ -21,14 +22,14 @@ public interface RouterConstants {
     public static final String PropertyDstPort = "dstPort";
     public static final String PropertyPorts = "ports";
     public static final String PropertyVMAP = "VMAP";
-//    public static final String PropertyGbPorts = "GbPorts";
-//    public static final String Property10GbPorts = "10GbPorts";
+    // public static final String PropertyGbPorts = "GbPorts";
+    // public static final String Property10GbPorts = "10GbPorts";
     public static final String PropertyAccessPorts = "AccessPorts";
     public static final String PropertyTrunkPorts = "TrunkPorts";
     public static final String PropertyPort = "port";
-    public static final String PropertyVLANNamePrefix ="orca_vlan_";
+    public static final String PropertyVLANNamePrefix = "orca_vlan_";
     public static final String PropertyPolicyNamePrefix = "orca_policy_";
-    
+
     public static final String CommandCreateVLAN = "CreateVLANRequest";
     public static final String CommandDeleteVLAN = "DeleteVLANRequest";
     public static final String CommandCreateQoSVLAN = "CreateQoSVLANRequest";

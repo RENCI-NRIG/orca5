@@ -13,16 +13,12 @@ package orca.nodeagent.tests.drivers;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
-public class AllTests
-{
-    public static void main(String[] args)
-    {
+public class AllTests {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         TestSuite suite = new TestSuite("nodeagent unit tests");
         suite.addTest(DriverTest.suite());
 

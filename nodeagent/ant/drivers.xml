@@ -1,37 +1,34 @@
 <!--
     This file contains targets necessary to build and install the test driver package.
--->
-
-<!-- Installs the test driver -->
-<target name="install">
-	<java classname="${driver.tool.class}" fork="true" classpath="${runtime_classpath}">
-        <arg value="-l" />
-        <arg value="${service.location}" />
-        <arg value="install" />
-        <arg value="${driver.id}" />
-        <arg value="${driver.class}" />
-        <arg value="dist/testdriver.tar.gz" />
-    </java>
-</target>
-
-<!-- Upgrades the test driver -->
-<target name="upgrade">
-    <java classname="${driver.tool.class}" fork="true" classpath="${runtime_classpath}">
-        <arg value="-l" />
-        <arg value="${service.location}" />
-        <arg value="upgrade" />
-        <arg value="${driver.id}" />
-        <arg value="${driver.class}" />
-        <arg value="dist/testdriver.tar.gz" />
-    </java>
-</target>
-
-<!-- Uninstalls the test driver -->
-<target name="uninstall">
-    <java classname="${driver.tool.class}" fork="true" classpath="${runtime_classpath}">
-        <arg value="-l" />
-        <arg value="${service.location}" />
-        <arg value="uninstall" />
-        <arg value="${driver.id}" />
-    </java>
+--> 
+<!-- Installs the test driver --> 
+<target name="install"> 
+    <java classname="${driver.tool.class}" fork="true" classpath="${runtime_classpath}"> 
+        <arg value="-l" /> 
+        <arg value="${service.location}" /> 
+        <arg value="install" /> 
+        <arg value="${driver.id}" /> 
+        <arg value="${driver.class}" /> 
+        <arg value="dist/testdriver.tar.gz" /> 
+    </java> 
+</target> 
+<!-- Upgrades the test driver --> 
+<target name="upgrade"> 
+    <java classname="${driver.tool.class}" fork="true" classpath="${runtime_classpath}"> 
+        <arg value="-l" /> 
+        <arg value="${service.location}" /> 
+        <arg value="upgrade" /> 
+        <arg value="${driver.id}" /> 
+        <arg value="${driver.class}" /> 
+        <arg value="dist/testdriver.tar.gz" /> 
+    </java> 
+</target> 
+<!-- Uninstalls the test driver --> 
+<target name="uninstall"> 
+    <java classname="${driver.tool.class}" fork="true" classpath="${runtime_classpath}"> 
+        <arg value="-l" /> 
+        <arg value="${service.location}" /> 
+        <arg value="uninstall" /> 
+        <arg value="${driver.id}" /> 
+    </java> 
 </target>

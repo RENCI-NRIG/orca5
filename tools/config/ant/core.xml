@@ -1,48 +1,40 @@
 <!--
   This file contains commonly used macros.
--->
-
-<macrodef name="ssh" description="executes ssh command">
-	<attribute name="host" description="host address" />
-	<attribute name="command" description="command to execute"/>
-	<attribute name="fail" default="true" description="should the build fail if an error occurs" />
-	<sequential>
-		<exec executable="${ssh}" failonerror="@{fail}">
-			<arg line="${ssh.options} -i ${ssh.key} ${ssh.user}@@@{host} '@{command}'"/>
-		</exec>
-	</sequential>
-</macrodef>
-
-<macrodef name="myscp" description="copies files using scp">
-	<attribute name="src" description="source file(s)"/>
-	<attribute name="dest" description="destination files" />
-	<attribute name="fail" default="true" description="should the build fail if an error occurs" />
-	<sequential>
-		<!--    <echo message="-c &quot;${scpexecutable} ${ssh.options} -i ${ssh.key} @{src} @{dest}&quot;"/> -->
-		<exec executable="${bash}" failonerror="@{fail}">
-			<arg line="-c &quot;${scpexecutable} ${ssh.options} -i ${ssh.key} @{src} @{dest}&quot;"/>
-		</exec>
-	</sequential>
-</macrodef>
-
-<target name="clean.local" description="deletes local">
-	<delete dir="${local.dir}" />
+--> 
+<macrodef name="ssh" description="executes ssh command"> 
+    <attribute name="host" description="host address" /> 
+    <attribute name="command" description="command to execute" /> 
+    <attribute name="fail" default="true" description="should the build fail if an error occurs" /> 
+    <sequential> 
+        <exec executable="${ssh}" failonerror="@{fail}"> 
+            <arg line="${ssh.options} -i ${ssh.key} ${ssh.user}@@@{host} '@{command}'" /> 
+        </exec> 
+    </sequential> 
+</macrodef> 
+<macrodef name="myscp" description="copies files using scp"> 
+    <attribute name="src" description="source file(s)" /> 
+    <attribute name="dest" description="destination files" /> 
+    <attribute name="fail" default="true" description="should the build fail if an error occurs" /> 
+    <sequential> 
+        <!--    <echo message="-c &quot;${scpexecutable} ${ssh.options} -i ${ssh.key} @{src} @{dest}&quot;"/> --> 
+        <exec executable="${bash}" failonerror="@{fail}"> 
+            <arg line="-c &quot;${scpexecutable} ${ssh.options} -i ${ssh.key} @{src} @{dest}&quot;" /> 
+        </exec> 
+    </sequential> 
+</macrodef> 
+<target name="clean.local" description="deletes local"> 
+    <delete dir="${local.dir}" /> 
+</target> 
+<target name="copy.local" description="copies configuration templates into the local configuration directory"> 
+    <mkdir dir="${local.dir}" /> 
+    <copy todir="${local.dir}"> 
+        <fileset dir="${config.dir}"> 
+            <exclude name="build.properties" /> 
+        </fileset> 
+    </copy> 
+</target> 
+<target name="guid" description="generates a new guid"> 
+    <java classname="orca.util.GuidGenerator" Fork="Yes"> 
+        <classpath refid="run.classpath" /> 
+    </java> 
 </target>
-
-<target name="copy.local" description="copies configuration templates into the local configuration directory">
-	<mkdir dir="${local.dir}" />
-	<copy todir="${local.dir}">
-		<fileset dir="${config.dir}">
-			<exclude name="build.properties" />
-		</fileset>
-	</copy>
-
-</target>
-
-<target name="guid" description="generates a new guid">
-	<java classname="orca.util.GuidGenerator" Fork="Yes">
-		<classpath refid="run.classpath" />
-	</java>
-</target>
-
-

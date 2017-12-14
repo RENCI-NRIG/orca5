@@ -6,23 +6,23 @@ import orca.handlers.network.tasks.SyncNetworkBaseTask;
 
 public abstract class G8264BaseTask extends SyncNetworkBaseTask {
 
-	public static final String G8264 = "g8264";
-	protected IRouterDevice router;
-	
-	@Override
+    public static final String G8264 = "g8264";
+    protected IRouterDevice router;
+
+    @Override
     protected void makeDevice() {
-    	super.makeDevice();
-    	
+        super.makeDevice();
+
         if (deviceInstance.equalsIgnoreCase(G8264)) {
-        	try {
-        		router = new G8264RouterDevice(deviceAddress, user, password);
-        	} catch (Exception e) {
-        		throw new RuntimeException("Unable to instantiate " + G8264 + " device: " + e);
-        	}
+            try {
+                router = new G8264RouterDevice(deviceAddress, user, password);
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to instantiate " + G8264 + " device: " + e);
+            }
         } else {
             throw new RuntimeException("Unsupported router: " + deviceInstance);
-        }        
+        }
         configureDevice(router);
     }
-	
+
 }

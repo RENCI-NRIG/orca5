@@ -13,18 +13,22 @@ public class InfineraDTNDeviceTest extends NetworkDeviceTest {
     public static final String PropertyDTNCtag = "dtn.ctag";
 
     protected DTNDevice getDevice() {
-        DTNDevice device = new InfineraDTNDevice(props.getProperty(PropertyDTN), props.getProperty(PropertyDTNUser), props.getProperty(PropertyDTNPassword));
+        DTNDevice device = new InfineraDTNDevice(props.getProperty(PropertyDTN), props.getProperty(PropertyDTNUser),
+                props.getProperty(PropertyDTNPassword));
         configureDevice(device);
         return device;
     }
 
     public void testCreateCrossConnect() throws Exception {
         DTNDevice device = getDevice();
-        device.createCrossConnect(props.getProperty(PropertyDTNSourcePort), props.getProperty(PropertyDTNDestinationPort), props.getProperty(PropertyDTNPayloadType), props.getProperty(PropertyDTNCtag));
+        device.createCrossConnect(props.getProperty(PropertyDTNSourcePort),
+                props.getProperty(PropertyDTNDestinationPort), props.getProperty(PropertyDTNPayloadType),
+                props.getProperty(PropertyDTNCtag));
     }
 
     public void testDeleteCrossConnect() throws Exception {
         DTNDevice device = getDevice();
-        device.deleteCrossConnect(props.getProperty(PropertyDTNSourcePort), props.getProperty(PropertyDTNDestinationPort), props.getProperty(PropertyDTNCtag));
+        device.deleteCrossConnect(props.getProperty(PropertyDTNSourcePort),
+                props.getProperty(PropertyDTNDestinationPort), props.getProperty(PropertyDTNCtag));
     }
 }

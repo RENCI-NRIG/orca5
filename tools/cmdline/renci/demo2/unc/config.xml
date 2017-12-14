@@ -1,144 +1,168 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-    <global>
-        <startTime>-1</startTime>
-        <cycleMillis>1000</cycleMillis>
-        <firstTick>0</firstTick>
-        <manualTicks>false</manualTicks>
-        <containerGuid>1cba2f6f-bf06-4fce-865c-146795667d64</containerGuid>
-        <locations>
-            <location protocol="soapaxis2" url="http://go-m1.unc.ben:8080/orca"/>
-        </locations>
-        <database>
-            <className>orca.manage.container.db.MySqlContainerManagementDatabase</className>
-            <properties>
-                <property name="db.mysql.server" value="localhost" />
-                <property name="db.mysql.db" value="orca" />
-                <property name="db.mysql.user" value="orca" />
-                <property name="db.mysql.password" value="" />
-		        <property name="db.admin.first" value="Orca" />
-				<property name="db.admin.last" value="Admin" />
-				<property name="db.admin.login" value="admin" />
-				<property name="db.admin.password" value="admin" />
-				<property name="db.admin.roles" value="home,users,broker,admin" />
-             </properties>
-        </database>
-    </global>
-    <actors>
-		<actor>
-            <name>unc-vm-site</name>
-            <description>VM site authority at UNC</description>
-	    <guid>08affd38-76d7-453f-a0a7-0d273a2abb43</guid>
-            <instance>
-                <className>orca.shirako.core.Authority</className>
-            </instance>
-            <mapper>
-                <className>orca.policy.core.AuthorityCalendarPolicy</className>
-                <parameters>
-                    <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
-                        <instance>
-                            <className>orca.cod.control.VMControl</className>
-                            <properties>
-                                <property name="resource.types" value="unc.vm" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                </parameters>
-            </mapper>
-            <plugin>
-                <className>orca.cod.plugins.Site</className>
-                <properties>
-                    <!-- Storage servers to be transferred to this site -->
-                    <property name="inventory.storage" value="go-nfs.unc" />
-                    <!-- Physical machines to be transferred to this site -->
-                    <property name="inventory.machines" value="go-1.unc go-2.unc" />
-                    <!-- Resource pool configuration -->
-                    <property name="resource.pools.count" value="1" />
-                    <!-- 	First resource pool configuration -->
-                    <property name="resource.pool.name.0" value="UNC VM pool" />
-                    <property name="resource.pool.type.0" value="unc.vm" />
-                    <property name="resource.pool.properties.0"
-                    		value="total.memory=1024,total.cpu=100,total.bandwidth=1000,capacity=3,cpu.model=Intel Celeron 2.8 GHz" />
-                    <property name="resource.pool.machines.0" value="go-1.unc go-2.unc" />
-                    <!--    Source ticket configuration -->
-                    <property name="resource.pool.ticket.units.0" value="6" />
-                    <property name="resource.pool.ticket.start.0" value="0" />
-                    <property name="resource.pool.ticket.end.0" value="10000000" />
-                    <!-- Handler configuration -->
-                    <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" />
-                    <property name="resource.pool.handler.pluginId.0" value="1" />
-                    <property name="resource.pool.handler.properties.0" value="server.name=go-nfs.unc,server.guid=3b171f41-c84e-4c05-b9b2-c8d6e9e47209,server.ip=192.168.201.16,server.base=rpool/images/orca,server.control=192.168.203.12" />
-                </properties>
-                <parameters>
-                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.db.MySqlAuthorityCodDatabase</className>
-                            <properties>
-                                <property name="db.mysql.server" value="localhost" />
-                                <property name="db.mysql.db" value="orca" />
-                                <property name="db.mysql.user" value="orca" />
-                                <property name="db.mysql.password" value="" />
-                            </properties>
-                        </instance>
-                    </parameter>
-                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.config.CodAntConfig</className>
-                        </instance>
-                    </parameter>
-                    <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
-                        <instance>
-                            <className>orca.cod.plugins.NetworkConfigurationManager</className>
-                            <parameters>
-                                <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
-                                    <instance>
-                                        <className>orca.cod.plugins.NetworkConfiguration</className>
-                                        <properties>
-                                            <property name="network.service.ips" value="192.168.203.30-200" />
-                                            <property name="network.service.netmask" value="255.255.255.0" />
-                                            <property name="network.service.gateway" value="192.168.203.1" />
-                                        </properties>
-                                    </instance>
-                                </parameter>
-                                <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
-                                    <instance>
-                                        <className>orca.cod.plugins.DnsConfiguration</className>
-                                        <properties>
-                                            <property name="dns.prefix" value="default" />
-                                            <property name="dns.zone" value="cs.unc.edu" />
-                                            <property name="dns.mx" value="10 cs.unc.edu" />
-                                        </properties>
-                                    </instance>
-                                </parameter>
-                            </parameters>
-                        </instance>
-	                    </parameter>
-                </parameters>
-            </plugin>
-        </actor>
-
-         </actors>
-         <topology>
-             <edges>
-                 <edge>
-                     <from name="vm-broker" type="agent" guid="dbcf2bdd-e0b2-498b-8dc1-cd0eb2026d6f">
-		       <location protocol="soapaxis2" url="http://go-m1.renci.ben:8080/orca/services/vm-broker" />
-		       <certificate>
-MIICaDCCAdECBEpOeAswDQYJKoZIhvcNAQEEBQAwezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5D
-MQ8wDQYDVQQHEwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNV
-BAMTJGRiY2YyYmRkLWUwYjItNDk4Yi04ZGMxLWNkMGViMjAyNmQ2ZjAeFw0wOTA3MDMyMTI4NDNa
-Fw0wOTEwMDEyMTI4NDNaMHsxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJOQzEPMA0GA1UEBxMGRHVy
-aGFtMQ0wCwYDVQQKEwRvcmNhMRAwDgYDVQQLEwdzaGlyYWtvMS0wKwYDVQQDEyRkYmNmMmJkZC1l
-MGIyLTQ5OGItOGRjMS1jZDBlYjIwMjZkNmYwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAIh+
-AsUNdgajrPUBfEnlJ5W7RsqFeJwDgjzNFnsBmedPu/J/b8VQVPB+D4ora26txgvQSBcljwrtJrgO
-xPtbmb0E1cbsZHYdbMR9MzUYPfamQbAHtrJAlRrr5D/MxD4eCpDh/KK4oWuvZxVaeTkQtumP98l3
-Qw7ZD0yae4lJcQnlAgMBAAEwDQYJKoZIhvcNAQEEBQADgYEAEkzSGZEE0yx+54UoBSP5zicrSmdB
-6+fHrZFK9iaMv6393kmq47+981BI2zHRAmxn8WvF/Rx1838wQtKTkGGwN7Rd2iJJoq0xhIdiemng
-Zl/NhbUJ+THKu6+512/Vsl70J7D9CHwFuJQoD8kBEVJhtZ30YOXuLrzEx0Pr+e3DtxU=
-		       </certificate>
-		     </from>
-                     <to name="unc-vm-site" type="authority" />
-                 </edge>
-              </edges>
-          </topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <global> 
+        <startTime>
+            -1
+        </startTime> 
+        <cycleMillis>
+            1000
+        </cycleMillis> 
+        <firstTick>
+            0
+        </firstTick> 
+        <manualTicks>
+            false
+        </manualTicks> 
+        <containerGuid>
+            1cba2f6f-bf06-4fce-865c-146795667d64
+        </containerGuid> 
+        <locations> 
+            <location protocol="soapaxis2" url="http://go-m1.unc.ben:8080/orca" /> 
+        </locations> 
+        <database> 
+            <className>
+                orca.manage.container.db.MySqlContainerManagementDatabase
+            </className> 
+            <properties> 
+                <property name="db.mysql.server" value="localhost" /> 
+                <property name="db.mysql.db" value="orca" /> 
+                <property name="db.mysql.user" value="orca" /> 
+                <property name="db.mysql.password" value="" /> 
+                <property name="db.admin.first" value="Orca" /> 
+                <property name="db.admin.last" value="Admin" /> 
+                <property name="db.admin.login" value="admin" /> 
+                <property name="db.admin.password" value="admin" /> 
+                <property name="db.admin.roles" value="home,users,broker,admin" /> 
+            </properties> 
+        </database> 
+    </global> 
+    <actors> 
+        <actor> 
+            <name>
+                unc-vm-site
+            </name> 
+            <description>
+                VM site authority at UNC
+            </description> 
+            <guid>
+                08affd38-76d7-453f-a0a7-0d273a2abb43
+            </guid> 
+            <instance> 
+                <className>
+                    orca.shirako.core.Authority
+                </className> 
+            </instance> 
+            <mapper> 
+                <className>
+                    orca.policy.core.AuthorityCalendarPolicy
+                </className> 
+                <parameters> 
+                    <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
+                        <instance> 
+                            <className>
+                                orca.cod.control.VMControl
+                            </className> 
+                            <properties> 
+                                <property name="resource.types" value="unc.vm" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </mapper> 
+            <plugin> 
+                <className>
+                    orca.cod.plugins.Site
+                </className> 
+                <properties> 
+                    <!-- Storage servers to be transferred to this site --> 
+                    <property name="inventory.storage" value="go-nfs.unc" /> 
+                    <!-- Physical machines to be transferred to this site --> 
+                    <property name="inventory.machines" value="go-1.unc go-2.unc" /> 
+                    <!-- Resource pool configuration --> 
+                    <property name="resource.pools.count" value="1" /> 
+                    <!-- 	First resource pool configuration --> 
+                    <property name="resource.pool.name.0" value="UNC VM pool" /> 
+                    <property name="resource.pool.type.0" value="unc.vm" /> 
+                    <property name="resource.pool.properties.0" value="total.memory=1024,total.cpu=100,total.bandwidth=1000,capacity=3,cpu.model=Intel Celeron 2.8 GHz" /> 
+                    <property name="resource.pool.machines.0" value="go-1.unc go-2.unc" /> 
+                    <!--    Source ticket configuration --> 
+                    <property name="resource.pool.ticket.units.0" value="6" /> 
+                    <property name="resource.pool.ticket.start.0" value="0" /> 
+                    <property name="resource.pool.ticket.end.0" value="10000000" /> 
+                    <!-- Handler configuration --> 
+                    <property name="resource.pool.handler.packageId.0" value="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" /> 
+                    <property name="resource.pool.handler.pluginId.0" value="1" /> 
+                    <property name="resource.pool.handler.properties.0" value="server.name=go-nfs.unc,server.guid=3b171f41-c84e-4c05-b9b2-c8d6e9e47209,server.ip=192.168.201.16,server.base=rpool/images/orca,server.control=192.168.203.12" /> 
+                </properties> 
+                <parameters> 
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
+                        <instance> 
+                            <className>
+                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                            </className> 
+                            <properties> 
+                                <property name="db.mysql.server" value="localhost" /> 
+                                <property name="db.mysql.db" value="orca" /> 
+                                <property name="db.mysql.user" value="orca" /> 
+                                <property name="db.mysql.password" value="" /> 
+                            </properties> 
+                        </instance> 
+                    </parameter> 
+                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
+                        <instance> 
+                            <className>
+                                orca.cod.plugins.config.CodAntConfig
+                            </className> 
+                        </instance> 
+                    </parameter> 
+                    <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance"> 
+                        <instance> 
+                            <className>
+                                orca.cod.plugins.NetworkConfigurationManager
+                            </className> 
+                            <parameters> 
+                                <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance"> 
+                                    <instance> 
+                                        <className>
+                                            orca.cod.plugins.NetworkConfiguration
+                                        </className> 
+                                        <properties> 
+                                            <property name="network.service.ips" value="192.168.203.30-200" /> 
+                                            <property name="network.service.netmask" value="255.255.255.0" /> 
+                                            <property name="network.service.gateway" value="192.168.203.1" /> 
+                                        </properties> 
+                                    </instance> 
+                                </parameter> 
+                                <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance"> 
+                                    <instance> 
+                                        <className>
+                                            orca.cod.plugins.DnsConfiguration
+                                        </className> 
+                                        <properties> 
+                                            <property name="dns.prefix" value="default" /> 
+                                            <property name="dns.zone" value="cs.unc.edu" /> 
+                                            <property name="dns.mx" value="10 cs.unc.edu" /> 
+                                        </properties> 
+                                    </instance> 
+                                </parameter> 
+                            </parameters> 
+                        </instance> 
+                    </parameter> 
+                </parameters> 
+            </plugin> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="vm-broker" type="agent" guid="dbcf2bdd-e0b2-498b-8dc1-cd0eb2026d6f"> 
+                    <location protocol="soapaxis2" url="http://go-m1.renci.ben:8080/orca/services/vm-broker" /> 
+                    <certificate>
+                         MIICaDCCAdECBEpOeAswDQYJKoZIhvcNAQEEBQAwezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5D MQ8wDQYDVQQHEwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNV BAMTJGRiY2YyYmRkLWUwYjItNDk4Yi04ZGMxLWNkMGViMjAyNmQ2ZjAeFw0wOTA3MDMyMTI4NDNa Fw0wOTEwMDEyMTI4NDNaMHsxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJOQzEPMA0GA1UEBxMGRHVy aGFtMQ0wCwYDVQQKEwRvcmNhMRAwDgYDVQQLEwdzaGlyYWtvMS0wKwYDVQQDEyRkYmNmMmJkZC1l MGIyLTQ5OGItOGRjMS1jZDBlYjIwMjZkNmYwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAIh+ AsUNdgajrPUBfEnlJ5W7RsqFeJwDgjzNFnsBmedPu/J/b8VQVPB+D4ora26txgvQSBcljwrtJrgO xPtbmb0E1cbsZHYdbMR9MzUYPfamQbAHtrJAlRrr5D/MxD4eCpDh/KK4oWuvZxVaeTkQtumP98l3 Qw7ZD0yae4lJcQnlAgMBAAEwDQYJKoZIhvcNAQEEBQADgYEAEkzSGZEE0yx+54UoBSP5zicrSmdB 6+fHrZFK9iaMv6393kmq47+981BI2zHRAmxn8WvF/Rx1838wQtKTkGGwN7Rd2iJJoq0xhIdiemng Zl/NhbUJ+THKu6+512/Vsl70J7D9CHwFuJQoD8kBEVJhtZ30YOXuLrzEx0Pr+e3DtxU= 
+                    </certificate> 
+                </from> 
+                <to name="unc-vm-site" type="authority" /> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

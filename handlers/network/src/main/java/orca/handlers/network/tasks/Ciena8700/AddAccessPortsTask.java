@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.Ciena8700;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class AddAccessPortsTask extends Ciena8700BaseTask {
@@ -17,7 +16,7 @@ public class AddAccessPortsTask extends Ciena8700BaseTask {
             if (ports == null) {
                 throw new Exception("Missing ports");
             }
-            router.addAccessPortsToVLAN(vlanTag, ports);    
+            router.addAccessPortsToVLAN(vlanTag, ports);
             setResult(0);
         } catch (BuildException e) {
             throw e;

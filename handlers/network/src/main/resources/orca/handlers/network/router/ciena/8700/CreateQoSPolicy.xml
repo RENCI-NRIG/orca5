@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script xmlns="http://geni-orca.renci.org/CreateQoSPolicy"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://geni-orca.renci.org/CreateQoSPolicy CreateQoSPolicy.xsd">
-	<action name="CreateQoSPolicy">
-		<exchange>
-			<send>traffic-services metering meter-profile create profile {$QoSPolicyName} cir {$QoSRate} cbs {$QoSBurstSize}</send>
-		</exchange>
-	</action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script xmlns="http://geni-orca.renci.org/CreateQoSPolicy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/CreateQoSPolicy CreateQoSPolicy.xsd"> 
+    <action name="CreateQoSPolicy"> 
+        <exchange> 
+            <send>
+                traffic-services metering meter-profile create profile {$QoSPolicyName} cir {$QoSRate} cbs {$QoSBurstSize}
+            </send> 
+        </exchange> 
+    </action> 
 </script>

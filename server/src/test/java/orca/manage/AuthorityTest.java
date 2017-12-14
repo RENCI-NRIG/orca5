@@ -9,18 +9,18 @@ import orca.util.ID;
 import org.junit.Test;
 
 public abstract class AuthorityTest extends ServerActorTest {
-	public AuthorityTest(ID actorGuid, String actorName) {
-		super(actorGuid, actorName);
-	}
-	
-	protected IOrcaAuthority getAuthority() {
-		return (IOrcaAuthority)getActor();
-	}
-	
-	@Test
-	public void testGetAuthorityReservations() {
-		IOrcaAuthority site = getAuthority();
-		List<ReservationMng> list = site.getAuthorityReservations();
-		Assert.assertNotNull(list);
-	}
+    public AuthorityTest(ID actorGuid, String actorName) {
+        super(actorGuid, actorName);
+    }
+
+    protected IOrcaAuthority getAuthority() {
+        return (IOrcaAuthority) getActor();
+    }
+
+    @Test
+    public void testGetAuthorityReservations() {
+        IOrcaAuthority site = getAuthority();
+        List<ReservationMng> list = site.getAuthorityReservations();
+        Assert.assertNotNull(list);
+    }
 }

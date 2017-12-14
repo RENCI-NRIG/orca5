@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script xmlns="http://geni-orca.renci.org/DeleteVLAN"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://geni-orca.renci.org/DeleteVLAN DeleteVLAN.xsd">
-	<action name="DeleteVLAN">
-        <exchange>
-            <send>virtual-switch delete vs {$virtualSwitch}</send>
-        </exchange>
-	</action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script xmlns="http://geni-orca.renci.org/DeleteVLAN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/DeleteVLAN DeleteVLAN.xsd"> 
+    <action name="DeleteVLAN"> 
+        <exchange> 
+            <send>
+                virtual-switch delete vs {$virtualSwitch}
+            </send> 
+        </exchange> 
+    </action> 
 </script>

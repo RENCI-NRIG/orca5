@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2009 Renaissance Computing Institute and Duke University
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and/or hardware specification (the ÒWorkÓ) to deal in the
+ * of this software and/or hardware specification (the ï¿½Workï¿½) to deal in the
  * Work without restriction, including without limitation the rights to use,
  * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Work, and to permit persons to whom the Work is furnished to do so,
@@ -26,8 +26,8 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
 /**
- * Clean all "AUTOMATED" vlan id reservations from Sherpa in this wg This will
- * not touch provisioned vlans
+ * Clean all "AUTOMATED" vlan id reservations from Sherpa in this wg This will not touch provisioned vlans
+ * 
  * @author ibaldin@renci.org
  */
 public class RemoveAllReservations extends GenericSherpaTask {
@@ -63,7 +63,8 @@ public class RemoveAllReservations extends GenericSherpaTask {
         if (exitCodeProperty != null) {
             p.setProperty(exitCodeProperty, Integer.toString(code));
             if (code != 0)
-                p.setProperty(exitCodeMessageProperty, p.getProperty(exitCodeMessageProperty) + "\n" + getErrorMessage(code));
+                p.setProperty(exitCodeMessageProperty,
+                        p.getProperty(exitCodeMessageProperty) + "\n" + getErrorMessage(code));
             else
                 p.setProperty(exitCodeMessageProperty, p.getProperty(exitCodeMessageProperty) + "\n" + "Success!");
         } else {

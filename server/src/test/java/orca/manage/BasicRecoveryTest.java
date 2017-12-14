@@ -92,7 +92,6 @@ public class BasicRecoveryTest extends RecoveryTest {
     private void validateState() throws Exception {
     }
 
-
     public void oneReservation(IOrcaServiceManager sm) throws Exception {
         final Object testDone = new Object();
 
@@ -101,10 +100,9 @@ public class BasicRecoveryTest extends RecoveryTest {
                 System.out.println("Received an event: " + e.getClass().getName());
                 if (e instanceof ReservationStateTransitionEventMng) {
                     ReservationStateTransitionEventMng ste = (ReservationStateTransitionEventMng) e;
-                    System.out.println("Reservation #" + ste.getReservationId()
-                            + " transitioned into: " + OrcaConverter.getState(ste.getState()));
-                    if (OrcaConverter.hasNothingPending(ste.getState())
-                            && OrcaConverter.isActive(ste.getState())
+                    System.out.println("Reservation #" + ste.getReservationId() + " transitioned into: "
+                            + OrcaConverter.getState(ste.getState()));
+                    if (OrcaConverter.hasNothingPending(ste.getState()) && OrcaConverter.isActive(ste.getState())
                             && !OrcaConverter.isActiveTicketed(ste.getState())) {
                         synchronized (testDone) {
                             System.out.println("Reservation is active.");

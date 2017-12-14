@@ -30,5 +30,4 @@ var RDFHeader = '\
      xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"> \
     <owl:Ontology rdf:about=""/>';
 
-
 var RDFFooter = '</rdf:RDF>';

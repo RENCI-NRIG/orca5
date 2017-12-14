@@ -17,9 +17,7 @@ import junit.framework.TestSuite;
 
 import orca.nodeagent.tests.security.unknown.TestUnauthorizedClient;
 
-
-public class SecurityTest extends TestCase
-{
+public class SecurityTest extends TestCase {
     protected String serviceLocation = null;
     protected String repositoryPath = null;
     protected String configFileAuthorized = null;
@@ -31,17 +29,13 @@ public class SecurityTest extends TestCase
     TestRegisterKey trk;
     TestUnregisterKey tuk;
 
-    public SecurityTest()
-    {
-        this(System.getenv("na.location"),
-             System.getenv("na.repository"),
-             System.getenv("na.config.authorized"),
-             System.getenv("na.config.unauthorized"));
+    public SecurityTest() {
+        this(System.getenv("na.location"), System.getenv("na.repository"), System.getenv("na.config.authorized"),
+                System.getenv("na.config.unauthorized"));
     }
 
     public SecurityTest(String location, String repository, String configFileAuthorized,
-                        String configFileUnauthorized)
-    {
+            String configFileUnauthorized) {
         if (location == null) {
             throw new RuntimeException("Location cannot be null");
         }
@@ -64,8 +58,7 @@ public class SecurityTest extends TestCase
         this.configFileUnauthorized = configFileUnauthorized;
     }
 
-    public void setTrudyParameters()
-    {
+    public void setTrudyParameters() {
         trudyKeyStoreLocation = System.getenv("na.trudykeystorelocation");
 
         if (trudyKeyStoreLocation == null) {
@@ -79,8 +72,7 @@ public class SecurityTest extends TestCase
         }
     }
 
-    public void test() throws Exception
-    {
+    public void test() throws Exception {
         int retVal;
         System.out.println("Running Authorized Client Security suite ...");
 
@@ -98,11 +90,8 @@ public class SecurityTest extends TestCase
         System.out.println("Authorized client test ... OK");
 
         setTrudyParameters();
-        trk = new TestRegisterKey(serviceLocation,
-                                  repositoryPath,
-                                  configFileAuthorized,
-                                  trudyKeyStoreLocation,
-                                  trudyKeyStorePass);
+        trk = new TestRegisterKey(serviceLocation, repositoryPath, configFileAuthorized, trudyKeyStoreLocation,
+                trudyKeyStorePass);
         System.out.println("Testing Trudy key registration ...");
         retVal = trk.run();
         Assert.assertTrue("key registration failed ... code = " + retVal, retVal == 0);
@@ -132,8 +121,7 @@ public class SecurityTest extends TestCase
         System.out.println("Authorized Client suite completed");
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(SecurityTest.class);
     }
 }

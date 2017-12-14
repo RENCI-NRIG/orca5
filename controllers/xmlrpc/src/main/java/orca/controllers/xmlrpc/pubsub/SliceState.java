@@ -15,26 +15,23 @@ import orca.controllers.xmlrpc.XmlrpcControllerSlice;
  */
 public class SliceState {
 
-	public static enum PubSubState {
-		SUBMITTED("SUBMITTED"),
-		INPROGRESS("INPROGRESS"),
-		WAITINPROGRESS("WAITINPROGRESS"),
-		DONE("DONE"),
-		DELETED("DELETED"),
-		EXPUNGE("EXPUNGE"),
-		DONEACTIVE("DONEACTIVE"),
-		DONECLOSED("DONECLOSED");
-		
-		private String name;
-		private PubSubState(String n) {
-			name = n;
-		}
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
-	private XmlrpcControllerSlice slice;
+    public static enum PubSubState {
+        SUBMITTED("SUBMITTED"), INPROGRESS("INPROGRESS"), WAITINPROGRESS("WAITINPROGRESS"), DONE("DONE"), DELETED(
+                "DELETED"), EXPUNGE("EXPUNGE"), DONEACTIVE("DONEACTIVE"), DONECLOSED("DONECLOSED");
+
+        private String name;
+
+        private PubSubState(String n) {
+            name = n;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    private XmlrpcControllerSlice slice;
     private PubSubState state; // SUBMITTED, INPROGRESS, WAITINPROGRESS, DONE, EXPUNGE
     private Date startTime; // date when slice was created
     private Date endTime; // date when slice was closed
@@ -51,9 +48,9 @@ public class SliceState {
     public String getSlice_urn() {
         return slice.getSliceUrn();
     }
-    
+
     public String getSlice_ID() {
-    	return slice.getSliceID();
+        return slice.getSliceID();
     }
 
     public PubSubState getState() {

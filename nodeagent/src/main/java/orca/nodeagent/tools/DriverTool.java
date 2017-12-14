@@ -23,24 +23,19 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
-
-public class DriverTool
-{
+public class DriverTool {
     protected String location = "http://localhost:8080/axis2/services/NodeManagerService";
     protected String repository = null;
     protected String config = null;
 
-    public DriverTool()
-    {
+    public DriverTool() {
     }
 
-    public DriverTool(String location)
-    {
+    public DriverTool(String location) {
         this.location = location;
     }
 
-    public DriverTool(String location, String repository, String config)
-    {
+    public DriverTool(String location, String repository, String config) {
         if (location != null) {
             this.location = location;
         }
@@ -49,8 +44,7 @@ public class DriverTool
         this.config = config;
     }
 
-    public NodeAgentServiceStub getStub() throws Exception
-    {
+    public NodeAgentServiceStub getStub() throws Exception {
         // if (repository != null || config != null) {
         // ConfigurationContext cc =
         // ConfigurationContextFactory.createConfigurationContextFromFileSystem(repository,
@@ -59,15 +53,12 @@ public class DriverTool
         // } else {
         // return new NodeAgentServiceStub(location);
         // }
-        ConfigurationContext context = Axis2ClientConfigurationManager.getInstance().getContext(
-            repository,
-            config);
+        ConfigurationContext context = Axis2ClientConfigurationManager.getInstance().getContext(repository, config);
 
         return new NodeAgentServiceStub(context, location);
     }
 
-    public int installDriver(String id, String className, String pkg)
-    {
+    public int installDriver(String id, String className, String pkg) {
         int code = 0;
 
         try {
@@ -99,8 +90,7 @@ public class DriverTool
         return code;
     }
 
-    public int upgradeDriver(String id, String className, String pkg)
-    {
+    public int upgradeDriver(String id, String className, String pkg) {
         int code = 0;
 
         try {
@@ -132,8 +122,7 @@ public class DriverTool
         return code;
     }
 
-    public int uninstallDriver(String id)
-    {
+    public int uninstallDriver(String id) {
         int code = 0;
 
         try {
@@ -157,23 +146,19 @@ public class DriverTool
         return code;
     }
 
-    public void setLocation(String location)
-    {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public void setRepository(String repository)
-    {
+    public void setRepository(String repository) {
         this.repository = repository;
     }
 
-    public void setConfig(String config)
-    {
+    public void setConfig(String config) {
         this.config = config;
     }
 
-    public static DriverTool getDriverTool(String[] args)
-    {
+    public static DriverTool getDriverTool(String[] args) {
         DriverTool tool = new DriverTool();
 
         for (int i = 1; i < args.length; i++) {
@@ -206,19 +191,14 @@ public class DriverTool
         return tool;
     }
 
-    public static void printUsage()
-    {
-        System.out.println(
-            "Usage [modifiers] command parameters:\n" + "Modifiers can be:\n" +
-            "-l location -> location of nodemanager service\n" + "-r path -> path to repository\n" +
-            "-c path -> path to axis2.xml\n" +
-            "install id class [path] [pkg] --> installs the driver\n" +
-            "upgrade id class [path] [pkg] --> upgrades the driver\n" +
-            "uninstall id --> uninstalls the driver");
+    public static void printUsage() {
+        System.out.println("Usage [modifiers] command parameters:\n" + "Modifiers can be:\n"
+                + "-l location -> location of nodemanager service\n" + "-r path -> path to repository\n"
+                + "-c path -> path to axis2.xml\n" + "install id class [path] [pkg] --> installs the driver\n"
+                + "upgrade id class [path] [pkg] --> upgrades the driver\n" + "uninstall id --> uninstalls the driver");
     }
 
-    public static int processInstall(DriverTool tool, String[] args, int index)
-    {
+    public static int processInstall(DriverTool tool, String[] args, int index) {
         if ((index + 1) >= args.length) {
             printUsage();
 
@@ -242,8 +222,7 @@ public class DriverTool
         }
     }
 
-    public static int processUpgradeDriver(DriverTool tool, String[] args, int index)
-    {
+    public static int processUpgradeDriver(DriverTool tool, String[] args, int index) {
         int i = index;
 
         if ((i + 1) >= args.length) {
@@ -282,8 +261,7 @@ public class DriverTool
         // }
     }
 
-    public static int processUninstallDriver(DriverTool tool, String[] args, int index)
-    {
+    public static int processUninstallDriver(DriverTool tool, String[] args, int index) {
         int i = index;
 
         if (i >= args.length) {
@@ -299,17 +277,14 @@ public class DriverTool
         }
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         if (args.length == 0) {
             printUsage();
             System.exit(-1);
         }
 
         ToolHelper helper = new ToolHelper(args);
-        DriverTool tool = new DriverTool(helper.getLocation(),
-                                         helper.getRepository(),
-                                         helper.getConfig());
+        DriverTool tool = new DriverTool(helper.getLocation(), helper.getRepository(), helper.getConfig());
 
         int index = helper.getIndex();
 

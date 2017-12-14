@@ -1,82 +1,133 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-	<artifactId>orca-am-broker</artifactId>
-	<name>Orca Docker image: orca-am-broker</name>
-
-	<parent>
-		<groupId>orca</groupId>
-		<artifactId>docker-orca</artifactId>
-		<version>5.2.2-SNAPSHOT</version>
-	</parent>
-
-	<dependencies>
-		<dependency>
-			<groupId>orca</groupId>
-			<artifactId>orca-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>${project.basedir}</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>**/Dockerfile</include>
-					<!-- the file docker-entrypoint.sh doesn't currently need any filtering. 
-						but it does need to get copied. -->
-					<include>**/docker-entrypoint.sh</include>
-				</includes>
-			</resource>
-		</resources>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>com.spotify</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>build</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<dockerDirectory>${project.build.directory}/classes</dockerDirectory>
-
-						<imageName>renci/${project.artifactId}</imageName>
-						<imageTags>
-							<imageTag>${project.version}-${orca.docker.jre.vendor}</imageTag>
-							<imageTag>${git.commit.id.abbrev}-${orca.docker.jre.vendor}</imageTag>
-							<imageTag>${orca.docker.jre.vendor}</imageTag>
-						</imageTags>
-
-						<pushImage>false</pushImage>
-
-						<resources>
-							<resource>
-								<directory>${user.home}/orca-build/rpmbuild/RPMS/x86_64/</directory>
-								<targetPath>resources</targetPath>
-								<includes>
-									<include>orca-iaas-*${git.commit.id.abbrev}*.rpm</include>
-									<include>orca-iaas-exogeni-am+broker-config*${git.commit.id.abbrev}*.rpm</include>
-								</includes>
-								<excludes>
-									<exclude>*common*</exclude>
-									<exclude>*controller*</exclude>
-									<exclude>*sm-config*</exclude>
-								</excludes>
-							</resource>
-						</resources>
-					</configuration>
-				</plugin>
-
-			</plugins>
-		</pluginManagement>
-	</build>
-
+<?xml version="1.0" encoding="UTF-8"?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+    <modelVersion>
+        4.0.0
+    </modelVersion> 
+    <artifactId>
+        orca-am-broker
+    </artifactId> 
+    <name>
+        Orca Docker image: orca-am-broker
+    </name> 
+    <parent> 
+        <groupId>
+            orca
+        </groupId> 
+        <artifactId>
+            docker-orca
+        </artifactId> 
+        <version>
+            5.2.2-SNAPSHOT
+        </version> 
+    </parent> 
+    <dependencies> 
+        <dependency> 
+            <groupId>
+                orca
+            </groupId> 
+            <artifactId>
+                orca-common
+            </artifactId> 
+            <version>
+                ${project.version}
+            </version> 
+        </dependency> 
+    </dependencies> 
+    <build> 
+        <resources> 
+            <resource> 
+                <directory>
+                    ${project.basedir}
+                </directory> 
+                <filtering>
+                    true
+                </filtering> 
+                <includes> 
+                    <include>
+                        **/Dockerfile
+                    </include> 
+                    <!-- the file docker-entrypoint.sh doesn't currently need any filtering. 
+						but it does need to get copied. --> 
+                    <include>
+                        **/docker-entrypoint.sh
+                    </include> 
+                </includes> 
+            </resource> 
+        </resources> 
+        <pluginManagement> 
+            <plugins> 
+                <plugin> 
+                    <groupId>
+                        com.spotify
+                    </groupId> 
+                    <artifactId>
+                        docker-maven-plugin
+                    </artifactId> 
+                    <executions> 
+                        <execution> 
+                            <phase>
+                                package
+                            </phase> 
+                            <goals> 
+                                <goal>
+                                    build
+                                </goal> 
+                            </goals> 
+                        </execution> 
+                    </executions> 
+                    <configuration> 
+                        <dockerDirectory>
+                            ${project.build.directory}/classes
+                        </dockerDirectory> 
+                        <imageName>
+                            renci/${project.artifactId}
+                        </imageName> 
+                        <imageTags> 
+                            <imageTag>
+                                ${project.version}-${orca.docker.jre.vendor}
+                            </imageTag> 
+                            <imageTag>
+                                ${git.commit.id.abbrev}-${orca.docker.jre.vendor}
+                            </imageTag> 
+                            <imageTag>
+                                ${orca.docker.jre.vendor}
+                            </imageTag> 
+                        </imageTags> 
+                        <pushImage>
+                            false
+                        </pushImage> 
+                        <resources> 
+                            <resource> 
+                                <directory>
+                                    ${user.home}/orca-build/rpmbuild/RPMS/x86_64/
+                                </directory> 
+                                <targetPath>
+                                    resources
+                                </targetPath> 
+                                <includes> 
+                                    <include>
+                                        orca-iaas-*${git.commit.id.abbrev}*.rpm
+                                    </include> 
+                                    <include>
+                                        orca-iaas-exogeni-am+broker-config*${git.commit.id.abbrev}*.rpm
+                                    </include> 
+                                </includes> 
+                                <excludes> 
+                                    <exclude>
+                                        *common*
+                                    </exclude> 
+                                    <exclude>
+                                        *controller*
+                                    </exclude> 
+                                    <exclude>
+                                        *sm-config*
+                                    </exclude> 
+                                </excludes> 
+                            </resource> 
+                        </resources> 
+                    </configuration> 
+                </plugin> 
+            </plugins> 
+        </pluginManagement> 
+    </build> 
 </project>

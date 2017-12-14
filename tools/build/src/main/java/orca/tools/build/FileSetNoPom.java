@@ -7,27 +7,21 @@ import org.apache.tools.ant.types.selectors.FileSelector;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class FileSetNoPom
-    extends FileSet
-{
+public class FileSetNoPom extends FileSet {
     protected FileSet fset;
     protected Path path;
 
-    public FileSetNoPom(  )
-    {
+    public FileSetNoPom() {
     }
 
-    public void add( FileSet fset )
-    {
+    public void add(FileSet fset) {
         this.fset = fset;
     }
 
     @Override
-    public Iterator iterator(  )
-    {
-        if ( fset != null )
-        {
-            return new IteratorWrapper( fset.iterator(  ) );
+    public Iterator iterator() {
+        if (fset != null) {
+            return new IteratorWrapper(fset.iterator());
         }
 
         return null;

@@ -80,7 +80,7 @@ public class MerlinKeyRegister extends Merlin {
     /**
      * Service data folder.
      */
-    protected final static String dataFolder = root +  "/data/";
+    protected final static String dataFolder = root + "/data/";
     /**
      * Keystore location.
      */
@@ -98,6 +98,7 @@ public class MerlinKeyRegister extends Merlin {
 
     /**
      * Returns the singleton instance.
+     * 
      * @return
      */
     public static MerlinKeyRegister getInstance() {
@@ -134,7 +135,7 @@ public class MerlinKeyRegister extends Merlin {
         logger.debug("verify called");
         logger.debug("Root directory is: " + root);
         logger.debug("Server keystore path is: " + ServerKeyStoreDestination);
-        
+
         if (keyStore != null) {
             // the keyStore is initialized I have to set it
             // so that it used by the crypto provider
@@ -143,7 +144,7 @@ public class MerlinKeyRegister extends Merlin {
         } else {// the keyStore is not initialized we attempt to execute
             // recovery
             logger.debug("Merlin Keystore instance is null.");
-            
+
             File f = new File(ServerKeyStoreDestination);
 
             if (f.exists()) // call recovery
@@ -174,6 +175,7 @@ public class MerlinKeyRegister extends Merlin {
 
     /**
      * Tries recovery for a new instance of the Merlin Provider,
+     * 
      * @return
      */
     public static synchronized int checkRecovery() {
@@ -182,7 +184,7 @@ public class MerlinKeyRegister extends Merlin {
         logger.debug("Recovery invoked!");
         logger.debug("Root directory is: " + root);
         logger.debug("Server keystore path is: " + ServerKeyStoreDestination);
-        
+
         InputStream in = MerlinKeyRegister.class.getClassLoader().getResourceAsStream(ServicePropertiesFile);
 
         if (in == null) {
@@ -296,11 +298,12 @@ public class MerlinKeyRegister extends Merlin {
     }
 
     /**
-     * Creates server.jks when registerAuthorityKey is invoked. Creates the
-     * private key / certificate of the node
-     * @param alias this alias should be "authoritykey", we will use
-     *            "authoritykey"
-     * @param cert the first trusted certificate to be added
+     * Creates server.jks when registerAuthorityKey is invoked. Creates the private key / certificate of the node
+     * 
+     * @param alias
+     *            this alias should be "authoritykey", we will use "authoritykey"
+     * @param cert
+     *            the first trusted certificate to be added
      * @return
      */
     public static synchronized int createServiceKeyStore(String alias, Certificate cert) {
@@ -406,6 +409,7 @@ public class MerlinKeyRegister extends Merlin {
 
     /**
      * Retrieves the service key.
+     * 
      * @return
      */
     public static synchronized Certificate getServiceKey() {
@@ -425,6 +429,7 @@ public class MerlinKeyRegister extends Merlin {
 
     /**
      * Retrieves the first certificate registered with the node
+     * 
      * @return
      */
     public static synchronized Certificate getAuthorityKey() {
@@ -443,8 +448,9 @@ public class MerlinKeyRegister extends Merlin {
     }
 
     /**
-     * Adds a certificate to the keystore. Allows multiple clients to use the
-     * node. The actor invoking this function has to be trusted.
+     * Adds a certificate to the keystore. Allows multiple clients to use the node. The actor invoking this function has
+     * to be trusted.
+     * 
      * @param alias
      * @param cert
      * @throws IOException
@@ -452,7 +458,8 @@ public class MerlinKeyRegister extends Merlin {
      * @throws CertificateException
      * @throws NoSuchAlgorithmException
      */
-    public void addKeyToKeystore(String alias, Certificate cert) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
+    public void addKeyToKeystore(String alias, Certificate cert)
+            throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
         KeyStore.TrustedCertificateEntry trustedEntry = new KeyStore.TrustedCertificateEntry(cert);
 
         // the keystore already contains an alias for this certificate
@@ -466,15 +473,16 @@ public class MerlinKeyRegister extends Merlin {
     }
 
     /**
-     * Removes a trusted key from the node. The actor invoking this function has
-     * to be trusted.
+     * Removes a trusted key from the node. The actor invoking this function has to be trusted.
+     * 
      * @param alias
      * @throws IOException
      * @throws KeyStoreException
      * @throws NoSuchAlgorithmException
      * @throws CertificateException
      */
-    public void removeKeyFromKeyStore(String alias) throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
+    public void removeKeyFromKeyStore(String alias)
+            throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
         // there is no entry with alias
         if (!keyStore.containsAlias(alias)) {
             return;
@@ -486,8 +494,8 @@ public class MerlinKeyRegister extends Merlin {
     }
 
     /**
-     * Generates the node certificate when the first trusted key is registered
-     * with the node.
+     * Generates the node certificate when the first trusted key is registered with the node.
+     * 
      * @return
      */
     private static int generateServiceCertificate() {

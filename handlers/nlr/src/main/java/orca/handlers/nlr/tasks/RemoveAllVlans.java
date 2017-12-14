@@ -10,6 +10,7 @@ import org.apache.tools.ant.Project;
 
 /**
  * Remove all provisioned VLANs matching the keyword descriptions used by ORCA
+ * 
  * @author ibaldin
  */
 public class RemoveAllVlans extends GenericSherpaTask {
@@ -45,7 +46,8 @@ public class RemoveAllVlans extends GenericSherpaTask {
         if (exitCodeProperty != null) {
             p.setProperty(exitCodeProperty, Integer.toString(code));
             if (code != 0)
-                p.setProperty(exitCodeMessageProperty, p.getProperty(exitCodeMessageProperty) + "\n" + getErrorMessage(code));
+                p.setProperty(exitCodeMessageProperty,
+                        p.getProperty(exitCodeMessageProperty) + "\n" + getErrorMessage(code));
             else
                 p.setProperty(exitCodeMessageProperty, p.getProperty(exitCodeMessageProperty) + "\n" + "Success!");
         } else {

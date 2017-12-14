@@ -1,21 +1,25 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Configuration Tool">
-    <publishDate format="dd MMM yyyy" position="right" />
-    <skin>
-        <groupId>orca</groupId>
-        <artifactId>site-skin</artifactId>
-        <version>1.0</version>
-    </skin>
-    <body>
-        <breadcrumbs>
-            <item name="Tools" href="http://www.nicl.cs.duke.edu/orca/tools" />            
-        </breadcrumbs>
-
-        <menu name="Configuration Tool">
-            <item name="Welcome" href="/index.html" />
-            <item name="Reference" href="/guides/index.html" />
-        </menu>
-
-        <menu ref="reports" />
-    </body>
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<project name="Configuration Tool"> 
+    <publishDate format="dd MMM yyyy" position="right" /> 
+    <skin> 
+        <groupId>
+            orca
+        </groupId> 
+        <artifactId>
+            site-skin
+        </artifactId> 
+        <version>
+            1.0
+        </version> 
+    </skin> 
+    <body> 
+        <breadcrumbs> 
+            <item name="Tools" href="http://www.nicl.cs.duke.edu/orca/tools" /> 
+        </breadcrumbs> 
+        <menu name="Configuration Tool"> 
+            <item name="Welcome" href="/index.html" /> 
+            <item name="Reference" href="/guides/index.html" /> 
+        </menu> 
+        <menu ref="reports"></menu> 
+    </body> 
 </project>

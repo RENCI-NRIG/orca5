@@ -14,14 +14,11 @@ import orca.shirako.container.Globals;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * A very simple test to ensure the correctness of the container manager.
  */
-public class LoadConfigurationTest extends TestBase
-{
-    public static void main(String[] args)
-    {
+public class LoadConfigurationTest extends TestBase {
+    public static void main(String[] args) {
         try {
             if (args.length != 1) {
                 System.out.println("Usage: <configuration file>");
@@ -41,13 +38,11 @@ public class LoadConfigurationTest extends TestBase
 
     protected Logger logger;
 
-    public LoadConfigurationTest()
-    {
+    public LoadConfigurationTest() {
         logger = Globals.getLogger(this.getClass().getCanonicalName());
     }
 
-    public void runTest(String config) throws Exception
-    {
+    public void runTest(String config) throws Exception {
         if (Globals.getContainer().isFresh()) {
             Globals.getContainer().loadConfiguration(config);
         }

@@ -9,8 +9,8 @@ public abstract class OSBaseTask extends SyncNetworkBaseTask {
 
     @Override
     protected void makeDevice() {
-    	super.makeDevice();
-    	
+        super.makeDevice();
+
         if (deviceInstance.equalsIgnoreCase(PolatisOS)) {
             device = new PolatisOSDevice(deviceAddress, user, password);
         } else {

@@ -1,91 +1,161 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-	<artifactId>orca-rpmbuild</artifactId>
-	<name>Orca Docker image: orca-rpmbuild</name>
-
-	<parent>
-		<groupId>orca</groupId>
-		<artifactId>docker-orca</artifactId>
-		<version>5.2.2-SNAPSHOT</version>
-	</parent>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>${project.basedir}</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>**/Dockerfile</include>
-					<!-- the file docker-entrypoint.sh doesn't currently need any filtering.
-						but it does need to get copied. -->
-					<include>**/docker-entrypoint.sh</include>
-				</includes>
-			</resource>
-		</resources>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>com.spotify</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>build</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<dockerDirectory>${project.build.directory}/classes</dockerDirectory>
-
-						<imageName>renci/${project.artifactId}</imageName>
-						<imageTags>
-							<imageTag>${project.version}-${orca.docker.jre.vendor}</imageTag>
-							<imageTag>${orca.docker.jre.vendor}</imageTag>
-						</imageTags>
-
-						<pushImage>false</pushImage>
-
-						<resources>
-							<!-- Copy the entire source tree, to be placed in the created Image.
+<?xml version="1.0" encoding="UTF-8"?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+    <modelVersion>
+        4.0.0
+    </modelVersion> 
+    <artifactId>
+        orca-rpmbuild
+    </artifactId> 
+    <name>
+        Orca Docker image: orca-rpmbuild
+    </name> 
+    <parent> 
+        <groupId>
+            orca
+        </groupId> 
+        <artifactId>
+            docker-orca
+        </artifactId> 
+        <version>
+            5.2.2-SNAPSHOT
+        </version> 
+    </parent> 
+    <build> 
+        <resources> 
+            <resource> 
+                <directory>
+                    ${project.basedir}
+                </directory> 
+                <filtering>
+                    true
+                </filtering> 
+                <includes> 
+                    <include>
+                        **/Dockerfile
+                    </include> 
+                    <!-- the file docker-entrypoint.sh doesn't currently need any filtering.
+						but it does need to get copied. --> 
+                    <include>
+                        **/docker-entrypoint.sh
+                    </include> 
+                </includes> 
+            </resource> 
+        </resources> 
+        <pluginManagement> 
+            <plugins> 
+                <plugin> 
+                    <groupId>
+                        com.spotify
+                    </groupId> 
+                    <artifactId>
+                        docker-maven-plugin
+                    </artifactId> 
+                    <executions> 
+                        <execution> 
+                            <phase>
+                                package
+                            </phase> 
+                            <goals> 
+                                <goal>
+                                    build
+                                </goal> 
+                            </goals> 
+                        </execution> 
+                    </executions> 
+                    <configuration> 
+                        <dockerDirectory>
+                            ${project.build.directory}/classes
+                        </dockerDirectory> 
+                        <imageName>
+                            renci/${project.artifactId}
+                        </imageName> 
+                        <imageTags> 
+                            <imageTag>
+                                ${project.version}-${orca.docker.jre.vendor}
+                            </imageTag> 
+                            <imageTag>
+                                ${orca.docker.jre.vendor}
+                            </imageTag> 
+                        </imageTags> 
+                        <pushImage>
+                            false
+                        </pushImage> 
+                        <resources> 
+                            <!-- Copy the entire source tree, to be placed in the created Image.
 							     Ideally, we would only do this on Mac systems,
 							     where the Docker engine is exceptionally slow
-							     at using volume mounted files. -->
-							<!-- normally would want to exclude .git directory,
+							     at using volume mounted files. --> 
+                            <!-- normally would want to exclude .git directory,
 							     but it is needed to get the git commit ID.
-							     `git describe` seems to need the full objects dir -->
-							<resource>
-								<targetPath>/orca/</targetPath>
-								<directory>${project.basedir}/../../</directory>
-								<excludes>
-									<exclude>**/target/**/*</exclude>
-									<exclude>**/repo/**/*</exclude>
-									<exclude>**/network/logs/**/*</exclude>
-									<exclude>**/startup/**/*</exclude>
-									<exclude>**/handlers/network/logs/</exclude>
-									<exclude>**/nodeagent/scripts/**/*</exclude>
-									<exclude>**/server/orca/config/runtime/**/*</exclude>
-									<exclude>**/server/orca/logs/**/*</exclude>
-									<exclude>**/server/orca/scripts/**/*</exclude>
-									<exclude>**/server/orca/startup/**/*</exclude>
-									<exclude>**/tools/cmdline/startup/</exclude>
-									<exclude>**/core/shirako/orca/</exclude>
-									<exclude>**/controllers/xmlrpc/controller_recovery.lock</exclude>
-									<exclude>**/controllers/xmlrpc/logs/</exclude>
-									<exclude>**/controllers/xmlrpc/modelState/</exclude>
-									<exclude>**/.project</exclude>
-									<exclude>**/.classpath</exclude>
-									<exclude>**/.settings/**/*</exclude>
-								</excludes>
-							</resource>
-						</resources>
-					</configuration>
-				</plugin>
-
-			</plugins>
-		</pluginManagement>
-	</build>
-
+							     `git describe` seems to need the full objects dir --> 
+                            <resource> 
+                                <targetPath>
+                                    /orca/
+                                </targetPath> 
+                                <directory>
+                                    ${project.basedir}/../../
+                                </directory> 
+                                <excludes> 
+                                    <exclude>
+                                        **/target/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/repo/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/network/logs/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/startup/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/handlers/network/logs/
+                                    </exclude> 
+                                    <exclude>
+                                        **/nodeagent/scripts/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/server/orca/config/runtime/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/server/orca/logs/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/server/orca/scripts/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/server/orca/startup/**/*
+                                    </exclude> 
+                                    <exclude>
+                                        **/tools/cmdline/startup/
+                                    </exclude> 
+                                    <exclude>
+                                        **/core/shirako/orca/
+                                    </exclude> 
+                                    <exclude>
+                                        **/controllers/xmlrpc/controller_recovery.lock
+                                    </exclude> 
+                                    <exclude>
+                                        **/controllers/xmlrpc/logs/
+                                    </exclude> 
+                                    <exclude>
+                                        **/controllers/xmlrpc/modelState/
+                                    </exclude> 
+                                    <exclude>
+                                        **/.project
+                                    </exclude> 
+                                    <exclude>
+                                        **/.classpath
+                                    </exclude> 
+                                    <exclude>
+                                        **/.settings/**/*
+                                    </exclude> 
+                                </excludes> 
+                            </resource> 
+                        </resources> 
+                    </configuration> 
+                </plugin> 
+            </plugins> 
+        </pluginManagement> 
+    </build> 
 </project>

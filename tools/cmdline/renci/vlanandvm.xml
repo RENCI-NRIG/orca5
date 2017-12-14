@@ -1,75 +1,121 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-    <actors>
-        <actor>
-            <type>site</type>
-            <name>ben-vlan-site</name>
-            <description>BEN VLAN site authority</description>
-            <pools>
-                <pool>
-                    <type>ben.vlan</type>
-                    <label>BEN VLAN</label>
-                    <description>A VLAN over BEN</description>
-                    <units>100</units>
-                    <start>2010-01-30T00:00:00</start>
-                    <end>2011-01-30T00:00:00</end>
-                    <handler packageId="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000"
-                             pluginId="3" />
-                    <properties>
-                        <property name="vlan.tag.start" value="2" />
-                        <property name="vlan.tag.end" value="101" />
-                    </properties>
-                </pool>
-            </pools>
-            <controls>
-                <control type="ben.vlan" class="orca.policy.core.VlanControl" />
-            </controls>
-        </actor>
-        <actor>
-            <type>site</type>
-            <name>renci-vm-site</name>
-            <description>RENCI VM site authority</description>
-            <pools>
-                <pool>
-                    <type>renci.vm</type>
-                    <label>Encalyptus VM (RENCI)</label>
-                    <description>A VM hosted at RENCI</description>
-                    <units>10</units>
-                    <start>2010-01-30T00:00:00</start>
-                    <end>2011-01-30T00:00:00</end>
-                    <handler path="common/noop.xml" />
-                </pool>
-            </pools>
-            <controls>
-                <control type="renci.vm class="orca.policy.core.VMControl" />
-            </controls>
-        </actor>
-
-        <actor>
-            <type>broker</type>
-            <name>ben-vlan-broker</name>
-            <description>BEN VLAN broker</description>
-        </actor>
-        <actor>
-            <type>service</type>
-            <name>service</name>
-            <description>Service Manager</description>
-        </actor>
-    </actors>
-    <topology>
-        <edges>
-            <edge>
-                <from name="service" type="service" />
-                <to name="ben-vlan-broker" type="broker" />
-            </edge>
-            <edge>
-                <from name="ben-vlan-broker" type="broker" />
-                <to name="ben-vlan-site" type="site" />
-                <rset>
-                    <type>ben.vlan</type>
-                    <units>100</units>
-                </rset>
-            </edge>
-        </edges>
-    </topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                site
+            </type> 
+            <name>
+                ben-vlan-site
+            </name> 
+            <description>
+                BEN VLAN site authority
+            </description> 
+            <pools> 
+                <pool> 
+                    <type>
+                        ben.vlan
+                    </type> 
+                    <label>BEN VLAN</label> 
+                    <description>
+                        A VLAN over BEN
+                    </description> 
+                    <units>
+                        100
+                    </units> 
+                    <start>
+                        2010-01-30T00:00:00
+                    </start> 
+                    <end>
+                        2011-01-30T00:00:00
+                    </end> 
+                    <handler packageId="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" pluginId="3" /> 
+                    <properties> 
+                        <property name="vlan.tag.start" value="2" /> 
+                        <property name="vlan.tag.end" value="101" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="ben.vlan" class="orca.policy.core.VlanControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                site
+            </type> 
+            <name>
+                renci-vm-site
+            </name> 
+            <description>
+                RENCI VM site authority
+            </description> 
+            <pools> 
+                <pool> 
+                    <type>
+                        renci.vm
+                    </type> 
+                    <label>Encalyptus VM (RENCI)</label> 
+                    <description>
+                        A VM hosted at RENCI
+                    </description> 
+                    <units>
+                        10
+                    </units> 
+                    <start>
+                        2010-01-30T00:00:00
+                    </start> 
+                    <end>
+                        2011-01-30T00:00:00
+                    </end> 
+                    <handler path="common/noop.xml" /> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="renci.vm class=" orca.policy.core.VMControl"="" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                broker
+            </type> 
+            <name>
+                ben-vlan-broker
+            </name> 
+            <description>
+                BEN VLAN broker
+            </description> 
+        </actor> 
+        <actor> 
+            <type>
+                service
+            </type> 
+            <name>
+                service
+            </name> 
+            <description>
+                Service Manager
+            </description> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="ben-vlan-broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="ben-vlan-broker" type="broker" /> 
+                <to name="ben-vlan-site" type="site" /> 
+                <rset> 
+                    <type>
+                        ben.vlan
+                    </type> 
+                    <units>
+                        100
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

@@ -19,28 +19,23 @@ import orca.util.PropList;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * The arguments passed to this test should be of the form: <br>
- * &lt;config file&gt; &lt;name=value&gt; &lt;name=value&gt; &lt;name=value&gt
- * ... <br>
- * The first argument is the XML configuration file to use. The arguments that
- * follow are name/value pairs with properties to be used by the test.<br>
+ * &lt;config file&gt; &lt;name=value&gt; &lt;name=value&gt; &lt;name=value&gt ... <br>
+ * The first argument is the XML configuration file to use. The arguments that follow are name/value pairs with
+ * properties to be used by the test.<br>
  * <br>
  * BaseTest supports two properties:<br>
  * <ol>
  * <li>tickLength: The length of a tick in milliseconds</li>
  * <li>testLength: The length of the test in milliseconds</li>
  * </ol>
- * Classes extending BaseTest should override readParameters() to extract
- * whatever parameters they need. <br>
+ * Classes extending BaseTest should override readParameters() to extract whatever parameters they need. <br>
  * <br>
- * In case a test requires additional configuration actions, for example passing
- * parameters to the load source of a service manager, the test can override the
- * loadConfiguration method.
+ * In case a test requires additional configuration actions, for example passing parameters to the load source of a
+ * service manager, the test can override the loadConfiguration method.
  */
-public class ShirakoTest extends TestBase
-{
+public class ShirakoTest extends TestBase {
     /**
      * Length of a tick (milliseconds)
      */
@@ -103,11 +98,12 @@ public class ShirakoTest extends TestBase
 
     /**
      * Run the test.
-     * @param args the test parameters and properties
+     * 
+     * @param args
+     *            the test parameters and properties
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         if (args.length > 0) {
             ShirakoTest test = new ShirakoTest(args);
             test.run();
@@ -156,13 +152,11 @@ public class ShirakoTest extends TestBase
      */
     protected boolean measureTime = false;
 
-    public ShirakoTest()
-    {
+    public ShirakoTest() {
         this(DefaultTestName, DefaultTestLength, DefaultTickLength);
     }
 
-    public ShirakoTest(String name, long cycles, long sleepTime)
-    {
+    public ShirakoTest(String name, long cycles, long sleepTime) {
         fixClassPath();
 
         this.testName = name;
@@ -173,32 +167,30 @@ public class ShirakoTest extends TestBase
         logger = Globals.getLogger(testName);
     }
 
-    public ShirakoTest(String[] args)
-    {
+    public ShirakoTest(String[] args) {
         this(DefaultTestName, DefaultTestLength, DefaultTickLength);
         setParameters(args);
     }
 
-    protected long getCurrentCycle()
-    {
+    protected long getCurrentCycle() {
         return Globals.getContainer().getCurrentCycle();
     }
 
     /**
      * Load the configuration file for this test.
+     * 
      * @throws Exception
      */
-    protected void loadConfiguration() throws Exception
-    {
+    protected void loadConfiguration() throws Exception {
         Globals.getContainer().loadConfiguration(configFile);
     }
 
     /**
      * What happens on a single iteration of the test.
+     * 
      * @throws Exception
      */
-    protected void oneIteration() throws Exception
-    {
+    protected void oneIteration() throws Exception {
         Globals.getContainer().tick();
 
         if (tickLength > 0) {
@@ -208,10 +200,10 @@ public class ShirakoTest extends TestBase
 
     /**
      * Read in all of the test parameters that are relevant to this test.
+     * 
      * @throws Exception
      */
-    protected void readParameters() throws Exception
-    {
+    protected void readParameters() throws Exception {
         String temp = properties.getProperty(PropertySleepTime);
 
         if (temp != null) {
@@ -232,23 +224,23 @@ public class ShirakoTest extends TestBase
     }
 
     /**
-     * Run the test. Read in the parameters and the configuration file for the
-     * test and then run. Record the length of the test in seconds if indicated.
+     * Run the test. Read in the parameters and the configuration file for the test and then run. Record the length of
+     * the test in seconds if indicated.
+     * 
      * @throws Exception
      */
-    public void run() throws Exception
-    {
+    public void run() throws Exception {
         if (configFile == null) {
             throw new Exception("Missing config file");
         }
 
         readParameters();
-        
+
         boolean started = false;
         if (properties.getProperty(PropertyDoNotRecover) != null) {
             if (PropList.getBooleanProperty(properties, PropertyDoNotRecover)) {
-               Globals.start(true);
-               started = true;
+                Globals.start(true);
+                started = true;
             }
         }
         if (!started) {
@@ -262,7 +254,7 @@ public class ShirakoTest extends TestBase
         }
 
         boolean manualTicks = Globals.getContainer().isManualClock();
-        
+
         if (manualTicks) {
             long start = System.currentTimeMillis();
 
@@ -289,34 +281,36 @@ public class ShirakoTest extends TestBase
     /**
      * Test function to execute if not using manual ticks.
      */
-    protected void runTest()
-    {
+    protected void runTest() {
     }
 
     /**
      * Set the configuration file.
-     * @param file the configuration file for the test
+     * 
+     * @param file
+     *            the configuration file for the test
      */
-    public void setConfigFile(String file)
-    {
+    public void setConfigFile(String file) {
         this.configFile = file;
     }
 
     /**
      * Set the duration of the test.
-     * @param cycles length of the test
+     * 
+     * @param cycles
+     *            length of the test
      */
-    public void setDuration(long cycles)
-    {
+    public void setDuration(long cycles) {
         this.testLength = cycles;
     }
 
     /**
      * Set all of the parameters for the test.
-     * @param args the parameters for the test
+     * 
+     * @param args
+     *            the parameters for the test
      */
-    public void setParameters(String[] args)
-    {
+    public void setParameters(String[] args) {
         configFile = args[0];
 
         for (int i = 1; i < args.length; i++) {
@@ -331,15 +325,15 @@ public class ShirakoTest extends TestBase
 
     /**
      * Set the amount of time to sleep between ticks.
-     * @param sleepTime time between ticks
+     * 
+     * @param sleepTime
+     *            time between ticks
      */
-    public void setSleepTime(long sleepTime)
-    {
+    public void setSleepTime(long sleepTime) {
         this.tickLength = sleepTime;
     }
 
-    protected void stopTest() throws Exception
-    {
+    protected void stopTest() throws Exception {
         Globals.getContainer().stop();
     }
 }

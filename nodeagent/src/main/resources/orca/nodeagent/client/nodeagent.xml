@@ -1,9 +1,7 @@
-<antlib>
-	<!--Definition of types-->
-    
-    <!-- Definitions of tasks -->
-    <taskdef resource="orca/nodeagent/client/nodeagent.tasks" />
-  	
-  	<!-- unfortunately we cannot import properties in the antlib for some reason -->
-    <!-- <property resource="orca/nodeagent/nodeagent.properties" /> -->   
+<antlib> 
+    <!--Definition of types--> 
+    <!-- Definitions of tasks --> 
+    <taskdef resource="orca/nodeagent/client/nodeagent.tasks" /> 
+    <!-- unfortunately we cannot import properties in the antlib for some reason --> 
+    <!-- <property resource="orca/nodeagent/nodeagent.properties" /> --> 
 </antlib>

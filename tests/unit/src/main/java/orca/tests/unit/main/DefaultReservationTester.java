@@ -10,12 +10,10 @@
 
 package orca.tests.unit.main;
 
-
 /**
  * Runs a set of default tests for a reservation.
  */
-public class DefaultReservationTester
-{
+public class DefaultReservationTester {
     /**
      * Lease length (in cycles).
      */
@@ -28,10 +26,10 @@ public class DefaultReservationTester
 
     /**
      * Runs a test.
+     * 
      * @throws Exception
      */
-    public void runTest() throws Exception
-    {
+    public void runTest() throws Exception {
         /* set the test parameters */
         ReservationTestTool tester = new ReservationTestTool();
         tester.setElasticTime(true);
@@ -47,13 +45,11 @@ public class DefaultReservationTester
         }
     }
 
-    public void setLeaseLength(int leaseLength)
-    {
+    public void setLeaseLength(int leaseLength) {
         this.leaseLength = leaseLength;
     }
 
-    public void setUnits(int units)
-    {
+    public void setUnits(int units) {
         this.units = units;
     }
 }

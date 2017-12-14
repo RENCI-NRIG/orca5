@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script xmlns="http://geni-orca.renci.org/Log_off" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/Log_off Log_off.xsd ">
-	<action name="Disconnect">
-		<exchange>
-		<send>canc-user::{$UID}:1:;</send>
-		<expect>COMPLD</expect>
-		</exchange>
-	</action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script xmlns="http://geni-orca.renci.org/Log_off" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/Log_off Log_off.xsd "> 
+    <action name="Disconnect"> 
+        <exchange> 
+            <send>
+                canc-user::{$UID}:1:;
+            </send> 
+            <expect>
+                COMPLD
+            </expect> 
+        </exchange> 
+    </action> 
 </script>

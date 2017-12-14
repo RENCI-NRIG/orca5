@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.EX3200;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class AddTrunkPortsTask extends EX3200BaseTask {
@@ -17,7 +16,7 @@ public class AddTrunkPortsTask extends EX3200BaseTask {
             if (ports == null) {
                 throw new Exception("Missing ports");
             }
-            router.addTrunkPortsToVLAN(vlanTag, ports);    
+            router.addTrunkPortsToVLAN(vlanTag, ports);
             setResult(0);
         } catch (BuildException e) {
             throw e;

@@ -21,9 +21,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
-
-public class AntBaseTask extends Task
-{
+public class AntBaseTask extends Task {
     public static final int InternalTaskError = -123456;
     public static final String PropertyRootPath = "root.dir";
 
@@ -53,15 +51,13 @@ public class AntBaseTask extends Task
     protected String loaderref;
     protected Logger logger;
 
-    public AntBaseTask()
-    {
+    public AntBaseTask() {
         logger = Logger.getLogger(this.getClass().getCanonicalName());
         Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
     }
 
     @Override
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         super.execute();
 
         try {
@@ -74,10 +70,10 @@ public class AntBaseTask extends Task
 
     /**
      * Adds a path to the classpath.
+     * 
      * @return a class path to be configured
      */
-    public Path createClasspath()
-    {
+    public Path createClasspath() {
         if (classpath == null) {
             classpath = new Path(getProject());
         }
@@ -85,8 +81,7 @@ public class AntBaseTask extends Task
         return classpath.createPath();
     }
 
-    protected void fixClassPath() throws Exception
-    {
+    protected void fixClassPath() throws Exception {
         if (loaderref != null) {
             Object obj = getProject().getReference(loaderref);
 
@@ -112,8 +107,7 @@ public class AntBaseTask extends Task
         }
     }
 
-    protected void setResult(int code) throws Exception
-    {
+    protected void setResult(int code) throws Exception {
         if (exitCodeProperty != null) {
             getProject().setProperty(exitCodeProperty, Integer.toString(code));
             getProject().setProperty(exitCodeMessageProperty, getErrorMessage(code));
@@ -124,13 +118,11 @@ public class AntBaseTask extends Task
         }
     }
 
-    protected String getErrorMessage(int code)
-    {
+    protected String getErrorMessage(int code) {
         return "";
     }
 
-    protected void setExitCode(int code) throws Exception
-    {
+    protected void setExitCode(int code) throws Exception {
         if (exitCodeProperty != null) {
             getProject().setProperty(exitCodeProperty, Integer.toString(code));
         } else {
@@ -140,60 +132,61 @@ public class AntBaseTask extends Task
         }
     }
 
-    protected Properties getProperties() throws Exception
-    {
+    protected Properties getProperties() throws Exception {
         return null;
     }
 
     /**
      * Adds a reference to a classpath defined elsewhere.
-     * @param r a reference to a classpath
+     * 
+     * @param r
+     *            a reference to a classpath
      */
-    public void setClasspathRef(Reference r)
-    {
+    public void setClasspathRef(Reference r) {
         createClasspath().setRefid(r);
     }
 
     /**
      * Gets the classpath to be used for this compilation.
+     * 
      * @return the class path
      */
-    public Path getClasspath()
-    {
+    public Path getClasspath() {
         return classpath;
     }
 
     /**
-     * @param exitCodePropert the exitCodePropert to set
+     * @param exitCodePropert
+     *            the exitCodePropert to set
      */
-    public void setExitCodeProperty(String exitCodeProperty)
-    {
+    public void setExitCodeProperty(String exitCodeProperty) {
         this.exitCodeProperty = exitCodeProperty;
         this.exitCodeMessageProperty = exitCodeProperty + ".message";
     }
 
     /**
-     * @param timeout the timeout to set
+     * @param timeout
+     *            the timeout to set
      */
-    public void setTimeout(int timeout)
-    {
+    public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
 
     /**
-     * @param loaderref the loaderref to set
+     * @param loaderref
+     *            the loaderref to set
      */
-    public void setLoaderref(String loaderref)
-    {
+    public void setLoaderref(String loaderref) {
         this.loaderref = loaderref;
     }
 
     /**
      * Set the classpath to be used for this compilation.
-     * @param classpath an Ant Path object containing the compilation classpath.
+     * 
+     * @param classpath
+     *            an Ant Path object containing the compilation classpath.
      */
-    public void setClasspath(Path classpath)
-    {
+    public void setClasspath(Path classpath) {
         if (this.classpath == null) {
             this.classpath = classpath;
         } else {

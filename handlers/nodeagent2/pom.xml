@@ -1,96 +1,140 @@
-<?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>orca</groupId>
-		<artifactId>handlers</artifactId>
-		<version>5.2.2-SNAPSHOT</version>
-	</parent>
-	<groupId>orca.handlers</groupId>
-	<artifactId>nodeagent2</artifactId>
-	<name>nodeagent2</name>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>orca.core</groupId>
-			<artifactId>shirako</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.renci.node-agent2</groupId>
-			<artifactId>agentlib</artifactId>
-		</dependency>
-	</dependencies>
-
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
-				<artifactId>maven-antrun-extended-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>package</id>
-						<phase>package</phase>
-						<configuration>
-							<tasks>
-								<property name="name.prefix" value="orca.handlers.nodeagent2" />
-								<delete dir="target/package" />
-								<mkdir dir="target/package" />
-								<mkdir dir="target/package/lib" />
-								<copy todir="target/package/lib">
-									<fileset dir="target">
-										<include name="*.jar" />
-										<exclude name="*test*.jar" />
-										<exclude name="*-sources.jar" />
-									</fileset>
-								</copy>
-								<copy file="${maven.dependency.org.apache.httpcomponents.httpclient.jar.path}" todir="target/package/lib" flatten="true" />
-								<copy file="${maven.dependency.com.googlecode.json-simple.json-simple.jar.path}" todir="target/package/lib" flatten="true" />
-								<copy file="${maven.dependency.org.renci.node-agent2.agentlib.jar.path}" todir="target/package/lib" flatten="true" />
-
-								<!-- <mkdir dir="target/package/handlers" /> <copy todir="target/package/handlers"> 
-									<fileset dir="src/main/resources/orca/handlers" /> </copy> -->
-
-								<copy file="resources/scripts/install.sh" todir="target/package" />
-
-								<!-- <mkdir dir="target/package/web" /> <copy todir="target/package/web"> 
-									<fileset dir="resources/web"> <include name="**/*" /> </fileset> </copy> -->
-
-								<copy file="resources/package.xml" todir="target/package" />
-
-								<tar tarfile="target/${name.prefix}.tar" basedir="target/package" />
-
-								<gzip zipfile="target/${name.prefix}.tar.gz" src="target/${name.prefix}.tar" />
-
-								<delete file="target/${name.prefix}.tar" />
-
-								<attachArtifact file="target/${name.prefix}.tar.gz" classifier="package" type="tar.gz" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+<?xml version="1.0"?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+    <modelVersion>
+        4.0.0
+    </modelVersion> 
+    <parent> 
+        <groupId>
+            orca
+        </groupId> 
+        <artifactId>
+            handlers
+        </artifactId> 
+        <version>
+            5.2.2-SNAPSHOT
+        </version> 
+    </parent> 
+    <groupId>
+        orca.handlers
+    </groupId> 
+    <artifactId>
+        nodeagent2
+    </artifactId> 
+    <name>
+        nodeagent2
+    </name> 
+    <properties> 
+        <project.build.sourceEncoding>
+            UTF-8
+        </project.build.sourceEncoding> 
+    </properties> 
+    <dependencies> 
+        <dependency> 
+            <groupId>
+                junit
+            </groupId> 
+            <artifactId>
+                junit
+            </artifactId> 
+            <scope>
+                test
+            </scope> 
+        </dependency> 
+        <dependency> 
+            <groupId>
+                orca.core
+            </groupId> 
+            <artifactId>
+                shirako
+            </artifactId> 
+            <version>
+                ${project.version}
+            </version> 
+        </dependency> 
+        <dependency> 
+            <groupId>
+                org.apache.httpcomponents
+            </groupId> 
+            <artifactId>
+                httpclient
+            </artifactId> 
+            <version>
+                4.2.3
+            </version> 
+        </dependency> 
+        <dependency> 
+            <groupId>
+                com.googlecode.json-simple
+            </groupId> 
+            <artifactId>
+                json-simple
+            </artifactId> 
+            <version>
+                1.1.1
+            </version> 
+        </dependency> 
+        <dependency> 
+            <groupId>
+                org.renci.node-agent2
+            </groupId> 
+            <artifactId>
+                agentlib
+            </artifactId> 
+        </dependency> 
+    </dependencies> 
+    <build> 
+        <plugins> 
+            <plugin> 
+                <groupId>
+                    org.jvnet.maven-antrun-extended-plugin
+                </groupId> 
+                <artifactId>
+                    maven-antrun-extended-plugin
+                </artifactId> 
+                <executions> 
+                    <execution> 
+                        <id>
+                            package
+                        </id> 
+                        <phase>
+                            package
+                        </phase> 
+                        <configuration> 
+                            <tasks> 
+                                <property name="name.prefix" value="orca.handlers.nodeagent2" /> 
+                                <delete dir="target/package" /> 
+                                <mkdir dir="target/package" /> 
+                                <mkdir dir="target/package/lib" /> 
+                                <copy todir="target/package/lib"> 
+                                    <fileset dir="target"> 
+                                        <include name="*.jar" /> 
+                                        <exclude name="*test*.jar" /> 
+                                        <exclude name="*-sources.jar" /> 
+                                    </fileset> 
+                                </copy> 
+                                <copy file="${maven.dependency.org.apache.httpcomponents.httpclient.jar.path}" todir="target/package/lib" flatten="true" /> 
+                                <copy file="${maven.dependency.com.googlecode.json-simple.json-simple.jar.path}" todir="target/package/lib" flatten="true" /> 
+                                <copy file="${maven.dependency.org.renci.node-agent2.agentlib.jar.path}" todir="target/package/lib" flatten="true" /> 
+                                <!-- <mkdir dir="target/package/handlers" /> <copy todir="target/package/handlers"> 
+									<fileset dir="src/main/resources/orca/handlers" /> </copy> --> 
+                                <copy file="resources/scripts/install.sh" todir="target/package" /> 
+                                <!-- <mkdir dir="target/package/web" /> <copy todir="target/package/web"> 
+									<fileset dir="resources/web"> <include name="**/*" /> </fileset> </copy> --> 
+                                <copy file="resources/package.xml" todir="target/package" /> 
+                                <tar tarfile="target/${name.prefix}.tar" basedir="target/package" /> 
+                                <gzip zipfile="target/${name.prefix}.tar.gz" src="target/${name.prefix}.tar" /> 
+                                <delete file="target/${name.prefix}.tar" /> 
+                                <attachArtifact file="target/${name.prefix}.tar.gz" classifier="package" type="tar.gz" /> 
+                            </tasks> 
+                        </configuration> 
+                        <goals> 
+                            <goal>
+                                run
+                            </goal> 
+                        </goals> 
+                    </execution> 
+                </executions> 
+            </plugin> 
+        </plugins> 
+    </build> 
 </project>

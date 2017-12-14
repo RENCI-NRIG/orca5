@@ -13,9 +13,9 @@ public class Ciena8700DeviceTest extends NetworkDeviceTest {
     public static final String PropertyRouterDstVlan = "router.8700.dst.vlan.tag";
     public static final String PropertyRouterMapPort = "router.8700.map.port";
 
-
     protected Ciena8700Device getDevice() {
-        Ciena8700Device device = new Ciena8700Device(props.getProperty(PropertyRouter), props.getProperty(PropertyUser), props.getProperty(PropertyPassword));
+        Ciena8700Device device = new Ciena8700Device(props.getProperty(PropertyRouter), props.getProperty(PropertyUser),
+                props.getProperty(PropertyPassword));
         configureDevice(device);
         return device;
     }
@@ -32,12 +32,14 @@ public class Ciena8700DeviceTest extends NetworkDeviceTest {
 
     public void testMapVLAN() throws Exception {
         Ciena8700Device device = getDevice();
-        device.mapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan), props.getProperty(PropertyRouterMapPort));
+        device.mapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan),
+                props.getProperty(PropertyRouterMapPort));
     }
 
     public void testUnmapVLAN() throws Exception {
         Ciena8700Device device = getDevice();
-        device.unmapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan), props.getProperty(PropertyRouterMapPort));
+        device.unmapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan),
+                props.getProperty(PropertyRouterMapPort));
     }
 
 }

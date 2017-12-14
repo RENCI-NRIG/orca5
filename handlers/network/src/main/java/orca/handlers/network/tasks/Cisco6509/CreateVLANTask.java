@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.Cisco6509;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class CreateVLANTask extends Cisco6509BaseTask {
@@ -31,8 +30,8 @@ public class CreateVLANTask extends Cisco6509BaseTask {
     public void setVlanQosRate(String qosRate) {
         this.qosRate = qosRate;
     }
-    
+
     public void setVlanQoSBurstSize(String qosBurstSize) {
-    	this.qosBurstSize = qosBurstSize;
+        this.qosBurstSize = qosBurstSize;
     }
 }

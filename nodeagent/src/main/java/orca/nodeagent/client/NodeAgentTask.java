@@ -21,9 +21,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-
-public class NodeAgentTask extends Task
-{
+public class NodeAgentTask extends Task {
     protected String script;
     protected String arguments = "";
     protected String address;
@@ -32,47 +30,38 @@ public class NodeAgentTask extends Task
     protected String stdOutProperty;
     protected String exitCodeProperty;
 
-    public NodeAgentTask()
-    {
+    public NodeAgentTask() {
     }
 
-    public void setStdErrorProperty(String p)
-    {
+    public void setStdErrorProperty(String p) {
         this.stdErrorProperty = p;
     }
 
-    public void setStdOutProperty(String p)
-    {
+    public void setStdOutProperty(String p) {
         this.stdOutProperty = p;
     }
 
-    public void setExitCodeProperty(String p)
-    {
+    public void setExitCodeProperty(String p) {
         this.exitCodeProperty = p;
     }
 
-    public void setScript(String script)
-    {
+    public void setScript(String script) {
         this.script = script;
     }
 
-    public void setArguments(String arguments)
-    {
+    public void setArguments(String arguments) {
         this.arguments = arguments;
     }
 
-    public void setGenerate(boolean generate)
-    {
+    public void setGenerate(boolean generate) {
         this.generate = generate;
     }
 
-    public void setAddress(String address)
-    {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    protected String makePropertiesString()
-    {
+    protected String makePropertiesString() {
         Hashtable p = getProject().getProperties();
 
         StringBuffer buffer = new StringBuffer();
@@ -83,8 +72,8 @@ public class NodeAgentTask extends Task
             Map.Entry entry = (Map.Entry) i.next();
             String name = (String) entry.getKey();
 
-            if (name.startsWith("host") || name.startsWith("unit") ||
-                    (name.startsWith("new") && !name.equals("unit.all"))) {
+            if (name.startsWith("host") || name.startsWith("unit")
+                    || (name.startsWith("new") && !name.equals("unit.all"))) {
                 String value = (String) entry.getValue();
                 buffer.append(name);
                 buffer.append("=\'");
@@ -102,8 +91,7 @@ public class NodeAgentTask extends Task
         // getProject().setProperty(outputProperty, result);
     }
 
-    protected void callNodeManager(String args) throws Exception
-    {
+    protected void callNodeManager(String args) throws Exception {
         NodeAgentServiceStub stub = new NodeAgentServiceStub(address);
 
         ScriptElement el = new ScriptElement();
@@ -127,8 +115,7 @@ public class NodeAgentTask extends Task
         }
     }
 
-    public void execute() throws BuildException
-    {
+    public void execute() throws BuildException {
         try {
             String args = arguments;
 

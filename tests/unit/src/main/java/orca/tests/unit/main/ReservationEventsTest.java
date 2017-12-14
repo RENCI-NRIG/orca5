@@ -20,17 +20,13 @@ import orca.util.PropList;
 
 import java.util.HashMap;
 
-
 /**
- * This class tests the processing of a single reservation. Execute it using the
- * following parameters:
+ * This class tests the processing of a single reservation. Execute it using the following parameters:
  * <p>
- * <b>&lt;config file&gt; do.not.recover=true manual=false mode=[sm|broker|site]
- * state=state,pending,joining</b>
+ * <b>&lt;config file&gt; do.not.recover=true manual=false mode=[sm|broker|site] state=state,pending,joining</b>
  * </p>
  */
-public class ReservationEventsTest extends ShirakoTest
-{
+public class ReservationEventsTest extends ShirakoTest {
     public static final String PropertyState = "state";
     public static final String PropertyMode = "mode";
 
@@ -44,8 +40,7 @@ public class ReservationEventsTest extends ShirakoTest
      */
     public static final int Units = 2;
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         if (args.length > 0) {
             ShirakoTest test = new ReservationEventsTest(args);
             test.run();
@@ -60,8 +55,7 @@ public class ReservationEventsTest extends ShirakoTest
     protected HashMap<String, Integer> mapPending;
     protected HashMap<String, Integer> mapJoining;
 
-    public ReservationEventsTest(String[] args)
-    {
+    public ReservationEventsTest(String[] args) {
         super(args);
         mapState = new HashMap<String, Integer>();
         mapPending = new HashMap<String, Integer>();
@@ -69,8 +63,7 @@ public class ReservationEventsTest extends ShirakoTest
         populateMaps();
     }
 
-    private ReservationState parseState(String str) throws Exception
-    {
+    private ReservationState parseState(String str) throws Exception {
         String[] temp = str.split(",");
 
         if (temp.length < 2) {
@@ -112,8 +105,7 @@ public class ReservationEventsTest extends ShirakoTest
         return result;
     }
 
-    private void populateMaps()
-    {
+    private void populateMaps() {
         mapState.put("nascent", new Integer(ReservationStates.Nascent));
         mapState.put("ticketed", new Integer(ReservationStates.Ticketed));
         mapState.put("active", new Integer(ReservationStates.Active));
@@ -134,8 +126,7 @@ public class ReservationEventsTest extends ShirakoTest
     }
 
     @Override
-    protected void readParameters() throws Exception
-    {
+    protected void readParameters() throws Exception {
         super.readParameters();
         mode = PropList.getIntegerProperty(properties, PropertyMode);
 
@@ -153,8 +144,7 @@ public class ReservationEventsTest extends ShirakoTest
     }
 
     @Override
-    protected void runTest()
-    {
+    protected void runTest() {
         try {
             /* set the test parameters */
             ReservationEventsTestTool tester = new ReservationEventsTestTool();

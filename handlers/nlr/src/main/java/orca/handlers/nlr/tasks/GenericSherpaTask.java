@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2009 Renaissance Computing Institute and Duke University
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and/or hardware specification (the ÒWorkÓ) to deal in the
+ * of this software and/or hardware specification (the ï¿½Workï¿½) to deal in the
  * Work without restriction, including without limitation the rights to use,
  * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Work, and to permit persons to whom the Work is furnished to do so,
@@ -48,11 +48,11 @@ public class GenericSherpaTask extends OrcaAntTask {
     public static final String SherpaBandwidthProperty = "NLRSherpa.bandwidth";
     public static final String SherpaRequestIdProperty = "NLRSherpa.request_id";
     public static final String SherpaVlanIdProperty = "NLRSherpa.vlan_id";
-    
+
     protected static final int SherpaRequestId = 1234;
 
-    protected static final String sherpaLockName="sherpa.lock";
-    
+    protected static final String sherpaLockName = "sherpa.lock";
+
     protected SherpaSession ss = null;
     protected SherpaAPI sapi = null;
 
@@ -73,10 +73,10 @@ public class GenericSherpaTask extends OrcaAntTask {
             throw new BuildException("An error occurred: " + e.getMessage(), e);
         }
     }
-    
+
     @Override
     public void execute() throws BuildException {
-    	initializeApi();
+        initializeApi();
     }
 
     public void setLogin(String l) {
@@ -90,41 +90,41 @@ public class GenericSherpaTask extends OrcaAntTask {
     public void setWg(String w) {
         this.wg = Integer.valueOf(w);
     }
-    
+
     // use same locking as for sync handler tasks
     public void lockSherpa() {
-		Project opr = getProject();
-		
-		// when testing handlers, it really is just Project, cant get the map
-		if (!(opr instanceof SliceProject))
-			return;
-		
-		SliceProject pr = (SliceProject)getProject();
-		
-		SemaphoreMap sems = (SemaphoreMap)pr.getSemaphoreMap();
-		
-		try {
-    		sems.tryAcquire(sherpaLockName, 900, TimeUnit.SECONDS);
-    	} catch (Exception e) {
-    		throw new BuildException("Exception encountered waiting for sequence lock " + sherpaLockName + ": " + e);
-    	}
+        Project opr = getProject();
+
+        // when testing handlers, it really is just Project, cant get the map
+        if (!(opr instanceof SliceProject))
+            return;
+
+        SliceProject pr = (SliceProject) getProject();
+
+        SemaphoreMap sems = (SemaphoreMap) pr.getSemaphoreMap();
+
+        try {
+            sems.tryAcquire(sherpaLockName, 900, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            throw new BuildException("Exception encountered waiting for sequence lock " + sherpaLockName + ": " + e);
+        }
     }
-    
+
     public void unlockSherpa() {
-		Project opr = getProject();
-		
-		// when testing handlers, it really is just Project, cant get the map
-		if (!(opr instanceof SliceProject))
-			return;
-		
-		SliceProject pr = (SliceProject)getProject();
-		
-		SemaphoreMap sems = (SemaphoreMap)pr.getSemaphoreMap();
-		
-    	try {
-    		sems.release(sherpaLockName);
-    	} catch (Exception e) {
-    		throw new BuildException("Exception encountered releasing sequence lock " + sherpaLockName + ": " + e);
-    	}
+        Project opr = getProject();
+
+        // when testing handlers, it really is just Project, cant get the map
+        if (!(opr instanceof SliceProject))
+            return;
+
+        SliceProject pr = (SliceProject) getProject();
+
+        SemaphoreMap sems = (SemaphoreMap) pr.getSemaphoreMap();
+
+        try {
+            sems.release(sherpaLockName);
+        } catch (Exception e) {
+            throw new BuildException("Exception encountered releasing sequence lock " + sherpaLockName + ": " + e);
+        }
     }
 }

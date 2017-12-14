@@ -10,22 +10,19 @@
 
 package orca.nodeagent.tools;
 
-public class ToolHelper
-{
+public class ToolHelper {
     protected String[] args;
     protected String location;
     protected String repository = null;
     protected String config = null;
     protected int index = 0;
 
-    public ToolHelper(String[] args)
-    {
+    public ToolHelper(String[] args) {
         this.args = args;
         parse();
     }
 
-    protected void parse()
-    {
+    protected void parse() {
         for (; index < args.length; index++) {
             if (args[index].startsWith("-")) {
                 if (args[index].equals("-l")) {
@@ -64,32 +61,28 @@ public class ToolHelper
     /**
      * @return the config
      */
-    public String getConfig()
-    {
+    public String getConfig() {
         return this.config;
     }
 
     /**
      * @return the index
      */
-    public int getIndex()
-    {
+    public int getIndex() {
         return this.index;
     }
 
     /**
      * @return the location
      */
-    public String getLocation()
-    {
+    public String getLocation() {
         return this.location;
     }
 
     /**
      * @return the repository
      */
-    public String getRepository()
-    {
+    public String getRepository() {
         return this.repository;
     }
 }

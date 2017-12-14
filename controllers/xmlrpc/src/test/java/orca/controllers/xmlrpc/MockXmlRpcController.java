@@ -18,9 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A messy attempt at an XmlRpcController that doesn't need to talk to 'Live' servers.
- * The main thing is that it returns a MockOrcaConnectionFactory,
- * but several methods had to be overridden.
+ * A messy attempt at an XmlRpcController that doesn't need to talk to 'Live' servers. The main thing is that it returns
+ * a MockOrcaConnectionFactory, but several methods had to be overridden.
  *
  */
 public class MockXmlRpcController extends XmlRpcController {
@@ -40,7 +39,8 @@ public class MockXmlRpcController extends XmlRpcController {
     /**
      * Jump-start a new SM with some fake reservations already in place.
      *
-     * @param reservationMap a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
+     * @param reservationMap
+     *            a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
      * @throws Exception
      */
     protected void init(Map<ReservationID, TicketReservationMng> reservationMap) throws Exception {
@@ -48,14 +48,17 @@ public class MockXmlRpcController extends XmlRpcController {
     }
 
     /**
-     * Jump-start a new SM with some fake reservations already in place,
-     * as well as an indicator to the (Mock) SM whether it should fail any reservations.
+     * Jump-start a new SM with some fake reservations already in place, as well as an indicator to the (Mock) SM
+     * whether it should fail any reservations.
      *
-     * @param reservationMap a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
-     * @param failReservation an indicator to any SM created whether it should fail any reservations
+     * @param reservationMap
+     *            a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
+     * @param failReservation
+     *            an indicator to any SM created whether it should fail any reservations
      * @throws Exception
      */
-    public void init(Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) throws Exception {
+    public void init(Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation)
+            throws Exception {
         if (null != reservationMap) {
             this.reservationMap = reservationMap;
         } else {
@@ -76,7 +79,7 @@ public class MockXmlRpcController extends XmlRpcController {
     private void initConnectionFactory() throws Exception {
         getLogger(this.getClass().getSimpleName()).debug("initializing MockOrcaConnectionFactory");
         String smGuid = controllerProperties.getProperty(ControllerServiceManager);
-        if (smGuid == null){
+        if (smGuid == null) {
             throw new ConfigurationException("Please specify a service manager to connect to");
         }
 
@@ -97,8 +100,8 @@ public class MockXmlRpcController extends XmlRpcController {
     @Override
     public void start() throws Exception {
         // the handler
-        ServletContextHandler servletHandler =
-                new ServletContextHandler(ServletContextHandler.SECURITY|ServletContextHandler.SECURITY);
+        ServletContextHandler servletHandler = new ServletContextHandler(
+                ServletContextHandler.SECURITY | ServletContextHandler.SECURITY);
         servletHandler.setContextPath("/");
 
         // add the orca xmlrpc servlet
@@ -116,7 +119,8 @@ public class MockXmlRpcController extends XmlRpcController {
     /**
      * Returns a dummy (new) broker ID
      *
-     * @param sm ignored
+     * @param sm
+     *            ignored
      * @return new ID()
      */
     @Override
@@ -137,14 +141,14 @@ public class MockXmlRpcController extends XmlRpcController {
                 Log.info("Initializing the XMLRPC controller");
                 NdlCommons.init();
                 init();
-                //Log.info("Recovering the XMLRPC controller");
-                //recover();
-                //Log.info("Starting XMLRPC handlers");
-                //setupXmlRpcHandlers();
+                // Log.info("Recovering the XMLRPC controller");
+                // recover();
+                // Log.info("Starting XMLRPC handlers");
+                // setupXmlRpcHandlers();
                 Log.info("Starting support threads");
-                //XmlrpcOrcaState.startThreads();
+                // XmlrpcOrcaState.startThreads();
                 startThreads();
-            } catch (Exception e){
+            } catch (Exception e) {
                 Log.fatal("Could not start the XMLRPC controller", e);
                 System.err.println(e.getMessage());
                 System.exit(1);
@@ -153,35 +157,38 @@ public class MockXmlRpcController extends XmlRpcController {
 
         // start the threads (called from the controller startup code)
         // original code in XmlrpcOrcaState
-        public void startThreads () {
+        public void startThreads() {
             // slice defer thread
             Globals.Log.info("Starting SliceDeferThread");
             XmlrpcOrcaState.sdt = new SliceDeferThread();
-            //XmlrpcOrcaState.sdtThread = new Thread(XmlrpcOrcaState.sdt);
-            //XmlrpcOrcaState.sdtThread.setDaemon(true);
-            //XmlrpcOrcaState.sdtThread.setName("SliceDeferThread");
-            //XmlrpcOrcaState.sdtThread.start();
+            // XmlrpcOrcaState.sdtThread = new Thread(XmlrpcOrcaState.sdt);
+            // XmlrpcOrcaState.sdtThread.setDaemon(true);
+            // XmlrpcOrcaState.sdtThread.setName("SliceDeferThread");
+            // XmlrpcOrcaState.sdtThread.start();
 
             // modify status thread
-            Globals.Log.info("Scheduling periodic ReservationStatusUpdateThread at " + ReservationStatusUpdateThread.getPeriod() + " sec.");
+            Globals.Log.info("Scheduling periodic ReservationStatusUpdateThread at "
+                    + ReservationStatusUpdateThread.getPeriod() + " sec.");
             XmlrpcOrcaState.sut = new ReservationStatusUpdateThread();
-            //sutFuture = scheduler.scheduleAtFixedRate(sut, ReservationStatusUpdateThread.getPeriod(),
-            //        ReservationStatusUpdateThread.getPeriod(), TimeUnit.SECONDS);
+            // sutFuture = scheduler.scheduleAtFixedRate(sut, ReservationStatusUpdateThread.getPeriod(),
+            // ReservationStatusUpdateThread.getPeriod(), TimeUnit.SECONDS);
 
         }
 
         private void stop() {
             try {
                 Log.info("Stopping the XMLRPC controller");
-            } catch (Exception e){
+            } catch (Exception e) {
             }
         }
     }
 
     /**
      *
-     * @param p property name
-     * @param value new value
+     * @param p
+     *            property name
+     * @param value
+     *            new value
      */
     public void setProperty(String p, String value) {
         controllerProperties.setProperty(p, value);

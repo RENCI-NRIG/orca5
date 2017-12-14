@@ -16,50 +16,44 @@ import orca.shirako.common.ReservationState;
 import orca.shirako.core.Actor;
 import orca.shirako.kernel.ReservationStates;
 
-
-public class ReservationEventsTestTool extends ReservationTestTool
-{
+public class ReservationEventsTestTool extends ReservationTestTool {
     protected int mode;
     protected ReservationState desiredState;
 
-    public ReservationEventsTestTool()
-    {
+    public ReservationEventsTestTool() {
     }
 
     @Override
-    protected int checkFinalStates(boolean close)
-    {
+    protected int checkFinalStates(boolean close) {
         printFinalStates();
 
         switch (mode) {
-            case Actor.TypeServiceManager:
+        case Actor.TypeServiceManager:
 
-                if (!close) {
-                    if (finalStateSM.getState() != ReservationStates.Closed) {
-                        return ExitCodeUnexpectedStateSM;
-                    }
-
-                    if (finalStateSite != null) {
-                        if (finalStateSite.getState() != ReservationStates.Closed) {
-                            return ExitCodeUnexpectedStateSite;
-                        }
-                    }
+            if (!close) {
+                if (finalStateSM.getState() != ReservationStates.Closed) {
+                    return ExitCodeUnexpectedStateSM;
                 }
 
-                break;
+                if (finalStateSite != null) {
+                    if (finalStateSite.getState() != ReservationStates.Closed) {
+                        return ExitCodeUnexpectedStateSite;
+                    }
+                }
+            }
+
+            break;
         }
 
         return ExitCodeOK;
     }
 
     @Override
-    protected void init() throws Exception
-    {
+    protected void init() throws Exception {
         super.init();
     }
 
-    protected void printFinalStates()
-    {
+    protected void printFinalStates() {
         if (finalStateSM != null) {
             System.out.println("Final state sm: " + finalStateSM.toString());
         }
@@ -78,33 +72,30 @@ public class ReservationEventsTestTool extends ReservationTestTool
     }
 
     @Override
-    protected synchronized void reservationTransition(IReservation r, ReservationState from,
-                                                      ReservationState to)
-    {
+    protected synchronized void reservationTransition(IReservation r, ReservationState from, ReservationState to) {
         super.reservationTransition(r, from, to);
 
         IActor actor = r.getActor();
         System.out.println(actor.getName() + " : " + getStates(from, to));
 
         switch (mode) {
-            case Actor.TypeServiceManager:
+        case Actor.TypeServiceManager:
 
-                if (actor.getType() == Actor.TypeServiceManager) {
-                    if (to.equals(desiredState)) {
-                        try {
-                            sm.close(currentReservationSM);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+            if (actor.getType() == Actor.TypeServiceManager) {
+                if (to.equals(desiredState)) {
+                    try {
+                        sm.close(currentReservationSM);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 }
+            }
 
-                break;
+            break;
         }
     }
 
-    public int runTest() throws Exception
-    {
+    public int runTest() throws Exception {
         try {
             init();
             issueRequest();

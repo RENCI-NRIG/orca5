@@ -1,164 +1,150 @@
 
-            /**
-            * RegisterImage.java
-            *
-            * This file was auto-generated from WSDL
-            * by the Apache Axis2 version: #axisVersion# #today#
-            */
+/**
+* RegisterImage.java
+*
+* This file was auto-generated from WSDL
+* by the Apache Axis2 version: #axisVersion# #today#
+*/
 
-            package orca.handlers.ec2.tasks.imgproxy;
-            /**
-            *  RegisterImage bean class
-            */
-        
-        public  class RegisterImage
-        implements org.apache.axis2.databinding.ADBBean{
-        
-                public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
-                "http://imageproxy.orca",
-                "RegisterImage",
-                "ns1");
+package orca.handlers.ec2.tasks.imgproxy;
 
-            
+/**
+ * RegisterImage bean class
+ */
 
-                        /**
-                        * field for Url
-                        */
+public class RegisterImage implements org.apache.axis2.databinding.ADBBean {
 
-                        protected java.lang.String localUrl ;
-                        
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localUrlTracker = false ;
-                           
+    public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName("http://imageproxy.orca",
+            "RegisterImage", "ns1");
 
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String
-                           */
-                           public  java.lang.String getUrl(){
-                               return localUrl;
-                           }
+    /**
+     * field for Url
+     */
 
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Url
-                               */
-                               public void setUrl(java.lang.String param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localUrlTracker = true;
-                                       } else {
-                                          localUrlTracker = true;
-                                              
-                                       }
-                                   
-                                    this.localUrl=param;
-                            
+    protected java.lang.String localUrl;
 
-                               }
-                            
+    /*
+     * This tracker boolean wil be used to detect whether the user called the set method for this attribute. It will be
+     * used to determine whether to include this field in the serialized XML
+     */
+    protected boolean localUrlTracker = false;
 
-                        /**
-                        * field for Signature
-                        */
+    /**
+     * Auto generated getter method
+     * 
+     * @return java.lang.String
+     */
+    public java.lang.String getUrl() {
+        return localUrl;
+    }
 
-                        protected java.lang.String localSignature ;
-                        
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localSignatureTracker = false ;
-                           
+    /**
+     * Auto generated setter method
+     * 
+     * @param param
+     *            Url
+     */
+    public void setUrl(java.lang.String param) {
 
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String
-                           */
-                           public  java.lang.String getSignature(){
-                               return localSignature;
-                           }
+        if (param != null) {
+            // update the setting tracker
+            localUrlTracker = true;
+        } else {
+            localUrlTracker = true;
 
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Signature
-                               */
-                               public void setSignature(java.lang.String param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localSignatureTracker = true;
-                                       } else {
-                                          localSignatureTracker = true;
-                                              
-                                       }
-                                   
-                                    this.localSignature=param;
-                            
+        }
 
-                               }
-                            
+        this.localUrl = param;
 
-     /**
+    }
+
+    /**
+     * field for Signature
+     */
+
+    protected java.lang.String localSignature;
+
+    /*
+     * This tracker boolean wil be used to detect whether the user called the set method for this attribute. It will be
+     * used to determine whether to include this field in the serialized XML
+     */
+    protected boolean localSignatureTracker = false;
+
+    /**
+     * Auto generated getter method
+     * 
+     * @return java.lang.String
+     */
+    public java.lang.String getSignature() {
+        return localSignature;
+    }
+
+    /**
+     * Auto generated setter method
+     * 
+     * @param param
+     *            Signature
+     */
+    public void setSignature(java.lang.String param) {
+
+        if (param != null) {
+            // update the setting tracker
+            localSignatureTracker = true;
+        } else {
+            localSignatureTracker = true;
+
+        }
+
+        this.localSignature = param;
+
+    }
+
+    /**
      * isReaderMTOMAware
+     * 
      * @return true if the reader supports MTOM
      */
-   public static boolean isReaderMTOMAware(javax.xml.stream.XMLStreamReader reader) {
+    public static boolean isReaderMTOMAware(javax.xml.stream.XMLStreamReader reader) {
         boolean isReaderMTOMAware = false;
-        
-        try{
-          isReaderMTOMAware = java.lang.Boolean.TRUE.equals(reader.getProperty(org.apache.axiom.om.OMConstants.IS_DATA_HANDLERS_AWARE));
-        }catch(java.lang.IllegalArgumentException e){
-          isReaderMTOMAware = false;
+
+        try {
+            isReaderMTOMAware = java.lang.Boolean.TRUE
+                    .equals(reader.getProperty(org.apache.axiom.om.OMConstants.IS_DATA_HANDLERS_AWARE));
+        } catch (java.lang.IllegalArgumentException e) {
+            isReaderMTOMAware = false;
         }
         return isReaderMTOMAware;
-   }
-     
-     
-        /**
-        *
-        * @param parentQName
-        * @param factory
-        * @return org.apache.axiom.om.OMElement
-        */
-       public org.apache.axiom.om.OMElement getOMElement(
-               final javax.xml.namespace.QName parentQName,
-               final org.apache.axiom.om.OMFactory factory){
+    }
 
-        org.apache.axiom.om.OMDataSource dataSource = getOMDataSource(parentQName, factory);
-
-        
-               return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(
-               MY_QNAME,factory,dataSource);
-            
-       }
-
-     /**
+    /**
      *
      * @param parentQName
      * @param factory
      * @return org.apache.axiom.om.OMElement
      */
-    public org.apache.axiom.om.OMDataSource getOMDataSource(
-            final javax.xml.namespace.QName parentQName,
-            final org.apache.axiom.om.OMFactory factory){
+    public org.apache.axiom.om.OMElement getOMElement(final javax.xml.namespace.QName parentQName,
+            final org.apache.axiom.om.OMFactory factory) {
 
+        org.apache.axiom.om.OMDataSource dataSource = getOMDataSource(parentQName, factory);
 
-        org.apache.axiom.om.OMDataSource dataSource =
-                       new org.apache.axis2.databinding.ADBDataSource(this,parentQName){
+        return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(MY_QNAME, factory, dataSource);
 
-         public void serialize(
-                                  javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-            
-                
+    }
+
+    /**
+     *
+     * @param parentQName
+     * @param factory
+     * @return org.apache.axiom.om.OMElement
+     */
+    public org.apache.axiom.om.OMDataSource getOMDataSource(final javax.xml.namespace.QName parentQName,
+            final org.apache.axiom.om.OMFactory factory) {
+
+        org.apache.axiom.om.OMDataSource dataSource = new org.apache.axis2.databinding.ADBDataSource(this,
+                parentQName) {
+
+            public void serialize(javax.xml.stream.XMLStreamWriter xmlWriter)
+                    throws javax.xml.stream.XMLStreamException {
 
                 java.lang.String prefix = parentQName.getPrefix();
                 java.lang.String namespace = parentQName.getNamespaceURI();
@@ -180,118 +166,111 @@
                     xmlWriter.writeStartElement(parentQName.getLocalPart());
                 }
 
-                
-                if (localUrlTracker){
-                                    namespace = "http://imageproxy.orca";
-                                    if (! namespace.equals("")) {
-                                        prefix = xmlWriter.getPrefix(namespace);
+                if (localUrlTracker) {
+                    namespace = "http://imageproxy.orca";
+                    if (!namespace.equals("")) {
+                        prefix = xmlWriter.getPrefix(namespace);
 
-                                        if (prefix == null) {
-                                            prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
+                        if (prefix == null) {
+                            prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
 
-                                            xmlWriter.writeStartElement(prefix,"url", namespace);
-                                            xmlWriter.writeNamespace(prefix, namespace);
-                                            xmlWriter.setPrefix(prefix, namespace);
+                            xmlWriter.writeStartElement(prefix, "url", namespace);
+                            xmlWriter.writeNamespace(prefix, namespace);
+                            xmlWriter.setPrefix(prefix, namespace);
 
-                                        } else {
-                                            xmlWriter.writeStartElement(namespace,"url");
-                                        }
+                        } else {
+                            xmlWriter.writeStartElement(namespace, "url");
+                        }
 
-                                    } else {
-                                        xmlWriter.writeStartElement("url");
-                                    }
-                                
+                    } else {
+                        xmlWriter.writeStartElement("url");
+                    }
 
-                                          if (localUrl==null){
-                                              // write the nil attribute
-                                              
-                                                     writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","true",xmlWriter);
-                                                  
-                                          }else{
+                    if (localUrl == null) {
+                        // write the nil attribute
 
-                                        
-                                                   xmlWriter.writeCharacters(localUrl);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             } if (localSignatureTracker){
-                                    namespace = "http://imageproxy.orca";
-                                    if (! namespace.equals("")) {
-                                        prefix = xmlWriter.getPrefix(namespace);
+                        writeAttribute("xsi", "http://www.w3.org/2001/XMLSchema-instance", "nil", "true", xmlWriter);
 
-                                        if (prefix == null) {
-                                            prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
+                    } else {
 
-                                            xmlWriter.writeStartElement(prefix,"signature", namespace);
-                                            xmlWriter.writeNamespace(prefix, namespace);
-                                            xmlWriter.setPrefix(prefix, namespace);
+                        xmlWriter.writeCharacters(localUrl);
 
-                                        } else {
-                                            xmlWriter.writeStartElement(namespace,"signature");
-                                        }
+                    }
 
-                                    } else {
-                                        xmlWriter.writeStartElement("signature");
-                                    }
-                                
+                    xmlWriter.writeEndElement();
+                }
+                if (localSignatureTracker) {
+                    namespace = "http://imageproxy.orca";
+                    if (!namespace.equals("")) {
+                        prefix = xmlWriter.getPrefix(namespace);
 
-                                          if (localSignature==null){
-                                              // write the nil attribute
-                                              
-                                                     writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","true",xmlWriter);
-                                                  
-                                          }else{
+                        if (prefix == null) {
+                            prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
 
-                                        
-                                                   xmlWriter.writeCharacters(localSignature);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             }
-                   
-               xmlWriter.writeEndElement();
-            
-            
+                            xmlWriter.writeStartElement(prefix, "signature", namespace);
+                            xmlWriter.writeNamespace(prefix, namespace);
+                            xmlWriter.setPrefix(prefix, namespace);
 
-        }
+                        } else {
+                            xmlWriter.writeStartElement(namespace, "signature");
+                        }
 
-         /**
-          * Util method to write an attribute with the ns prefix
-          */
-          private void writeAttribute(java.lang.String prefix,java.lang.String namespace,java.lang.String attName,
-                                      java.lang.String attValue,javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException{
-              if (xmlWriter.getPrefix(namespace) == null) {
-                       xmlWriter.writeNamespace(prefix, namespace);
-                       xmlWriter.setPrefix(prefix, namespace);
+                    } else {
+                        xmlWriter.writeStartElement("signature");
+                    }
 
-              }
+                    if (localSignature == null) {
+                        // write the nil attribute
 
-              xmlWriter.writeAttribute(namespace,attName,attValue);
+                        writeAttribute("xsi", "http://www.w3.org/2001/XMLSchema-instance", "nil", "true", xmlWriter);
 
-         }
+                    } else {
 
-         /**
-          * Util method to write an attribute without the ns prefix
-          */
-          private void writeAttribute(java.lang.String namespace,java.lang.String attName,
-                                      java.lang.String attValue,javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException{
-    	  	  if (namespace.equals(""))
-        	  {
-        		  xmlWriter.writeAttribute(attName,attValue);
-        	  }
-        	  else
-        	  {
-                  registerPrefix(xmlWriter, namespace);
-                  xmlWriter.writeAttribute(namespace,attName,attValue);
-              }
-          }
+                        xmlWriter.writeCharacters(localSignature);
 
-         /**
-         * Register a namespace prefix
-         */
-         private java.lang.String registerPrefix(javax.xml.stream.XMLStreamWriter xmlWriter, java.lang.String namespace) throws javax.xml.stream.XMLStreamException {
+                    }
+
+                    xmlWriter.writeEndElement();
+                }
+
+                xmlWriter.writeEndElement();
+
+            }
+
+            /**
+             * Util method to write an attribute with the ns prefix
+             */
+            private void writeAttribute(java.lang.String prefix, java.lang.String namespace, java.lang.String attName,
+                    java.lang.String attValue, javax.xml.stream.XMLStreamWriter xmlWriter)
+                    throws javax.xml.stream.XMLStreamException {
+                if (xmlWriter.getPrefix(namespace) == null) {
+                    xmlWriter.writeNamespace(prefix, namespace);
+                    xmlWriter.setPrefix(prefix, namespace);
+
+                }
+
+                xmlWriter.writeAttribute(namespace, attName, attValue);
+
+            }
+
+            /**
+             * Util method to write an attribute without the ns prefix
+             */
+            private void writeAttribute(java.lang.String namespace, java.lang.String attName, java.lang.String attValue,
+                    javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
+                if (namespace.equals("")) {
+                    xmlWriter.writeAttribute(attName, attValue);
+                } else {
+                    registerPrefix(xmlWriter, namespace);
+                    xmlWriter.writeAttribute(namespace, attName, attValue);
+                }
+            }
+
+            /**
+             * Register a namespace prefix
+             */
+            private java.lang.String registerPrefix(javax.xml.stream.XMLStreamWriter xmlWriter,
+                    java.lang.String namespace) throws javax.xml.stream.XMLStreamException {
                 java.lang.String prefix = xmlWriter.getPrefix(namespace);
 
                 if (prefix == null) {
@@ -308,148 +287,134 @@
                 return prefix;
             }
 
-         /**
-          * Create a prefix
-          */
-          private java.lang.String createPrefix() {
-                return "ns" + (int)Math.random();
-          }
+            /**
+             * Create a prefix
+             */
+            private java.lang.String createPrefix() {
+                return "ns" + (int) Math.random();
+            }
         };
 
         return dataSource;
     }
 
-  
-        /**
-        * databinding method to get an XML representation of this object
-        *
-        */
-        public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName){
+    /**
+     * databinding method to get an XML representation of this object
+     *
+     */
+    public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName) {
 
+        java.util.ArrayList elementList = new java.util.ArrayList();
+        java.util.ArrayList attribList = new java.util.ArrayList();
 
-        
-                 java.util.ArrayList elementList = new java.util.ArrayList();
-                 java.util.ArrayList attribList = new java.util.ArrayList();
+        if (localUrlTracker) {
+            elementList.add(new javax.xml.namespace.QName("http://imageproxy.orca", "url"));
 
-                 if (localUrlTracker){
-                             elementList.add(new javax.xml.namespace.QName("http://imageproxy.orca",
-                                                                      "url"));
-                            
-                                         elementList.add(localUrl==null?null:
-                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localUrl));
-                                    } if (localSignatureTracker){
-                             elementList.add(new javax.xml.namespace.QName("http://imageproxy.orca",
-                                                                      "signature"));
-                            
-                                         elementList.add(localSignature==null?null:
-                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localSignature));
-                                    }
+            elementList.add(localUrl == null ? null
+                    : org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localUrl));
+        }
+        if (localSignatureTracker) {
+            elementList.add(new javax.xml.namespace.QName("http://imageproxy.orca", "signature"));
 
-                return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
-            
-            
-
+            elementList.add(localSignature == null ? null
+                    : org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localSignature));
         }
 
-  
+        return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(),
+                attribList.toArray());
 
-     /**
-      *  Factory class that keeps the parse method
-      */
-    public static class Factory{
+    }
 
+    /**
+     * Factory class that keeps the parse method
+     */
+    public static class Factory {
 
         /**
-        * static method to create the object
-        * Precondition:  If this object is an element, the current or next start element starts this object and any intervening reader events are ignorable
-        *                If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
-        * Postcondition: If this object is an element, the reader is positioned at its end element
-        *                If this object is a complex type, the reader is positioned at the end element of its outer element
-        */
-        public static RegisterImage parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+         * static method to create the object Precondition: If this object is an element, the current or next start
+         * element starts this object and any intervening reader events are ignorable If this object is not an element,
+         * it is a complex type and the reader is at the event just after the outer start element Postcondition: If this
+         * object is an element, the reader is positioned at its end element If this object is a complex type, the
+         * reader is positioned at the end element of its outer element
+         */
+        public static RegisterImage parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception {
             RegisterImage object = new RegisterImage();
             int event;
             try {
-                
+
                 while (!reader.isStartElement() && !reader.isEndElement())
                     reader.next();
 
-                
-                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null){
-                  java.lang.String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
-                        "type");
-                  if (fullTypeName!=null){
-                    java.lang.String nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
-                    nsPrefix = nsPrefix==null?"":nsPrefix;
+                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance", "type") != null) {
+                    java.lang.String fullTypeName = reader
+                            .getAttributeValue("http://www.w3.org/2001/XMLSchema-instance", "type");
+                    if (fullTypeName != null) {
+                        java.lang.String nsPrefix = fullTypeName.substring(0, fullTypeName.indexOf(":"));
+                        nsPrefix = nsPrefix == null ? "" : nsPrefix;
 
-                    java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
-                    if (!"RegisterImage".equals(type)){
-                        //find namespace for the prefix
-                        java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                        return (RegisterImage)orca.handlers.ec2.tasks.imgproxy.ExtensionMapper.getTypeObject(
-                             nsUri,type,reader);
-                      }
+                        java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":") + 1);
+                        if (!"RegisterImage".equals(type)) {
+                            // find namespace for the prefix
+                            java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
+                            return (RegisterImage) orca.handlers.ec2.tasks.imgproxy.ExtensionMapper.getTypeObject(nsUri,
+                                    type, reader);
+                        }
 
-                  }
+                    }
 
                 }
-                
 
-                
                 // Note all attributes that were handled. Used to differ normal attributes
                 // from anyAttributes.
                 java.util.Vector handledAttributes = new java.util.Vector();
-                
-                    
-                    reader.next();
-                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://imageproxy.orca","url").equals(reader.getName())){
-                                
-                                       if (!"true".equals(reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil"))){
-                                    
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setUrl(
-                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                            
-                                       } else {
-                                           reader.getElementText(); // throw away text nodes if any.
-                                       }
-                                      
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://imageproxy.orca","signature").equals(reader.getName())){
-                                
-                                       if (!"true".equals(reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil"))){
-                                    
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setSignature(
-                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                            
-                                       } else {
-                                           reader.getElementText(); // throw away text nodes if any.
-                                       }
-                                      
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                              
-                            while (!reader.isStartElement() && !reader.isEndElement())
-                                reader.next();
-                            if (reader.isStartElement())
-                                // A start element we are not expecting indicates a trailing invalid property
-                                throw new java.lang.RuntimeException("Unexpected subelement " + reader.getLocalName());
-                        
 
+                reader.next();
+
+                while (!reader.isStartElement() && !reader.isEndElement())
+                    reader.next();
+
+                if (reader.isStartElement()
+                        && new javax.xml.namespace.QName("http://imageproxy.orca", "url").equals(reader.getName())) {
+
+                    if (!"true".equals(reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance", "nil"))) {
+
+                        java.lang.String content = reader.getElementText();
+
+                        object.setUrl(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+
+                    } else {
+                        reader.getElementText(); // throw away text nodes if any.
+                    }
+
+                    reader.next();
+
+                } // End of if for expected property start element
+
+                while (!reader.isStartElement() && !reader.isEndElement())
+                    reader.next();
+
+                if (reader.isStartElement() && new javax.xml.namespace.QName("http://imageproxy.orca", "signature")
+                        .equals(reader.getName())) {
+
+                    if (!"true".equals(reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance", "nil"))) {
+
+                        java.lang.String content = reader.getElementText();
+
+                        object.setSignature(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+
+                    } else {
+                        reader.getElementText(); // throw away text nodes if any.
+                    }
+
+                    reader.next();
+
+                } // End of if for expected property start element
+
+                while (!reader.isStartElement() && !reader.isEndElement())
+                    reader.next();
+                if (reader.isStartElement())
+                    // A start element we are not expecting indicates a trailing invalid property
+                    throw new java.lang.RuntimeException("Unexpected subelement " + reader.getLocalName());
 
             } catch (javax.xml.stream.XMLStreamException e) {
                 throw new java.lang.Exception(e);
@@ -458,10 +423,6 @@
             return object;
         }
 
-        }//end of factory class
+    }// end of factory class
 
-        
-
-        }
-           
-          
+}

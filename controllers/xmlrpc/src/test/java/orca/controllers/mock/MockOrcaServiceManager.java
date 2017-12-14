@@ -33,11 +33,11 @@ public class MockOrcaServiceManager extends LocalServiceManager {
      * stolen from CloudHandlerTest.java
      */
     protected Map<Domain, Map<String, Integer>> resourceMap;
+
     /*
-     * the tests go a lot quicker with this as a static assignment,
-     * but TS3-3 and others fail when not run independently, somehow,
-     * because the 'ben' domain gets messed up,
-     * resulting in a NPE at orca.ndl.elements.NetworkElement.getRank(NetworkElement.java:268)
+     * the tests go a lot quicker with this as a static assignment, but TS3-3 and others fail when not run
+     * independently, somehow, because the 'ben' domain gets messed up, resulting in a NPE at
+     * orca.ndl.elements.NetworkElement.getRank(NetworkElement.java:268)
      */
     private void populateResourceMap() {
         resourceMap = new HashMap<>();
@@ -81,7 +81,6 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             domain = new Domain("orca/ndl/substrate/wvnNet.rdf");
             resourceMap.put(domain, resource);
 
-
             /*
              * Add VMs to resources
              */
@@ -95,15 +94,14 @@ public class MockOrcaServiceManager extends LocalServiceManager {
             domain = new Domain("orca/ndl/substrate/gwuvmsite.rdf");
             resourceMap.put(domain, resource);
 
-            //domain = new Domain("orca/ndl/substrate/pscvmsite.rdf");
-            //resourceMap.put(domain, resource);
+            // domain = new Domain("orca/ndl/substrate/pscvmsite.rdf");
+            // resourceMap.put(domain, resource);
 
             domain = new Domain("orca/ndl/substrate/uhvmsite.rdf");
             resourceMap.put(domain, resource);
 
             domain = new Domain("orca/ndl/substrate/wvnvmsite.rdf");
             resourceMap.put(domain, resource);
-
 
             /*
              * These need to be more custom
@@ -138,12 +136,17 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
     /**
      *
-     * @param manager passed to super
-     * @param authToken passed to super
-     * @param reservationMap a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
-     * @param failReservation an indicator to any SM created whether it should fail any reservations
+     * @param manager
+     *            passed to super
+     * @param authToken
+     *            passed to super
+     * @param reservationMap
+     *            a Map of fake reservations that any new SM will have. Useful for testing modifySlice()
+     * @param failReservation
+     *            an indicator to any SM created whether it should fail any reservations
      */
-    public MockOrcaServiceManager(ManagementObject manager, AuthToken authToken, Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) {
+    public MockOrcaServiceManager(ManagementObject manager, AuthToken authToken,
+            Map<ReservationID, TicketReservationMng> reservationMap, boolean failReservation) {
         super(manager, authToken);
         this.reservationMap = reservationMap;
         this.failReservation = failReservation;
@@ -155,7 +158,8 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     /**
      * Just adds new SliceID to slice, does not save any details.
      *
-     * @param slice new ID is added to slice, but not saved in SM
+     * @param slice
+     *            new ID is added to slice, but not saved in SM
      * @return
      */
     @Override
@@ -163,14 +167,16 @@ public class MockOrcaServiceManager extends LocalServiceManager {
         SliceID sliceID = new SliceID();
         slice.setSliceID(sliceID.toString());
         return sliceID;
-        //ResultStringMng resultStringMng = manager.addSlice(slice, null); // can the manager be made to track this for us?
-        //resultStringMng.
+        // ResultStringMng resultStringMng = manager.addSlice(slice, null); // can the manager be made to track this for
+        // us?
+        // resultStringMng.
     }
 
     /**
      * Provides a static list of pool resources
      *
-     * @param broker is ignored
+     * @param broker
+     *            is ignored
      * @return
      */
     @Override
@@ -181,8 +187,7 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
         try {
             EmbedTestHelper.populateModelsAndPools(abstractModels, pools, resourceMap);
-            //cloudHandler.addSubstrateModel(abstractModels);
-
+            // cloudHandler.addSubstrateModel(abstractModels);
 
             // from ClientActorManagementObjectHelper.java
             for (ResourcePoolDescriptor resourcePoolDescriptor : pools) {
@@ -206,7 +211,8 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     /**
      * Add reservation to our maintained reservationMap
      *
-     * @param reservation new ReservationID is added to reservation
+     * @param reservation
+     *            new ReservationID is added to reservation
      * @return new ReservationID
      */
     @Override
@@ -226,7 +232,8 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
     /**
      *
-     * @param reservationID used to find reservation
+     * @param reservationID
+     *            used to find reservation
      * @return the reservation matching ID
      */
     @Override
@@ -236,14 +243,15 @@ public class MockOrcaServiceManager extends LocalServiceManager {
 
     /**
      *
-     * @param sliceID is ignored
+     * @param sliceID
+     *            is ignored
      * @return all reservations from this (Mock) SM
      */
     @Override
     public List<ReservationMng> getReservations(SliceID sliceID) {
         // fail one of the reservations in the Test
         if (failReservation) {
-            for (ReservationMng reservation : reservationMap.values()){
+            for (ReservationMng reservation : reservationMap.values()) {
                 reservation.setState(ReservationStateFailed);
                 break;
             }
@@ -255,7 +263,8 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     /**
      * Always returns true
      *
-     * @param reservation ignored
+     * @param reservation
+     *            ignored
      * @return true
      */
     @Override
@@ -264,25 +273,25 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     }
 
     /**
-     * This is currently only called in Test from testModifySliceWithModifyRemove,
-     * and that code path only seems to be looking for two properties.
+     * This is currently only called in Test from testModifySliceWithModifyRemove, and that code path only seems to be
+     * looking for two properties.
      *
      * @param reservationID
      * @return
      */
     @Override
-    public List<UnitMng> getUnits(ReservationID reservationID){
+    public List<UnitMng> getUnits(ReservationID reservationID) {
         List<UnitMng> unitMngList = new ArrayList<>();
         UnitMng unit = new UnitMng();
         PropertiesMng mng = new PropertiesMng();
 
         ReservationMng reservation = getReservation(reservationID);
-        for (PropertyMng propertyMng : reservation.getConfigurationProperties().getProperty()){
-            if (propertyMng.getName().equals("unit.vlan.url")){
+        for (PropertyMng propertyMng : reservation.getConfigurationProperties().getProperty()) {
+            if (propertyMng.getName().equals("unit.vlan.url")) {
                 mng.getProperty().add(propertyMng);
                 PropertyMng propertyMng1 = new PropertyMng();
                 propertyMng1.setName("unit.vlan.tag");
-                propertyMng1.setValue("137"); //can probably be anything
+                propertyMng1.setValue("137"); // can probably be anything
                 mng.getProperty().add(propertyMng1);
             }
         }
@@ -294,16 +303,13 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     }
 
     /**
-     * This is currently only called in Test from testModifySliceWithModifyRemove,
-     * but it doesn't really seem to change the result of the test whether or not
-     * this function is implemented. (Besides cleaning up some error logs).
+     * This is currently only called in Test from testModifySliceWithModifyRemove, but it doesn't really seem to change
+     * the result of the test whether or not this function is implemented. (Besides cleaning up some error logs).
      *
      * Stealing code ServiceManager.modify()
      */
     @Override
-    public boolean modifyReservation(ReservationID reservationID,
-                                     Properties modifyProperties)
-    {
+    public boolean modifyReservation(ReservationID reservationID, Properties modifyProperties) {
         LeaseReservationMng reservation = (LeaseReservationMng) getReservation(reservationID);
 
         // Merging modifyProperties into ConfigurationProperties
@@ -318,8 +324,10 @@ public class MockOrcaServiceManager extends LocalServiceManager {
     /**
      * We do not currently have any tests where we need this to fail.
      *
-     * @param reservation ignored
-     * @param newEndTime ignored
+     * @param reservation
+     *            ignored
+     * @param newEndTime
+     *            ignored
      * @return always true
      */
     @Override

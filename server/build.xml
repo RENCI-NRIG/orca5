@@ -1,23 +1,20 @@
-<project name="orca-server" default="package" basedir=".">
-
-<property name="orcatar" value="${basedir}/target/orca.tgz" />
-<property name="orcadtar" value="${basedir}/target/orcad.tgz" />
-<property name="orcastartuptar" value="${basedir}/target/orca-startup.tgz" />
-
-<target name="package" description="Create .tar.gz for orca and orcad based on appassembler outputs" depends="clean">
-	<echo message="Building a .tgz file of ORCA application executable" />
-	<tar destfile="${orcatar}" basedir="${basedir}/orca" includes="bin/* repo/**" compression="gzip" />
-	<echo message="Building a .tgz file of ORCA startup/ which goes to $ORCA_HOME"/>
-	<tar destfile="${orcastartuptar}" basedir="${basedir}/orca" includes="startup/*" compression="gzip" />
-	<echo message="Building a .tgz file of ORCA daemon"/>
-	<tar destfile="${orcadtar}" basedir="${basedir}/target/generated-resources/appassembler/jsw/orcad" compression="gzip" />
-	<echo message="Created tar files ${orcatar}, ${orcadtar} and ${orcastartuptar}"/>
-</target>
-
-<target name="clean" description="Remove old tar files">
-	<echo message="Deleting old tar files"/>
-	<delete file="${orcatar}" />
-	<delete file="${orcastartuptar}" />
-	<delete file="${orcadtar}" />
-</target>
+<project name="orca-server" default="package" basedir="."> 
+    <property name="orcatar" value="${basedir}/target/orca.tgz" /> 
+    <property name="orcadtar" value="${basedir}/target/orcad.tgz" /> 
+    <property name="orcastartuptar" value="${basedir}/target/orca-startup.tgz" /> 
+    <target name="package" description="Create .tar.gz for orca and orcad based on appassembler outputs" depends="clean"> 
+        <echo message="Building a .tgz file of ORCA application executable" /> 
+        <tar destfile="${orcatar}" basedir="${basedir}/orca" includes="bin/* repo/**" compression="gzip" /> 
+        <echo message="Building a .tgz file of ORCA startup/ which goes to $ORCA_HOME" /> 
+        <tar destfile="${orcastartuptar}" basedir="${basedir}/orca" includes="startup/*" compression="gzip" /> 
+        <echo message="Building a .tgz file of ORCA daemon" /> 
+        <tar destfile="${orcadtar}" basedir="${basedir}/target/generated-resources/appassembler/jsw/orcad" compression="gzip" /> 
+        <echo message="Created tar files ${orcatar}, ${orcadtar} and ${orcastartuptar}" /> 
+    </target> 
+    <target name="clean" description="Remove old tar files"> 
+        <echo message="Deleting old tar files" /> 
+        <delete file="${orcatar}" /> 
+        <delete file="${orcastartuptar}" /> 
+        <delete file="${orcadtar}" /> 
+    </target> 
 </project>

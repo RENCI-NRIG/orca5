@@ -29,12 +29,12 @@ import orca.util.persistence.NotPersistent;
 import com.hp.hpl.jena.ontology.OntModel;
 
 public class NdlVLANControl extends VlanControl {
-	public static final String EdgeIntfSuffix = ".edge.interface";
+    public static final String EdgeIntfSuffix = ".edge.interface";
     public static final String EdgeIntfUrlSuffix = ".edge.interface.url";
     public static final String EdgeTagSuffix = "." + UnitProperties.UnitVlanTag;
     public static final String ConfigIntfSuffix = "config.interface.";
     public static final String ConfigTagSuffix = "config.vlan.tag.";
-    
+
     // restored in donate
     @NotPersistent
     protected DomainResources drs;
@@ -57,9 +57,8 @@ public class NdlVLANControl extends VlanControl {
     @Override
     public ResourceSet assign(IAuthorityReservation r) throws Exception {
         /*
-         * Send back reservations if they have a deficit. For now we want to
-         * avoid reservations stuck forever looping between allocation and
-         * priming with failures, eventually exhausting the inventory.
+         * Send back reservations if they have a deficit. For now we want to avoid reservations stuck forever looping
+         * between allocation and priming with failures, eventually exhausting the inventory.
          */
         ResourceSet r_set = null;
 
@@ -84,11 +83,11 @@ public class NdlVLANControl extends VlanControl {
 
         // The following stuff isn't used, so commenting out /ib 04/01/14
         // get the requested lease term
-        //Term term = r.getRequestedTerm();
+        // Term term = r.getRequestedTerm();
         // convert to cycles
-        //long start = authority.getActorClock().cycle(term.getNewStartTime());
-        //long end = authority.getActorClock().cycle(term.getEndTime());
-        
+        // long start = authority.getActorClock().cycle(term.getNewStartTime());
+        // long end = authority.getActorClock().cycle(term.getEndTime());
+
         Properties configuration_properties = requested.getConfigurationProperties();
 
         // determine if this is a new lease or an extension request
@@ -142,7 +141,7 @@ public class NdlVLANControl extends VlanControl {
             // extend automatically
             r_set = new ResourceSet(null, null, null, type, null);
         }
-        
+
         return r_set;
     }
 
@@ -152,13 +151,12 @@ public class NdlVLANControl extends VlanControl {
 
         String key = null, value = null, pdomain = null;
         int index = 0;
-        logger.debug("NdlVLANControl.convertEdgeProperties(): configuration_properties="
-                + configuration_properties.size());
-        for (Entry<Object,Object> entry : configuration_properties.entrySet()) {
+        logger.debug(
+                "NdlVLANControl.convertEdgeProperties(): configuration_properties=" + configuration_properties.size());
+        for (Entry<Object, Object> entry : configuration_properties.entrySet()) {
             key = (String) entry.getKey();
             value = (String) entry.getValue();
-            if (key.contains(EdgeTagSuffix) || key.contains(EdgeIntfSuffix)
-                    || key.contains(EdgeIntfUrlSuffix)) {
+            if (key.contains(EdgeTagSuffix) || key.contains(EdgeIntfSuffix) || key.contains(EdgeIntfUrlSuffix)) {
                 logger.debug("  Match  properties: key =" + key + ";value=" + value);
                 config_properties.put(key, value);
                 index = key.indexOf(EdgeIntfUrlSuffix);
@@ -176,7 +174,7 @@ public class NdlVLANControl extends VlanControl {
             i++;
             pdomain = pdomainSetIt.next();
             String intf_url = null, p_tag = null;
-            for (Entry<Object,Object> entry : config_properties.entrySet()) {
+            for (Entry<Object, Object> entry : config_properties.entrySet()) {
                 key = (String) entry.getKey();
                 value = (String) entry.getValue();
                 if (key.contains(pdomain)) {
@@ -192,7 +190,7 @@ public class NdlVLANControl extends VlanControl {
                 p_tag = tag.toString();
             }
             String real_tag = tagSwap(intf_url, p_tag);
-           	logger.debug("NdlVLANControl.convertEdgeProperties(): real_tag=" + real_tag);
+            logger.debug("NdlVLANControl.convertEdgeProperties(): real_tag=" + real_tag);
             if (real_tag != null) {
                 configuration_properties.put(ConfigTagSuffix + String.valueOf(i), real_tag);
             }
@@ -212,14 +210,13 @@ public class NdlVLANControl extends VlanControl {
         logger.debug("NdlVLANControl.tagSwap(): dr=" + dr.toString());
         LinkedList<LabelSet> label_list = dr.getLabel_list();
         if (label_list == null) {
-        	logger.warn("NdlVLANControl.tagSwap():No labellist, intf="+intf_url);
+            logger.warn("NdlVLANControl.tagSwap():No labellist, intf=" + intf_url);
             return real_tag;
         }
         for (LabelSet l_s : label_list) {
             Label min_label = l_s.getMinLabel();
             if (min_label.label == Float.valueOf(p_tag).floatValue()) {
-                logger.debug("NdlVLANControl.tagSwap(): min_label=" + min_label.label + ";swap="
-                        + min_label.swap);
+                logger.debug("NdlVLANControl.tagSwap(): min_label=" + min_label.label + ";swap=" + min_label.swap);
                 if (min_label.swap != 0)
                     real_tag = String.valueOf(min_label.swap.intValue());
                 break;
@@ -228,16 +225,16 @@ public class NdlVLANControl extends VlanControl {
 
         return real_tag;
     }
-    
-	@Override
-	public void recoveryStarting() {
-		logger.info("Beginning NdlVlanControl recovery");
-	}
 
-	@Override
-	public void recoveryEnded() {
-		logger.info("Completing NdlVlanControl recovery");
-		logger.debug("Restored NdlVlanControl tags: " + tags);
-		logger.debug("Restored NdlVlanControl DomainResources: " + drs);
-	}
+    @Override
+    public void recoveryStarting() {
+        logger.info("Beginning NdlVlanControl recovery");
+    }
+
+    @Override
+    public void recoveryEnded() {
+        logger.info("Completing NdlVlanControl recovery");
+        logger.debug("Restored NdlVlanControl tags: " + tags);
+        logger.debug("Restored NdlVlanControl DomainResources: " + drs);
+    }
 }

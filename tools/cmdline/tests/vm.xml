@@ -1,89 +1,123 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-	<actors>
-		<actor>
-			<!-- The actor type: site|broker|service" -->
-			<type>site</type>
-			<!-- Actor name -->
-			<name>site</name>
-			<!-- Actor description (optional) -->
-			<description>A sample VM site</description>
-			<!-- 
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <!-- The actor type: site|broker|service" --> 
+            <type>
+                site
+            </type> 
+            <!-- Actor name --> 
+            <name>
+                site
+            </name> 
+            <!-- Actor description (optional) --> 
+            <description>
+                A sample VM site
+            </description> 
+            <!-- 
 			If this actor needs some inventory to be transferred to it, e.g., so that its handler
 			can execute drivers inside Node Agent services, specify here a comma-separated list of
 			inventory item names. Each item listed here must be defined in the database and have
 			a Node Agent service running on it. 
-			-->
-			<inventory>demo1,demo2,demo3,demo4</inventory>
-			<!-- The pools section specifies the resource pools available at this actor (site-only) -->
-			<pools>
-				<!-- The pool section specifies a single resource pool -->
-				<pool>
-					<!-- 
+			--> 
+            <inventory>
+                demo1,demo2,demo3,demo4
+            </inventory> 
+            <!-- The pools section specifies the resource pools available at this actor (site-only) --> 
+            <pools> 
+                <!-- The pool section specifies a single resource pool --> 
+                <pool> 
+                    <!-- 
 					Resource type: this is the string used to represent the type.
 					Must be unique within the ecosystem: there can be only one pool
 					with resources a given type. 
-					-->
-					<type>vm</type>
-					<!-- Label used when displaying resources from this type -->
-					<label>Virtual Machine</label>
-					<!-- Optional description -->
-					<description>A virtual machine</description>
-					<!-- Number of units in the pool -->
-					<units>100</units>
-					<!-- Pool validity: start time YYYY-MM-DDTHH:MM:SS-->
-					<start>2010-01-30T00:00:00</start>
-					<!-- Pool validity: end time YYYY-MM-DDTHH:MM:SS-->
-					<end>2011-01-30T00:00:00</end>
-					<!-- 
+					--> 
+                    <type>
+                        vm
+                    </type> 
+                    <!-- Label used when displaying resources from this type --> 
+                    <label>Virtual Machine</label> 
+                    <!-- Optional description --> 
+                    <description>
+                        A virtual machine
+                    </description> 
+                    <!-- Number of units in the pool --> 
+                    <units>
+                        100
+                    </units> 
+                    <!-- Pool validity: start time YYYY-MM-DDTHH:MM:SS--> 
+                    <start>
+                        2010-01-30T00:00:00
+                    </start> 
+                    <!-- Pool validity: end time YYYY-MM-DDTHH:MM:SS--> 
+                    <end>
+                        2011-01-30T00:00:00
+                    </end> 
+                    <!-- 
 					Handler to use when creating resources from this type.
 					A handler can be specified either by its path or by its packageId:pluginId, if
 					supplied by an extension package. See the online documentation for more details.
 					You an also pass an optional properties list to your handler.
-					-->
-					<handler path="common/noop.xml" />
-					<!-- 
+					--> 
+                    <handler path="common/noop.xml" /> 
+                    <!-- 
 					Inventory assigned to this resource pool: comma-separated list of names.
-					-->
-					<inventory>demo1,demo2</inventory>
-					<!--
+					--> 
+                    <inventory>
+                        demo1,demo2
+                    </inventory> 
+                    <!--
 					The attributes section describes the attributes of a single unit allocated
 					from this resource type. See the only documentation for more information.	
-					-->
-					<attributes>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<!-- 
+					--> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                resource.memory
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                128
+                            </value> 
+                            <unit>
+                                MB
+                            </unit> 
+                            <type>
+                                integer
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                resource.cpu
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                1/2 of 2GHz Intel Xeon
+                            </value> 
+                            <type>
+                                String
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <!-- 
 					You can associate an optional properties list with the resource pool. 
 					This properties list is available to the control object during donate.
-					-->
-					<properties>
-						<property name="capacity" value="50" />
-						<property name="ip.list" value="192.168.1.2/24" />
-						<property name="ip.subnet" value="255.255.255.0" />
-					</properties>
-				</pool>
-			</pools>
-			<!-- 
+					--> 
+                    <properties> 
+                        <property name="capacity" value="50" /> 
+                        <property name="ip.list" value="192.168.1.2/24" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <!-- 
 			Control objects associated with the site (valid only when using 
 			the AuthorityCalendarPolicy. 
-			-->
-			<controls>
-				<control type="vm" class="orca.policy.core.VMControl" />
-			</controls>
-			<!-- 
+			--> 
+            <controls> 
+                <control type="vm" class="orca.policy.core.VMControl" /> 
+            </controls> 
+            <!-- 
 			The actor policy is inferred by the actor type:
 			  - site: AuthorityCalendarPolicy
 			  - broker: BrokerSimplerUnitsPolicy
@@ -91,31 +125,43 @@
 			To override the default:
 			<policy class="policy class name" />
 			The policy section takes an optional properties list to be passed to your policy's configure(Properties) method.
-			-->
-		</actor>
-		<actor>
-			<type>broker</type>
-			<name>broker</name>
-		</actor>
-		<actor>
-			<type>service</type>
-			<name>service</name>
-		</actor>
-	</actors>
-	<topology>
-		<edges>
-			<edge>
-				<from name="service" type="service" />
-				<to name="broker" type="broker" />
-			</edge>
-			<edge>
-				<from name="broker" type="broker" />
-				<to name="site" type="site" />
-				<rset>
-					<type>vm</type>
-					<units>100</units>
-				</rset>
-			</edge>
-		</edges>
-	</topology>
+			--> 
+        </actor> 
+        <actor> 
+            <type>
+                broker
+            </type> 
+            <name>
+                broker
+            </name> 
+        </actor> 
+        <actor> 
+            <type>
+                service
+            </type> 
+            <name>
+                service
+            </name> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="broker" type="broker" /> 
+                <to name="site" type="site" /> 
+                <rset> 
+                    <type>
+                        vm
+                    </type> 
+                    <units>
+                        100
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

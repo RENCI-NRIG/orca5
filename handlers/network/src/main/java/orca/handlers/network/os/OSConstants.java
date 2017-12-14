@@ -8,13 +8,13 @@ public interface OSConstants {
     public static final String PropertyOutputPort = "outputPort";
     public static final String PropertyPort = "port";
     public static final String PropertyCTAG = "ctag";
-    
+
     public static final String CommandCreatePatch = "PolatisCreatePatchRequest";
     public static final String CommandDeletePatch = "PolatisDeletePatchRequest";
-       
+
     public static final int ErrorMissingInputPort = -20000;
     public static final int ErrorMissingOutputPort = -20001;
     public static final int ErrorMissingPort = -20002;
     public static final int ErrorMissingDeviceAddress = -20010;
-    public static final int ErrorUndefined = -20099;              
+    public static final int ErrorUndefined = -20099;
 }

@@ -1,89 +1,59 @@
-<!DOCTYPE project [
-<!ENTITY core SYSTEM "../../../common/core.xml">
-<!ENTITY paths SYSTEM "../../../common/paths.xml">
-<!ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml">
-<!ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml">
-]>
-
+<!DOCTYPE project> 
+<!--ENTITY paths SYSTEM "../../../common/paths.xml"--> 
+<!--ENTITY drivertasks SYSTEM "../../../common/drivertasks.xml"--> 
+<!--ENTITY bentasks SYSTEM "../ben.no-na.tasks.xml"-->
+ ]&gt; 
 <project name="bencomplex" basedir=".">
-
-	&paths;
-	&core;
-	&drivertasks;
-	&bentasks;
-
-	<!-- <property file="test.properties" /> -->
-    <property file="../ben.properties" />
-	<!-- Uncomment for handler testing
+     &amp;paths; &amp;core; &amp;drivertasks; &amp;bentasks; 
+    <!-- <property file="test.properties" /> --> 
+    <property file="../ben.properties" /> 
+    <!-- Uncomment for handler testing
 	<property file="ben.test.properties" />
-	-->
-    
-    <target name="join" depends="resolve.configuration,ben.load.tasks">
-        <echo message="BEN HANDLER: SETUP" />
-
-        <var name="code" value="0" />
-
-        <!-- create the BEN vlan -->
-        <for list="renci unc duke ncsu"
-             param="site"
-             delimiter=" "
-             parallel="false">
-            <sequential>
-                <echo message="performing settup at @{site}" />
-                <!-- check if we need to setup Polatis -->
-                <if>
-                    <isset property="@{site}.polatis.actionslist" />
-                    <then>
-                        <for list="${@{site}.polatis.actionslist}"
-                             param="anum"
-                             delimiter=" "
-                             parallel="false">
-                            <sequential>
-                                <if>
-                                    <equals arg1="${code}" arg2="0" />
-                                    <then>
-                                        <polatis.connect 
-                                        	polatis="${@{site}.polatis}"
-                                            src.port="${@{site}.polatis.action.@{anum}.sport}"
-                                            dst.port="${@{site}.polatis.action.@{anum}.dport}"
-                                            user="${polatis.user}"
-                                            password="${polatis.password}" />
-                                    </then>
-                                </if>
-                            </sequential>
-                        </for>
-                    </then>
-                </if>
-                <!-- check if we need to setup DTN -->
-                <if>
-                    <isset property="@{site}.dtn.actionslist" />
-                    <then>
-                        <for list="${@{site}.dtn.actionslist}"
-                             param="anum"
-                             delimiter=" "
-                             parallel="false">
-                            <sequential>
-                                <if>
-                                    <equals arg1="${code}" arg2="0" />
-                                    <then>
-                                        <dtn.connect 
-                                        	dtn="${@{site}.dtn}"
-					    dtn.payload.type="${dtn.payloadType}"
-                                            src.port="${@{site}.dtn.action.@{anum}.sport}"
-                                            dst.port="${@{site}.dtn.action.@{anum}.dport}"
-                                            user="${dtn.user}"
-                                            password="${dtn.password}" />
-                                    </then>
-                                </if>
-                            </sequential>
-                        </for>
-                    </then>
-                </if>
-                <!-- check if we need to setup 6509 -->
-                <if>
-                    <isset property="@{site}.6509.actionslist" />
-                    <then>
-			<!--
+	--> 
+    <target name="join" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="BEN HANDLER: SETUP" /> 
+        <var name="code" value="0"></var> 
+        <!-- create the BEN vlan --> 
+        <for list="renci unc duke ncsu" param="site" delimiter=" " parallel="false"> 
+            <sequential> 
+                <echo message="performing settup at @{site}" /> 
+                <!-- check if we need to setup Polatis --> 
+                <if> 
+                    <isset property="@{site}.polatis.actionslist" /> 
+                    <then> 
+                        <for list="${@{site}.polatis.actionslist}" param="anum" delimiter=" " parallel="false"> 
+                            <sequential> 
+                                <if> 
+                                    <equals arg1="${code}" arg2="0" /> 
+                                    <then> 
+                                        <polatis.connect polatis="${@{site}.polatis}" src.port="${@{site}.polatis.action.@{anum}.sport}" dst.port="${@{site}.polatis.action.@{anum}.dport}" user="${polatis.user}" password="${polatis.password}" /> 
+                                    </then> 
+                                </if> 
+                            </sequential> 
+                        </for> 
+                    </then> 
+                </if> 
+                <!-- check if we need to setup DTN --> 
+                <if> 
+                    <isset property="@{site}.dtn.actionslist" /> 
+                    <then> 
+                        <for list="${@{site}.dtn.actionslist}" param="anum" delimiter=" " parallel="false"> 
+                            <sequential> 
+                                <if> 
+                                    <equals arg1="${code}" arg2="0" /> 
+                                    <then> 
+                                        <dtn.connect dtn="${@{site}.dtn}" dtn.payload.type="${dtn.payloadType}" src.port="${@{site}.dtn.action.@{anum}.sport}" dst.port="${@{site}.dtn.action.@{anum}.dport}" user="${dtn.user}" password="${dtn.password}" /> 
+                                    </then> 
+                                </if> 
+                            </sequential> 
+                        </for> 
+                    </then> 
+                </if> 
+                <!-- check if we need to setup 6509 --> 
+                <if> 
+                    <isset property="@{site}.6509.actionslist" /> 
+                    <then> 
+                        <!--
         		<for list="nlr dukenet dukevm rencinet rencivm"
              		     param="parentsite"
              		     delimiter=" "
@@ -100,231 +70,141 @@
 				</then>
 			    </sequential>
 			</for>
-			-->
-                        <for list="${@{site}.6509.actionslist}"
-                             param="anum"
-                             delimiter=" "
-                             parallel="false">
-                            <sequential>
-                                <if>
-                                    <equals arg1="${code}" arg2="0" />
-                                    <then>
-					<sequential>
-                                        	<create.vlan 
-                                        		router="${@{site}.router}"
-							router.type="Cisco6509"
-                                            		vlan.tag="${unit.vlan.tag}"
-							vlan.qos.rate="${unit.vlan.qos.rate}"
-							vlan.qos.burst.size="${unit.vlan.qos.burst.size}"
-                                            		router.user="${router.user}"
-                                            		router.password="${router.password}"
-                                            		router.admin.password="${router.admin.password}" />
-						<add.trunk.ports 
-                 					router="${@{site}.router}"
-		 					router.type="Cisco6509"
-                					vlan.tag="${unit.vlan.tag}"
-                					ports="${@{site}.6509.action.@{anum}.ports}"
-                					router.user="${router.user}"
-                		    			router.password="${router.password}"
-                					router.admin.password="${router.admin.password}" />
-
-                        			<for list="nlr dukenet dukevmsite rencinet rencivmsite uncnet uncvmsite"
-                             			     param="parentsite"
-                             			     delimiter=" "
-                             			     parallel="false">
-                            				<sequential>
-                                			    <if>
-                                    				<and>
-                                        			    <isset property="@{parentsite}.unit.portlist" />
-                                    				    <equals arg1="${code}" arg2="0" />
-								</and>	
-                                			    	<then>
-									<echo message = "Add ports ${@{parentsite}.unit.portlist} on ${@{parentsite}.map.router} to VLAN ${unit.vlan.tag}" /> 
-  									<add.trunk.ports 
-                 								router="${@{parentsite}.map.router}"
-				 						router.type="Cisco6509"
-                 								vlan.tag="${unit.vlan.tag}"
-                								ports="${@{parentsite}.unit.portlist}"
-                								router.user="${router.user}"
-                				    				router.password="${router.password}"
-                								router.admin.password="${router.admin.password}" />
-                                			    	</then>
-							    </if>	
-                            				</sequential>
-                        			</for>
-					</sequential>
-                                    </then>
-                                </if>
-                            </sequential>
-                        </for>
-                    </then>
-                </if>
-            </sequential>
-        </for>
-        <echo message="Finished setting up BEN vlan. code=${code}" />
-    
-        <echo message="Performing map operations" />
-        <for list="nlr dukenet dukevmsite rencinet rencivmsite uncnet uncvmsite"
-             param="site"
-             delimiter=" "
-             parallel="false">
-            <sequential>
-                <if>
-                    <and>
-                        <isset property="@{site}.unit.vlan.tag" />
-                        <isset property="@{site}.edge.interface" />
-                        <equals arg1="0" arg2="${code}" />
-                    </and>
-                    <then>
-                        <echo message="Mapping BEN and @{site} vlans: ${unit.vlan.tag} ${@{site}.unit.vlan.tag} on ${@{site}.map.router}: ${@{site}.edge.interface}" />
-                        <map.vlans router="${@{site}.map.router}"
-				   router.type="Cisco6509"
-                                   src.vlan.tag="${@{site}.unit.vlan.tag}"
-                                   dst.vlan.tag="${unit.vlan.tag}"
-                                   port="${@{site}.edge.interface}"
-                                   router.user="${router.user}"
-                                   router.password="${router.password}"
-                                   router.admin.password="${router.admin.password}" />
-                    </then>
-                </if>
-            </sequential>
-        </for>
-        <echo message="Finished performing map operations" />
-        <property name="shirako.target.code" value="${code}" />
-        <echo message="join exit code: ${shirako.target.code}" />
-    </target>
-
-    <target name="leave" depends="resolve.configuration,ben.load.tasks">
-        <echo message="BEN HANDLER: TEARDOWN" />
-        <var name="code" value="0" />
-
-        <!-- disconnect the BEN vlan -->
-        <for list="renci unc duke ncsu"
-             param="site"
-             delimiter=" "
-             parallel="false">
-            <sequential>
-                <echo message="performing settup at @{site}" />
-                <!-- check if we need to teardown Polatis -->
-                <if>
-                    <isset property="@{site}.polatis.actionslist" />
-                    <then>
-                        <for list="${@{site}.polatis.actionslist}"
-                             param="anum"
-                             delimiter=" "
-                             parallel="false">
-                            <sequential>
-                                <if>
-                                    <equals arg1="${code}" arg2="0" />
-                                    <then>
-                                        <polatis.disconnect 
-                                        	polatis="${@{site}.polatis}"
-                                            src.port="${@{site}.polatis.action.@{anum}.sport}"
-                                            user="${polatis.user}"
-                                            password="${polatis.password}" />
-                                    </then>
-                                </if>
-                            </sequential>
-                        </for>
-                    </then>
-                </if>
-                <!-- check if we need to teardown DTN -->
-                <if>
-                    <isset property="@{site}.dtn.actionslist" />
-                    <then>
-                        <for list="${@{site}.dtn.actionslist}"
-                             param="anum"
-                             delimiter=" "
-                             parallel="false">
-                            <sequential>
-                                <if>
-                                    <equals arg1="${code}" arg2="0" />
-                                    <then>
-                                        <dtn.disconnect
-                                        	dtn="${@{site}.dtn}"
-                                        dtn.payload.type="${dtn.payloadType}"    
-					src.port="${@{site}.dtn.action.@{anum}.sport}"
-                                            dst.port="${@{site}.dtn.action.@{anum}.dport}"
-                                            user="${dtn.user}"
-                                            password="${dtn.password}" />
-                                    </then>
-                                </if>
-                            </sequential>
-                        </for>
-                    </then>
-                </if>
-                <!-- check if we need to disable 6509 -->
-                <if>
-                    <isset property="@{site}.6509.actionslist" />
-                    <then>
-                        <for list="${@{site}.6509.actionslist}"
-                             param="anum"
-                             delimiter=" "
-                             parallel="false">
-                            <sequential>
-                                <if>
-                                    <equals arg1="${code}" arg2="0" />
-                                    <then>
-										<sequential>
-										<remove.trunk.ports
-   											router="${@{site}.router}"
-											router.type="Cisco6509"
-        									vlan.tag="${unit.vlan.tag}"
-        									ports="${@{site}.6509.action.@{anum}.ports}"
-        									router.user="${router.user}"
-        									router.password="${router.password}"
-        									router.admin.password="${router.admin.password}" />
-                                        <delete.vlan 
-                                        	router="${@{site}.router}"
-											router.type="Cisco6509"
-                                            vlan.tag="${unit.vlan.tag}"
-											vlan.with.qos="${unit.vlan.with.qos}"
-                                            router.user="${router.user}"
-                                            router.password="${router.password}"
-                                            router.admin.password="${router.admin.password}" />
-										</sequential>
-                                    </then>
-                                </if>
-                            </sequential>
-                        </for>
-                    </then>
-                </if>
-            </sequential>
-        </for>
-        <echo message="Performing unmap operations" />
-        <for list="nlr dukenet dukevmsite rencinet rencivmsite uncnet uncvmsite"
-             param="site"
-             delimiter=" "
-             parallel="false">
-            <sequential>
-                <if>
-                    <and>
-                        <isset property="@{site}.unit.vlan.tag" />
-                        <isset property="@{site}.edge.interface" />
-                    </and>
-                    <then>
-                        <echo message="Unmapping BEN and @{site} vlans: ${unit.vlan.tag} ${@{site}.unit.vlan.tag} on ${@{site}.map.router}: ${@{site}.edge.interface}" />
-                        <unmap.vlans 
-                        	router="${@{site}.map.router}"
-							router.type="Cisco6509"
-                            src.vlan.tag="${@{site}.unit.vlan.tag}"
-                            dst.vlan.tag="${unit.vlan.tag}"
-                            port="${@{site}.edge.interface}"
-                            router.user="${router.user}"
-                            router.password="${router.password}"
-                            router.admin.password="${router.admin.password}" />
-                    </then>
-                </if>
-            </sequential>
-        </for>
-        <echo message="Finished performing unmap operations" />
-        <!-- FIXME: ${code} contains the exit code of only the last operation -->
-        <property name="shirako.target.code" value="${code}" />
-        <echo message="join exit code: ${shirako.target.code}" />
-    </target>
-
-    <target name="modify" depends="resolve.configuration,ben.load.tasks">
-        <echo message="BEN HANDLER: MODIFY" />
-        <property name="shirako.target.code" value="0" />
-    </target>
+			--> 
+                        <for list="${@{site}.6509.actionslist}" param="anum" delimiter=" " parallel="false"> 
+                            <sequential> 
+                                <if> 
+                                    <equals arg1="${code}" arg2="0" /> 
+                                    <then> 
+                                        <sequential> 
+                                            <create.vlan router="${@{site}.router}" router.type="Cisco6509" vlan.tag="${unit.vlan.tag}" vlan.qos.rate="${unit.vlan.qos.rate}" vlan.qos.burst.size="${unit.vlan.qos.burst.size}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+                                            <add.trunk.ports router="${@{site}.router}" router.type="Cisco6509" vlan.tag="${unit.vlan.tag}" ports="${@{site}.6509.action.@{anum}.ports}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+                                            <for list="nlr dukenet dukevmsite rencinet rencivmsite uncnet uncvmsite" param="parentsite" delimiter=" " parallel="false"> 
+                                                <sequential> 
+                                                    <if> 
+                                                        <and> 
+                                                            <isset property="@{parentsite}.unit.portlist" /> 
+                                                            <equals arg1="${code}" arg2="0" /> 
+                                                        </and> 
+                                                        <then> 
+                                                            <echo message="Add ports ${@{parentsite}.unit.portlist} on ${@{parentsite}.map.router} to VLAN ${unit.vlan.tag}" /> 
+                                                            <add.trunk.ports router="${@{parentsite}.map.router}" router.type="Cisco6509" vlan.tag="${unit.vlan.tag}" ports="${@{parentsite}.unit.portlist}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+                                                        </then> 
+                                                    </if> 
+                                                </sequential> 
+                                            </for> 
+                                        </sequential> 
+                                    </then> 
+                                </if> 
+                            </sequential> 
+                        </for> 
+                    </then> 
+                </if> 
+            </sequential> 
+        </for> 
+        <echo message="Finished setting up BEN vlan. code=${code}" /> 
+        <echo message="Performing map operations" /> 
+        <for list="nlr dukenet dukevmsite rencinet rencivmsite uncnet uncvmsite" param="site" delimiter=" " parallel="false"> 
+            <sequential> 
+                <if> 
+                    <and> 
+                        <isset property="@{site}.unit.vlan.tag" /> 
+                        <isset property="@{site}.edge.interface" /> 
+                        <equals arg1="0" arg2="${code}" /> 
+                    </and> 
+                    <then> 
+                        <echo message="Mapping BEN and @{site} vlans: ${unit.vlan.tag} ${@{site}.unit.vlan.tag} on ${@{site}.map.router}: ${@{site}.edge.interface}" /> 
+                        <map.vlans router="${@{site}.map.router}" router.type="Cisco6509" src.vlan.tag="${@{site}.unit.vlan.tag}" dst.vlan.tag="${unit.vlan.tag}" port="${@{site}.edge.interface}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+                    </then> 
+                </if> 
+            </sequential> 
+        </for> 
+        <echo message="Finished performing map operations" /> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="join exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="BEN HANDLER: TEARDOWN" /> 
+        <var name="code" value="0"></var> 
+        <!-- disconnect the BEN vlan --> 
+        <for list="renci unc duke ncsu" param="site" delimiter=" " parallel="false"> 
+            <sequential> 
+                <echo message="performing settup at @{site}" /> 
+                <!-- check if we need to teardown Polatis --> 
+                <if> 
+                    <isset property="@{site}.polatis.actionslist" /> 
+                    <then> 
+                        <for list="${@{site}.polatis.actionslist}" param="anum" delimiter=" " parallel="false"> 
+                            <sequential> 
+                                <if> 
+                                    <equals arg1="${code}" arg2="0" /> 
+                                    <then> 
+                                        <polatis.disconnect polatis="${@{site}.polatis}" src.port="${@{site}.polatis.action.@{anum}.sport}" user="${polatis.user}" password="${polatis.password}" /> 
+                                    </then> 
+                                </if> 
+                            </sequential> 
+                        </for> 
+                    </then> 
+                </if> 
+                <!-- check if we need to teardown DTN --> 
+                <if> 
+                    <isset property="@{site}.dtn.actionslist" /> 
+                    <then> 
+                        <for list="${@{site}.dtn.actionslist}" param="anum" delimiter=" " parallel="false"> 
+                            <sequential> 
+                                <if> 
+                                    <equals arg1="${code}" arg2="0" /> 
+                                    <then> 
+                                        <dtn.disconnect dtn="${@{site}.dtn}" dtn.payload.type="${dtn.payloadType}" src.port="${@{site}.dtn.action.@{anum}.sport}" dst.port="${@{site}.dtn.action.@{anum}.dport}" user="${dtn.user}" password="${dtn.password}" /> 
+                                    </then> 
+                                </if> 
+                            </sequential> 
+                        </for> 
+                    </then> 
+                </if> 
+                <!-- check if we need to disable 6509 --> 
+                <if> 
+                    <isset property="@{site}.6509.actionslist" /> 
+                    <then> 
+                        <for list="${@{site}.6509.actionslist}" param="anum" delimiter=" " parallel="false"> 
+                            <sequential> 
+                                <if> 
+                                    <equals arg1="${code}" arg2="0" /> 
+                                    <then> 
+                                        <sequential> 
+                                            <remove.trunk.ports router="${@{site}.router}" router.type="Cisco6509" vlan.tag="${unit.vlan.tag}" ports="${@{site}.6509.action.@{anum}.ports}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+                                            <delete.vlan router="${@{site}.router}" router.type="Cisco6509" vlan.tag="${unit.vlan.tag}" vlan.with.qos="${unit.vlan.with.qos}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+                                        </sequential> 
+                                    </then> 
+                                </if> 
+                            </sequential> 
+                        </for> 
+                    </then> 
+                </if> 
+            </sequential> 
+        </for> 
+        <echo message="Performing unmap operations" /> 
+        <for list="nlr dukenet dukevmsite rencinet rencivmsite uncnet uncvmsite" param="site" delimiter=" " parallel="false"> 
+            <sequential> 
+                <if> 
+                    <and> 
+                        <isset property="@{site}.unit.vlan.tag" /> 
+                        <isset property="@{site}.edge.interface" /> 
+                    </and> 
+                    <then> 
+                        <echo message="Unmapping BEN and @{site} vlans: ${unit.vlan.tag} ${@{site}.unit.vlan.tag} on ${@{site}.map.router}: ${@{site}.edge.interface}" /> 
+                        <unmap.vlans router="${@{site}.map.router}" router.type="Cisco6509" src.vlan.tag="${@{site}.unit.vlan.tag}" dst.vlan.tag="${unit.vlan.tag}" port="${@{site}.edge.interface}" router.user="${router.user}" router.password="${router.password}" router.admin.password="${router.admin.password}" /> 
+                    </then> 
+                </if> 
+            </sequential> 
+        </for> 
+        <echo message="Finished performing unmap operations" /> 
+        <!-- FIXME: ${code} contains the exit code of only the last operation --> 
+        <property name="shirako.target.code" value="${code}" /> 
+        <echo message="join exit code: ${shirako.target.code}" /> 
+    </target> 
+    <target name="modify" depends="resolve.configuration,ben.load.tasks"> 
+        <echo message="BEN HANDLER: MODIFY" /> 
+        <property name="shirako.target.code" value="0" /> 
+    </target> 
 </project>

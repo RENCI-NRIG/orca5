@@ -1,251 +1,195 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 body {
-  background-color: #fff;
-  font-family: Verdana, Helvetica, Arial, sans-serif;
-  margin-left: auto;
-  margin-right: auto;
-  background-repeat: repeat-y;
-  font-size: small;
-  padding: 0px;
-  height: 100%;
+    background-color: #ffffff;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    background-repeat: repeat-y;
+    font-size: small;
+    padding: 0px;
+    height: 100%
 }
-
-td, select, input, li{
-  font-family: Verdana, Helvetica, Arial, sans-serif;
-  font-size: small;
-  color:#333333;
+td, select, input, li {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    font-size: small;
+    color: #333333
 }
-
-code{
-  font-size: small;
+code {
+    font-size: small
 }
 a {
-  text-decoration: none;
+    text-decoration: none
 }
-a:link, a:visited, a:active{
-  color:#CC3300;
+a:link, a:visited, a:active {
+    color: #cc3300
 }
 a:hover {
-  color: #3C5693;
+    color: #3c5693
 }
 #legend li.externalLink {
-  background: url(../images/external.png) left top no-repeat;
-  padding-left: 18px;
+    background: url(../images/external.png) left top no-repeat;
+    padding-left: 18px
 }
 a.externalLink, a.externalLink:link, a.externalLink:visited, a.externalLink:active, a.externalLink:hover {
-  background: url(../images/external.png) right center no-repeat;
-  padding-right: 18px;
+    background: url(../images/external.png) right center no-repeat;
+    padding-right: 18px
 }
 #legend li.newWindow {
-  background: url(../images/newwindow.png) left top no-repeat;
-  padding-left: 18px;
+    background: url(../images/newwindow.png) left top no-repeat;
+    padding-left: 18px
 }
 a.newWindow, a.newWindow:link, a.newWindow:visited, a.newWindow:active, a.newWindow:hover {
-  background: url(../images/newwindow.png) right center no-repeat;
-  padding-right: 18px;
+    background: url(../images/newwindow.png) right center no-repeat;
+    padding-right: 18px
 }
-
-
 h2 {
-  font-size: 17px;
-  color: #333333;  
+    font-size: 17px;
+    color: #333333
 }
-
 h3 {
-  padding: 4px 4px 4px 8px;
-  color:#eeeeee;
-  background-color: #9ea6bb;
-  font-weight: bold;
-  font-size: 14px;
-  
-/*  background-image: url(../images/h3.jpg);
-  background-repeat: no-repeat;
-  background-position: left bottom;
-*/  
+    padding: 4px 4px 4px 8px;
+    color: #eeeeee;
+    background-color: #9ea6bb;
+    font-weight: bold;
+    font-size: 14px
 }
-
-h3 a:hover{
-	color: #eeeeee;
+h3 a:hover {
+    color: #eeeeee
 }
 p {
-  font-size: small;
-  color: #000;
+    font-size: small;
+    color: #000000
 }
 #breadcrumbs {
-  height: 5px;
-  color: white;
-  background-color: #3C5693; //#9EA6BB; //#EDFAC2;
-  /*background-image: url(../images/breadcrumbs.jpg);*/
-  padding: 5px 10px 14px 20px;
+    height: 5px;
+    color: white;
+    background-color: #3c5693
 }
 * html #breadcrumbs {
-  padding-bottom: 8px;
+    padding-bottom: 8px
 }
-#leftColumn {  
-  margin: 10px 0 10px 0;
-  border-top-color: #ccc;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-right-color: #ccc;
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-bottom-color: #ccc;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  padding-right: 5px;
-  padding-left: 5px;
-  background-color: #FFD9C2;
-  height: 100%;
+#leftColumn {
+    margin: 10px 0 10px 0;
+    border-top-color: #cccccc;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: #cccccc;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: #cccccc;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding-right: 5px;
+    padding-left: 5px;
+    background-color: #ffd9c2;
+    height: 100%
 }
 #navcolumn h5 {
-  font-size: small;
-  border-bottom: 1px solid #aaaaaa;
-  padding-top: 2px;
-  color: #001A57;
+    font-size: small;
+    border-bottom: 1px solid #aaaaaa;
+    padding-top: 2px;
+    color: #001a57
 }
-
-table.bodyTable{
-	border: 1px solid #ccc;
-	border-spacing: 0px 0px;
+table.bodyTable {
+    border: 1px solid #cccccc;
+    border-spacing: 0px 0px
 }
-
 table.bodyTable th {
-  color: #333333
-  background-color: white;
-  text-align: left;
-  font-weight: bold;
+    text-align: left;
+    font-weight: bold
 }
-
 table.bodyTable th {
-  font-size: small;
-  background-color: #e6ed8a;  
+    font-size: small;
+    background-color: #e6ed8a
 }
-
 table.bodyTable tr.a:first-child {
-  background-color: #e6ed8a;
-  color: #333333
-  font-weight: bold;
+    background-color: #e6ed8a
 }
-
 table.bodyTable tr.a {
-  background-color: #eee;
+    background-color: #eeeeee
 }
-
 table.bodyTable tr.b {
-  background-color: white;
+    background-color: white
 }
-
 .source {
-  border: 1px solid #ccc;
-  overflow:auto
+    border: 1px solid #cccccc;
+    overflow: auto
 }
 dt {
-  padding: 4px 4px 4px 24px;
-  color: #333333;
-  background-color: #ccc;
-  font-weight: bold;
-  font-size: 14px;
-  background-image: url(../images/h3.jpg);
-  background-repeat: no-repeat;
-  background-position: left bottom;
+    padding: 4px 4px 4px 24px;
+    color: #333333;
+    background-color: #cccccc;
+    font-weight: bold;
+    font-size: 14px;
+    background-image: url(../images/h3.jpg);
+    background-repeat: no-repeat;
+    background-position: left bottom
 }
 .subsectionTitle {
-  font-size: 13px;
-  font-weight: bold;
-  color: #666;
-
+    font-size: 13px;
+    font-weight: bold;
+    color: #666666
 }
-
 table {
-  font-size: small;
+    font-size: small
 }
-.xright{
-  color: white;
+.xright {
+    color: white
 }
 .xright a:link, .xright a:visited, .xright a:active {
-  color: #666;
+    color: #666666
 }
 .xright a:hover {
-  color: #003300;
+    color: #003300
 }
-
-
 .xleft a:link, .xleft a:visited, .xleft a:active {
-  color: white;
+    color: white
 }
 .xleft a:hover {
-  color: #FF8F70;
+    color: #ff8f70
 }
-
 #banner {
-  height: 40px;
-  color: white;
-  background-color: #FF8F70;
-  padding-left: 17px;
-  padding-top: 5px;
-  /*background: url(../images/banner.jpg);*/
+    height: 40px;
+    color: white;
+    background-color: #ff8f70;
+    padding-left: 17px;
+    padding-top: 5px
 }
 #navcolumn ul {
-  margin: 5px 0 15px -0em;
+    margin: 5px 0 15px 0em
 }
 #navcolumn ul a {
-  color: black;
+    color: black
 }
 #navcolumn ul a:hover {
-  color: #CC3300;
+    color: #cc3300
 }
 #intro {
-  border: solid #ccc 1px;
-  margin: 6px 0px 0px 0px;
-  padding: 10px 40px 10px 40px;
+    border: solid #cccccc 1px;
+    margin: 6px 0px 0px 0px;
+    padding: 10px 40px 10px 40px
 }
 .subsection {
-  margin-left: 3px;
-  color: #333333;
+    margin-left: 3px;
+    color: #333333
 }
-
 .subsection p {
-  font-size: small;
+    font-size: small
 }
 #footer {
-  padding: 10px;
-  margin: 20px 0px 20px 0px;
-  border-top: solid #ccc 1px; 
-  color: #333333;
+    padding: 10px;
+    margin: 20px 0px 20px 0px;
+    border-top: solid #cccccc 1px;
+    color: #333333
 }
-
 .errormark, .warningmark, .donemark, .infomark {
-  background: url(../images/icon_error_sml.gif) no-repeat;
+    background: url(../images/icon_error_sml.gif) no-repeat
 }
-
 .warningmark {
-  background-image: url(../images/icon_warning_sml.gif);
+    background-image: url(../images/icon_warning_sml.gif)
 }
-
 .donemark {
-  background-image: url(../images/icon_success_sml.gif);
+    background-image: url(../images/icon_success_sml.gif)
 }
-
 .infomark {
-  background-image: url(../images/icon_info_sml.gif);
+    background-image: url(../images/icon_info_sml.gif)
 }
-
-

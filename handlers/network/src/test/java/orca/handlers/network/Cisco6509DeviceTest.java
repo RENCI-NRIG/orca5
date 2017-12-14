@@ -14,9 +14,10 @@ public class Cisco6509DeviceTest extends NetworkDeviceTest {
     public static final String PropertyRouterMapPort = "router.6509.map.port";
     public static final String PropertyDefaultPrompt = "router.default.prompt";
 
-
     protected Cisco6509Device getDevice() {
-        Cisco6509Device device = new Cisco6509Device(props.getProperty(PropertyRouter), props.getProperty(PropertyUser), props.getProperty(PropertyPassword), props.getProperty(PropertyAdminPassword), props.getProperty(PropertyDefaultPrompt));
+        Cisco6509Device device = new Cisco6509Device(props.getProperty(PropertyRouter), props.getProperty(PropertyUser),
+                props.getProperty(PropertyPassword), props.getProperty(PropertyAdminPassword),
+                props.getProperty(PropertyDefaultPrompt));
         configureDevice(device);
         return device;
     }
@@ -33,12 +34,14 @@ public class Cisco6509DeviceTest extends NetworkDeviceTest {
 
     public void testMapVLAN() throws Exception {
         Cisco6509Device device = getDevice();
-        device.mapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan), props.getProperty(PropertyRouterMapPort));
+        device.mapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan),
+                props.getProperty(PropertyRouterMapPort));
     }
 
     public void testUnmapVLAN() throws Exception {
         Cisco6509Device device = getDevice();
-        device.unmapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan), props.getProperty(PropertyRouterMapPort));
+        device.unmapVLANs(props.getProperty(PropertyRouterSrcVlan), props.getProperty(PropertyRouterDstVlan),
+                props.getProperty(PropertyRouterMapPort));
     }
 
 }

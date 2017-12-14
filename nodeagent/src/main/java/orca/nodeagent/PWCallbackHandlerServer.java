@@ -19,35 +19,26 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import org.apache.log4j.Logger;
 import org.apache.ws.security.WSPasswordCallback;
 
-
-public class PWCallbackHandlerServer implements CallbackHandler
-{
+public class PWCallbackHandlerServer implements CallbackHandler {
     private static String serverPassword = "serverkeypass";
     protected Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 
-    public void handle(Callback[] callbacks) throws UnsupportedCallbackException, IOException
-    {
+    public void handle(Callback[] callbacks) throws UnsupportedCallbackException, IOException {
         logger.debug("CallbackHandler invoked on server side");
 
         /*
-         * // this part is used to load a key in case callback.getUsage() ==
-         * WSPasswordCallback.KEY_NAME // however keys are identified by the
-         * user/encryptionUser tags in services.xml or axis2.xml keyStorePath =
-         * NodeManagerService.getInstance().getKeyStorePath(); byte[] clientKey =
-         * null; String clientStorePassword = "clientstorepass"; char[]
-         * clientStorePasswordChar = clientStorePassword.toCharArray(); String
-         * clientPassword = "clientkeypass"; try { Security.addProvider(new
-         * BouncyCastleProvider()); KeyStore ks = KeyStore.getInstance("JKS");
-         * FileInputStream fis = new
-         * FileInputStream("/home/ionut/eclipse/workspace/nodemanager/src/keystores/server.jks");
-         * FileInputStream fis = new FileInputStream("server.jks");
-         * FileInputStream fis = new
-         * FileInputStream("/home/ionut/eclipse/workspace/nodemanager/src/keystores/client.jks");
-         * ks.load(fis, serverStorePasswordChar);
-         * ks.load(fis,clientStorePasswordChar); fis.close(); clientKey =
+         * // this part is used to load a key in case callback.getUsage() == WSPasswordCallback.KEY_NAME // however keys
+         * are identified by the user/encryptionUser tags in services.xml or axis2.xml keyStorePath =
+         * NodeManagerService.getInstance().getKeyStorePath(); byte[] clientKey = null; String clientStorePassword =
+         * "clientstorepass"; char[] clientStorePasswordChar = clientStorePassword.toCharArray(); String clientPassword
+         * = "clientkeypass"; try { Security.addProvider(new BouncyCastleProvider()); KeyStore ks =
+         * KeyStore.getInstance("JKS"); FileInputStream fis = new
+         * FileInputStream("/home/ionut/eclipse/workspace/nodemanager/src/keystores/server.jks"); FileInputStream fis =
+         * new FileInputStream("server.jks"); FileInputStream fis = new
+         * FileInputStream("/home/ionut/eclipse/workspace/nodemanager/src/keystores/client.jks"); ks.load(fis,
+         * serverStorePasswordChar); ks.load(fis,clientStorePasswordChar); fis.close(); clientKey =
          * ks.getCertificate("clientkey").getEncoded(); } catch (Exception ex) {
-         * logger.debug("Exception at keystore/keys"); ex.printStackTrace();
-         * return; }
+         * logger.debug("Exception at keystore/keys"); ex.printStackTrace(); return; }
          */
         for (int i = 0; i < callbacks.length; i++) {
             if (callbacks[i] instanceof WSPasswordCallback) {
@@ -55,10 +46,9 @@ public class PWCallbackHandlerServer implements CallbackHandler
                 logger.debug("Callback is of type " + callback.getClass().getName());
                 logger.debug("Callback usage is " + callback.getUsage());
 
-                logger.debug(
-                    "Callback has set " + "Identifier " + callback.getIdentifer() + "\n" +
-                    "Password " + callback.getPassword() + "\n" + "PasswordType" +
-                    callback.getPasswordType() + "\n" + "Key " + callback.getKey());
+                logger.debug("Callback has set " + "Identifier " + callback.getIdentifer() + "\n" + "Password "
+                        + callback.getPassword() + "\n" + "PasswordType" + callback.getPasswordType() + "\n" + "Key "
+                        + callback.getKey());
 
                 if (callback.getUsage() == WSPasswordCallback.KEY_NAME) {
                     logger.debug("callback usage KEY_NAME");
@@ -100,8 +90,7 @@ public class PWCallbackHandlerServer implements CallbackHandler
                 }
             } else {
                 throw new UnsupportedCallbackException(callbacks[i],
-                                                       "Unrecognized Callback of type " +
-                                                       (callbacks[i]).getClass().getName());
+                        "Unrecognized Callback of type " + (callbacks[i]).getClass().getName());
             }
         }
 

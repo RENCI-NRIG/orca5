@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import orca.shirako.common.ReservationState;
 import orca.shirako.kernel.ReservationStates;
 
-public class BrokerReservationChecker
-{
+public class BrokerReservationChecker {
     public static final String LogFile = "states.agentreservation.log";
     public static final long LeaseLength = 15;
     public static final int Units = 2;
@@ -16,8 +15,7 @@ public class BrokerReservationChecker
     protected ArrayList<StateToCheck> statesToCheck;
     protected PrintWriter writer;
 
-    public BrokerReservationChecker()
-    {
+    public BrokerReservationChecker() {
         statesToCheck = new ArrayList<StateToCheck>();
 
         try {
@@ -29,45 +27,54 @@ public class BrokerReservationChecker
         populate();
     }
 
-    protected void populate()
-    {
+    protected void populate() {
         StateToCheck state = new StateToCheck(new ReservationState(ReservationStates.Nascent, ReservationStates.None));
-        state.expectedImmediate.add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
-        state.expectedExpired.add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedImmediate
+                .add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedExpired
+                .add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
         statesToCheck.add(state);
 
         state = new StateToCheck(new ReservationState(ReservationStates.Nascent, ReservationStates.Ticketing));
-        state.expectedImmediate.add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
-        state.expectedExpired.add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedImmediate
+                .add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedExpired
+                .add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
         statesToCheck.add(state);
 
         state = new StateToCheck(new ReservationState(ReservationStates.Ticketed, ReservationStates.Priming));
-        state.expectedImmediate.add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
-        state.expectedExpired.add(new ReservationState(ReservationStates.Failed, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedImmediate
+                .add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedExpired
+                .add(new ReservationState(ReservationStates.Failed, ReservationStates.None, ReservationStates.NoJoin));
         statesToCheck.add(state);
 
         state = new StateToCheck(new ReservationState(ReservationStates.Ticketed, ReservationStates.ExtendingTicket));
-        state.expectedImmediate.add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
-        state.expectedExpired.add(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin));
-        state.expectedExpired.add(new ReservationState(ReservationStates.Failed, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedImmediate
+                .add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedExpired
+                .add(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedExpired
+                .add(new ReservationState(ReservationStates.Failed, ReservationStates.None, ReservationStates.NoJoin));
         statesToCheck.add(state);
 
         state = new StateToCheck(new ReservationState(ReservationStates.Ticketed, ReservationStates.None));
-        state.expectedImmediate.add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedImmediate
+                .add(new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin));
         // if recovery takes a bit longer the sm will issue close before it gets the ticket extension
-        state.expectedImmediate.add(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin));
-        state.expectedExpired.add(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedImmediate
+                .add(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin));
+        state.expectedExpired
+                .add(new ReservationState(ReservationStates.Closed, ReservationStates.None, ReservationStates.NoJoin));
         statesToCheck.add(state);
     }
 
-    public void check()
-    {
+    public void check() {
         checkImmediate();
         checkExpired();
     }
 
-    protected void checkImmediate()
-    {
+    protected void checkImmediate() {
         for (int i = 0; i < statesToCheck.size(); i++) {
             StateToCheck state = statesToCheck.get(i);
 
@@ -84,7 +91,8 @@ public class BrokerReservationChecker
             RecoveryResult result = tester.runTest();
 
             if (result.code != RecoveryTester.ExitCodeOK) {
-                String msg = "Recovery for state " + state.state.toString() + " failed. Code: " + Integer.toString(result.code);
+                String msg = "Recovery for state " + state.state.toString() + " failed. Code: "
+                        + Integer.toString(result.code);
                 writer.println(msg);
                 writer.flush();
                 throw new RuntimeException(msg);
@@ -93,7 +101,9 @@ public class BrokerReservationChecker
                     writer.println("Recovery successful");
                     writer.flush();
                 } else {
-                    String msg = "Recovery for state " + state.state.toString() + " failed. Unexpected end state. Expected: " + state.getString(state.expectedImmediate) + ", actual: " + result.state;
+                    String msg = "Recovery for state " + state.state.toString()
+                            + " failed. Unexpected end state. Expected: " + state.getString(state.expectedImmediate)
+                            + ", actual: " + result.state;
                     writer.println(msg);
                     writer.flush();
                     throw new RuntimeException(msg);
@@ -102,8 +112,7 @@ public class BrokerReservationChecker
         }
     }
 
-    protected void checkExpired()
-    {
+    protected void checkExpired() {
         for (int i = 0; i < statesToCheck.size(); i++) {
             StateToCheck state = statesToCheck.get(i);
 
@@ -120,7 +129,8 @@ public class BrokerReservationChecker
             RecoveryResult result = tester.runTest();
 
             if (result.code != RecoveryTester.ExitCodeOK) {
-                String msg = "Recovery for state " + state.state.toString() + " failed. Code: " + Integer.toString(result.code);
+                String msg = "Recovery for state " + state.state.toString() + " failed. Code: "
+                        + Integer.toString(result.code);
                 writer.println(msg);
                 writer.flush();
                 throw new RuntimeException(msg);
@@ -129,7 +139,9 @@ public class BrokerReservationChecker
                     writer.println("Recovery successful");
                     writer.flush();
                 } else {
-                    String msg = "Recovery for state " + state.state.toString() + " failed. Unexpected end state. Expected: " + state.getString(state.expectedExpired) + ", actual: " + result.state;
+                    String msg = "Recovery for state " + state.state.toString()
+                            + " failed. Unexpected end state. Expected: " + state.getString(state.expectedExpired)
+                            + ", actual: " + result.state;
                     writer.println(msg);
                     writer.flush();
                     throw new RuntimeException(msg);

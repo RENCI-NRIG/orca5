@@ -25,8 +25,7 @@ import orca.shirako.container.api.IConfigurationLoader;
 
 import org.apache.log4j.Logger;
 
-public class ConfigurationLoader implements IConfigurationLoader
-{
+public class ConfigurationLoader implements IConfigurationLoader {
     /**
      * Path to configuration file.
      */
@@ -48,27 +47,22 @@ public class ConfigurationLoader implements IConfigurationLoader
      */
     protected Logger logger = Globals.getLogger(this.getClass().getCanonicalName());
 
-    public ConfigurationLoader()
-    {
+    public ConfigurationLoader() {
     }
 
-    public ConfigurationLoader(byte[] bytes)
-    {
+    public ConfigurationLoader(byte[] bytes) {
         this.bytes = bytes;
     }
 
-    public ConfigurationLoader(InputStream stream)
-    {
+    public ConfigurationLoader(InputStream stream) {
         this.stream = stream;
     }
 
-    public ConfigurationLoader(String path)
-    {
+    public ConfigurationLoader(String path) {
         this.path = path;
     }
 
-    public void process() throws ConfigurationException
-    {
+    public void process() throws ConfigurationException {
         readConfiguration();
 
         // process the configuration file
@@ -86,8 +80,7 @@ public class ConfigurationLoader implements IConfigurationLoader
         // addActor
     }
 
-    protected void readConfiguration() throws ConfigurationException
-    {
+    protected void readConfiguration() throws ConfigurationException {
         try {
             if (path != null) {
                 config = readConfiguration(path);
@@ -98,22 +91,22 @@ public class ConfigurationLoader implements IConfigurationLoader
             } else {
                 throw new ConfigurationException("No data source has been specified");
             }
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             throw new ConfigurationException("Configuration file could not be found", e);
         } catch (JAXBException e) {
             throw new ConfigurationException("An error occurred while reading configuration", e);
-        } catch (ConfigurationException e){
+        } catch (ConfigurationException e) {
             throw e;
         }
     }
 
     /**
      * Reads the configuration from the given byte stream
+     * 
      * @param configBytes
      * @throws Exception
      */
-    private Configuration readConfiguration(byte[] configBytes) throws JAXBException
-    {
+    private Configuration readConfiguration(byte[] configBytes) throws JAXBException {
         logger.info("Reading configuration. Source: bytearray");
         InputStream is = new ByteArrayInputStream(configBytes);
         JAXBContext context = JAXBContext.newInstance("orca.boot.beans");
@@ -123,10 +116,10 @@ public class ConfigurationLoader implements IConfigurationLoader
 
     /**
      * Reads the specified configuration file
+     * 
      * @throws Exception
      */
-    private Configuration readConfiguration(InputStream is) throws JAXBException
-    {
+    private Configuration readConfiguration(InputStream is) throws JAXBException {
         logger.info("Reading configuration: Source: stream");
         JAXBContext context = JAXBContext.newInstance("orca.boot.beans");
         Unmarshaller um = context.createUnmarshaller();
@@ -135,10 +128,10 @@ public class ConfigurationLoader implements IConfigurationLoader
 
     /**
      * Reads the specified configuration file
+     * 
      * @throws Exception
      */
-    private Configuration readConfiguration(String configFile) throws JAXBException, FileNotFoundException
-    {
+    private Configuration readConfiguration(String configFile) throws JAXBException, FileNotFoundException {
         logger.info("Reading configuration: file = " + configFile);
         InputStream is = new FileInputStream(configFile);
         JAXBContext context = JAXBContext.newInstance("orca.boot.beans");
@@ -146,18 +139,15 @@ public class ConfigurationLoader implements IConfigurationLoader
         return (Configuration) um.unmarshal(is);
     }
 
-    public void setConfiguration(byte[] bytes)
-    {
+    public void setConfiguration(byte[] bytes) {
         this.bytes = bytes;
     }
 
-    public void setConfiguration(InputStream is)
-    {
+    public void setConfiguration(InputStream is) {
         this.stream = is;
     }
 
-    public void setConfiguration(String path)
-    {
+    public void setConfiguration(String path) {
         this.path = path;
     }
 }

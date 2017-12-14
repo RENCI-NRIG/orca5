@@ -63,7 +63,8 @@ public class VlanTest extends ShirakoTest {
     protected ResourceType vlanType = new ResourceType("ben.vlan");
 
     protected ReservationState stateVlan = null;
-    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None, ReservationStates.NoJoin);
+    protected ReservationState doneState = new ReservationState(ReservationStates.Active, ReservationStates.None,
+            ReservationStates.NoJoin);
 
     public VlanTest(String[] args) {
         super(args);
@@ -101,7 +102,8 @@ public class VlanTest extends ShirakoTest {
     protected IServiceManagerReservation getVlanReservation(long cycle) {
         ResourceSet rset = new ResourceSet(1, vlanType);
         Term term = new Term(clock.date(cycle + ADVANCE_TIME), clock.getMillis((long) leaseLength));
-        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance().create(rset, term, slice, vlanBrokerProxy);
+        IServiceManagerReservation r = (IServiceManagerReservation) ServiceManagerReservationFactory.getInstance()
+                .create(rset, term, slice, vlanBrokerProxy);
 
         AntConfig.setServiceXml(r, noopConfigFile);
         r.setRenewable(true);
@@ -114,12 +116,12 @@ public class VlanTest extends ShirakoTest {
                 System.out.println("Vlan reservation transition: from " + from + " to " + to);
                 if (to.equals(doneState)) {
                     ResourceSet leased = vlanReservation.getLeasedResources();
-                    UnitSet uset = (UnitSet)leased.getResources();
+                    UnitSet uset = (UnitSet) leased.getResources();
                     for (Unit u : uset.getSet()) {
                         System.out.println("Vlan Tag: " + u.getProperty(UnitProperties.UnitVlanTag));
                     }
                 }
-            }else {
+            } else {
                 System.out.println("Unknown reservation object: " + obj);
             }
             reservationTransition((IReservation) obj, (ReservationState) from, (ReservationState) to);
@@ -128,7 +130,8 @@ public class VlanTest extends ShirakoTest {
 
     protected boolean isExtended(ReservationState state) {
         if (state != null) {
-            return (state.getState() == ReservationStates.ActiveTicketed) && (state.getPending() == ReservationStates.None);
+            return (state.getState() == ReservationStates.ActiveTicketed)
+                    && (state.getPending() == ReservationStates.None);
         }
         return false;
     }
@@ -151,7 +154,7 @@ public class VlanTest extends ShirakoTest {
             stateVlan = to;
             if (isExtended(to)) {
                 extendCountVlan++;
-            }        
+            }
         }
     }
 
@@ -177,7 +180,7 @@ public class VlanTest extends ShirakoTest {
     }
 
     protected synchronized boolean checkDone() {
-        if (isActive(stateVlan) ) {
+        if (isActive(stateVlan)) {
             if (extendCountVlan > 0) {
                 return true;
             }

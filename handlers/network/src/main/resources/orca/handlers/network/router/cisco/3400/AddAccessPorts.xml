@@ -1,35 +1,61 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<script xmlns="http://geni-orca.renci.org/AddAccessPorts"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://geni-orca.renci.org/AddAccessPorts AddAccessPorts.xsd">
-	<action name="AddAccessPorts" parameter="AccessPorts">
-		<exchange>
-			<send>config t</send>
-			<expect>{$DefaultPrompt}</expect>
-		</exchange>
-		<exchange>
-			<send>interface range {$AccessPorts}</send>
-			<expect timeout="4000">{$DefaultPrompt}</expect>
-		</exchange>
-		<exchange>
-			<send>switchport</send>
-			<expect>{$DefaultPrompt}</expect>
-		</exchange>
-		<exchange>
-			<send>switchport mode access</send>
-			<expect timeout="3000">{$DefaultPrompt}</expect>
-		</exchange>
-		<exchange>
-			<send>switchport access vlan {$VLANTagName}</send>
-			<expect timeout="3000">{$DefaultPrompt}</expect>
-		</exchange>
-		<exchange>
-			<send>no shut</send>
-			<expect>{$DefaultPrompt}</expect>
-		</exchange>
-		<exchange>
-			<send>end</send>
-			<expect>{$DefaultPrompt}</expect>
-		</exchange>
-	</action>
+<?xml version="1.0" encoding="UTF-8"?> 
+<script xmlns="http://geni-orca.renci.org/AddAccessPorts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/AddAccessPorts AddAccessPorts.xsd"> 
+    <action name="AddAccessPorts" parameter="AccessPorts"> 
+        <exchange> 
+            <send>
+                config t
+            </send> 
+            <expect>
+                {$DefaultPrompt}
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                interface range {$AccessPorts}
+            </send> 
+            <expect timeout="4000">
+                {$DefaultPrompt}
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                switchport
+            </send> 
+            <expect>
+                {$DefaultPrompt}
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                switchport mode access
+            </send> 
+            <expect timeout="3000">
+                {$DefaultPrompt}
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                switchport access vlan {$VLANTagName}
+            </send> 
+            <expect timeout="3000">
+                {$DefaultPrompt}
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                no shut
+            </send> 
+            <expect>
+                {$DefaultPrompt}
+            </expect> 
+        </exchange> 
+        <exchange> 
+            <send>
+                end
+            </send> 
+            <expect>
+                {$DefaultPrompt}
+            </expect> 
+        </exchange> 
+    </action> 
 </script>

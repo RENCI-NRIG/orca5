@@ -1,180 +1,284 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://issg.cs.duke.edu/sharp/boot">
-    <actors>
-		<actor>
-			<type>site</type>
-			<name>duke-vm-site</name>
-			<guid>9b12d036-23e7-11df-b3a3-000c29b1c193</guid>
-			<pools>
-				<pool>
-					<type>duke.vm</type>
-					<label>Eucalyptus Virtual Machine (DUKE)</label>
-					<description>A virtual machine</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>	
-							<property name="ec2.keys" value="/home/orca/orca-2.0/tools/cmdline/ec2" />
-							<property name="unit.vlan.tag" value="13" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.206.3/24" />
-						<property name="ip.subnet" value="255.255.255.0" />
-						<property name="ip.gateway" value="192.168.206.1" />
-						<property name="data.subnet" value="255.255.0.0" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="duke.vm" class="orca.policy.core.SimpleVMControl" />
-			</controls>
-		</actor>
-		<actor>
-			<type>site</type>
-			<name>renci-vm-site</name>
-			<guid>19f1b53b-f081-4544-81fa-b0467bff73c1</guid>
-			<pools>
-				<pool>
-					<type>renci.vm</type>
-					<label>Eucalyptus Virtual Machine (RENCI)</label>
-					<description>A virtual machine</description>
-					<units>10</units>
-					<start>2010-01-30T00:00:00</start>
-					<end>2011-01-30T00:00:00</end>
-					<handler path="ec2/handler.xml">
-						<properties>	
-							<property name="ec2.keys" value="/opt/orca/ec2-renci" />
-						</properties>
-					</handler>
-					<attributes>
-						<attribute>
-							<key>resource.memory</key>
-							<label>Memory</label>
-							<value>128</value>
-							<unit>MB</unit>
-							<type>integer</type>
-						</attribute>
-						<attribute>
-							<key>resource.cpu</key>
-							<label>CPU</label>
-							<value>1/2 of 2GHz Intel Xeon</value>
-							<type>String</type>
-						</attribute>
-					</attributes>
-					<properties>
-						<property name="ip.list" value="192.168.201.20-29" />
-						<property name="ip.subnet" value="255.255.255.0" />
-						<property name="ip.gateway" value="192.168.201.1" />
-						<property name="data.subnet" value="255.255.0.0" />
-					</properties>
-				</pool>
-			</pools>
-			<controls>
-				<control type="renci.vm" class="orca.policy.core.SimpleVMControl" />
-			</controls>
-		</actor>
-        <actor>
-            <type>site</type>
-            <name>openflow-site</name>
-            <pools>
-                <pool>
-                    <type>openflow</type>
-                    <label>OpenFlow slice</label>
-                    <description>A slice over OpenFlow substrate</description>
-                    <units>10</units>
-                    <start>2010-01-30T00:00:00</start>
-                    <end>2011-01-30T00:00:00</end>
-                    <handler path="network/openflow/handler.xml" >
-			<properties>
-				<property name="flowvisor.base" value="/home/ngkim/flowvisor" />
-				<property name="flowvisor.conf.d" value="conf.d" />
-				<property name="flowvisor.name" value="renci" />
-				<property name="flowvisor.id" value="20" />
-				<property name="controller.host" value="210.125.84.65" />
-				<property name="controller.port" value="2525" />
-				<property name="flowspace.01" value="allow:" />
-				<property name="allowedports.01" value="0,1,2,3	nfgist01" />
-				<property name="allowedports.02" value="0,1,2,3	nfgist02" />
-				<property name="allowedports.03" value="0,1 ofgist01" />
-				</properties>
-			</handler>
-                    <properties>
-                        <property name="openflow.slice.start" value="2" />
-                        <property name="openflow.slice.end" value="11" />
-                    </properties>
-                </pool>
-            </pools>
-            <controls>
-                <control type="openflow" class="orca.policy.core.OpenFlowControl" />
-            </controls>
-        </actor>
-	<actor>
-	    <type>broker</type>
-	    <name>vm-broker</name>
-	    <description>VM broker</description>
-	</actor>
-        <actor>
-            <type>broker</type>
-            <name>openflow-broker</name>
-            <description>OpenFlow broker</description>
-        </actor>
-        <actor>
-            <type>service</type>
-            <name>service</name>
-            <description>Service Manager</description>
-        </actor>
-    </actors>
-    <topology>
-        <edges>
-            <edge>
-                <from name="service" type="service" />
-                <to name="openflow-broker" type="broker" />
-            </edge>
-	    <edge>
-		<from name="service" type="service" />
-		<to name="vm-broker" type="broker" />
-	    </edge>
-            <edge>
-                <from name="openflow-broker" type="broker" />
-                <to name="openflow-site" type="site" />
-                <rset>
-                    <type>openflow</type>
-                    <units>10</units>
-                </rset>
-            </edge>
-	    <edge>
-		<from name="vm-broker" type="broker" />
-		<to name="duke-vm-site" type="site" />
-		<rset>
-		    <type>duke.vm</type>
-		    <units>10</units>
-		</rset>
-	    </edge>
-	    <edge>
-		<from name="vm-broker" type="broker" />
-		<to name="renci-vm-site" type="site" />
-		<rset>
-		    <type>renci.vm</type>
-		    <units>10</units>
-		</rset>
-	    </edge>
-        </edges>
-    </topology>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
+    <actors> 
+        <actor> 
+            <type>
+                site
+            </type> 
+            <name>
+                duke-vm-site
+            </name> 
+            <guid>
+                9b12d036-23e7-11df-b3a3-000c29b1c193
+            </guid> 
+            <pools> 
+                <pool> 
+                    <type>
+                        duke.vm
+                    </type> 
+                    <label>Eucalyptus Virtual Machine (DUKE)</label> 
+                    <description>
+                        A virtual machine
+                    </description> 
+                    <units>
+                        10
+                    </units> 
+                    <start>
+                        2010-01-30T00:00:00
+                    </start> 
+                    <end>
+                        2011-01-30T00:00:00
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/home/orca/orca-2.0/tools/cmdline/ec2" /> 
+                            <property name="unit.vlan.tag" value="13" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                resource.memory
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                128
+                            </value> 
+                            <unit>
+                                MB
+                            </unit> 
+                            <type>
+                                integer
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                resource.cpu
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                1/2 of 2GHz Intel Xeon
+                            </value> 
+                            <type>
+                                String
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.206.3/24" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                        <property name="ip.gateway" value="192.168.206.1" /> 
+                        <property name="data.subnet" value="255.255.0.0" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                site
+            </type> 
+            <name>
+                renci-vm-site
+            </name> 
+            <guid>
+                19f1b53b-f081-4544-81fa-b0467bff73c1
+            </guid> 
+            <pools> 
+                <pool> 
+                    <type>
+                        renci.vm
+                    </type> 
+                    <label>Eucalyptus Virtual Machine (RENCI)</label> 
+                    <description>
+                        A virtual machine
+                    </description> 
+                    <units>
+                        10
+                    </units> 
+                    <start>
+                        2010-01-30T00:00:00
+                    </start> 
+                    <end>
+                        2011-01-30T00:00:00
+                    </end> 
+                    <handler path="ec2/handler.xml"> 
+                        <properties> 
+                            <property name="ec2.keys" value="/opt/orca/ec2-renci" /> 
+                        </properties> 
+                    </handler> 
+                    <attributes> 
+                        <attribute> 
+                            <key>
+                                resource.memory
+                            </key> 
+                            <label>Memory</label> 
+                            <value>
+                                128
+                            </value> 
+                            <unit>
+                                MB
+                            </unit> 
+                            <type>
+                                integer
+                            </type> 
+                        </attribute> 
+                        <attribute> 
+                            <key>
+                                resource.cpu
+                            </key> 
+                            <label>CPU</label> 
+                            <value>
+                                1/2 of 2GHz Intel Xeon
+                            </value> 
+                            <type>
+                                String
+                            </type> 
+                        </attribute> 
+                    </attributes> 
+                    <properties> 
+                        <property name="ip.list" value="192.168.201.20-29" /> 
+                        <property name="ip.subnet" value="255.255.255.0" /> 
+                        <property name="ip.gateway" value="192.168.201.1" /> 
+                        <property name="data.subnet" value="255.255.0.0" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                site
+            </type> 
+            <name>
+                openflow-site
+            </name> 
+            <pools> 
+                <pool> 
+                    <type>
+                        openflow
+                    </type> 
+                    <label>OpenFlow slice</label> 
+                    <description>
+                        A slice over OpenFlow substrate
+                    </description> 
+                    <units>
+                        10
+                    </units> 
+                    <start>
+                        2010-01-30T00:00:00
+                    </start> 
+                    <end>
+                        2011-01-30T00:00:00
+                    </end> 
+                    <handler path="network/openflow/handler.xml"> 
+                        <properties> 
+                            <property name="flowvisor.base" value="/home/ngkim/flowvisor" /> 
+                            <property name="flowvisor.conf.d" value="conf.d" /> 
+                            <property name="flowvisor.name" value="renci" /> 
+                            <property name="flowvisor.id" value="20" /> 
+                            <property name="controller.host" value="210.125.84.65" /> 
+                            <property name="controller.port" value="2525" /> 
+                            <property name="flowspace.01" value="allow:" /> 
+                            <property name="allowedports.01" value="0,1,2,3	nfgist01" /> 
+                            <property name="allowedports.02" value="0,1,2,3	nfgist02" /> 
+                            <property name="allowedports.03" value="0,1 ofgist01" /> 
+                        </properties> 
+                    </handler> 
+                    <properties> 
+                        <property name="openflow.slice.start" value="2" /> 
+                        <property name="openflow.slice.end" value="11" /> 
+                    </properties> 
+                </pool> 
+            </pools> 
+            <controls> 
+                <control type="openflow" class="orca.policy.core.OpenFlowControl" /> 
+            </controls> 
+        </actor> 
+        <actor> 
+            <type>
+                broker
+            </type> 
+            <name>
+                vm-broker
+            </name> 
+            <description>
+                VM broker
+            </description> 
+        </actor> 
+        <actor> 
+            <type>
+                broker
+            </type> 
+            <name>
+                openflow-broker
+            </name> 
+            <description>
+                OpenFlow broker
+            </description> 
+        </actor> 
+        <actor> 
+            <type>
+                service
+            </type> 
+            <name>
+                service
+            </name> 
+            <description>
+                Service Manager
+            </description> 
+        </actor> 
+    </actors> 
+    <topology> 
+        <edges> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="openflow-broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="service" type="service" /> 
+                <to name="vm-broker" type="broker" /> 
+            </edge> 
+            <edge> 
+                <from name="openflow-broker" type="broker" /> 
+                <to name="openflow-site" type="site" /> 
+                <rset> 
+                    <type>
+                        openflow
+                    </type> 
+                    <units>
+                        10
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="vm-broker" type="broker" /> 
+                <to name="duke-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                        duke.vm
+                    </type> 
+                    <units>
+                        10
+                    </units> 
+                </rset> 
+            </edge> 
+            <edge> 
+                <from name="vm-broker" type="broker" /> 
+                <to name="renci-vm-site" type="site" /> 
+                <rset> 
+                    <type>
+                        renci.vm
+                    </type> 
+                    <units>
+                        10
+                    </units> 
+                </rset> 
+            </edge> 
+        </edges> 
+    </topology> 
 </configuration>

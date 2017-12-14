@@ -16,24 +16,26 @@ import orca.manage.extensions.standard.beans.ResultProxyMng;
 import orca.security.AuthToken;
 
 public interface IOpenFlowControllerManagementProxy {
-    
+
     ResultStringMng addRequest(String start, String end, int vmsDuke, int vmsRenci, AuthToken caller) throws Exception;
 
     ResultOpenFlowRequestMng getRequests(AuthToken caller) throws Exception;
 
     ResultOpenFlowRequestMng getRequests(String id, AuthToken caller) throws Exception;
-    
+
     ResultMng closeRequest(String id, AuthToken caller) throws Exception;
-    
+
     /**
      * Returns the details of the VM proxy.
+     * 
      * @return
      * @throws Exception
      */
     ResultProxyMng getVMBroker(AuthToken caller) throws Exception;
-    
+
     /**
-     * Returns the details of the OpenFlow proxy. 
+     * Returns the details of the OpenFlow proxy.
+     * 
      * @return
      * @throws Exception
      */

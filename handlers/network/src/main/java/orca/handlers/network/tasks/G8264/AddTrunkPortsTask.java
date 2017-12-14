@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.G8264;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class AddTrunkPortsTask extends G8264BaseTask {
@@ -17,7 +16,7 @@ public class AddTrunkPortsTask extends G8264BaseTask {
             if (ports == null) {
                 throw new Exception("Missing ports");
             }
-            router.addTrunkPortsToVLAN(vlanTag, ports);    
+            router.addTrunkPortsToVLAN(vlanTag, ports);
             setResult(0);
         } catch (BuildException e) {
             throw e;

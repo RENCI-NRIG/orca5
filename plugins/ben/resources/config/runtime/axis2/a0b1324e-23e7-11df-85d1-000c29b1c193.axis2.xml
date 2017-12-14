@@ -1,211 +1,216 @@
-<axisconfig name="AxisJava2.0">
-
-    <!-- Engage the addressing module -->
-    <!-- <module ref="addressing"/> -->
-
-    <!-- Engage the security module -->
-    <module ref="rampart" />
-
-     <parameter name="OutflowSecurity">
-        <action>
-            <items>Signature</items>
-            <user>actorKey</user>
-            <!--alias of the key used to sign-->
-            <passwordCallbackClass>orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
-            <signaturePropFile>./runtime/axis2/a0b1324e-23e7-11df-85d1-000c29b1c193.client.properties</signaturePropFile>
-            <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
-        </action>
-    </parameter>
-
-
-    <parameter name="InflowSecurity">
-        <action>
-            <items>Signature</items>
-            <passwordCallbackClass>orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
-            <signaturePropFile>./runtime/axis2/a0b1324e-23e7-11df-85d1-000c29b1c193.client.properties</signaturePropFile>
-        </action>
-    </parameter>
-    <!-- Engage the orca-auth module -->
-    <module ref="orcaauth" />
-
-    <!-- Test with addressing and MTOM: Client's Configuration:END-->
-
-    <!-- ================================================= -->
-    <!-- Parameters -->
-    <!-- ================================================= -->
-    <parameter name="hotdeployment" locked="false">true</parameter>
-    <parameter name="hotupdate" locked="false">false</parameter>
-    <parameter name="enableMTOM" locked="false">true</parameter>
-    <!-- Uncomment this to enable REST support -->
-    <!--    <parameter name="enableREST" locked="false">true</parameter>-->
-
-
-
-    <!-- ADDED -->
-    <parameter name="sendStacktraceDetailsWithFaults" locked="false">true</parameter>
-    <parameter name="DrillDownToRootCauseForFaultReason" locked="false">true</parameter>
-
-
-    <parameter name="userName" locked="false">admin</parameter>
-    <parameter name="password" locked="false">axis2</parameter>
-
-
-
-    <!-- ADDED -->
-    <parameter name="manageTransportSession" locked="false">false</parameter>
-    <parameter name="enableRESTInAxis2MainServlet" locked="true">false</parameter>
-    <parameter name="disableREST" locked="true">false</parameter>
-    <parameter name="disableSeparateEndpointForREST" locked="true">false</parameter>
-
-
-    <!-- ================================================= -->
-    <!-- Message Receivers -->
-    <!-- ================================================= -->
-    <!--This is the Deafult Message Receiver for the system , if you want to have MessageReceivers for -->
-    <!--all the other MEP implement it and add the correct entry to here , so that you can refer from-->
-    <!--any operation -->
-    <!--Note : You can ovride this for particular service by adding the same element with your requirement-->
-    <messageReceivers>
-        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
-                         class="org.apache.axis2.receivers.RawXMLINOnlyMessageReceiver" />
-        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
-                         class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver" />
-    </messageReceivers>
-    <!-- ================================================= -->
-    <!-- Transport Ins -->
-    <!-- ================================================= -->
-    <transportReceiver name="http"
-                       class="org.apache.axis2.transport.http.SimpleHTTPServer">
-        <parameter name="port" locked="false">6060</parameter>
-        <!--If you want to give your own host address for EPR generation-->
-        <!--uncommet following paramter , and set as you required.-->
-        <!--<parameter name="hostname" locked="false">http://myApp.com/ws</parameter>-->
-    </transportReceiver>
-
-    <transportReceiver name="tcp"
-                       class="org.apache.axis2.transport.tcp.TCPServer">
-        <parameter name="port" locked="false">6061</parameter>
-        <!--If you want to give your own host address for EPR generation-->
-        <!--uncommet following paramter , and set as you required.-->
-        <!--<parameter name="hostname" locked="false">tcp://myApp.com/ws</parameter>-->
-    </transportReceiver>
-
-    <!-- ================================================= -->
-    <!-- Transport Outs -->
-    <!-- ================================================= -->
-
-    <transportSender name="tcp"
-                     class="org.apache.axis2.transport.tcp.TCPTransportSender" />
-    <transportSender name="local"
-                     class="org.apache.axis2.transport.local.LocalTransportSender" />
-    <transportSender name="jms"
-                     class="org.apache.axis2.transport.jms.JMSSender" />
-    <transportSender name="http"
-                     class="org.apache.axis2.transport.http.CommonsHTTPTransportSender">
-        <parameter name="PROTOCOL" locked="false">HTTP/1.1</parameter>
-        <parameter name="Transfer-Encoding" locked="false">chunked</parameter>
-    </transportSender>
-    <transportSender name="https"
-                     class="org.apache.axis2.transport.http.CommonsHTTPTransportSender">
-        <parameter name="PROTOCOL" locked="false">HTTP/1.1</parameter>
-        <parameter name="Transfer-Encoding" locked="false">chunked</parameter>
-    </transportSender>
-
-    <!-- ================================================= -->
-    <!-- Phases  -->
-    <!-- ================================================= -->
-    <phaseOrder type="InFlow">
-        <!--  System pre defined phases       -->
-        <phase name="Transport">
-            <handler name="RequestURIBasedDispatcher"
-                     class="org.apache.axis2.engine.RequestURIBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-            <handler name="SOAPActionBasedDispatcher"
-                     class="org.apache.axis2.engine.SOAPActionBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-        </phase>
-        <phase name="Security" />
-        <phase name="PreDispatch" />
-        <phase name="Dispatch" class="org.apache.axis2.engine.DispatchPhase">
-            <handler name="AddressingBasedDispatcher"
-                     class="org.apache.axis2.engine.AddressingBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-
-            <handler name="SOAPMessageBodyBasedDispatcher"
-                     class="org.apache.axis2.engine.SOAPMessageBodyBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-            <handler name="InstanceDispatcher"
-                     class="org.apache.axis2.engine.InstanceDispatcher">
-                <order phase="PostDispatch" />
-            </handler>
-        </phase>
-        <!--  System pre defined phases       -->
-        <!--   After Postdispatch phase module author or or service author can add any phase he want      -->
-        <phase name="OperationInPhase" />
-        <!-- Orca-specific phases -->
-        <phase name="loggingPhase"/>
-        <phase name="authenticationPhase"/>                
-    </phaseOrder>
-    <phaseOrder type="OutFlow">
-        <!--      user can add his own phases to this area  -->
-        <phase name="OperationOutPhase" />
-        <!-- Orca-specific phases -->
-        <phase name="authenticationPhase">
-        </phase>
-        <!--system predefined phase-->
-        <!--these phase will run irrespective of the service-->
-        <phase name="PolicyDetermination" />
-        <phase name="MessageOut" />
-        <phase name="Security" />
-        <!-- Orca-specific phases -->
-        <phase name="loggingPhase"/>
-    </phaseOrder>
-    <phaseOrder type="InFaultFlow">
-        <phase name="PreDispatch" />
-        <phase name="Dispatch" class="org.apache.axis2.engine.DispatchPhase">
-            <handler name="RequestURIBasedDispatcher"
-                     class="org.apache.axis2.engine.RequestURIBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-
-            <handler name="SOAPActionBasedDispatcher"
-                     class="org.apache.axis2.engine.SOAPActionBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-
-            <handler name="AddressingBasedDispatcher"
-                     class="org.apache.axis2.engine.AddressingBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-
-            <handler name="SOAPMessageBodyBasedDispatcher"
-                     class="org.apache.axis2.engine.SOAPMessageBodyBasedDispatcher">
-                <order phase="Dispatch" />
-            </handler>
-            <handler name="InstanceDispatcher"
-                     class="org.apache.axis2.engine.InstanceDispatcher">
-                <order phase="PostDispatch" />
-            </handler>
-        </phase>
-        <!--      user can add his own phases to this area  -->
-        <phase name="OperationInFaultPhase" />
-        <!-- Orca-specific phases -->
-        <phase name="loggingPhase"/>
-        <phase name="authenticationPhase"/>                
-    </phaseOrder>
-    <phaseOrder type="OutFaultFlow">
-        <!--      user can add his own phases to this area  -->
-        <phase name="OperationOutFaultPhase" />
-        <!-- Orca-specific phases -->
-        <phase name="authenticationPhase"/>                
-        <phase name="PolicyDetermination" />
-        <phase name="MessageOut" />
-        <!-- Orca-specific phases -->
-        <phase name="loggingPhase"/>
-    </phaseOrder>
-    </axisconfig>
+<axisconfig name="AxisJava2.0"> 
+    <!-- Engage the addressing module --> 
+    <!-- <module ref="addressing"/> --> 
+    <!-- Engage the security module --> 
+    <module ref="rampart" /> 
+    <parameter name="OutflowSecurity"> 
+        <action> 
+            <items>
+                Signature
+            </items> 
+            <user>
+                actorKey
+            </user> 
+            <!--alias of the key used to sign--> 
+            <passwordCallbackClass>
+                orca.nodeagent.client.PWCallbackHandlerClient
+            </passwordCallbackClass> 
+            <signaturePropFile>
+                ./runtime/axis2/a0b1324e-23e7-11df-85d1-000c29b1c193.client.properties
+            </signaturePropFile> 
+            <signatureKeyIdentifier>
+                DirectReference
+            </signatureKeyIdentifier> 
+        </action> 
+    </parameter> 
+    <parameter name="InflowSecurity"> 
+        <action> 
+            <items>
+                Signature
+            </items> 
+            <passwordCallbackClass>
+                orca.nodeagent.client.PWCallbackHandlerClient
+            </passwordCallbackClass> 
+            <signaturePropFile>
+                ./runtime/axis2/a0b1324e-23e7-11df-85d1-000c29b1c193.client.properties
+            </signaturePropFile> 
+        </action> 
+    </parameter> 
+    <!-- Engage the orca-auth module --> 
+    <module ref="orcaauth" /> 
+    <!-- Test with addressing and MTOM: Client's Configuration:END--> 
+    <!-- ================================================= --> 
+    <!-- Parameters --> 
+    <!-- ================================================= --> 
+    <parameter name="hotdeployment" locked="false">
+        true
+    </parameter> 
+    <parameter name="hotupdate" locked="false">
+        false
+    </parameter> 
+    <parameter name="enableMTOM" locked="false">
+        true
+    </parameter> 
+    <!-- Uncomment this to enable REST support --> 
+    <!--    <parameter name="enableREST" locked="false">true</parameter>--> 
+    <!-- ADDED --> 
+    <parameter name="sendStacktraceDetailsWithFaults" locked="false">
+        true
+    </parameter> 
+    <parameter name="DrillDownToRootCauseForFaultReason" locked="false">
+        true
+    </parameter> 
+    <parameter name="userName" locked="false">
+        admin
+    </parameter> 
+    <parameter name="password" locked="false">
+        axis2
+    </parameter> 
+    <!-- ADDED --> 
+    <parameter name="manageTransportSession" locked="false">
+        false
+    </parameter> 
+    <parameter name="enableRESTInAxis2MainServlet" locked="true">
+        false
+    </parameter> 
+    <parameter name="disableREST" locked="true">
+        false
+    </parameter> 
+    <parameter name="disableSeparateEndpointForREST" locked="true">
+        false
+    </parameter> 
+    <!-- ================================================= --> 
+    <!-- Message Receivers --> 
+    <!-- ================================================= --> 
+    <!--This is the Deafult Message Receiver for the system , if you want to have MessageReceivers for --> 
+    <!--all the other MEP implement it and add the correct entry to here , so that you can refer from--> 
+    <!--any operation --> 
+    <!--Note : You can ovride this for particular service by adding the same element with your requirement--> 
+    <messageReceivers> 
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.receivers.RawXMLINOnlyMessageReceiver" /> 
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver" /> 
+    </messageReceivers> 
+    <!-- ================================================= --> 
+    <!-- Transport Ins --> 
+    <!-- ================================================= --> 
+    <transportReceiver name="http" class="org.apache.axis2.transport.http.SimpleHTTPServer"> 
+        <parameter name="port" locked="false">
+            6060
+        </parameter> 
+        <!--If you want to give your own host address for EPR generation--> 
+        <!--uncommet following paramter , and set as you required.--> 
+        <!--<parameter name="hostname" locked="false">http://myApp.com/ws</parameter>--> 
+    </transportReceiver> 
+    <transportReceiver name="tcp" class="org.apache.axis2.transport.tcp.TCPServer"> 
+        <parameter name="port" locked="false">
+            6061
+        </parameter> 
+        <!--If you want to give your own host address for EPR generation--> 
+        <!--uncommet following paramter , and set as you required.--> 
+        <!--<parameter name="hostname" locked="false">tcp://myApp.com/ws</parameter>--> 
+    </transportReceiver> 
+    <!-- ================================================= --> 
+    <!-- Transport Outs --> 
+    <!-- ================================================= --> 
+    <transportSender name="tcp" class="org.apache.axis2.transport.tcp.TCPTransportSender" /> 
+    <transportSender name="local" class="org.apache.axis2.transport.local.LocalTransportSender" /> 
+    <transportSender name="jms" class="org.apache.axis2.transport.jms.JMSSender" /> 
+    <transportSender name="http" class="org.apache.axis2.transport.http.CommonsHTTPTransportSender"> 
+        <parameter name="PROTOCOL" locked="false">
+            HTTP/1.1
+        </parameter> 
+        <parameter name="Transfer-Encoding" locked="false">
+            chunked
+        </parameter> 
+    </transportSender> 
+    <transportSender name="https" class="org.apache.axis2.transport.http.CommonsHTTPTransportSender"> 
+        <parameter name="PROTOCOL" locked="false">
+            HTTP/1.1
+        </parameter> 
+        <parameter name="Transfer-Encoding" locked="false">
+            chunked
+        </parameter> 
+    </transportSender> 
+    <!-- ================================================= --> 
+    <!-- Phases  --> 
+    <!-- ================================================= --> 
+    <phaseOrder type="InFlow"> 
+        <!--  System pre defined phases       --> 
+        <phase name="Transport"> 
+            <handler name="RequestURIBasedDispatcher" class="org.apache.axis2.engine.RequestURIBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+            <handler name="SOAPActionBasedDispatcher" class="org.apache.axis2.engine.SOAPActionBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+        </phase> 
+        <phase name="Security" /> 
+        <phase name="PreDispatch" /> 
+        <phase name="Dispatch" class="org.apache.axis2.engine.DispatchPhase"> 
+            <handler name="AddressingBasedDispatcher" class="org.apache.axis2.engine.AddressingBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+            <handler name="SOAPMessageBodyBasedDispatcher" class="org.apache.axis2.engine.SOAPMessageBodyBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+            <handler name="InstanceDispatcher" class="org.apache.axis2.engine.InstanceDispatcher"> 
+                <order phase="PostDispatch" /> 
+            </handler> 
+        </phase> 
+        <!--  System pre defined phases       --> 
+        <!--   After Postdispatch phase module author or or service author can add any phase he want      --> 
+        <phase name="OperationInPhase" /> 
+        <!-- Orca-specific phases --> 
+        <phase name="loggingPhase" /> 
+        <phase name="authenticationPhase" /> 
+    </phaseOrder> 
+    <phaseOrder type="OutFlow"> 
+        <!--      user can add his own phases to this area  --> 
+        <phase name="OperationOutPhase" /> 
+        <!-- Orca-specific phases --> 
+        <phase name="authenticationPhase"> 
+        </phase> 
+        <!--system predefined phase--> 
+        <!--these phase will run irrespective of the service--> 
+        <phase name="PolicyDetermination" /> 
+        <phase name="MessageOut" /> 
+        <phase name="Security" /> 
+        <!-- Orca-specific phases --> 
+        <phase name="loggingPhase" /> 
+    </phaseOrder> 
+    <phaseOrder type="InFaultFlow"> 
+        <phase name="PreDispatch" /> 
+        <phase name="Dispatch" class="org.apache.axis2.engine.DispatchPhase"> 
+            <handler name="RequestURIBasedDispatcher" class="org.apache.axis2.engine.RequestURIBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+            <handler name="SOAPActionBasedDispatcher" class="org.apache.axis2.engine.SOAPActionBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+            <handler name="AddressingBasedDispatcher" class="org.apache.axis2.engine.AddressingBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+            <handler name="SOAPMessageBodyBasedDispatcher" class="org.apache.axis2.engine.SOAPMessageBodyBasedDispatcher"> 
+                <order phase="Dispatch" /> 
+            </handler> 
+            <handler name="InstanceDispatcher" class="org.apache.axis2.engine.InstanceDispatcher"> 
+                <order phase="PostDispatch" /> 
+            </handler> 
+        </phase> 
+        <!--      user can add his own phases to this area  --> 
+        <phase name="OperationInFaultPhase" /> 
+        <!-- Orca-specific phases --> 
+        <phase name="loggingPhase" /> 
+        <phase name="authenticationPhase" /> 
+    </phaseOrder> 
+    <phaseOrder type="OutFaultFlow"> 
+        <!--      user can add his own phases to this area  --> 
+        <phase name="OperationOutFaultPhase" /> 
+        <!-- Orca-specific phases --> 
+        <phase name="authenticationPhase" /> 
+        <phase name="PolicyDetermination" /> 
+        <phase name="MessageOut" /> 
+        <!-- Orca-specific phases --> 
+        <phase name="loggingPhase" /> 
+    </phaseOrder> 
 </axisconfig>

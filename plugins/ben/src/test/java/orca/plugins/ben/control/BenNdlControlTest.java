@@ -34,7 +34,8 @@ import orca.shirako.util.UpdateData;
 import orca.util.PropList;
 import orca.util.ResourceType;
 
-public class BenNdlControlTest extends AuthorityCalendarPolicyTest implements ResourceProperties, UnitProperties, ConfigurationProperties {
+public class BenNdlControlTest extends AuthorityCalendarPolicyTest
+        implements ResourceProperties, UnitProperties, ConfigurationProperties {
     public static final String SubstrateFile = "orca/network/ben-dell.rdf";
 
     public static final String RequestFile = "orca/network/request-6509.rdf";
@@ -74,7 +75,8 @@ public class BenNdlControlTest extends AuthorityCalendarPolicyTest implements Re
         return control;
     }
 
-    protected IClientReservation getSource(int units, ResourceType type, Term term, IActor actor, ISlice slice) throws DelegationException, TicketException {
+    protected IClientReservation getSource(int units, ResourceType type, Term term, IActor actor, ISlice slice)
+            throws DelegationException, TicketException {
         ResourceSet resources = new ResourceSet(units, type);
 
         // set the vlan properties
@@ -113,7 +115,8 @@ public class BenNdlControlTest extends AuthorityCalendarPolicyTest implements Re
 
     protected int vlantag = 0;
 
-    protected void checkIncomingLease(IAuthority authority, IAuthorityReservation request, IReservation incoming, UpdateData udd) {
+    protected void checkIncomingLease(IAuthority authority, IAuthorityReservation request, IReservation incoming,
+            UpdateData udd) {
         super.checkIncomingLease(authority, request, incoming, udd);
 
         final AuthorityCalendarPolicy policy = (AuthorityCalendarPolicy) authority.getPolicy();
@@ -136,7 +139,8 @@ public class BenNdlControlTest extends AuthorityCalendarPolicyTest implements Re
         assertFalse(control.inprogress);
     }
 
-    protected void checkIncomingCloseLease(IAuthority authority, IAuthorityReservation request, IReservation incoming, UpdateData udd) {
+    protected void checkIncomingCloseLease(IAuthority authority, IAuthorityReservation request, IReservation incoming,
+            UpdateData udd) {
         super.checkIncomingCloseLease(authority, request, incoming, udd);
         final AuthorityCalendarPolicy policy = (AuthorityCalendarPolicy) authority.getPolicy();
         final BenNdlControl control = (BenNdlControl) getControl(policy);
@@ -149,7 +153,8 @@ public class BenNdlControlTest extends AuthorityCalendarPolicyTest implements Re
         assertFalse(control.inprogress);
     }
 
-    protected void checkIncomingExtendLease(IAuthority authority, IAuthorityReservation request, IReservation incoming, UpdateData udd) {
+    protected void checkIncomingExtendLease(IAuthority authority, IAuthorityReservation request, IReservation incoming,
+            UpdateData udd) {
         super.checkIncomingLease(authority, request, incoming, udd);
 
         final AuthorityCalendarPolicy policy = (AuthorityCalendarPolicy) authority.getPolicy();

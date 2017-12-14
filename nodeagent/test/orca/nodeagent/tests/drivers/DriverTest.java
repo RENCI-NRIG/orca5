@@ -28,25 +28,19 @@ import org.apache.axis2.context.ConfigurationContextFactory;
 
 import java.util.Properties;
 
-
 /**
  * A unit test for driver operations.
  */
-public class DriverTest extends TestCase
-{
+public class DriverTest extends TestCase {
     protected String location = null;
     protected String repository = null;
     protected String config = null;
 
-    public DriverTest()
-    {
-        this(System.getenv("na.location"),
-             System.getenv("na.repository"),
-             System.getenv("na.config"));
+    public DriverTest() {
+        this(System.getenv("na.location"), System.getenv("na.repository"), System.getenv("na.config"));
     }
 
-    public DriverTest(String location, String repository, String config)
-    {
+    public DriverTest(String location, String repository, String config) {
         if (location == null) {
             throw new RuntimeException("Location cannot be null");
         }
@@ -58,15 +52,14 @@ public class DriverTest extends TestCase
 
     /**
      * Returns a stub to the node agent service
+     * 
      * @return
      * @throws Exception
      */
-    protected NodeAgentServiceStub getStub() throws Exception
-    {
+    protected NodeAgentServiceStub getStub() throws Exception {
         if ((repository != null) || (config != null)) {
-            ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-                repository,
-                config);
+            ConfigurationContext cc = ConfigurationContextFactory.createConfigurationContextFromFileSystem(repository,
+                    config);
 
             return new NodeAgentServiceStub(cc, location);
         } else {
@@ -74,8 +67,7 @@ public class DriverTest extends TestCase
         }
     }
 
-    public void test() throws Exception
-    {
+    public void test() throws Exception {
         DriverTool tool = new DriverTool(location, repository, config);
 
         String id = TestDriver.MyDriverId.toString();
@@ -149,8 +141,7 @@ public class DriverTest extends TestCase
         System.out.println("Driver support unit test successful.");
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(DriverTest.class);
     }
 }

@@ -16,34 +16,36 @@ import java.util.Map;
  */
 public class EmbedTestHelper {
 
-    public static void populateModelsAndPools(List<String> abstractModels, ResourcePoolsDescriptor pools, Map<Domain, Map<String, Integer>> resourceMap) throws IOException, NdlException {
-        for (Domain domain : resourceMap.keySet()){
+    public static void populateModelsAndPools(List<String> abstractModels, ResourcePoolsDescriptor pools,
+            Map<Domain, Map<String, Integer>> resourceMap) throws IOException, NdlException {
+        for (Domain domain : resourceMap.keySet()) {
             Map<String, Integer> resource = resourceMap.get(domain);
 
             for (String resourceType : resource.keySet()) {
                 String abstractModel = domain.delegateDomainModelToString(resourceType);
                 abstractModels.add(abstractModel);
 
-                DomainResources domainResources=domain.getDomainResources(abstractModel, resource.get(resourceType));
+                DomainResources domainResources = domain.getDomainResources(abstractModel, resource.get(resourceType));
                 pools.add(getResourcePoolDescriptor(domainResources, abstractModel));
             }
         }
     }
 
-    protected static ResourcePoolDescriptor getResourcePoolDescriptor(DomainResources domainResources, String abstractModel){
+    protected static ResourcePoolDescriptor getResourcePoolDescriptor(DomainResources domainResources,
+            String abstractModel) {
         ResourcePoolDescriptor pool = new ResourcePoolDescriptor();
 
         String rdf = null;
-        DomainResourceType dType= domainResources.getResourceType().get(0);
+        DomainResourceType dType = domainResources.getResourceType().get(0);
         rdf = dType.getDomainURL().split("\\#")[0];
 
         String type = dType.getResourceType().toLowerCase();
 
-        String value= DomainResourceType.generateDomainName(rdf, type);
+        String value = DomainResourceType.generateDomainName(rdf, type);
 
-        ResourceType rType=new ResourceType(value+"."+type);
+        ResourceType rType = new ResourceType(value + "." + type);
 
-        //System.out.println("ResourceDescriptor:"+rdf+":"+type+":"+value+":"+rType.toString());
+        // System.out.println("ResourceDescriptor:"+rdf+":"+type+":"+value+":"+rType.toString());
 
         pool.setResourceType(rType);
         pool.setResourceTypeLabel("label");

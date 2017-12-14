@@ -4,14 +4,14 @@ import org.apache.tools.ant.BuildException;
 
 public class JoinTask extends RestTask {
 
-	public JoinTask() {
-		rop = RestOperations.JOIN;		
-	}
-	
-	@Override
-	public void execute() throws BuildException {
+    public JoinTask() {
+        rop = RestOperations.JOIN;
+    }
 
-		_execute();
-	}
+    @Override
+    public void execute() throws BuildException {
+
+        _execute();
+    }
 
 }

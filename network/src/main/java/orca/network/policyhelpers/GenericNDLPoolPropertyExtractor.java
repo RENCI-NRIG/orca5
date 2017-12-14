@@ -13,21 +13,22 @@ import com.hp.hpl.jena.ontology.OntModel;
 
 public class GenericNDLPoolPropertyExtractor {
 
-	OntModel delegateModel;
-	OntProcessor ontProcessor;
-	public GenericNDLPoolPropertyExtractor(String str) throws IOException {
-		ByteArrayInputStream modelStream = new ByteArrayInputStream(str.getBytes());		
-		
-		ontProcessor=new OntProcessor(modelStream);
-		delegateModel=ontProcessor.ontModel;
-	}
-	
-	public Properties getPoolProperties(){
-		return null;
-	}
-	
-	public List <ResourcePoolAttributeDescriptor> getPoolAttributes(){
-		return null;
-	}
+    OntModel delegateModel;
+    OntProcessor ontProcessor;
+
+    public GenericNDLPoolPropertyExtractor(String str) throws IOException {
+        ByteArrayInputStream modelStream = new ByteArrayInputStream(str.getBytes());
+
+        ontProcessor = new OntProcessor(modelStream);
+        delegateModel = ontProcessor.ontModel;
+    }
+
+    public Properties getPoolProperties() {
+        return null;
+    }
+
+    public List<ResourcePoolAttributeDescriptor> getPoolAttributes() {
+        return null;
+    }
 
 }

@@ -25,13 +25,13 @@ public class ProvisionAnyVlan extends GenericSherpaTask {
     public String getReservedVlanProperty() {
         return this.reservedVlanProperty;
     }
-    
+
     public void setReservationIdProperty(String name) {
-    	this.reservationIdProperty = name;
+        this.reservationIdProperty = name;
     }
-    
+
     public String getReservationIdProperty() {
-    	return this.reservationIdProperty;
+        return this.reservationIdProperty;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ProvisionAnyVlan extends GenericSherpaTask {
             Long bb = new Long(this.bw);
             // get available vlan
             logger.info("Provisioning vlan");
-            
+
             VlanIdDefinition vlan_id = sapi.get_available_vlan_id();
 
             // reserve it
@@ -54,16 +54,16 @@ public class ProvisionAnyVlan extends GenericSherpaTask {
             // save the results
             String vlanAsString = Integer.toString(vlan_id.vlan_id);
             getProject().setProperty(getReservedVlanProperty(), vlanAsString);
-            
-            getProject().setProperty(getReservationIdProperty(), vlanAsString + "|" + nodeA.trim() + ":" + intA.trim() + "|" + 
-            		vlanAsString + "|" + nodeZ.trim() + ":" + intZ.trim() + "|" + vlanAsString);
-            
-            
+
+            getProject().setProperty(getReservationIdProperty(), vlanAsString + "|" + nodeA.trim() + ":" + intA.trim()
+                    + "|" + vlanAsString + "|" + nodeZ.trim() + ":" + intZ.trim() + "|" + vlanAsString);
+
             // get shortest path and entities
             List<SPDefinition> sp = sapi.get_shortest_path(nodeA, nodeZ, bw);
             List<EntityDefinition> entities = sapi.get_entities();
 
-            if (!sapi.provision_vlan(nodeA, intA, nodeZ, intZ, sp, vlan_id.vlan_id, bw, SherpaDescKeyword, SherpaRequestId, entities.get(0).entity_id)) {
+            if (!sapi.provision_vlan(nodeA, intA, nodeZ, intZ, sp, vlan_id.vlan_id, bw, SherpaDescKeyword,
+                    SherpaRequestId, entities.get(0).entity_id)) {
                 logger.error("Unable to provision vlan tag " + vlan_id);
                 throw new BuildException("Unable to provision vlan tag " + vlan_id);
             }
@@ -87,6 +87,7 @@ public class ProvisionAnyVlan extends GenericSherpaTask {
 
     /**
      * set source node:interface
+     * 
      * @param na
      */
     public void setEndpointA(String na) {
@@ -98,6 +99,7 @@ public class ProvisionAnyVlan extends GenericSherpaTask {
 
     /**
      * set destination node:interface
+     * 
      * @param nz
      */
     public void setEndpointZ(String nz) {
@@ -109,6 +111,7 @@ public class ProvisionAnyVlan extends GenericSherpaTask {
 
     /**
      * set vlan bandwidth
+     * 
      * @param b
      */
     public void setBandwidth(String b) {
@@ -117,6 +120,7 @@ public class ProvisionAnyVlan extends GenericSherpaTask {
 
     /**
      * set vlan status property
+     * 
      * @param s
      */
     public void setVlanStatusProperty(String s) {

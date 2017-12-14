@@ -1,7 +1,7 @@
 /////////////////////////  Logging
 //
 //bitmask levels
-TNONE = 0; 
+TNONE = 0;
 TERROR = 1;
 TWARN = 2;
 TMESG = 4;
@@ -10,7 +10,7 @@ TINFO = 16;
 TDEBUG = 32;
 TALL = 63;
 logging = {
-    ascending : false, 
+    ascending : false,
     level : TERROR | TWARN | TINFO //default
 };
 
@@ -31,7 +31,7 @@ function escapeForXML(str) {
 //     if (!type) { type = TMESG; typestr = 'mesg'};
 //     if (!(logging.level & type)) return; //bitmask
 //     var log_area = document.getElementById('status');
-    
+
 //     var addendum = document.createElement("span");
 //     addendum.setAttribute('class', typestr);
 //     var now = new Date();
@@ -43,18 +43,28 @@ function escapeForXML(str) {
 //         log_area.insertBefore(addendum, log_area.firstChild);
 // } //tlog
 
-function tmsg(msg)  { tlog(msg, TMESG, 'info') };
-function tinfo(msg)  { tlog(msg, TINFO, 'info') };
-function twarn(msg) { tlog(msg, TWARN, 'warn') };
-function terror(msg) { tlog(msg, TERROR, 'error') };
-function tdebug(msg) { tlog(msg, TDEBUG, 'info') };
-function tsuccess(msg) { tlog(msg, TSUCCESS, 'info') };
+function tmsg(msg) {
+    tlog(msg, TMESG, 'info')
+};
+function tinfo(msg) {
+    tlog(msg, TINFO, 'info')
+};
+function twarn(msg) {
+    tlog(msg, TWARN, 'warn')
+};
+function terror(msg) {
+    tlog(msg, TERROR, 'error')
+};
+function tdebug(msg) {
+    tlog(msg, TDEBUG, 'info')
+};
+function tsuccess(msg) {
+    tlog(msg, TSUCCESS, 'info')
+};
 
-function tlog(str, type, typestr)
-{
-  YAHOO.log(str, typestr);
+function tlog(str, type, typestr) {
+    YAHOO.log(str, typestr);
 } //tlog
-
 
 fyi = tdebug;
 log = {}
@@ -68,7 +78,8 @@ log.success = tsuccess
 /** clear the log window **/
 function clearStatus(str) {
     var x = document.getElementById('status');
-    if (!x) return;
+    if (!x)
+        return;
     //x.innerHTML = "";
     emptyNode(x);
 } //clearStatus
@@ -76,7 +87,7 @@ function clearStatus(str) {
 /** set the logging level **/
 function setLogging(x) {
     logging.level = TALL;
-    fyi("Logging "+x);
+    fyi("Logging " + x);
     logging.level = x;
 }
 

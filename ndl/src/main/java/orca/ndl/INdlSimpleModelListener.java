@@ -1,9 +1,9 @@
 package orca.ndl;
 
 public interface INdlSimpleModelListener {
-	
-	/**
-	 * Signal the end of parsing
-	 */
-	public void ndlParseComplete();
+
+    /**
+     * Signal the end of parsing
+     */
+    public void ndlParseComplete();
 }

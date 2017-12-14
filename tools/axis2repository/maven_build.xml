@@ -1,37 +1,30 @@
-<project name="orca.tools.axis2repository" basedir="." >
-
-	<property name="file.prefix" value="orca.tools.axis2repository" />
-
-	<target name="package">
-		<copy todir="target">
-			<fileset dir="src">
-				<include name="axis2repository/*/**" />
-			</fileset>
-		</copy>
-		<tar tarfile="target/${file.prefix}.tar"
-				basedir="target/axis2repository" />
-		<gzip zipfile="target/${file.prefix}.tar.gz"
-				src="target/${file.prefix}.tar" />
-		<delete file="target/file.prefix.tar" />
-		<copy file="resources/project.pom" tofile="target/pom.xml" />
-		<!-- prepare the pom file -->
-		<exec executable="perl" dir="." failonerror="true">
-			<arg line="-i -pe &quot;s/PROJECT_VERSION/${maven.project.version}/&quot; target/pom.xml" />		
-		</exec>
-	</target>
-
-	<!-- Installs the in the local repository -->
-	<target name="install" depends="package">
-		<exec executable="mvn" dir="." failonerror="true" >
-			<arg line="install:install-file -DpomFile=target/pom.xml -Dfile=target/${file.prefix}.tar.gz" />
-		</exec>
-	</target>
-
-	<!-- Deploys subprojects in the orca repository -->
-	<target name="deploy" depends="package">
-		<exec executable="mvn" dir="." failonerror="true" >
-			<arg line="deploy:deploy-file -DrepositoryId='orca.deploy' -Durl='dav:https://geni-orca.renci.org/maven' -DpomFile=target/pom.xml -Dfile=target/${file.prefix}.tar.gz" />
-		</exec>
-	</target>
-
+<project name="orca.tools.axis2repository" basedir="."> 
+    <property name="file.prefix" value="orca.tools.axis2repository" /> 
+    <target name="package"> 
+        <copy todir="target"> 
+            <fileset dir="src"> 
+                <include name="axis2repository/*/**" /> 
+            </fileset> 
+        </copy> 
+        <tar tarfile="target/${file.prefix}.tar" basedir="target/axis2repository" /> 
+        <gzip zipfile="target/${file.prefix}.tar.gz" src="target/${file.prefix}.tar" /> 
+        <delete file="target/file.prefix.tar" /> 
+        <copy file="resources/project.pom" tofile="target/pom.xml" /> 
+        <!-- prepare the pom file --> 
+        <exec executable="perl" dir="." failonerror="true"> 
+            <arg line="-i -pe &quot;s/PROJECT_VERSION/${maven.project.version}/&quot; target/pom.xml" /> 
+        </exec> 
+    </target> 
+    <!-- Installs the in the local repository --> 
+    <target name="install" depends="package"> 
+        <exec executable="mvn" dir="." failonerror="true"> 
+            <arg line="install:install-file -DpomFile=target/pom.xml -Dfile=target/${file.prefix}.tar.gz" /> 
+        </exec> 
+    </target> 
+    <!-- Deploys subprojects in the orca repository --> 
+    <target name="deploy" depends="package"> 
+        <exec executable="mvn" dir="." failonerror="true"> 
+            <arg line="deploy:deploy-file -DrepositoryId='orca.deploy' -Durl='dav:https://geni-orca.renci.org/maven' -DpomFile=target/pom.xml -Dfile=target/${file.prefix}.tar.gz" /> 
+        </exec> 
+    </target> 
 </project>

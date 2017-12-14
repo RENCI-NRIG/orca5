@@ -18,16 +18,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-
-public class Serializer
-{
+public class Serializer {
     /**
      * Serializes a properties list to a properties element
+     * 
      * @param p
      * @return
      */
-    public static PropertiesElement serialize(Properties p)
-    {
+    public static PropertiesElement serialize(Properties p) {
         PropertiesElement result = new PropertiesElement();
 
         if (p != null) {
@@ -48,10 +46,10 @@ public class Serializer
 
     /**
      * Serializes a properties element to a properties list
+     * 
      * @param e
      */
-    public static Properties serialize(PropertiesElement e)
-    {
+    public static Properties serialize(PropertiesElement e) {
         Properties p = new Properties();
 
         if (e != null) {

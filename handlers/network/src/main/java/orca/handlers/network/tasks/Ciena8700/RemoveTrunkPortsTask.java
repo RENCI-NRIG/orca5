@@ -1,6 +1,5 @@
 package orca.handlers.network.tasks.Ciena8700;
 
-
 import org.apache.tools.ant.BuildException;
 
 public class RemoveTrunkPortsTask extends Ciena8700BaseTask {
