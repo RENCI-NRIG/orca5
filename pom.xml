@@ -550,6 +550,9 @@
                     </excludes>
                 </configuration>
 
+                <!--
+                only run this manually, not with other maven goals.
+                running with other maven goals wasn't using the correct configFile
                 <executions>
                     <execution>
                         <goals>
@@ -557,6 +560,7 @@
                         </goals>
                     </execution>
                 </executions>
+                -->
             </plugin>
         </plugins>
         <extensions>
