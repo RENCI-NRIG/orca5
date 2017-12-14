@@ -847,9 +847,11 @@ class VM:
     
         floating_addr = None
 
-        #allocate floating ip
+        # https://github.com/RENCI-NRIG/orca5/pull/166/files
+        # https://github.com/RENCI-NRIG/exogeni/issues/117
+        # allocate floating ip
         floating_addr = self._allocate_floating_ip()
-        if floating_addr != None:
+        if floating_addr is not None:
             LOG.info("VM " + new_vm_id + " is allocated floating ip " + floating_addr)
             #assign floating ip
             self._assign_floating_ip(new_vm_id, floating_addr)
@@ -861,6 +863,7 @@ class VM:
                 console_log = 'Cannot get console log'
             self._clean_all(new_vm_id)
             raise VM_Broken('Nova failed to allocate floating ip to the VM ' + str(new_vm_id), new_vm_id,console_log)
+
 
         #ping test
         if self._ping_test_vm(floating_addr, ping_retries, 10):
