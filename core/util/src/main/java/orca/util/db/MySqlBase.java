@@ -162,7 +162,7 @@ public class MySqlBase implements DatabaseBase
      * https://github.com/RENCI-NRIG/orca5/pull/156
      */
     @Persistent(key = PropertyMySqlConnectionOptions)
-    protected String mySqlConnectionOptions;
+    protected String mySqlConnectionOptions = "";
     /**
      * Location of the file to use to create the connection pool
      */
