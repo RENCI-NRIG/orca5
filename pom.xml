@@ -611,24 +611,6 @@
 	</build>
 
 	<profiles>
-		<!-- Use this profile for code formatting: mvn -Pformat jalopy:format -->
-		<profile>
-			<id>format</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>jalopy-maven-plugin</artifactId>
-						<version>1.0-alpha-1</version>
-						<configuration>
-							<convention>build/build/src/main/resources/orca/format.xml</convention>
-							<failOnError>false</failOnError>
-							<srcExcludesPattern>**/beans/**/*.java</srcExcludesPattern>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 		<!-- Use this profile for generating project reports -->
 		<profile>
 			<id>reporting</id>
