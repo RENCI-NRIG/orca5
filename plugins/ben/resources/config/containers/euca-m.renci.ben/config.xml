@@ -3,59 +3,59 @@
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                renci-vm-site
+                 renci-vm-site 
             </name> 
             <guid>
-                1c1078c4-7259-4d88-9e9a-d4a723bea6b4
+                 1c1078c4-7259-4d88-9e9a-d4a723bea6b4 
             </guid> 
             <pools> 
                 <pool> 
                     <type>
-                        renci.vm
+                         renci.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (RENCI)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="ec2/handler.xml" /> 
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.memory
+                                 resource.memory 
                             </key> 
                             <label>Memory</label> 
                             <value>
-                                128
+                                 128 
                             </value> 
                             <unit>
-                                MB
+                                 MB 
                             </unit> 
                             <type>
-                                integer
+                                 integer 
                             </type> 
                         </attribute> 
                         <attribute> 
                             <key>
-                                resource.cpu
+                                 resource.cpu 
                             </key> 
                             <label>CPU</label> 
                             <value>
-                                1/2 of 2GHz Intel Xeon
+                                 1/2 of 2GHz Intel Xeon 
                             </value> 
                             <type>
-                                String
+                                 String 
                             </type> 
                         </attribute> 
                     </attributes> 
@@ -84,10 +84,10 @@
                 <to name="renci-vm-site" type="site" /> 
                 <rset> 
                     <type>
-                        renci.vm
+                         renci.vm 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 

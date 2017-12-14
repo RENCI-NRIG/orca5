@@ -3,7 +3,7 @@
     <action name="DeleteVLAN"> 
         <exchange> 
             <send>
-                virtual-switch delete vs {$virtualSwitch}
+                 virtual-switch delete vs {$virtualSwitch} 
             </send> 
         </exchange> 
     </action> 

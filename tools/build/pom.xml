@@ -1,60 +1,60 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <artifactId>
-        build
+         build 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            tools
+             tools 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
     </parent> 
     <name>
-        Orca Build Tools
+         Orca Build Tools 
     </name> 
     <url>
-        https://geni-orca.renci.org/orca-doc
+         https://geni-orca.renci.org/orca-doc 
     </url> 
     <description>
          A small collection of useful classes to bootstrap Orca's build process 
     </description> 
     <properties> 
         <orca.tools.build.version>
-            1.0
+             1.0 
         </orca.tools.build.version> 
         <orca.repository.id>
-            orca
+             orca 
         </orca.repository.id> 
         <orca.repository.url>
-            http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs
+             http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs 
         </orca.repository.url> 
         <orca.website.id>
-            orca.website
+             orca.website 
         </orca.website.id> 
         <orca.website.url>
-            dav:https://geni-orca.renci.org/orca-doc/current
+             dav:https://geni-orca.renci.org/orca-doc/current 
         </orca.website.url> 
     </properties> 
     <dependencies> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant
+                 ant 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
     </dependencies> 
@@ -64,15 +64,15 @@
             <!-- the compiler --> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-compiler-plugin
+                     maven-compiler-plugin 
                 </artifactId> 
                 <configuration> 
                     <source>1.7</source> 
                     <target>
-                        1.7
+                         1.7 
                     </target> 
                 </configuration> 
             </plugin> 
@@ -81,13 +81,13 @@
             <!-- enable webdav wagon support --> 
             <extension> 
                 <groupId>
-                    org.apache.maven.wagon
+                     org.apache.maven.wagon 
                 </groupId> 
                 <artifactId>
-                    wagon-webdav
+                     wagon-webdav 
                 </artifactId> 
                 <version>
-                    1.0-beta-2
+                     1.0-beta-2 
                 </version> 
             </extension> 
         </extensions> 

@@ -3,50 +3,50 @@
     <action name="DeleteQoSPolicy"> 
         <exchange> 
             <send>
-                config t
+                 config t 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                policy-map {$QoSPolicyName}
+                 policy-map {$QoSPolicyName} 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                no class class-default
+                 no class class-default 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                exit
+                 exit 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                no policy-map {$QoSPolicyName}
+                 no policy-map {$QoSPolicyName} 
             </send> 
             <expect timeout="3000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                end
+                 end 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
     </action> 

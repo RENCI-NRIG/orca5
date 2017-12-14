@@ -3,34 +3,34 @@
     <action name="RemoveAccessPorts" parameter="AccessPorts"> 
         <exchange> 
             <send>
-                config t
+                 config t 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                interface range {$AccessPorts}
+                 interface range {$AccessPorts} 
             </send> 
             <expect timeout="3000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                no switchport access vlan {$VLANTagName}
+                 no switchport access vlan {$VLANTagName} 
             </send> 
             <expect timeout="4000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                end
+                 end 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
     </action> 

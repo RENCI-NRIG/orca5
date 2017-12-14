@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <artifactId>
-        orca-base
+         orca-base 
     </artifactId> 
     <name>
-        Orca Docker image: orca-base
+         Orca Docker image: orca-base 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            docker-orca
+             docker-orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
     </parent> 
     <build> 
         <resources> 
             <resource> 
                 <directory>
-                    ${project.basedir}
+                     ${project.basedir} 
                 </directory> 
                 <filtering>
-                    true
+                     true 
                 </filtering> 
                 <includes> 
                     <include>
-                        **/Dockerfile
+                         **/Dockerfile 
                     </include> 
                 </includes> 
             </resource> 
@@ -40,43 +40,43 @@
             <plugins> 
                 <plugin> 
                     <groupId>
-                        com.spotify
+                         com.spotify 
                     </groupId> 
                     <artifactId>
-                        docker-maven-plugin
+                         docker-maven-plugin 
                     </artifactId> 
                     <executions> 
                         <execution> 
                             <phase>
-                                package
+                                 package 
                             </phase> 
                             <goals> 
                                 <goal>
-                                    build
+                                     build 
                                 </goal> 
                             </goals> 
                         </execution> 
                     </executions> 
                     <configuration> 
                         <dockerDirectory>
-                            ${project.build.directory}/classes
+                             ${project.build.directory}/classes 
                         </dockerDirectory> 
                         <imageName>
-                            renci/${project.artifactId}
+                             renci/${project.artifactId} 
                         </imageName> 
                         <imageTags> 
                             <imageTag>
-                                ${project.version}-${orca.docker.jre.vendor}
+                                 ${project.version}-${orca.docker.jre.vendor} 
                             </imageTag> 
                             <imageTag>
-                                ${git.commit.id.abbrev}-${orca.docker.jre.vendor}
+                                 ${git.commit.id.abbrev}-${orca.docker.jre.vendor} 
                             </imageTag> 
                             <imageTag>
-                                ${orca.docker.jre.vendor}
+                                 ${orca.docker.jre.vendor} 
                             </imageTag> 
                         </imageTags> 
                         <pushImage>
-                            false
+                             false 
                         </pushImage> 
                         <resources> 
                         </resources> 

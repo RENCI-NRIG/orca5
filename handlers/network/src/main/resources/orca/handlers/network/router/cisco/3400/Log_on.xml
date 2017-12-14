@@ -3,18 +3,18 @@
     <action name="Connect"> 
         <exchange> 
             <send>
-                en
+                 en 
             </send> 
             <expect timeout="2000">
-                Password
+                 Password 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                {$adminPWD}
+                 {$adminPWD} 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
     </action> 

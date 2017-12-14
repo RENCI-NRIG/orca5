@@ -3,10 +3,10 @@
     <action name="DeletePatch"> 
         <exchange> 
             <send>
-                DLT-PATCH::{$port}:{$ctag}:;
+                 DLT-PATCH::{$port}:{$ctag}:; 
             </send> 
             <expect>
-                COMPLD
+                 COMPLD 
             </expect> 
         </exchange> 
     </action> 

@@ -1,97 +1,97 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.handlers.network
+         orca.handlers.network 
     </groupId> 
     <artifactId>
-        nlr
+         nlr 
     </artifactId> 
     <name>
-        Orca NLR Sherpa Integration
+         Orca NLR Sherpa Integration 
     </name> 
     <version>
-        4.0-SNAPSHOT
+         4.0-SNAPSHOT 
     </version> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            handlers
+             handlers 
         </artifactId> 
         <version>
-            4.0-SNAPSHOT
+             4.0-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <repositories> 
         <repository> 
             <id>
-                gson
+                 gson 
             </id> 
             <url>
-                http://google-gson.googlecode.com/svn/mavenrepo
+                 http://google-gson.googlecode.com/svn/mavenrepo 
             </url> 
         </repository> 
     </repositories> 
     <dependencies> 
         <dependency> 
             <groupId>
-                com.google.code.gson
+                 com.google.code.gson 
             </groupId> 
             <artifactId>
-                gson
+                 gson 
             </artifactId> 
             <version>
-                1.3
+                 1.3 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-net
+                 commons-net 
             </groupId> 
             <artifactId>
-                commons-net
+                 commons-net 
             </artifactId> 
             <version>
-                2.0
+                 2.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-httpclient
+                 commons-httpclient 
             </groupId> 
             <artifactId>
-                commons-httpclient
+                 commons-httpclient 
             </artifactId> 
             <version>
-                3.1
+                 3.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                net.jcip
+                 net.jcip 
             </groupId> 
             <artifactId>
-                jcip-annotations
+                 jcip-annotations 
             </artifactId> 
             <version>
-                1.0
+                 1.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                shirako
+                 shirako 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
     </dependencies> 
@@ -99,18 +99,18 @@
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <executions> 
                     <execution> 
                         <id>
-                            package
+                             package 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -147,7 +147,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 
@@ -155,30 +155,30 @@
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <version>
-                    2.4.2
+                     2.4.2 
                 </version> 
                 <configuration> 
                     <systemProperties> 
                         <property> 
                             <name>
-                                login
+                                 login 
                             </name> 
                             <value>
-                                blah
+                                 blah 
                             </value> 
                         </property> 
                         <property> 
                             <name>
-                                password
+                                 password 
                             </name> 
                             <value>
-                                blah
+                                 blah 
                             </value> 
                         </property> 
                     </systemProperties> 

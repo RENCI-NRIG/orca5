@@ -1,66 +1,66 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.dependencies
+         orca.dependencies 
     </groupId> 
     <version>
-        1.0
+         1.0 
     </version> 
     <artifactId>
-        axiom
+         axiom 
     </artifactId> 
     <packaging>
-        pom
+         pom 
     </packaging> 
     <name>
-        Orca Dependencies Axiom
+         Orca Dependencies Axiom 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            dependencies
+             dependencies 
         </artifactId> 
         <version>
-            1.0
+             1.0 
         </version> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                axiom
+                 axiom 
             </groupId> 
             <artifactId>
-                axiom-api
+                 axiom-api 
             </artifactId> 
             <version>
-                1.2.2
+                 1.2.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axiom
+                 axiom 
             </groupId> 
             <artifactId>
-                axiom-impl
+                 axiom-impl 
             </artifactId> 
             <version>
-                1.2.2
+                 1.2.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axiom
+                 axiom 
             </groupId> 
             <artifactId>
-                axiom-dom
+                 axiom-dom 
             </artifactId> 
             <version>
-                1.2.2
+                 1.2.2 
             </version> 
         </dependency> 
     </dependencies> 

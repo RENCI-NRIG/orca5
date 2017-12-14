@@ -2,26 +2,26 @@
 <configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
     <global> 
         <startTime>
-            -1
+             -1 
         </startTime> 
         <cycleMillis>
-            1000
+             1000 
         </cycleMillis> 
         <firstTick>
-            0
+             0 
         </firstTick> 
         <manualTicks>
-            false
+             false 
         </manualTicks> 
         <containerGuid>
-            31560583-0f38-4300-be71-81c5b6be0c27
+             31560583-0f38-4300-be71-81c5b6be0c27 
         </containerGuid> 
         <locations> 
             <location protocol="local" /> 
         </locations> 
         <database> 
             <className>
-                orca.manage.container.db.MySqlContainerManagementDatabase
+                 orca.manage.container.db.MySqlContainerManagementDatabase 
             </className> 
             <properties> 
                 <property name="db.mysql.server" value="localhost" /> 
@@ -34,25 +34,25 @@
     <actors> 
         <actor> 
             <name>
-                renci-vm-site
+                 renci-vm-site 
             </name> 
             <description>
-                VM site authority at RENCI
+                 VM site authority at RENCI 
             </description> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.control.VMControl
+                                 orca.cod.control.VMControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="renci.vm" /> 
@@ -63,7 +63,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.Site
+                     orca.cod.plugins.Site 
                 </className> 
                 <properties> 
                     <!-- Storage servers to be transferred to this site --> 
@@ -90,7 +90,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -103,20 +103,20 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
                     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.NetworkConfigurationManager
+                                 orca.cod.plugins.NetworkConfigurationManager 
                             </className> 
                             <parameters> 
                                 <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.NetworkConfiguration
+                                             orca.cod.plugins.NetworkConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="network.service.ips" value="192.168.201.30-200" /> 
@@ -128,7 +128,7 @@
                                 <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.DnsConfiguration
+                                             orca.cod.plugins.DnsConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="dns.prefix" value="default" /> 
@@ -145,30 +145,30 @@
         </actor> 
         <actor> 
             <name>
-                vm-broker
+                 vm-broker 
             </name> 
             <description>
-                VM broker
+                 VM broker 
             </description> 
             <instance> 
                 <className>
-                    orca.shirako.core.Broker
+                     orca.shirako.core.Broker 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.BrokerSimpleUnitsPolicy
+                     orca.policy.core.BrokerSimpleUnitsPolicy 
                 </className> 
             </mapper> 
             <plugin> 
                 <className>
-                    orca.shirako.plugins.ShirakoPlugin
+                     orca.shirako.plugins.ShirakoPlugin 
                 </className> 
                 <parameters> 
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.shirako.plugins.db.MySqlClientDatabase
+                                 orca.shirako.plugins.db.MySqlClientDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -183,30 +183,30 @@
         </actor> 
         <actor> 
             <name>
-                service-renci
+                 service-renci 
             </name> 
             <description>
-                Service Manager at Renci
+                 Service Manager at Renci 
             </description> 
             <instance> 
                 <className>
-                    orca.shirako.core.ServiceManager
+                     orca.shirako.core.ServiceManager 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.ServiceManagerSimplePolicy
+                     orca.policy.core.ServiceManagerSimplePolicy 
                 </className> 
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.ServiceManagerCodPlugin
+                     orca.cod.plugins.ServiceManagerCodPlugin 
                 </className> 
                 <parameters> 
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlCodDatabase
+                                 orca.cod.plugins.db.MySqlCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -219,7 +219,7 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.shirako.plugins.config.AntConfig
+                                 orca.shirako.plugins.config.AntConfig 
                             </className> 
                             <properties> 
                                 <property name="config.count" value="1" /> 
@@ -243,10 +243,10 @@
                 <to name="renci-vm-site" type="authority" /> 
                 <rset> 
                     <type>
-                        renci.vm
+                         renci.vm 
                     </type> 
                     <units>
-                        9
+                         9 
                     </units> 
                 </rset> 
             </edge> 

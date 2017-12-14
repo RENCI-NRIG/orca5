@@ -3,58 +3,58 @@
     <action name="MapVLANS"> 
         <exchange> 
             <send>
-                config t
+                 config t 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                interface {$port}
+                 interface {$port} 
             </send> 
             <expect timeout="3000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                switchport
+                 switchport 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                switchport vlan mapping enable
+                 switchport vlan mapping enable 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                switchport vlan mapping {$srcVLAN} {$dstVLAN}
+                 switchport vlan mapping {$srcVLAN} {$dstVLAN} 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                no shut
+                 no shut 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                end
+                 end 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
     </action> 

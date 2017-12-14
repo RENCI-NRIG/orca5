@@ -3,30 +3,30 @@
     <actors> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                test-test-topology-embedding-SM
+                 test-test-topology-embedding-SM 
             </name> 
             <guid>
-                38615670-64f2-46ae-b2e5-88bb1ae86400
+                 38615670-64f2-46ae-b2e5-88bb1ae86400 
             </guid> 
             <description>
-                A Test SM for inter/intra-site topology embedding
+                 A Test SM for inter/intra-site topology embedding 
             </description> 
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                test-ndl-broker
+                 test-ndl-broker 
             </name> 
             <guid>
-                7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd
+                 7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd 
             </guid> 
             <description>
-                NDL enabled broker hosted at RENCI
+                 NDL enabled broker hosted at RENCI 
             </description> 
             <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
                 <properties> 
@@ -36,34 +36,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-bbnvm-site
+                 test-bbnvm-site 
             </name> 
             <guid>
-                af054653-54e9-4a14-aae3-6daa191b2471
+                 af054653-54e9-4a14-aae3-6daa191b2471 
             </guid> 
             <description>
-                BBN OS site authority
+                 BBN OS site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnvmsite.baremetalce
+                         bbnvmsite.baremetalce 
                     </type> 
                     <label>XCAT Bare Metal (BBN)</label> 
                     <description>
-                        A Bare Metal machine
+                         A Bare Metal machine 
                     </description> 
                     <units>
-                        1
+                         1 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -77,20 +77,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnvmsite.vm
+                         bbnvmsite.vm 
                     </type> 
                     <label>OpenStack Virtual Machine (BBN)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        36
+                         36 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -105,20 +105,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnvmsite.vlan
+                         bbnvmsite.vlan 
                     </type> 
                     <label>BBN OS internal vlan</label> 
                     <description>
-                        BBN OS vlan
+                         BBN OS vlan 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -129,13 +129,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -153,34 +153,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-bbnnet-site
+                 test-bbnnet-site 
             </name> 
             <guid>
-                071990c0-1bf6-4e0a-8b35-fe643a854149
+                 071990c0-1bf6-4e0a-8b35-fe643a854149 
             </guid> 
             <description>
-                BBN NET authority
+                 BBN NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnNet.vlan
+                         bbnNet.vlan 
                     </type> 
                     <label>BBN NET VLAN</label> 
                     <description>
-                        A VLAN over BBN NET
+                         A VLAN over BBN NET 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -191,13 +191,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -223,26 +223,26 @@
                 <to name="test-bbnvm-site" guid="af054653-54e9-4a14-aae3-6daa191b2471" type="site" /> 
                 <rset> 
                     <type>
-                        bbnvmsite.baremetalce
+                         bbnvmsite.baremetalce 
                     </type> 
                     <units>
-                        1
+                         1 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        bbnvmsite.vm
+                         bbnvmsite.vm 
                     </type> 
                     <units>
-                        18
+                         18 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        bbnvmsite.vlan
+                         bbnvmsite.vlan 
                     </type> 
                     <units>
-                        500
+                         500 
                     </units> 
                 </rset> 
             </edge> 
@@ -251,10 +251,10 @@
                 <to name="test-bbnnet-site" guid="071990c0-1bf6-4e0a-8b35-fe643a854149" type="site" /> 
                 <rset> 
                     <type>
-                        bbnNet.vlan
+                         bbnNet.vlan 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 

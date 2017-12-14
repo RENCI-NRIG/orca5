@@ -3,34 +3,34 @@
     <action name="UnmapVLANS"> 
         <exchange> 
             <send>
-                config t
+                 config t 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                interface {$port}
+                 interface {$port} 
             </send> 
             <expect timeout="3000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                no switchport vlan mapping {$srcVLAN} {$dstVLAN}
+                 no switchport vlan mapping {$srcVLAN} {$dstVLAN} 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                end
+                 end 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
     </action> 

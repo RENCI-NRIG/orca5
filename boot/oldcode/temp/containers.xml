@@ -4,39 +4,39 @@
 <containers> 
     <container> 
         <name>
-            Container name
+             Container name 
         </name> 
         <dns>
-            DNS name for this container
+             DNS name for this container 
         </dns> 
         <actors> 
             <actor>
-                actor name
+                 actor name 
             </actor> 
             <actor>
-                actor name
+                 actor name 
             </actor> 
             <actor>
-                actor name
+                 actor name 
             </actor> 
         </actors> 
     </container> 
     <container> 
         <name>
-            Container name
+             Container name 
         </name> 
         <dns>
-            DNS name for this container
+             DNS name for this container 
         </dns> 
         <actors> 
             <actor>
-                actor name
+                 actor name 
             </actor> 
             <actor>
-                actor name
+                 actor name 
             </actor> 
             <actor>
-                actor name
+                 actor name 
             </actor> 
         </actors> 
     </container> 

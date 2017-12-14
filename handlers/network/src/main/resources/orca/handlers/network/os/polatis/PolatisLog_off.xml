@@ -3,10 +3,10 @@
     <action name="Disconnect"> 
         <exchange> 
             <send>
-                canc-user::{$UID}:1:;
+                 canc-user::{$UID}:1:; 
             </send> 
             <expect>
-                COMPLD
+                 COMPLD 
             </expect> 
         </exchange> 
     </action> 

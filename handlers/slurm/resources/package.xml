@@ -1,26 +1,26 @@
 <extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans" id="67c3b524-4618-45de-b3a8-4d0310dd3744"> 
     <name>
-        SLURM Handler Library
+         SLURM Handler Library 
     </name> 
     <description>
-        Provides handlers to control SLURM managed resources
+         Provides handlers to control SLURM managed resources 
     </description> 
     <plugins> 
         <plugin id="1" type="10" actorType="3"> 
             <name>
-                SLURM
+                 SLURM 
             </name> 
             <description>
-                Provides support for managing SLURM clusters
+                 Provides support for managing SLURM clusters 
             </description> 
             <configurationProperties> 
                 <!-- Name of the handler file (relative to /ROOT/handlers) --> 
                 <property> 
                     <name>
-                        handler.file
+                         handler.file 
                     </name> 
                     <value>
-                        slurm/handler.xml
+                         slurm/handler.xml 
                     </value> 
                 </property> 
             </configurationProperties> 

@@ -3,31 +3,31 @@
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                ben-vlan-site
+                 ben-vlan-site 
             </name> 
             <description>
-                BEN VLAN site authority
+                 BEN VLAN site authority 
             </description> 
             <pools> 
                 <pool> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <label>BEN VLAN</label> 
                     <description>
-                        A VLAN over BEN
+                         A VLAN over BEN 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler packageId="583c10bfdbd326ba:-523aeda8:11644bdcf54:-8000" pluginId="3" /> 
                     <properties> 
@@ -42,24 +42,24 @@
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                ben-vlan-broker
+                 ben-vlan-broker 
             </name> 
             <description>
-                BEN VLAN broker
+                 BEN VLAN broker 
             </description> 
         </actor> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                service
+                 service 
             </name> 
             <description>
-                Service Manager
+                 Service Manager 
             </description> 
         </actor> 
     </actors> 
@@ -74,10 +74,10 @@
                 <to name="ben-vlan-site" type="site" /> 
                 <rset> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 

@@ -3,12 +3,12 @@
     <action name="RemoveSubPort" parameter="subPort"> 
         <exchange> 
             <send>
-                virtual-switch interface detach sub-port {$subPort}
+                 virtual-switch interface detach sub-port {$subPort} 
             </send> 
         </exchange> 
         <exchange> 
             <send>
-                sub-port delete sub-port {$subPort}
+                 sub-port delete sub-port {$subPort} 
             </send> 
         </exchange> 
     </action> 

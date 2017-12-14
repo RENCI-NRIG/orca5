@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <artifactId>
-        orca-mysql
+         orca-mysql 
     </artifactId> 
     <name>
-        Orca Docker image: orca-mysql
+         Orca Docker image: orca-mysql 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            docker-orca
+             docker-orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
     </parent> 
     <!-- <dependencies>
@@ -32,49 +32,49 @@
             <plugins> 
                 <plugin> 
                     <groupId>
-                        com.spotify
+                         com.spotify 
                     </groupId> 
                     <artifactId>
-                        docker-maven-plugin
+                         docker-maven-plugin 
                     </artifactId> 
                     <executions> 
                         <execution> 
                             <phase>
-                                package
+                                 package 
                             </phase> 
                             <goals> 
                                 <goal>
-                                    build
+                                     build 
                                 </goal> 
                             </goals> 
                         </execution> 
                     </executions> 
                     <configuration> 
                         <dockerDirectory>
-                            ${project.basedir}
+                             ${project.basedir} 
                         </dockerDirectory> 
                         <imageName>
-                            renci/${project.artifactId}
+                             renci/${project.artifactId} 
                         </imageName> 
                         <imageTags> 
                             <imageTag>
-                                ${git.commit.id.abbrev}
+                                 ${git.commit.id.abbrev} 
                             </imageTag> 
                         </imageTags> 
                         <pushImage>
-                            false
+                             false 
                         </pushImage> 
                         <resources> 
                             <resource> 
                                 <directory>
-                                    ${project.basedir}/../../core/schema/mysql/
+                                     ${project.basedir}/../../core/schema/mysql/ 
                                 </directory> 
                                 <targetPath>
-                                    resources
+                                     resources 
                                 </targetPath> 
                                 <includes> 
                                     <include>
-                                        full.schema.sql
+                                         full.schema.sql 
                                     </include> 
                                 </includes> 
                             </resource> 

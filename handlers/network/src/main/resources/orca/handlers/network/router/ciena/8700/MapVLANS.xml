@@ -3,7 +3,7 @@
     <action name="MapVLANS"> 
         <exchange> 
             <send>
-                sub-port set sub-port {$subPort} ingress-l2-transform stamp-*.{$dstVLAN}.* egress-l2-transform stamp-*.{$srcVLAN}.*
+                 sub-port set sub-port {$subPort} ingress-l2-transform stamp-*.{$dstVLAN}.* egress-l2-transform stamp-*.{$srcVLAN}.* 
             </send> 
         </exchange> 
     </action> 

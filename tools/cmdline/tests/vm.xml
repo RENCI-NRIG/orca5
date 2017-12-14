@@ -4,15 +4,15 @@
         <actor> 
             <!-- The actor type: site|broker|service" --> 
             <type>
-                site
+                 site 
             </type> 
             <!-- Actor name --> 
             <name>
-                site
+                 site 
             </name> 
             <!-- Actor description (optional) --> 
             <description>
-                A sample VM site
+                 A sample VM site 
             </description> 
             <!-- 
 			If this actor needs some inventory to be transferred to it, e.g., so that its handler
@@ -21,7 +21,7 @@
 			a Node Agent service running on it. 
 			--> 
             <inventory>
-                demo1,demo2,demo3,demo4
+                 demo1,demo2,demo3,demo4 
             </inventory> 
             <!-- The pools section specifies the resource pools available at this actor (site-only) --> 
             <pools> 
@@ -33,25 +33,25 @@
 					with resources a given type. 
 					--> 
                     <type>
-                        vm
+                         vm 
                     </type> 
                     <!-- Label used when displaying resources from this type --> 
                     <label>Virtual Machine</label> 
                     <!-- Optional description --> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <!-- Number of units in the pool --> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <!-- Pool validity: start time YYYY-MM-DDTHH:MM:SS--> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <!-- Pool validity: end time YYYY-MM-DDTHH:MM:SS--> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <!-- 
 					Handler to use when creating resources from this type.
@@ -64,7 +64,7 @@
 					Inventory assigned to this resource pool: comma-separated list of names.
 					--> 
                     <inventory>
-                        demo1,demo2
+                         demo1,demo2 
                     </inventory> 
                     <!--
 					The attributes section describes the attributes of a single unit allocated
@@ -73,29 +73,29 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.memory
+                                 resource.memory 
                             </key> 
                             <label>Memory</label> 
                             <value>
-                                128
+                                 128 
                             </value> 
                             <unit>
-                                MB
+                                 MB 
                             </unit> 
                             <type>
-                                integer
+                                 integer 
                             </type> 
                         </attribute> 
                         <attribute> 
                             <key>
-                                resource.cpu
+                                 resource.cpu 
                             </key> 
                             <label>CPU</label> 
                             <value>
-                                1/2 of 2GHz Intel Xeon
+                                 1/2 of 2GHz Intel Xeon 
                             </value> 
                             <type>
-                                String
+                                 String 
                             </type> 
                         </attribute> 
                     </attributes> 
@@ -129,18 +129,18 @@
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                broker
+                 broker 
             </name> 
         </actor> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                service
+                 service 
             </name> 
         </actor> 
     </actors> 
@@ -155,10 +155,10 @@
                 <to name="site" type="site" /> 
                 <rset> 
                     <type>
-                        vm
+                         vm 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 

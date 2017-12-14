@@ -3,10 +3,10 @@
     <action name="CreatePatch"> 
         <exchange> 
             <send>
-                ENT-PATCH::{$inputPort},{$outputPort}:{$ctag}:;
+                 ENT-PATCH::{$inputPort},{$outputPort}:{$ctag}:; 
             </send> 
             <expect>
-                COMPLD
+                 COMPLD 
             </expect> 
         </exchange> 
     </action> 

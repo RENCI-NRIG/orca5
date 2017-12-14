@@ -6,380 +6,380 @@
             <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="orca.nodeagent.NodeAgentServiceMessageReceiverInOut" /> 
         </messageReceivers> 
         <parameter locked="false" name="ServiceClass">
-            orca.nodeagent.NodeAgentServiceSkeleton
+             orca.nodeagent.NodeAgentServiceSkeleton 
         </parameter> 
         <operation name="uninstallDriver" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                uninstallDriver
+                 uninstallDriver 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/uninstallDriverResponse
+                 http://orca/nodeagent/NodeAgentPortType/uninstallDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="executeScript" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                executeScript
+                 executeScript 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/executeScriptResponse
+                 http://orca/nodeagent/NodeAgentPortType/executeScriptResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="testFunc" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                testFunc
+                 testFunc 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/testFuncResponse
+                 http://orca/nodeagent/NodeAgentPortType/testFuncResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="executeObjectDriver" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                executeObjectDriver
+                 executeObjectDriver 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/executeObjectDriverResponse
+                 http://orca/nodeagent/NodeAgentPortType/executeObjectDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="unregisterKey" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                unregisterKey
+                 unregisterKey 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/unregisterKeyResponse
+                 http://orca/nodeagent/NodeAgentPortType/unregisterKeyResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="executeDriver" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                executeDriver
+                 executeDriver 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/executeDriverResponse
+                 http://orca/nodeagent/NodeAgentPortType/executeDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="upgradeDriver" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                upgradeDriver
+                 upgradeDriver 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/upgradeDriverResponse
+                 http://orca/nodeagent/NodeAgentPortType/upgradeDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="registerAuthorityKey" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                registerAuthorityKey
+                 registerAuthorityKey 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/registerFirstKeyResponse
+                 http://orca/nodeagent/NodeAgentPortType/registerFirstKeyResponse 
             </outputActionMapping> 
         </operation> 
         <operation name="getServiceKey" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                getServiceKey
+                 getServiceKey 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/getServiceKeyResponse
+                 http://orca/nodeagent/NodeAgentPortType/getServiceKeyResponse 
             </outputActionMapping> 
         </operation> 
         <operation name="registerKey" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                registerKey
+                 registerKey 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/registerKeyResponse
+                 http://orca/nodeagent/NodeAgentPortType/registerKeyResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 
         </operation> 
         <operation name="installDriver" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
-                installDriver
+                 installDriver 
             </actionMapping> 
             <outputActionMapping>
-                http://orca/nodeagent/NodeAgentPortType/installDriverResponse
+                 http://orca/nodeagent/NodeAgentPortType/installDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                 </action> 
             </parameter> 
             <parameter name="OutflowSecurity"> 
                 <action> 
                     <items>
-                        Signature
+                         Signature 
                     </items> 
                     <user>
-                        serverkey
+                         serverkey 
                     </user> 
                     <passwordCallbackClass>
-                        orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
-                        service.properties
+                         service.properties 
                     </signaturePropFile> 
                     <signatureKeyIdentifier>
-                        DirectReference
+                         DirectReference 
                     </signatureKeyIdentifier> 
                 </action> 
             </parameter> 

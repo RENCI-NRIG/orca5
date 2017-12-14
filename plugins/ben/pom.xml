@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.plugins
+         orca.plugins 
     </groupId> 
     <artifactId>
-        ben
+         ben 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <name>
-        Orca BEN Plugins
+         Orca BEN Plugins 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            plugins
+             plugins 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <build> 
         <plugins> 
             <plugin> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <executions> 
                     <execution> 
                         <id>
-                            package
+                             package 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -122,7 +122,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 
@@ -133,75 +133,75 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                policy
+                 policy 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <scope>
-                provided
+                 provided 
             </scope> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                shirako
+                 shirako 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <scope>
-                provided
+                 provided 
             </scope> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                embed
+                 embed 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                shirako
+                 shirako 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <classifier>
-                tests
+                 tests 
             </classifier> 
             <scope>
-                test
+                 test 
             </scope> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                policy
+                 policy 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <classifier>
-                tests
+                 tests 
             </classifier> 
             <scope>
-                test
+                 test 
             </scope> 
         </dependency> 
     </dependencies> 

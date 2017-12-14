@@ -69,7 +69,7 @@
                 <echo message="after create lun: exit code ${code}, ${create.lun.output}" /> 
                 <property name="shirako.target.code" value="${code}" /> 
                 <property name="shirako.target.code.message" value="${create.lun.output}" /> 
-            </else>
+            </else> 
         </if> 
         <!-- end of else for emulation --> 
         <echo message="join exit code: ${shirako.target.code}" /> 

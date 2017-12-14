@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.handlers
+         orca.handlers 
     </groupId> 
     <artifactId>
-        ec2
+         ec2 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <name>
-        Orca EC2 Handlers Library
+         Orca EC2 Handlers Library 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            handlers
+             handlers 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                shirako
+                 shirako 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.ini4j
+                 org.ini4j 
             </groupId> 
             <artifactId>
-                ini4j
+                 ini4j 
             </artifactId> 
             <version>
-                0.5.4
+                 0.5.4 
             </version> 
         </dependency> 
     </dependencies> 
@@ -60,29 +60,29 @@
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <version>
-                    2.4.2
+                     2.4.2 
                 </version> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <executions> 
                     <execution> 
                         <id>
-                            package
+                             package 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -132,7 +132,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 

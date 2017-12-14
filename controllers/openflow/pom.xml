@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.controllers
+         orca.controllers 
     </groupId> 
     <artifactId>
-        openflow
+         openflow 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <version>
-        3.1-extended
+         3.1-extended 
     </version> 
     <name>
-        Orca OpenFlow Controller
+         Orca OpenFlow Controller 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            controllers
+             controllers 
         </artifactId> 
         <version>
-            4.0-SNAPSHOT
+             4.0-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <build> 
         <plugins> 
             <plugin> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <executions> 
                     <execution> 
                         <id>
-                            package
+                             package 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -116,7 +116,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 
@@ -127,81 +127,81 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                orca.manage.extensions
+                 orca.manage.extensions 
             </groupId> 
             <artifactId>
-                standard
+                 standard 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.tests
+                 orca.tests 
             </groupId> 
             <artifactId>
-                core
+                 core 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
-                network
+                 network 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                openflow
+                 openflow 
             </groupId> 
             <artifactId>
-                flowvisor
+                 flowvisor 
             </artifactId> 
             <version>
-                1.0
+                 1.0 
             </version> 
         </dependency> 
         <!-- Those are necessary but only for execution --> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                shirako
+                 shirako 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <classifier>
-                tests
+                 tests 
             </classifier> 
             <scope>
-                test
+                 test 
             </scope> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                policy
+                 policy 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <classifier>
-                tests
+                 tests 
             </classifier> 
             <scope>
-                test
+                 test 
             </scope> 
         </dependency> 
     </dependencies> 

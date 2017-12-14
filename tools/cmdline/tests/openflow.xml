@@ -3,31 +3,31 @@
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                openflow-site
+                 openflow-site 
             </name> 
             <guid>
-                5a3a0bce-84dc-4cdd-b6ae-8c5718359cc4
+                 5a3a0bce-84dc-4cdd-b6ae-8c5718359cc4 
             </guid> 
             <pools> 
                 <pool> 
                     <type>
-                        openflow
+                         openflow 
                     </type> 
                     <label>OpenFlow slice</label> 
                     <description>
-                        A slice over OpenFlow substrate
+                         A slice over OpenFlow substrate 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="network/openflow/handler.xml"> 
                         <properties> 
@@ -55,31 +55,31 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                renci-vm-site
+                 renci-vm-site 
             </name> 
             <guid>
-                19f1b53b-f081-4544-81fa-b0467bff73c1
+                 19f1b53b-f081-4544-81fa-b0467bff73c1 
             </guid> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        renci.vm
+                         renci.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (RENCI)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="ec2/handler.xml"> 
                         <properties> 
@@ -89,40 +89,40 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.domain
+                                 resource.domain 
                             </key> 
                             <type>
-                                String
+                                 String 
                             </type> 
                             <value>
-                                rencivmsite
+                                 rencivmsite 
                             </value> 
                         </attribute> 
                         <attribute> 
                             <key>
-                                resource.memory
+                                 resource.memory 
                             </key> 
                             <label>Memory</label> 
                             <value>
-                                128
+                                 128 
                             </value> 
                             <unit>
-                                MB
+                                 MB 
                             </unit> 
                             <type>
-                                integer
+                                 integer 
                             </type> 
                         </attribute> 
                         <attribute> 
                             <key>
-                                resource.cpu
+                                 resource.cpu 
                             </key> 
                             <label>CPU</label> 
                             <value>
-                                1/2 of 2GHz Intel Xeon
+                                 1/2 of 2GHz Intel Xeon 
                             </value> 
                             <type>
-                                String
+                                 String 
                             </type> 
                         </attribute> 
                     </attributes> 
@@ -141,30 +141,30 @@
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                ndl-broker
+                 ndl-broker 
             </name> 
             <guid>
-                27163b6d-c5bd-4413-aedb-ba306c5eec18
+                 27163b6d-c5bd-4413-aedb-ba306c5eec18 
             </guid> 
             <description>
-                OpenFlow Broker
+                 OpenFlow Broker 
             </description> 
         </actor> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                service
+                 service 
             </name> 
             <guid>
-                e095db95-ebeb-4e0a-a218-2919b96deaf3
+                 e095db95-ebeb-4e0a-a218-2919b96deaf3 
             </guid> 
             <description>
-                Service Manager
+                 Service Manager 
             </description> 
         </actor> 
     </actors> 
@@ -179,10 +179,10 @@
                 <to name="openflow-site" type="site" /> 
                 <rset> 
                     <type>
-                        openflow
+                         openflow 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 
@@ -191,10 +191,10 @@
                 <to name="renci-vm-site" type="site" /> 
                 <rset> 
                     <type>
-                        renci.vm
+                         renci.vm 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 

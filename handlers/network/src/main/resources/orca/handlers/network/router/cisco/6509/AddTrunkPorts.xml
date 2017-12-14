@@ -3,74 +3,74 @@
     <action name="AddTrunkPorts" parameter="TrunkPorts"> 
         <exchange> 
             <send>
-                config t
+                 config t 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                interface range {$TrunkPorts}
+                 interface range {$TrunkPorts} 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                switchport
+                 switchport 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                switchport trunk encapsulation dot1q
+                 switchport trunk encapsulation dot1q 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                switchport trunk allowed vlan add {$VLANTagName}
+                 switchport trunk allowed vlan add {$VLANTagName} 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                switchport mode trunk
+                 switchport mode trunk 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                mls qos vlan-based
+                 mls qos vlan-based 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                no shut
+                 no shut 
             </send> 
             <expect timeout="2000">
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                end
+                 end 
             </send> 
             <expect>
-                {$DefaultPrompt}
+                 {$DefaultPrompt} 
             </expect> 
         </exchange> 
     </action> 

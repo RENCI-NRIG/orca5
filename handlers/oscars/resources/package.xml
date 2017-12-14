@@ -1,30 +1,30 @@
 <extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans" id="6E06A4E8-90F7-4530-B263-4230D80E7ED5"> 
     <name>
-        OSCARS/ION Handler Library
+         OSCARS/ION Handler Library 
     </name> 
     <description>
-        Provides OSCARS/ION handler.
+         Provides OSCARS/ION handler. 
     </description> 
     <plugins> 
         <!-- OSCARS/ION --> 
         <plugin id="1" type="10" actorType="3"> 
             <name>
-                OSCARS/ION Handler
+                 OSCARS/ION Handler 
             </name> 
             <description>
-                Provides support for OSCARS/ION circuit service.
+                 Provides support for OSCARS/ION circuit service. 
             </description> 
             <configurationTemplate>
-                oscars/config.vm
+                 oscars/config.vm 
             </configurationTemplate> 
             <configurationProperties> 
                 <!-- Name of the handler file (relative to /ROOT/handlers) --> 
                 <property> 
                     <name>
-                        handler.file
+                         handler.file 
                     </name> 
                     <value>
-                        oscars/handler.xml
+                         oscars/handler.xml 
                     </value> 
                 </property> 
             </configurationProperties> 

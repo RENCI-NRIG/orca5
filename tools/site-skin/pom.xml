@@ -1,30 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <artifactId>
-        site-skin
+         site-skin 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            tools
+             tools 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
     </parent> 
     <name>
-        Orca Website Template and Skin
+         Orca Website Template and Skin 
     </name> 
     <properties> 
         <project.build.sourceEncoding>
-            UTF-8
+             UTF-8 
         </project.build.sourceEncoding> 
     </properties> 
 </project>

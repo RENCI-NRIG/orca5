@@ -3,7 +3,7 @@
     <action name="Connect"> 
         <exchange> 
             <send>
-                system show host-name
+                 system show host-name 
             </send> 
         </exchange> 
     </action> 

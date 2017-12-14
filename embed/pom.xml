@@ -1,37 +1,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        embed
+         embed 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <name>
-        Orca Network Embedding v2
+         Orca Network Embedding v2 
     </name> 
     <url>
-        https://geni-orca.renci.org/orca-doc
+         https://geni-orca.renci.org/orca-doc 
     </url> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <description>
@@ -40,22 +40,22 @@
     <repositories> 
         <repository> 
             <id>
-                jwhoisserver
+                 jwhoisserver 
             </id> 
             <url>
-                http://repo.jwhoisserver.net/m2/
+                 http://repo.jwhoisserver.net/m2/ 
             </url> 
         </repository> 
         <repository> 
             <id>
-                apache-repo-snapshots
+                 apache-repo-snapshots 
             </id> 
             <url>
-                https://repository.apache.org/content/repositories/releases/
+                 https://repository.apache.org/content/repositories/releases/ 
             </url> 
             <releases> 
                 <enabled>
-                    true
+                     true 
                 </enabled> 
             </releases> 
         </repository> 
@@ -63,35 +63,35 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                policy
+                 policy 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                ndl
+                 ndl 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                velocity
+                 velocity 
             </groupId> 
             <artifactId>
-                velocity
+                 velocity 
             </artifactId> 
             <version>
-                1.4
+                 1.4 
             </version> 
         </dependency> 
     </dependencies> 
@@ -99,16 +99,16 @@
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-jar-plugin
+                     maven-jar-plugin 
                 </artifactId> 
                 <executions> 
                     <execution> 
                         <goals> 
                             <goal>
-                                test-jar
+                                 test-jar 
                             </goal> 
                         </goals> 
                     </execution> 
@@ -117,25 +117,25 @@
             <!-- disable unit tests --> 
             <plugin> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- Most Orca modules do not need to be pushed to Nexus. --> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
@@ -144,17 +144,17 @@
     <profiles> 
         <profile> 
             <id>
-                test
+                 test 
             </id> 
             <build> 
                 <plugins> 
                     <plugin> 
                         <artifactId>
-                            maven-surefire-plugin
+                             maven-surefire-plugin 
                         </artifactId> 
                         <configuration> 
                             <skip>
-                                false
+                                 false 
                             </skip> 
                         </configuration> 
                     </plugin> 

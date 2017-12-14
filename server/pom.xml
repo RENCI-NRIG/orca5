@@ -1,110 +1,110 @@
 <?xml version="1.0"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        server
+         server 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <name>
-        Orca Server
+         Orca Server 
     </name> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                core
+                 core 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <type>
-                pom
+                 pom 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                nodeagent
+                 nodeagent 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <classifier>
-                client
+                 client 
             </classifier> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                boot
+                 boot 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.eclipse.jetty.aggregate
+                 org.eclipse.jetty.aggregate 
             </groupId> 
             <artifactId>
-                jetty-all-server
+                 jetty-all-server 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.reflections
+                 org.reflections 
             </groupId> 
             <artifactId>
-                reflections
+                 reflections 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                com.beust
+                 com.beust 
             </groupId> 
             <artifactId>
-                jcommander
+                 jcommander 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.jolokia
+                 org.jolokia 
             </groupId> 
             <artifactId>
-                jolokia-core
+                 jolokia-core 
             </artifactId> 
             <version>
-                1.3.3
+                 1.3.3 
             </version> 
         </dependency> 
     </dependencies> 
@@ -112,51 +112,51 @@
         <plugins> 
             <plugin> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.codehaus.mojo
+                     org.codehaus.mojo 
                 </groupId> 
                 <artifactId>
-                    appassembler-maven-plugin
+                     appassembler-maven-plugin 
                 </artifactId> 
                 <version>
-                    1.3
+                     1.3 
                 </version> 
                 <executions> 
                     <execution> 
                         <id>
-                            package-execs-and-daemon
+                             package-execs-and-daemon 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <goals> 
                             <goal>
-                                assemble
+                                 assemble 
                             </goal> 
                             <goal>
-                                generate-daemons
+                                 generate-daemons 
                             </goal> 
                         </goals> 
                         <configuration> 
                             <assembleDirectory>
-                                ${basedir}/orca
+                                 ${basedir}/orca 
                             </assembleDirectory> 
                             <programs> 
                                 <program> 
                                     <mainClass>
-                                        orca.server.OrcaServer
+                                         orca.server.OrcaServer 
                                     </mainClass> 
                                     <name>
-                                        orca
+                                         orca 
                                     </name> 
                                 </program> 
                             </programs> 
@@ -164,98 +164,98 @@
                                 <daemon> 
                                     <jvmSettings> 
                                         <maxMemorySize>
-                                            2048
+                                             2048 
                                         </maxMemorySize> 
                                         <extraArguments> 
                                             <extraArgument>
-                                                -Djava.awt.headless=true
+                                                 -Djava.awt.headless=true 
                                             </extraArgument> 
                                             <extraArgument>
-                                                -XX:PermSize=96m
+                                                 -XX:PermSize=96m 
                                             </extraArgument> 
                                             <extraArgument>
-                                                -XX:MaxPermSize=128m
+                                                 -XX:MaxPermSize=128m 
                                             </extraArgument> 
                                             <extraArgument>
-                                                -XX:+UseParallelOldGC
+                                                 -XX:+UseParallelOldGC 
                                             </extraArgument> 
                                         </extraArguments> 
                                     </jvmSettings> 
                                     <id>
-                                        orcad
+                                         orcad 
                                     </id> 
                                     <mainClass>
-                                        orca.server.OrcaServer
+                                         orca.server.OrcaServer 
                                     </mainClass> 
                                     <generatorConfigurations> 
                                         <generatorConfiguration> 
                                             <generator>
-                                                jsw
+                                                 jsw 
                                             </generator> 
                                             <includes> 
                                                 <include>
-                                                    linux-x86-32
+                                                     linux-x86-32 
                                                 </include> 
                                                 <include>
-                                                    linux-x86-64
+                                                     linux-x86-64 
                                                 </include> 
                                             </includes> 
                                             <configuration> 
                                                 <property> 
                                                     <!-- this can be overridden in the generated shell script --> 
                                                     <name>
-                                                        wrapper.logfile
+                                                         wrapper.logfile 
                                                     </name> 
                                                     <value>
-                                                        orca-stdout.log
+                                                         orca-stdout.log 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.logfile.loglevel
+                                                         wrapper.logfile.loglevel 
                                                     </name> 
                                                     <value>
-                                                        INFO
+                                                         INFO 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.logfile.maxsize
+                                                         wrapper.logfile.maxsize 
                                                     </name> 
                                                     <value>
-                                                        10M
+                                                         10M 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.logfile.maxfiles
+                                                         wrapper.logfile.maxfiles 
                                                     </name> 
                                                     <value>
-                                                        10
+                                                         10 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.ping.timeout
+                                                         wrapper.ping.timeout 
                                                     </name> 
                                                     <value>
-                                                        300
+                                                         300 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.ping.timeout.action
+                                                         wrapper.ping.timeout.action 
                                                     </name> 
                                                     <value>
-                                                        NONE
+                                                         NONE 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        run.as.user.envvar
+                                                         run.as.user.envvar 
                                                     </name> 
                                                     <value>
-                                                        geni-orca
+                                                         geni-orca 
                                                     </value> 
                                                 </property> 
                                             </configuration> 
@@ -263,7 +263,7 @@
                                     </generatorConfigurations> 
                                     <platforms> 
                                         <platform>
-                                            jsw
+                                             jsw 
                                         </platform> 
                                     </platforms> 
                                 </daemon> 
@@ -274,35 +274,35 @@
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <dependencies> 
                     <dependency> 
                         <groupId>
-                            ant-contrib
+                             ant-contrib 
                         </groupId> 
                         <artifactId>
-                            ant-contrib
+                             ant-contrib 
                         </artifactId> 
                         <version>
-                            1.0b3
+                             1.0b3 
                         </version> 
                     </dependency> 
                 </dependencies> 
                 <executions> 
                     <execution> 
                         <id>
-                            resgen
+                             resgen 
                         </id> 
                         <phase>
-                            generate-resources
+                             generate-resources 
                         </phase> 
                         <configuration> 
                             <verifyArtifact>
-                                false
+                                 false 
                             </verifyArtifact> 
                             <tasks> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
@@ -330,16 +330,16 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 
                     <execution> 
                         <id>
-                            package
+                             package 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -356,7 +356,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 
@@ -364,35 +364,35 @@
             </plugin> 
             <plugin> 
                 <artifactId>
-                    maven-clean-plugin
+                     maven-clean-plugin 
                 </artifactId> 
                 <version>
-                    2.5
+                     2.5 
                 </version> 
                 <configuration> 
                     <filesets> 
                         <fileset> 
                             <directory>
-                                ${basedir}/orca
+                                 ${basedir}/orca 
                             </directory> 
                             <includes> 
                                 <include>
-                                    bin/**
+                                     bin/** 
                                 </include> 
                                 <include>
-                                    repo/**
+                                     repo/** 
                                 </include> 
                                 <include>
-                                    startup/**
+                                     startup/** 
                                 </include> 
                             </includes> 
                             <excludes> 
                                 <exclude>
-                                    startup
+                                     startup 
                                 </exclude> 
                             </excludes> 
                             <followSymlinks>
-                                false
+                                 false 
                             </followSymlinks> 
                         </fileset> 
                     </filesets> 
@@ -400,15 +400,15 @@
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- Most Orca modules do not need to be pushed to Nexus. --> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 

@@ -176,7 +176,7 @@
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
         <arg value="leaseLength=${leaseLength}" /> 
-        <arg value="units=${units}" />
+        <arg value="units=${units}" /> 
         <target name="test.vlan"> 
             <if> 
                 <not> 

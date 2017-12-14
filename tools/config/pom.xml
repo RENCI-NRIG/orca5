@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.tools
+         orca.tools 
     </groupId> 
     <artifactId>
-        config
+         config 
     </artifactId> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <name>
-        Orca Configuration Tools
+         Orca Configuration Tools 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            tools
+             tools 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
-                ant
+                 ant 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <type>
-                pom
+                 pom 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                tools-axis2
+                 tools-axis2 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
     </dependencies> 

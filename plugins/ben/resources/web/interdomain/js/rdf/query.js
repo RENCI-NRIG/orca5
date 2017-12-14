@@ -16,7 +16,6 @@
 // Also, users name variables and want the same name back when stuff is printed
 
 /*jsl:option explicit*/// Turn on JavaScriptLint variable declaration checking
-
 //The Query object.  Should be very straightforward.
 function Query(name, id) {
     this.pat = kb.formula();

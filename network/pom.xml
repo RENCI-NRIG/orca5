@@ -1,37 +1,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        network
+         network 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <version>
-        4.0-SNAPSHOT
+         4.0-SNAPSHOT 
     </version> 
     <name>
-        Orca Network Embedding
+         Orca Network Embedding 
     </name> 
     <url>
-        https://geni-orca.renci.org/orca-doc
+         https://geni-orca.renci.org/orca-doc 
     </url> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            4.0-SNAPSHOT
+             4.0-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <description>
@@ -40,131 +40,131 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                org.apache.jena
+                 org.apache.jena 
             </groupId> 
             <artifactId>
-                jena-tdb
+                 jena-tdb 
             </artifactId> 
             <version>
-                1.0.0
+                 1.0.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                edu.washington.sig
+                 edu.washington.sig 
             </groupId> 
             <artifactId>
-                gleen
+                 gleen 
             </artifactId> 
             <version>
-                0.6.2
+                 0.6.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-logging
+                 commons-logging 
             </groupId> 
             <artifactId>
-                commons-logging
+                 commons-logging 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                xerces
+                 xerces 
             </groupId> 
             <artifactId>
-                xerces-impl
+                 xerces-impl 
             </artifactId> 
             <version>
-                2.8.1
+                 2.8.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                com.ibm.icu
+                 com.ibm.icu 
             </groupId> 
             <artifactId>
-                icu4j
+                 icu4j 
             </artifactId> 
             <version>
-                4.0.1
+                 4.0.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                concurrent
+                 concurrent 
             </groupId> 
             <artifactId>
-                concurrent
+                 concurrent 
             </artifactId> 
             <version>
-                1.3.4
+                 1.3.4 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                util
+                 util 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                policy
+                 policy 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.slf4j
+                 org.slf4j 
             </groupId> 
             <artifactId>
-                slf4j-log4j12
+                 slf4j-log4j12 
             </artifactId> 
             <version>
-                1.7.2
+                 1.7.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                net.jwhoisserver
+                 net.jwhoisserver 
             </groupId> 
             <artifactId>
-                JWhoisServer
+                 JWhoisServer 
             </artifactId> 
             <version>
-                0.3.2.3
+                 0.3.2.3 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                velocity
+                 velocity 
             </groupId> 
             <artifactId>
-                velocity
+                 velocity 
             </artifactId> 
             <version>
-                1.4
+                 1.4 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                ndl
+                 ndl 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
     </dependencies> 
@@ -173,11 +173,11 @@
             <!-- disable unit tests --> 
             <plugin> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 

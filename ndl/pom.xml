@@ -1,146 +1,146 @@
 <?xml version="1.0"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <parent> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
     </parent> 
     <name>
-        Orca NDL Processing
+         Orca NDL Processing 
     </name> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        ndl
+         ndl 
     </artifactId> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <url>
-        http://maven.apache.org
+         http://maven.apache.org 
     </url> 
     <properties> 
         <project.build.sourceEncoding>
-            UTF-8
+             UTF-8 
         </project.build.sourceEncoding> 
     </properties> 
     <dependencies> 
         <dependency> 
             <groupId>
-                junit
+                 junit 
             </groupId> 
             <artifactId>
-                junit
+                 junit 
             </artifactId> 
             <scope>
-                test
+                 test 
             </scope> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.apache.jena
+                 org.apache.jena 
             </groupId> 
             <artifactId>
-                jena-tdb
+                 jena-tdb 
             </artifactId> 
             <version>
-                1.0.2
+                 1.0.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                javax.xml
+                 javax.xml 
             </groupId> 
             <artifactId>
-                jaxb-xjc
+                 jaxb-xjc 
             </artifactId> 
             <version>
-                2.0EA3
+                 2.0EA3 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                edu.washington.sig
+                 edu.washington.sig 
             </groupId> 
             <artifactId>
-                gleen
+                 gleen 
             </artifactId> 
             <version>
-                0.6.2
+                 0.6.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.slf4j
+                 org.slf4j 
             </groupId> 
             <artifactId>
-                slf4j-log4j12
+                 slf4j-log4j12 
             </artifactId> 
             <version>
-                1.7.5
+                 1.7.5 
             </version> 
             <type>
-                jar
+                 jar 
             </type> 
             <scope>
-                compile
+                 compile 
             </scope> 
         </dependency> 
         <dependency> 
             <groupId>
-                net.jwhoisserver
+                 net.jwhoisserver 
             </groupId> 
             <artifactId>
-                jwhoisserver
+                 jwhoisserver 
             </artifactId> 
             <version>
-                0.4.1.1
+                 0.4.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-lang
+                 commons-lang 
             </groupId> 
             <artifactId>
-                commons-lang
+                 commons-lang 
             </artifactId> 
             <version>
-                2.5
+                 2.5 
             </version> 
             <type>
-                jar
+                 jar 
             </type> 
             <scope>
-                compile
+                 compile 
             </scope> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-logging
+                 commons-logging 
             </groupId> 
             <artifactId>
-                commons-logging
+                 commons-logging 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                util
+                 util 
             </artifactId> 
             <version>
-                5.2.2-SNAPSHOT
+                 5.2.2-SNAPSHOT 
             </version> 
         </dependency> 
     </dependencies> 
@@ -148,19 +148,19 @@
         <plugins> 
             <plugin> 
                 <artifactId>
-                    maven-assembly-plugin
+                     maven-assembly-plugin 
                 </artifactId> 
                 <configuration> 
                     <archive> 
                         <manifest> 
                             <mainClass>
-                                orca.ndl.NdlTDBLeakTest
+                                 orca.ndl.NdlTDBLeakTest 
                             </mainClass> 
                         </manifest> 
                     </archive> 
                     <descriptorRefs> 
                         <descriptorRef>
-                            jar-with-dependencies
+                             jar-with-dependencies 
                         </descriptorRef> 
                     </descriptorRefs> 
                 </configuration> 
@@ -168,25 +168,25 @@
             <!-- disable unit tests by default --> 
             <plugin> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- This Orca module should be pushed to Nexus. --> 
                     <skip>
-                        false
+                         false 
                     </skip> 
                 </configuration> 
             </plugin> 
@@ -195,17 +195,17 @@
     <profiles> 
         <profile> 
             <id>
-                test
+                 test 
             </id> 
             <build> 
                 <plugins> 
                     <plugin> 
                         <artifactId>
-                            maven-surefire-plugin
+                             maven-surefire-plugin 
                         </artifactId> 
                         <configuration> 
                             <skip>
-                                false
+                                 false 
                             </skip> 
                         </configuration> 
                     </plugin> 

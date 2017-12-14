@@ -3,10 +3,10 @@
     <action name="DeleteCRS"> 
         <exchange> 
             <send>
-                DLT-CRS::{$srcPort},{$dstPort}:{$ctag};
+                 DLT-CRS::{$srcPort},{$dstPort}:{$ctag}; 
             </send> 
             <expect>
-                COMPLD
+                 COMPLD 
             </expect> 
         </exchange> 
     </action> 

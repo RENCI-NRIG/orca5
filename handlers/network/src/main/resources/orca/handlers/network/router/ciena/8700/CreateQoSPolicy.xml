@@ -3,7 +3,7 @@
     <action name="CreateQoSPolicy"> 
         <exchange> 
             <send>
-                traffic-services metering meter-profile create profile {$QoSPolicyName} cir {$QoSRate} cbs {$QoSBurstSize}
+                 traffic-services metering meter-profile create profile {$QoSPolicyName} cir {$QoSRate} cbs {$QoSBurstSize} 
             </send> 
         </exchange> 
     </action> 

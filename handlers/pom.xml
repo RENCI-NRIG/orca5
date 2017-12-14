@@ -1,85 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        handlers
+         handlers 
     </artifactId> 
     <packaging>
-        pom
+         pom 
     </packaging> 
     <name>
-        Orca Handlers
+         Orca Handlers 
     </name> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <modules> 
         <module>
-            ec2
+             ec2 
         </module> 
         <module>
-            xcat
+             xcat 
         </module> 
         <module>
-            network
+             network 
         </module> 
         <module>
-            providers
+             providers 
         </module> 
         <module>
-            oscars
+             oscars 
         </module> 
         <module>
-            oess
+             oess 
         </module> 
         <module>
-            nsi
+             nsi 
         </module> 
         <module>
-            ibm_ds
+             ibm_ds 
         </module> 
         <module>
-            storage_service
+             storage_service 
         </module> 
         <module>
-            slurm
+             slurm 
         </module> 
         <module>
-            nodeagent2
+             nodeagent2 
         </module> 
     </modules> 
     <build> 
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- Most Orca modules do not need to be pushed to Nexus. --> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 

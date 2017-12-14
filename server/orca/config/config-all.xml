@@ -3,30 +3,30 @@
     <actors> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                test-test-topology-embedding-SM
+                 test-test-topology-embedding-SM 
             </name> 
             <guid>
-                38615670-64f2-46ae-b2e5-88bb1ae86400
+                 38615670-64f2-46ae-b2e5-88bb1ae86400 
             </guid> 
             <description>
-                A Test SM for inter/intra-site topology embedding
+                 A Test SM for inter/intra-site topology embedding 
             </description> 
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                test-ndl-broker
+                 test-ndl-broker 
             </name> 
             <guid>
-                7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd
+                 7b60d8dd-5c4d-4b2c-afc9-bfd6023e66cd 
             </guid> 
             <description>
-                NDL enabled broker hosted at RENCI
+                 NDL enabled broker hosted at RENCI 
             </description> 
             <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
                 <properties> 
@@ -37,34 +37,34 @@
         <!-- fake nersc site --> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-nerscvmsite-site
+                 test-nerscvmsite-site 
             </name> 
             <guid>
-                0bb0eee9-2f96-4e38-baa7-61c9d90fee9b
+                 0bb0eee9-2f96-4e38-baa7-61c9d90fee9b 
             </guid> 
             <description>
-                Placeholder site authority for nerscvmsite
+                 Placeholder site authority for nerscvmsite 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        nerscvmsite.vm
+                         nerscvmsite.vm 
                     </type> 
                     <label>NERSC Cluster</label> 
                     <description>
-                        The NERSC Facility
+                         The NERSC Facility 
                     </description> 
                     <units>
-                        12
+                         12 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -83,34 +83,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-nersc-net-site
+                 test-nersc-net-site 
             </name> 
             <guid>
-                e75a1591-87d6-4305-84c7-c4adfd718c36
+                 e75a1591-87d6-4305-84c7-c4adfd718c36 
             </guid> 
             <description>
-                NERSC NET authority
+                 NERSC NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        nerscNet.vlan
+                         nerscNet.vlan 
                     </type> 
                     <label>NERSC NET VLAN</label> 
                     <description>
-                        A VLAN over NERSC NET
+                         A VLAN over NERSC NET 
                     </description> 
                     <units>
-                        1
+                         1 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -121,13 +121,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -143,34 +143,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-ben-site
+                 test-ben-site 
             </name> 
             <guid>
-                5f3d47ba-3cd5-41ad-85d7-531e97627b49
+                 5f3d47ba-3cd5-41ad-85d7-531e97627b49 
             </guid> 
             <description>
-                BEN authority
+                 BEN authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <label>BEN VLAN</label> 
                     <description>
-                        A VLAN over BEN
+                         A VLAN over BEN 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -181,24 +181,24 @@
                         <!-- specifying resource.domain for BEN --> 
                         <attribute> 
                             <key>
-                                resource.domain
+                                 resource.domain 
                             </key> 
                             <type>
-                                String
+                                 String 
                             </type> 
                             <value>
-                                ben/vlan
+                                 ben/vlan 
                             </value> 
                         </attribute> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -213,34 +213,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-nlr-site
+                 test-nlr-site 
             </name> 
             <description>
-                NLR site authority
+                 NLR site authority 
             </description> 
             <guid>
-                c35f5d8d-1722-48d5-9d45-a9cac98547e5
+                 c35f5d8d-1722-48d5-9d45-a9cac98547e5 
             </guid> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        nlr.vlan
+                         nlr.vlan 
                     </type> 
                     <label>NLR VLAN</label> 
                     <description>
-                        A VLAN over NLR
+                         A VLAN over NLR 
                     </description> 
                     <units>
-                        19
+                         19 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -250,13 +250,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -271,34 +271,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-starlight-site
+                 test-starlight-site 
             </name> 
             <guid>
-                6f2a54b9-ffaa-4bfb-a754-9dc34f0b9cff
+                 6f2a54b9-ffaa-4bfb-a754-9dc34f0b9cff 
             </guid> 
             <description>
-                Starlight NET authority
+                 Starlight NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        starlight.vlan
+                         starlight.vlan 
                     </type> 
                     <label>Starlight VLAN</label> 
                     <description>
-                        A VLAN over Starlight 6509
+                         A VLAN over Starlight 6509 
                     </description> 
                     <units>
-                        101
+                         101 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -309,13 +309,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -331,34 +331,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-esnet-site
+                 test-esnet-site 
             </name> 
             <description>
-                ESNET site authority
+                 ESNET site authority 
             </description> 
             <guid>
-                124d4e22-4a27-4741-8e5b-221401428e9e
+                 124d4e22-4a27-4741-8e5b-221401428e9e 
             </guid> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        esnet.vlan
+                         esnet.vlan 
                     </type> 
                     <label>ESNET VLAN</label> 
                     <description>
-                        A VLAN over esnet
+                         A VLAN over esnet 
                     </description> 
                     <units>
-                        3900
+                         3900 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -368,13 +368,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -389,34 +389,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-renci-net-site
+                 test-renci-net-site 
             </name> 
             <guid>
-                79cf8c29-49b6-4c6d-8cc0-2896eb80555d
+                 79cf8c29-49b6-4c6d-8cc0-2896eb80555d 
             </guid> 
             <description>
-                RENCI NET authority
+                 RENCI NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        renciNet.vlan
+                         renciNet.vlan 
                     </type> 
                     <label>RENCI NET VLAN</label> 
                     <description>
-                        A VLAN over RENCI NET
+                         A VLAN over RENCI NET 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -427,13 +427,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -449,34 +449,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-renci-vm-site
+                 test-renci-vm-site 
             </name> 
             <guid>
-                64222ba8-098b-4eb8-8371-dd64daacff97
+                 64222ba8-098b-4eb8-8371-dd64daacff97 
             </guid> 
             <description>
-                RENCI Euca site authority
+                 RENCI Euca site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        rencivmsite.vm
+                         rencivmsite.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (RENCI)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        12
+                         12 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="ec2/handler.xml"> 
                         <properties> 
@@ -491,20 +491,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        rencivmsite.vlan
+                         rencivmsite.vlan 
                     </type> 
                     <label>RENCI Euca internal vlan</label> 
                     <description>
-                        RENCI Euca internal vlan
+                         RENCI Euca internal vlan 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -515,13 +515,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -538,34 +538,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-acisrenci-net-site
+                 test-acisrenci-net-site 
             </name> 
             <guid>
-                0164d9c5-c2b0-4155-8fa8-24d666487757
+                 0164d9c5-c2b0-4155-8fa8-24d666487757 
             </guid> 
             <description>
-                ACISRENCI NET authority
+                 ACISRENCI NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        acisrenciNet.vlan
+                         acisrenciNet.vlan 
                     </type> 
                     <label>ACISRENCI NET VLAN</label> 
                     <description>
-                        A VLAN over RENCI NET
+                         A VLAN over RENCI NET 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -576,13 +576,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -598,34 +598,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-acisrenci-vm-site
+                 test-acisrenci-vm-site 
             </name> 
             <guid>
-                6b1bfa96-fa53-4a3e-8b3b-fb7004b6a73b
+                 6b1bfa96-fa53-4a3e-8b3b-fb7004b6a73b 
             </guid> 
             <description>
-                ACISRENCI Euca site authority
+                 ACISRENCI Euca site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        acisrencivmsite.vm
+                         acisrencivmsite.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (ACISRENCI)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        20
+                         20 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -640,20 +640,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        acisrencivmsite.vlan
+                         acisrencivmsite.vlan 
                     </type> 
                     <label>ACISRENCI Euca internal vlan</label> 
                     <description>
-                        ACISRENCI Euca internal vlan
+                         ACISRENCI Euca internal vlan 
                     </description> 
                     <units>
-                        80
+                         80 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -664,13 +664,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -687,34 +687,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-duke-net-site
+                 test-duke-net-site 
             </name> 
             <guid>
-                cb1c39aa-db09-43c9-a0dc-55e3d6dc45ed
+                 cb1c39aa-db09-43c9-a0dc-55e3d6dc45ed 
             </guid> 
             <description>
-                DUKE NET authority
+                 DUKE NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        dukeNet.vlan
+                         dukeNet.vlan 
                     </type> 
                     <label>DUKE NET VLAN</label> 
                     <description>
-                        A VLAN over DUKE NET
+                         A VLAN over DUKE NET 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -725,13 +725,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -747,34 +747,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-duke-vm-site
+                 test-duke-vm-site 
             </name> 
             <guid>
-                05095c27-acc2-4a8b-9960-5d34b7533489
+                 05095c27-acc2-4a8b-9960-5d34b7533489 
             </guid> 
             <description>
-                Duke Euca site authority
+                 Duke Euca site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        dukevmsite.vm
+                         dukevmsite.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (DUKE)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        50
+                         50 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -789,20 +789,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        dukevmsite.vlan
+                         dukevmsite.vlan 
                     </type> 
                     <label>Duke Euca internal vlan</label> 
                     <description>
-                        DUKE Euca internal vlan
+                         DUKE Euca internal vlan 
                     </description> 
                     <units>
-                        2000
+                         2000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="providers/euca-sites/unified.euca.net.xml"> 
                         <properties> 
@@ -813,13 +813,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -836,34 +836,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-unc-net-site
+                 test-unc-net-site 
             </name> 
             <guid>
-                000eee54-cf9c-4acc-bfe0-453ee387f044
+                 000eee54-cf9c-4acc-bfe0-453ee387f044 
             </guid> 
             <description>
-                UNC NET authority
+                 UNC NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        uncNet.vlan
+                         uncNet.vlan 
                     </type> 
                     <label>UNC NET VLAN</label> 
                     <description>
-                        A VLAN over UNC NET
+                         A VLAN over UNC NET 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -874,13 +874,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -896,34 +896,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-unc-vm-site
+                 test-unc-vm-site 
             </name> 
             <guid>
-                89e45eb7-d82d-42dc-b56d-6767dfb34a44
+                 89e45eb7-d82d-42dc-b56d-6767dfb34a44 
             </guid> 
             <description>
-                UNC Euca site authority
+                 UNC Euca site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        uncvmsite.vm
+                         uncvmsite.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (UNC)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        32
+                         32 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -938,20 +938,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        uncvmsite.vlan
+                         uncvmsite.vlan 
                     </type> 
                     <label>UNC Euca internal vlan</label> 
                     <description>
-                        UNC Euca internal vlan
+                         UNC Euca internal vlan 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -962,13 +962,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -985,34 +985,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-uhoustonvm-site
+                 test-uhoustonvm-site 
             </name> 
             <guid>
-                af029108-9709-4afd-a91c-127a5af10982
+                 af029108-9709-4afd-a91c-127a5af10982 
             </guid> 
             <description>
-                UHouston Euca site authority
+                 UHouston Euca site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        uhoustonvmsite.vm
+                         uhoustonvmsite.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (UHouston)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        12
+                         12 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1027,20 +1027,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        uhoustonvmsite.vlan
+                         uhoustonvmsite.vlan 
                     </type> 
                     <label>UHouston Euca internal vlan</label> 
                     <description>
-                        UHouston Euca internal vlan
+                         UHouston Euca internal vlan 
                     </description> 
                     <units>
-                        99
+                         99 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1051,13 +1051,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1074,34 +1074,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-uhoustonnet-site
+                 test-uhoustonnet-site 
             </name> 
             <guid>
-                6399c873-a55e-4b99-98da-aab86cdd0992
+                 6399c873-a55e-4b99-98da-aab86cdd0992 
             </guid> 
             <description>
-                UHouston NET authority
+                 UHouston NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        uhoustonNet.vlan
+                         uhoustonNet.vlan 
                     </type> 
                     <label>UHouston NET VLAN</label> 
                     <description>
-                        A VLAN over UHouston NET
+                         A VLAN over UHouston NET 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1111,13 +1111,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1133,51 +1133,51 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-learnnet-site
+                 test-learnnet-site 
             </name> 
             <description>
-                learnNet site authority
+                 learnNet site authority 
             </description> 
             <guid>
-                8725d982-1aff-4de8-8f8e-d0c58ad6cad6
+                 8725d982-1aff-4de8-8f8e-d0c58ad6cad6 
             </guid> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        learnNet.vlan
+                         learnNet.vlan 
                     </type> 
                     <label>learnNet VLAN</label> 
                     <description>
-                        A VLAN over learnNet 3400
+                         A VLAN over learnNet 3400 
                     </description> 
                     <units>
-                        9
+                         9 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
                             <property name="learn.credentials" value="/opt/orca/config/learn.cred.properties" />
-                            i 
+                             i 
                         </properties> 
                     </handler> 
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1192,47 +1192,47 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-learn-site
+                 test-learn-site 
             </name> 
             <guid>
-                3262b61b-0f1f-4290-9b95-ec04f4b77157
+                 3262b61b-0f1f-4290-9b95-ec04f4b77157 
             </guid> 
             <description>
-                Learn NET authority
+                 Learn NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        learn.vlan
+                         learn.vlan 
                     </type> 
                     <label>Learn VLAN</label> 
                     <description>
-                        A VLAN over LEARN
+                         A VLAN over LEARN 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                     </handler> 
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1248,34 +1248,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-rcivm-site
+                 test-rcivm-site 
             </name> 
             <guid>
-                e0e650b2-e69b-43d1-9744-1512f79c4df6
+                 e0e650b2-e69b-43d1-9744-1512f79c4df6 
             </guid> 
             <description>
-                RCI OS site authority
+                 RCI OS site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        rcivmsite.baremetalce
+                         rcivmsite.baremetalce 
                     </type> 
                     <label>XCAT Bare Metal (RCI)</label> 
                     <description>
-                        A Bare Metal machine
+                         A Bare Metal machine 
                     </description> 
                     <units>
-                        1
+                         1 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                     </handler> 
@@ -1286,20 +1286,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        rcivmsite.vm
+                         rcivmsite.vm 
                     </type> 
                     <label>OpenStack Virtual Machine (RCI)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        36
+                         36 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1310,13 +1310,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVMInventory
+                                 orca.plugins.ben.broker.NDLVMInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1327,20 +1327,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        rcivmsite.vlan
+                         rcivmsite.vlan 
                     </type> 
                     <label>RCI OS internal vlan</label> 
                     <description>
-                        RCI OS vlan
+                         RCI OS vlan 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1351,13 +1351,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1375,34 +1375,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-rcinet-site
+                 test-rcinet-site 
             </name> 
             <guid>
-                9a87643b-ae0e-4110-9909-06c91cdd3925
+                 9a87643b-ae0e-4110-9909-06c91cdd3925 
             </guid> 
             <description>
-                RCI NET authority
+                 RCI NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        rciNet.vlan
+                         rciNet.vlan 
                     </type> 
                     <label>RCI NET VLAN</label> 
                     <description>
-                        A VLAN over RCI NET
+                         A VLAN over RCI NET 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1413,13 +1413,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1435,34 +1435,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-bbnvm-site
+                 test-bbnvm-site 
             </name> 
             <guid>
-                af054653-54e9-4a14-aae3-6daa191b2471
+                 af054653-54e9-4a14-aae3-6daa191b2471 
             </guid> 
             <description>
-                BBN OS site authority
+                 BBN OS site authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnvmsite.baremetalce
+                         bbnvmsite.baremetalce 
                     </type> 
                     <label>XCAT Bare Metal (BBN)</label> 
                     <description>
-                        A Bare Metal machine
+                         A Bare Metal machine 
                     </description> 
                     <units>
-                        1
+                         1 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd-bm.xml"> 
                         <properties> 
@@ -1476,20 +1476,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnvmsite.vm
+                         bbnvmsite.vm 
                     </type> 
                     <label>OpenStack Virtual Machine (BBN)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        36
+                         36 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd-vm.xml"> 
                         <properties> 
@@ -1500,13 +1500,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVMInventory
+                                 orca.plugins.ben.broker.NDLVMInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1517,20 +1517,20 @@
                 </pool> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnvmsite.vlan
+                         bbnvmsite.vlan 
                     </type> 
                     <label>BBN OS internal vlan</label> 
                     <description>
-                        BBN OS vlan
+                         BBN OS vlan 
                     </description> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1541,13 +1541,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1565,34 +1565,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                test-bbnnet-site
+                 test-bbnnet-site 
             </name> 
             <guid>
-                071990c0-1bf6-4e0a-8b35-fe643a854149
+                 071990c0-1bf6-4e0a-8b35-fe643a854149 
             </guid> 
             <description>
-                BBN NET authority
+                 BBN NET authority 
             </description> 
             <pools> 
                 <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
-                        bbnNet.vlan
+                         bbnNet.vlan 
                     </type> 
                     <label>BBN NET VLAN</label> 
                     <description>
-                        A VLAN over BBN NET
+                         A VLAN over BBN NET 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2031-01-30T00:00:00
+                         2031-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -1603,13 +1603,13 @@
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.class.invfortype
+                                 resource.class.invfortype 
                             </key> 
                             <type>
-                                Class
+                                 Class 
                             </type> 
                             <value>
-                                orca.plugins.ben.broker.NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -1636,10 +1636,10 @@
                 <to name="test-nerscvmsite-site" guid="0bb0eee9-2f96-4e38-baa7-61c9d90fee9b" type="site" /> 
                 <rset> 
                     <type>
-                        nerscvmsite.vm
+                         nerscvmsite.vm 
                     </type> 
                     <units>
-                        12
+                         12 
                     </units> 
                 </rset> 
             </edge> 
@@ -1648,10 +1648,10 @@
                 <to name="test-nersc-net-site" guid="e75a1591-87d6-4305-84c7-c4adfd718c36" type="site" /> 
                 <rset> 
                     <type>
-                        nerscNet.vlan
+                         nerscNet.vlan 
                     </type> 
                     <units>
-                        1
+                         1 
                     </units> 
                 </rset> 
             </edge> 
@@ -1660,10 +1660,10 @@
                 <to name="test-nlr-site" guid="c35f5d8d-1722-48d5-9d45-a9cac98547e5" type="site" /> 
                 <rset> 
                     <type>
-                        nlr.vlan
+                         nlr.vlan 
                     </type> 
                     <units>
-                        19
+                         19 
                     </units> 
                 </rset> 
             </edge> 
@@ -1672,10 +1672,10 @@
                 <to name="test-starlight-site" guid="6f2a54b9-ffaa-4bfb-a754-9dc34f0b9cff" type="site" /> 
                 <rset> 
                     <type>
-                        starlight.vlan
+                         starlight.vlan 
                     </type> 
                     <units>
-                        101
+                         101 
                     </units> 
                 </rset> 
             </edge> 
@@ -1684,10 +1684,10 @@
                 <to name="test-esnet-site" guid="124d4e22-4a27-4741-8e5b-221401428e9e" type="site" /> 
                 <rset> 
                     <type>
-                        esnet.vlan
+                         esnet.vlan 
                     </type> 
                     <units>
-                        3900
+                         3900 
                     </units> 
                 </rset> 
             </edge> 
@@ -1696,10 +1696,10 @@
                 <to name="test-renci-net-site" guid="79cf8c29-49b6-4c6d-8cc0-2896eb80555d" type="site" /> 
                 <rset> 
                     <type>
-                        renciNet.vlan
+                         renciNet.vlan 
                     </type> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                 </rset> 
             </edge> 
@@ -1708,18 +1708,18 @@
                 <to name="test-renci-vm-site" guid="64222ba8-098b-4eb8-8371-dd64daacff97" type="site" /> 
                 <rset> 
                     <type>
-                        rencivmsite.vm
+                         rencivmsite.vm 
                     </type> 
                     <units>
-                        12
+                         12 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        rencivmsite.vlan
+                         rencivmsite.vlan 
                     </type> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                 </rset> 
             </edge> 
@@ -1728,10 +1728,10 @@
                 <to name="test-acisrenci-net-site" guid="0164d9c5-c2b0-4155-8fa8-24d666487757" type="site" /> 
                 <rset> 
                     <type>
-                        acisrenciNet.vlan
+                         acisrenciNet.vlan 
                     </type> 
                     <units>
-                        9
+                         9 
                     </units> 
                 </rset> 
             </edge> 
@@ -1740,18 +1740,18 @@
                 <to name="test-acisrenci-vm-site" guid="6b1bfa96-fa53-4a3e-8b3b-fb7004b6a73b" type="site" /> 
                 <rset> 
                     <type>
-                        acisrencivmsite.vm
+                         acisrencivmsite.vm 
                     </type> 
                     <units>
-                        20
+                         20 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        acisrencivmsite.vlan
+                         acisrencivmsite.vlan 
                     </type> 
                     <units>
-                        80
+                         80 
                     </units> 
                 </rset> 
             </edge> 
@@ -1760,10 +1760,10 @@
                 <to name="test-duke-net-site" guid="cb1c39aa-db09-43c9-a0dc-55e3d6dc45ed" type="site" /> 
                 <rset> 
                     <type>
-                        dukeNet.vlan
+                         dukeNet.vlan 
                     </type> 
                     <units>
-                        500
+                         500 
                     </units> 
                 </rset> 
             </edge> 
@@ -1772,18 +1772,18 @@
                 <to name="test-duke-vm-site" guid="05095c27-acc2-4a8b-9960-5d34b7533489" type="site" /> 
                 <rset> 
                     <type>
-                        dukevmsite.vm
+                         dukevmsite.vm 
                     </type> 
                     <units>
-                        50
+                         50 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        dukevmsite.vlan
+                         dukevmsite.vlan 
                     </type> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                 </rset> 
             </edge> 
@@ -1792,10 +1792,10 @@
                 <to name="test-unc-net-site" guid="000eee54-cf9c-4acc-bfe0-453ee387f044" type="site" /> 
                 <rset> 
                     <type>
-                        uncNet.vlan
+                         uncNet.vlan 
                     </type> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                 </rset> 
             </edge> 
@@ -1804,18 +1804,18 @@
                 <to name="test-unc-vm-site" guid="89e45eb7-d82d-42dc-b56d-6767dfb34a44" type="site" /> 
                 <rset> 
                     <type>
-                        uncvmsite.vm
+                         uncvmsite.vm 
                     </type> 
                     <units>
-                        32
+                         32 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        uncvmsite.vlan
+                         uncvmsite.vlan 
                     </type> 
                     <units>
-                        1000
+                         1000 
                     </units> 
                 </rset> 
             </edge> 
@@ -1824,18 +1824,18 @@
                 <to name="test-uhoustonvm-site" guid="af029108-9709-4afd-a91c-127a5af10982" type="site" /> 
                 <rset> 
                     <type>
-                        uhoustonvmsite.vm
+                         uhoustonvmsite.vm 
                     </type> 
                     <units>
-                        12
+                         12 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        uhoustonvmsite.vlan
+                         uhoustonvmsite.vlan 
                     </type> 
                     <units>
-                        99
+                         99 
                     </units> 
                 </rset> 
             </edge> 
@@ -1844,10 +1844,10 @@
                 <to name="test-uhoustonnet-site" guid="6399c873-a55e-4b99-98da-aab86cdd0992" type="site" /> 
                 <rset> 
                     <type>
-                        uhoustonNet.vlan
+                         uhoustonNet.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 
@@ -1856,26 +1856,26 @@
                 <to name="test-rcivm-site" guid="e0e650b2-e69b-43d1-9744-1512f79c4df6" type="site" /> 
                 <rset> 
                     <type>
-                        rcivmsite.baremetalce
+                         rcivmsite.baremetalce 
                     </type> 
                     <units>
-                        1
+                         1 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        rcivmsite.vm
+                         rcivmsite.vm 
                     </type> 
                     <units>
-                        18
+                         18 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        rcivmsite.vlan
+                         rcivmsite.vlan 
                     </type> 
                     <units>
-                        500
+                         500 
                     </units> 
                 </rset> 
             </edge> 
@@ -1884,10 +1884,10 @@
                 <to name="test-rcinet-site" guid="9a87643b-ae0e-4110-9909-06c91cdd3925" type="site" /> 
                 <rset> 
                     <type>
-                        rciNet.vlan
+                         rciNet.vlan 
                     </type> 
                     <units>
-                        500
+                         500 
                     </units> 
                 </rset> 
             </edge> 
@@ -1896,26 +1896,26 @@
                 <to name="test-bbnvm-site" guid="af054653-54e9-4a14-aae3-6daa191b2471" type="site" /> 
                 <rset> 
                     <type>
-                        bbnvmsite.baremetalce
+                         bbnvmsite.baremetalce 
                     </type> 
                     <units>
-                        1
+                         1 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        bbnvmsite.vm
+                         bbnvmsite.vm 
                     </type> 
                     <units>
-                        18
+                         18 
                     </units> 
                 </rset> 
                 <rset> 
                     <type>
-                        bbnvmsite.vlan
+                         bbnvmsite.vlan 
                     </type> 
                     <units>
-                        500
+                         500 
                     </units> 
                 </rset> 
             </edge> 
@@ -1924,10 +1924,10 @@
                 <to name="test-bbnnet-site" guid="071990c0-1bf6-4e0a-8b35-fe643a854149" type="site" /> 
                 <rset> 
                     <type>
-                        bbnNet.vlan
+                         bbnNet.vlan 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 
@@ -1936,10 +1936,10 @@
                 <to name="test-learnnet-site" guid="8725d982-1aff-4de8-8f8e-d0c58ad6cad6" type="site" /> 
                 <rset> 
                     <type>
-                        learnNet.vlan
+                         learnNet.vlan 
                     </type> 
                     <units>
-                        9
+                         9 
                     </units> 
                 </rset> 
             </edge> 
@@ -1948,10 +1948,10 @@
                 <to name="test-learn-site" guid="3262b61b-0f1f-4290-9b95-ec04f4b77157" type="site" /> 
                 <rset> 
                     <type>
-                        learn.vlan
+                         learn.vlan 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 
@@ -1960,10 +1960,10 @@
                 <to name="test-ben-site" guid="5f3d47ba-3cd5-41ad-85d7-531e97627b49" type="site" /> 
                 <rset> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 

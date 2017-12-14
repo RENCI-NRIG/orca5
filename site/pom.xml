@@ -1,38 +1,38 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        site
+         site 
     </artifactId> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <packaging>
-        pom
+         pom 
     </packaging> 
     <name>
-        Orca
+         Orca 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <inceptionYear>
-        2001
+         2001 
     </inceptionYear> 
     <!--
  	<distributionManagement>
@@ -46,25 +46,25 @@
         <plugins> 
             <plugin> 
                 <artifactId>
-                    maven-site-plugin
+                     maven-site-plugin 
                 </artifactId> 
                 <configuration> 
                     <port>
-                        9999
+                         9999 
                     </port> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- Most Orca modules do not need to be pushed to Nexus. --> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 

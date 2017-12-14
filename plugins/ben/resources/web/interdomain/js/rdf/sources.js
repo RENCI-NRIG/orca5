@@ -133,6 +133,12 @@ function SourceFetcher(store, timeout, async) {
                             sf.switchHandler(SourceFetcher.RDFXMLHandler, xhr, cb, [ dom ])
                             return
 
+                            
+
+                                                        
+
+                            
+
                         }
                         // it isn't RDF/XML or we can't tell
                         break
@@ -150,6 +156,12 @@ function SourceFetcher(store, timeout, async) {
                         sf.switchHandler(SourceFetcher.XHTMLHandler, xhr, cb)
                         return
 
+                        
+
+                                                
+
+                        
+
                     }
                 }
 
@@ -161,6 +173,12 @@ function SourceFetcher(store, timeout, async) {
                         log.info(xhr.uri + " has a default namespace for " + "XHTML. Switching to XHTMLHandler.")
                         sf.switchHandler(SourceFetcher.XHTMLHandler, xhr, cb)
                         return
+
+                        
+
+                                                
+
+                        
 
                     }
                 }
@@ -198,6 +216,12 @@ function SourceFetcher(store, timeout, async) {
                     sf.switchHandler(SourceFetcher.XHTMLHandler, xhr, cb)
                     return
 
+                    
+
+                                        
+
+                    
+
                 }
 
                 // DOCTYPE
@@ -207,6 +231,12 @@ function SourceFetcher(store, timeout, async) {
                     sf.switchHandler(SourceFetcher.XHTMLHandler, xhr, cb)
                     return
 
+                    
+
+                                        
+
+                    
+
                 }
 
                 // xmlns
@@ -214,6 +244,12 @@ function SourceFetcher(store, timeout, async) {
                     log.info(xhr.uri + " has a default namespace for XHTML." + " Switching to XHTMLHandler.")
                     sf.switchHandler(SourceFetcher.XHTMLHandler, xhr, cb)
                     return
+
+                    
+
+                                        
+
+                    
 
                 }
 
@@ -245,6 +281,12 @@ function SourceFetcher(store, timeout, async) {
                     sf.switchHandler(SourceFetcher.XMLHandler, xhr, cb)
                     return
 
+                    
+
+                                        
+
+                    
+
                 }
 
                 // Look for an XML declaration
@@ -253,6 +295,12 @@ function SourceFetcher(store, timeout, async) {
                             + "it's XML but its content-type wasn't XML.")
                     sf.switchHandler(SourceFetcher.XMLHandler, xhr, cb)
                     return
+
+                    
+
+                                        
+
+                    
 
                 }
 
@@ -399,12 +447,24 @@ function SourceFetcher(store, timeout, async) {
             this.fireCallbacks('done', args)
             return
 
+            
+
+                        
+
+            
+
         }
 
         if (!force && typeof this.requested[uri.uri] != "undefined") {
             log.debug("We already have " + uri + ". Skipping.")
             this.fireCallbacks('done', args)
             return
+
+            
+
+                        
+
+            
 
         }
 
@@ -439,6 +499,12 @@ function SourceFetcher(store, timeout, async) {
             // update the status before we break out
             this.failFetch(xhr, "Unsupported protocol")
             return
+
+            
+
+                        
+
+            
 
         }
 
@@ -539,6 +605,12 @@ function SourceFetcher(store, timeout, async) {
                                     if (xhr.aborted)
                                         return
 
+                                    
+
+                                                                        
+
+                                    
+
                                     if (xhr.status == 302 || xhr.status == 303) {
                                         sf.seeAlsoFetch(xhr, args, xhr.status + " to <" + newC.URI.spec + ">",
                                                 newC.URI.spec)
@@ -584,6 +656,12 @@ function SourceFetcher(store, timeout, async) {
         } catch (er) {
             this.failFetch(xhr, "sendFailed")
             return
+
+            
+
+                        
+
+            
 
         }
 

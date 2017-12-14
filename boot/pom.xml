@@ -1,101 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        boot
+         boot 
     </artifactId> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <name>
-        Orca Boot Helper
+         Orca Boot Helper 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                shirako
+                 shirako 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                policy
+                 policy 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                embed
+                 embed 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
-                xmlrpc-client
+                 xmlrpc-client 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
-                xmlrpc-server
+                 xmlrpc-server 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
-                xmlrpc-common
+                 xmlrpc-common 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                ws-commons-util
+                 ws-commons-util 
             </groupId> 
             <artifactId>
-                ws-commons-util
+                 ws-commons-util 
             </artifactId> 
         </dependency> 
     </dependencies> 
@@ -103,15 +103,15 @@
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- Most Orca modules do not need to be pushed to Nexus. --> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 

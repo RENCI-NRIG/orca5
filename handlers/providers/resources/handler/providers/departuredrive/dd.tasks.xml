@@ -133,17 +133,17 @@
             <sequential> 
                 <if> 
                     <or> 
-                        <not>
-                            <isset property="unit.vlan.tag.@{actioniter}.DD" />
+                        <not> 
+                            <isset property="unit.vlan.tag.@{actioniter}.DD" /> 
                         </not> 
-                        <not>
-                            <isset property="unit.bandwidth.@{actioniter}.DD" />
+                        <not> 
+                            <isset property="unit.bandwidth.@{actioniter}.DD" /> 
                         </not> 
-                        <not>
-                            <isset property="unit.bandwidth.burst.@{actioniter}.DD" />
+                        <not> 
+                            <isset property="unit.bandwidth.burst.@{actioniter}.DD" /> 
                         </not> 
-                        <not>
-                            <isset property="DD.action.@{actioniter}.ports" />
+                        <not> 
+                            <isset property="DD.action.@{actioniter}.ports" /> 
                         </not> 
                     </or> 
                     <then> 
@@ -165,11 +165,11 @@
             <sequential> 
                 <if> 
                     <or> 
-                        <not>
-                            <isset property="unit.vlan.tag.@{actioniter}.DD" />
+                        <not> 
+                            <isset property="unit.vlan.tag.@{actioniter}.DD" /> 
                         </not> 
-                        <not>
-                            <isset property="DD.action.@{actioniter}.ports" />
+                        <not> 
+                            <isset property="DD.action.@{actioniter}.ports" /> 
                         </not> 
                     </or> 
                     <then> 
@@ -191,20 +191,20 @@
             <sequential> 
                 <if> 
                     <or> 
-                        <not>
-                            <isset property="unit.vlan.tag.@{actioniter}.Exchange" />
+                        <not> 
+                            <isset property="unit.vlan.tag.@{actioniter}.Exchange" /> 
                         </not> 
-                        <not>
-                            <isset property="unit.vlan.tag.swap.@{actioniter}.Exchange" />
+                        <not> 
+                            <isset property="unit.vlan.tag.swap.@{actioniter}.Exchange" /> 
                         </not> 
-                        <not>
-                            <isset property="unit.bandwidth.@{actioniter}.Exchange" />
+                        <not> 
+                            <isset property="unit.bandwidth.@{actioniter}.Exchange" /> 
                         </not> 
-                        <not>
-                            <isset property="unit.bandwidth.burst.@{actioniter}.Exchange" />
+                        <not> 
+                            <isset property="unit.bandwidth.burst.@{actioniter}.Exchange" /> 
                         </not> 
-                        <not>
-                            <isset property="Exchange.action.@{actioniter}.ports" />
+                        <not> 
+                            <isset property="Exchange.action.@{actioniter}.ports" /> 
                         </not> 
                     </or> 
                     <then> 
@@ -226,14 +226,14 @@
             <sequential> 
                 <if> 
                     <or> 
-                        <not>
-                            <isset property="unit.vlan.tag.@{actioniter}.Exchange" />
+                        <not> 
+                            <isset property="unit.vlan.tag.@{actioniter}.Exchange" /> 
                         </not> 
-                        <not>
-                            <isset property="unit.vlan.tag.swap.@{actioniter}.Exchange" />
+                        <not> 
+                            <isset property="unit.vlan.tag.swap.@{actioniter}.Exchange" /> 
                         </not> 
-                        <not>
-                            <isset property="Exchange.action.@{actioniter}.ports" />
+                        <not> 
+                            <isset property="Exchange.action.@{actioniter}.ports" /> 
                         </not> 
                     </or> 
                     <then> 

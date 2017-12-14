@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <artifactId>
-        docker-orca
+         docker-orca 
     </artifactId> 
     <name>
-        Orca Docker sub-modules
+         Orca Docker sub-modules 
     </name> 
     <packaging>
-        pom
+         pom 
     </packaging> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
     </parent> 
     <modules> 
         <module>
-            orca_mysql
+             orca_mysql 
         </module> 
         <module>
-            orca_base
+             orca_base 
         </module> 
         <module>
-            orca-rpmbuild
+             orca-rpmbuild 
         </module> 
         <module>
-            orca_common
+             orca_common 
         </module> 
         <module>
-            orca_am_broker
+             orca_am_broker 
         </module> 
         <module>
-            orca_sm
+             orca_sm 
         </module> 
         <module>
-            orca_controller
+             orca_controller 
         </module> 
     </modules> 
     <properties> 
         <!-- use either 'oracle' or 'openjdk' for JRE runtime vendor --> 
         <orca.docker.jre.vendor>
-            oracle_1.8
+             oracle_1.8 
         </orca.docker.jre.vendor> 
     </properties> 
     <build> 
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- Most Orca modules do not need to be pushed to Nexus. --> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
@@ -73,28 +73,28 @@
     <profiles> 
         <profile> 
             <id>
-                docker
+                 docker 
             </id> 
             <build> 
                 <plugins> 
                     <plugin> 
                         <groupId>
-                            pl.project13.maven
+                             pl.project13.maven 
                         </groupId> 
                         <artifactId>
-                            git-commit-id-plugin
+                             git-commit-id-plugin 
                         </artifactId> 
                         <version>
-                            2.2.1
+                             2.2.1 
                         </version> 
                         <executions> 
                             <execution> 
                                 <id>
-                                    get-the-git-infos
+                                     get-the-git-infos 
                                 </id> 
                                 <goals> 
                                     <goal>
-                                        revision
+                                         revision 
                                     </goal> 
                                 </goals> 
                             </execution> 
@@ -104,25 +104,25 @@
 								use this setting, otherwise we'll perform a search trying to figure out the 
 								right directory. It's better to add it explicitly IMHO. --> 
                             <dotGitDirectory>
-                                ${project.basedir}/.git
+                                 ${project.basedir}/.git 
                             </dotGitDirectory> 
                             <!-- that's the default value, you don't have to set it --> 
                             <prefix>
-                                git
+                                 git 
                             </prefix> 
                             <!-- that's the default value --> 
                             <dateFormat>
-                                dd.MM.yyyy '@' HH:mm:ss z
+                                 dd.MM.yyyy '@' HH:mm:ss z 
                             </dateFormat> 
                             <!-- <verbose>true</verbose> --> 
                             <generateGitPropertiesFile>
-                                false
+                                 false 
                             </generateGitPropertiesFile> 
                             <generateGitPropertiesFilename>
-                                ${project.build.outputDirectory}/git.properties
+                                 ${project.build.outputDirectory}/git.properties 
                             </generateGitPropertiesFilename> 
                             <skipPoms>
-                                false
+                                 false 
                             </skipPoms> 
                         </configuration> 
                     </plugin> 
@@ -130,13 +130,13 @@
                     <!-- other plugins --> 
                     <plugin> 
                         <groupId>
-                            com.spotify
+                             com.spotify 
                         </groupId> 
                         <artifactId>
-                            docker-maven-plugin
+                             docker-maven-plugin 
                         </artifactId> 
                         <version>
-                            0.4.13
+                             0.4.13 
                         </version> 
                     </plugin> 
                 </plugins> 

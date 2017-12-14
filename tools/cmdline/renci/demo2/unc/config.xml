@@ -2,26 +2,26 @@
 <configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
     <global> 
         <startTime>
-            -1
+             -1 
         </startTime> 
         <cycleMillis>
-            1000
+             1000 
         </cycleMillis> 
         <firstTick>
-            0
+             0 
         </firstTick> 
         <manualTicks>
-            false
+             false 
         </manualTicks> 
         <containerGuid>
-            1cba2f6f-bf06-4fce-865c-146795667d64
+             1cba2f6f-bf06-4fce-865c-146795667d64 
         </containerGuid> 
         <locations> 
             <location protocol="soapaxis2" url="http://go-m1.unc.ben:8080/orca" /> 
         </locations> 
         <database> 
             <className>
-                orca.manage.container.db.MySqlContainerManagementDatabase
+                 orca.manage.container.db.MySqlContainerManagementDatabase 
             </className> 
             <properties> 
                 <property name="db.mysql.server" value="localhost" /> 
@@ -39,28 +39,28 @@
     <actors> 
         <actor> 
             <name>
-                unc-vm-site
+                 unc-vm-site 
             </name> 
             <description>
-                VM site authority at UNC
+                 VM site authority at UNC 
             </description> 
             <guid>
-                08affd38-76d7-453f-a0a7-0d273a2abb43
+                 08affd38-76d7-453f-a0a7-0d273a2abb43 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.control.VMControl
+                                 orca.cod.control.VMControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="unc.vm" /> 
@@ -71,7 +71,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.Site
+                     orca.cod.plugins.Site 
                 </className> 
                 <properties> 
                     <!-- Storage servers to be transferred to this site --> 
@@ -98,7 +98,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -111,20 +111,20 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
                     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.NetworkConfigurationManager
+                                 orca.cod.plugins.NetworkConfigurationManager 
                             </className> 
                             <parameters> 
                                 <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.NetworkConfiguration
+                                             orca.cod.plugins.NetworkConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="network.service.ips" value="192.168.203.30-200" /> 
@@ -136,7 +136,7 @@
                                 <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.DnsConfiguration
+                                             orca.cod.plugins.DnsConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="dns.prefix" value="default" /> 

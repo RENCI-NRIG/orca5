@@ -3,17 +3,17 @@
     <action name="Connect"> 
         <exchange> 
             <send>
-                ;
+                 ; 
             </send> 
             <expect> 
             </expect> 
         </exchange> 
         <exchange> 
             <send>
-                act-user::{$UID}:1::{$PWD};
+                 act-user::{$UID}:1::{$PWD}; 
             </send> 
             <expect>
-                COMPLD
+                 COMPLD 
             </expect> 
         </exchange> 
     </action> 

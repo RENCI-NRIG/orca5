@@ -3,62 +3,62 @@
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                site
+                 site 
             </name> 
             <inventory>
-                demo1,demo2,demo3,demo4
+                 demo1,demo2,demo3,demo4 
             </inventory> 
             <pools> 
                 <pool> 
                     <type>
-                        vm
+                         vm 
                     </type> 
                     <label>Virtual Machine</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="common/noop.xml" /> 
                     <inventory>
-                        demo1,demo2
+                         demo1,demo2 
                     </inventory> 
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.memory
+                                 resource.memory 
                             </key> 
                             <label>Memory</label> 
                             <value>
-                                128
+                                 128 
                             </value> 
                             <unit>
-                                MB
+                                 MB 
                             </unit> 
                             <type>
-                                integer
+                                 integer 
                             </type> 
                         </attribute> 
                         <attribute> 
                             <key>
-                                resource.cpu
+                                 resource.cpu 
                             </key> 
                             <label>CPU</label> 
                             <value>
-                                1/2 of 2GHz Intel Xeon
+                                 1/2 of 2GHz Intel Xeon 
                             </value> 
                             <type>
-                                String
+                                 String 
                             </type> 
                         </attribute> 
                     </attributes> 
@@ -75,18 +75,18 @@
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                broker
+                 broker 
             </name> 
         </actor> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                service
+                 service 
             </name> 
         </actor> 
     </actors> 
@@ -101,10 +101,10 @@
                 <to name="site" type="site" /> 
                 <rset> 
                     <type>
-                        vm
+                         vm 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 

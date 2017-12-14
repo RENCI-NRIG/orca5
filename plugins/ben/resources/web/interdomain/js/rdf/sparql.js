@@ -604,6 +604,9 @@ function SPARQLResultsInterpreter(xml, callback, doneCallback) {
     if (sparql.nodeName != 'sparql') {
         terror("Bad SPARQL results XML");
         return
+
+        
+
     }
 
     for (var x = 0; x < sparql.attributes.length; x++)
@@ -624,6 +627,9 @@ function SPARQLResultsInterpreter(xml, callback, doneCallback) {
     if (!results && !head) {
         terror("Bad SPARQL results XML");
         return
+
+        
+
     }
 
     for (var x = 0; x < head.childNodes.length; x++) //@@does anything need to be done with these? Should we check against query vars?

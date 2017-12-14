@@ -3,10 +3,10 @@
     <action name="Disconnect"> 
         <exchange> 
             <send>
-                exit
+                 exit 
             </send> 
             <expect>
-                eof
+                 eof 
             </expect> 
         </exchange> 
     </action> 

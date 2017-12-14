@@ -3,59 +3,59 @@
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                duke-vm-site
+                 duke-vm-site 
             </name> 
             <guid>
-                9b12d036-23e7-11df-b3a3-000c29b1c193
+                 9b12d036-23e7-11df-b3a3-000c29b1c193 
             </guid> 
             <pools> 
                 <pool> 
                     <type>
-                        duke.vm
+                         duke.vm 
                     </type> 
                     <label>Eucalyptus Virtual Machine (DUKE)</label> 
                     <description>
-                        A virtual machine
+                         A virtual machine 
                     </description> 
                     <units>
-                        10
+                         10 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="ec2/handler.xml" /> 
                     <attributes> 
                         <attribute> 
                             <key>
-                                resource.memory
+                                 resource.memory 
                             </key> 
                             <label>Memory</label> 
                             <value>
-                                128
+                                 128 
                             </value> 
                             <unit>
-                                MB
+                                 MB 
                             </unit> 
                             <type>
-                                integer
+                                 integer 
                             </type> 
                         </attribute> 
                         <attribute> 
                             <key>
-                                resource.cpu
+                                 resource.cpu 
                             </key> 
                             <label>CPU</label> 
                             <value>
-                                1/2 of 2GHz Intel Xeon
+                                 1/2 of 2GHz Intel Xeon 
                             </value> 
                             <type>
-                                String
+                                 String 
                             </type> 
                         </attribute> 
                     </attributes> 
@@ -84,10 +84,10 @@
                 <to name="duke-vm-site" type="site" /> 
                 <rset> 
                     <type>
-                        duke.vm
+                         duke.vm 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 

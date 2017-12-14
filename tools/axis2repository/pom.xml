@@ -1,57 +1,57 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.tools
+         orca.tools 
     </groupId> 
     <artifactId>
-        axis2repository
+         axis2repository 
     </artifactId> 
     <packaging>
-        pom
+         pom 
     </packaging> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <name>
-        Orca Axis2 Client Repository Helper Package
+         Orca Axis2 Client Repository Helper Package 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            tools
+             tools 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <build> 
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-plugin
+                     maven-antrun-plugin 
                 </artifactId> 
                 <version>
-                    1.3
+                     1.3 
                 </version> 
                 <executions> 
                     <execution> 
                     </execution> 
                     <execution> 
                         <id>
-                            install
+                             install 
                         </id> 
                         <phase>
-                            install
+                             install 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -74,7 +74,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 

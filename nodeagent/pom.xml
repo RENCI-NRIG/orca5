@@ -1,148 +1,148 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca
+         orca 
     </groupId> 
     <artifactId>
-        nodeagent
+         nodeagent 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <name>
-        Orca Node Agent
+         Orca Node Agent 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            orca
+             orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <properties> 
         <client.jar>
-            ${project.build.directory}/orca.nodeagent.client-${project.version}.jar
+             ${project.build.directory}/orca.nodeagent.client-${project.version}.jar 
         </client.jar> 
         <service.aar>
-            ${project.build.directory}/orca.nodeagent-${project.version}.aar
+             ${project.build.directory}/orca.nodeagent-${project.version}.aar 
         </service.aar> 
     </properties> 
     <dependencies> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                drivers
+                 drivers 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                tools-axis2
+                 tools-axis2 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                util
+                 util 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.apache.ant
+                 org.apache.ant 
             </groupId> 
             <artifactId>
-                ant
+                 ant 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant-contrib
+                 ant-contrib 
             </groupId> 
             <artifactId>
-                ant-contrib
+                 ant-contrib 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-httpclient
+                 commons-httpclient 
             </groupId> 
             <artifactId>
-                commons-httpclient
+                 commons-httpclient 
             </artifactId> 
         </dependency> 
     </dependencies> 
     <build> 
         <testSourceDirectory>
-            test
+             test 
         </testSourceDirectory> 
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <dependencies> 
                     <dependency> 
                         <groupId>
-                            ant-contrib
+                             ant-contrib 
                         </groupId> 
                         <artifactId>
-                            ant-contrib
+                             ant-contrib 
                         </artifactId> 
                         <version>
-                            1.0b3
+                             1.0b3 
                         </version> 
                     </dependency> 
                 </dependencies> 
                 <executions> 
                     <execution> 
                         <id>
-                            test
+                             test 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -262,7 +262,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 
@@ -270,15 +270,15 @@
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.apache.maven.plugins
+                     org.apache.maven.plugins 
                 </groupId> 
                 <artifactId>
-                    maven-deploy-plugin
+                     maven-deploy-plugin 
                 </artifactId> 
                 <configuration> 
                     <!-- Most Orca modules do not need to be pushed to Nexus. --> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                 </configuration> 
             </plugin> 

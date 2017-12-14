@@ -3,13 +3,13 @@
     <actors> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                service
+                 service 
             </name> 
             <guid>
-                af7b4558-23e7-11df-bf65-000c29b1c193
+                 af7b4558-23e7-11df-bf65-000c29b1c193 
             </guid> 
         </actor> 
     </actors> 

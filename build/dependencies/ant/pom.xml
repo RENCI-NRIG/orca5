@@ -1,344 +1,344 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.dependencies
+         orca.dependencies 
     </groupId> 
     <version>
-        1.0
+         1.0 
     </version> 
     <artifactId>
-        ant
+         ant 
     </artifactId> 
     <packaging>
-        pom
+         pom 
     </packaging> 
     <name>
-        Orca Dependencies Ant
+         Orca Dependencies Ant 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            dependencies
+             dependencies 
         </artifactId> 
         <version>
-            1.0
+             1.0 
         </version> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-antlr
+                 ant-antlr 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-apache-bcel
+                 ant-apache-bcel 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-apache-bsf
+                 ant-apache-bsf 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-apache-bsf
+                 ant-apache-bsf 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-apache-log4j
+                 ant-apache-log4j 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-apache-oro
+                 ant-apache-oro 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-apache-regexp
+                 ant-apache-regexp 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-commons-logging
+                 ant-commons-logging 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-commons-net
+                 ant-commons-net 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-jai
+                 ant-jai 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-javamail
+                 ant-javamail 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-jdepend
+                 ant-jdepend 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-jmf
+                 ant-jmf 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-jsch
+                 ant-jsch 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-junit
+                 ant-junit 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-launcher
+                 ant-launcher 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-netrexx
+                 ant-netrexx 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-nodeps
+                 ant-nodeps 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-starteam
+                 ant-starteam 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-stylebook
+                 ant-stylebook 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-swing
+                 ant-swing 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-testutil
+                 ant-testutil 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-trax
+                 ant-trax 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-weblogic
+                 ant-weblogic 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant
+                 ant 
             </artifactId> 
             <version>
-                1.7.0
+                 1.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-axis
+                 ant-axis 
             </artifactId> 
             <version>
-                1.2RC2
+                 1.2RC2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ant
+                 ant 
             </groupId> 
             <artifactId>
-                ant-catalina
+                 ant-catalina 
             </artifactId> 
             <version>
-                1.4.1
+                 1.4.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
-                ant-contrib
+                 ant-contrib 
             </artifactId> 
             <version>
-                1.0
+                 1.0 
             </version> 
             <type>
-                pom
+                 pom 
             </type> 
         </dependency> 
     </dependencies> 

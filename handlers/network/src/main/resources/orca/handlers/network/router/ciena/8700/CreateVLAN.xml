@@ -3,7 +3,7 @@
     <action name="CreateVLAN"> 
         <exchange> 
             <send>
-                virtual-switch create vs {$virtualSwitch}
+                 virtual-switch create vs {$virtualSwitch} 
             </send> 
         </exchange> 
     </action> 

@@ -3,34 +3,34 @@
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                ben-vlan-site
+                 ben-vlan-site 
             </name> 
             <guid>
-                c48e2cb1-e00e-4ed2-918b-8fe4368c8c02
+                 c48e2cb1-e00e-4ed2-918b-8fe4368c8c02 
             </guid> 
             <description>
-                BEN VLAN site authority
+                 BEN VLAN site authority 
             </description> 
             <pools> 
                 <pool> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <label>BEN VLAN</label> 
                     <description>
-                        A VLAN over BEN
+                         A VLAN over BEN 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2013-01-30T00:00:00
+                         2013-01-30T00:00:00 
                     </end> 
                     <handler path="common/noopd.xml"> 
                         <properties> 
@@ -60,30 +60,30 @@
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                ben-vlan-broker
+                 ben-vlan-broker 
             </name> 
             <guid>
-                ebeb5bf1-4751-410a-94bf-0075297c162d
+                 ebeb5bf1-4751-410a-94bf-0075297c162d 
             </guid> 
             <description>
-                BEN VLAN broker
+                 BEN VLAN broker 
             </description> 
         </actor> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                service
+                 service 
             </name> 
             <guid>
-                46AEA103-1185-4E69-8AFA-53194582F5A9
+                 46AEA103-1185-4E69-8AFA-53194582F5A9 
             </guid> 
             <description>
-                Service Manager
+                 Service Manager 
             </description> 
         </actor> 
     </actors> 
@@ -98,10 +98,10 @@
                 <to name="ben-vlan-site" type="site" /> 
                 <rset> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 

@@ -17,9 +17,9 @@
 //RDFRemoteFormula.prototype = new RDFIndexedFormula();
 //RDFRemoteFormula.prototype.constructor = RDFIndexedFormula;
 /*for (x in RDFIndexedFormula)
-{
-	RDFRemoteFormula[x] = RDFIndexedFormula[x];
-}*/
+ {
+ RDFRemoteFormula[x] = RDFIndexedFormula[x];
+ }*/
 
 //RDFRemoteFormula.prototype = RDFIndexedFormula.prototype;	
 /* @query: a query object

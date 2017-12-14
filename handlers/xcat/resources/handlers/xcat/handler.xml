@@ -218,7 +218,7 @@
                     </exec> 
                     <delete file="${xcat.bash.file}" /> 
                     <echo>
-                        result code: ${code}
+                         result code: ${code} 
                     </echo> 
                 </else> 
             </if> 
@@ -279,7 +279,7 @@
                     </exec> 
                     <delete file="${xcat.bash.file}" /> 
                     <echo>
-                        result code: ${code}
+                         result code: ${code} 
                     </echo> 
                 </else> 
             </if> 

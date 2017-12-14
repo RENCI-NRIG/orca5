@@ -1,193 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.controllers
+         orca.controllers 
     </groupId> 
     <artifactId>
-        xmlrpc
+         xmlrpc 
     </artifactId> 
     <packaging>
-        jar
+         jar 
     </packaging> 
     <version>
-        5.2.2-SNAPSHOT
+         5.2.2-SNAPSHOT 
     </version> 
     <name>
-        Orca XML-RPC Controller
+         Orca XML-RPC Controller 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            controllers
+             controllers 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <properties> 
         <xmlrpc.version>
-            3.1.3
+             3.1.3 
         </xmlrpc.version> 
     </properties> 
     <build> 
         <plugins> 
             <plugin> 
                 <artifactId>
-                    maven-surefire-plugin
+                     maven-surefire-plugin 
                 </artifactId> 
                 <configuration> 
                     <skip>
-                        true
+                         true 
                     </skip> 
                     <reuseForks>
-                        false
+                         false 
                     </reuseForks> 
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.codehaus.mojo
+                     org.codehaus.mojo 
                 </groupId> 
                 <artifactId>
-                    appassembler-maven-plugin
+                     appassembler-maven-plugin 
                 </artifactId> 
                 <version>
-                    1.3
+                     1.3 
                 </version> 
                 <executions> 
                     <execution> 
                         <id>
-                            package-execs-and-daemon
+                             package-execs-and-daemon 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <goals> 
                             <goal>
-                                assemble
+                                 assemble 
                             </goal> 
                             <goal>
-                                generate-daemons
+                                 generate-daemons 
                             </goal> 
                         </goals> 
                         <configuration> 
                             <assembleDirectory>
-                                ${basedir}
+                                 ${basedir} 
                             </assembleDirectory> 
                             <programs> 
                                 <program> 
                                     <mainClass>
-                                        orca.controllers.xmlrpc.XmlRpcController
+                                         orca.controllers.xmlrpc.XmlRpcController 
                                     </mainClass> 
                                     <name>
-                                        xmlrpc
+                                         xmlrpc 
                                     </name> 
                                 </program> 
                             </programs> 
                             <daemons> 
                                 <daemon> 
                                     <id>
-                                        xmlrpcd
+                                         xmlrpcd 
                                     </id> 
                                     <jvmSettings> 
                                         <maxMemorySize>
-                                            2048
+                                             2048 
                                         </maxMemorySize> 
                                         <extraArguments> 
                                             <extraArgument>
-                                                -Djava.awt.headless=true
+                                                 -Djava.awt.headless=true 
                                             </extraArgument> 
                                             <extraArgument>
-                                                -XX:PermSize=96m
+                                                 -XX:PermSize=96m 
                                             </extraArgument> 
                                             <extraArgument>
-                                                -XX:MaxPermSize=128m
+                                                 -XX:MaxPermSize=128m 
                                             </extraArgument> 
                                             <extraArgument>
-                                                -XX:+UseParallelOldGC
+                                                 -XX:+UseParallelOldGC 
                                             </extraArgument> 
                                         </extraArguments> 
                                     </jvmSettings> 
                                     <mainClass>
-                                        orca.controllers.xmlrpc.XmlRpcController
+                                         orca.controllers.xmlrpc.XmlRpcController 
                                     </mainClass> 
                                     <generatorConfigurations> 
                                         <generatorConfiguration> 
                                             <generator>
-                                                jsw
+                                                 jsw 
                                             </generator> 
                                             <includes> 
                                                 <include>
-                                                    linux-x86-32
+                                                     linux-x86-32 
                                                 </include> 
                                                 <include>
-                                                    linux-x86-64
+                                                     linux-x86-64 
                                                 </include> 
                                             </includes> 
                                             <configuration> 
                                                 <property> 
                                                     <!-- this can be overridden in the generated shell script --> 
                                                     <name>
-                                                        wrapper.logfile
+                                                         wrapper.logfile 
                                                     </name> 
                                                     <value>
-                                                        xmlrpc-stdout.log
+                                                         xmlrpc-stdout.log 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.logfile.loglevel
+                                                         wrapper.logfile.loglevel 
                                                     </name> 
                                                     <value>
-                                                        DEBUG
+                                                         DEBUG 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.logfile.maxsize
+                                                         wrapper.logfile.maxsize 
                                                     </name> 
                                                     <value>
-                                                        10M
+                                                         10M 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.logfile.maxfiles
+                                                         wrapper.logfile.maxfiles 
                                                     </name> 
                                                     <value>
-                                                        10
+                                                         10 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.ping.timeout
+                                                         wrapper.ping.timeout 
                                                     </name> 
                                                     <value>
-                                                        300
+                                                         300 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        wrapper.ping.timeout.action
+                                                         wrapper.ping.timeout.action 
                                                     </name> 
                                                     <value>
-                                                        NONE
+                                                         NONE 
                                                     </value> 
                                                 </property> 
                                                 <property> 
                                                     <name>
-                                                        run.as.user.envvar
+                                                         run.as.user.envvar 
                                                     </name> 
                                                     <value>
-                                                        geni-orca
+                                                         geni-orca 
                                                     </value> 
                                                 </property> 
                                             </configuration> 
@@ -195,7 +195,7 @@
                                     </generatorConfigurations> 
                                     <platforms> 
                                         <platform>
-                                            jsw
+                                             jsw 
                                         </platform> 
                                     </platforms> 
                                 </daemon> 
@@ -206,18 +206,18 @@
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <executions> 
                     <execution> 
                         <id>
-                            package
+                             package 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <configuration> 
                             <tasks> 
@@ -248,7 +248,7 @@
                         </configuration> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                     </execution> 
@@ -256,27 +256,27 @@
             </plugin> 
             <plugin> 
                 <artifactId>
-                    maven-clean-plugin
+                     maven-clean-plugin 
                 </artifactId> 
                 <version>
-                    2.5
+                     2.5 
                 </version> 
                 <configuration> 
                     <filesets> 
                         <fileset> 
                             <directory>
-                                ${basedir}
+                                 ${basedir} 
                             </directory> 
                             <includes> 
                                 <include>
-                                    bin/**
+                                     bin/** 
                                 </include> 
                                 <include>
-                                    repo/**
+                                     repo/** 
                                 </include> 
                             </includes> 
                             <followSymlinks>
-                                false
+                                 false 
                             </followSymlinks> 
                         </fileset> 
                     </filesets> 
@@ -287,109 +287,109 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                org.eclipse.jetty.aggregate
+                 org.eclipse.jetty.aggregate 
             </groupId> 
             <artifactId>
-                jetty-all-server
+                 jetty-all-server 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
-                shirako
+                 shirako 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <classifier>
-                client
+                 client 
             </classifier> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                embed
+                 embed 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                embed
+                 embed 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <scope>
-                test
+                 test 
             </scope> 
             <classifier>
-                tests
+                 tests 
             </classifier> 
         </dependency> 
         <!-- <dependency> <groupId>orca.tests</groupId> <artifactId>core</artifactId> 
 			<version>${project.version}</version> </dependency> --> 
         <dependency> 
             <groupId>
-                org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
-                xmlrpc-client
+                 xmlrpc-client 
             </artifactId> 
             <version>
-                ${xmlrpc.version}
+                 ${xmlrpc.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
-                xmlrpc-server
+                 xmlrpc-server 
             </artifactId> 
             <version>
-                ${xmlrpc.version}
+                 ${xmlrpc.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
-                xmlrpc-common
+                 xmlrpc-common 
             </artifactId> 
             <version>
-                ${xmlrpc.version}
+                 ${xmlrpc.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ws-commons-util
+                 ws-commons-util 
             </groupId> 
             <artifactId>
-                ws-commons-util
+                 ws-commons-util 
             </artifactId> 
             <version>
-                1.0.2
+                 1.0.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-httpclient
+                 commons-httpclient 
             </groupId> 
             <artifactId>
-                commons-httpclient
+                 commons-httpclient 
             </artifactId> 
             <version>
-                3.1
+                 3.1 
             </version> 
         </dependency> 
         <!-- <dependency> <groupId>org.jivesoftware.smack</groupId> <artifactId>smack-pubsub</artifactId> 
@@ -397,41 +397,41 @@
 			<artifactId>smackx-pubsub</artifactId> <version>3.4.1</version> </dependency> --> 
         <dependency> 
             <groupId>
-                org.renci
+                 org.renci 
             </groupId> 
             <artifactId>
-                xmpp-pubsub
+                 xmpp-pubsub 
             </artifactId> 
             <version>
-                1.1
+                 1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.jolokia
+                 org.jolokia 
             </groupId> 
             <artifactId>
-                jolokia-core
+                 jolokia-core 
             </artifactId> 
             <version>
-                1.3.3
+                 1.3.3 
             </version> 
         </dependency> 
     </dependencies> 
     <profiles> 
         <profile> 
             <id>
-                test
+                 test 
             </id> 
             <build> 
                 <plugins> 
                     <plugin> 
                         <artifactId>
-                            maven-surefire-plugin
+                             maven-surefire-plugin 
                         </artifactId> 
                         <configuration> 
                             <skip>
-                                false
+                                 false 
                             </skip> 
                         </configuration> 
                     </plugin> 

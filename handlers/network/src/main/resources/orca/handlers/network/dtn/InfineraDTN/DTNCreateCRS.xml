@@ -3,10 +3,10 @@
     <action name="CreateCRS"> 
         <exchange> 
             <send>
-                ENT-CRS::{$srcPort},{$dstPort}:{$ctag}::2way:PAYLOAD={$payloadType};
+                 ENT-CRS::{$srcPort},{$dstPort}:{$ctag}::2way:PAYLOAD={$payloadType}; 
             </send> 
             <expect>
-                COMPLD
+                 COMPLD 
             </expect> 
         </exchange> 
     </action> 

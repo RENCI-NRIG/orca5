@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <artifactId>
-        orca-rpmbuild
+         orca-rpmbuild 
     </artifactId> 
     <name>
-        Orca Docker image: orca-rpmbuild
+         Orca Docker image: orca-rpmbuild 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            docker-orca
+             docker-orca 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
     </parent> 
     <build> 
         <resources> 
             <resource> 
                 <directory>
-                    ${project.basedir}
+                     ${project.basedir} 
                 </directory> 
                 <filtering>
-                    true
+                     true 
                 </filtering> 
                 <includes> 
                     <include>
-                        **/Dockerfile
+                         **/Dockerfile 
                     </include> 
                     <!-- the file docker-entrypoint.sh doesn't currently need any filtering.
 						but it does need to get copied. --> 
                     <include>
-                        **/docker-entrypoint.sh
+                         **/docker-entrypoint.sh 
                     </include> 
                 </includes> 
             </resource> 
@@ -45,40 +45,40 @@
             <plugins> 
                 <plugin> 
                     <groupId>
-                        com.spotify
+                         com.spotify 
                     </groupId> 
                     <artifactId>
-                        docker-maven-plugin
+                         docker-maven-plugin 
                     </artifactId> 
                     <executions> 
                         <execution> 
                             <phase>
-                                package
+                                 package 
                             </phase> 
                             <goals> 
                                 <goal>
-                                    build
+                                     build 
                                 </goal> 
                             </goals> 
                         </execution> 
                     </executions> 
                     <configuration> 
                         <dockerDirectory>
-                            ${project.build.directory}/classes
+                             ${project.build.directory}/classes 
                         </dockerDirectory> 
                         <imageName>
-                            renci/${project.artifactId}
+                             renci/${project.artifactId} 
                         </imageName> 
                         <imageTags> 
                             <imageTag>
-                                ${project.version}-${orca.docker.jre.vendor}
+                                 ${project.version}-${orca.docker.jre.vendor} 
                             </imageTag> 
                             <imageTag>
-                                ${orca.docker.jre.vendor}
+                                 ${orca.docker.jre.vendor} 
                             </imageTag> 
                         </imageTags> 
                         <pushImage>
-                            false
+                             false 
                         </pushImage> 
                         <resources> 
                             <!-- Copy the entire source tree, to be placed in the created Image.
@@ -90,65 +90,65 @@
 							     `git describe` seems to need the full objects dir --> 
                             <resource> 
                                 <targetPath>
-                                    /orca/
+                                     /orca/ 
                                 </targetPath> 
                                 <directory>
-                                    ${project.basedir}/../../
+                                     ${project.basedir}/../../ 
                                 </directory> 
                                 <excludes> 
                                     <exclude>
-                                        **/target/**/*
+                                         **/target/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/repo/**/*
+                                         **/repo/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/network/logs/**/*
+                                         **/network/logs/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/startup/**/*
+                                         **/startup/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/handlers/network/logs/
+                                         **/handlers/network/logs/ 
                                     </exclude> 
                                     <exclude>
-                                        **/nodeagent/scripts/**/*
+                                         **/nodeagent/scripts/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/server/orca/config/runtime/**/*
+                                         **/server/orca/config/runtime/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/server/orca/logs/**/*
+                                         **/server/orca/logs/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/server/orca/scripts/**/*
+                                         **/server/orca/scripts/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/server/orca/startup/**/*
+                                         **/server/orca/startup/**/* 
                                     </exclude> 
                                     <exclude>
-                                        **/tools/cmdline/startup/
+                                         **/tools/cmdline/startup/ 
                                     </exclude> 
                                     <exclude>
-                                        **/core/shirako/orca/
+                                         **/core/shirako/orca/ 
                                     </exclude> 
                                     <exclude>
-                                        **/controllers/xmlrpc/controller_recovery.lock
+                                         **/controllers/xmlrpc/controller_recovery.lock 
                                     </exclude> 
                                     <exclude>
-                                        **/controllers/xmlrpc/logs/
+                                         **/controllers/xmlrpc/logs/ 
                                     </exclude> 
                                     <exclude>
-                                        **/controllers/xmlrpc/modelState/
+                                         **/controllers/xmlrpc/modelState/ 
                                     </exclude> 
                                     <exclude>
-                                        **/.project
+                                         **/.project 
                                     </exclude> 
                                     <exclude>
-                                        **/.classpath
+                                         **/.classpath 
                                     </exclude> 
                                     <exclude>
-                                        **/.settings/**/*
+                                         **/.settings/**/* 
                                     </exclude> 
                                 </excludes> 
                             </resource> 

@@ -13,31 +13,31 @@ change names and types in topology section accordingly
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                openflow-site
+                 openflow-site 
             </name> 
             <description>
-                OpenFlow site authority
+                 OpenFlow site authority 
             </description> 
             <pools> 
                 <pool> 
                     <type>
-                        openflow
+                         openflow 
                     </type> 
                     <label>OpenFlow</label> 
                     <description>
-                        OpenFlow
+                         OpenFlow 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="network/openflow/handler.xml"> 
                         <properties> 
@@ -63,24 +63,24 @@ change names and types in topology section accordingly
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                openflow-broker
+                 openflow-broker 
             </name> 
             <description>
-                OpenFlow broker
+                 OpenFlow broker 
             </description> 
         </actor> 
         <actor> 
             <type>
-                service
+                 service 
             </type> 
             <name>
-                service
+                 service 
             </name> 
             <description>
-                Service Manager
+                 Service Manager 
             </description> 
         </actor> 
     </actors> 
@@ -95,10 +95,10 @@ change names and types in topology section accordingly
                 <to name="openflow-site" type="site" /> 
                 <rset> 
                     <type>
-                        openflow
+                         openflow 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 

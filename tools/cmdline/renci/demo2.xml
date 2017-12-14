@@ -2,26 +2,26 @@
 <configuration xmlns="http://issg.cs.duke.edu/sharp/boot"> 
     <global> 
         <startTime>
-            -1
+             -1 
         </startTime> 
         <cycleMillis>
-            1000
+             1000 
         </cycleMillis> 
         <firstTick>
-            0
+             0 
         </firstTick> 
         <manualTicks>
-            false
+             false 
         </manualTicks> 
         <containerGuid>
-            e13abf84-26b5-4fe6-8640-50b317687079
+             e13abf84-26b5-4fe6-8640-50b317687079 
         </containerGuid> 
         <locations> 
             <location protocol="local" /> 
         </locations> 
         <database> 
             <className>
-                orca.manage.container.db.MySqlContainerManagementDatabase
+                 orca.manage.container.db.MySqlContainerManagementDatabase 
             </className> 
             <properties> 
                 <property name="db.mysql.server" value="localhost" /> 
@@ -39,28 +39,28 @@
     <actors> 
         <actor> 
             <name>
-                ben-vlan-site
+                 ben-vlan-site 
             </name> 
             <description>
-                BEN VLAN site authority
+                 BEN VLAN site authority 
             </description> 
             <guid>
-                e6fde0fe-fac1-4b48-8671-2433ade17c13
+                 e6fde0fe-fac1-4b48-8671-2433ade17c13 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.controllers.ben.control.BenNdlControl
+                                 orca.controllers.ben.control.BenNdlControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="ben.vlan" /> 
@@ -71,7 +71,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.SiteBase
+                     orca.cod.plugins.SiteBase 
                 </className> 
                 <properties> 
                     <!-- Devices --> 
@@ -94,7 +94,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -107,7 +107,7 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
@@ -117,28 +117,28 @@
         <!-- NLR site --> 
         <actor> 
             <name>
-                nlr-vlan-site
+                 nlr-vlan-site 
             </name> 
             <description>
-                NLR VLAN site authority
+                 NLR VLAN site authority 
             </description> 
             <guid>
-                cee72e42-57e2-4297-8887-0d1f7b382241
+                 cee72e42-57e2-4297-8887-0d1f7b382241 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.control.VlanControl
+                                 orca.cod.control.VlanControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="nlr.vlan" /> 
@@ -149,7 +149,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.SiteBase
+                     orca.cod.plugins.SiteBase 
                 </className> 
                 <properties> 
                     <!-- Resource pool configuration --> 
@@ -170,7 +170,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -183,7 +183,7 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
@@ -193,28 +193,28 @@
         <!-- DUKE net site--> 
         <actor> 
             <name>
-                duke-net-site
+                 duke-net-site 
             </name> 
             <description>
-                Duke NET site authority
+                 Duke NET site authority 
             </description> 
             <guid>
-                56fa76cc-b90c-470d-b138-e5246a5272c
+                 56fa76cc-b90c-470d-b138-e5246a5272c 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.control.VlanControl
+                                 orca.cod.control.VlanControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="duke.vlan" /> 
@@ -225,7 +225,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.SiteBase
+                     orca.cod.plugins.SiteBase 
                 </className> 
                 <properties> 
                     <!-- Devices --> 
@@ -248,7 +248,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -261,7 +261,7 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
@@ -271,33 +271,33 @@
         <!-- VLAN Broker --> 
         <actor> 
             <name>
-                vlan-broker
+                 vlan-broker 
             </name> 
             <description>
-                VLAN broker
+                 VLAN broker 
             </description> 
             <guid>
-                c7d57e6a-c1f2-4867-aafa-29b86e23f73e
+                 c7d57e6a-c1f2-4867-aafa-29b86e23f73e 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Broker
+                     orca.shirako.core.Broker 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.BrokerSimplerUnitsPolicy
+                     orca.policy.core.BrokerSimplerUnitsPolicy 
                 </className> 
             </mapper> 
             <plugin> 
                 <className>
-                    orca.shirako.plugins.ShirakoPlugin
+                     orca.shirako.plugins.ShirakoPlugin 
                 </className> 
                 <parameters> 
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.shirako.plugins.db.MySqlClientDatabase
+                                 orca.shirako.plugins.db.MySqlClientDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -313,28 +313,28 @@
         <!-- VM sites --> 
         <actor> 
             <name>
-                renci-vm-site
+                 renci-vm-site 
             </name> 
             <description>
-                VM site authority at RENCI
+                 VM site authority at RENCI 
             </description> 
             <guid>
-                2ac8d2c0-4977-49c6-bac2-9b160978627a
+                 2ac8d2c0-4977-49c6-bac2-9b160978627a 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.control.VMControl
+                                 orca.cod.control.VMControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="renci.vm" /> 
@@ -345,7 +345,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.Site
+                     orca.cod.plugins.Site 
                 </className> 
                 <properties> 
                     <!-- Storage servers to be transferred to this site --> 
@@ -372,7 +372,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -385,20 +385,20 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
                     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.NetworkConfigurationManager
+                                 orca.cod.plugins.NetworkConfigurationManager 
                             </className> 
                             <parameters> 
                                 <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.NetworkConfiguration
+                                             orca.cod.plugins.NetworkConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="network.service.ips" value="192.168.201.30-200" /> 
@@ -410,7 +410,7 @@
                                 <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.DnsConfiguration
+                                             orca.cod.plugins.DnsConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="dns.prefix" value="default" /> 
@@ -427,28 +427,28 @@
         </actor> 
         <actor> 
             <name>
-                unc-vm-site
+                 unc-vm-site 
             </name> 
             <description>
-                VM site authority at UNC
+                 VM site authority at UNC 
             </description> 
             <guid>
-                ace7b834-e777-4b8b-a12c-64c2f0a5eabe
+                 ace7b834-e777-4b8b-a12c-64c2f0a5eabe 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.control.VMControl
+                                 orca.cod.control.VMControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="unc.vm" /> 
@@ -459,7 +459,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.Site
+                     orca.cod.plugins.Site 
                 </className> 
                 <properties> 
                     <!-- Storage servers to be transferred to this site --> 
@@ -486,7 +486,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -499,20 +499,20 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
                     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.NetworkConfigurationManager
+                                 orca.cod.plugins.NetworkConfigurationManager 
                             </className> 
                             <parameters> 
                                 <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.NetworkConfiguration
+                                             orca.cod.plugins.NetworkConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="network.service.ips" value="192.168.203.30-200" /> 
@@ -524,7 +524,7 @@
                                 <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.DnsConfiguration
+                                             orca.cod.plugins.DnsConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="dns.prefix" value="default" /> 
@@ -541,28 +541,28 @@
         </actor> 
         <actor> 
             <name>
-                duke-vm-site
+                 duke-vm-site 
             </name> 
             <description>
-                VM site authority at DUKE
+                 VM site authority at DUKE 
             </description> 
             <guid>
-                b1aa6a77-68ec-4947-95c5-a070b4dcdba6
+                 b1aa6a77-68ec-4947-95c5-a070b4dcdba6 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
                     <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.control.VMControl
+                                 orca.cod.control.VMControl 
                             </className> 
                             <properties> 
                                 <property name="resource.types" value="duke.vm" /> 
@@ -573,7 +573,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.Site
+                     orca.cod.plugins.Site 
                 </className> 
                 <properties> 
                     <!-- Storage servers to be transferred to this site --> 
@@ -600,7 +600,7 @@
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -613,20 +613,20 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
                     <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.NetworkConfigurationManager
+                                 orca.cod.plugins.NetworkConfigurationManager 
                             </className> 
                             <parameters> 
                                 <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.NetworkConfiguration
+                                             orca.cod.plugins.NetworkConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="network.service.ips" value="192.168.202.30-200" /> 
@@ -638,7 +638,7 @@
                                 <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                            orca.cod.plugins.DnsConfiguration
+                                             orca.cod.plugins.DnsConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="dns.prefix" value="default" /> 
@@ -655,33 +655,33 @@
         </actor> 
         <actor> 
             <name>
-                vm-broker
+                 vm-broker 
             </name> 
             <description>
-                VM broker
+                 VM broker 
             </description> 
             <guid>
-                326a5dbf-fe65-4748-a842-6bb08d92daff
+                 326a5dbf-fe65-4748-a842-6bb08d92daff 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.Broker
+                     orca.shirako.core.Broker 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.BrokerSimpleUnitsPolicy
+                     orca.policy.core.BrokerSimpleUnitsPolicy 
                 </className> 
             </mapper> 
             <plugin> 
                 <className>
-                    orca.shirako.plugins.ShirakoPlugin
+                     orca.shirako.plugins.ShirakoPlugin 
                 </className> 
                 <parameters> 
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.shirako.plugins.db.MySqlClientDatabase
+                                 orca.shirako.plugins.db.MySqlClientDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -697,33 +697,33 @@
         <!-- Service manager --> 
         <actor> 
             <name>
-                service
+                 service 
             </name> 
             <description>
-                Service Manager
+                 Service Manager 
             </description> 
             <guid>
-                218d0e0a-7d7b-49a4-be4c-4a1f7caad705
+                 218d0e0a-7d7b-49a4-be4c-4a1f7caad705 
             </guid> 
             <instance> 
                 <className>
-                    orca.shirako.core.ServiceManager
+                     orca.shirako.core.ServiceManager 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                    orca.policy.core.ServiceManagerSimplePolicy
+                     orca.policy.core.ServiceManagerSimplePolicy 
                 </className> 
             </mapper> 
             <plugin> 
                 <className>
-                    orca.cod.plugins.ServiceManagerCodPlugin
+                     orca.cod.plugins.ServiceManagerCodPlugin 
                 </className> 
                 <parameters> 
                     <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                orca.cod.plugins.db.MySqlCodDatabase
+                                 orca.cod.plugins.db.MySqlCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -736,7 +736,7 @@
                     <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                orca.shirako.plugins.config.AntConfig
+                                 orca.shirako.plugins.config.AntConfig 
                             </className> 
                             <properties> 
                                 <property name="config.count" value="1" /> 
@@ -764,10 +764,10 @@
                 <to name="ben-vlan-site" type="authority" /> 
                 <rset> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 
@@ -777,10 +777,10 @@
                 <to name="nlr-vlan-site" type="authority" /> 
                 <rset> 
                     <type>
-                        nlr.vlan
+                         nlr.vlan 
                     </type> 
                     <units>
-                        6
+                         6 
                     </units> 
                 </rset> 
             </edge> 
@@ -790,10 +790,10 @@
                 <to name="duke-net-site" type="authority" /> 
                 <rset> 
                     <type>
-                        duke.vlan
+                         duke.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 
@@ -802,10 +802,10 @@
                 <to name="renci-vm-site" type="authority" /> 
                 <rset> 
                     <type>
-                        renci.vm
+                         renci.vm 
                     </type> 
                     <units>
-                        6
+                         6 
                     </units> 
                 </rset> 
             </edge> 
@@ -814,10 +814,10 @@
                 <to name="unc-vm-site" type="authority" /> 
                 <rset> 
                     <type>
-                        unc.vm
+                         unc.vm 
                     </type> 
                     <units>
-                        6
+                         6 
                     </units> 
                 </rset> 
             </edge> 
@@ -826,10 +826,10 @@
                 <to name="duke-vm-site" type="authority" /> 
                 <rset> 
                     <type>
-                        duke.vm
+                         duke.vm 
                     </type> 
                     <units>
-                        6
+                         6 
                     </units> 
                 </rset> 
             </edge> 

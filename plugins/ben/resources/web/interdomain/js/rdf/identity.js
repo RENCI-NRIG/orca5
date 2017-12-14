@@ -86,7 +86,7 @@ function RDFIndexedFormula() {
         var fixEndA = formula.statementsMatching(undefined, pred, undefined);
         var i;
         for (i = 0; i < fixEndA.length; i++) { // NOT optimized - sort fixEndA etc
-        //	    fyi("nePropertyAction: retrospective action for "+st)
+            //	    fyi("nePropertyAction: retrospective action for "+st)
             if (action(formula, fixEndA[i].subject, pred, fixEndA[i].object)) {
                 //@@		kb.remove(st); /// messing up the list we are iterating over?? @@
                 fyi("newPropertyAction: NOT removing " + fixEndA[i]);

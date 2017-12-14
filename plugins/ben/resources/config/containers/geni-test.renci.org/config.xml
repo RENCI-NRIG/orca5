@@ -3,34 +3,34 @@
     <actors> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                duke-net-site
+                 duke-net-site 
             </name> 
             <guid>
-                a0b1324e-23e7-11df-85d1-000c29b1c193
+                 a0b1324e-23e7-11df-85d1-000c29b1c193 
             </guid> 
             <description>
-                DUKE NET site authority
+                 DUKE NET site authority 
             </description> 
             <pools> 
                 <pool> 
                     <type>
-                        duke.vlan
+                         duke.vlan 
                     </type> 
                     <label>DUKE NET VLAN</label> 
                     <description>
-                        A VLAN over DUKE NET
+                         A VLAN over DUKE NET 
                     </description> 
                     <units>
-                        4
+                         4 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="common/noop.xml" /> 
                     <properties> 
@@ -45,37 +45,37 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                ben-site
+                 ben-site 
             </name> 
             <guid>
-                a3a84424-23e7-11df-a8ff-000c29b1c193
+                 a3a84424-23e7-11df-a8ff-000c29b1c193 
             </guid> 
             <description>
-                BEN site authority
+                 BEN site authority 
             </description> 
             <inventory>
-                ben.na
+                 ben.na 
             </inventory> 
             <pools> 
                 <pool> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <label>BEN VLAN</label> 
                     <description>
-                        A VLAN over BEN
+                         A VLAN over BEN 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="controllers/ben/gec7/ben.xml" /> 
                     <properties> 
@@ -89,34 +89,34 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                nlr-site
+                 nlr-site 
             </name> 
             <description>
-                NLR site authority
+                 NLR site authority 
             </description> 
             <guid>
-                a6bac0d8-23e7-11df-8b63-000c29b1c193
+                 a6bac0d8-23e7-11df-8b63-000c29b1c193 
             </guid> 
             <pools> 
                 <pool> 
                     <type>
-                        nlr.vlan
+                         nlr.vlan 
                     </type> 
                     <label>NLR VLAN</label> 
                     <description>
-                        A VLAN over NLR
+                         A VLAN over NLR 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="network/nlr/handler.xml"> 
                         <properties> 
@@ -132,37 +132,37 @@
         </actor> 
         <actor> 
             <type>
-                site
+                 site 
             </type> 
             <name>
-                starlight-site
+                 starlight-site 
             </name> 
             <description>
-                Starlight site authority
+                 Starlight site authority 
             </description> 
             <guid>
-                a9c9cd6e-23e7-11df-af97-000c29b1c193
+                 a9c9cd6e-23e7-11df-af97-000c29b1c193 
             </guid> 
             <inventory>
-                starlight.na
+                 starlight.na 
             </inventory> 
             <pools> 
                 <pool> 
                     <type>
-                        starlight.vlan
+                         starlight.vlan 
                     </type> 
                     <label>Starlight VLAN</label> 
                     <description>
-                        A VLAN over Starlight
+                         A VLAN over Starlight 
                     </description> 
                     <units>
-                        100
+                         100 
                     </units> 
                     <start>
-                        2010-01-30T00:00:00
+                         2010-01-30T00:00:00 
                     </start> 
                     <end>
-                        2011-01-30T00:00:00
+                         2011-01-30T00:00:00 
                     </end> 
                     <handler path="controllers/ben/gec7/starlight.xml" /> 
                 </pool> 
@@ -173,13 +173,13 @@
         </actor> 
         <actor> 
             <type>
-                broker
+                 broker 
             </type> 
             <name>
-                broker
+                 broker 
             </name> 
             <guid>
-                acaa0b8e-23e7-11df-b278-000c29b1c193
+                 acaa0b8e-23e7-11df-b278-000c29b1c193 
             </guid> 
             <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
                 <properties> 
@@ -222,10 +222,10 @@
                 <to name="duke-net-site" type="site" /> 
                 <rset> 
                     <type>
-                        duke.vlan
+                         duke.vlan 
                     </type> 
                     <units>
-                        4
+                         4 
                     </units> 
                 </rset> 
             </edge> 
@@ -234,10 +234,10 @@
                 <to name="ben-site" type="site" /> 
                 <rset> 
                     <type>
-                        ben.vlan
+                         ben.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 
@@ -246,10 +246,10 @@
                 <to name="nlr-site" type="site" /> 
                 <rset> 
                     <type>
-                        nlr.vlan
+                         nlr.vlan 
                     </type> 
                     <units>
-                        100
+                         100 
                     </units> 
                 </rset> 
             </edge> 
@@ -258,10 +258,10 @@
                 <to name="starlight-site" type="site" /> 
                 <rset> 
                     <type>
-                        starlight.vlan
+                         starlight.vlan 
                     </type> 
                     <units>
-                        10
+                         10 
                     </units> 
                 </rset> 
             </edge> 

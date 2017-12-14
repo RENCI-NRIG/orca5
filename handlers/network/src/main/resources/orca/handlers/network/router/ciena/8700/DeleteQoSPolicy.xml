@@ -3,32 +3,32 @@
     <action name="DeleteQoSPolicy"> 
         <exchange> 
             <send>
-                config t
+                 config t 
             </send> 
         </exchange> 
         <exchange> 
             <send>
-                policy-map {$QoSPolicyName}
+                 policy-map {$QoSPolicyName} 
             </send> 
         </exchange> 
         <exchange> 
             <send>
-                no class class-default
+                 no class class-default 
             </send> 
         </exchange> 
         <exchange> 
             <send>
-                exit
+                 exit 
             </send> 
         </exchange> 
         <exchange> 
             <send>
-                no policy-map {$QoSPolicyName}
+                 no policy-map {$QoSPolicyName} 
             </send> 
         </exchange> 
         <exchange> 
             <send>
-                end
+                 end 
             </send> 
         </exchange> 
     </action> 

@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.tools
+         orca.tools 
     </groupId> 
     <artifactId>
-        cmdline
+         cmdline 
     </artifactId> 
     <!-- <packaging>pom</packaging> --> 
     <name>
-        Orca Commandline Testing Environment
+         Orca Commandline Testing Environment 
     </name> 
     <description>
-        This project provides a template for running Orca from the command line.
+         This project provides a template for running Orca from the command line. 
     </description> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            tools
+             tools 
         </artifactId> 
         <version>
-            5.2.2-SNAPSHOT
+             5.2.2-SNAPSHOT 
         </version> 
         <relativePath>
-            ../pom.xml
+             ../pom.xml 
         </relativePath> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                boot
+                 boot 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                core
+                 core 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <type>
-                pom
+                 pom 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca
+                 orca 
             </groupId> 
             <artifactId>
-                nodeagent
+                 nodeagent 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <classifier>
-                client
+                 client 
             </classifier> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
-                ant-contrib
+                 ant-contrib 
             </artifactId> 
             <version>
-                ${project.version}
+                 ${project.version} 
             </version> 
             <type>
-                pom
+                 pom 
             </type> 
         </dependency> 
     </dependencies> 
@@ -89,38 +89,38 @@
         <plugins> 
             <plugin> 
                 <groupId>
-                    org.codehaus.mojo
+                     org.codehaus.mojo 
                 </groupId> 
                 <artifactId>
-                    appassembler-maven-plugin
+                     appassembler-maven-plugin 
                 </artifactId> 
                 <version>
-                    1.3
+                     1.3 
                 </version> 
                 <executions> 
                     <execution> 
                         <id>
-                            package-execs-and-daemon
+                             package-execs-and-daemon 
                         </id> 
                         <phase>
-                            package
+                             package 
                         </phase> 
                         <goals> 
                             <goal>
-                                assemble
+                                 assemble 
                             </goal> 
                         </goals> 
                         <configuration> 
                             <assembleDirectory>
-                                ${basedir}/orca
+                                 ${basedir}/orca 
                             </assembleDirectory> 
                             <programs> 
                                 <program> 
                                     <mainClass>
-                                        orca.tools.cmdline.UnpackOrca
+                                         orca.tools.cmdline.UnpackOrca 
                                     </mainClass> 
                                     <name>
-                                        orca-unwrap
+                                         orca-unwrap 
                                     </name> 
                                 </program> 
                             </programs> 
@@ -130,40 +130,40 @@
             </plugin> 
             <plugin> 
                 <groupId>
-                    org.jvnet.maven-antrun-extended-plugin
+                     org.jvnet.maven-antrun-extended-plugin 
                 </groupId> 
                 <artifactId>
-                    maven-antrun-extended-plugin
+                     maven-antrun-extended-plugin 
                 </artifactId> 
                 <dependencies> 
                     <dependency> 
                         <groupId>
-                            ant-contrib
+                             ant-contrib 
                         </groupId> 
                         <artifactId>
-                            ant-contrib
+                             ant-contrib 
                         </artifactId> 
                         <version>
-                            1.0b3
+                             1.0b3 
                         </version> 
                     </dependency> 
                 </dependencies> 
                 <executions> 
                     <execution> 
                         <id>
-                            resgen
+                             resgen 
                         </id> 
                         <phase>
-                            generate-resources
+                             generate-resources 
                         </phase> 
                         <goals> 
                             <goal>
-                                run
+                                 run 
                             </goal> 
                         </goals> 
                         <configuration> 
                             <verifyArtifact>
-                                false
+                                 false 
                             </verifyArtifact> 
                             <tasks> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
@@ -193,27 +193,27 @@
             </plugin> 
             <plugin> 
                 <artifactId>
-                    maven-clean-plugin
+                     maven-clean-plugin 
                 </artifactId> 
                 <version>
-                    2.5
+                     2.5 
                 </version> 
                 <configuration> 
                     <filesets> 
                         <fileset> 
                             <directory>
-                                ${basedir}/orca
+                                 ${basedir}/orca 
                             </directory> 
                             <includes> 
                                 <include>
-                                    bin/**
+                                     bin/** 
                                 </include> 
                                 <include>
-                                    repo/**
+                                     repo/** 
                                 </include> 
                             </includes> 
                             <followSymlinks>
-                                false
+                                 false 
                             </followSymlinks> 
                         </fileset> 
                     </filesets> 

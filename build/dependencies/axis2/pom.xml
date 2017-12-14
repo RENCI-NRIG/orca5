@@ -1,168 +1,168 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
     <modelVersion>
-        4.0.0
+         4.0.0 
     </modelVersion> 
     <groupId>
-        orca.dependencies
+         orca.dependencies 
     </groupId> 
     <version>
-        1.0
+         1.0 
     </version> 
     <artifactId>
-        axis2
+         axis2 
     </artifactId> 
     <packaging>
-        pom
+         pom 
     </packaging> 
     <name>
-        Orca Dependencies Axis2
+         Orca Dependencies Axis2 
     </name> 
     <parent> 
         <groupId>
-            orca
+             orca 
         </groupId> 
         <artifactId>
-            dependencies
+             dependencies 
         </artifactId> 
         <version>
-            1.0
+             1.0 
         </version> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                javax.activation
+                 javax.activation 
             </groupId> 
             <artifactId>
-                activation
+                 activation 
             </artifactId> 
             <version>
-                1.1
+                 1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                annogen
+                 annogen 
             </groupId> 
             <artifactId>
-                annogen
+                 annogen 
             </artifactId> 
             <version>
-                0.1.0
+                 0.1.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
-                axiom
+                 axiom 
             </artifactId> 
             <version>
-                1.0
+                 1.0 
             </version> 
             <type>
-                pom
+                 pom 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-adb
+                 axis2-adb 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-adb-codegen
+                 axis2-adb-codegen 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-codegen
+                 axis2-codegen 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-java2wsdl
+                 axis2-java2wsdl 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-jaxbri
+                 axis2-jaxbri 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-jibx
+                 axis2-jibx 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-kernel
+                 axis2-kernel 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-rahas
+                 axis2-rahas 
             </artifactId> 
             <version>
-                1.1
+                 1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-saaj
+                 axis2-saaj 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <!--    
@@ -174,353 +174,353 @@
 --> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-secpolicy
+                 axis2-secpolicy 
             </artifactId> 
             <version>
-                1.1
+                 1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-soapmonitor
+                 axis2-soapmonitor 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-spring
+                 axis2-spring 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-xmlbeans
+                 axis2-xmlbeans 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                axis2-tools
+                 axis2-tools 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                backport-util-concurrent
+                 backport-util-concurrent 
             </groupId> 
             <artifactId>
-                backport-util-concurrent
+                 backport-util-concurrent 
             </artifactId> 
             <version>
-                2.2
+                 2.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-codec
+                 commons-codec 
             </groupId> 
             <artifactId>
-                commons-codec
+                 commons-codec 
             </artifactId> 
             <version>
-                1.3
+                 1.3 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-fileupload
+                 commons-fileupload 
             </groupId> 
             <artifactId>
-                commons-fileupload
+                 commons-fileupload 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-httpclient
+                 commons-httpclient 
             </groupId> 
             <artifactId>
-                commons-httpclient
+                 commons-httpclient 
             </artifactId> 
             <version>
-                3.1
+                 3.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-io
+                 commons-io 
             </groupId> 
             <artifactId>
-                commons-io
+                 commons-io 
             </artifactId> 
             <version>
-                1.2
+                 1.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                commons-logging
+                 commons-logging 
             </groupId> 
             <artifactId>
-                commons-logging
+                 commons-logging 
             </artifactId> 
         </dependency> 
         <dependency> 
             <groupId>
-                orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
-                jaxb
+                 jaxb 
             </artifactId> 
             <version>
-                1.0
+                 1.0 
             </version> 
             <type>
-                pom
+                 pom 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                jaxen
+                 jaxen 
             </groupId> 
             <artifactId>
-                jaxen
+                 jaxen 
             </artifactId> 
             <version>
-                1.1
+                 1.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                org.jibx
+                 org.jibx 
             </groupId> 
             <artifactId>
-                jibx-run
+                 jibx-run 
             </artifactId> 
             <version>
-                1.1.3
+                 1.1.3 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                mail
+                 mail 
             </groupId> 
             <artifactId>
-                mail
+                 mail 
             </artifactId> 
             <version>
-                1.4.0
+                 1.4.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                neethi
+                 neethi 
             </groupId> 
             <artifactId>
-                neethi
+                 neethi 
             </artifactId> 
             <version>
-                2.0
+                 2.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                stax
+                 stax 
             </groupId> 
             <artifactId>
-                stax-api
+                 stax-api 
             </artifactId> 
             <version>
-                1.0.1
+                 1.0.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                woden
+                 woden 
             </groupId> 
             <artifactId>
-                woden
+                 woden 
             </artifactId> 
             <version>
-                1.0.0M6
+                 1.0.0M6 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                wsdl
+                 wsdl 
             </groupId> 
             <artifactId>
-                wsdl4j
+                 wsdl4j 
             </artifactId> 
             <version>
-                1.6.2
+                 1.6.2 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                wstx-asl
+                 wstx-asl 
             </groupId> 
             <artifactId>
-                wstx-asl
+                 wstx-asl 
             </artifactId> 
             <version>
-                3.2.0
+                 3.2.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                xalan
+                 xalan 
             </groupId> 
             <artifactId>
-                xalan
+                 xalan 
             </artifactId> 
             <version>
-                2.7.0
+                 2.7.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                xbean
+                 xbean 
             </groupId> 
             <artifactId>
-                xbean
+                 xbean 
             </artifactId> 
             <version>
-                2.2.0
+                 2.2.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                xerces
+                 xerces 
             </groupId> 
             <artifactId>
-                xerces-impl
+                 xerces-impl 
             </artifactId> 
             <version>
-                2.8.1
+                 2.8.1 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                xml-apis
+                 xml-apis 
             </groupId> 
             <artifactId>
-                xml-apis
+                 xml-apis 
             </artifactId> 
             <version>
-                1.3.03
+                 1.3.03 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                xmlschema
+                 xmlschema 
             </groupId> 
             <artifactId>
-                xmlschema
+                 xmlschema 
             </artifactId> 
             <version>
-                1.2
+                 1.2 
             </version> 
         </dependency> 
         <!-- Modules --> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                addressing
+                 addressing 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
             <type>
-                mar
+                 mar 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                soapmonitor
+                 soapmonitor 
             </artifactId> 
             <version>
-                1.1.1
+                 1.1.1 
             </version> 
             <type>
-                mar
+                 mar 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                axis2
+                 axis2 
             </groupId> 
             <artifactId>
-                rampart
+                 rampart 
             </artifactId> 
             <version>
-                1.1
+                 1.1 
             </version> 
             <type>
-                mar
+                 mar 
             </type> 
         </dependency> 
         <dependency> 
             <groupId>
-                xmlsec
+                 xmlsec 
             </groupId> 
             <artifactId>
-                xmlsec
+                 xmlsec 
             </artifactId> 
             <version>
-                1.3.0
+                 1.3.0 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                xmldsig
+                 xmldsig 
             </groupId> 
             <artifactId>
-                xmldsig
+                 xmldsig 
             </artifactId> 
             <version>
-                1.5
+                 1.5 
             </version> 
         </dependency> 
         <dependency> 
             <groupId>
-                ws-sec
+                 ws-sec 
             </groupId> 
             <artifactId>
-                wss4j
+                 wss4j 
             </artifactId> 
             <version>
-                1.5.1
+                 1.5.1 
             </version> 
         </dependency> 
     </dependencies> 
