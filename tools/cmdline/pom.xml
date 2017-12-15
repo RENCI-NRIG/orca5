@@ -41,21 +41,21 @@
             <version>
                  ${project.version} 
             </version> 
-        </dependency> 
-        <dependency> 
+        </dependency>
+        <dependency>
             <groupId>
-                 orca 
-            </groupId> 
+                orca
+            </groupId>
             <artifactId>
-                 core 
-            </artifactId> 
+                core
+            </artifactId>
             <version>
-                 ${project.version} 
-            </version> 
+                ${project.version}
+            </version>
             <type>
-                 pom 
-            </type> 
-        </dependency> 
+                pom
+            </type>
+        </dependency>
         <dependency> 
             <groupId>
                  orca.controllers 
@@ -69,35 +69,74 @@
             <type>
                  pom 
             </type> 
-        </dependency> 
-        <dependency> 
+        </dependency>
+        <dependency>
             <groupId>
-                 orca 
-            </groupId> 
+                orca
+            </groupId>
             <artifactId>
-                 nodeagent 
-            </artifactId> 
+                nodeagent
+            </artifactId>
             <version>
-                 ${project.version} 
-            </version> 
+                ${project.version}
+            </version>
             <classifier>
-                 client 
-            </classifier> 
-        </dependency> 
-        <dependency> 
+                client
+            </classifier>
+        </dependency>
+        <dependency>
             <groupId>
-                 orca.dependencies 
-            </groupId> 
+                orca.plugins
+            </groupId>
             <artifactId>
-                 ant-contrib 
-            </artifactId> 
+                ben
+            </artifactId>
             <version>
-                 ${project.version} 
-            </version> 
+                ${project.version}
+            </version>
+        </dependency>
+        <dependency>
+            <groupId>
+                orca.dependencies
+            </groupId>
+            <artifactId>
+                ant
+            </artifactId>
+            <version>
+                ${project.version}
+            </version>
             <type>
-                 pom 
-            </type> 
-        </dependency> 
+                pom
+            </type>
+        </dependency>
+        <dependency>
+            <groupId>
+                orca.dependencies
+            </groupId>
+            <artifactId>
+                ant-contrib
+            </artifactId>
+            <version>
+                ${project.version}
+            </version>
+            <type>
+                pom
+            </type>
+        </dependency>
+        <dependency>
+            <groupId>
+                orca.dependencies
+            </groupId>
+            <artifactId>
+                handler-dependencies
+            </artifactId>
+            <version>
+                ${project.version}
+            </version>
+            <type>
+                pom
+            </type>
+        </dependency>
     </dependencies> 
     <build> 
         <plugins> 

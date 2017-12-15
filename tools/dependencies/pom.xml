@@ -43,10 +43,13 @@
         </module> 
         <module>
              axis2 
-        </module> 
+        </module>
         <module>
-             jaxb 
-        </module> 
+            jaxb
+        </module>
+        <module>
+            handler-dependencies
+        </module>
     </modules> 
     <build> 
         <plugins> 

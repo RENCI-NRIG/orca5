@@ -75,7 +75,7 @@ cat << EOF > "${ORCA_BLD}/settings.xml"
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <mirrors>
     <mirror>
-      <mirrorOf>*,!geni-imf-libs,!geni-orca-libs,!geni-orca-snapshot</mirrorOf>
+      <mirrorOf>external:*,!geni-imf-libs,!geni-orca-libs,!geni-orca-snapshot</mirrorOf>
       <name>remote-repos</name>
         <url>http://ci-dev.renci.org/nexus/content/groups/public/</url>
       <id>remote-repos</id>
