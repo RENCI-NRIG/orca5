@@ -100,20 +100,6 @@
                 orca.dependencies
             </groupId>
             <artifactId>
-                ant
-            </artifactId>
-            <version>
-                ${project.version}
-            </version>
-            <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
-            <groupId>
-                orca.dependencies
-            </groupId>
-            <artifactId>
                 ant-contrib
             </artifactId>
             <version>

@@ -32,9 +32,6 @@
          A small collection of useful classes to bootstrap Orca's build process 
     </description> 
     <properties> 
-        <orca.tools.build.version>
-             ${project.version}
-        </orca.tools.build.version>
         <orca.website.id>
              orca.website 
         </orca.website.id> 

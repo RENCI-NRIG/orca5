@@ -569,14 +569,6 @@
             </plugin>
         </plugins>
         <extensions>
-            <!-- Enable our own build tools -->
-            <!--
-            <extension>
-                <groupId>orca.tools</groupId>
-                <artifactId>build</artifactId>
-                <version>${orca.tools.build.version}</version>
-            </extension>
-            -->
             <!-- enable webdav support -->
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>

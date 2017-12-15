@@ -14,6 +14,9 @@
     <name>
          Orca Dependencies Handlers
     </name> 
+    <description>
+         A grouping of all of the 'handlers' in a single place, for dependency management.
+    </description>
     <parent> 
         <groupId>
              orca 
