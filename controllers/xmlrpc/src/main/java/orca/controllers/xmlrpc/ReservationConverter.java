@@ -54,6 +54,7 @@ import orca.shirako.common.meta.ConfigurationProperties;
 import orca.shirako.common.meta.RequestProperties;
 import orca.shirako.common.meta.UnitProperties;
 
+import orca.shirako.container.Globals;
 import orca.util.PropList;
 import org.apache.log4j.Logger;
 
@@ -2319,18 +2320,26 @@ public class ReservationConverter implements LayerConstant {
 
             // concatenate SSH keys for this login
             List<String> userKeys = null;
+            final Object keysObject = e.get(KEYS_FIELD);
+            if (Globals.Log.isTraceEnabled()) {
+                Globals.Log.trace("keys object is of class " + keysObject.getClass().getCanonicalName());
+            }
             try {
-                userKeys = (List<String>) e.get(KEYS_FIELD);
-            } catch (ClassCastException cce) {
-                try {
-                    userKeys = new ArrayList<String>(Arrays.asList((String[]) e.get(KEYS_FIELD)));
-                } catch (ClassCastException cce1) {
-                    try {
-                        userKeys = Collections.singletonList((String) e.get(KEYS_FIELD));
-                    } catch (ClassCastException cce2) {
-                        continue;
-                    }
+                // Using instanceof is supposed to be faster than catching Exceptions
+                if (keysObject instanceof List) {
+                    userKeys = (List<String>) keysObject;
+                } else if (keysObject instanceof Object[]) {
+                    final Object[] keysObjectArray = (Object[]) keysObject;
+                    userKeys = Arrays.asList(Arrays.copyOf(keysObjectArray, keysObjectArray.length, String[].class));
+                } else if (keysObject instanceof String) {
+                    userKeys = Collections.singletonList((String) keysObject);
+                } else {
+                    Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class " + keysObject.getClass().getCanonicalName());
+                    continue;
                 }
+            } catch (ClassCastException cce) {
+                Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class " + keysObject.getClass().getCanonicalName(), cce);
+                continue;
             }
 
             // get the sudo
