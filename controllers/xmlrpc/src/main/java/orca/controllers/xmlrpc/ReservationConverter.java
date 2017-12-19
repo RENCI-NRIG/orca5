@@ -6,8 +6,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Formatter;
@@ -67,9 +69,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.sparql.core.ResultBinding;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class ReservationConverter implements LayerConstant {
     static final String SUDO_NO = "no";
@@ -2324,7 +2323,7 @@ public class ReservationConverter implements LayerConstant {
                 userKeys = (List<String>) e.get(KEYS_FIELD);
             } catch (ClassCastException cce) {
                 try {
-                    userKeys = new ArrayList<String>(Arrays.asList((Object[]) e.get(KEYS_FIELD)));
+                    userKeys = new ArrayList<String>(Arrays.asList((String[]) e.get(KEYS_FIELD)));
                 } catch (ClassCastException cce1) {
                     try {
                         userKeys = Collections.singletonList((String) e.get(KEYS_FIELD));

@@ -3,6 +3,7 @@ package orca.embed.cloudembed;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -19,8 +20,6 @@ import orca.ndl.elements.NetworkElement;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class VTRequestMapping extends RequestMapping {
 

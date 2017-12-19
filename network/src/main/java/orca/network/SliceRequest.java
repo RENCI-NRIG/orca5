@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -36,8 +37,6 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.XSD;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 import orca.ndl.*;
 import orca.ndl.elements.Device;
