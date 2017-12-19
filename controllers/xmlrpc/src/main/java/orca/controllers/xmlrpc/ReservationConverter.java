@@ -2334,11 +2334,13 @@ public class ReservationConverter implements LayerConstant {
                 } else if (keysObject instanceof String) {
                     userKeys = Collections.singletonList((String) keysObject);
                 } else {
-                    Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class " + keysObject.getClass().getCanonicalName());
+                    Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class "
+                            + keysObject.getClass().getCanonicalName());
                     continue;
                 }
             } catch (ClassCastException cce) {
-                Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class " + keysObject.getClass().getCanonicalName(), cce);
+                Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class "
+                        + keysObject.getClass().getCanonicalName(), cce);
                 continue;
             }
 

@@ -260,8 +260,10 @@ public class UnboundRequestHandler extends MultiPointHandler {
         getVMInfo(master_ce, rr);
         getVMInfo(slave_ce, rr);
 
-        final ComputeElement masterNE = createNE(requestModel, max_domain_rs, Collections.singletonList(master_ce), connection);
-        final ComputeElement slaveNE = createNE(requestModel, second_domain_rs, Collections.singletonList(slave_ce), connection);
+        final ComputeElement masterNE = createNE(requestModel, max_domain_rs, Collections.singletonList(master_ce),
+                connection);
+        final ComputeElement slaveNE = createNE(requestModel, second_domain_rs, Collections.singletonList(slave_ce),
+                connection);
 
         connection.setNe1(masterNE);
         connection.setNe2(slaveNE);

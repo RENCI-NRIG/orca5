@@ -118,8 +118,8 @@ public class ReservationConverterTest extends RequestWorkflowTest {
     }
 
     /**
-     * Test that SSH key property is generated from UsersMap.
-     * This function passes the keys in the Map as a List, as used by most of our Unit Tests.
+     * Test that SSH key property is generated from UsersMap. This function passes the keys in the Map as a List, as
+     * used by most of our Unit Tests.
      *
      * @throws ReservationConverter.ReservationConverterException
      */
@@ -130,14 +130,15 @@ public class ReservationConverterTest extends RequestWorkflowTest {
 
         assertNotNull("Generated SSH Properties were null", sshProperties);
 
-        final String keyProperty = sshProperties.getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
+        final String keyProperty = sshProperties
+                .getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
 
         assertNotNull("Returned SSH key was null", keyProperty);
     }
 
     /**
-     * Test that SSH key property is generated from UsersMap.
-     * This function passes the keys in the Map as an Object[], which is how they appear from XMLRPC.
+     * Test that SSH key property is generated from UsersMap. This function passes the keys in the Map as an Object[],
+     * which is how they appear from XMLRPC.
      *
      * @throws ReservationConverter.ReservationConverterException
      */
@@ -148,14 +149,15 @@ public class ReservationConverterTest extends RequestWorkflowTest {
 
         assertNotNull("Generated SSH Properties were null", sshProperties);
 
-        final String keyProperty = sshProperties.getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
+        final String keyProperty = sshProperties
+                .getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
 
         assertNotNull("Returned SSH key was null", keyProperty);
     }
 
     /**
-     * Test that SSH key property is generated from UsersMap.
-     * This function passes the keys in the Map as a String object.
+     * Test that SSH key property is generated from UsersMap. This function passes the keys in the Map as a String
+     * object.
      *
      * @throws ReservationConverter.ReservationConverterException
      */
@@ -166,13 +168,15 @@ public class ReservationConverterTest extends RequestWorkflowTest {
 
         assertNotNull("Generated SSH Properties were null", sshProperties);
 
-        final String keyProperty = sshProperties.getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
+        final String keyProperty = sshProperties
+                .getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
 
         assertNotNull("Returned SSH key was null", keyProperty);
     }
 
     /**
-     * Similar to function in OrcaXmlrpcHandlerTest, this is a slightly modified version explicity for testing ReservationConverter
+     * Similar to function in OrcaXmlrpcHandlerTest, this is a slightly modified version explicity for testing
+     * ReservationConverter
      *
      * Craft a userMap required by createSlice() and modifySlice().
      *
@@ -181,7 +185,7 @@ public class ReservationConverterTest extends RequestWorkflowTest {
     private static List<Map<String, ?>> getUsersMapWithObjects() {
         List<Map<String, ?>> users = new ArrayList<>();
         Map<String, Object> userEntry = new HashMap<>();
-        Object[] keys = {"ssh-rsa this is not a key"};
+        Object[] keys = { "ssh-rsa this is not a key" };
         userEntry.put("keys", keys);
         userEntry.put("login", "root");
         userEntry.put("sudo", false);
@@ -190,7 +194,8 @@ public class ReservationConverterTest extends RequestWorkflowTest {
     }
 
     /**
-     * Similar to function in OrcaXmlrpcHandlerTest, this is a slightly modified version explicity for testing ReservationConverter
+     * Similar to function in OrcaXmlrpcHandlerTest, this is a slightly modified version explicity for testing
+     * ReservationConverter
      *
      * Craft a userMap required by createSlice() and modifySlice().
      *
