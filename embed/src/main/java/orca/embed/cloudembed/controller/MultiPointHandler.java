@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import orca.embed.cloudembed.IConnectionManager;
 import orca.embed.policyhelpers.DomainResourcePools;
@@ -197,9 +197,9 @@ public class MultiPointHandler extends InterDomainHandler implements LayerConsta
         return request;
     }
 
-    public ComputeElement createNE(OntModel m, Resource rs, LinkedList<NetworkElement> cg, NetworkConnection c_e) {
+    public ComputeElement createNE(OntModel m, Resource rs, List<NetworkElement> cg, NetworkConnection c_e) {
         OntResource ne_rs = null;
-        ComputeElement ne = (ComputeElement) cg.getFirst();
+        ComputeElement ne = (ComputeElement) cg.get(0);
         ComputeElement new_ne = null;
         String new_ne_url = null, new_ne_name = null;
         if (cg == null) {
