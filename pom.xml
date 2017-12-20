@@ -520,6 +520,7 @@
                 <version>2.6.0</version>
                 <configuration>
                     <configFile>tools/build/src/main/resources/orca/orca_formatter_style.xml</configFile>
+                    <skipCssFormatting>true</skipCssFormatting>
 
                     <!-- It's annoying to have to specify the directories.
                          Might be fixed at a later date:
@@ -551,6 +552,13 @@
                         <exclude>**/target/package/**/*</exclude>
                         <exclude>**/target/classes/**/*</exclude>
                         <exclude>**/target/pom.xml</exclude>
+                        <!-- additional exclusions from https://github.com/RENCI-NRIG/orca5/issues/176 -->
+                        <exclude>**/handlers/**/*.xml</exclude>
+                        <exclude>**/handler/**/*.xml</exclude>
+                        <exclude>**/handler*.xml</exclude>
+                        <exclude>**/build.xml</exclude>
+                        <exclude>**/test.xml</exclude>
+                        <exclude>**/checkstyle.xml</exclude>
                     </excludes>
                 </configuration>
 
