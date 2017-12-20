@@ -12,7 +12,7 @@
          jar 
     </packaging> 
     <version>
-         5.2.2-SNAPSHOT 
+         5.3.0 
     </version> 
     <name>
          Orca Network Embedding v2 
@@ -28,7 +28,7 @@
              orca 
         </artifactId> 
         <version>
-             5.2.2-SNAPSHOT 
+             5.3.0 
         </version> 
         <relativePath>
              ../pom.xml 

@@ -10,7 +10,7 @@
          config 
     </artifactId> 
     <version>
-         5.2.2-SNAPSHOT 
+         5.3.0 
     </version> 
     <name>
          Orca Configuration Tools 
@@ -23,7 +23,7 @@
              tools 
         </artifactId> 
         <version>
-             5.2.2-SNAPSHOT 
+             5.3.0 
         </version> 
         <relativePath>
              ../pom.xml 

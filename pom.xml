@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>orca</groupId>
     <artifactId>orca</artifactId>
-    <version>5.2.2-SNAPSHOT</version>
+    <version>5.3.0</version>
     <packaging>pom</packaging>
     <name>Orca</name>
     <url>https://geni-orca.renci.org/orca-doc</url>
@@ -149,7 +148,7 @@
         <developerConnection>scm:git:git@github.com:RENCI-NRIG/orca5.git</developerConnection>
         <connection>scm:git:git@github.com:RENCI-NRIG/orca5.git</connection>
         <url>https://github.com/RENCI-NRIG/orca5</url>
-        <tag>HEAD</tag>
+        <tag>orca-5.3.0</tag>
     </scm>
 
     <issueManagement>
@@ -717,28 +716,28 @@
                                     any of these properties. To make sure your ant file can access a given property,
                                     you will have to specify it here explicitly. -->
 
-                                <property name="compile_classpath" refid="maven.compile.classpath"/>
-                                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                                <property name="test_classpath" refid="maven.test.classpath"/>
-                                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                                <property name="compile_classpath" refid="maven.compile.classpath" />
+                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                                <property name="test_classpath" refid="maven.test.classpath" />
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <property name="project.version" value="${project.version}"/>
-                                <property name="orca.tools.build.version" value="${orca.tools.build.version}"/>
-                                <property name="orca.repository.id" value="${orca.repository.id}"/>
-                                <property name="orca.repository.url" value="${orca.repository.url}"/>
-                                <property name="orca.website.id" value="${orca.website.id}"/>
-                                <property name="orca.website.url" value="${orca.website.url}"/>
+                                <property name="project.version" value="${project.version}" />
+                                <property name="orca.tools.build.version" value="${orca.tools.build.version}" />
+                                <property name="orca.repository.id" value="${orca.repository.id}" />
+                                <property name="orca.repository.url" value="${orca.repository.url}" />
+                                <property name="orca.website.id" value="${orca.website.id}" />
+                                <property name="orca.website.url" value="${orca.website.url}" />
 
-                                <property name="username" value="${username}"/>
-                                <property name="password" value="${password}"/>
+                                <property name="username" value="${username}" />
+                                <property name="password" value="${password}" />
 
                                 <!-- Default configuration file -->
-                                <property name="file" value="${basedir}/ant/build.xml"/>
+                                <property name="file" value="${basedir}/ant/build.xml" />
                                 <!-- Default target name -->
-                                <property name="target" value="help"/>
+                                <property name="target" value="help" />
 
                                 <ant antfile="${file}" inheritRefs="true" inheritAll="true">
-                                    <target name="${target}"/>
+                                    <target name="${target}" />
                                 </ant>
                             </tasks>
                         </configuration>
