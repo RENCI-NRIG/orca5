@@ -9,7 +9,7 @@
          network 
     </artifactId> 
     <version>
-         5.3.1-SNAPSHOT 
+         5.3.1 
     </version> 
     <name>
          Orca Network Handlers 
@@ -22,7 +22,7 @@
              handlers 
         </artifactId> 
         <version>
-             5.3.1-SNAPSHOT 
+             5.3.1 
         </version> 
         <relativePath>
              ../pom.xml 

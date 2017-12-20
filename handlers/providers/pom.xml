@@ -12,7 +12,7 @@
          Orca Network Provider handlers 
     </name> 
     <version>
-         5.3.1-SNAPSHOT 
+         5.3.1 
     </version> 
     <parent> 
         <groupId>
@@ -22,7 +22,7 @@
              handlers 
         </artifactId> 
         <version>
-             5.3.1-SNAPSHOT 
+             5.3.1 
         </version> 
         <relativePath>
              ../pom.xml 
