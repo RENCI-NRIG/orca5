@@ -1,102 +1,120 @@
-<!DOCTYPE project> 
-<!--ENTITY drivers SYSTEM "drivers.xml"--> 
-<!--ENTITY tests SYSTEM "tests.xml"--> 
-<!--ENTITY util SYSTEM "util.xml"-->
- ]&gt; 
+<!DOCTYPE project [
+	<!ENTITY deps SYSTEM "deps.xml">
+	<!ENTITY drivers SYSTEM "drivers.xml">
+	<!ENTITY tests SYSTEM "tests.xml">
+	<!ENTITY util SYSTEM "util.xml">
+]>
 <project name="orca.nodeagent" default="help" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-     &amp;deps; &amp;drivers; &amp;tests; &amp;util; 
-    <target name="help"> 
-        <echo>
-             copy.local - copies template configuration files locally service - creates orca-nodeagent service aar 
-        </echo> 
-    </target> 
-    <target name="copy.local" description="copies configuration templates into the local configuration directory"> 
-        <mkdir dir="${local.dir}" /> 
-        <copy todir="${local.dir}"> 
-            <fileset dir="${config.dir}"> 
-                <include name="**/*" /> 
-            </fileset> 
-        </copy> 
-    </target> 
-    <!-- Generates the web service archive--> 
-    <target name="service"> 
-        <!--
+
+	&deps;
+	&drivers;
+	&tests;
+	&util;
+
+	<target name="help">
+		<echo>
+			copy.local - copies template configuration files locally
+			service - creates orca-nodeagent service aar
+		</echo>
+	</target>
+
+	<target name="copy.local" description="copies configuration templates into the local configuration directory">
+		<mkdir dir="${local.dir}" />
+		<copy todir="${local.dir}">
+			<fileset dir="${config.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- Generates the web service archive-->
+	<target name="service">
+		<!--
 		  <echo message="${maven.project.version}" />
 			  <echo message="${maven.project.build.sourceDirectory}" />
 				  <echo message="${maven.project.build.directory}" />
 					  <echo message="${maven.project.build.outputDirectory}" />
-					  --> 
-        <!-- WS-Security related files --> 
-        <copy todir="${maven.project.build.outputDirectory}" file="src/resources/service.properties" /> 
-        <if> 
-            <equals arg1="true" arg2="${aar.include.testfile}" /> 
-            <then> 
-                <copy todir="${maven.project.build.outputDirectory}" file="src/resources/testcmdline" /> 
-            </then> 
-            <else> 
-                <delete file="${maven.project.build.outputDirectory}/testcmdline" /> 
-            </else> 
-        </if> 
-        <delete dir="${maven.project.build.outputDirectory}/META-INF" /> 
-        <mkdir dir="${maven.project.build.outputDirectory}/META-INF" /> 
-        <copy todir="${maven.project.build.outputDirectory}/META-INF"> 
-            <fileset dir="src/resources"> 
-                <!-- axis2 web services definitions file --> 
-                <include name="services.xml" /> 
-                <include name="*.wsdl" /> 
-            </fileset> 
-        </copy> 
-        <delete dir="${maven.project.build.outputDirectory}/lib" /> 
-        <mkdir dir="${maven.project.build.outputDirectory}/lib" /> 
-        <mkdir dir="${maven.project.build.outputDirectory}/local" /> 
-        <copy todir="${maven.project.build.outputDirectory}/lib/local"> 
-            <fileset dir="${local.dir}"> 
-                <include name="*.properties" /> 
-            </fileset> 
-        </copy> 
-        <mkdir dir="${maven.project.build.outputDirectory}/local" /> 
-        <copy todir="${maven.project.build.outputDirectory}/local"> 
-            <fileset dir="${local.dir}"> 
-                <include name="*.properties" /> 
-            </fileset> 
-        </copy> 
-        <copy todir="${maven.project.build.outputDirectory}/lib"> 
-            <fileset dir="${local.dir}"> 
-                <include name="*.properties" /> 
-            </fileset> 
-            <!--
+					  -->
+
+		<!-- WS-Security related files -->
+		<copy todir="${maven.project.build.outputDirectory}" file="src/resources/service.properties" />
+		<if>
+			<equals arg1="true" arg2="${aar.include.testfile}" />
+			<then>
+				<copy todir="${maven.project.build.outputDirectory}" file="src/resources/testcmdline" />
+			</then>      
+			<else>
+				<delete file="${maven.project.build.outputDirectory}/testcmdline" />        
+			</else>
+		</if> 
+		<delete dir="${maven.project.build.outputDirectory}/META-INF" />
+		<mkdir dir="${maven.project.build.outputDirectory}/META-INF" />
+		<copy todir="${maven.project.build.outputDirectory}/META-INF">
+			<fileset dir="src/resources">
+				<!-- axis2 web services definitions file -->
+				<include name="services.xml" />
+				<include name="*.wsdl" />
+			</fileset>
+		</copy>
+
+		<delete dir="${maven.project.build.outputDirectory}/lib" />
+		<mkdir dir="${maven.project.build.outputDirectory}/lib" />
+		<mkdir dir="${maven.project.build.outputDirectory}/local" />
+		<copy todir="${maven.project.build.outputDirectory}/lib/local">
+			<fileset dir="${local.dir}">
+				<include name="*.properties" />
+			</fileset>        
+		</copy>
+		<mkdir dir="${maven.project.build.outputDirectory}/local" />
+		<copy todir="${maven.project.build.outputDirectory}/local">
+			<fileset dir="${local.dir}">
+				<include name="*.properties" />
+			</fileset>        
+		</copy>
+		<copy todir="${maven.project.build.outputDirectory}/lib">
+			<fileset dir="${local.dir}">
+				<include name="*.properties" />
+			</fileset>        
+			<!--
 			  <fileset dir="${maven.project.build.directory}">
 				  <include name="*.jar" />
 					  <exclude name="orca.nodeagent.tests-${maven.project.verion}.jar" />
 						  <exclude name="orca.nodeagent.client-${maven.project.verion}.jar" />
 						  </fileset>
-					  --> 
-        </copy> 
-        <!--
+					  -->
+		</copy>
+		<!--
 		  We expand out dependencies instead of including the jars.  We
 		  do this because the nodeagenthost (unlike Tomcat) has problems
 		  resolving paths.
-	  --> 
-        <!-- An ugly hack for now --> 
-        <delete dir="${tmp.dir}" /> 
-        <mkdir dir="${tmp.dir}" /> 
-        <copy todir="${tmp.dir}"> 
-            <fileset refid="compile.fileset" /> 
-        </copy> 
-        <unjar dest="${maven.project.build.outputDirectory}"> 
-            <fileset dir="${tmp.dir}"> 
-                <include name="orca/drivers/core/**/*.jar" /> 
-            </fileset> 
-        </unjar> 
-        <!--    <delete dir="${tmp.dir}" /> --> 
-        <jar jarfile="${maven.project.build.directory}/orca.nodeagent-${maven.project.version}.aar"> 
-            <fileset dir="${maven.project.build.outputDirectory}"> 
-                <exclude name="orca/axis2/tools/**/*" /> 
-                <exclude name="orca/nodeagent/Server.class" /> 
-                <exclude name="orca/nodeagent/tests/**/*.class" /> 
-                <exclude name="orca/nodeagent/AllTests.class" /> 
-                <exclude name="orca/nodeagent/client/*" /> 
-            </fileset> 
-        </jar> 
-    </target> 
+	  -->
+
+		<!-- An ugly hack for now -->
+		<delete dir="${tmp.dir}" />
+		<mkdir dir="${tmp.dir}" />
+		<copy todir="${tmp.dir}">
+			<fileset refid="compile.fileset" />
+		</copy>
+
+		<unjar dest="${maven.project.build.outputDirectory}">
+			<fileset dir="${tmp.dir}">
+				<include name="orca/drivers/core/**/*.jar" />
+			</fileset>
+		</unjar>
+		<!--    <delete dir="${tmp.dir}" /> -->
+
+		<jar jarfile="${maven.project.build.directory}/orca.nodeagent-${maven.project.version}.aar">
+			<fileset dir="${maven.project.build.outputDirectory}">
+				<exclude name="orca/axis2/tools/**/*" />
+				<exclude name="orca/nodeagent/Server.class" />
+				<exclude name="orca/nodeagent/tests/**/*.class" />
+				<exclude name="orca/nodeagent/AllTests.class" />
+				<exclude name="orca/nodeagent/client/*" />
+			</fileset>
+		</jar>
+
+	</target>
+
+
 </project>

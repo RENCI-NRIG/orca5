@@ -1,31 +1,39 @@
-<!DOCTYPE project>
- ]&gt; 
-<project name="orca.controllers.openflow" default="help" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-     &amp;deps; 
-    <target name="help"> 
-        <echo>
-             Build file options: oftest: invokes the OpenFlow test 
-        </echo> 
-    </target> 
-    <target name="oftest"> 
-        <if> 
-            <isset property="config" /> 
-            <then> 
-                <delete dir="${cmdline.home}/logs" /> 
-                <delete dir="${cmdline.home}/log" /> 
-                <echo message="running ben unit test (real mode)..." /> 
-                <echo message="configuration file: ${config}" /> 
-                <java classname="orca.controllers.openflow.OpenFlowTest" Fork="Yes" failonerror="true" dir="../../run"> 
-                    <classpath refid="run.classpath" /> 
-                    <arg value="${config}" /> 
-                    <arg value="do.not.recover=true" /> 
-                    <arg value="manual=false" /> 
-                    <arg value="clean.machines=true" /> 
-                </java> 
-            </then> 
-            <else> 
-                <echo message="usage: -Dhandler=&lt;path to handler> -Dtarget=&lt;target name>" /> 
-            </else> 
-        </if> 
-    </target> 
+<!DOCTYPE project [
+	<!ENTITY deps SYSTEM "ant/deps.xml">
+]>
+<project name="orca.controllers.openflow"
+		default="help"
+		basedir="."
+		xmlns:artifact="urn:maven-artifact-ant">
+
+	&deps;
+
+	<target name="help">
+		<echo>
+			Build file options:
+			oftest: invokes the OpenFlow test            
+		</echo>
+	</target>
+
+	<target name="oftest">
+		<if>
+			<isset property="config" />
+			<then>
+				<delete dir="${cmdline.home}/logs" />
+				<delete dir="${cmdline.home}/log" />
+				<echo message="running ben unit test (real mode)..." />
+				<echo message="configuration file: ${config}" />
+				<java classname="orca.controllers.openflow.OpenFlowTest" Fork="Yes" failonerror="true" dir="../../run">
+					<classpath refid="run.classpath" />
+					<arg value="${config}" />
+					<arg value="do.not.recover=true" />
+					<arg value="manual=false" />
+					<arg value="clean.machines=true" />
+				</java>
+			</then>
+			<else>
+				<echo message="usage: -Dhandler=&lt;path to handler&gt; -Dtarget=&lt;target name&gt;" />
+			</else>
+		</if>
+	</target>
 </project>

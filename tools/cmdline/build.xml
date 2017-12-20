@@ -1,13 +1,38 @@
-<!DOCTYPE project> 
-<!--ENTITY core SYSTEM "ant/core.xml"--> 
-<!--ENTITY packages SYSTEM "ant/packages.xml"--> 
-<!--ENTITY tests SYSTEM "ant/tests.xml"-->
- ]&gt; 
-<project name="orca.run" default="help" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-     &amp;deps; &amp;core; &amp;packages; &amp;tests; 
-    <target name="help"> 
-        <echo>
-             Build file options: test.handler.prepare - prepares a handler for testing (after mvn clean package) test.handler - tests a handler -Dhandler=path_to_handler -Dtarget=target_to_invoke(join/leave/modify) Other obsolete targets: test.configuration - tests a configuration file -Dconfig=path_to_configuration_file test.reset.inventory - resets the container's inventory -Dconfig=path_to_configuration_file test.unit.reservation.emulation - runs the basic resevation test in emulation test.unit.reservation.real - runs the basic reservation test in real mode 
-        </echo> 
-    </target> 
+<!DOCTYPE project [
+<!ENTITY deps SYSTEM "ant/deps.xml">
+<!ENTITY core SYSTEM "ant/core.xml">
+<!ENTITY packages SYSTEM "ant/packages.xml">
+<!ENTITY tests SYSTEM "ant/tests.xml">
+]>
+<project name="orca.run"
+	default="help"
+	basedir="."
+	xmlns:artifact="urn:maven-artifact-ant">
+
+	&deps;
+	&core;
+	&packages;
+	&tests;
+
+	<target name="help">
+		<echo>
+Build file options:
+
+test.handler.prepare - prepares a handler for testing (after mvn clean package)
+test.handler - tests a handler
+			   -Dhandler=path_to_handler
+			   -Dtarget=target_to_invoke(join/leave/modify)
+
+Other obsolete targets:
+
+test.configuration - tests a configuration file
+			   -Dconfig=path_to_configuration_file			   	
+test.reset.inventory - resets the container's inventory
+			   -Dconfig=path_to_configuration_file			   	
+test.unit.reservation.emulation - runs the basic resevation test in emulation
+test.unit.reservation.real - runs the basic reservation test in real mode
+
+		</echo>
+	</target>
+
 </project>

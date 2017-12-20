@@ -1,259 +1,302 @@
-<!DOCTYPE project> 
-<!--ENTITY core SYSTEM "../common/core.xml"--> 
-<!--ENTITY drivertasks SYSTEM "../common/drivertasks.xml"--> 
-<!--ENTITY paths SYSTEM "../common/paths.xml"--> 
-<!--ENTITY bentasks SYSTEM "../providers/ben.no-na.tasks.xml"--> 
-<!-- for development ($ORCA_HOME/tools/cmdline/handlers) --> 
-<!-- <!ENTITY core SYSTEM "../../../../../../../core/handlers/resources/handlers/common/core.xml"> --> 
-<!-- <!ENTITY drivertasks SYSTEM "../../../../../../../core/handlers/resources/handlers/common/drivertasks.xml"> --> 
-<!-- <!ENTITY paths SYSTEM "../../../../../../../core/handlers/resources/handlers/common/paths.xml"> --> 
+<!DOCTYPE project [
+<!-- switch to this ones when placing in $ORCA_HOME/handlers -->
+<!ENTITY core SYSTEM "../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../common/paths.xml">
+<!ENTITY bentasks SYSTEM "../providers/ben.no-na.tasks.xml">
+
+<!-- for development ($ORCA_HOME/tools/cmdline/handlers) -->
+<!-- <!ENTITY core SYSTEM "../../../../../../../core/handlers/resources/handlers/common/core.xml"> -->
+<!-- <!ENTITY drivertasks SYSTEM "../../../../../../../core/handlers/resources/handlers/common/drivertasks.xml"> -->
+<!-- <!ENTITY paths SYSTEM "../../../../../../../core/handlers/resources/handlers/common/paths.xml"> -->
 <!-- <!ENTITY bentasks SYSTEM "../../../../../../../handlers/providers/resources/handler/providers/ben.no-na.tasks.xml"> -->
- ]&gt; 
+
+]>
 <project name="nsi" basedir=".">
-     &amp;paths; &amp;core; &amp;drivertasks; &amp;bentasks; 
-    <target name="join" depends="resolve.configuration,ben.load.tasks"> 
-        <echo message="NSI HANDLER: JOIN" /> 
-        <if> 
-            <isset property="nsi.site.properties" /> 
-            <then> 
-                <property file="${nsi.site.properties}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.endpointA" /> 
-            </not> 
-            <then> 
-                <property name="nsi.endpointA" value="${config.interface.1}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.endpointZ" /> 
-            </not> 
-            <then> 
-                <property name="nsi.endpointZ" value="${config.interface.2}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.duration" /> 
-            </not> 
-            <then> 
-                <property name="nsi.duration" value="${config.duration}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.start_time" /> 
-            </not> 
-            <then> 
-                <property name="nsi.start_time" value="${config.start_time}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.end_time" /> 
-            </not> 
-            <then> 
-                <property name="nsi.end_time" value="${config.end_time}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.bw" /> 
-            </not> 
-            <then> 
-                <if> 
-                    <isset property="resource.bandwidth" /> 
-                    <then> 
-                        <property name="nsi.bw" value="${resource.bandwidth}" /> 
-                    </then> 
-                    <else> 
-                        <property name="nsi.bw" value="100000000" /> 
-                    </else> 
-                </if> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.vlan_tags" /> 
-            </not> 
-            <then> 
-                <if> 
-                    <isset property="config.unit.tag" /> 
-                    <then> 
-                        <property name="nsi.vlan_tags" value="${config.unit.tag}" /> 
-                        <echo message="nsi.vlan_tags: ${nsi.vlan_tags} from config.unit.tag" /> 
-                    </then> 
-                    <else> 
-                        <if> 
-                            <isset property="unit.vlan.tags" /> 
-                            <then> 
-                                <property name="nsi.vlan_tags" value="${unit.vlan.tags}" /> 
-                                <echo message="nsi.vlan_tags: ${nsi.vlan_tags} from unit.vlan.tags" /> 
-                            </then> 
-                            <else> 
-                                <property name="nsi.vlan_tags" value="${nsi.default.vlan.tags}" /> 
-                                <echo message="nsi.vlan_tags: ${nsi.vlan_tags} from nsi.default.vlan.tags" /> 
-                            </else> 
-                        </if> 
-                    </else> 
-                </if> 
-            </then> 
-        </if> 
-        <echo message="creating NSI circuit from ${nsi.endpointA} to ${nsi.endpointZ} with bandwidth ${nsi.bw} bps" /> 
-        <var name="shirako.save.unit.vlan.tag" unset="true"></var> 
-        <var name="shirako.save.unit.status" unset="true"></var> 
-        <var name="shirako.save.unit.vlan.reservation" unset="true"></var> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <echo message="RUNNING UNDER EMULATION... EXITING" /> 
-                <echo message="Passed in available tag list:${nsi.vlan_tags}" /> 
-                <echo message="Passed in connection duration:${nsi.duration},start_time:${nsi.start_time},end_time:${nsi.end_time},bandwidth:${nsi.bw},endpointA:${nsi.endpointA},endPointB:${nsi.endpointZ}" /> 
-                <property name="shirako.save.unit.vlan.reservation" value="some-reservation-id|${nsi.endpointA}|${nsi.tagA}|${nsi.endpointZ}|${nsi.tagZ}" /> 
-                <property name="shirako.save.unit.vlan.tag" value="${config.unit.tag}" /> 
-                <property name="shirako.save.unit.status" value="ACTIVE" /> 
-                <echo message="unit.vlan.tag=${shirako.save.unit.vlan.tag} unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" /> 
-                <property name="shirako.target.code" value="0" /> 
-            </then> 
-            <else> 
-                <var name="create.circuit.output" unset="true"></var> 
-                <var name="code" unset="true"></var> 
-                <var name="message" unset="true"></var> 
-                <atomic.sequence.start.macro device="NSIHandler" /> 
-                <exec executable="${nsi.scripts}/start-nsi.sh" resultproperty="code" outputproperty="create.circuit.output" errorproperty="create.circuit.error"> 
-                    <env key="NSI_SCRIPTS_DIR" value="${nsi.scripts}" /> 
-                    <env key="NSI_HOSTKEY" value="${nsi.hostkey}" /> 
-                    <env key="NSI_HOSTCERT" value="${nsi.hostcert}" /> 
-                    <env key="NSI_CERTDIR" value="${nsi.certdir}" /> 
-                    <env key="NSI_TLS" value="${nsi.tls}" /> 
-                    <env key="NSI_VERIFY" value="${nsi.verify}" /> 
-                    <env key="NSI_SERVICE" value="${nsi.service}" /> 
-                    <env key="NSI_PROVIDER" value="${nsi.provider}" /> 
-                    <env key="NSI_REQUESTER" value="${nsi.requester}" /> 
-                    <env key="NSI_USER" value="${nsi.user}" /> 
-                    <env key="NSI_DEBUG" value="${nsi.debug}" /> 
-                    <env key="NSI_ONSA" value="${nsi.onsa}" /> 
-                    <env key="NSI_PYTHON" value="${nsi.python}" /> 
-                    <env key="NSI_VLANNAS" value="${nsi.vlan.notavail.string}" /> 
-                    <env key="NSI_PROVISIONEDS" value="${nsi.provisioned.string}" /> 
-                    <env key="NSI_ADDRINUSE" value="${nsi.addr.inuse.string}" /> 
-                    <!-- controller-supplied properties --> 
-                    <env key="NSI_L2_SRC" value="${nsi.endpointA}" /> 
-                    <env key="NSI_L2_DST" value="${nsi.endpointZ}" /> 
-                    <env key="NSI_BW" value="${nsi.bw}" /> 
-                    <env key="NSI_DURATION" value="${nsi.duration}" /> 
-                    <env key="NSI_START_TIME" value="${nsi.start_time}" /> 
-                    <env key="NSI_END_TIME" value="${nsi.end_time}" /> 
-                    <env key="NSI_TAGS" value="${nsi.vlan_tags}" /> 
-                </exec> 
-                <atomic.sequence.stop.macro device="NSIHandler" /> 
-                <if> 
-                    <not> 
-                        <equals arg1="${code}" arg2="0" /> 
-                    </not> 
-                    <then> 
-                        <echo message="Unable to create circuit: ${create.circuit.error}" /> 
-                        <property name="message" value="Unable to create circuit: ${create.circuit.error}" /> 
-                    </then> 
-                    <else> 
-                        <exec executable="/bin/bash" outputproperty="connection.id"> 
-                            <arg value="-c" /> 
-                            <arg value="echo ${create.circuit.output} | awk '{print $1}'" /> 
-                        </exec> 
-                        <exec executable="/bin/bash" outputproperty="vlan.tag"> 
-                            <arg value="-c" /> 
-                            <arg value="echo ${create.circuit.output} | awk '{print $2}'" /> 
-                        </exec> 
-                        <property name="shirako.save.unit.connection.id" value="${connection.id}" /> 
-                        <property name="shirako.save.unit.vlan.tag" value="${vlan.tag}" /> 
-                        <property name="shirako.save.unit.status" value="ACTIVE" /> 
-                        <echo message="Created connection with id: ${connection.id} and VLAN ${vlan.tag}." /> 
-                        <property name="message" value="Created connection with id: ${connection.id} and VLAN ${vlan.tag}." /> 
-                    </else> 
-                </if> 
-                <property name="shirako.target.code" value="${code}" /> 
-                <property name="shirako.target.code.message" value="${message}" /> 
-            </else> 
-        </if> 
-        <!-- hairpin --> 
-        <var name="shirako.save.unit.vlan.url" unset="true"></var> 
-        <if> 
-            <isset property="unit.vlan.url" /> 
-            <then> 
-                <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" /> 
-            </then> 
-        </if> 
-        <echo message="join exit code: ${shirako.target.code}" /> 
-    </target> 
-    <!-- Modify operation is not supported --> 
-    <target name="modify" /> 
+
+        &paths;
+        &core; 
+        &drivertasks;
+        &bentasks;
+	
+        <target name="join" depends="resolve.configuration,ben.load.tasks"  > 
+
+    	<echo message="NSI HANDLER: JOIN" />
+		<if>
+			<isset property="nsi.site.properties" />
+			<then>
+				<property file="${nsi.site.properties}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nsi.endpointA" />
+			</not>
+			<then>
+				<property name="nsi.endpointA" value="${config.interface.1}" />
+			</then>
+		</if>
+	
+		<if>
+			<not>
+				<isset property="nsi.endpointZ" />
+			</not>
+			<then>
+				<property name="nsi.endpointZ" value="${config.interface.2}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nsi.duration" />
+			</not>
+			<then>
+				<property name="nsi.duration" value="${config.duration}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nsi.start_time" />
+			</not>
+			<then>
+				<property name="nsi.start_time" value="${config.start_time}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nsi.end_time" />
+			</not>
+			<then>
+				<property name="nsi.end_time" value="${config.end_time}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nsi.bw" />
+			</not>
+			<then>
+				<if>
+					<isset property="resource.bandwidth" />
+					<then>
+						<property name="nsi.bw" value="${resource.bandwidth}" />
+					</then>
+					<else>
+						<property name="nsi.bw" value="100000000" />
+					</else>
+				</if>
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nsi.vlan_tags" />
+			</not>
+			<then>
+				<if>
+					<isset property="config.unit.tag" />
+					<then>
+						<property name="nsi.vlan_tags" value="${config.unit.tag}" />
+						<echo message="nsi.vlan_tags: ${nsi.vlan_tags} from config.unit.tag" />
+					</then>
+					<else>
+						<if>
+							<isset property="unit.vlan.tags" />
+							<then>
+								<property name="nsi.vlan_tags" value="${unit.vlan.tags}" />
+								<echo message="nsi.vlan_tags: ${nsi.vlan_tags} from unit.vlan.tags" />
+							</then>
+							<else>
+								<property name="nsi.vlan_tags" value="${nsi.default.vlan.tags}" />
+								<echo message="nsi.vlan_tags: ${nsi.vlan_tags} from nsi.default.vlan.tags" />
+							</else>
+						</if>
+					</else>	
+				</if>
+			</then>
+		</if>
+
+		<echo message="creating NSI circuit from ${nsi.endpointA} to ${nsi.endpointZ} with bandwidth ${nsi.bw} bps" />
+		<var name="shirako.save.unit.vlan.tag" unset="true" />
+		<var name="shirako.save.unit.status" unset="true" />
+		<var name="shirako.save.unit.vlan.reservation" unset="true" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="RUNNING UNDER EMULATION... EXITING" />
+				<echo message="Passed in available tag list:${nsi.vlan_tags}"/>
+                <echo message="Passed in connection duration:${nsi.duration},start_time:${nsi.start_time},end_time:${nsi.end_time},bandwidth:${nsi.bw},endpointA:${nsi.endpointA},endPointB:${nsi.endpointZ}"/>
+				<property name="shirako.save.unit.vlan.reservation" value="some-reservation-id|${nsi.endpointA}|${nsi.tagA}|${nsi.endpointZ}|${nsi.tagZ}" />
+				<property name="shirako.save.unit.vlan.tag" value="${config.unit.tag}" />
+				<property name="shirako.save.unit.status" value="ACTIVE" />
+				<echo message="unit.vlan.tag=${shirako.save.unit.vlan.tag} unit.vlan.reservation=${shirako.save.unit.vlan.reservation}" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<var name="create.circuit.output" unset="true" />
+				<var name="code" unset="true" />
+				<var name="message" unset="true" />
+
+				<atomic.sequence.start.macro device="NSIHandler"/>
+
+				<exec executable="${nsi.scripts}/start-nsi.sh" resultproperty="code" outputproperty="create.circuit.output" errorproperty="create.circuit.error">
+				  	<env key="NSI_SCRIPTS_DIR" value="${nsi.scripts}" />
+				  	<env key="NSI_HOSTKEY" value="${nsi.hostkey}" />
+					<env key="NSI_HOSTCERT" value="${nsi.hostcert}" />
+					<env key="NSI_CERTDIR" value="${nsi.certdir}" />
+					<env key="NSI_TLS" value="${nsi.tls}" />
+					<env key="NSI_VERIFY" value="${nsi.verify}" />
+					<env key="NSI_SERVICE" value="${nsi.service}" />
+					<env key="NSI_PROVIDER" value="${nsi.provider}" />
+					<env key="NSI_REQUESTER" value="${nsi.requester}" />
+					<env key="NSI_USER" value="${nsi.user}" />
+					<env key="NSI_DEBUG" value="${nsi.debug}" />
+					<env key="NSI_ONSA" value="${nsi.onsa}" />
+					<env key="NSI_PYTHON" value="${nsi.python}" />
+					<env key="NSI_VLANNAS" value="${nsi.vlan.notavail.string}" />
+					<env key="NSI_PROVISIONEDS" value="${nsi.provisioned.string}" />
+					<env key="NSI_ADDRINUSE" value="${nsi.addr.inuse.string}" />
+	
+					<!-- controller-supplied properties -->
+				  	<env key="NSI_L2_SRC" value="${nsi.endpointA}" />
+				  	<env key="NSI_L2_DST" value="${nsi.endpointZ}" />
+				  	<env key="NSI_BW" value="${nsi.bw}" />
+				  	<env key="NSI_DURATION" value="${nsi.duration}" />
+				  	<env key="NSI_START_TIME" value="${nsi.start_time}" />
+				  	<env key="NSI_END_TIME" value="${nsi.end_time}" />
+
+				  	<env key="NSI_TAGS" value="${nsi.vlan_tags}" />
+				
+				</exec>
+				
+				<atomic.sequence.stop.macro device="NSIHandler"/>
+
+				<if>
+					<not>
+						<equals arg1="${code}" arg2="0" />
+					</not>
+					<then>
+						<echo message="Unable to create circuit: ${create.circuit.error}" />
+						<property name="message" value="Unable to create circuit: ${create.circuit.error}" />
+					</then>
+					<else>
+						<exec executable="/bin/bash" outputproperty="connection.id">
+							<arg value="-c"/>
+							<arg value="echo ${create.circuit.output} | awk '{print $1}'"/>
+						</exec>
+				  		<exec executable="/bin/bash" outputproperty="vlan.tag">
+				  			<arg value="-c"/>
+							<arg value="echo ${create.circuit.output} | awk '{print $2}'"/>
+				  		</exec>
+
+						<property name="shirako.save.unit.connection.id" value="${connection.id}" />
+						<property name="shirako.save.unit.vlan.tag" value="${vlan.tag}" />
+						<property name="shirako.save.unit.status" value="ACTIVE" />
+						<echo message="Created connection with id: ${connection.id} and VLAN ${vlan.tag}." />
+						<property name="message" value="Created connection with id: ${connection.id} and VLAN ${vlan.tag}." />
+					</else>
+				</if>
+			<property name="shirako.target.code" value="${code}" />
+			<property name="shirako.target.code.message" value="${message}" />
+
+		</else>
+	</if>
+
+
+        <!-- hairpin -->
+        <var name="shirako.save.unit.vlan.url" unset="true" />
+        <if>
+                <isset property="unit.vlan.url" />
+                <then>
+                        <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+                </then>
+        </if>
+
+	<echo message="join exit code: ${shirako.target.code}" />
+	</target>
+
+
+	<!-- Modify operation is not supported -->
+	<target name="modify" />
+
+
     <target name="leave" depends="resolve.configuration,ben.load.tasks"> 
-        <echo message="NSI HANDLER: LEAVE" /> 
-        <if> 
-            <isset property="nsi.site.properties" /> 
-            <then> 
-                <property file="${nsi.site.properties}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="nsi.connection.id" /> 
-            </not> 
-            <then> 
-                <property name="nsi.connection.id" value="${unit.connection.id}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <echo message="RUNNING UNDER EMULATION...EXITING" /> 
-                <echo message="Terminating NSI circuit: ${nsi.connection.id}" /> 
-                <property name="shirako.target.code" value="0" /> 
-            </then> 
-            <else> 
-                <var name="code" unset="true"></var> 
-                <echo message="Terminating NSI circuit: ${nsi.connection.id}" /> 
-                <atomic.sequence.start.macro device="NSIHandler" /> 
-                <exec executable="${nsi.scripts}/stop-nsi.sh" resultproperty="code" outputproperty="terminate.circuit.output" errorproperty="create.circuit.error"> 
-                    <env key="NSI_SCRIPTS_DIR" value="${nsi.scripts}" /> 
-                    <env key="NSI_HOSTKEY" value="${nsi.hostkey}" /> 
-                    <env key="NSI_HOSTCERT" value="${nsi.hostcert}" /> 
-                    <env key="NSI_CERTDIR" value="${nsi.certdir}" /> 
-                    <env key="NSI_TLS" value="${nsi.tls}" /> 
-                    <env key="NSI_VERIFY" value="${nsi.verify}" /> 
-                    <env key="NSI_SERVICE" value="${nsi.service}" /> 
-                    <env key="NSI_PROVIDER" value="${nsi.provider}" /> 
-                    <env key="NSI_REQUESTER" value="${nsi.requester}" /> 
-                    <env key="NSI_VERBOSE" value="${nsi.verbose}" /> 
-                    <env key="NSI_ONSA" value="${nsi.onsa}" /> 
-                    <env key="NSI_PYTHON" value="${nsi.python}" /> 
-                    <env key="NSI_TERMINATEDS" value="${nsi.terminated.string}" /> 
-                    <env key="NSI_ADDRINUSE" value="${nsi.addr.inuse.string}" /> 
-                    <!-- controller-supplied properties --> 
-                    <env key="NSI_CONNECTION_ID" value="${nsi.connection.id}" /> 
-                </exec> 
-                <atomic.sequence.stop.macro device="NSIHandler" /> 
-                <if> 
-                    <not> 
-                        <equals arg1="${code}" arg2="0" /> 
-                    </not> 
-                    <then> 
-                        <echo message="Unable to terminate circuit: ${create.circuit.error}" /> 
-                        <property name="message" value="Unable to terminate circuit: ${create.circuit.error}" /> 
-                    </then> 
-                    <else> 
-                        <echo message="Connection ${nsi.connection.id} terminated." /> 
-                        <property name="message" value="Connection ${nsi.connection.id} terminated." /> 
-                    </else> 
-                </if> 
-                <echo message="nsi-stop.sh exit code: ${code}" /> 
-                <property name="shirako.target.code" value="${code}" /> 
-                <property name="shirako.target.code.message" value="${message}" /> 
-            </else> 
-        </if> 
-        <echo message="leave exit code: ${shirako.target.code}" /> 
-    </target> 
+		<echo message="NSI HANDLER: LEAVE" />
+
+		<if>
+			<isset property="nsi.site.properties" />
+			<then>
+				<property file="${nsi.site.properties}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nsi.connection.id" />
+			</not>
+			<then>
+				<property name="nsi.connection.id" value="${unit.connection.id}" />
+			</then>
+		</if>
+	
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="RUNNING UNDER EMULATION...EXITING" />
+				<echo message="Terminating NSI circuit: ${nsi.connection.id}" />
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<var name="code" unset="true" />				
+				<echo message="Terminating NSI circuit: ${nsi.connection.id}" />
+
+				<atomic.sequence.start.macro device="NSIHandler"/>
+
+				<exec executable="${nsi.scripts}/stop-nsi.sh" resultproperty="code" outputproperty="terminate.circuit.output" errorproperty="create.circuit.error">
+				  	<env key="NSI_SCRIPTS_DIR" value="${nsi.scripts}" />
+				  	<env key="NSI_HOSTKEY" value="${nsi.hostkey}" />
+					<env key="NSI_HOSTCERT" value="${nsi.hostcert}" />
+					<env key="NSI_CERTDIR" value="${nsi.certdir}" />
+					<env key="NSI_TLS" value="${nsi.tls}" />
+					<env key="NSI_VERIFY" value="${nsi.verify}" />
+					<env key="NSI_SERVICE" value="${nsi.service}" />
+					<env key="NSI_PROVIDER" value="${nsi.provider}" />
+					<env key="NSI_REQUESTER" value="${nsi.requester}" />
+					<env key="NSI_VERBOSE" value="${nsi.verbose}" />
+					<env key="NSI_ONSA" value="${nsi.onsa}" />
+					<env key="NSI_PYTHON" value="${nsi.python}" />
+					<env key="NSI_TERMINATEDS" value="${nsi.terminated.string}" />
+					<env key="NSI_ADDRINUSE" value="${nsi.addr.inuse.string}" />
+
+					<!-- controller-supplied properties -->
+				  	<env key="NSI_CONNECTION_ID" value="${nsi.connection.id}" />
+
+				</exec>
+
+				<atomic.sequence.stop.macro device="NSIHandler"/>
+
+				<if>
+					<not>
+						<equals arg1="${code}" arg2="0" />
+					</not>
+					<then>
+						<echo message="Unable to terminate circuit: ${create.circuit.error}" />
+						<property name="message" value="Unable to terminate circuit: ${create.circuit.error}" />
+					</then>
+					<else>
+						<echo message="Connection ${nsi.connection.id} terminated." />
+						<property name="message" value="Connection ${nsi.connection.id} terminated." />
+					</else>
+				</if>
+				<echo message="nsi-stop.sh exit code: ${code}" />	
+				<property name="shirako.target.code" value="${code}" />
+				<property name="shirako.target.code.message" value="${message}" />
+			</else>
+		</if>
+		<echo message="leave exit code: ${shirako.target.code}" />
+	</target>
 </project>
+
