@@ -1,126 +1,163 @@
-<!DOCTYPE project> 
-<!--ENTITY drivertasks SYSTEM "../common/drivertasks.xml"--> 
-<!--ENTITY paths SYSTEM "../common/paths.xml"-->
- ]&gt; 
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../common/paths.xml">
+]>
+
 <project name="nlrsherpa" basedir=".">
-     &amp;paths; &amp;core; &amp;drivertasks; 
-    <!-- Uncomment for handler testing
+
+	&paths;
+	&core;    
+	&drivertasks;
+
+	
+	<!-- Uncomment for handler testing
 	<property file="nlr.test.properties"/>
-	--> 
-    <target name="load.nlr.tasks" depends="set.classpath"> 
-        <taskdef resource="orca/handlers/nlr/NLRSherpa.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
-    </target> 
-    <target name="join" depends="resolve.configuration,load.nlr.tasks"> 
-        <!-- get the credentials from a file, if needed --> 
-        <if> 
-            <isset property="nlr.site.properties" /> 
-            <then> 
-                <property file="${nlr.site.properties}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="NLRSherpa.endpointA" /> 
-            </not> 
-            <then> 
-                <property name="NLRSherpa.endpointA" value="${config.interface.1}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="NLRSherpa.endpointZ" /> 
-            </not> 
-            <then> 
-                <property name="NLRSherpa.endpointZ" value="${config.interface.2}" /> 
-            </then> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="NLRSherpa.bandwidth" /> 
-            </not> 
-            <then> 
-                <property name="NLRSherpa.bandwidth" value="${resource.bandwidth}" /> 
-            </then> 
-            <else> 
-                <property name="NLRSherpa.bandwidth" value="" /> 
-            </else> 
-        </if> 
-        <if> 
-            <not> 
-                <isset property="unit.vlan.tag" /> 
-            </not> 
-            <then> 
-                <property name="unit.vlan.tag" value="" /> 
-            </then> 
-        </if> 
-        <!-- 
+	-->
+
+	<target name="load.nlr.tasks" depends="set.classpath">
+		<taskdef resource="orca/handlers/nlr/NLRSherpa.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+	</target>
+	
+	<target name="join" depends="resolve.configuration,load.nlr.tasks">
+		<!-- get the credentials from a file, if needed -->
+		<if>
+			<isset property="nlr.site.properties" />
+			<then>
+				<property file="${nlr.site.properties}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="NLRSherpa.endpointA" />
+			</not>
+			<then>
+				<property name="NLRSherpa.endpointA" value="${config.interface.1}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="NLRSherpa.endpointZ" />
+			</not>
+			<then>
+				<property name="NLRSherpa.endpointZ" value="${config.interface.2}" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="NLRSherpa.bandwidth" />
+			</not>
+			<then>
+				<property name="NLRSherpa.bandwidth" value="${resource.bandwidth}" />
+			</then>
+			<else>
+				<property name="NLRSherpa.bandwidth" value="" />
+			</else>
+		</if>
+
+		<if>
+			<not>
+				<isset property="unit.vlan.tag" />
+			</not>
+			<then>
+				<property name="unit.vlan.tag" value="" />
+			</then>
+		</if>
+	
+		<!-- 
 		input parameters are credentials, endpointA, endpointZ (NLR hostname:interface), bandwidth and optionally unit.vlan.tag
-		--> 
-        <!-- 
+		-->
+		<!-- 
 		output parameter is property shirako.save.unit.vlan.tag - indicates the reserved vlan 
-		--> 
-        <tstamp prefix="start"> 
-            <format property="TIME" pattern="MM/dd/yyyy hh:mm" /> 
-        </tstamp> 
-        <echo message="NLR HANDLER: JOIN" /> 
-        <echo message="Creating NLR vlan from: ${NLRSherpa.endpointA} to: ${NLRSherpa.endpointZ} bandwidth=${NLRSherpa.bandwidth} for tag=${unit.vlan.tag} on ${start.TIME}" /> 
-        <var name="shirako.save.unit.vlan.tag" unset="true"></var> 
-        <var name="shirako.save.unit.status" unset="true"></var> 
-        <var name="shirako.save.unit.vlan.reservation" unset="true"></var> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <property name="shirako.save.unit.vlan.tag" value="256" /> 
-                <property name="shirako.save.unit.vlan.reservation" value="265|rale.layer2.nlr.net:TenGigabitEthernet2/2|265|chic.layer2.nlr.net:GigabitEthernet9/10|265" /> 
-                <property name="shirako.target.code" value="0" /> 
-                <echo message="running under emulation...exiting" /> 
-                <echo message="Vlan ${shirako.save.unit.vlan.tag} provisioned successfully with reservation ${shirako.save.unit.vlan.reservation}" /> 
-            </then> 
-            <else> 
-                <NLRSherpa.SmartProvisionVlan login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" endpointA="${NLRSherpa.endpointA}" endpointZ="${NLRSherpa.endpointZ}" bandwidth="${NLRSherpa.bandwidth}" vlanId="${unit.vlan.tag}" vlanStatusProperty="shirako.save.unit.status" reservedVlanProperty="shirako.save.unit.vlan.tag" reservationIdProperty="shirako.save.unit.vlan.reservation" exitCodeProperty="NLRSherpa.exitCode" /> 
-                <echo message="Vlan ${shirako.save.unit.vlan.tag} provisioned with status ${shirako.save.unit.status} and reservation id ${shirako.save.unit.vlan.reservation}" /> 
-                <property name="shirako.target.code" value="${NLRSherpa.exitCode}" /> 
-                <property name="shirako.target.code.message" value="Vlan ${shirako.save.unit.vlan.tag} provisioned with status ${shirako.save.unit.status} and reservation id ${shirako.save.unit.vlan.reservation}" /> 
-            </else> 
-        </if> 
-        <!-- hairpin --> 
-        <var name="shirako.save.unit.vlan.url" unset="true"></var> 
-        <if> 
-            <isset property="unit.vlan.url" /> 
-            <then> 
-                <property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" /> 
-            </then> 
-        </if> 
-    </target> 
-    <target name="leave" depends="resolve.configuration,load.nlr.tasks"> 
-        <if> 
-            <isset property="nlr.site.properties" /> 
-            <then> 
-                <property file="${nlr.site.properties}" /> 
-            </then> 
-        </if> 
-        <!-- input parameter is property unit.vlan.tag, unit.vlan.reservation + credentials --> 
-        <echo message="NLR HANDLER: LEAVE" /> 
-        <tstamp prefix="start"> 
-            <format property="TIME" pattern="MM/dd/yyyy hh:mm" /> 
-        </tstamp> 
-        <echo message="Removing vlan ${unit.vlan.tag} with reservation ${unit.vlan.reservation} on ${start.TIME}" /> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <echo message="running under emulation...exiting" /> 
-                <echo message="Vlan ${unit.vlan.tag} with reservation ${unit.vlan.reservation} destroyed successfully" /> 
-                <property name="shirako.target.code" value="0" /> 
-            </then> 
-            <else> 
-                <NLRSherpa.SmartRemoveVlan login="${NLRSherpa.login}" password="${NLRSherpa.password}" wg="${NLRSherpa.wg}" vlanId="${unit.vlan.tag}" vlanReservationId="${unit.vlan.reservation}" exitCodeProperty="NLRSherpa.removeVlanCode" /> 
-                <echo message="Removed vlan ${unit.vlan.tag} reservation ${unit.vlan.reservation} with exit code ${NLRSherpa.removeVlanCode}" /> 
-                <property name="shirako.target.code" value="${NLRSherpa.removeVlanCode}" /> 
-            </else> 
-        </if> 
-    </target> 
-    <target name="modify"> 
-        <echo message="NLR HANDLER: MODIFY" /> 
-        <property name="shirako.target.code" value="0" /> 
-    </target> 
+		-->
+                <tstamp prefix="start">
+                        <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+                </tstamp>
+
+		<echo message="NLR HANDLER: JOIN" />
+		<echo message="Creating NLR vlan from: ${NLRSherpa.endpointA} to: ${NLRSherpa.endpointZ} bandwidth=${NLRSherpa.bandwidth} for tag=${unit.vlan.tag} on ${start.TIME}" />
+		<var name="shirako.save.unit.vlan.tag" unset="true" />
+		<var name="shirako.save.unit.status" unset="true" />
+		<var name="shirako.save.unit.vlan.reservation" unset="true" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<property name="shirako.save.unit.vlan.tag" value="256" />
+				<property name="shirako.save.unit.vlan.reservation" value="265|rale.layer2.nlr.net:TenGigabitEthernet2/2|265|chic.layer2.nlr.net:GigabitEthernet9/10|265" />
+				<property name="shirako.target.code" value="0" />
+				<echo message="running under emulation...exiting" />
+				<echo message="Vlan ${shirako.save.unit.vlan.tag} provisioned successfully with reservation ${shirako.save.unit.vlan.reservation}"/>
+			</then>
+			<else>
+				<NLRSherpa.SmartProvisionVlan 
+					login="${NLRSherpa.login}"
+					password="${NLRSherpa.password}"
+					wg="${NLRSherpa.wg}"
+					endpointA="${NLRSherpa.endpointA}"
+					endpointZ="${NLRSherpa.endpointZ}"
+					bandwidth="${NLRSherpa.bandwidth}"
+					vlanId="${unit.vlan.tag}"
+					vlanStatusProperty="shirako.save.unit.status"
+					reservedVlanProperty="shirako.save.unit.vlan.tag"
+					reservationIdProperty="shirako.save.unit.vlan.reservation"
+					exitCodeProperty="NLRSherpa.exitCode" />
+				<echo message="Vlan ${shirako.save.unit.vlan.tag} provisioned with status ${shirako.save.unit.status} and reservation id ${shirako.save.unit.vlan.reservation}"/>
+				<property name="shirako.target.code" value="${NLRSherpa.exitCode}" />
+				<property name="shirako.target.code.message" value="Vlan ${shirako.save.unit.vlan.tag} provisioned with status ${shirako.save.unit.status} and reservation id ${shirako.save.unit.vlan.reservation}" />
+			</else>
+		</if>
+	        <!-- hairpin -->
+       	 	<var name="shirako.save.unit.vlan.url" unset="true" />
+        	<if>
+                	<isset property="unit.vlan.url" />
+                	<then>
+                        	<property name="shirako.save.unit.vlan.url" value="${unit.vlan.url}" />
+                	</then>
+        	</if>
+
+	</target>
+
+	<target name="leave" depends="resolve.configuration,load.nlr.tasks">
+		<if>
+			<isset property="nlr.site.properties" />
+			<then>
+				<property file="${nlr.site.properties}" />
+			</then>
+		</if>
+
+		<!-- input parameter is property unit.vlan.tag, unit.vlan.reservation + credentials -->
+		<echo message="NLR HANDLER: LEAVE" />
+                <tstamp prefix="start">
+                        <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+                </tstamp>
+
+		<echo message="Removing vlan ${unit.vlan.tag} with reservation ${unit.vlan.reservation} on ${start.TIME}" />
+		<if>
+			<equals arg1="${emulation}" arg2="true" />
+			<then>
+				<echo message="running under emulation...exiting" />
+				<echo message="Vlan ${unit.vlan.tag} with reservation ${unit.vlan.reservation} destroyed successfully"/>
+				<property name="shirako.target.code" value="0" />
+			</then>
+			<else>
+				<NLRSherpa.SmartRemoveVlan
+					login="${NLRSherpa.login}"
+					password="${NLRSherpa.password}"
+					wg="${NLRSherpa.wg}"
+					vlanId="${unit.vlan.tag}"
+					vlanReservationId="${unit.vlan.reservation}"
+					exitCodeProperty="NLRSherpa.removeVlanCode" />
+				<echo message="Removed vlan ${unit.vlan.tag} reservation ${unit.vlan.reservation} with exit code ${NLRSherpa.removeVlanCode}"/>
+				<property name="shirako.target.code" value="${NLRSherpa.removeVlanCode}" />
+			</else>
+		</if>
+	</target>
+
+	<target name="modify">
+		<echo message="NLR HANDLER: MODIFY" />
+		<property name="shirako.target.code" value="0" />
+	</target>
 </project>

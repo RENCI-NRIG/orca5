@@ -1,153 +1,193 @@
-<!DOCTYPE project> 
-<!--ENTITY drivertasks SYSTEM "../common/drivertasks.xml"--> 
-<!--ENTITY paths SYSTEM "../common/paths.xml"-->
- ]&gt; 
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../common/paths.xml">
+]>
 <project name="ibm_ds" basedir=".">
-     &amp;paths; &amp;core; &amp;drivertasks; 
-    <!-- Join operation --> 
-    <target name="join" depends="resolve.configuration"> 
-        <tstamp prefix="start"> 
-            <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" /> 
-        </tstamp> 
-        <echo message="IBM_DS iSCSI STORAGE HANDLER: JOIN on ${start.TIME}" /> 
-        <!--<property file="test.properties" />--> 
-        <if> 
-            <isset property="ibm_ds.site.properties" /> 
-            <then> 
-                <property file="${ibm_ds.site.properties}" /> 
-            </then> 
-        </if> 
-        <!-- Echo statments for log and emulation mode --> 
-        <echo message="IBM_DS_DIR=${ibm_ds.dir}" /> 
-        <echo message="IBM_DS_LOG_DIR=${ibm_ds.log.dir}" /> 
-        <echo message="IBM_DS_LOG_FILE=${ibm_ds.log.file}" /> 
-        <echo message="IBM_DS_LOG_LEVEL=${ibm_ds.log.level}" /> 
-        <echo message="IBM_DS_CONNECTION_TIMEOUT=${ibm_ds.connection.timeout}" /> 
-        <echo message="IBM_DS_REQUEST_TIMEOUT=${ibm_ds.request.timeout}" /> 
-        <echo message="IBM_DS_POOL=${ibm_ds.pool}" /> 
-        <echo message="IBM_DS_RAID_LEVEL=${ibm_ds.raid_level}" /> 
-        <echo message="IBM_DS_OWNER=${ibm_ds.owner}" /> 
-        <echo message="IBM_DS_IP=${ibm_ds.ip}" /> 
-        <echo message="IBM_DS_PASSWORD=${ibm_ds.password}" /> 
-        <echo message="IBM_DS_LOCKFILE=${ibm_ds.lockfile}" /> 
-        <echo message="UNIT_INITIATOR_IQN_PREFIX=${unit.initiator.iqn_prefix}" /> 
-        <echo message="UNIT_TARGET_NAME=${unit.target.name}" /> 
-        <echo message="UNIT_TARGET_LUN=${unit.target.lun}" /> 
-        <echo message="UNIT_TARGET_CHAP_USER=${unit.target.chap_user}" /> 
-        <echo message="UNIT_TARGET_CHAP_PASSWORD=${unit.target.chap_password}" /> 
-        <echo message="UNIT_TARGET_SEGMENT_SIZE=${unit.target.segment_size}" /> 
-        <echo message="UNIT_TARGET_CAPACITY=${unit.target.capacity}" /> 
-        <echo message="UNIT_INITIATOR_OS_TYPE=Linux" /> 
-        <!-- Only Linux for now --> 
-        <echo message="IBM_DS_GROUP_LABEL=${ibm_ds.group_label}" /> 
-        <echo message="UNIT_VM_GUID=${unit.vm.guid}" /> 
-        <echo message="UNIT_LUN_GUID=${unit.lun.guid}" /> 
-        <echo message="UNIT_SLICE_GUID=${unit.slice.guid}" /> 
-        <!-- If in emulation then exit without doing anything --> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <echo message="Emulation mode...exiting" /> 
-                <property name="shirako.target.code" value="0" /> 
-            </then> 
-            <else> 
-                <!-- Log some properites for debuging --> 
-                <echo message="creating IBM_DS LUN ...(may take some time)" /> 
-                <var name="create.lun.output" unset="true"></var> 
-                <var name="code" unset="true"></var> 
-                <var name="message" unset="true"></var> 
-                <exec executable="${ibm_ds.scripts}/ibm_ds-create-lun" resultproperty="code" outputproperty="create.lun.output"> 
-                    <env key="IBM_DS_DIR" value="${ibm_ds.dir}" /> 
-                    <env key="IBM_DS_LOG_DIR" value="${ibm_ds.log.dir}" /> 
-                    <env key="IBM_DS_LOG_FILE" value="${ibm_ds.log.file}" /> 
-                    <env key="IBM_DS_LOG_LEVEL" value="${ibm_ds.log.level}" /> 
-                    <env key="IBM_DS_CONNECTION_TIMEOUT" value="${ibm_ds.connection.timeout}" /> 
-                    <env key="IBM_DS_REQUEST_TIMEOUT" value="${ibm_ds.request.timeout}" /> 
-                    <env key="IBM_DS_POOL" value="${ibm_ds.pool}" /> 
-                    <env key="IBM_DS_RAID_LEVEL" value="${ibm_ds.raid_level}" /> 
-                    <env key="IBM_DS_OWNER" value="${ibm_ds.owner}" /> 
-                    <env key="IBM_DS_IP" value="${ibm_ds.ip}" /> 
-                    <env key="IBM_DS_PASSWORD" value="${ibm_ds.password}" /> 
-                    <env key="IBM_DS_LOCKFILE" value="${ibm_ds.lockfile}" /> 
-                    <env key="UNIT_INITIATOR_IQN_PREFIX" value="${unit.initiator.iqn_prefix}" /> 
-                    <env key="UNIT_TARGET_NAME" value="${unit.target.name}" /> 
-                    <env key="UNIT_TARGET_LUN" value="${unit.target.lun}" /> 
-                    <env key="UNIT_TARGET_CHAP_USER" value="${unit.target.chap_user}" /> 
-                    <env key="UNIT_TARGET_CHAP_PASSWORD" value="${unit.target.chap_password}" /> 
-                    <env key="UNIT_TARGET_SEGMENT_SIZE" value="${unit.target.segment_size}" /> 
-                    <env key="UNIT_TARGET_CAPACITY" value="${unit.target.capacity}" /> 
-                    <env key="UNIT_INITIATOR_OS_TYPE" value="Linux" /> 
-                    <!-- Only Linux for now --> 
-                    <env key="IBM_DS_GROUP_LABEL" value="${ibm_ds.group_label}" /> 
-                    <env key="UNIT_VM_GUID" value="${unit.vm.guid}" /> 
-                    <env key="UNIT_LUN_GUID" value="${unit.lun.guid}" /> 
-                    <env key="UNIT_SLICE_GUID" value="${unit.slice.guid}" /> 
-                </exec> 
-                <echo message="after create lun: exit code ${code}, ${create.lun.output}" /> 
-                <property name="shirako.target.code" value="${code}" /> 
-            </else> 
-        </if> 
-        <!-- end of else for emulation --> 
-        <echo message="join exit code: ${shirako.target.code}" /> 
-    </target> 
-    <!-- Modify operation is not supported --> 
-    <target name="modify" /> 
-    <!-- Leave operation --> 
-    <target name="leave" depends="resolve.configuration"> 
-        <tstamp prefix="start"> 
-            <format property="TIME" pattern="MM/dd/yyyy hh:mm" /> 
-        </tstamp> 
-        <echo message="IBM_DS iSCSI STORAGE HANDLER: LEAVE on ${start.TIME}" /> 
-        <!--<property file="test.properties" />--> 
-        <if> 
-            <isset property="ibm_ds.site.properties" /> 
-            <then> 
-                <property file="${ibm_ds.site.properties}" /> 
-            </then> 
-        </if> 
-        <echo message="${ibm_ds.scripts}/ibm_ds-delete-lun" /> 
-        <echo message="IBM_DS_DIR=${ibm_ds.dir}" /> 
-        <echo message="IBM_DS_LOG_DIR=${ibm_ds.log.dir}" /> 
-        <echo message="IBM_DS_LOG_FILE=${ibm_ds.log.file}" /> 
-        <echo message="IBM_DS_LOG_LEVEL=${ibm_ds.log.level}" /> 
-        <echo message="IBM_DS_CONNECTION_TIMEOUT=${ibm_ds.connection.timeout}" /> 
-        <echo message="IBM_DS_REQUEST_TIMEOUT=${ibm_ds.request.timeout}" /> 
-        <echo message="IBM_DS_SITE_PROPERTIES=${ibm_ds.site.properties}" /> 
-        <echo message="IBM_DS_LOCKFILE=${ibm_ds.lockfile}" /> 
-        <echo message="IBM_DS_IP=${ibm_ds.ip}" /> 
-        <echo message="IBM_DS_PASSWORD=${ibm_ds.password}" /> 
-        <echo message="UNIT_LUN_GUID=${unit.lun.guid}" /> 
-        <!-- If in emulation then exit without doing anything --> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <echo message="Emulation mode...exiting" /> 
-                <property name="shirako.target.code" value="0" /> 
-            </then> 
-            <else> 
-                <echo message="deleting IBM_DS LUN ...(may take some time)" /> 
-                <var name="delete.lun.output" unset="true"></var> 
-                <var name="code" unset="true"></var> 
-                <var name="message" unset="true"></var> 
-                <echo message="before delete lun" /> 
-                <exec executable="${ibm_ds.scripts}/ibm_ds-delete-lun" resultproperty="code" outputproperty="delete.lun.output"> 
-                    <env key="IBM_DS_DIR" value="${ibm_ds.dir}" /> 
-                    <env key="IBM_DS_LOG_DIR" value="${ibm_ds.log.dir}" /> 
-                    <env key="IBM_DS_LOG_FILE" value="${ibm_ds.log.file}" /> 
-                    <env key="IBM_DS_LOG_LEVEL" value="${ibm_ds.log.level}" /> 
-                    <env key="IBM_DS_CONNECTION_TIMEOUT" value="${ibm_ds.connection.timeout}" /> 
-                    <env key="IBM_DS_REQUEST_TIMEOUT" value="${ibm_ds.request.timeout}" /> 
-                    <env key="IBM_DS_SITE_PROPERTIES" value="${ibm_ds.site.properties}" /> 
-                    <env key="IBM_DS_LOCKFILE" value="${ibm_ds.lockfile}" /> 
-                    <env key="IBM_DS_IP" value="${ibm_ds.ip}" /> 
-                    <env key="IBM_DS_PASSWORD" value="${ibm_ds.password}" /> 
-                    <env key="UNIT_LUN_GUID" value="${unit.lun.guid}" /> 
-                </exec> 
-                <echo message="after delete lun: exit code ${code}, ${delete.lun.output}" /> 
-                <property name="shirako.target.code" value="${code}" /> 
-            </else> 
-        </if> 
-        <!-- end of else for emulation --> 
-        <echo message="leave exit code: ${shirako.target.code}" /> 
-    </target> 
+
+  &paths;
+  &core;
+  &drivertasks;	
+
+
+
+  <!-- Join operation -->
+  <target name="join" depends="resolve.configuration">
+    <tstamp prefix="start">
+      <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
+    </tstamp>
+    <echo message="IBM_DS iSCSI STORAGE HANDLER: JOIN on ${start.TIME}" />
+
+     <!--<property file="test.properties" />-->
+     <if>
+      <isset property="ibm_ds.site.properties" />
+       <then>
+        <property file="${ibm_ds.site.properties}" />
+      </then>
+    </if>
+
+
+    <!-- Echo statments for log and emulation mode -->
+    <echo message="IBM_DS_DIR=${ibm_ds.dir}" />
+    <echo message="IBM_DS_LOG_DIR=${ibm_ds.log.dir}" />
+    <echo message="IBM_DS_LOG_FILE=${ibm_ds.log.file}" />
+    <echo message="IBM_DS_LOG_LEVEL=${ibm_ds.log.level}" />
+    <echo message="IBM_DS_CONNECTION_TIMEOUT=${ibm_ds.connection.timeout}" />
+    <echo message="IBM_DS_REQUEST_TIMEOUT=${ibm_ds.request.timeout}" />
+
+    <echo message="IBM_DS_POOL=${ibm_ds.pool}" />
+    <echo message="IBM_DS_RAID_LEVEL=${ibm_ds.raid_level}" />
+    <echo message="IBM_DS_OWNER=${ibm_ds.owner}" />
+    <echo message="IBM_DS_IP=${ibm_ds.ip}" />
+    <echo message="IBM_DS_PASSWORD=${ibm_ds.password}" />
+    <echo message="IBM_DS_LOCKFILE=${ibm_ds.lockfile}" />
+  
+    <echo message="UNIT_INITIATOR_IQN_PREFIX=${unit.initiator.iqn_prefix}" />
+    <echo message="UNIT_TARGET_NAME=${unit.target.name}" />
+    <echo message="UNIT_TARGET_LUN=${unit.target.lun}" />
+    <echo message="UNIT_TARGET_CHAP_USER=${unit.target.chap_user}" />
+    <echo message="UNIT_TARGET_CHAP_PASSWORD=${unit.target.chap_password}" />
+    <echo message="UNIT_TARGET_SEGMENT_SIZE=${unit.target.segment_size}" />
+    <echo message="UNIT_TARGET_CAPACITY=${unit.target.capacity}" />
+
+    <echo message="UNIT_INITIATOR_OS_TYPE=Linux" /> <!-- Only Linux for now -->
+    <echo message="IBM_DS_GROUP_LABEL=${ibm_ds.group_label}" />
+    <echo message="UNIT_VM_GUID=${unit.vm.guid}" />
+    <echo message="UNIT_LUN_GUID=${unit.lun.guid}" />
+    <echo message="UNIT_SLICE_GUID=${unit.slice.guid}" />
+    
+
+
+    <!-- If in emulation then exit without doing anything -->
+    <if>
+      <equals arg1="${emulation}" arg2="true" />
+      <then>
+        <echo message="Emulation mode...exiting" />
+        <property name="shirako.target.code" value="0" />
+      </then>
+    <else>
+
+
+    <!-- Log some properites for debuging -->
+    <echo message="creating IBM_DS LUN ...(may take some time)" />
+    <var name="create.lun.output" unset="true" />
+    <var name="code" unset="true" />
+    <var name="message" unset="true" />
+    
+    <exec executable="${ibm_ds.scripts}/ibm_ds-create-lun" resultproperty="code" outputproperty="create.lun.output">
+      <env key="IBM_DS_DIR" value="${ibm_ds.dir}" />
+      <env key="IBM_DS_LOG_DIR" value="${ibm_ds.log.dir}" />
+      <env key="IBM_DS_LOG_FILE" value="${ibm_ds.log.file}" />
+      <env key="IBM_DS_LOG_LEVEL" value="${ibm_ds.log.level}" />
+      <env key="IBM_DS_CONNECTION_TIMEOUT" value="${ibm_ds.connection.timeout}" />
+      <env key="IBM_DS_REQUEST_TIMEOUT" value="${ibm_ds.request.timeout}" />
+
+      <env key="IBM_DS_POOL" value="${ibm_ds.pool}" />
+      <env key="IBM_DS_RAID_LEVEL" value="${ibm_ds.raid_level}" />
+      <env key="IBM_DS_OWNER" value="${ibm_ds.owner}" />
+      <env key="IBM_DS_IP" value="${ibm_ds.ip}" />
+      <env key="IBM_DS_PASSWORD" value="${ibm_ds.password}" />
+      <env key="IBM_DS_LOCKFILE" value="${ibm_ds.lockfile}" />
+    
+
+      <env key="UNIT_INITIATOR_IQN_PREFIX" value="${unit.initiator.iqn_prefix}" />
+      <env key="UNIT_TARGET_NAME" value="${unit.target.name}" />
+      <env key="UNIT_TARGET_LUN" value="${unit.target.lun}" />
+      <env key="UNIT_TARGET_CHAP_USER" value="${unit.target.chap_user}" />
+      <env key="UNIT_TARGET_CHAP_PASSWORD" value="${unit.target.chap_password}" />
+      <env key="UNIT_TARGET_SEGMENT_SIZE" value="${unit.target.segment_size}" />
+      <env key="UNIT_TARGET_CAPACITY" value="${unit.target.capacity}" />
+	   
+      <env key="UNIT_INITIATOR_OS_TYPE" value="Linux" /> <!-- Only Linux for now -->
+      <env key="IBM_DS_GROUP_LABEL" value="${ibm_ds.group_label}" />
+      <env key="UNIT_VM_GUID" value="${unit.vm.guid}" />
+      <env key="UNIT_LUN_GUID" value="${unit.lun.guid}" />
+      <env key="UNIT_SLICE_GUID" value="${unit.slice.guid}" />
+	     
+    </exec>
+    <echo message="after create lun: exit code ${code}, ${create.lun.output}" />
+    
+    <property name="shirako.target.code" value="${code}" />
+    
+
+    </else></if> <!-- end of else for emulation -->  
+    <echo message="join exit code: ${shirako.target.code}" />
+  </target>
+  
+  <!-- Modify operation is not supported -->
+  <target name="modify" />
+
+  
+  <!-- Leave operation -->
+  <target name="leave" depends="resolve.configuration">
+    <tstamp prefix="start">
+      <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+    </tstamp>
+    
+    <echo message="IBM_DS iSCSI STORAGE HANDLER: LEAVE on ${start.TIME}" />
+
+  <!--<property file="test.properties" />-->
+  <if>
+      <isset property="ibm_ds.site.properties" />
+       <then>
+        <property file="${ibm_ds.site.properties}" />
+      </then>
+    </if>
+
+
+    <echo message="${ibm_ds.scripts}/ibm_ds-delete-lun" />
+    <echo message="IBM_DS_DIR=${ibm_ds.dir}" />
+    <echo message="IBM_DS_LOG_DIR=${ibm_ds.log.dir}" />
+    <echo message="IBM_DS_LOG_FILE=${ibm_ds.log.file}" />
+    <echo message="IBM_DS_LOG_LEVEL=${ibm_ds.log.level}" />
+    <echo message="IBM_DS_CONNECTION_TIMEOUT=${ibm_ds.connection.timeout}" />
+    <echo message="IBM_DS_REQUEST_TIMEOUT=${ibm_ds.request.timeout}" />
+    <echo message="IBM_DS_SITE_PROPERTIES=${ibm_ds.site.properties}" />
+    <echo message="IBM_DS_LOCKFILE=${ibm_ds.lockfile}" />
+    
+
+    <echo message="IBM_DS_IP=${ibm_ds.ip}" />
+    <echo message="IBM_DS_PASSWORD=${ibm_ds.password}" />
+    <echo message="UNIT_LUN_GUID=${unit.lun.guid}" />
+
+    <!-- If in emulation then exit without doing anything -->
+    <if>
+      <equals arg1="${emulation}" arg2="true" />
+      <then>
+        <echo message="Emulation mode...exiting" />
+        <property name="shirako.target.code" value="0" />
+      </then>
+      <else>
+
+
+	<echo message="deleting IBM_DS LUN ...(may take some time)" />
+        <var name="delete.lun.output" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
+	
+        <echo message="before delete lun" />
+        <exec executable="${ibm_ds.scripts}/ibm_ds-delete-lun" resultproperty="code" outputproperty="delete.lun.output">
+          
+          <env key="IBM_DS_DIR" value="${ibm_ds.dir}" />
+          <env key="IBM_DS_LOG_DIR" value="${ibm_ds.log.dir}" />
+          <env key="IBM_DS_LOG_FILE" value="${ibm_ds.log.file}" />
+          <env key="IBM_DS_LOG_LEVEL" value="${ibm_ds.log.level}" />
+          <env key="IBM_DS_CONNECTION_TIMEOUT" value="${ibm_ds.connection.timeout}" />
+          <env key="IBM_DS_REQUEST_TIMEOUT" value="${ibm_ds.request.timeout}" />
+          <env key="IBM_DS_SITE_PROPERTIES" value="${ibm_ds.site.properties}" />
+	  <env key="IBM_DS_LOCKFILE" value="${ibm_ds.lockfile}" />
+
+	  
+	  <env key="IBM_DS_IP" value="${ibm_ds.ip}" />
+          <env key="IBM_DS_PASSWORD" value="${ibm_ds.password}" />
+   	  <env key="UNIT_LUN_GUID" value="${unit.lun.guid}" />
+        </exec>
+        <echo message="after delete lun: exit code ${code}, ${delete.lun.output}" />
+	
+	<property name="shirako.target.code" value="${code}" />
+
+    </else> </if> <!-- end of else for emulation -->
+    <echo message="leave exit code: ${shirako.target.code}" />
+  </target>
 </project>
+

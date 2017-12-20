@@ -1,146 +1,178 @@
-<!DOCTYPE project> 
-<!--ENTITY drivertasks SYSTEM "../common/drivertasks.xml"--> 
-<!--ENTITY paths SYSTEM "../common/paths.xml"-->
- ]&gt; 
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "../common/core.xml">
+<!ENTITY drivertasks SYSTEM "../common/drivertasks.xml">
+<!ENTITY paths SYSTEM "../common/paths.xml">
+]>
 <project name="slurm" basedir=".">
-     &amp;paths; &amp;core; &amp;drivertasks; 
-    <!-- Join operation --> 
-    <target name="join" depends="resolve.configuration"> 
-        <tstamp prefix="start"> 
-            <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" /> 
-        </tstamp> 
-        <echo message="SLURM HANDLER: JOIN on ${start.TIME}" /> 
-        <!--<property file="test.properties" />--> 
-        <if> 
-            <isset property="slurm.site.properties" /> 
-            <then> 
-                <property file="${slurm.site.properties}" /> 
-            </then> 
-        </if> 
-        <!-- Echo statments for log and emulation mode --> 
-        <echo message="SLURM_VERSION=${slurm.version}" /> 
-        <echo message="SLURM_PACKAGE_DIR=${slurm.dir}" /> 
-        <echo message="SLURM_LOG_DIR=${slurm.log.dir}" /> 
-        <echo message="SLURM_LOG_FILE=${slurm.log.file}" /> 
-        <echo message="SLURM_LOG_LEVEL=${slurm.log.level}" /> 
-        <echo message="SLURM_MANAGE_HOME=${slurm.scripts}" /> 
-        <echo message="SLURM_TYPE=${slurm.allocation.type}" /> 
-        <echo message="SLURM_OWNER=${slurm.owner}" /> 
-        <echo message="SLURM_RESERVATION=${slurm.reservation}" /> 
-        <!-- If in emulation then exit without doing anything --> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <echo message="Emulation mode...exiting" /> 
-                <property name="shirako.target.code" value="0" /> 
-            </then> 
-            <else> 
-                <if> 
-                    <!-- For now reusing unit.ec2.instance.type for setting slurm allocation type --> 
-                    <isset property="unit.ec2.instance.type" /> 
-                    <then> 
-                        <echo message="User supplied type is ${unit.ec2.instance.type}" /> 
-                        <var name="slurm.allocation.type" unset="true"></var> 
-                        <property name="slurm.allocation.type" value="${unit.ec2.instance.type}" /> 
-                    </then> 
-                    <else> 
-                        <echo message="User did not specify type, using default ${slurm.allocation.type}" /> 
-                    </else> 
-                </if> 
-                <!-- Log some properites for debuging --> 
-                <echo message="creating SLURM Allocation ...(may take some time)" /> 
-                <var name="create.allocation.output" unset="true"></var> 
-                <var name="code" unset="true"></var> 
-                <var name="message" unset="true"></var> 
-                <echo message="before create allocation" /> 
-                <exec executable="${slurm.scripts}/slurm-create" resultproperty="code" outputproperty="create.allocation.output"> 
-                    <env key="SLURM_PACKAGE_DIR" value="${slurm.dir}" /> 
-                    <env key="SLURM_LOG_DIR" value="${slurm.log.dir}" /> 
-                    <env key="SLURM_LOG_FILE" value="${slurm.log.file}" /> 
-                    <env key="SLURM_LOG_LEVEL" value="${slurm.log.level}" /> 
-                    <env key="SLURM_MANAGE_HOME" value="${slurm.scripts}" /> 
-                    <env key="SLURM_TYPE" value="${slurm.allocation.type}" /> 
-                    <env key="SLURM_OWNER" value="${slurm.owner}" /> 
-                    <env key="SLURM_RESERVATION" value="${slurm.reservation}" /> 
-                </exec> 
-                <echo message="after create allocation: exit code ${code}, ${create.allocation.output}" /> 
-                <if> 
-                    <not> 
-                        <equals arg1="${code}" arg2="0" /> 
-                    </not> 
-                    <then> 
-                        <echo message="unable to create allocation: exit code ${code}, ${create.allocation.output}" /> 
-                        <property name="message" value="unable to create allocation: exit code ${code}, ${create.allocation.output}" /> 
-                    </then> 
-                    <else> 
-                        <var name="shirako.save.unit.ec2.instance" unset="true"></var> 
-                        <property name="shirako.save.unit.ec2.instance" value="${create.allocation.output}" /> 
-                    </else> 
-                </if> 
-                <property name="shirako.target.code" value="${code}" /> 
-            </else> 
-        </if> 
-        <!-- end of else for emulation --> 
-        <echo message="join exit code: ${shirako.target.code}" /> 
-    </target> 
-    <!-- Modify operation is not supported --> 
-    <target name="modify" /> 
-    <!-- Leave operation --> 
-    <target name="leave" depends="resolve.configuration"> 
-        <tstamp prefix="start"> 
-            <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" /> 
-        </tstamp> 
-        <echo message="SLURM HANDLER: LEAVE on ${start.TIME}" /> 
-        <!--<property file="test.properties" />--> 
-        <if> 
-            <isset property="slurm.site.properties" /> 
-            <then> 
-                <property file="${slurm.site.properties}" /> 
-            </then> 
-        </if> 
-        <!-- Echo statments for log and emulation mode --> 
-        <echo message="SLURM_PACKAGE_DIR=${slurm.dir}" /> 
-        <echo message="SLURM_LOG_DIR=${slurm.log.dir}" /> 
-        <echo message="SLURM_LOG_FILE=${slurm.log.file}" /> 
-        <echo message="SLURM_LOG_LEVEL=${slurm.log.level}" /> 
-        <echo message="SLURM_ALLOCATIONID=${slurm.allocationid}" /> 
-        <!-- If in emulation then exit without doing anything --> 
-        <if> 
-            <equals arg1="${emulation}" arg2="true" /> 
-            <then> 
-                <echo message="Emulation mode...exiting" /> 
-                <property name="shirako.target.code" value="0" /> 
-            </then> 
-            <else> 
-                <if> 
-                    <!-- Reusing unit.ec2.instance for getting allocation id, which was saved in shirako.save.unit.ec2.instance property in join --> 
-                    <isset property="unit.ec2.instance" /> 
-                    <then> 
-                        <echo message="Allocation id to delete is ${unit.ec2.instance}" /> 
-                        <var name="slurm.allocationid" unset="true"></var> 
-                        <property name="slurm.allocationid" value="${unit.ec2.instance}" /> 
-                    </then> 
-                    <else> 
-                        <echo message="User did not specify type, using default ${slurm.allocation.type}" /> 
-                    </else> 
-                </if> 
-                <echo message="deleting SLURM Allocation ...(may take some time)" /> 
-                <var name="delete.allocation.output" unset="true"></var> 
-                <var name="code" unset="true"></var> 
-                <var name="message" unset="true"></var> 
-                <echo message="before delete allocation" /> 
-                <exec executable="${slurm.scripts}/slurm-delete" resultproperty="code" outputproperty="delete.allocation.output"> 
-                    <env key="SLURM_PACKAGE_DIR" value="${slurm.dir}" /> 
-                    <env key="SLURM_LOG_DIR" value="${slurm.log.dir}" /> 
-                    <env key="SLURM_LOG_FILE" value="${slurm.log.file}" /> 
-                    <env key="SLURM_LOG_LEVEL" value="${slurm.log.level}" /> 
-                    <env key="SLURM_ALLOCATIONID" value="${slurm.allocationid}" /> 
-                </exec> 
-                <echo message="after delete allocation: exit code ${code}, ${delete.allocation.output}" /> 
-                <property name="shirako.target.code" value="${code}" /> 
-            </else> 
-        </if> 
-        <!-- end of else for emulation --> 
-        <echo message="leave exit code: ${shirako.target.code}" /> 
-    </target> 
+
+  &paths;
+  &core;
+  &drivertasks;	
+
+
+
+  <!-- Join operation -->
+  <target name="join" depends="resolve.configuration">
+    <tstamp prefix="start">
+      <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
+    </tstamp>
+    <echo message="SLURM HANDLER: JOIN on ${start.TIME}" />
+
+     <!--<property file="test.properties" />-->
+     <if>
+      <isset property="slurm.site.properties" />
+       <then>
+        <property file="${slurm.site.properties}" />
+      </then>
+    </if>
+
+
+    <!-- Echo statments for log and emulation mode -->
+    <echo message="SLURM_VERSION=${slurm.version}" />
+    <echo message="SLURM_PACKAGE_DIR=${slurm.dir}" />
+    <echo message="SLURM_LOG_DIR=${slurm.log.dir}" />
+    <echo message="SLURM_LOG_FILE=${slurm.log.file}" />
+    <echo message="SLURM_LOG_LEVEL=${slurm.log.level}" />
+    <echo message="SLURM_MANAGE_HOME=${slurm.scripts}" />
+    <echo message="SLURM_TYPE=${slurm.allocation.type}" />
+    <echo message="SLURM_OWNER=${slurm.owner}" />
+    <echo message="SLURM_RESERVATION=${slurm.reservation}" />
+    
+
+    <!-- If in emulation then exit without doing anything -->
+    <if>
+      <equals arg1="${emulation}" arg2="true" />
+      <then>
+        <echo message="Emulation mode...exiting" />
+        <property name="shirako.target.code" value="0" />
+      </then>
+    <else>
+
+	<if>
+	  <!-- For now reusing unit.ec2.instance.type for setting slurm allocation type -->
+	  <isset property="unit.ec2.instance.type" />
+	  <then>
+	  	<echo message="User supplied type is ${unit.ec2.instance.type}"/>
+	        <var name="slurm.allocation.type" unset="true" />
+	        <property name="slurm.allocation.type" value="${unit.ec2.instance.type}" />
+	  </then>
+	  <else>
+	        <echo message="User did not specify type, using default ${slurm.allocation.type}"/>
+          </else>
+        </if>
+
+    	<!-- Log some properites for debuging -->
+    	<echo message="creating SLURM Allocation ...(may take some time)" />
+    	<var name="create.allocation.output" unset="true" />
+    	<var name="code" unset="true" />
+    	<var name="message" unset="true" />
+    
+    	<echo message="before create allocation" />
+
+    	<exec executable="${slurm.scripts}/slurm-create" resultproperty="code" outputproperty="create.allocation.output">
+      	  <env key="SLURM_PACKAGE_DIR" value="${slurm.dir}" />
+      	  <env key="SLURM_LOG_DIR" value="${slurm.log.dir}" />
+      	  <env key="SLURM_LOG_FILE" value="${slurm.log.file}" />
+      	  <env key="SLURM_LOG_LEVEL" value="${slurm.log.level}" />
+      	  <env key="SLURM_MANAGE_HOME" value="${slurm.scripts}" />
+      	  <env key="SLURM_TYPE" value="${slurm.allocation.type}" />
+      	  <env key="SLURM_OWNER" value="${slurm.owner}" />
+      	  <env key="SLURM_RESERVATION" value="${slurm.reservation}" />
+    	</exec>
+
+    	<echo message="after create allocation: exit code ${code}, ${create.allocation.output}" />
+    
+	<if>
+	  <not>
+	    <equals arg1="${code}" arg2="0" />
+	  </not>
+	  <then>
+	    <echo message="unable to create allocation: exit code ${code}, ${create.allocation.output}" />
+	    <property name="message" value="unable to create allocation: exit code ${code}, ${create.allocation.output}" />
+	  </then>
+	  <else>
+	    <var name="shirako.save.unit.ec2.instance" unset="true" />
+	    <property name="shirako.save.unit.ec2.instance" value="${create.allocation.output}" />
+	  </else>
+	</if>    
+
+    	<property name="shirako.target.code" value="${code}" />
+
+    
+    </else>
+    </if> <!-- end of else for emulation -->  
+    <echo message="join exit code: ${shirako.target.code}" />
+  </target>
+  
+  <!-- Modify operation is not supported -->
+  <target name="modify" />
+
+  
+  <!-- Leave operation -->
+  <target name="leave" depends="resolve.configuration">
+    <tstamp prefix="start">
+      <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
+    </tstamp>
+    <echo message="SLURM HANDLER: LEAVE on ${start.TIME}" />
+
+     <!--<property file="test.properties" />-->
+     <if>
+      <isset property="slurm.site.properties" />
+       <then>
+        <property file="${slurm.site.properties}" />
+      </then>
+    </if>
+
+
+    <!-- Echo statments for log and emulation mode -->
+    <echo message="SLURM_PACKAGE_DIR=${slurm.dir}" />
+    <echo message="SLURM_LOG_DIR=${slurm.log.dir}" />
+    <echo message="SLURM_LOG_FILE=${slurm.log.file}" />
+    <echo message="SLURM_LOG_LEVEL=${slurm.log.level}" />
+    <echo message="SLURM_ALLOCATIONID=${slurm.allocationid}" />
+    
+
+    <!-- If in emulation then exit without doing anything -->
+    <if>
+      <equals arg1="${emulation}" arg2="true" />
+      <then>
+        <echo message="Emulation mode...exiting" />
+        <property name="shirako.target.code" value="0" />
+      </then>
+    <else>
+
+	<if>
+	  <!-- Reusing unit.ec2.instance for getting allocation id, which was saved in shirako.save.unit.ec2.instance property in join -->
+	  <isset property="unit.ec2.instance" />
+	  <then>
+	  	<echo message="Allocation id to delete is ${unit.ec2.instance}"/>
+	        <var name="slurm.allocationid" unset="true" />
+	        <property name="slurm.allocationid" value="${unit.ec2.instance}" />
+	  </then>
+	  <else>
+	        <echo message="User did not specify type, using default ${slurm.allocation.type}"/>
+          </else>
+        </if>
+
+	<echo message="deleting SLURM Allocation ...(may take some time)" />
+        <var name="delete.allocation.output" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
+	
+        <echo message="before delete allocation" />
+        <exec executable="${slurm.scripts}/slurm-delete" resultproperty="code" outputproperty="delete.allocation.output">
+      	  <env key="SLURM_PACKAGE_DIR" value="${slurm.dir}" />
+      	  <env key="SLURM_LOG_DIR" value="${slurm.log.dir}" />
+      	  <env key="SLURM_LOG_FILE" value="${slurm.log.file}" />
+      	  <env key="SLURM_LOG_LEVEL" value="${slurm.log.level}" />
+      	  <env key="SLURM_ALLOCATIONID" value="${slurm.allocationid}" />
+        </exec>
+        <echo message="after delete allocation: exit code ${code}, ${delete.allocation.output}" />
+	
+	<property name="shirako.target.code" value="${code}" />
+
+    </else> </if> <!-- end of else for emulation -->
+    <echo message="leave exit code: ${shirako.target.code}" />
+  </target>
 </project>
+

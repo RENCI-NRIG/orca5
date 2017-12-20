@@ -1,52 +1,76 @@
-<!DOCTYPE project>
- ]&gt; 
-<project name="orca.shirako" default="help" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-     &amp;deps; 
-    <target name="help"> 
-        <echo>
-             proxies.soap.axis2.beans - generates orca.shirako.proxies.soapaxis2.beans (Axis 2.x) proxies.soap.axis2.services - generates orca.shirako.proxies.soapaxis2.services (Axis 2.x) manage.extensions.beans manage.extensions.api.beans 
-        </echo> 
-    </target> 
-    <!-- Begin AXIS 2.x support --> 
-    <!--
+<!DOCTYPE project [
+	<!ENTITY deps SYSTEM "deps.xml">
+]>
+<project name="orca.shirako"
+		default="help"
+		basedir="."
+	xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	&deps;
+
+	<target name="help">
+		<echo>
+			proxies.soap.axis2.beans - generates orca.shirako.proxies.soapaxis2.beans (Axis 2.x)
+			proxies.soap.axis2.services - generates orca.shirako.proxies.soapaxis2.services (Axis 2.x)
+			manage.extensions.beans
+		    manage.extensions.api.beans
+		</echo>
+	</target>
+
+
+	<!-- Begin AXIS 2.x support -->
+
+	<!--
 	  Helper target to invoke wsdl2java with the right parameters.
 	  Parameters: 
 	  ${wsdl.file} - path to the wsdl to be compiled
-  --> 
-    <target name="proxies.soap.axis2.helper" description="helper target to invoke wsdl2java with the right parameters"> 
-        <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpath="${runtime_classpath}"> 
-            <arg value="-d" /> 
-            <arg value="adb" /> 
-            <arg value="-uri" /> 
-            <arg file="${wsdl.file}" /> 
-            <arg value="-ss" /> 
-            <arg value="-g" /> 
-            <!--
+  -->
+	<target name="proxies.soap.axis2.helper"
+		description="helper target to invoke wsdl2java with the right parameters">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpath="${runtime_classpath}">
+			<arg value="-d" />
+			<arg value="adb" />
+			<arg value="-uri" />
+			<arg file="${wsdl.file}" />
+			<arg value="-ss" />
+			<arg value="-g" />
+<!--
 			<arg value="-sd" />
---> 
-            <arg value="-o" /> 
-            <arg file="${tmp.dir}" /> 
-            <arg value="-p" /> 
-            <arg value="${pkg.name}" /> 
-            <arg value="-ns2p" /> 
-            <arg value="http://imageproxy.orca=orca.handlers.ec2.tasks.imgproxy" /> 
-        </java> 
-    </target> 
-    <!--
+-->
+			<arg value="-o" />
+			<arg file="${tmp.dir}" />
+			<arg value="-p" />
+			<arg value="${pkg.name}" />
+			<arg value="-ns2p" />
+			<arg value="http://imageproxy.orca=orca.handlers.ec2.tasks.imgproxy" />		    
+		</java>
+	</target>
+
+	<!--
 	  Regenerates the soap.services package:
-        --> 
-    <target name="imageproxy.axis2.service" description="recreate SOAP handlers/stubs for image proxy"> 
-        <delete dir="${tmp.dir}" /> 
-        <mkdir dir="${tmp.dir}" /> 
-        <!-- compile the wsdl and copy the deployment descriptors --> 
-        <!-- actor --> 
-        <antcall target="proxies.soap.axis2.helper"> 
-            <param name="wsdl.file" value="src/main/axis2/imageproxy.wsdl" /> 
-            <param name="pkg.name" value="orca.handlers.ec2.tasks.imgproxy" /> 
-        </antcall> 
-        <!-- Put all code files at the right place --> 
-        <copy todir="src/main/java/orca/handlers/ec2/tasks/imgproxy" overwrite="true"> 
-            <fileset dir="${tmp.dir}/src/orca/handlers/ec2/tasks/imgproxy" includes="**/*.java" /> 
-        </copy> 
-    </target> 
+        -->
+	<target name="imageproxy.axis2.service" description="recreate SOAP handlers/stubs for image proxy">
+		<delete dir="${tmp.dir}" />
+		<mkdir dir="${tmp.dir}" />
+
+		<!-- compile the wsdl and copy the deployment descriptors -->
+
+		<!-- actor -->
+		<antcall target="proxies.soap.axis2.helper">
+			<param name="wsdl.file"
+					value="src/main/axis2/imageproxy.wsdl" />
+			<param name="pkg.name"
+					value="orca.handlers.ec2.tasks.imgproxy" />
+		</antcall>
+
+		<!-- Put all code files at the right place -->
+		<copy todir="src/main/java/orca/handlers/ec2/tasks/imgproxy" overwrite="true">
+			<fileset dir="${tmp.dir}/src/orca/handlers/ec2/tasks/imgproxy"
+					includes="**/*.java" 
+				/>
+		</copy>
+
+	</target>
+
+
 </project>

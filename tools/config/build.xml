@@ -1,18 +1,80 @@
-<?xml version="1.0" encoding="utf-8"?> <!DOCTYPE project> 
-<!--ENTITY deps SYSTEM "ant/deps.xml"--> 
-<!--ENTITY drivers  SYSTEM "ant/drivers.xml"--> 
-<!--ENTITY na SYSTEM "ant/na.xml"--> 
-<!--ENTITY misc SYSTEM "ant/misc.xml"--> 
-<!--ENTITY paths SYSTEM "ant/paths.xml"--> 
-<!--ENTITY packages SYSTEM "ant/packages.xml"--> 
-<!--ENTITY taskdefs SYSTEM "ant/taskdefs.xml"--> 
-<!--ENTITY security SYSTEM "ant/security.xml"-->
- ]&gt; 
-<project name="orca.tools.config" default="help" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-     &amp;deps; &amp;taskdefs; &amp;core; &amp;security; &amp;na; &amp;misc; &amp;packages; &amp;drivers; 
-    <target name="help"> 
-        <echo>
-             Orca Configuration Tool options: Package operations: get.packages - retrieves all required archives from the repository Node Agent operations: nah.install - installs the node agent host on all machines na.upgrade - upgrades the node agent service on all machines na.start - starts the node agent service on all machines na.stop - stops the node agent service on all machines na.restart - restarts the node agent service on all machines na.status - shows the status of the node agent service on all machines Security operations: security.create.admin.config - creates the admin security configuration security.create.actor.config - creates the security configuration for the given actor security.get.service.key - obtains the service key for all machines and registers the keys in the actor keystore security.register.actor.key - registers the actor key with all node agents security.unauth - unregisters all security keys from the node agent service security.prepare - generates and copies the cmdline file security.setup - registers the admin key with the node agent services Keystore operations: show.keys - shows all keys in the admin keystore show.actor.keys - shows all keys in the given actor keystore remove.key - removes the given key from the admin keystore export.actor.certificate - exports the certificate for the given key from the given actor's keystore export64.actor.certificate - exports the certificate of the specified actor in base64 format Driver operations: drivers.install - installs all drivers on all machines drivers.uninstall - uninstalls all drivers from all machines drivers.upgrade - upgrades all drivers on all machines Miscelaneous operations: guid - generates a GUID 
-        </echo> 
-    </target> 
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE project [
+<!ENTITY core SYSTEM "ant/core.xml">
+<!ENTITY deps SYSTEM "ant/deps.xml">
+<!ENTITY drivers  SYSTEM "ant/drivers.xml">
+<!ENTITY na SYSTEM "ant/na.xml">
+<!ENTITY misc SYSTEM "ant/misc.xml">
+<!ENTITY paths SYSTEM "ant/paths.xml">
+<!ENTITY packages SYSTEM "ant/packages.xml">
+<!ENTITY taskdefs SYSTEM "ant/taskdefs.xml">
+<!ENTITY security SYSTEM "ant/security.xml">
+]>
+
+<project 
+    name="orca.tools.config" 
+    default="help" 
+    basedir="."
+    xmlns:artifact="urn:maven-artifact-ant">
+
+  &deps;
+  &taskdefs;
+  &core;
+  &security;
+  &na;
+  &misc;
+  &packages;	
+  &drivers;
+    
+  <target name="help">
+    <echo>
+Orca Configuration Tool options:
+
+    Package operations:
+    	
+get.packages - retrieves all required archives from the repository
+    	
+    Node Agent operations:
+
+nah.install - installs the node agent host on all machines
+na.upgrade - upgrades the node agent service on all machines    	
+na.start - starts the node agent service on all machines
+na.stop - stops the node agent service on all machines
+na.restart - restarts the node agent service on all machines
+na.status - shows the status of the node agent service on all machines 
+
+    Security operations:
+
+security.create.admin.config - creates the admin security configuration
+security.create.actor.config - creates the security configuration for the given actor
+security.get.service.key - obtains the service key for all machines and registers the keys in the actor keystore
+security.register.actor.key - registers the actor key with all node agents 
+
+security.unauth - unregisters all security keys from the node agent service
+security.prepare - generates and copies the cmdline file
+security.setup - registers the admin key with the node agent services
+    	
+  	Keystore operations:
+
+show.keys - shows all keys in the admin keystore
+show.actor.keys - shows all keys in the given actor keystore
+remove.key - removes the given key from the admin keystore
+export.actor.certificate - exports the certificate for the given key from the given actor's keystore
+export64.actor.certificate - exports the certificate of the specified actor in base64 format
+
+    Driver operations:
+
+drivers.install - installs all drivers on all machines
+drivers.uninstall - uninstalls all drivers from all machines
+drivers.upgrade - upgrades all drivers on all machines
+   
+    Miscelaneous operations:
+
+guid - generates a GUID
+
+
+	</echo>
+  </target>
+
 </project>
+

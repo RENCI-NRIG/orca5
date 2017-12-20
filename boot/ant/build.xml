@@ -1,31 +1,44 @@
-<!DOCTYPE project>
- ]&gt; 
-<project name="orca.util" default="help" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-     &amp;deps; 
-    <target name="help"> 
-        <echo>
-             copy.local - copies template configuration files locally orca.boot.beans - generates orca.boot.beans 
-        </echo> 
-    </target> 
-    <target name="copy.local" description="copies configuration templates into the local configuration directory"> 
-        <mkdir dir="${local.dir}" /> 
-        <copy todir="${local.dir}"> 
-            <fileset dir="${config.dir}"> 
-                <include name="**/*" /> 
-            </fileset> 
-        </copy> 
-    </target> 
-    <target name="orca.boot.beans" description="generates orca.boot.beans"> 
-        <!-- prepare the output directory --> 
-        <delete dir="${tmp.dir}" /> 
-        <mkdir dir="${tmp.dir}" /> 
-        <xjc schema="resources/orca.boot.beans.schema.xsd" target="${tmp.dir}" package="orca.boot.beans" /> 
-        <!-- copy the generated beans to their destination --> 
-        <copy todir="src/main/java/orca/boot/beans" overwrite="true"> 
-            <fileset dir="${tmp.dir}/orca/boot/beans"> 
-                <include name="**/*" /> 
-            </fileset> 
-        </copy> 
-        <delete dir="${tmp.dir}" /> 
-    </target> 
+<!DOCTYPE project [
+<!ENTITY deps SYSTEM "deps.xml">
+]>
+<project name="orca.util"
+	default="help"
+	basedir="."
+	xmlns:artifact="urn:maven-artifact-ant">
+
+	&deps;
+
+	<target name="help">
+		<echo>
+			copy.local - copies template configuration files locally
+			orca.boot.beans - generates orca.boot.beans
+		</echo>
+	</target>
+
+	<target name="copy.local"
+		description="copies configuration templates into the local configuration directory">
+		<mkdir dir="${local.dir}" />
+		<copy todir="${local.dir}">
+			<fileset dir="${config.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="orca.boot.beans" description="generates orca.boot.beans">
+		<!-- prepare the output directory -->
+		<delete dir="${tmp.dir}" />
+		<mkdir dir="${tmp.dir}" />
+		<xjc schema="resources/orca.boot.beans.schema.xsd"
+			target="${tmp.dir}"
+			package="orca.boot.beans" />
+		<!-- copy the generated beans to their destination -->
+		<copy todir="src/main/java/orca/boot/beans" overwrite="true">
+			<fileset dir="${tmp.dir}/orca/boot/beans">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<delete dir="${tmp.dir}" />
+	</target>
+
 </project>
