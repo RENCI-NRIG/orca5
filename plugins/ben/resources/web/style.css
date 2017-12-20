@@ -1,23 +1,47 @@
-.mainTable { }
-.mainTableCell {
-    padding-right: 5px;
-    padding-left: 20px
+
+.mainTable{
+//        border: 1px solid #001A57;
+//        padding-left: 5px;
+        padding-top: 20px;
+}        
+
+.mainTableCell{
+        padding-right: 5px;
+        padding-left: 20px;
 }
-.masterTable { }
-.workerTable { }
-.batchMenu {
-    border-left: 1px solid #cc3300;
-    padding-left: 20px
+
+.masterTable{
+//        padding-left: 10px;
+        padding-bottom: 10px;
+//        border: 1px solid #CC3300;
+          padding-right: 20px;  
 }
-.batchSummary {
-    border-right: 1px solid #cc3300;
-    padding-right: 20px
+
+.workerTable{
+//        padding-left: 10px;
+        padding-bottom: 10px;
+//        border: 1px solid #CC3300;
+          padding-right: 20px;  
 }
-.batchSummaryCell {
-    color: #001a57;
-    padding-bottom: 10px
+
+
+.batchMenu{
+      border-left: 1px solid #CC3300;
+      padding-left: 20px;
 }
-.menuTable {
-    color: #cc3300;
-    padding-bottom: 10px
+
+.batchSummary{
+      border-right: 1px solid #CC3300;
+      padding-right: 20px;
 }
+
+.batchSummaryCell{
+      color: #001A57;
+      padding-bottom: 10px; 
+}
+
+.menuTable{
+      color: #CC3300;
+      padding-bottom: 10px; 
+}
+  
