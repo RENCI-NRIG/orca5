@@ -2,8 +2,13 @@ package orca.controllers.xmlrpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import orca.embed.RequestWorkflowTest;
@@ -15,6 +20,7 @@ import orca.ndl.NdlModel;
 import orca.ndl.elements.NetworkElement;
 
 import orca.ndl.elements.OrcaReservationTerm;
+import orca.shirako.common.meta.ConfigurationProperties;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -111,4 +117,98 @@ public class ReservationConverterTest extends RequestWorkflowTest {
         System.out.println("Term end date updated to: " + orc.leaseEnd);
     }
 
+    /**
+     * Test that SSH key property is generated from UsersMap. This function passes the keys in the Map as a List, as
+     * used by most of our Unit Tests.
+     *
+     * @throws ReservationConverter.ReservationConverterException
+     */
+    public void testGenerateSSHPropertiesWithListKey() throws ReservationConverter.ReservationConverterException {
+        List<Map<String, ?>> users = OrcaXmlrpcHandlerTest.getUsersMap();
+
+        final Properties sshProperties = ReservationConverter.generateSSHProperties(users);
+
+        assertNotNull("Generated SSH Properties were null", sshProperties);
+
+        final String keyProperty = sshProperties
+                .getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
+
+        assertNotNull("Returned SSH key was null", keyProperty);
+    }
+
+    /**
+     * Test that SSH key property is generated from UsersMap. This function passes the keys in the Map as an Object[],
+     * which is how they appear from XMLRPC.
+     *
+     * @throws ReservationConverter.ReservationConverterException
+     */
+    public void testGenerateSSHPropertiesWithObjectKey() throws ReservationConverter.ReservationConverterException {
+        List<Map<String, ?>> users = getUsersMapWithObjects();
+
+        final Properties sshProperties = ReservationConverter.generateSSHProperties(users);
+
+        assertNotNull("Generated SSH Properties were null", sshProperties);
+
+        final String keyProperty = sshProperties
+                .getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
+
+        assertNotNull("Returned SSH key was null", keyProperty);
+    }
+
+    /**
+     * Test that SSH key property is generated from UsersMap. This function passes the keys in the Map as a String
+     * object.
+     *
+     * @throws ReservationConverter.ReservationConverterException
+     */
+    public void testGenerateSSHPropertiesWithStringKey() throws ReservationConverter.ReservationConverterException {
+        List<Map<String, ?>> users = getUsersMapWithString();
+
+        final Properties sshProperties = ReservationConverter.generateSSHProperties(users);
+
+        assertNotNull("Generated SSH Properties were null", sshProperties);
+
+        final String keyProperty = sshProperties
+                .getProperty(String.format(ConfigurationProperties.ConfigSSHKeyPattern, 1));
+
+        assertNotNull("Returned SSH key was null", keyProperty);
+    }
+
+    /**
+     * Similar to function in OrcaXmlrpcHandlerTest, this is a slightly modified version explicity for testing
+     * ReservationConverter
+     *
+     * Craft a userMap required by createSlice() and modifySlice().
+     *
+     * @return a UserMap with junk values
+     */
+    private static List<Map<String, ?>> getUsersMapWithObjects() {
+        List<Map<String, ?>> users = new ArrayList<>();
+        Map<String, Object> userEntry = new HashMap<>();
+        Object[] keys = { "ssh-rsa this is not a key" };
+        userEntry.put("keys", keys);
+        userEntry.put("login", "root");
+        userEntry.put("sudo", false);
+        users.add(userEntry);
+        return users;
+    }
+
+    /**
+     * Similar to function in OrcaXmlrpcHandlerTest, this is a slightly modified version explicity for testing
+     * ReservationConverter
+     *
+     * Craft a userMap required by createSlice() and modifySlice().
+     *
+     * @return a UserMap with junk values
+     */
+    private static List<Map<String, ?>> getUsersMapWithString() {
+        List<Map<String, ?>> users = new ArrayList<>();
+        Map<String, Object> userEntry = new HashMap<>();
+        String keys = "ssh-rsa this is not a key";
+        userEntry.put("keys", keys);
+        userEntry.put("login", "root");
+        userEntry.put("sudo", false);
+        users.add(userEntry);
+        return users;
+    }
 }

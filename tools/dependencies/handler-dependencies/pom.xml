@@ -6,17 +6,17 @@
          orca.dependencies 
     </groupId> 
     <artifactId>
-         handler-dependencies
+         handler-dependencies 
     </artifactId> 
     <packaging>
          pom 
     </packaging> 
     <name>
-         Orca Dependencies Handlers
+         Orca Dependencies Handlers 
     </name> 
     <description>
-         A grouping of all of the 'handlers' in a single place, for dependency management.
-    </description>
+         A grouping of all of the 'handlers' in a single place, for dependency management. 
+    </description> 
     <parent> 
         <groupId>
              orca 
@@ -28,160 +28,160 @@
              5.2.2-SNAPSHOT 
         </version> 
     </parent> 
-    <dependencies>
-        <dependency>
+    <dependencies> 
+        <dependency> 
             <groupId>
-                orca.core
-            </groupId>
+                 orca.core 
+            </groupId> 
             <artifactId>
-                handlers
-            </artifactId>
+                 handlers 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers
-            </groupId>
+                 orca.handlers 
+            </groupId> 
             <artifactId>
-                ec2
-            </artifactId>
+                 ec2 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers
-            </groupId>
+                 orca.handlers 
+            </groupId> 
             <artifactId>
-                xcat
-            </artifactId>
+                 xcat 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers
-            </groupId>
+                 orca.handlers 
+            </groupId> 
             <artifactId>
-                nodeagent2
-            </artifactId>
+                 nodeagent2 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers
-            </groupId>
+                 orca.handlers 
+            </groupId> 
             <artifactId>
-                ibm_ds
-            </artifactId>
+                 ibm_ds 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers
-            </groupId>
+                 orca.handlers 
+            </groupId> 
             <artifactId>
-                slurm
-            </artifactId>
+                 slurm 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers
-            </groupId>
+                 orca.handlers 
+            </groupId> 
             <artifactId>
-                storage_service
-            </artifactId>
+                 storage_service 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers.network
-            </groupId>
+                 orca.handlers.network 
+            </groupId> 
             <artifactId>
-                nsi
-            </artifactId>
+                 nsi 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers.network
-            </groupId>
+                 orca.handlers.network 
+            </groupId> 
             <artifactId>
-                oscars
-            </artifactId>
+                 oscars 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers.network
-            </groupId>
+                 orca.handlers.network 
+            </groupId> 
             <artifactId>
-                oess
-            </artifactId>
+                 oess 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-        <dependency>
+                 pom 
+            </type> 
+        </dependency> 
+        <dependency> 
             <groupId>
-                orca.handlers.network
-            </groupId>
+                 orca.handlers.network 
+            </groupId> 
             <artifactId>
-                providers
-            </artifactId>
+                 providers 
+            </artifactId> 
             <version>
-                ${project.version}
-            </version>
+                 ${project.version} 
+            </version> 
             <type>
-                pom
-            </type>
-        </dependency>
-    </dependencies>
+                 pom 
+            </type> 
+        </dependency> 
+    </dependencies> 
 </project>

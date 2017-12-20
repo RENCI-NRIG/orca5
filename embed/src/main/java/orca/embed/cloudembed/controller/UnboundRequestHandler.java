@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.Collections;
 
 import orca.embed.cloudembed.IConnectionManager;
 import orca.embed.policyhelpers.DomainResourcePools;
@@ -239,24 +240,33 @@ public class UnboundRequestHandler extends MultiPointHandler {
             master_ont.addProperty(NdlCommons.inDomainProperty, max_domain_rs);
         Individual slave_ont = requestModel.createIndividual(slave_str, NdlCommons.computeElementClass);
         slave_ont.addProperty(NdlCommons.inDomainProperty, second_domain_rs);
-        DomainResourceType dType = new DomainResourceType(rType, x1);
 
+        DomainResourceType dType = new DomainResourceType(rType, x1);
         dType.setDomainURL(max_domain);
         dType.setRank(10);
         ComputeElement master_ce = new ComputeElement(requestModel, master_ont);
         master_ce.setResourceType(dType);
+        master_ce.setGroup("MasterGroup");
+
         dType = new DomainResourceType(rType, x2);
         dType.setDomainURL(second_domain);
         dType.setRank(10);
         ComputeElement slave_ce = new ComputeElement(requestModel, slave_ont);
         slave_ce.setResourceType(dType);
+        slave_ce.setGroup("SlaveGroup");
+
         // add interfaces....
 
         getVMInfo(master_ce, rr);
         getVMInfo(slave_ce, rr);
 
-        connection.setNe1(master_ce);
-        connection.setNe2(slave_ce);
+        final ComputeElement masterNE = createNE(requestModel, max_domain_rs, Collections.singletonList(master_ce),
+                connection);
+        final ComputeElement slaveNE = createNE(requestModel, second_domain_rs, Collections.singletonList(slave_ce),
+                connection);
+
+        connection.setNe1(masterNE);
+        connection.setNe2(slaveNE);
 
         // process node dependency,image information, etc.
         // request.setRequest(connection);

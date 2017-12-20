@@ -1144,7 +1144,7 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @return a UserMap with junk values
      */
-    private static List<Map<String, ?>> getUsersMap() {
+    protected static List<Map<String, ?>> getUsersMap() {
         List<Map<String, ?>> users = new ArrayList<>();
         Map<String, Object> userEntry = new HashMap<>();
         List<String> keys = new ArrayList<String>();

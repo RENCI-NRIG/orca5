@@ -431,25 +431,25 @@
                                                 <var name="iface.net.vlan" unset="true"></var> 
                                                 <var name="iface.mac" unset="true"></var> 
                                                 <echo>
-                                                    iface @{iface}
+                                                     iface @{iface} 
                                                 </echo> 
                                                 <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" /> 
                                                 <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" /> 
                                                 <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" /> 
                                                 <echo>
-                                                    quantum.tenant.id ${quantum.tenant.id}
+                                                     quantum.tenant.id ${quantum.tenant.id} 
                                                 </echo> 
                                                 <echo>
-                                                    shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}
+                                                     shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance} 
                                                 </echo> 
                                                 <echo>
-                                                    iface.mac ${iface.mac}
+                                                     iface.mac ${iface.mac} 
                                                 </echo> 
                                                 <echo>
-                                                    iface.net.vlan ${iface.net.vlan}
+                                                     iface.net.vlan ${iface.net.vlan} 
                                                 </echo> 
                                                 <echo>
-                                                    iface.net.name ${iface.net.name}
+                                                     iface.net.name ${iface.net.name} 
                                                 </echo> 
                                                 <var name="code" unset="true"></var> 
                                                 <var name="add.iface.output" unset="true"></var> 
@@ -478,10 +478,10 @@
                                                     <env key="QUANTUM_NET_VLAN" value="${iface.net.vlan}" /> 
                                                 </exec> 
                                                 <echo>
-                                                    result code: ${code}
+                                                     result code: ${code} 
                                                 </echo> 
                                                 <echo>
-                                                    output: ${add.iface.output}
+                                                     output: ${add.iface.output} 
                                                 </echo> 
                                                 <if> 
                                                     <isset property="instance.quantum.ifaces" /> 
@@ -499,7 +499,7 @@
                                         </for> 
                                         <property name="shirako.save.unit.quantum.ifaces" value="${instance.quantum.ifaces}" /> 
                                         <echo>
-                                            shirako.save.unit.quantum.ifaces: ${shirako.save.unit.quantum.ifaces}
+                                             shirako.save.unit.quantum.ifaces: ${shirako.save.unit.quantum.ifaces} 
                                         </echo> 
                                     </then> 
                                 </if> 
@@ -688,28 +688,28 @@
                     <var name="iface.net.vlan" unset="true"></var> 
                     <var name="iface.mac" unset="true"></var> 
                     <echo>
-                        iface @{iface}
+                         iface @{iface} 
                     </echo> 
                     <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" /> 
                     <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" /> 
                     <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" /> 
                     <echo>
-                        quantum.tenant.id ${quantum.tenant.id}
+                         quantum.tenant.id ${quantum.tenant.id} 
                     </echo> 
                     <echo>
-                        shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}
+                         shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance} 
                     </echo> 
                     <echo>
-                        iface.mac ${iface.mac}
+                         iface.mac ${iface.mac} 
                     </echo> 
                     <echo>
-                        iface.net.vlan ${iface.net.vlan}
+                         iface.net.vlan ${iface.net.vlan} 
                     </echo> 
                     <echo>
-                        iface.net.name ${iface.net.name}
+                         iface.net.name ${iface.net.name} 
                     </echo> 
                     <echo>
-                        unit.ec2.instance ${unit.ec2.instance}
+                         unit.ec2.instance ${unit.ec2.instance} 
                     </echo> 
                     <echo message="Running under emulation...exiting" /> 
                     <property name="shirako.target.code" value="0" /> 
@@ -794,10 +794,10 @@
                         <env key="QUANTUM_NET_VLAN" value="${modify.@{seqnum}.vlan.tag}" /> 
                     </exec> 
                     <echo>
-                        result code: ${code}
+                         result code: ${code} 
                     </echo> 
                     <echo>
-                        output: ${add.iface.output}
+                         output: ${add.iface.output} 
                     </echo> 
                     <!-- add properties to userdata file --> 
                     <echo message="About to update userdata file: " /> 
@@ -817,14 +817,14 @@
                     <property name="target.ip" value="${modify.@{seqnum}.target.ip}" /> 
                     <if> 
                         <and> 
-                            <not>
-                                <contains string="${storage_type}" substring="modify" />
+                            <not> 
+                                <contains string="${storage_type}" substring="modify" /> 
                             </not> 
-                            <not>
-                                <contains string="${port}" substring="modify" />
+                            <not> 
+                                <contains string="${port}" substring="modify" /> 
                             </not> 
-                            <not>
-                                <contains string="${target.ip}" substring="modify" />
+                            <not> 
+                                <contains string="${target.ip}" substring="modify" /> 
                             </not> 
                         </and> 
                         <then> 
@@ -999,28 +999,28 @@
                     <var name="iface.net.vlan" unset="true"></var> 
                     <var name="iface.mac" unset="true"></var> 
                     <echo>
-                        iface @{iface}
+                         iface @{iface} 
                     </echo> 
                     <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" /> 
                     <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" /> 
                     <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" /> 
                     <echo>
-                        quantum.tenant.id ${quantum.tenant.id}
+                         quantum.tenant.id ${quantum.tenant.id} 
                     </echo> 
                     <echo>
-                        shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}
+                         shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance} 
                     </echo> 
                     <echo>
-                        iface.mac ${iface.mac}
+                         iface.mac ${iface.mac} 
                     </echo> 
                     <echo>
-                        iface.net.vlan ${iface.net.vlan}
+                         iface.net.vlan ${iface.net.vlan} 
                     </echo> 
                     <echo>
-                        iface.net.name ${iface.net.name}
+                         iface.net.name ${iface.net.name} 
                     </echo> 
                     <echo>
-                        unit.ec2.instance ${unit.ec2.instance}
+                         unit.ec2.instance ${unit.ec2.instance} 
                     </echo> 
                     <echo message="Running under emulation...exiting" /> 
                     <property name="shirako.target.code" value="0" /> 
@@ -1076,10 +1076,10 @@
                         <env key="QUANTUM_NET_VLAN" value="${modify.@{seqnum}.vlan.tag}" /> 
                     </exec> 
                     <echo>
-                        result code: ${code}
+                         result code: ${code} 
                     </echo> 
                     <echo>
-                        output: ${add.iface.output}
+                         output: ${add.iface.output} 
                     </echo> 
                     <!-- add property to userdata file TODO: add actual config values --> 
                     <ec2.removeproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}" section="interfaces" key="${modify.@{seqnum}.mac}" /> 
