@@ -11,7 +11,7 @@
              orca 
         </groupId> 
         <version>
-             5.3.0 
+             5.3.1-SNAPSHOT 
         </version> 
     </parent> 
     <name>
@@ -24,7 +24,7 @@
          ndl 
     </artifactId> 
     <version>
-         5.3.0 
+         5.3.1-SNAPSHOT 
     </version> 
     <url>
          http://maven.apache.org 
@@ -140,7 +140,7 @@
                  util 
             </artifactId> 
             <version>
-                 5.3.0 
+                 5.3.1-SNAPSHOT 
             </version> 
         </dependency> 
     </dependencies> 
