@@ -2331,12 +2331,9 @@ public class ReservationConverter implements LayerConstant {
                 } else if (keysObject instanceof Object[]) {
                     final Object[] keysObjectArray = (Object[]) keysObject;
                     userKeys = Arrays.asList(Arrays.copyOf(keysObjectArray, keysObjectArray.length, String[].class));
-                } else if (keysObject instanceof String) {
-                    userKeys = Collections.singletonList((String) keysObject);
                 } else {
-                    Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class "
-                            + keysObject.getClass().getCanonicalName());
-                    continue;
+                    // we probably only know at this point that it is an 'Object'.
+                    userKeys = Collections.singletonList((String) keysObject);
                 }
             } catch (ClassCastException cce) {
                 Globals.Log.error("Could not coerce " + KEYS_FIELD + " to List. Object was of class "
