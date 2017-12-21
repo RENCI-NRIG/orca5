@@ -137,7 +137,7 @@ public class OrcaRegressionModifyTest {
             // #122
             System.out.println("Checking for requested Resource Constraints");
             assertReservationsHaveResourceConstraints(computedReservations);
-            assertReservationsHaveCorrectInterfaceParent(slice);
+            assertNodeGroupReservationsHaveCorrectInterfaceNames(slice);
         } else if (requestFilename.contains("137_")) {
             System.out.println("Checking for Network Interfaces");
             // Nodes added in NodeGroup Increase need to have a Network interface

@@ -354,7 +354,7 @@ public class OrcaXmlrpcAssertions {
      *
      * @param slice
      */
-    protected static void assertReservationsHaveCorrectInterfaceParent(XmlrpcControllerSlice slice) {
+    protected static void assertNodeGroupReservationsHaveCorrectInterfaceNames(XmlrpcControllerSlice slice) {
         Logger logger = Globals.getLogger(OrcaXmlrpcAssertions.class.getSimpleName());
 
         final RequestWorkflow workflow = slice.getWorkflow();
@@ -377,6 +377,8 @@ public class OrcaXmlrpcAssertions {
                 // Not OK: http://geni-orca.renci.org/owl/713280a5-582a-4b8f-ba31-d03cebf8ba58#VLAN0-NodeGroup0/0
                 assertFalse("Invalid parent URI name for " + element.getName() + " " + parentUri,
                         parentUri.matches(".*NodeGroup\\d+/\\d+.*"));
+                assertTrue("Invalid interface name for " + element.getName() + " " + clientInterface.getName(),
+                        clientInterface.getName().matches(".*NodeGroup\\d+/\\d+/intf"));
             }
         }
 
