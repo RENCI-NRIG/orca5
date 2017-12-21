@@ -19,6 +19,12 @@ One of the docker containers started (in emulation) will be a MySQL container, t
 Tests are run automatically on our Jenkins server, following every commit pushed to GitHub.
 https://ci.exogeni.net:8443/
 
+### Tests that are run
+Many, but not all, of the current ORCA tests are run as if requests were submitted to the Controller:
+- [OrcaXmlrpcHandlerTest](https://github.com/RENCI-NRIG/orca5/blob/master/controllers/xmlrpc/src/test/java/orca/controllers/xmlrpc/OrcaXmlrpcHandlerTest.java)
+- [OrcaRegressionTest](https://github.com/RENCI-NRIG/orca5/blob/master/controllers/xmlrpc/src/test/java/orca/controllers/xmlrpc/OrcaRegressionTest.java)
+- [OrcaRegressionModifyTest](https://github.com/RENCI-NRIG/orca5/blob/master/controllers/xmlrpc/src/test/java/orca/controllers/xmlrpc/OrcaRegressionModifyTest.java)
+
 ## Interacting with ORCA
 You can download [Flukes](https://github.com/RENCI-NRIG/flukes) from here: http://geni-images.renci.org/webstart/flukes.jnlp
 And use that to connect to ExoGENI or your emulated ORCA.
