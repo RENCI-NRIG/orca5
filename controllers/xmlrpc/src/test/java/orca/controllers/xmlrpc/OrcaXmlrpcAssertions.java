@@ -377,8 +377,12 @@ public class OrcaXmlrpcAssertions {
                 // Not OK: http://geni-orca.renci.org/owl/713280a5-582a-4b8f-ba31-d03cebf8ba58#VLAN0-NodeGroup0/0
                 assertFalse("Invalid parent URI name for " + element.getName() + " " + parentUri,
                         parentUri.matches(".*NodeGroup\\d+/\\d+.*"));
+
+                // OK: http://geni-orca.renci.org/owl/713280a5-582a-4b8f-ba31-d03cebf8ba58#VLAN0-NodeGroup0/1/intf
+                // OK: http://geni-orca.renci.org/owl/713280a5-582a-4b8f-ba31-d03cebf8ba58#VLAN0-NodeGroup0/021a98a79-b840-432e-9ee7-4ed15a9be83f/intf
+                // Not OK: http://geni-orca.renci.org/owl/713280a5-582a-4b8f-ba31-d03cebf8ba58#VLAN0-NodeGroup0/0/1/intf
                 assertTrue("Invalid interface name for " + element.getName() + " " + clientInterface.getName(),
-                        clientInterface.getName().matches(".*NodeGroup\\d+/\\d+/intf"));
+                        clientInterface.getName().matches(".*NodeGroup\\d+/[\\w-]+/intf"));
             }
         }
 
