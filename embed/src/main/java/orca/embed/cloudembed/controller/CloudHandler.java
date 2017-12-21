@@ -729,9 +729,6 @@ public class CloudHandler extends MappingHandler {
         Resource intf_ont = current_intf.getResource();
         if (null != NdlCommons.getSameAsResource(intf_ont)){
             intf_ont = NdlCommons.getSameAsResource(intf_ont);
-
-            // probably should change the current_intf too? but i'm not sure how to find that from the intf_ont
-            //current_intf =
         }
 
         OntModel device_model = element.getModel();
@@ -764,7 +761,8 @@ public class CloudHandler extends MappingHandler {
         netmask = base_ip.netmask;
         String url = null;
         try {
-            new_ip = base_ip.getNewIpAddress(device_model, network_str, netmask, base_ip.getURI(), hole);
+            // #178 use the Ontology Resource URI for the name, since it might have been updated to the `sameAs` interface
+            new_ip = base_ip.getNewIpAddress(device_model, network_str, netmask, intf_ont.getURI(), hole);
 
             // #137, when IPs are not assigned, duplicate interfaces can be created
             if (-1 == hole) {
