@@ -24,6 +24,9 @@ public class OrcaRegressionModifyTest {
                 { "src/test/resources/122_request.rdf", "src/test/resources/122_nodegroups_increase_modify_request.rdf",
                         23 }, // we don't even have 23, but apparently the controller doesn't check
                 // NodeGroup modify
+                { "src/test/resources/122_with_autoip_request.rdf",
+                        "src/test/resources/122_nodegroups_increase_modify_request.rdf",
+                        23 }, // we don't even have 23
                 { "src/test/resources/122_request.rdf",
                         "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 5 },
                 // NodeGroup modify
@@ -134,6 +137,7 @@ public class OrcaRegressionModifyTest {
             // #122
             System.out.println("Checking for requested Resource Constraints");
             assertReservationsHaveResourceConstraints(computedReservations);
+            assertReservationsHaveCorrectInterfaceParent(slice);
         } else if (requestFilename.contains("137_")) {
             System.out.println("Checking for Network Interfaces");
             // Nodes added in NodeGroup Increase need to have a Network interface

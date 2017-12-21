@@ -350,6 +350,39 @@ public class OrcaXmlrpcAssertions {
     }
 
     /**
+     * Detects incorrect sameAs / Parent interface names from #178
+     *
+     * @param slice
+     */
+    protected static void assertReservationsHaveCorrectInterfaceParent(XmlrpcControllerSlice slice) {
+        Logger logger = Globals.getLogger(OrcaXmlrpcAssertions.class.getSimpleName());
+
+        final RequestWorkflow workflow = slice.getWorkflow();
+        final Collection<NetworkElement> boundElements = workflow.getBoundElements();
+
+        assertNotNull(boundElements);
+
+        for (NetworkElement element : boundElements) {
+            final LinkedList<Interface> interfaces = element.getClientInterface();
+
+            // VLANs don't have this list, we can skip them
+            if (null == interfaces) {
+                continue;
+            }
+
+            element.getResource().getProperty(NdlCommons.OWL_sameAs);
+            for (Interface clientInterface : interfaces) {
+                final String parentUri = clientInterface.getResource().getProperty(NdlCommons.OWL_sameAs).getResource().getURI();
+                // OK: http://geni-orca.renci.org/owl/713280a5-582a-4b8f-ba31-d03cebf8ba58#VLAN0-NodeGroup0
+                // Not OK: http://geni-orca.renci.org/owl/713280a5-582a-4b8f-ba31-d03cebf8ba58#VLAN0-NodeGroup0/0
+                assertFalse("Invalid parent URI name for " + element.getName() + " " + parentUri,
+                        parentUri.matches(".*NodeGroup\\d+/\\d+.*"));
+            }
+        }
+
+    }
+
+    /**
      * The list of NdlCommons.computeElementClass includes both the actual node elements, and each unique domain for
      * those node elements. In #157, a domain with both VM and BareMetal node elements would "lose" track of one of
      * those type of elements, which was exhibited in the domain for the "missing" one to not be present in this list.
