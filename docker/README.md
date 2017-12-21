@@ -16,6 +16,11 @@ Or, you can build individual containers manually using Maven:
 mvn clean package -Pdocker
 ```
 
+## ORCA configuration files
+Sample ORCA configuration files for emulation are stored in a private repo: [exogeni-emulation-config](https://github.com/RENCI-NRIG/exogeni-emulation-config)
+
+The run script (below) assumes these files are saved in `/opt/orca-oracle_1.8`
+
 ## Running the Docker images
 Four runnable Docker images will be created. Use this script to start them all:
 ```
@@ -73,6 +78,17 @@ You may find that you need to be able to get shell access inside a running conta
 ```
 docker exec -it orca-sm bash
 ```
+
+The default names for containers are:
+- `orca-mysql`
+- `orca-am-broker`
+- `orca -sm`
+- `orca-controller`
+
+### Changing running containers
+Making code changes will require you to re-build and re-launch the new container images.
+
+Configuration changes can be made on your local (non-Docker) file system (by default at /opt/orca-oracle_1.8), and then by restarting the docker containers (just run the `docker_run.sh` script again).
 
 ## Dependencies
 1. Docker must be installed on your system.  You will either need to run the above commands with sudo / as root, or add your current user to the 'docker' group.
