@@ -705,25 +705,31 @@ public class CloudHandler extends MappingHandler {
                     current_intf = intf;
                     break;
                 }
-                boolean outter_break = false;
+                boolean outer_break = false;
                 for (Object de : ce.getDependencies().toArray()) {
                     if (de instanceof NetworkConnection) {
                         NetworkConnection ne = (NetworkConnection) de;
                         logger.info("ncByInterface=" + ncByInterface.getName() + ";ne=" + ne.getName());
                         if ((ncByInterface.getName().equals(ne.getName())) && ne.hasConnection(link_device)) {
                             current_intf = intf;
-                            outter_break = true;
+                            outer_break = true;
                             break;
                         }
                     }
                 }
-                if (outter_break)
+                if (outer_break)
                     break;
             }
         }
 
         if (current_intf == null)
             return;
+
+        // #178 -- NodeGroup Increase needs to refer to the FirstElements Parent interface (sameAs)
+        Resource intf_ont = current_intf.getResource();
+        if (null != NdlCommons.getSameAsResource(intf_ont)){
+            intf_ont = NdlCommons.getSameAsResource(intf_ont);
+        }
 
         OntModel device_model = element.getModel();
         if (this.manifestModel != null)
@@ -755,8 +761,18 @@ public class CloudHandler extends MappingHandler {
         netmask = base_ip.netmask;
         String url = null;
         try {
-            new_ip = base_ip.getNewIpAddress(device_model, network_str, netmask, base_ip.getURI(), hole);
-            url = new_ip.getURI() + "/intf";
+            // #178 use the Ontology Resource URI for the name, since it might have been updated to the `sameAs` interface
+            new_ip = base_ip.getNewIpAddress(device_model, network_str, netmask, intf_ont.getURI(), hole);
+
+            // #137, when IPs are not assigned, duplicate interfaces can be created
+            if (-1 == hole) {
+                int index = ce.getURI().lastIndexOf("/");
+                String nodeUUID = index > 0 ? ce.getURI().substring(index + 1) : UUID.randomUUID().toString();
+                url = new_ip.getURI() + nodeUUID + "/intf";
+            } else {
+                url = new_ip.getURI() + "/intf";
+            }
+
             if (logger.isTraceEnabled()) {
                 logger.trace("new_ip " + new_ip + " using netmask " + netmask);
             }
@@ -766,18 +782,22 @@ public class CloudHandler extends MappingHandler {
         Interface new_intf = new Interface(device_model, url, url);
         OntResource new_intfResource = new_intf.getResource();
         new_intfResource.addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(device_model));
+        if (intf_ont.getProperty(NdlCommons.hostInterfaceName) != null) {
+            String site_host_interface = intf_ont.getProperty(NdlCommons.hostInterfaceName).getString();
+            new_intf.getResource().addProperty(NdlCommons.hostInterfaceName, site_host_interface);
+        }
         if (new_ip.cidr != null)
             new_intfResource.addProperty(NdlCommons.layerLabelIdProperty, new_ip.cidr);
         new_intfResource.addProperty(NdlCommons.ip4NetmaskProperty, netmask);
         new_intf.setLabel(new_ip);
         ce.addClientInterface(new_intf);
         edge_device.addClientInterface(new_intf);
-        new_intfResource.addProperty(NdlCommons.OWL_sameAs, current_intf.getResource());
+        new_intfResource.addProperty(NdlCommons.OWL_sameAs, intf_ont);
         logger.debug("CreateInterface:new_ip=" + new_ip.getURI() + ";url=" + url + ";new_intf=" + new_intf.getURI());
         ncByInterface = element.getConnectionByInterfaceName(current_intf);
         ce.setInterfaceName(ncByInterface, new_intf);
-        link_device.setFollowedBy(edge_device, new_intfResource);
-        edge_device.setPrecededBy(link_device, new_intfResource);
+
+        setEdgeNeighbourhood(edge_device, link_device, new_intf, ncByInterface);
     }
 
     protected void setEdgeNeighbourhood(DomainElement edge_device, DomainElement link_device, Interface new_intf,

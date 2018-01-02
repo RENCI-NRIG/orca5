@@ -472,7 +472,7 @@ public class ModifyHandler extends UnboundRequestHandler {
                         edge_device = createNewNodeGroupNode(firstElement, hole, link_device, domainName,
                                 manifestOntModel, requestModel, deviceList);
                     }
-                    createInterface(firstElement, edge_device, hole, link_device);
+                    createInterface(firstElement.getCe(), edge_device, hole, link_device);
                 }
             } else {
                 logger.debug("firstElement has no parent! No interface will be created.");
@@ -531,89 +531,6 @@ public class ModifyHandler extends UnboundRequestHandler {
         }
 
         return edge_device;
-    }
-
-    protected void createInterface(DomainElement element, DomainElement edge_device, int hole,
-            DomainElement link_device) throws InetNetworkException, UnknownHostException {
-        if (link_device == null)
-            return;
-
-        ComputeElement ce = edge_device.getCe();
-
-        ComputeElement element_ce = element.getCe();
-        NetworkConnection ncByInterface = null;
-
-        OntResource intf_ont = element.getPrecededBySetByElement(link_device.getURI());
-        if (intf_ont == null)
-            return;
-        Interface intf = element.getClientInterfaceByURI(intf_ont.getURI());
-
-        if (intf != null) {
-            IPAddress ip = (IPAddress) intf.getLabel();
-            InetNetwork ip_str_IP = new InetNetwork(ip.address, ip.netmask);
-            String network_str = null;
-            if (ip.address != null)
-                network_str = ip_str_IP.getNetwork();
-            IPAddress new_ip = null;
-            String url = ip.getURI();
-            int index = url.lastIndexOf("/intf");
-            url = index >= 0 ? url.substring(0, index) : url;
-            try {
-                new_ip = ip.getNewIpAddress(edge_device.getModel(), network_str, ip.netmask, url, hole);
-
-                // #137, when IPs are not assigned, duplicate interfaces can be created
-                if (-1 == hole) {
-                    index = ce.getURI().lastIndexOf("/");
-                    String nodeUUID = index > 0 ? ce.getURI().substring(index + 1) : UUID.randomUUID().toString();
-                    url = new_ip.getURI() + nodeUUID + "/intf";
-                } else {
-                    url = new_ip.getURI() + "/intf";
-                }
-
-                if (logger.isTraceEnabled()) {
-                    logger.trace("new_ip " + new_ip + " using netmask " + ip.netmask);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Interface new_intf = new Interface(edge_device.getModel(), url, url);
-            new_intf.getResource().addProperty(NdlCommons.ip4LocalIPAddressProperty,
-                    new_ip.getResource(edge_device.getModel()));
-            if (intf_ont.getProperty(NdlCommons.hostInterfaceName) != null) {
-                String site_host_interface = intf_ont.getProperty(NdlCommons.hostInterfaceName).getString();
-                new_intf.getResource().addProperty(NdlCommons.hostInterfaceName, site_host_interface);
-            }
-            if (new_ip.cidr != null)
-                new_intf.getResource().addProperty(NdlCommons.layerLabelIdProperty, new_ip.cidr);
-
-            new_intf.setLabel(new_ip);
-            ce.addClientInterface(new_intf);
-            edge_device.addClientInterface(new_intf);
-            new_intf.getResource().addProperty(NdlCommons.OWL_sameAs, intf.getResource());
-
-            ncByInterface = element_ce.getConnectionByInterfaceName(intf);
-            ce.setInterfaceName(ncByInterface, new_intf);
-
-            logger.debug("New intf=" + new_intf.getURI() + ";ip=" + new_ip.getResource(edge_device.getModel())
-                    + ";cidr=" + new_ip.cidr + ";intf.model=" + new_intf.getModel().equals(edge_device.getModel())
-                    + ";ncByInterface=" + ncByInterface);
-
-            setEdgeNeighbourhood(edge_device, link_device, new_intf, ncByInterface);
-        } else {
-            String domain_name = null;
-            if (link_device.getResource() != null)
-                domain_name = link_device.getResource().getProperty(NdlCommons.inDomainProperty).getResource().getURI();
-            else {
-                logger.error("No resource, url=" + link_device.getURI());
-                return;
-            }
-            logger.debug("ModifyHandler:no IP interface! intf_ont=" + intf_ont.getURI() + ";domain=" + domain_name);
-            OntResource edge_intf = getEdgeInterface(domain_name, null);
-            if (edge_intf != null) {
-                link_device.setFollowedBy(edge_device, edge_intf);
-                edge_device.setPrecededBy(link_device, edge_intf);
-            }
-        }
     }
 
     protected SystemNativeError removeElement(ModifyElement me, OntModel manifestOntModel,
