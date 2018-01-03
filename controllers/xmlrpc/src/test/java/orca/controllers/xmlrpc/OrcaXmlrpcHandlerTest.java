@@ -491,6 +491,7 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @throws Exception
      */
+    /*
     @Test
     public void testNodeWithTwoInterfacesInterdomainDeleteAdd() throws Exception {
         // Create Request
@@ -537,7 +538,7 @@ public class OrcaXmlrpcHandlerTest {
 
         // can't check that Link Parent and IP address matches very easily in Interdomain
     }
-
+	*/
     /**
      * Start with five nodes, with four nodes each connected to the central node (Node0). Of these starting nodes, three
      * nodes are all bound to RCI (including Node0). The remaining two nodes are bound at UH, for Inter-Domain
@@ -638,6 +639,7 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @throws Exception
      */
+    /*
     @Test
     public void testMixedDomainMultiStepModify() throws Exception {
         // Create Request
@@ -723,7 +725,7 @@ public class OrcaXmlrpcHandlerTest {
         input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
     }
-
+*/
     /**
      * Remove an existing Node, and the inter-domain links. This is not a clean process, because the inter-domain links
      * are not known ahead of time.
