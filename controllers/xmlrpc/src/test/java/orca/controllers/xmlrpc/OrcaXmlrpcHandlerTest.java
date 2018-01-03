@@ -1,6 +1,45 @@
 package orca.controllers.xmlrpc;
 
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertExpectedPropertyCounts;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertExpectedPropertyValues;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertLinkMatchesIPProperty;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertNetmaskPropertyPresent;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertReservationsHaveNetworkInterface;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertSliceHasNoDuplicateInterfaces;
+import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.ERR_RET_FIELD;
+import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.MSG_RET_FIELD;
+import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.MaxReservationDuration;
+import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.PropertyXmlrpcControllerUrl;
+import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.RET_RET_FIELD;
+import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.TERM_END_FIELD;
+import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.TICKETED_ENTITIES_FIELD;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
 import com.hp.hpl.jena.ontology.Individual;
+
 import orca.controllers.OrcaController;
 import orca.embed.policyhelpers.DomainResourcePools;
 import orca.embed.policyhelpers.SystemNativeError;
@@ -19,19 +58,6 @@ import orca.ndl.elements.NetworkElement;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.SliceID;
 import orca.shirako.container.Globals;
-import org.apache.log4j.Logger;
-import org.junit.Test;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
-import static orca.controllers.xmlrpc.OrcaXmlrpcHandler.*;
-import static org.junit.Assert.*;
 
 public class OrcaXmlrpcHandlerTest {
 
@@ -491,7 +517,6 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @throws Exception
      */
-    /*
     @Test
     public void testNodeWithTwoInterfacesInterdomainDeleteAdd() throws Exception {
         // Create Request
@@ -538,7 +563,7 @@ public class OrcaXmlrpcHandlerTest {
 
         // can't check that Link Parent and IP address matches very easily in Interdomain
     }
-	*/
+    
     /**
      * Start with five nodes, with four nodes each connected to the central node (Node0). Of these starting nodes, three
      * nodes are all bound to RCI (including Node0). The remaining two nodes are bound at UH, for Inter-Domain
@@ -639,7 +664,6 @@ public class OrcaXmlrpcHandlerTest {
      *
      * @throws Exception
      */
-    /*
     @Test
     public void testMixedDomainMultiStepModify() throws Exception {
         // Create Request
@@ -725,7 +749,7 @@ public class OrcaXmlrpcHandlerTest {
         input.close();
         assertExpectedPropertyValues(computedReservations, reservationProperties);
     }
-*/
+
     /**
      * Remove an existing Node, and the inter-domain links. This is not a clean process, because the inter-domain links
      * are not known ahead of time.
@@ -927,6 +951,7 @@ public class OrcaXmlrpcHandlerTest {
             }
 
             result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
+            Thread.sleep(1000);
 
             // verify results of modifySlice()
             assertNotNull(result);
