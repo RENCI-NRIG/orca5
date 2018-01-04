@@ -951,7 +951,7 @@ public class OrcaXmlrpcHandlerTest {
             }
 
             result = orcaXmlrpcHandler.modifySlice(slice_urn, credentials, modReq);
-            Thread.sleep(5000);
+            Thread.sleep(10000);
 
             // verify results of modifySlice()
             assertNotNull(result);
