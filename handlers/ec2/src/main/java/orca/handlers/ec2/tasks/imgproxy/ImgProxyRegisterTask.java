@@ -39,14 +39,16 @@ public class ImgProxyRegisterTask extends OrcaAntTask {
                 ByteArrayInputStream stream = new ByteArrayInputStream(returnVal.getBytes());
                 imageIds.load(stream);
 
-                // set the indicated property
+                // set the indicated property to actual value or empty string
                 getProject().setNewProperty(emiPropertyName, imageIds.getProperty(FILE_SYSTEM_IMAGE_KEY));
                 if (imageIds.getProperty(KERNEL_IMAGE_KEY) != null) {
                     getProject().setNewProperty(ekiPropertyName, imageIds.getProperty(KERNEL_IMAGE_KEY));
-                }
+                } else
+                	getProject().setNewProperty(ekiPropertyName, "");
                 if (imageIds.getProperty(RAMDISK_IMAGE_KEY) != null) {
                     getProject().setNewProperty(eriPropertyName, imageIds.getProperty(RAMDISK_IMAGE_KEY));
-                }
+                } else
+                	getProject().setNewProperty(eriPropertyName, "");
 
                 status = "SUCCESS";
             }
