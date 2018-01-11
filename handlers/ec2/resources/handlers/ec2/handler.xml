@@ -380,13 +380,17 @@
 													</not>
 													<then>
 														<if>
-															<not>
+															<and>
 																<!-- code 2 reserved for 'soft key insertion failures' -->
 																<equals arg="${icode}" arg2="2" />
-															</not>
+																<isset property="ssh.key.insertion.soft.failure"/> 
+															</and>
 															<then>
-																<fail message="Unable to create account ${loginProperty}, failing" />
+																<echo message="Unable to create account ${loginProperty}, logging soft failure" />
 															</then>
+															<else>
+																<fail message="Unable to create account ${loginProperty}, failing" />
+															</else>
 														</if>
 													</then>
 												</if>
