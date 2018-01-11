@@ -135,6 +135,9 @@
 							<then>
 								<var name="code" unset="true" />
 								<var name="message" unset="true" />
+								<var name="ec2.ami.name" unset="true" />
+								<var name="ec2.aki.name" unset="true" />
+								<var name="ec2.ari.name" unset="true" />
 								<echo message="invoking image proxy ${ec2.img.proxy.url} to download and install image ${config.image.url}... (may take some time)" />
 								<!-- config.image.url and config.image.guid are externally specified -->
 								<ec2.image.proxy.register url="${config.image.url}" signature="${config.image.guid}" axisTimeout="${ec2.img.proxy.timeout}" imgproxyServiceUrl="${ec2.img.proxy.url}" statusPropertyName="img.proxy.status" emiPropertyName="img.proxy.emi" ekiPropertyName="img.proxy.eki" eriPropertyName="img.proxy.eri" />
@@ -149,14 +152,12 @@
 									</then>
 									<else>
 										<echo message="New EMI from image proxy is ${img.proxy.emi}" />
-										<var name="ec2.ami.name" unset="true" />
 										<property name="ec2.ami.name" value="${img.proxy.emi}" />
 										<property name="code" value="0" />
 										<if>
 											<isset property="img.proxy.eki" />
 											<then>
 												<echo message="New EKI from image proxy is ${img.proxy.eki}" />
-												<var name="ec2.aki.name" unset="true" />
 												<property name="ec2.aki.name" value="${img.proxy.eki}" />
 											</then>
 										</if>
@@ -164,7 +165,6 @@
 											<isset property="img.proxy.eri" />
 											<then>
 												<echo message="New ERI from image proxy is ${img.proxy.eri}" />
-												<var name="ec2.ari.name" unset="true" />
 												<property name="ec2.ari.name" value="${img.proxy.eri}" />
 											</then>
 										</if>
@@ -379,7 +379,15 @@
 														<equals arg1="${icode}" arg2="0" />
 													</not>
 													<then>
-														<fail message="Unable to create account ${loginProperty}, failing" />
+														<if>
+															<not>
+																<!-- code 2 reserved for 'soft key insertion failures' -->
+																<equals arg="${icode}" arg2="2" />
+															</not>
+															<then>
+																<fail message="Unable to create account ${loginProperty}, failing" />
+															</then>
+														</if>
 													</then>
 												</if>
 											</sequential>
