@@ -863,7 +863,11 @@ class VM:
         # https://github.com/RENCI-NRIG/orca5/pull/166/files
         # https://github.com/RENCI-NRIG/exogeni/issues/117
         # allocate floating ip
-        floating_addr = self._allocate_floating_ip()
+        try: 
+            floating_addr = self._allocate_floating_ip()
+        except Exception as e:
+            LOG.info('Nova failed to allocate floating ip to the VM ' + str(new_vm_id))
+
         if floating_addr is not None:
             LOG.info("VM " + new_vm_id + " is allocated floating ip " + floating_addr)
             # assign floating ip
@@ -871,7 +875,6 @@ class VM:
         else:
             try:
                 console_log = str(VM.get_console_log_by_ID(new_vm_id))
-                LOG.info('Nova failed to allocate floating ip to the VM ' + str(new_vm_id))
             except Exception:
                 console_log = 'Cannot get console log'
             self._clean_all(new_vm_id)
@@ -1009,106 +1012,17 @@ class VM:
 
         if (os.environ['EC2_SSH_TIMEOUT']).isdigit():
             ssh_timeout = int(os.environ['EC2_SSH_TIMEOUT'])
-            else:
+        else:
             ssh_timeout = 0
 
-    # ip = self._get_floating_ip_by_id(id)
-    ip = instance_ip
+        LOG.debug('prepare_key')
 
-    for i in range(retries):
-        cmd = None
-        try:
-            cmd = ["ssh", "-q",
-                   "-o", "PreferredAuthentications=publickey",
-                   "-o", "HostbasedAuthentication=no",
-                   "-o", "PasswordAuthentication=no",
-                   "-o", "StrictHostKeyChecking=no",
-                   "-o", "BatchMode=yes",
-                   "-o", "ConnectTimeout=50",
-                   "-i", str(root_ssh_key),
-                   str('root') + "@" + str(ip),
-                   "echo " + str(user_ssh_key) + " >> .ssh/authorized_keys"]
-            rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
+        # ip = self._get_floating_ip_by_id(id)
+        ip = instance_ip
 
-            if rtncode == 0:
-                return True
-
-        except Exception as e:
-            LOG.error("prepare-key: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-            pass
-
-        LOG.warning("Failed cmd: " + str(cmd) + ", retrying (" + str(i) + ")")
-        time.sleep(timeout)
-
-    if i == retries:
-        LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
-        return False
-
-
-@classmethod
-def prepare_keys(self, instance_ip, user_id, user_ssh_keys, shouldSudo, root_ssh_key, retries=1, timeout=3):
-    import traceback
-
-    if (os.environ['EC2_SSH_TIMEOUT']).isdigit():
-        ssh_timeout = int(os.environ['EC2_SSH_TIMEOUT'])
-        else:
-        ssh_timeout = 0
-
-
-LOG.debug('prepare_keys')
-LOG.debug('instance_ip: ' + str(instance_ip))
-LOG.debug('user_id:' + str(user_id))
-LOG.debug('user_ssh_keys:' + str(user_ssh_keys))
-LOG.debug('shouldSudo:' + str(shouldSudo))
-LOG.debug('root_ssh_key:' + str(root_ssh_key))
-
-if user_id == 'root':
-    for key in user_ssh_keys:
-        ret = VM.prepare_key(instance_ip, key, root_ssh_key)
-        if not ret:
-            return False
-
-    return True
-
-else:
-    # if its a new user
-    ip = instance_ip
-
-    # create account and add to sudoers
-    # ssh $SSH_OPTS -i $KEY root@${machine} "useradd -m $user_login"
-    for i in range(retries):
-        cmd = None
-        try:
-            cmd = ["ssh", "-q",
-                   "-o", "PreferredAuthentications=publickey",
-                   "-o", "HostbasedAuthentication=no",
-                   "-o", "PasswordAuthentication=no",
-                   "-o", "StrictHostKeyChecking=no",
-                   "-o", "BatchMode=yes",
-                   "-o", "ConnectTimeout=50",
-                   "-i", str(root_ssh_key),
-                   str('root') + "@" + str(ip),
-                   "useradd -m " + str(user_id)]
-            rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
-
-            if rtncode == 0:
-                break
-
-        except Exception as e:
-            LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-            return False
-
-        LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
-        time.sleep(timeout)
-
-    if i == retries:
-        LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
-        return False
-
-    # ssh $SSH_OPTS -i $KEY root@${machine} "echo '${user_login} ALL=(ALL)  ALL' >> /etc/sudoers"
-    if shouldSudo.lower() == 'yes':
         for i in range(retries):
             cmd = None
+            seq = i
             try:
                 cmd = ["ssh", "-q",
                        "-o", "PreferredAuthentications=publickey",
@@ -1119,91 +1033,186 @@ else:
                        "-o", "ConnectTimeout=50",
                        "-i", str(root_ssh_key),
                        str('root') + "@" + str(ip),
-                       "echo '" + str(user_id) + " ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"]
+                       "echo " + str(user_ssh_key) + " >> .ssh/authorized_keys"]
                 rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
 
                 if rtncode == 0:
                     break
 
             except Exception as e:
-                LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-                return False
+                LOG.error("prepare-key: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+                pass
 
-            LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
+            LOG.warning("Failed cmd: " + str(cmd) + ", retrying (" + str(i) + ")")
             time.sleep(timeout)
 
-        if i == retries:
+
+        if seq == retries-1 :
             LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
             return False
-    else:
-        LOG.debug("Skipping adding user to sudoers")
 
-    # USERHOMEPREFIX=`ssh $SSH_OPTS -i $KEY root@${machine} "useradd -D | grep HOME | awk '{ split(\\$0, a, \"=\"); print a[2]}'"`
-    # guess home_prefix == /home then try to find reall prefix
-    user_home_prefix = '/home'
-    for i in range(retries):
-        cmd = None
-        try:
-            cmd = ["ssh", "-q",
-                   "-o", "PreferredAuthentications=publickey",
-                   "-o", "HostbasedAuthentication=no",
-                   "-o", "PasswordAuthentication=no",
-                   "-o", "StrictHostKeyChecking=no",
-                   "-o", "BatchMode=yes",
-                   "-o", "ConnectTimeout=50",
-                   "-i", str(root_ssh_key),
-                   str('root') + "@" + str(ip),
-                   "useradd -D | grep HOME | awk '{ split(\\$0, a, \"=\"); print a[2]}'"]
-            rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
+        return True
 
-            if rtncode == 0:
-                user_home_prefix = data_stdout
-                break
 
-        except Exception as e:
-            LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-
-        LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
-        time.sleep(timeout)
-
-    if i == retries:
-        LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
-
-    # ssh $SSH_OPTS -i $KEY root@${machine} "echo ${user_key} >> ${USERHOMEPREFIX}/${user_login}/.ssh/authorized_keys"
-    for user_key in user_ssh_keys:
-        for i in range(retries):
-            cmd = None
-            try:
-                cmd = ["ssh", "-q",
-                       "-o", "PreferredAuthentications=publickey",
-                       "-o", "HostbasedAuthentication=no",
-                       "-o", "PasswordAuthentication=no",
-                       "-o", "StrictHostKeyChecking=no",
-                       "-o", "BatchMode=yes",
-                       "-o", "ConnectTimeout=50",
-                       "-i", str(root_ssh_key),
-                       str('root') + "@" + str(ip),
-                       "mkdir -p " + str(user_home_prefix) + "/" + str(user_id) + "/.ssh; echo " + str(
-                           user_key) + " >> " + str(user_home_prefix) + "/" + str(
-                           user_id) + "/.ssh/authorized_keys; chown -R " + str(user_id) + ":" + str(user_id)
-                       + " " + str(user_home_prefix) + "/" + str(user_id) + "/.ssh"]
-                rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
-
-                if rtncode == 0:
-                    break
-
-            except Exception as e:
-                LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-                return False
-
-            LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
-            time.sleep(timeout)
-
+    @classmethod
+    def prepare_keys(self, instance_ip, user_id, user_ssh_keys, shouldSudo, root_ssh_key, retries=1, timeout=3):
+        import traceback
+    
+        if (os.environ['EC2_SSH_TIMEOUT']).isdigit():
+            ssh_timeout = int(os.environ['EC2_SSH_TIMEOUT'])
+        else:
+            ssh_timeout = 0
+    
+    
+        LOG.debug('prepare_keys')
+        LOG.debug('instance_ip: ' + str(instance_ip))
+        LOG.debug('user_id:' + str(user_id))
+        LOG.debug('user_ssh_keys:' + str(user_ssh_keys))
+        LOG.debug('shouldSudo:' + str(shouldSudo))
+        LOG.debug('root_ssh_key:' + str(root_ssh_key))
+        
+        if user_id == 'root':
+            for key in user_ssh_keys:
+                ret = VM.prepare_key(instance_ip, key, root_ssh_key)
+                if not ret:
+                    return False
+        
+            return True
+        
+        else:
+            # if its a new user
+            ip = instance_ip
+        
+            # create account and add to sudoers
+            # ssh $SSH_OPTS -i $KEY root@${machine} "useradd -m $user_login"
+            for i in range(retries):
+                cmd = None
+                try:
+                    cmd = ["ssh", "-q",
+                           "-o", "PreferredAuthentications=publickey",
+                           "-o", "HostbasedAuthentication=no",
+                           "-o", "PasswordAuthentication=no",
+                           "-o", "StrictHostKeyChecking=no",
+                           "-o", "BatchMode=yes",
+                           "-o", "ConnectTimeout=50",
+                           "-i", str(root_ssh_key),
+                           str('root') + "@" + str(ip),
+                           "useradd -m " + str(user_id)]
+                    rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
+        
+                    if rtncode == 0:
+                        break
+        
+                except Exception as e:
+                    LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+                    return False
+        
+                LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
+                time.sleep(timeout)
+        
             if i == retries:
                 LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
                 return False
-
-    return True
+        
+            # ssh $SSH_OPTS -i $KEY root@${machine} "echo '${user_login} ALL=(ALL)  ALL' >> /etc/sudoers"
+            if shouldSudo.lower() == 'yes':
+                for i in range(retries):
+                    cmd = None
+                    try:
+                        cmd = ["ssh", "-q",
+                               "-o", "PreferredAuthentications=publickey",
+                               "-o", "HostbasedAuthentication=no",
+                               "-o", "PasswordAuthentication=no",
+                               "-o", "StrictHostKeyChecking=no",
+                               "-o", "BatchMode=yes",
+                               "-o", "ConnectTimeout=50",
+                               "-i", str(root_ssh_key),
+                               str('root') + "@" + str(ip),
+                               "echo '" + str(user_id) + " ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"]
+                        rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
+        
+                        if rtncode == 0:
+                            break
+        
+                    except Exception as e:
+                        LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+                        return False
+        
+                    LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
+                    time.sleep(timeout)
+        
+                if i == retries:
+                    LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
+                    return False
+            else:
+                LOG.debug("Skipping adding user to sudoers")
+        
+            # USERHOMEPREFIX=`ssh $SSH_OPTS -i $KEY root@${machine} "useradd -D | grep HOME | awk '{ split(\\$0, a, \"=\"); print a[2]}'"`
+            # guess home_prefix == /home then try to find reall prefix
+            user_home_prefix = '/home'
+            for i in range(retries):
+                cmd = None
+                try:
+                    cmd = ["ssh", "-q",
+                           "-o", "PreferredAuthentications=publickey",
+                           "-o", "HostbasedAuthentication=no",
+                           "-o", "PasswordAuthentication=no",
+                           "-o", "StrictHostKeyChecking=no",
+                           "-o", "BatchMode=yes",
+                           "-o", "ConnectTimeout=50",
+                           "-i", str(root_ssh_key),
+                           str('root') + "@" + str(ip),
+                           "useradd -D | grep HOME | awk '{ split(\\$0, a, \"=\"); print a[2]}'"]
+                    rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
+        
+                    if rtncode == 0:
+                        user_home_prefix = data_stdout
+                        break
+        
+                except Exception as e:
+                    LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+        
+                LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
+                time.sleep(timeout)
+        
+            if i == retries:
+                LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
+        
+            # ssh $SSH_OPTS -i $KEY root@${machine} "echo ${user_key} >> ${USERHOMEPREFIX}/${user_login}/.ssh/authorized_keys"
+            for user_key in user_ssh_keys:
+                for i in range(retries):
+                    cmd = None
+                    try:
+                        cmd = ["ssh", "-q",
+                               "-o", "PreferredAuthentications=publickey",
+                               "-o", "HostbasedAuthentication=no",
+                               "-o", "PasswordAuthentication=no",
+                               "-o", "StrictHostKeyChecking=no",
+                               "-o", "BatchMode=yes",
+                               "-o", "ConnectTimeout=50",
+                               "-i", str(root_ssh_key),
+                               str('root') + "@" + str(ip),
+                               "mkdir -p " + str(user_home_prefix) + "/" + str(user_id) + "/.ssh; echo " + str(
+                                   user_key) + " >> " + str(user_home_prefix) + "/" + str(
+                                   user_id) + "/.ssh/authorized_keys; chown -R " + str(user_id) + ":" + str(user_id)
+                               + " " + str(user_home_prefix) + "/" + str(user_id) + "/.ssh"]
+                        rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=ssh_timeout)
+        
+                        if rtncode == 0:
+                            break
+        
+                    except Exception as e:
+                        LOG.error("prepare-keys: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+                        return False
+        
+                    LOG.warning("prepare-keys: ssh failed, retrying (" + str(i) + "). " + str(cmd))
+                    time.sleep(timeout)
+        
+                    if i == retries:
+                        LOG.warning("Failed cmd  " + str(retries) + " times, giving up: " + str(cmd))
+                        return False
+        
+            return True
 
 # Upon import, read in the needed OpenStack credentials from one of the right places.
 if (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/novarc")):

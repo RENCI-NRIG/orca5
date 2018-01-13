@@ -382,7 +382,7 @@
 														<if>
 															<and>
 																<!-- code 2 reserved for 'soft key insertion failures' -->
-																<equals arg="${icode}" arg2="2" />
+																<equals arg1="${icode}" arg2="2" />
 																<isset property="ssh.key.insertion.soft.failure"/> 
 															</and>
 															<then>
