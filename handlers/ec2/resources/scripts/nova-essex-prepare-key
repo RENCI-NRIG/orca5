@@ -1,9 +1,7 @@
 #!/usr/bin/env python                                                                                                                                                                                  
+import logging.handlers
 import os
 import sys
-import logging as LOG
-import logging.handlers
-import traceback
 
 sys.path.append(os.environ['EC2_DIR'] + "/scripts")
 
@@ -89,7 +87,7 @@ try:
             LOG.debug("user_ssh_keys -- " + str(i))
 
             ret = VM.prepare_keys(instance_ip, user_name, user_ssh_keys, shouldSudo,
-                        os.environ['EUCA_KEY_DIR'] + "/" + os.environ['EC2_SSH_KEY'])
+                                  os.environ['EUCA_KEY_DIR'] + "/" + os.environ['EC2_SSH_KEY'])
             if ret:
                 LOG.info("nova-essex-prepare-key: Success " + str(instance_ip) + ": " + str(user_name))
             else:
