@@ -1,21 +1,16 @@
 package orca.controllers.xmlrpc;
 
-import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertEc2InstanceTypePresent;
-import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertManifestHasNumberOfComputeElements;
-import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.assertManifestWillProcess;
-import static org.junit.Assert.assertNotNull;
+import orca.manage.beans.TicketReservationMng;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import orca.manage.beans.TicketReservationMng;
-import orca.ndl.NdlCommons;
+import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Parameterized.class)
 public class OrcaRegressionTest {
@@ -91,11 +86,10 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/158_mp_one_domain_one_unbound_request.rdf", true, 4 + 0 },
                 { "../../embed/src/test/resources/orca/embed/158_mp_two_domain_one_unbound_request.rdf", true, 4 + 4 },
                 { "../../embed/src/test/resources/orca/embed/158_mp_three_domain_one_unbound_request.rdf", false,
-                        4 + 6 } /*,
+                        4 + 6 },
                 { "../../embed/src/test/resources/orca/embed/41_single_large_nodegroup_unbound_request.rdf", true,
                         133 },
                 { "../../embed/src/test/resources/orca/embed/41_mp_unbound_request.rdf", true, 134 }
-                */
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
                  * { "../../embed/src/test/resources/orca/embed/TS8/TS8-1.rdf", true, 12}, {
@@ -164,12 +158,6 @@ public class OrcaRegressionTest {
         }
 
         assertManifestWillProcess(slice);
-    }
-    
-    @BeforeClass
-    public static void setupTests() {
-    	System.out.println("Initializing NDL");
-    	NdlCommons.init();
     }
 
 }
