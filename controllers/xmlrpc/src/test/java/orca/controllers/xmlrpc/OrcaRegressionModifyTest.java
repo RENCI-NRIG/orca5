@@ -21,6 +21,7 @@ public class OrcaRegressionModifyTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
+        	/*
                 // Bootscripts need Velocity templating on Modify
                 { "src/test/resources/112_velocityRequest.rdf", "src/test/resources/112_velocityModifyRequest.rdf", 5 },
                 // NodeGroup modify
@@ -85,6 +86,7 @@ public class OrcaRegressionModifyTest {
                 { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
                         "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_B2_C1_modify_request.rdf",
                         17 },
+                        */
                 // Interdomain modify
                 { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
                         "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_to_B2_modify_request.rdf",
