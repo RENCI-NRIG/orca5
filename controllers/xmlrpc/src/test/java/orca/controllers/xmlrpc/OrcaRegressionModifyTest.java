@@ -1,6 +1,9 @@
 package orca.controllers.xmlrpc;
 
 import orca.manage.beans.TicketReservationMng;
+import orca.ndl.NdlCommons;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -145,6 +148,12 @@ public class OrcaRegressionModifyTest {
             assertSliceHasNoDuplicateInterfaces(slice);
         }
 
+    }
+    
+    @BeforeClass
+    public static void setupTests() {
+    	System.out.println("Initializing NDL");
+    	NdlCommons.init();
     }
 
 }
