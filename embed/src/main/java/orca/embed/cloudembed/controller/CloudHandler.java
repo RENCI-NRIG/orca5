@@ -797,11 +797,11 @@ public class CloudHandler extends MappingHandler {
         ncByInterface = element.getConnectionByInterfaceName(current_intf);
         ce.setInterfaceName(ncByInterface, new_intf);
 
-        System.out.println("SETTING NEIGHBORHOOD" );
-        System.out.println("  Edge Device " + edge_device.getName());
-        System.out.println("  Link Device " + link_device.getName());
-        System.out.println("  New Intf " + new_intf.getName());
-        System.out.println("  ncByInterface " + ncByInterface.getName());
+        //System.out.println("SETTING NEIGHBORHOOD" );
+        //System.out.println("  Edge Device " + edge_device.getName());
+        //System.out.println("  Link Device " + link_device.getName());
+        //System.out.println("  New Intf " + new_intf.getName());
+        //System.out.println("  ncByInterface " + ncByInterface.getName());
         setEdgeNeighbourhood(edge_device, link_device, new_intf, ncByInterface);
     }
 
@@ -820,30 +820,26 @@ public class CloudHandler extends MappingHandler {
                     if (new_intf.getResource() == null) {
                         logger.error("setEdgeNeighborhood new_intf.getResource() is null - this will cause errors");
                     }
-                    System.out.println("DIRECT");
                     link_device.setFollowedBy(edge_device, new_intf.getResource());
                     edge_device.setPrecededBy(link_device, new_intf.getResource());
                 } else { // Inter-site topology request: link=the neighboring domain; connection = requestconnection
-                	System.out.println("BEFORE LOOP");
                     for (Object de : ce.getDependencies().toArray()) {
                         if (de instanceof NetworkConnection) {
-                        	System.out.println("NetworkConnection");
                             NetworkConnection ne = (NetworkConnection) de;
                             // this IF doesn't fire sometimes for #180
-                            System.out.println("Before IF: ne=" + ne.getName() + " ncByInterface=" + ncByInterface.getName());
                             if (ne.getName().equals(ncByInterface.getName())) {
                                 if (ne.getFirstConnectionElement() != null)
                                     link_device = (DomainElement) ne.getFirstConnectionElement();
-                                System.out.println("LOOP");
                                 link_device.setFollowedBy(edge_device, new_intf.getResource());
                                 edge_device.setPrecededBy(link_device, new_intf.getResource());
+                                // break;
                             }
+                            // break statement must be moved into the if above, however even better not to have it /ib 01/23/18
                             //break;
                         }
                     }
                 }
             } else {
-            	System.out.println("LAST");
                 link_device.setFollowedBy(edge_device, new_intf.getResource());
                 edge_device.setPrecededBy(link_device, new_intf.getResource());
             }

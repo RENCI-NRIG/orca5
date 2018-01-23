@@ -91,11 +91,11 @@ public class OrcaRegressionTest {
                 { "../../embed/src/test/resources/orca/embed/158_mp_one_domain_one_unbound_request.rdf", true, 4 + 0 },
                 { "../../embed/src/test/resources/orca/embed/158_mp_two_domain_one_unbound_request.rdf", true, 4 + 4 },
                 { "../../embed/src/test/resources/orca/embed/158_mp_three_domain_one_unbound_request.rdf", false,
-                        4 + 6 } /*,
+                        4 + 6 },
                 { "../../embed/src/test/resources/orca/embed/41_single_large_nodegroup_unbound_request.rdf", true,
                         133 },
                 { "../../embed/src/test/resources/orca/embed/41_mp_unbound_request.rdf", true, 134 }
-                */
+                
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
                  * { "../../embed/src/test/resources/orca/embed/TS8/TS8-1.rdf", true, 12}, {
