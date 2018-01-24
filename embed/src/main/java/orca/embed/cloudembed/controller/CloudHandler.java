@@ -341,7 +341,8 @@ public class CloudHandler extends MappingHandler {
         logger.info("CloudHandler.IPAddressRange: domain name=" + domainName);
         // BitSet bSet = this.controllerAssignedLabel.get(domainName);
         BitSet bSet = getAvailableBitSet(domainName);
-        // System.out.println("1. CloudHandler domain="+domainName+";bSet="+bSet);
+        if (debugOn)
+        	System.out.println("1. CloudHandler domain="+domainName+";bSet="+bSet);
         IPAddressRange ip_range = null;
         for (Interface action_intf : intf_list) {
             action_intf_ont = action_intf.getResource();
@@ -369,12 +370,12 @@ public class CloudHandler extends MappingHandler {
                         if (ip_range == null) {
                             ip_range = new IPAddressRange(ip_addr, ip_netmask, ip_addr_ont);
                             ip_range.setbSet(bSet);
-                            // System.out.println("2. CloudHandler controller label
-                            // bSet="+this.controllerAssignedLabel.get(domainName));
+                            if (debugOn)
+                            	System.out.println("2. CloudHandler controller label bSet="+this.controllerAssignedLabel.get(domainName));
                         } else {
                             ip_range.modify(ip_addr, ip_netmask, ip_addr_ont);
-                            // System.out.println("3. CloudHandler controller label
-                            // bSet="+this.controllerAssignedLabel.get(domainName));
+                            if (debugOn) 
+                            	System.out.println("3. CloudHandler controller label bSet="+this.controllerAssignedLabel.get(domainName));
                         }
                     }
                 }
@@ -797,6 +798,13 @@ public class CloudHandler extends MappingHandler {
         ncByInterface = element.getConnectionByInterfaceName(current_intf);
         ce.setInterfaceName(ncByInterface, new_intf);
 
+        if (debugOn) {
+        	System.out.println("SETTING NEIGHBORHOOD" );
+        	System.out.println("  Edge Device " + edge_device.getName());
+        	System.out.println("  Link Device " + link_device.getName());
+        	System.out.println("  New Intf " + new_intf.getName());
+        	System.out.println("  ncByInterface " + ncByInterface.getName());
+        }
         setEdgeNeighbourhood(edge_device, link_device, new_intf, ncByInterface);
     }
 
@@ -821,13 +829,18 @@ public class CloudHandler extends MappingHandler {
                     for (Object de : ce.getDependencies().toArray()) {
                         if (de instanceof NetworkConnection) {
                             NetworkConnection ne = (NetworkConnection) de;
+                            // this IF caused problems firing sometimes for #178 due to random order of traversal of array above /ib 01/24/18
                             if (ne.getName().equals(ncByInterface.getName())) {
                                 if (ne.getFirstConnectionElement() != null)
                                     link_device = (DomainElement) ne.getFirstConnectionElement();
                                 link_device.setFollowedBy(edge_device, new_intf.getResource());
                                 edge_device.setPrecededBy(link_device, new_intf.getResource());
+                                // Ultimately the cause of #178 was the break statement below living outside the enclosing
+                                // IF statement. Now it is in the right place, however we must note that if somehow more
+                                // than one ne matches the enclosing if (due to a bug), the results of this function become
+                                // random. /ib 01/24/18
+                                break;
                             }
-                            break;
                         }
                     }
                 }
