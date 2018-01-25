@@ -188,6 +188,9 @@ lock_file /tmp/fl_lock
 
 # start FL
 
+# Flowvisor is compatible with Java 7
+JAVA_DIR="/usr/java/java7"
+
 # Set JVM options
 JVM_OPTS=""
 JVM_OPTS="$JVM_OPTS -server -d64"
@@ -202,7 +205,7 @@ while [ "$retry" != "0" ]; do
 	FLPORT=$(findRandomPort)
 	RESTPORT=$(( $FLPORT + 5000 ))
 	#java ${JVM_OPTS} -Dnet.orca.vlan=vlan-$FVVLAN- -Dnet.floodlightcontroller.restserver.RestApiServer.port=$RESTPORT -Dnet.floodlightcontroller.core.FloodlightProvider.openflowport=$FLPORT -Dfloodlight.modules=net.floodlightcontroller.learningswitch.LearningSwitch,net.floodlightcontroller.counter.NullCounterStore,net.floodlightcontroller.perfmon.NullPktInProcessingTime -jar ${FLEXEC} > /dev/null 2>&1 &
-	java ${JVM_OPTS} -Dnet.orca.vlan=vlan-$FVVLAN- -Dnet.floodlightcontroller.jython.JythonDebugInterface.port=0 -Dnet.floodlightcontroller.restserver.RestApiServer.port=$RESTPORT -Dnet.floodlightcontroller.core.FloodlightProvider.openflowport=$FLPORT -jar ${FLEXEC} > /dev/null 2>&1 &
+	${JAVA_DIR}/bin/java ${JVM_OPTS} -Dnet.orca.vlan=vlan-$FVVLAN- -Dnet.floodlightcontroller.jython.JythonDebugInterface.port=0 -Dnet.floodlightcontroller.restserver.RestApiServer.port=$RESTPORT -Dnet.floodlightcontroller.core.FloodlightProvider.openflowport=$FLPORT -jar ${FLEXEC} > /dev/null 2>&1 &
 
 	if [ "$?" != "0" ]; then
 		echo "ERROR: Unable to start Floodlight" 
