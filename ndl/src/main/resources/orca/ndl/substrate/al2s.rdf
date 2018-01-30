@@ -402,8 +402,8 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chameleon</topology:hasName>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-8/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-8/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-8/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-8/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -419,8 +419,8 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChamelonICAIR</topology:hasName>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-7/0/0</topology:hasURN>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-7/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-7/0/0</topology:hasURN>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-7/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -492,6 +492,174 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/PoP -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/PoP">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/availableVLANSet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/availableVLANSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/availableVLANSet/1"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
+        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509/EthernetSwitchMatrix"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix"/>
+        <layer:swappingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <layer:switchingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/availableVLANSet"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/Cisco/6509"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Clemson</topology:hasName>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.atla.net.internet2.edu:port=et-3/1/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.atla.net.internet2.edu:port=et-3/1/0</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/VLANLabel/3230 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/VLANLabel/3230">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3230.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/VLANLabel/3240 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/VLANLabel/3240">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3240.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/availableVLANSet/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/availableVLANSet/1">
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/VLANLabel/3230"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/VLANLabel/3240"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">11</collections:size>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/PoP -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/PoP">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/availableVLANSet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/availableVLANSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/availableVLANSet/1"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509/EthernetSwitchMatrix"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509/EthernetSwitchMatrix -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix"/>
+        <layer:swappingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <layer:switchingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/availableVLANSet"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/Cisco/6509"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">duke</topology:hasName>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=et-9/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=et-9/0/0</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/VLANLabel/690 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/VLANLabel/690">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">690.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/VLANLabel/699 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/VLANLabel/699">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">699.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/availableVLANSet/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/availableVLANSet/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/VLANLabel/690"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/VLANLabel/699"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/PoP -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/PoP">
@@ -532,8 +700,8 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/fiuNet.rdf#FiuNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/unfNet.rdf#UNFNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.jack.net.internet2.edu:port=et-4/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.jack.net.internet2.edu:port=et-4/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.jack.net.internet2.edu:port=et-4/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.jack.net.internet2.edu:port=et-4/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -719,8 +887,8 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NCBI</topology:hasName>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.ashb.net.internet2.edu:port=et-1/3/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.ashb.net.internet2.edu:port=et-1/3/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.ashb.net.internet2.edu:port=et-1/3/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.ashb.net.internet2.edu:port=et-1/3/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -804,8 +972,8 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/acisrenciNet.rdf#AcisRenciNet/Juniper/3200/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BF40G</topology:hasName>
-        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.rale.net.internet2.edu:port=xe-8/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.rale.net.internet2.edu:port=xe-8/0/0</rdfs:label>
+        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=xe-8/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=xe-8/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -992,8 +1160,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UCDNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ucdNet.rdf#ucdNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.sunn.net.internet2.edu:port=et-8/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.sunn.net.internet2.edu:port=et-8/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.sunn.net.internet2.edu:port=et-8/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.sunn.net.internet2.edu:port=et-8/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1037,8 +1205,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/UH/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uhNet.rdf#UHNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.houh.net.internet2.edu:port=et-0/3/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.houh.net.internet2.edu:port=et-0/3/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.houh.net.internet2.edu:port=et-0/3/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.houh.net.internet2.edu:port=et-0/3/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1094,8 +1262,8 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UIUC</topology:hasName>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-9/0/0</topology:hasURN>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-9/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-9/0/0</topology:hasURN>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-9/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1211,8 +1379,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/ciena2Net/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ciena2Net.rdf#CIENA2Net/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-8/0/0</topology:hasURN>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-8/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-8/0/0</topology:hasURN>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-8/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1256,8 +1424,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/cienaNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/cienaNet.rdf#CIENANet/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-8/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-8/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-8/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-8/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1300,8 +1468,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/dukeNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/dukeNet.rdf#DukeNet/Arista/7050/TenGigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.rale.net.internet2.edu:port=xe-8/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.rale.net.internet2.edu:port=xe-8/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=xe-8/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=xe-8/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1345,8 +1513,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/pscNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pscNet.rdf#PSCNet/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.pitt.net.internet2.edu:port=et-4/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.pitt.net.internet2.edu:port=et-4/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.pitt.net.internet2.edu:port=et-4/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.pitt.net.internet2.edu:port=et-4/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1390,8 +1558,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/pucpNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/pucpNet.rdf#PUCPNet/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.pucp.net.internet2.edu:port=e3/2</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.pucp.net.internet2.edu:port=e3/2</rdfs:label>
+        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.pucp.net.internet2.edu:port=e3/2</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.pucp.net.internet2.edu:port=e3/2</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1435,8 +1603,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/tamuNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.houh.net.internet2.edu:port=et-0/3/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.houh.net.internet2.edu:port=et-0/3/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.houh.net.internet2.edu:port=et-0/3/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.houh.net.internet2.edu:port=et-0/3/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1777,7 +1945,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/DD/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/nlr.rdf#NLR/DD/Juniper/QFX3500/xe/0/0/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.rale.net.internet2.edu:port=et-9/0/0</rdfs:label>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=et-9/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -1811,6 +1979,8 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/ICAIR/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/availableVLANSet/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/availableVLANSet/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/MANLAN/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/NCBI/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Renci/availableVLANSet/1"/>
@@ -1819,7 +1989,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/NetworkService/1/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/UMass/VLANLabel/533"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">258</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">279</collections:size>
     </owl:NamedIndividual>
     
 
@@ -2256,8 +2426,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/StarLight/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/slNet.rdf#slNet/IBM/G8264/TenGigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-7/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.star.net.internet2.edu:port=et-7/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-7/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.star.net.internet2.edu:port=et-7/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -2301,8 +2471,8 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/UFLNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/uflNet.rdf#UFLNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.jack.net.internet2.edu:port=et-4/0/0</topology:hasURN>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=sdn-sw.jack.net.internet2.edu:port=et-4/0/0</rdfs:label>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.jack.net.internet2.edu:port=et-4/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.jack.net.internet2.edu:port=et-4/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -2356,6 +2526,8 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ion/Domain">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Clemson/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Duke/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/FIU/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/GWU/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/MANLAN/PoP"/>
