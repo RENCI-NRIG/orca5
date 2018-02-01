@@ -145,6 +145,7 @@ public class ActorLiveness {
                     Globals.Log.error("Could not connect to the registry server; registry server may be down", ex);
                 }
                 finally {
+                    connMgr.closeIdleConnections(0);
                     connMgr.shutdown();
                 }
             } catch (Exception e) {
