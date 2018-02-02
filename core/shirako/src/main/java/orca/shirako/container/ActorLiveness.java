@@ -112,8 +112,10 @@ public class ActorLiveness {
                 params.addElement(act_guid);
 
                 SimpleHttpConnectionManager connMgr = new SimpleHttpConnectionManager(true);
+                // Connect timeout, 10 seconds; Read timeout, 30 seconds; Close timeout, 1 second.
                 connMgr.getParams().setConnectionTimeout(10*1000);
                 connMgr.getParams().setSoTimeout(30*1000);
+                connMgr.getParams().setLinger(1);
                 HttpClient httpClient = new HttpClient(connMgr);
 
                 try {
