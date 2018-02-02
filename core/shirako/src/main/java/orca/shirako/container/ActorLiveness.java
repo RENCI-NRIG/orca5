@@ -112,8 +112,10 @@ public class ActorLiveness {
                 params.addElement(act_guid);
 
                 SimpleHttpConnectionManager connMgr = new SimpleHttpConnectionManager(true);
+                // Connect timeout, 10 seconds; Read timeout, 30 seconds; Close timeout, 1 second.
                 connMgr.getParams().setConnectionTimeout(10*1000);
                 connMgr.getParams().setSoTimeout(30*1000);
+                connMgr.getParams().setLinger(1);
                 HttpClient httpClient = new HttpClient(connMgr);
 
                 try {
@@ -153,6 +155,11 @@ public class ActorLiveness {
             	 */
                 //timer.cancel();
                 Globals.Log.error("Registry1: An error occurred while attempting to send heartbeats for actor: " + act_guid + " to external registry", e);
+            }
+            finally {
+                // Release references, allow GC to clean up ASAP.
+                httpClient = null;
+                connMgr = null;
             }
         }
     }
