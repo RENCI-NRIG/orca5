@@ -337,7 +337,7 @@
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UCD/Cisco/6509/GigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/UCD/Cisco/6509/GigabitEthernet/1/1/ethernet">
-        <topology:hasURN rdf:datatype="&xsd;float">urn:publicid:IDN+al2s.internet2.edu+interface+sdn-sw.sunn.net.internet2.edu:eth5/1:ucdavis-eg</topology:hasURN>
+        <topology:hasURN rdf:datatype="&xsd;float">urn:publicid:IDN+al2s.internet2.edu+interface+rtsw.sunn.net.internet2.edu:eth5/1:ucdavis-eg</topology:hasURN>
     </owl:NamedIndividual>
     
 
