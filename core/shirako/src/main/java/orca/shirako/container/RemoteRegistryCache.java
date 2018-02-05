@@ -67,6 +67,8 @@ import orca.util.ssl.ContextualSSLProtocolSocketFactory;
 import orca.util.ssl.MultiKeyManager;
 import orca.util.ssl.MultiKeySSLContextFactory;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.log4j.Logger;
@@ -83,9 +85,11 @@ import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
 public class RemoteRegistryCache extends TimerTask {
 	private static final int REFRESH_PERIOD = 60000;
 	private static final RemoteRegistryCache instance = new RemoteRegistryCache();
+	private static final MultiThreadedHttpConnectionManager connMgr =
+		new MultiThreadedHttpConnectionManager();
 	
 	private final Timer timer = new Timer("RemoteRegistryCache", true);
-	private final Logger logger = Globals.Log; 
+	private final Logger logger = Globals.Log;
 	private final String registryQueryMethod="registryService.getActorsVerifiedOtherThan";
 	private static String registryUrl = null;
 	private Map<String, Map<String, String>> cache = new HashMap<String, Map<String, String>>();
@@ -148,6 +152,7 @@ public class RemoteRegistryCache extends TimerTask {
 	public void stop() {
 		logger.info("Stopping XMLRPC registry caching thread");
 		timer.cancel();
+		connMgr.shutdown();
 	}
 	
 	/**
@@ -253,9 +258,11 @@ public class RemoteRegistryCache extends TimerTask {
 		
 		XmlRpcClient client = new XmlRpcClient();
 		client.setConfig(config);
-		
-        // set this transport factory for host-specific SSLContexts to work
-        XmlRpcCommonsTransportFactory f = new XmlRpcCommonsTransportFactory(client);
+
+		HttpClient h = new HttpClient(connMgr);
+		// set this transport factory for host-specific SSLContexts to work
+		XmlRpcCommonsTransportFactory f = new XmlRpcCommonsTransportFactory(client);
+		f.setHttpClient(h);
 		client.setTransportFactory(f);
 		
 		// set null identity - queries are not checked at the registry
@@ -282,9 +289,13 @@ public class RemoteRegistryCache extends TimerTask {
 				}
 			}
 			return new ArrayList(mapResult.keySet()); // return list of new guids
-		} catch (XmlRpcException e) {
+		}
+		catch (XmlRpcException e) {
 			logger.error("Error querying XMLRPC registry, continuing");
 			return null;
+		}
+		finally {
+			connMgr.closeIdleConnections(0);
 		}
 	}
 
@@ -785,15 +796,21 @@ public class RemoteRegistryCache extends TimerTask {
                 config.setServerURL(new URL(registryUrl + "/"));
                 XmlRpcClient client = new XmlRpcClient();
                 client.setConfig(config);
-                
+
+                HttpClient h = new HttpClient(connMgr);
                 // set this transport factory for host-specific SSLContexts to work
                 XmlRpcCommonsTransportFactory f = new XmlRpcCommonsTransportFactory(client);
-    			client.setTransportFactory(f);
-    			
+                f.setHttpClient(h);
+                client.setTransportFactory(f);
+
                 String stat = (String)client.execute(registryMethod, params);
                 Globals.Log.info("Registry returned: " + stat);                
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Globals.Log.error("Could not connect to the registry server " + registryUrl + ": ", ex);
+            }
+            finally {
+                connMgr.closeIdleConnections(0);
             }
             // start update thread
             ActorLiveness checkActorLive = new ActorLiveness(actor.getGuid().toString(), registryUrl, registryMethod);
@@ -848,16 +865,22 @@ public class RemoteRegistryCache extends TimerTask {
     			config.setServerURL(new URL(registryUrl + "/"));
     			XmlRpcClient client = new XmlRpcClient();
     			client.setConfig(config);
-    			
-                // set this transport factory for host-specific SSLContexts to work
-                XmlRpcCommonsTransportFactory f = new XmlRpcCommonsTransportFactory(client);
-    			client.setTransportFactory(f);
-    			
+
+			HttpClient h = new HttpClient(connMgr);
+			// set this transport factory for host-specific SSLContexts to work
+			XmlRpcCommonsTransportFactory f = new XmlRpcCommonsTransportFactory(client);
+			f.setHttpClient(h);
+			client.setTransportFactory(f);
+
     			String stat = (String) client.execute(registryMethod, params);
     			Globals.Log.info("Registry returned: " + stat); 
-    		} catch (Exception ex) {
-    			Globals.Log.error("Could not connect to the registry server", ex);
-    		}
+		}
+                catch (Exception ex) {
+			Globals.Log.error("Could not connect to the registry server", ex);
+		}
+		finally {
+			connMgr.closeIdleConnections(0);
+		}
     	} catch (Exception e) {
     		Globals.Log.error("An error occurred whle attempting to register Ndls with external registry", e);
     	}
