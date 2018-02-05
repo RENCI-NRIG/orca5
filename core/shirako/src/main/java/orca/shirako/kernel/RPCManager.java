@@ -829,7 +829,7 @@ public class RPCManager {
         public void run() {
             // mark this thread as an RPC thread
             String threadName = Thread.currentThread().getName();
-            Thread.currentThread().setName("RPC");
+            Thread.currentThread().setName("RPC: " + threadName);
             Globals.Log.debug("Performing RPC: type=" + request.request.getType() + " to:"
                     + request.proxy.getName());
             // perform the RPC call
