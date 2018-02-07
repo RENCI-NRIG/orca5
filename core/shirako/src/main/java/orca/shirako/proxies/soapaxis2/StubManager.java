@@ -12,7 +12,6 @@ import orca.util.ID;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.Stub;
 import org.apache.axis2.context.ConfigurationContext;
-import org.apache.axis2.context.MessageContextConstants;
 import org.apache.axis2.transport.http.HTTPConstants;
 
 import org.apache.commons.httpclient.HttpClient;
