@@ -14,6 +14,10 @@ import org.apache.axis2.client.Stub;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnection;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+
 public class StubManager
 {
     // FIXME: need a capacity limit on how many stubs get cached
@@ -32,9 +36,15 @@ public class StubManager
      */
     private HashMap<String, HashMap<String, Object>> stubs;
 
+    /**
+     * Connection manager for stubs
+     */
+    private StubHttpConnectionManager connMgr;
+
     private StubManager()
     {
         stubs = new HashMap<String, HashMap<String, Object>>();
+        connMgr = new StubHttpConnectionManager();
     }
 
     private synchronized Object getStub(String destination, ID source)
@@ -103,7 +113,9 @@ public class StubManager
 
         Globals.Log.debug("axis2 configuration for client stub: " + config);
 
+        HttpClient hc = new HttpClient(connMgr);
         ConfigurationContext axis2Context = Axis2ClientConfigurationManager.getInstance().getContext(repository, config);
+        axis2Context.setProperty(HTTPConstants.CACHED_HTTP_CLIENT, hc);
 
         switch (type) {
             case SoapAxis2Proxy.TypeReturn:
@@ -121,7 +133,20 @@ public class StubManager
         Options stubOpts = ((Stub) result)._getServiceClient().getOptions();
         stubOpts.setProperty(HTTPConstants.CONNECTION_TIMEOUT, connectionTimeout * 1000);
         stubOpts.setProperty(HTTPConstants.SO_TIMEOUT, socketTimeout * 1000);
+        stubOpts.setProperty(HTTPConstants.REUSE_HTTP_CLIENT, "true");
 
         return result;
+    }
+
+    private class StubHttpConnectionManager extends
+	    MultiThreadedHttpConnectionManager {
+
+        public void releaseConnection(final HttpConnection conn) {
+            if (conn == null) {
+                return;
+            }
+            conn.close();
+            super.releaseConnection(conn);
+        }
     }
 }
