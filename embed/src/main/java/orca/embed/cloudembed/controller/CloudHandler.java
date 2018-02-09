@@ -564,6 +564,7 @@ public class CloudHandler extends MappingHandler {
         // update or set the CE
         if (null != edge_device.getCe()) {
             ce.addDependency((HashSet<NetworkElement>) edge_device.getCe().getDependencies());
+            // this is the fix for #196
             ce.setInterfaces(edge_device.getCe().getInterfaces());
             ce.setClientInterface(edge_device.getCe().getClientInterface());
         }
