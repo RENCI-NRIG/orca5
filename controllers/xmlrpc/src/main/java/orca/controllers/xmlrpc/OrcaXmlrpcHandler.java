@@ -294,7 +294,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                     return setError(WHITELIST_ERROR);
 
                 if (!verifyCredentials && null == userDN) {
-                    logger.error("Setting userDN to test. This should only happen in Unit Testing.");
+                    logger.warn("Setting userDN to test. This should only happen in Unit Testing.");
                     userDN = "test";
                 }
 
