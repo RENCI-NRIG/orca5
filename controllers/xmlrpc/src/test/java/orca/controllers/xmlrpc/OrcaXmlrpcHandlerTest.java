@@ -1100,7 +1100,7 @@ public class OrcaXmlrpcHandlerTest extends TestHelper {
 
     @BeforeClass
     public static void setupTests() {
-    	System.out.println("Initializing NDL");
+    	logger.info("Initializing NDL");
     	NdlCommons.init();
     }
 

@@ -27,6 +27,7 @@ import orca.manage.OrcaConstants;
 import orca.manage.beans.SliceMng;
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
+import orca.shirako.common.SliceID;
 
 public class TestHelper {
 
@@ -200,7 +201,7 @@ public class TestHelper {
 	    SliceMng slice = new SliceMng();
 	    slice.setName(slice_urn);
 	    slice.setClientSlice(true);
-	    //SliceID sid = sm.addSlice(slice);
+	    SliceID sid = sm.addSlice(slice);
 	
 	    orcaXmlrpcHandler.discoverTypes(sm);
 	
@@ -242,7 +243,7 @@ public class TestHelper {
 	    ndlSlice.setComputedReservations(reservations);
 	
 	    ndlSlice.unlock();
-	
+	    
 	    return reservations;
 	
 	}
