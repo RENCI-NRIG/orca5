@@ -61,16 +61,16 @@ public class ManifestModelValidityTest extends TestHelper {
             ResultBinding result = (ResultBinding) results.next();
             if (result != null) {
                 netcon = (Resource) result.get("netcon");
-            	System.out.println("NETCON " + netcon);
+            	//System.out.println("NETCON " + netcon);
                 StmtIterator stim = netcon.listProperties(NdlCommons.collectionItemProperty);
                 int count = 0;
                 while (stim.hasNext()) {
                 	Statement stat = stim.next();
                 	Resource obj = stat.getResource();
-                	System.out.println("OBJECT " + obj);
+                	//System.out.println("OBJECT " + obj);
                 	count++;
                 }
-                //assert(count == 2);
+                assert(count == 2);
             }
         }
         

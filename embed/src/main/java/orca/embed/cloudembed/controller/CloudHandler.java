@@ -342,7 +342,7 @@ public class CloudHandler extends MappingHandler {
         // BitSet bSet = this.controllerAssignedLabel.get(domainName);
         BitSet bSet = getAvailableBitSet(domainName);
         if (debugOn)
-        	System.out.println("1. CloudHandler domain="+domainName+";bSet="+bSet);
+        	System.out.println("CloudHandler domain="+domainName+";bSet="+bSet);
         IPAddressRange ip_range = null;
         for (Interface action_intf : intf_list) {
             action_intf_ont = action_intf.getResource();
@@ -818,8 +818,7 @@ public class CloudHandler extends MappingHandler {
         ce.setInterfaceName(ncByInterface, new_intf);
         if (link_device != null) {
             if (ncByInterface != null) {
-                if (ncByInterface.getName().equals(link_device.getName())) { // intra-site topology request: link =
-                                                                             // connection
+                if (ncByInterface.getName().equals(link_device.getName())) { // intra-site topology request: link = connection
                     if (new_intf.getResource() == null) {
                         logger.error("setEdgeNeighborhood new_intf.getResource() is null - this will cause errors");
                     }

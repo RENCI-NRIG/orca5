@@ -3,13 +3,6 @@ package orca.ndl.elements;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 
-import net.jwhoisserver.utils.InetNetworkException;
-import orca.ndl.NdlCommons;
-import orca.util.persistence.NotPersistent;
-import orca.util.persistence.Persistent;
-
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
@@ -18,6 +11,11 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+
+import net.jwhoisserver.utils.InetNetworkException;
+import orca.ndl.NdlCommons;
+import orca.util.persistence.NotPersistent;
+import orca.util.persistence.Persistent;
 
 public class Interface extends NetworkElement {
 
