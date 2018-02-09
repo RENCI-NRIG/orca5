@@ -510,11 +510,7 @@ public class ModifyHandler extends UnboundRequestHandler {
         element_ce = element.getCe();
         // String url=element.getURI();
         String url = name;
-        ce = element_ce.copy(manifestModel, requestModel, url, name);
-        // copy operation copies interfaces and client interfaces, but we don't need them here
-        // /ib 02/09/18 
-        ce.setInterfaces(null);
-        ce.setClientInterface(null);
+        ce = element_ce.partialCopy(manifestModel, requestModel, url, name);
         
         OntResource ce_ont = ce.getModel().createOntResource(name);
         if (element.getResource() != null && element.getResource().hasProperty(NdlCommons.specificCEProperty))

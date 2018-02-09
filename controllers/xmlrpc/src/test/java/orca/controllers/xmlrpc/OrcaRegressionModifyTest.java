@@ -2,7 +2,9 @@ package orca.controllers.xmlrpc;
 
 import orca.manage.beans.TicketReservationMng;
 import orca.ndl.NdlCommons;
+import orca.shirako.container.Globals;
 
+import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,77 +20,80 @@ import static orca.controllers.xmlrpc.OrcaXmlrpcAssertions.*;
 @RunWith(Parameterized.class)
 public class OrcaRegressionModifyTest {
 
+	private static final Logger logger = Globals.getLogger(OrcaXmlrpcHandlerTest.class.getSimpleName());
+	
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                // Bootscripts need Velocity templating on Modify
-                { "src/test/resources/112_velocityRequest.rdf", "src/test/resources/112_velocityModifyRequest.rdf", 5 },
-                // NodeGroup modify
-                { "src/test/resources/122_request.rdf", "src/test/resources/122_nodegroups_increase_modify_request.rdf",
-                        23 }, // we don't even have 23, but apparently the controller doesn't check
-                // NodeGroup modify
-                { "src/test/resources/122_with_autoip_request.rdf",
-                        "src/test/resources/122_nodegroups_increase_modify_request.rdf",
-                        23 }, // we don't even have 23
-                { "src/test/resources/122_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 5 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_one_noip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 3 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_two_noip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 4 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 5 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_one_autoip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 3 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_two_autoip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 4 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 5 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_one_noip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 4 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_two_noip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 5 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 6 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_one_autoip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 4 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_two_autoip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 5 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
-                        "src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 6 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
-                        "src/test/resources/137_nodegroups_delete_one_modify_request.rdf", 3 },
-                // NodeGroup modify
-                { "src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
-                        "src/test/resources/137_nodegroups_delete_one_modify_request.rdf", 3 },
-                // add storage modify
-                { "../../embed/src/test/resources/orca/embed/TS1/TS1-2.rdf",
-                        "src/test/resources/146_modify_add_storage_request.rdf", 2 },
-                // Interdomain modify
-                { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
-                        "../../embed/src/test/resources/orca/embed/161_interdomain_simplified_A1_B1_B2_modify_request.rdf",
-                        13 },
-                // Interdomain modify
-                { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
-                        "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_B2_C1_modify_request.rdf",
-                        17 },
-                // Interdomain modify
-                { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
-                        "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_to_B2_modify_request.rdf",
-                        9 } });
+    	return Arrays.asList(new Object[][] {
+    		// Bootscripts need Velocity templating on Modify
+    		{ "src/test/resources/112_velocityRequest.rdf", "src/test/resources/112_velocityModifyRequest.rdf", 5 },
+    		// NodeGroup modify
+    		{ "src/test/resources/122_request.rdf", "src/test/resources/122_nodegroups_increase_modify_request.rdf",
+    			23 }, // we don't even have 23, but apparently the controller doesn't check
+    		// NodeGroup modify
+    		{ "src/test/resources/122_with_autoip_request.rdf",
+    				"src/test/resources/122_nodegroups_increase_modify_request.rdf",
+    				23 }, // we don't even have 23
+    		{ "src/test/resources/122_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 5 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_one_noip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 3 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_two_noip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 4 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 5 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_one_autoip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 3 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_two_autoip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 4 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_one_modify_request.rdf", 5 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_one_noip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 4 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_two_noip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 5 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 6 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_one_autoip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 4 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_two_autoip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 5 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
+    				"src/test/resources/137_nodegroups_increase_by_two_modify_request.rdf", 6 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_three_noip_request.rdf",
+    				"src/test/resources/137_nodegroups_delete_one_modify_request.rdf", 3 },
+    		// NodeGroup modify
+    		{ "src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
+    				"src/test/resources/137_nodegroups_delete_one_modify_request.rdf", 3 },
+    		// add storage modify
+    		{ "../../embed/src/test/resources/orca/embed/TS1/TS1-2.rdf",
+    				"src/test/resources/146_modify_add_storage_request.rdf", 2 },
+    		// Interdomain modify
+    		{ "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+    				"../../embed/src/test/resources/orca/embed/161_interdomain_simplified_A1_B1_B2_modify_request.rdf",
+    				13 },
+    		// Interdomain modify
+    		{ "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+    				"../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_B2_C1_modify_request.rdf",
+    				17 },
+    		// Interdomain modify
+    		{ "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+    				"../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_to_B2_modify_request.rdf",
+    				9 } 
+    	});
     }
 
     // First Parameter -- file name with Request
@@ -119,7 +124,7 @@ public class OrcaRegressionModifyTest {
         testName += "_"
                 + modifyFilename.substring(modifyFilename.lastIndexOf('/') + 1, modifyFilename.lastIndexOf('.'));
 
-        System.out.println("Starting Orca Regression Modify Test " + testName);
+        logger.info("Starting Orca Regression Modify Test " + testName);
 
         // modify request
         LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
@@ -147,12 +152,11 @@ public class OrcaRegressionModifyTest {
             assertReservationsHaveNetworkInterface(computedReservations);
             assertSliceHasNoDuplicateInterfaces(slice);
         }
-
     }
     
     @BeforeClass
     public static void setupTests() {
-    	System.out.println("Initializing NDL");
+    	logger.info("Initializing NDL");
     	NdlCommons.init();
     }
 
