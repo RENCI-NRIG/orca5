@@ -71,7 +71,16 @@ public class ComputeElement extends NetworkElement {
         super(m, url, name);
     }
 
-    public ComputeElement copy(OntModel m, OntModel req_m, String url, String name) {
+    /**
+     * Notice that this doesn't copy interfaces, clientInterfaces, dependencies or 
+     * the resourceMap. Those are handled on the individual basis in CloudHandler and ModifyHandler
+     * @param m
+     * @param req_m
+     * @param url
+     * @param name
+     * @return
+     */
+    public ComputeElement partialCopy(OntModel m, OntModel req_m, String url, String name) {
         ComputeElement ce = new ComputeElement(m, url, name);
         ce.setImageInfo(this.getImage(), this.getVMImageURL(), this.getVMImageHash());
         ce.setResourceType(this.getResourceType());
@@ -98,6 +107,8 @@ public class ComputeElement extends NetworkElement {
         ce.setFSParam(this.getFSParam());
         ce.setMntPoint(this.getMntPoint());
         ce.setDoFormat(this.isDoFormat());
+        ce.setCHAP_User(this.getCHAP_User());
+        ce.setCHAP_Password(this.getCHAP_Password());
 
         // #122
         // NodeGroup modify requests don't have Resource Request / Core Constraint information

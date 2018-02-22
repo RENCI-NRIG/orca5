@@ -235,14 +235,14 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
         sb.append("Name: " + getName() + " ");
         sb.append("At Layer: " + atLayer + " ");
         sb.append("#sn:" + sn + " ");
-        sb.append("ResourceType: " + resourceType);
-        sb.append("ClientInterface: ");
+        sb.append("ResourceType: " + resourceType + " ");
+        sb.append("ClientInterface: [\n");
         if (clientInterface != null) {
             for (Interface ii : clientInterface) {
-                sb.append(ii);
+                sb.append(ii+ " ");
             }
         }
-        sb.append("\n");
+        sb.append("]\n");
         sb.append("Interface Bandwidth: ");
         if (resourcesMap != null) {
             for (Entry<String, DomainResource> ee : resourcesMap.entrySet()) {

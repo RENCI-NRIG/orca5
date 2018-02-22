@@ -342,7 +342,7 @@ public class CloudHandler extends MappingHandler {
         // BitSet bSet = this.controllerAssignedLabel.get(domainName);
         BitSet bSet = getAvailableBitSet(domainName);
         if (debugOn)
-        	System.out.println("1. CloudHandler domain="+domainName+";bSet="+bSet);
+        	System.out.println("CloudHandler domain="+domainName+";bSet="+bSet);
         IPAddressRange ip_range = null;
         for (Interface action_intf : intf_list) {
             action_intf_ont = action_intf.getResource();
@@ -536,7 +536,7 @@ public class CloudHandler extends MappingHandler {
             device_model.createIndividual(element.getName(), element.getResource().getRDFType(true));
             device_model.getOntResource(element.getName()).addProperty(NdlCommons.hasGUIDProperty, device_guid);
         }
-        ComputeElement ce = ce_element.copy(device_model, requestModel, url, name);
+        ComputeElement ce = ce_element.partialCopy(device_model, requestModel, url, name);
         ce.setResourceType(dType);
         ce.setNodeGroupName(ce_element.getNodeGroupName());
         ce.setPostBootScript(ce_element.getPostBootScript());
@@ -564,6 +564,9 @@ public class CloudHandler extends MappingHandler {
         // update or set the CE
         if (null != edge_device.getCe()) {
             ce.addDependency((HashSet<NetworkElement>) edge_device.getCe().getDependencies());
+            // this is the fix for #196
+            ce.setInterfaces(edge_device.getCe().getInterfaces());
+            ce.setClientInterface(edge_device.getCe().getClientInterface());
         }
         edge_device.setCe(ce);
 
@@ -818,8 +821,7 @@ public class CloudHandler extends MappingHandler {
         ce.setInterfaceName(ncByInterface, new_intf);
         if (link_device != null) {
             if (ncByInterface != null) {
-                if (ncByInterface.getName().equals(link_device.getName())) { // intra-site topology request: link =
-                                                                             // connection
+                if (ncByInterface.getName().equals(link_device.getName())) { // intra-site topology request: link = connection
                     if (new_intf.getResource() == null) {
                         logger.error("setEdgeNeighborhood new_intf.getResource() is null - this will cause errors");
                     }

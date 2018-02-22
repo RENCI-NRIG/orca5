@@ -294,7 +294,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                     return setError(WHITELIST_ERROR);
 
                 if (!verifyCredentials && null == userDN) {
-                    logger.error("Setting userDN to test. This should only happen in Unit Testing.");
+                    logger.warn("Setting userDN to test. This should only happen in Unit Testing.");
                     userDN = "test";
                 }
 
@@ -552,7 +552,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                     return setError(WHITELIST_ERROR);
 
                 if (!verifyCredentials && null == userDN) {
-                    logger.error("Setting userDN to test. This should only happen in Unit Testing.");
+                    logger.warn("Setting userDN to test. This should only happen in Unit Testing.");
                     userDN = "test";
                 }
 
@@ -2608,7 +2608,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                 return true;
             }
         } catch (Exception e) {
-            logger.error("checkMemory(): unable to test for presence of disable file "
+            logger.warn("checkMemory(): unable to test for presence of disable file "
                     + OrcaController.getProperty(XmlRpcController.PropertyControllerDisableMemoryCheckFile));
         }
 
@@ -2616,7 +2616,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
         try {
             thresh = Double.parseDouble(OrcaController.getProperty(XmlRpcController.PropertyControllerMemoryThreshold));
         } catch (Exception e) {
-            logger.error("checkMemory(): Unable to parse memory threshold value, proceeding");
+            logger.warn("checkMemory(): Unable to parse memory threshold value, proceeding");
             return true;
         }
 
