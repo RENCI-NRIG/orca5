@@ -466,7 +466,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             if (verifyCredentials && !checkWhitelist(userDN))
                 return setError(WHITELIST_ERROR);
 
-            allRes = getSliceReservations(instance, slice_urn, userDN, logger);
+            try {
+                allRes = getSliceReservations(instance, slice_urn, userDN, logger);
+            }
+            catch (OrcaControllerException oce) {
+                logger.error("sliceStatus(): ControllerException: " + oce.getMessage());
+                logger.error("If this works - why doesnt it get caught in the exception tree down below?!?");
+                return setError("ControllerException encountered: " + oce.getMessage());
+            }
 
             if (allRes == null) {
                 result = "Invalid slice " + slice_urn + ", no reservations in the slice";
