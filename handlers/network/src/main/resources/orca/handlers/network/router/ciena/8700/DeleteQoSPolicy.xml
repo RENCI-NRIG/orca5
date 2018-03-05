@@ -1,35 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<script xmlns="http://geni-orca.renci.org/DeleteQoSPolicy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/DeleteQoSPolicy DeleteQoSPolicy.xsd"> 
-    <action name="DeleteQoSPolicy"> 
-        <exchange> 
-            <send>
-                 config t 
-            </send> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 policy-map {$QoSPolicyName} 
-            </send> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 no class class-default 
-            </send> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 exit 
-            </send> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 no policy-map {$QoSPolicyName} 
-            </send> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 end 
-            </send> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/DeleteQoSPolicy"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/DeleteQoSPolicy DeleteQoSPolicy.xsd">
+	<action name="DeleteQoSPolicy">
+		<exchange>
+			<send>config t</send>
+		</exchange>
+		<exchange>
+			<send>policy-map {$QoSPolicyName}</send>
+		</exchange>
+		<exchange>
+			<send>no class class-default</send>
+		</exchange>
+		<exchange>
+			<send>exit</send>
+		</exchange>
+		<exchange>
+			<send>no policy-map {$QoSPolicyName}</send>
+		</exchange>
+		<exchange>
+			<send>end</send>
+		</exchange>
+	</action>
 </script>

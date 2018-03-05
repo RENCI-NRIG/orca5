@@ -1,21 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<script xmlns="http://geni-orca.renci.org/Log_on" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/Log_on Log_on.xsd "> 
-    <action name="Connect"> 
-        <exchange> 
-            <send>
-                 en 
-            </send> 
-            <expect timeout="2000">
-                 Password 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 {$adminPWD} 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script xmlns="http://geni-orca.renci.org/Log_on" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/Log_on Log_on.xsd ">
+	<action name="Connect">
+	  <exchange>
+	    <send>en</send>
+	    <expect timeout="2000">Password</expect>
+	  </exchange>
+	  <exchange>
+	    <send>{$adminPWD}</send>
+	    <expect>{$DefaultPrompt}</expect>
+	  </exchange>
+	</action>
 </script>

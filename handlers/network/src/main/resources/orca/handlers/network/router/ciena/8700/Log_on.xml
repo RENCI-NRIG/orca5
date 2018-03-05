@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<request xmlns="http://geni-orca.renci.org/Log_on" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/Log_on Log_on.xsd "> 
-    <action name="Connect"> 
-        <exchange> 
-            <send>system show host-name</send> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+
+<request xmlns="http://geni-orca.renci.org/Log_on" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/Log_on Log_on.xsd ">
+	<action name="Connect">
+	  <exchange>
+	    <send>system show host-name</send>
+	  </exchange>
+	</action>
 </request>

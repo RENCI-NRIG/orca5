@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<script xmlns="http://geni-orca.renci.org/CreateVLAN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/CreateVLAN CreateVLAN.xsd"> 
-    <action name="CreateVLAN"> 
-        <exchange> 
-            <send>virtual-switch create vs {$virtualSwitch}</send> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/CreateVLAN"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/CreateVLAN CreateVLAN.xsd">
+	<action name="CreateVLAN">
+        <exchange>
+            <send>virtual-switch create vs {$virtualSwitch}</send>
+        </exchange>
+    </action>
 </script>

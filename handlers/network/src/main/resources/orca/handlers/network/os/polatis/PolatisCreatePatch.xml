@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<script xmlns="http://geni-orca.renci.org/CreatePatch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/CreatePatch CreatePatch.xsd"> 
-    <action name="CreatePatch"> 
-        <exchange> 
-            <send>
-                 ENT-PATCH::{$inputPort},{$outputPort}:{$ctag}:; 
-            </send> 
-            <expect>
-                 COMPLD 
-            </expect> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/CreatePatch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/CreatePatch CreatePatch.xsd">
+	<action name="CreatePatch">
+		<exchange>
+			<send>ENT-PATCH::{$inputPort},{$outputPort}:{$ctag}:;</send>
+			<expect>COMPLD</expect>
+		</exchange>
+	</action>
 </script>
