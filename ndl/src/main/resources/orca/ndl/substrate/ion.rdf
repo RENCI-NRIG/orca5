@@ -397,7 +397,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
         <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/availableVLANSet"/>
-        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#1G"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/Chameleon/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
@@ -1172,8 +1172,10 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/TACC/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/SL/Cisco/6509/GigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <topology:hasName>TACC</topology:hasName>
-        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.houh.net.internet2.edu:port=et-0/3/0</topology:hasURN>
+        <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">TACC</topology:hasName>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.houh.net.internet2.edu:port=et-0/3/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.houh.net.internet2.edu:port=et-0/3/0</rdfs:label>
+
     </owl:NamedIndividual>
     
 
