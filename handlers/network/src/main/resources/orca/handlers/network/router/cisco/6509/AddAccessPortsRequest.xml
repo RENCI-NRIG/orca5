@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<request srcVLAN="" dstVLAN="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/AddAccessPortsRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/AddAccessPortsRequest AddAccessPortsRequest.xsd "> 
-    <script>Log_on</script> 
-    <script>AddAccessPorts</script> 
-    <script>Log_off</script> 
+<?xml version="1.0" encoding="UTF-8"?>
+<request srcVLAN="" dstVLAN="" admin_password="" password="" target="" username="" xmlns="http://geni-orca.renci.org/AddAccessPortsRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/AddAccessPortsRequest AddAccessPortsRequest.xsd ">
+  <script>Log_on</script>
+  <script>AddAccessPorts</script>
+  <script>Log_off</script>
 </request>

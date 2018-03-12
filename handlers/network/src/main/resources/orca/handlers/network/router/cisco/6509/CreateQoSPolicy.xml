@@ -1,77 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<script xmlns="http://geni-orca.renci.org/CreateQoSPolicy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/CreateQoSPolicy CreateQoSPolicy.xsd"> 
-    <action name="CreateQoSPolicy"> 
-        <exchange> 
-            <send>
-                 config t 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 policy-map {$QoSPolicyName} 
-            </send> 
-            <expect timeout="2000">
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 class class-default 
-            </send> 
-            <expect timeout="2000">
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 police {$QoSRate} {$QoSBurstSize} {$QoSBurstSize} conform-action transmit exceed-action drop 
-            </send> 
-            <expect timeout="3000">
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 exit 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 interface vlan {$VLANTagName} 
-            </send> 
-            <expect timeout="3000">
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 service-policy input {$QoSPolicyName} 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 service-policy output {$QoSPolicyName} 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 end 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/CreateQoSPolicy"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/CreateQoSPolicy CreateQoSPolicy.xsd">
+	<action name="CreateQoSPolicy">
+		<exchange>
+			<send>config t</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>policy-map {$QoSPolicyName}</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>class class-default</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>police {$QoSRate} {$QoSBurstSize} {$QoSBurstSize} conform-action transmit exceed-action drop</send>
+			<expect timeout="3000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>exit</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>interface vlan {$VLANTagName}</send>
+			<expect timeout="3000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>service-policy input {$QoSPolicyName}</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>service-policy output {$QoSPolicyName}</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>end</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+	</action>
 </script>

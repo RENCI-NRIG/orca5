@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<script xmlns="http://geni-orca.renci.org/DeleteCRS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/DeleteCRS DeleteCRS.xsd"> 
-    <action name="DeleteCRS"> 
-        <exchange> 
-            <send>
-                 DLT-CRS::{$srcPort},{$dstPort}:{$ctag}; 
-            </send> 
-            <expect>
-                 COMPLD 
-            </expect> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/DeleteCRS"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/DeleteCRS DeleteCRS.xsd">
+	<action name="DeleteCRS">
+		<exchange>
+			<send>DLT-CRS::{$srcPort},{$dstPort}:{$ctag};</send>
+			<expect>COMPLD</expect>
+		</exchange>
+	</action>
 </script>

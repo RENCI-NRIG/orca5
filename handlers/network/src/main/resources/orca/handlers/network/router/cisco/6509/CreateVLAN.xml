@@ -1,69 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<script xmlns="http://geni-orca.renci.org/CreateVLAN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geni-orca.renci.org/CreateVLAN CreateVLAN.xsd"> 
-    <action name="CreateVLAN"> 
-        <exchange> 
-            <send>
-                 config t 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 vlan {$VLANTagName} 
-            </send> 
-            <expect timeout="3000">
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 name "{$VLANName}" 
-            </send> 
-            <expect timeout="2000">
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 exit 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 interface vlan {$VLANTagName} 
-            </send> 
-            <expect timeout="3000">
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 logging event link-status 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 no shut 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-        <exchange> 
-            <send>
-                 end 
-            </send> 
-            <expect>
-                 {$DefaultPrompt} 
-            </expect> 
-        </exchange> 
-    </action> 
+<?xml version="1.0" encoding="UTF-8"?>
+<script xmlns="http://geni-orca.renci.org/CreateVLAN"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://geni-orca.renci.org/CreateVLAN CreateVLAN.xsd">
+	<action name="CreateVLAN">
+		<exchange>
+			<send>config t</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>vlan {$VLANTagName}</send>
+			<expect timeout="3000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>name "{$VLANName}"</send>
+			<expect timeout="2000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>exit</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>interface vlan {$VLANTagName}</send>
+			<expect timeout="3000">{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>logging event link-status</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>no shut</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+		<exchange>
+			<send>end</send>
+			<expect>{$DefaultPrompt}</expect>
+		</exchange>
+	</action>
 </script>
