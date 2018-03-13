@@ -109,6 +109,10 @@
             <id>jwhoisserver</id>
             <url>http://repo.jwhoisserver.net/m2/</url>
         </repository>
+	<repository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/releases/</url>
+	</repository>
     </repositories>
 
     <pluginRepositories>
