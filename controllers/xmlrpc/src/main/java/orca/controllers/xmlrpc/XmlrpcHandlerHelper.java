@@ -162,47 +162,9 @@ public class XmlrpcHandlerHelper {
      * @return the provided timestamp as a RFC 3339 string
      */
     public static String getRFC3339String(Calendar timestamp) {
-        StringBuilder builder = new StringBuilder(Integer.toString(timestamp.get(Calendar.YEAR)));
-        builder.append('-');
-        appendTwoDigitInteger(builder, timestamp.get(Calendar.MONTH) + 1);
-        builder.append('-');
-        appendTwoDigitInteger(builder, timestamp.get(Calendar.DAY_OF_MONTH));
-        builder.append('T');
-        appendTwoDigitInteger(builder, timestamp.get(Calendar.HOUR_OF_DAY));
-        builder.append(':');
-        appendTwoDigitInteger(builder, timestamp.get(Calendar.MINUTE));
-        builder.append(':');
-        appendTwoDigitInteger(builder, timestamp.get(Calendar.SECOND));
-
-        int millisecond = timestamp.get(Calendar.MILLISECOND);
-        if (millisecond != 0) {
-            builder.append('.');
-            if (millisecond < 100)
-                builder.append('0');
-            if (millisecond < 10)
-                builder.append('0');
-            builder.append(millisecond);
-        }
-
-        int offset = timestamp.get(Calendar.ZONE_OFFSET);
-        if (offset == 0) {
-            builder.append('Z');
-        } else {
-            offset /= 60000;
-            int hours = offset / 60;
-            int minutes = offset - hours * 60;
-            if (hours > 0) {
-                builder.append('+');
-            } else {
-                hours = -hours;
-                builder.append('-');
-                appendTwoDigitInteger(builder, hours);
-                builder.append(':');
-                appendTwoDigitInteger(builder, minutes);
-            }
-        }
-
-        return builder.toString();
+    	// As of Java 7 this is possible /ib 03/13/2018
+    	SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    	return rfc3339Formatter.format(timestamp.getTime());
     }
 
     private static void appendTwoDigitInteger(StringBuilder builder, int integer) {
