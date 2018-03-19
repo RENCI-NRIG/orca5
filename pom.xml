@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>orca</groupId>
     <artifactId>orca</artifactId>
-    <version>5.3.2-SNAPSHOT</version>
+    <version>5.4.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Orca</name>
     <url>https://geni-orca.renci.org/orca-doc</url>
@@ -687,6 +687,7 @@
             <build>
                 <plugins>
                     <!-- Attach javadocs -->
+                    <!-- Reference: https://github.com/RENCI-NRIG/orca5/issues/204
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -700,6 +701,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
 
                     <!-- Create a binary distribution: this was copied from maven's pom
                         file. Update it!!! Info about this plugin: http://maven.apache.org/plugins/maven-assembly-plugin/
