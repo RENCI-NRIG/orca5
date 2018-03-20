@@ -11,7 +11,7 @@
     <packaging>
          pom 
     </packaging> 
-    <version>5.4.1-SNAPSHOT</version> 
+    <version>5.4.1</version> 
     <name>
          Orca Axis2 Client Repository Helper Package 
     </name> 
@@ -22,7 +22,7 @@
         <artifactId>
              tools 
         </artifactId> 
-        <version>5.4.1-SNAPSHOT</version> 
+        <version>5.4.1</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 

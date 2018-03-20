@@ -11,7 +11,7 @@
     <name>
          Orca Network Provider handlers 
     </name> 
-    <version>5.4.1-SNAPSHOT</version> 
+    <version>5.4.1</version> 
     <parent> 
         <groupId>
              orca 
@@ -19,7 +19,7 @@
         <artifactId>
              handlers 
         </artifactId> 
-        <version>5.4.1-SNAPSHOT</version> 
+        <version>5.4.1</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 

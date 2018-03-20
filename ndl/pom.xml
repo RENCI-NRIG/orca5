@@ -10,7 +10,7 @@
         <groupId>
              orca 
         </groupId> 
-        <version>5.4.1-SNAPSHOT</version> 
+        <version>5.4.1</version> 
     </parent> 
     <name>
          Orca NDL Processing 
@@ -21,7 +21,7 @@
     <artifactId>
          ndl 
     </artifactId> 
-    <version>5.4.1-SNAPSHOT</version> 
+    <version>5.4.1</version> 
     <url>
          http://maven.apache.org 
     </url> 
@@ -135,7 +135,7 @@
             <artifactId>
                  util 
             </artifactId> 
-            <version>5.4.1-SNAPSHOT</version> 
+            <version>5.4.1</version> 
         </dependency> 
     </dependencies> 
     <build> 

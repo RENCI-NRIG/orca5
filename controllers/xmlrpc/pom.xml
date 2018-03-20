@@ -12,7 +12,7 @@
     <packaging>
          jar 
     </packaging> 
-    <version>5.4.1-SNAPSHOT</version> 
+    <version>5.4.1</version> 
     <name>
          Orca XML-RPC Controller 
     </name> 
@@ -23,7 +23,7 @@
         <artifactId>
              controllers 
         </artifactId> 
-        <version>5.4.1-SNAPSHOT</version> 
+        <version>5.4.1</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 

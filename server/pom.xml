@@ -15,7 +15,7 @@
     <name>
          Orca Server 
     </name> 
-    <version>5.4.1-SNAPSHOT</version> 
+    <version>5.4.1</version> 
     <parent> 
         <groupId>
              orca 
@@ -23,7 +23,7 @@
         <artifactId>
              orca 
         </artifactId> 
-        <version>5.4.1-SNAPSHOT</version> 
+        <version>5.4.1</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
