@@ -11,7 +11,7 @@
     <packaging>
          jar 
     </packaging> 
-    <version>5.4.1</version> 
+    <version>5.4.2-SNAPSHOT</version> 
     <name>
          Orca Node Agent 
     </name> 
@@ -22,7 +22,7 @@
         <artifactId>
              orca 
         </artifactId> 
-        <version>5.4.1</version> 
+        <version>5.4.2-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
