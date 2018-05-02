@@ -61,7 +61,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
             ReservationMng p_r = null;
             List<String> r_id_list = new LinkedList<String>();
             String unit_tag = null, unit_parent_url = null;
-            Properties modifyProperties = new Properties();
+
             if (p_str != null) {
                 p = Integer.valueOf(p_str);
                 logger.debug("Number of parent reservations:" + p + ";num_interface=" + num_interface_int
@@ -84,6 +84,8 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
                 }
             }
             for (String r_id : r_id_list) {
+                // Creating modifyProperties here to ensure modifyProperties contains data for only one reservation
+                Properties modifyProperties = new Properties();
                 if (r_id != null) {
                     p_r = sm.getReservation(new ReservationID(r_id));
                     pr_local = OrcaConverter.fill(p_r.getLocalProperties());
@@ -123,6 +125,9 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
                                         parent_prefix, host_interface, unit_tag, local, logger);
                                 modifyProperties.putAll(ethModifyProperties);
 
+                                // Save unit.number.interface used later to build local interface properties in ReservationConverter.java
+                                logger.debug("KOMAL1 num_interface=" + num_interface + " num_interface_int=" + num_interface_int);
+                                modifyProperties.setProperty(ReservationConverter.PropertyParentNumInterface,String.valueOf(num_interface));
                                 logger.debug("modifycommand:" + modifySubcommand + ":properties:"
                                         + modifyProperties.toString());
                                 ModifyHelper.enqueueModify(reservation_id.toString(), modifySubcommand,
@@ -262,6 +267,7 @@ public class ReservationDependencyStatusUpdate implements IStatusUpdateCallback<
                 }
             }
 
+            logger.debug("KOMAL2 num_interface=" + num_interface + " num_interface_int=" + num_interface_int);
             local.setProperty(ReservationConverter.PropertyParentNumInterface, String.valueOf(num_interface));
             reservation.setLocalProperties(OrcaConverter.merge(local, reservation.getLocalProperties()));
 

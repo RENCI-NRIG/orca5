@@ -721,6 +721,8 @@ public class ReservationConverter implements LayerConstant {
                             PropList.mergeProperties(formedProperties, config);
                             PropList.mergeProperties(formedProperties, local);
 
+
+
                             parent_interface_uuid = parent_interface_uuid.concat(host_interface)
                                     .concat(UnitProperties.UnitEthUUIDSuffix);
 
@@ -814,6 +816,7 @@ public class ReservationConverter implements LayerConstant {
      */
     public Properties formInterfaceProperties(Entry<DomainElement, OntResource> parent, String site_host_interface,
             int num_parent, int num) {
+
         Properties property = new Properties();
         String ip_addr = null, mac_addr = null, host_interface = null, intf_name = null;
         String netmask;
@@ -1799,12 +1802,26 @@ public class ReservationConverter implements LayerConstant {
                 logger.debug("ModifiedReservation:d_uri=" + d_uri + ";" + dd.getGUID() + ";reservation="
                         + rmg.getReservationID());
                 Properties local = OrcaConverter.fill(rmg.getLocalProperties());
+                // Reading the configuration properties to fetch modify.x.unit.number.interface which is used for constructing Network Interface Properties
+                Properties config = OrcaConverter.fill(rmg.getConfigurationProperties());
+                int index = PropList.highestPropIndex(config, UnitProperties.ModifySubcommandPrefix);
+                String numInterfacePropName = UnitProperties.ModifyPrefix + index + "." + ReservationConverter.PropertyParentNumInterface;
                 local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
                 // modify properties for adding/deleting interfaces from links
                 String num_interface_str = local.getProperty(ReservationConverter.PropertyParentNumInterface);
+                // Fetch from config properties if not available in Local issue 208
+                if(num_interface_str == null) {
+                    num_interface_str = config.getProperty(numInterfacePropName);
+                    // Local Property Not Set
+                    if(num_interface_str !=null) {
+                        local.setProperty(ReservationConverter.PropertyParentNumInterface, num_interface_str);
+                        logger.debug("KOMAL ModifiedReservation: setting ReservationConverter.PropertyParentNumInterface=" + num_interface_str);
+                    }
+                }
                 int num_interface = 0;
                 if (num_interface_str != null)
                     num_interface = Integer.valueOf(num_interface_str);
+                logger.debug("KOMAL ModifiedReservation: num_interface_str=" + num_interface_str + " num_interface=" + num_interface);
                 HashMap<DomainElement, OntResource> preds = dd.getPrecededBy();
                 if (preds == null) {
                     logger.warn("Modify reservations, No parent:" + dd);
@@ -1814,6 +1831,7 @@ public class ReservationConverter implements LayerConstant {
                 if (m_p_storage_Map.containsKey(rmg))
                     numStorage = m_p_storage_Map.get(rmg);
                 num_interface = num_interface + numStorage;
+
                 int p = 0, m_p = 0, num = 0;
                 p_r = p_r_Map.get(rmg);
                 if (p_r == null) {
@@ -1875,6 +1893,7 @@ public class ReservationConverter implements LayerConstant {
                                         OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
                                 p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
                             }
+
                             Properties property = formInterfaceProperties(parent, site_host_interface, 0, p);
                             // merge properties into 'local'. should only be merged into 'rmg' once at the end
                             PropList.mergeProperties(property, local);
@@ -1897,6 +1916,7 @@ public class ReservationConverter implements LayerConstant {
                                         OrcaConverter.merge(p_property, p_rmg.getConfigurationProperties()));
                                 p_rmg.setLocalProperties(OrcaConverter.merge(p_property, p_rmg.getLocalProperties()));
                             }
+
                             Properties property = formInterfaceProperties(parent, site_host_interface, num_interface,
                                     m_p);
                             // merge properties into 'local'. should only be merged into 'rmg' once at the end
