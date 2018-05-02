@@ -1812,16 +1812,11 @@ public class ReservationConverter implements LayerConstant {
                 // Fetch from config properties if not available in Local issue 208
                 if(num_interface_str == null) {
                     num_interface_str = config.getProperty(numInterfacePropName);
-                    // Local Property Not Set
-                    if(num_interface_str !=null) {
-                        local.setProperty(ReservationConverter.PropertyParentNumInterface, num_interface_str);
-                        logger.debug("KOMAL ModifiedReservation: setting ReservationConverter.PropertyParentNumInterface=" + num_interface_str);
-                    }
                 }
                 int num_interface = 0;
                 if (num_interface_str != null)
                     num_interface = Integer.valueOf(num_interface_str);
-                logger.debug("KOMAL ModifiedReservation: num_interface_str=" + num_interface_str + " num_interface=" + num_interface);
+                logger.debug("ModifiedReservation: num_interface_str=" + num_interface_str + " num_interface=" + num_interface);
                 HashMap<DomainElement, OntResource> preds = dd.getPrecededBy();
                 if (preds == null) {
                     logger.warn("Modify reservations, No parent:" + dd);
@@ -1831,6 +1826,7 @@ public class ReservationConverter implements LayerConstant {
                 if (m_p_storage_Map.containsKey(rmg))
                     numStorage = m_p_storage_Map.get(rmg);
                 num_interface = num_interface + numStorage;
+                logger.debug("ModifiedReservation: num_interface_str=" + num_interface_str + " num_interface=" + num_interface + " numStorage=" + numStorage);
 
                 int p = 0, m_p = 0, num = 0;
                 p_r = p_r_Map.get(rmg);
@@ -1923,6 +1919,14 @@ public class ReservationConverter implements LayerConstant {
                             PropList.mergeProperties(property, local);
                         }
                     }
+                }
+
+                // The value set by formInterfaceProperties can be incorrect as the order in which this function is invoked is not same
+                // as the order or creation of the interfaces. If formInterfaceProperties is invoked for an existing interface at the end the value
+                // for unit.number.interface will be incorrect. The below code ensures that correct value for unit.number.interface = existing interfaces(num_interface) + new interfaces(m_p)
+                // NOTE: ReservationConverter.PropertyParentNumInterface is same as UnitProperties.UnitNumberInterface
+                if(m_p > 0) {
+                    local.setProperty(ReservationConverter.PropertyParentNumInterface, String.valueOf(m_p + num_interface));
                 }
 
                 // create properties to remember its parent reservations
