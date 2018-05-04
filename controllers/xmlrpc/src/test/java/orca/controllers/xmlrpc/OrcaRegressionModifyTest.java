@@ -92,8 +92,33 @@ public class OrcaRegressionModifyTest {
     		// Interdomain modify
     		{ "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
     				"../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_to_B2_modify_request.rdf",
-    				9 } 
-    	});
+    				9 },
+			// Multiple modify to add interface
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_add_vlan0_with_no_ip.rdf",
+					2 },
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_add_vlan1_with_no_ip.rdf",
+					3 },
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_add_vlan2_with_no_ip.rdf",
+					4 },
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_add_vlan3_with_no_ip.rdf",
+					5 },
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_del_vlan2_with_no_ip.rdf",
+					4 },
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_readd_vlan2_with_no_ip.rdf",
+					5 },
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_add_vlan4_with_no_ip.rdf",
+					6 },
+			{ "src/test/resources/208_create_slice_request.rdf",
+					"src/test/resources/208_modify_add_vlan5_with_no_ip.rdf",
+					7 }
+		});
     }
 
     // First Parameter -- file name with Request
