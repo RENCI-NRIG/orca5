@@ -149,7 +149,7 @@ public class OrcaRegressionModifyTest {
         testName += "_"
                 + modifyFilename.substring(modifyFilename.lastIndexOf('/') + 1, modifyFilename.lastIndexOf('.'));
 
-        logger.info("Starting Orca Regression Modify Test " + testName);
+        System.out.println("Starting Orca Regression Modify Test " + testName);
 
         // modify request
         LinkedHashMap<String, Integer> modifyRequests = new LinkedHashMap<>();
