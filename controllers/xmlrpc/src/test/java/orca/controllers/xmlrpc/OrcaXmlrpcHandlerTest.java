@@ -877,11 +877,11 @@ public class OrcaXmlrpcHandlerTest extends TestHelper {
 
             assertEquals(
                     "Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT
-                            + ") did not match expected value",
+                            + ") did not match expected value for " + modifyEntry.getKey(),
                     expectedReservationCount,
                     countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
 
-            assertTrue("Result does not match regex.",
+            assertTrue("Result does not match regex for " + modifyEntry.getKey(),
                     ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
 
             assertNotNull(result.get(TICKETED_ENTITIES_FIELD));

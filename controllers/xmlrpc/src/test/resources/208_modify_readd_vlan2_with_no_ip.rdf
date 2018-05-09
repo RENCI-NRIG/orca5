@@ -15,45 +15,45 @@
     xmlns:request-schema="http://geni-orca.renci.org/owl/request.owl#"
     xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
     xmlns:planetlab="http://geni-orca.renci.org/owl/planetlab.owl#"
+    xmlns:modify="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#"
     xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
     xmlns:dtn="http://geni-orca.renci.org/owl/dtn.owl#"
     xmlns:time="http://www.w3.org/2006/time#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:modify-schema="http://geni-orca.renci.org/owl/modify.owl#"
     xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
-    xmlns:modify="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#"
     xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
     xmlns:orca="http://geni-orca.renci.org/owl/orca.rdf#" > 
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#VLAN2-Node0">
-    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#modifyElement/a56e119d-d966-4d62-8db8-f25bb798bd0c">
-    <modify-schema:modifyElement rdf:resource="http://geni-orca.renci.org/owl/00e92a5c-daa2-4ef1-bb6e-217e963347bf#Node0"/>
-    <modify-schema:modifySubject rdf:resource="http://geni-orca.renci.org/owl/00e92a5c-daa2-4ef1-bb6e-217e963347bf#Node0"/>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#modifyElement/e14c3c28-436c-42b8-beb2-8afa010d4e21">
+    <modify-schema:addElement rdf:resource="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#VLAN2"/>
+    <modify-schema:modifySubject rdf:resource="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#VLAN2"/>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/modify.owl#ModifyElement"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#modifyElement/ca34dea1-68be-4ade-9b81-ee9f6e5d30aa">
-    <modify-schema:addElement rdf:resource="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#VLAN2"/>
-    <modify-schema:modifySubject rdf:resource="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#VLAN2"/>
-    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/modify.owl#ModifyElement"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/00e92a5c-daa2-4ef1-bb6e-217e963347bf#Node0">
-    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#VLAN2-Node0"/>
-    <modify-schema:isModify rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</modify-schema:isModify>
-    <topology:hasGUID>1ea0cad2-0588-410d-9e24-84101613cabb</topology:hasGUID>
-    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#a0fe6746-ee34-446a-adb4-7801741dcbe1/modify">
-    <collections:element rdf:resource="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#modifyElement/ca34dea1-68be-4ade-9b81-ee9f6e5d30aa"/>
-    <collections:element rdf:resource="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#modifyElement/a56e119d-d966-4d62-8db8-f25bb798bd0c"/>
-    <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">a0fe6746-ee34-446a-adb4-7801741dcbe1/modify</topology:hasName>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#afe0d0d6-fed9-438c-a478-0e3116b70157/modify">
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#modifyElement/e14c3c28-436c-42b8-beb2-8afa010d4e21"/>
+    <collections:element rdf:resource="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#modifyElement/b9538828-5167-47ce-9ecf-66f4399dfdd0"/>
+    <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">afe0d0d6-fed9-438c-a478-0e3116b70157/modify</topology:hasName>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/modify.owl#ModifyReservation"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#VLAN2">
-    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/a0fe6746-ee34-446a-adb4-7801741dcbe1#VLAN2-Node0"/>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/0eba2862-d44f-4e5b-a9a7-4181a7e9a362#Node0">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#VLAN2-Node0"/>
+    <modify-schema:isModify rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</modify-schema:isModify>
+    <topology:hasGUID>e9c871ae-d190-4d9e-9aa8-534070b98323</topology:hasGUID>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#VLAN2-Node0">
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#VLAN2">
+    <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#VLAN2-Node0"/>
     <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
     <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000000</layer:bandwidth>
-    <topology:hasGUID>781c7d70-d4bf-4b4a-ac58-945b2f094db4</topology:hasGUID>
+    <topology:hasGUID>24e19e7c-3611-4544-8509-ea57be456e6c</topology:hasGUID>
     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#BroadcastConnection"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://geni-orca.renci.org/owl/afe0d0d6-fed9-438c-a478-0e3116b70157#modifyElement/b9538828-5167-47ce-9ecf-66f4399dfdd0">
+    <modify-schema:modifyElement rdf:resource="http://geni-orca.renci.org/owl/0eba2862-d44f-4e5b-a9a7-4181a7e9a362#Node0"/>
+    <modify-schema:modifySubject rdf:resource="http://geni-orca.renci.org/owl/0eba2862-d44f-4e5b-a9a7-4181a7e9a362#Node0"/>
+    <rdf:type rdf:resource="http://geni-orca.renci.org/owl/modify.owl#ModifyElement"/>
   </rdf:Description>
 </rdf:RDF>
