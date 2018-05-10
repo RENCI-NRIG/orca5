@@ -337,7 +337,9 @@ public class OrcaXmlrpcAssertions {
      *
      * @param slice
      */
-    protected static void assertSliceHasExpectedVlans(XmlrpcControllerSlice slice, List<TicketReservationMng> computedReservations, int expectedInterfaceCount) {
+    protected static void assertSliceHasExpectedVlans(XmlrpcControllerSlice slice, 
+                                                      List<TicketReservationMng> computedReservations, 
+                                                      int expectedInterfaceCount) {
         Logger logger = Globals.getLogger(OrcaXmlrpcAssertions.class.getSimpleName());
 
         final RequestWorkflow workflow = slice.getWorkflow();
@@ -347,27 +349,31 @@ public class OrcaXmlrpcAssertions {
         int countVlans=0;
         HashSet<String> interfaceSet = new HashSet<>();
         for (NetworkElement element : boundElements) {
-            if(element.getResourceType().getResourceType()==DomainResourceType.VLAN_RESOURCE_TYPE)
-            {
+            if(element.getResourceType().getResourceType()==DomainResourceType.VLAN_RESOURCE_TYPE) {
                 countVlans++;
             }
         }
         assertEquals("Number intefaces did not match expected value",
                      expectedInterfaceCount,
                      countVlans);
+        int skipCreateSliceReservation=0;
         for (TicketReservationMng reservation : computedReservations) {
+            // Skip non vm reservations
+            if(!reservation.getResourceType().matches("(.*).vm.vm")) {
+                continue;
+            }
+            else {
+                if(skipCreateSliceReservation==0) {
+                    ++skipCreateSliceReservation;
+                    continue;
+                }
+            }
             Properties localProperties = OrcaConverter.fill(reservation.getLocalProperties());
-
-            // Skip any VLAN reservations
-            if (null != localProperties.getProperty(RequestBandwidth)) {
-                continue;
-            }
-            if(reservation.getResourceType()!="vm")
-            {
-                continue;
-            }
             assertNotNull("Reservation UID " + reservation.getReservationID() + " is missing unit.num.interface: "
                     + expectedInterfaceCount, localProperties.getProperty(UnitProperties.UnitNumberInterface));
+            assertEquals("Reservation UID " + reservation.getReservationID() + " is not as expected", 
+                         String.valueOf(expectedInterfaceCount), 
+                         localProperties.getProperty(UnitProperties.UnitNumberInterface));
         }
     }
 
