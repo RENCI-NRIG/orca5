@@ -15,8 +15,10 @@ import orca.ndl.NdlException;
 import orca.ndl.NdlManifestParser;
 import orca.ndl.elements.Interface;
 import orca.ndl.elements.NetworkElement;
+import orca.ndl.DomainResourceType;
 import orca.shirako.container.Globals;
 import org.apache.log4j.Logger;
+import orca.shirako.common.meta.UnitProperties;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -27,6 +29,7 @@ import static orca.shirako.common.meta.RequestProperties.RequestBandwidth;
 import static orca.shirako.common.meta.RequestProperties.RequestNumCPUCores;
 import static orca.shirako.common.meta.UnitProperties.*;
 import static org.junit.Assert.*;
+import static orca.ndl.DomainResourceType.VLAN_RESOURCE_TYPE;
 
 public class OrcaXmlrpcAssertions {
 
@@ -328,6 +331,50 @@ public class OrcaXmlrpcAssertions {
             }
         }
 
+    }
+    /**
+     * Detects slice has expected vlans from Issue #208
+     *
+     * @param slice
+     */
+    protected static void assertSliceHasExpectedVlans(XmlrpcControllerSlice slice, 
+                                                      List<TicketReservationMng> computedReservations, 
+                                                      int expectedInterfaceCount) {
+        Logger logger = Globals.getLogger(OrcaXmlrpcAssertions.class.getSimpleName());
+
+        final RequestWorkflow workflow = slice.getWorkflow();
+        final Collection<NetworkElement> boundElements = workflow.getBoundElements();
+
+        assertNotNull(boundElements);
+        int countVlans=0;
+        HashSet<String> interfaceSet = new HashSet<>();
+        for (NetworkElement element : boundElements) {
+            if(element.getResourceType().getResourceType()==DomainResourceType.VLAN_RESOURCE_TYPE) {
+                countVlans++;
+            }
+        }
+        assertEquals("Number intefaces did not match expected value",
+                     expectedInterfaceCount,
+                     countVlans);
+        int skipCreateSliceReservation=0;
+        for (TicketReservationMng reservation : computedReservations) {
+            // Skip non vm reservations
+            if(!reservation.getResourceType().matches("(.*).vm.vm")) {
+                continue;
+            }
+            else {
+                if(skipCreateSliceReservation==0) {
+                    ++skipCreateSliceReservation;
+                    continue;
+                }
+            }
+            Properties localProperties = OrcaConverter.fill(reservation.getLocalProperties());
+            assertNotNull("Reservation UID " + reservation.getReservationID() + " is missing unit.num.interface: "
+                    + expectedInterfaceCount, localProperties.getProperty(UnitProperties.UnitNumberInterface));
+            assertEquals("Reservation UID " + reservation.getReservationID() + " is not as expected", 
+                         String.valueOf(expectedInterfaceCount), 
+                         localProperties.getProperty(UnitProperties.UnitNumberInterface));
+        }
     }
 
     /**

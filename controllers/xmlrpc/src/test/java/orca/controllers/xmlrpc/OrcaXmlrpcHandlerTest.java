@@ -17,6 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import orca.manage.OrcaConstants;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -877,14 +878,23 @@ public class OrcaXmlrpcHandlerTest extends TestHelper {
 
             assertEquals(
                     "Number or result reservations (based on " + CHAR_TO_MATCH_RESERVATION_COUNT
-                            + ") did not match expected value",
+                            + ") did not match expected value for " + modifyEntry.getKey(),
                     expectedReservationCount,
                     countMatches((String) result.get(RET_RET_FIELD), CHAR_TO_MATCH_RESERVATION_COUNT));
 
-            assertTrue("Result does not match regex.",
+            assertTrue("Result does not match regex for " + modifyEntry.getKey(),
                     ((String) result.get(RET_RET_FIELD)).matches(VALID_RESERVATION_SUMMARY_REGEX));
 
             assertNotNull(result.get(TICKETED_ENTITIES_FIELD));
+            // Set the State of Reservations to Active inorder for ReservationConverter code to be invoked
+            if (modifyEntry.getKey().contains("208_"))
+            {
+                 XmlrpcControllerSlice slice = orcaXmlrpcHandler.instance.getSlice(slice_urn);
+                 List<TicketReservationMng> computedReservations = slice.getComputedReservations();
+                 for (TicketReservationMng reservation : computedReservations) {
+                     reservation.setState(OrcaConstants.ReservationStateActive);
+                 }
+            }
         }
 
         // check the reservation properties
