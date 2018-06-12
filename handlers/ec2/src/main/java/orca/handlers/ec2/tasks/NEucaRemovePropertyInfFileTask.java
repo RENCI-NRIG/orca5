@@ -40,6 +40,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
 
     public void execute() throws BuildException {
 
+        System.out.println("KTDEBUG IN NEucaRemovePropertyInfFileTask::execute");
         try {
             super.execute();
             if (file == null) {
@@ -138,6 +139,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
         } catch (Exception e) {
             throw new BuildException("An error occurred: " + e.getMessage(), e);
         }
+        System.out.println("KTDEBUG OUT NEucaRemovePropertyInfFileTask::execute");
     }
 
     public void setFile(String file) {

@@ -34,6 +34,11 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public static final String Emulation = "emulation";
 
     /**
+     * Are we using comet
+     */
+    public static final String CometHost = "comethost";
+
+    /**
      * Are we using secure communication with the node agent service: true|false.
      */
     public static final String PropertySecureCommunication = "secure.communication";
@@ -93,6 +98,7 @@ public class OrcaConfiguration implements IOrcaConfiguration
     protected String nodeAgentPortNumber = "6";
     protected String nodeAgentProtocol = "http";
     protected String nodeAgentUri = "/axis2/services/NodeAgentService";
+    protected String cometHost;
 
     /**
      * Class name for the ticket factory implementation.
@@ -154,6 +160,11 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public String getNodeAgentUri()
     {
         return nodeAgentUri;
+    }
+
+    public String getCometHost()
+    {
+        return cometHost;
     }
 
     /**
@@ -263,6 +274,10 @@ public class OrcaConfiguration implements IOrcaConfiguration
 
         if (properties.containsKey(OrcaConfiguration.NaUri)) {
             nodeAgentUri = properties.getProperty(OrcaConfiguration.NaUri);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CometHost)) {
+            cometHost = properties.getProperty(OrcaConfiguration.CometHost);
         }
 
         if (properties.containsKey(TicketFactoryClass)){

@@ -91,4 +91,6 @@ public interface IOrcaConfiguration {
     public String getNodeAgentServiceUrl(String address);
 
     public String getNodeAgentUri();
+
+    public String getCometHost();
 }

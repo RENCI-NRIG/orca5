@@ -79,6 +79,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
 
     public void execute() throws BuildException {
 
+        System.out.println("KTDEBUG IN NEucaAddPropertyInfFileTask::execute");
         try {
             super.execute();
             if (file == null) {
@@ -120,6 +121,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     this.key = this.key.replace(":", "").trim();
                 }
 
+                //NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(temp, unitId, sliceId);;
                 boolean processedKey = false;
                 while (line != null) {
                     System.out.println("PRUTH: line = " + line);
@@ -202,6 +204,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
         } catch (Exception e) {
             throw new BuildException("An error occurred: " + e.getMessage(), e);
         }
+        System.out.println("KTDEBUG OUT NEucaAddPropertyInfFileTask::execute");
     }
 
     public void setFile(String file) {
