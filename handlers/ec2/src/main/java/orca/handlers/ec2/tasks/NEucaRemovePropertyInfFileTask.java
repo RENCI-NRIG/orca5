@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 
 import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.common.meta.ConfigurationProperties;
+import orca.shirako.container.OrcaConfiguration;
 import orca.shirako.plugins.config.OrcaAntTask;
 
 import org.apache.tools.ant.BuildException;
@@ -29,137 +30,176 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
-    protected String file;
-    protected String cloudType;
-    protected String outputProperty;
-    protected String userdataOld;
-    protected String userdataNew;
+    protected String file_;
+    protected String cloudType_;
+    protected String outputProperty_;
+    protected String userdataOld_;
 
-    protected String section = null;
-    protected String key = null;
+    protected String section_ = null;
+    protected String key_ = null;
 
     public void execute() throws BuildException {
 
-        System.out.println("KTDEBUG IN NEucaRemovePropertyInfFileTask::execute");
         try {
             super.execute();
-            if (file == null) {
-                throw new Exception("Missing file parameter");
+            if (file_ == null) {
+                throw new Exception("NEucaRemovePropertyInfFileTask::execute: Missing file parameter");
             }
-            if (cloudType == null) {
-                throw new Exception("Missing cloudType parameter");
+            if (cloudType_ == null) {
+                throw new Exception("NEucaRemovePropertyInfFileTask::execute: Missing cloudType parameter");
             }
 
-            System.out.println("file: " + file + ", cloudType: " + cloudType);
+            System.out.println("NEucaRemovePropertyInfFileTask::execute: file: " + file_ + ", cloudType: " + cloudType_);
 
-            System.out.println("PRUTH: remove this.section = " + this.section + ", this.key = " + this.key);
+            System.out.println("NEucaRemovePropertyInfFileTask::execute: remove section_ = " + section_ + ", key_ = " + key_);
+
             BufferedReader userdataSource;
-            if (this.file.equals(this.userdataOld)) {
-                System.out.println("PRUTH: reading userdata from file " + this.file);
-                userdataSource = new BufferedReader(new FileReader(this.file));
+            if (file_.equals(userdataOld_)) {
+                System.out.println("NEucaRemovePropertyInfFileTask::execute: reading userdata from file " + file_);
+                userdataSource = new BufferedReader(new FileReader(file_));
             } else {
-                System.out.println("PRUTH: using userdata from userdataOld string");
-                userdataSource = new BufferedReader(new StringReader(this.userdataOld));
+                System.out.println("NEucaRemovePropertyInfFileTask::execute: using userdata from userdataOld string");
+                userdataSource = new BufferedReader(new StringReader(userdataOld_));
             }
 
-            System.out.println("PRUTH: this.section = " + this.section + ", this.key = " + this.key);
             String userdataNew = "";
-            System.out.println("PRUTH: removeing this.section = " + this.section + ", this.key = " + this.key);
-            try {
-                StringBuilder sb = new StringBuilder();
-                String line = userdataSource.readLine();
-
-                String section = "";
-                String prev_section = "";
-
-                // remove the colons from the mac address
-                if (this.section != null && this.section.equals("interfaces")) {
-                    this.key = this.key.replace(":", "").trim();
-                }
-
-                boolean processedKey = false;
-                while (line != null) {
-                    System.out.println("PRUTH: line = " + line);
-
-                    // if there is nothing to add, just copy lines
-                    if (this.section == null || this.key == null) {
-                        sb.append(line);
-                        sb.append(System.lineSeparator());
-                        line = userdataSource.readLine();
-                        processedKey = true;
-                        continue;
-                    }
-
-                    Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
-                    Matcher matcher = pattern.matcher(line);
-                    if (matcher.find()) {
-                        prev_section = section;
-                        section = matcher.group(1);
-                        sb.append(line);
-                        sb.append(System.lineSeparator());
-                        System.out.println("found section " + section);
-                        line = userdataSource.readLine();
-                        continue;
-                    }
-
-                    // check to see if we checked all the existing interfaces. if so, add the new one.
-                    key = line.split("=")[0].trim();
-                    // value=line.split("=")[1].trim();
-                    System.out.println("processing line:  key: " + key + ", section: " + section);
-
-                    // skip if we find a match... remember we are removing the key/value
-                    if (!(section.equals(this.section) && key.equals(this.key))) {
-                        // modify an existing interface
-                        System.out.println("Keeping line: " + line);
-                        sb.append(line);
-                        sb.append(System.lineSeparator());
-                    } else {
-                        System.out.println("Deleting line: " + line);
-                    }
-
-                    line = userdataSource.readLine();
-                }
-
-                userdataNew = sb.toString();
-            } finally {
-                userdataSource.close();
+            if (section_ == null || key_ == null) {
+                // Nothing to do; no change to UserData
+                System.out.println("NEucaRemovePropertyInfFileTask::execute:Nothing to do!");
+                userdataNew = userdataOld_;
             }
-            // }
+            else {
+                try {
+                    StringBuilder sb = new StringBuilder();
+                    String line = userdataSource.readLine();
+
+                    String section = "";
+                    String prev_section = "";
+
+                    // remove the colons from the mac address
+                    if (section_ != null && section_.equals("interfaces")) {
+                        key_ = key_.replace(":", "").trim();
+                    }
+
+                    // COMET KOMAL
+                    String unitId = getProject().getProperty(UnitProperties.UnitID);
+                    String sliceId= getProject().getProperty(UnitProperties.UnitSliceID);
+                    String cometHost = getProject().getProperty(OrcaConfiguration.CometHost);
+                    NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, unitId, sliceId);
+
+                    if(NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing users in");
+                        cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_);
+                        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users);
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing users out");
+                    }
+                    else if(NEucaCometDataGenerator.Family.interfaces.toString().equals(section_)) {
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing interfaces in");
+                        cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_);
+                        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing interfaces out");
+                    }
+                    else if(NEucaCometDataGenerator.Family.storages.toString().equals(section_)) {
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing storages in");
+                        cometDataGenerator.remove(NEucaCometDataGenerator.Family.storages, key_);
+                        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storages);
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing storages out");
+                    }
+                    else if(NEucaCometDataGenerator.Family.routes.toString().equals(section_)) {
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing routes in");
+                        cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_);
+                        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing routes out");
+                    }
+                    else if(NEucaCometDataGenerator.Family.scripts.toString().equals(section_)) {
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing scripts in");
+                        cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_);
+                        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts);
+                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing scripts out");
+                    }
+                    // COMET KOMAL
+
+                    boolean processedKey = false;
+                    while (line != null) {
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: line = " + line);
+
+                        // if there is nothing to remove, just copy lines
+                        if (section_ == null || key_ == null) {
+                            sb.append(line);
+                            sb.append(System.lineSeparator());
+                            line = userdataSource.readLine();
+                            processedKey = true;
+                            continue;
+                        }
+
+                        Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
+                        Matcher matcher = pattern.matcher(line);
+                        if (matcher.find()) {
+                            prev_section = section;
+                            section = matcher.group(1);
+                            sb.append(line);
+                            sb.append(System.lineSeparator());
+                            System.out.println("found section " + section);
+                            line = userdataSource.readLine();
+                            continue;
+                        }
+
+                        // check to see if we checked all the existing interfaces. if so, add the new one.
+                        String key = line.split("=")[0].trim();
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: processing line:  key: " + key + ", section: " + section);
+
+                        // skip if we find a match... remember we are removing the key/value
+                        if (!(section.equals(section_) && key.equals(key_))) {
+                            System.out.println("NEucaRemovePropertyInfFileTask::execute: Keeping line: " + line);
+                            sb.append(line);
+                            sb.append(System.lineSeparator());
+                        } else {
+                            System.out.println("NEucaRemovePropertyInfFileTask::execute: Deleting line: " + line);
+                        }
+
+                        line = userdataSource.readLine();
+                    }
+
+                    userdataNew = sb.toString();
+
+                } finally {
+                    userdataSource.close();
+                }
+            }
             userdataSource.close();
 
-            PrintWriter out = new PrintWriter(new FileWriter(new File(file)));
+            PrintWriter out = new PrintWriter(new FileWriter(new File(file_)));
             out.print(userdataNew);
             out.close();
 
-            if (outputProperty != null)
-                getProject().setProperty(this.outputProperty, userdataNew);
+            if (outputProperty_ != null)
+                getProject().setProperty(outputProperty_, userdataNew);
 
         } catch (BuildException e) {
             throw e;
         } catch (Exception e) {
-            throw new BuildException("An error occurred: " + e.getMessage(), e);
+            throw new BuildException("NEucaRemovePropertyInfFileTask::execute: An error occurred: " + e.getMessage(), e);
         }
-        System.out.println("KTDEBUG OUT NEucaRemovePropertyInfFileTask::execute");
     }
 
     public void setFile(String file) {
-        this.file = file;
+        file_ = file;
     }
 
     public void setCloudtype(String cloudtype) {
-        this.cloudType = cloudtype;
+        cloudType_ = cloudtype;
     }
 
     public void setSection(String section) {
-        this.section = section;
+        section_ = section;
     }
 
     public void setKey(String key) {
-        this.key = key;
+        key_ = key;
     }
 
     public void setUserdataold(String userdataold) {
-        this.userdataOld = userdataold;
+        userdataOld_ = userdataold;
     }
 
 }

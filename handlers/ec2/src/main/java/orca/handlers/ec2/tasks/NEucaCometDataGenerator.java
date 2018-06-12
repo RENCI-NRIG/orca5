@@ -44,12 +44,12 @@ public class NEucaCometDataGenerator {
     public final static String JsonKeyScriptBody = "scriptBody";
 
     // Types
-    enum Family {
-        Users,
-        Interfaces,
-        Storages,
-        Routes,
-        Scripts
+    public enum Family {
+        users,
+        interfaces,
+        storages,
+        routes,
+        scripts
     };
 
     // DATA
@@ -96,19 +96,19 @@ public class NEucaCometDataGenerator {
                 JSONArray value = comet_.read(sliceId_, unitId_, unitId_+"-rid", family.toString());
                 if(value != null) {
                     switch (family) {
-                        case Users:
+                        case users:
                             users_ = value;
                             break;
-                        case Interfaces:
+                        case interfaces:
                             interfaces_ = value;
                             break;
-                        case Storages:
+                        case storages:
                             storages_ = value;
                             break;
-                        case Routes:
+                        case routes:
                             routes_ = value;
                             break;
-                        case Scripts:
+                        case scripts:
                             scripts_ = value;
                             break;
                     }
@@ -125,27 +125,27 @@ public class NEucaCometDataGenerator {
     public String getObject(Family family) {
         try {
             switch (family) {
-                case Users:
+                case users:
                     if (users_ != null) {
                         return users_.toString();
                     }
                     break;
-                case Interfaces:
+                case interfaces:
                     if (interfaces_ != null) {
                         return interfaces_.toString();
                     }
                     break;
-                case Storages:
+                case storages:
                     if (storages_ != null) {
                         return storages_.toString();
                     }
                     break;
-                case Routes:
+                case routes:
                     if (routes_ != null) {
                         return routes_.toString();
                     }
                     break;
-                case Scripts:
+                case scripts:
                     if (scripts_ != null) {
                         return scripts_.toString();
                     }
@@ -320,19 +320,19 @@ public class NEucaCometDataGenerator {
             }
             JSONArray familyToBeUpdated = null;
             switch (family) {
-                case Users:
+                case users:
                     familyToBeUpdated = users_;
                     break;
-                case Interfaces:
+                case interfaces:
                     familyToBeUpdated = interfaces_;
                     break;
-                case Storages:
+                case storages:
                     familyToBeUpdated = storages_;
                     break;
-                case Routes:
+                case routes:
                     familyToBeUpdated = routes_;
                     break;
-                case Scripts:
+                case scripts:
                     familyToBeUpdated = storages_;
                     break;
             }

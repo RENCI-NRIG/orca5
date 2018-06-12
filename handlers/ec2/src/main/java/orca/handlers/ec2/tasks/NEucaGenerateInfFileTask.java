@@ -352,13 +352,11 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             out.println(login + "=" + sudo + ":" + key);
 
             if(cometDataGenerator != null) {
-                System.out.println("KTDEBUG adding user to cometDataGenerator");
                 cometDataGenerator.addUser(login, sudo, key);
-                System.out.println("KTDEBUG added user to cometDataGenerator");
             }
         }
         if(cometDataGenerator != null) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.Users);
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users);
         }
     }
 
@@ -491,7 +489,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         }
         if(cometDataGenerator != null) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.Interfaces);
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
         }
     }
 
@@ -616,7 +614,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         }
         if(cometDataGenerator != null) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.Storages);
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storages);
         }
     }
 
@@ -674,7 +672,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             }
         }
         if(cometDataGenerator != null) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.Routes);
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
         }
     }
 
@@ -744,7 +742,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
         }
 
         if(cometDataGenerator != null) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.Scripts);
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts);
         }
     }
 
