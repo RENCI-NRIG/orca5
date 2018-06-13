@@ -205,7 +205,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_);
         String [] arrOfStr = value_.split(":");
         if(arrOfStr.length < 2) {
-            System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: Incorret number of parameters");
+            System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: Incorrect number of parameters");
             return;
         }
         if(cometDataGenerator.addUser(key_, arrOfStr[0], arrOfStr[1])) {
@@ -218,8 +218,10 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces);
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_);
         String [] arrOfStr = value_.split(":");
+        System.out.println("val: " + value_);
+        System.out.println("Len: " + arrOfStr.length);
         if(arrOfStr.length < 2) {
-            System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: Incorret number of parameters");
+            System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: Incorrect number of parameters");
             return;
         }
         boolean save = false;
@@ -240,7 +242,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.storages, key_);
         String[] arrOfStr = value_.split(":");
         if (arrOfStr.length < 3) {
-            System.out.println("NEucaAddPropertyInfFileTask::modifyStorages: Incorret number of parameters");
+            System.out.println("NEucaAddPropertyInfFileTask::modifyStorages: Incorrect number of parameters");
             return;
         }
         boolean save = false;
@@ -292,7 +294,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_);
         String [] arrOfStr = value_.split(":");
         if(arrOfStr.length < 1) {
-            System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: Incorret number of parameters");
+            System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: Incorrect number of parameters");
             return;
         }
         if(cometDataGenerator.addRoute(key_, arrOfStr[0])) {
@@ -306,7 +308,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_);
         String[] arrOfStr = value_.split(":");
         if (arrOfStr.length < 1) {
-            System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: Incorret number of parameters");
+            System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: Incorrect number of parameters");
             return;
         }
         if (cometDataGenerator.addScript(key_, arrOfStr[0])) {
