@@ -488,7 +488,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             outputProperty += hosteth + "." + vlanTag + "." + mac + " ";
 
         }
-        if(cometDataGenerator != null) {
+        if(cometDataGenerator != null && eths.length > 0) {
             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
         }
     }
@@ -613,7 +613,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             }
 
         }
-        if(cometDataGenerator != null) {
+        if(cometDataGenerator != null && stores.length > 0) {
             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storages);
         }
     }
@@ -671,7 +671,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
                 cometDataGenerator.addRoute(routeNetwork, routeNexthop);
             }
         }
-        if(cometDataGenerator != null) {
+        if(cometDataGenerator != null && routes.length > 0) {
             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
         }
     }
@@ -741,7 +741,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             }
         }
 
-        if(cometDataGenerator != null) {
+        if(cometDataGenerator != null && (config != null || scripts.length > 0)) {
             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts);
         }
     }

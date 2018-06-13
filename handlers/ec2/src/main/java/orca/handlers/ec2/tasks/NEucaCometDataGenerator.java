@@ -2,10 +2,6 @@ package orca.handlers.ec2.tasks;
 
 import org.json.simple.*;
 
-
-
-import java.util.Iterator;
-
 public class NEucaCometDataGenerator {
     // Statics
     // User fields
@@ -168,9 +164,13 @@ public class NEucaCometDataGenerator {
                 // readToken = unitId_ + "-rid"
                 // writeToken = unitId_ + "-wid"
                 String value = getObject(family);
-                if(value != null) {
+                if(value != null && !value.isEmpty()) {
                     System.out.println("Saving family: " + family + " value: " + value);
                     return comet_.write(sliceId_, unitId_, unitId_ + "-rid", unitId_ + "-wid", family.toString(), value);
+                }
+                else {
+                    System.out.println("Removing family: " + family);
+                    return comet_.remove(sliceId_, unitId_, unitId_ + "-rid", unitId_ + "-wid", family.toString());
                 }
             }
         }
