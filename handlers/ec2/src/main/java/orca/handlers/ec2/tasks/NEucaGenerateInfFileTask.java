@@ -481,7 +481,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             }
             out.println();
             if(cometDataGenerator != null) {
-                cometDataGenerator.addInterface(mac, state, ipVersion, ip, hosteth, vlanTag);
+                cometDataGenerator.addInterface(mac.replace(":", "") , state, ipVersion, ip, hosteth, vlanTag);
             }
 
             // append iface to output property

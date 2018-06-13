@@ -122,27 +122,27 @@ public class NEucaCometDataGenerator {
         try {
             switch (family) {
                 case users:
-                    if (users_ != null) {
+                    if (users_ != null && users_.size() > 0) {
                         return users_.toString();
                     }
                     break;
                 case interfaces:
-                    if (interfaces_ != null) {
+                    if (interfaces_ != null && interfaces_.size() > 0) {
                         return interfaces_.toString();
                     }
                     break;
                 case storages:
-                    if (storages_ != null) {
+                    if (storages_ != null && storages_.size() > 0) {
                         return storages_.toString();
                     }
                     break;
                 case routes:
-                    if (routes_ != null) {
+                    if (routes_ != null && routes_.size() > 0) {
                         return routes_.toString();
                     }
                     break;
                 case scripts:
-                    if (scripts_ != null) {
+                    if (scripts_ != null && scripts_.size() > 0) {
                         return scripts_.toString();
                     }
                     break;
@@ -180,11 +180,12 @@ public class NEucaCometDataGenerator {
         return false;
     }
 
-    public void addUser(String user, String sudo, String key) {
+    public boolean addUser(String user, String sudo, String key) {
+        boolean retVal = false;
         try {
             if(user == null|| sudo == null || key == null) {
                 System.out.println("Missing mandatory user parameters!");
-                return;
+                return retVal;
             }
             if (users_ == null) {
                 users_ = new JSONArray();
@@ -193,18 +194,20 @@ public class NEucaCometDataGenerator {
             u.put(JsonKeyUserName, user);
             u.put(JsonKeyUserSudo, sudo);
             u.put(JsonKeyUserKey, key);
-            users_.add(u);
+            retVal = users_.add(u);
         }
         catch(Exception e) {
             System.out.println("Exception occured while addUser: " + e.getMessage() + " " + e.getStackTrace().toString());
         }
+        return retVal;
     }
 
-    public void addInterface(String mac, String state, String ipVersion, String ip, String hosteth, String vlanTag) {
+    public boolean addInterface(String mac, String state, String ipVersion, String ip, String hosteth, String vlanTag) {
+        boolean retVal = false;
         try {
             if (mac == null || state == null || ipVersion == null || hosteth == null) {
                 System.out.println("Missing mandatory interface parameters!");
-                return;
+                return retVal;
             }
             if (interfaces_ == null) {
                 interfaces_ = new JSONArray();
@@ -221,20 +224,23 @@ public class NEucaCometDataGenerator {
             if (vlanTag != null) {
                 i.put(JsonKeyInterfaceVlanTag, vlanTag);
             }
-            interfaces_.add(i);
+            retVal = interfaces_.add(i);
+
         }
         catch(Exception e) {
                 System.out.println("Exception occured while addInterface: " + e.getStackTrace());
         }
-
+        return retVal;
     }
 
-    public void addStorage(String device, String storageType, String targetIp, String targetPort, String targetLun,
+    public boolean addStorage(String device, String storageType, String targetIp, String targetPort, String targetLun,
                            String targetChapUser, String targetChapSecret, String targetShouldAttach,
                            String fsType, String fsOptions, String fsShouldFormat, String fsMountPoint) {
+        boolean retVal = false;
         try {
             if (device == null || storageType == null || targetIp == null || targetPort == null) {
                 System.out.println("Missing mandatory storage parameters!");
+                return retVal;
             }
             if (storages_ == null) {
                 storages_ = new JSONArray();
@@ -269,17 +275,20 @@ public class NEucaCometDataGenerator {
                 storage.put(JsonKeyStorageFsMountPoint, fsMountPoint);
             }
 
-            storages_.add(storage);
+            retVal = storages_.add(storage);
         }
         catch (Exception e) {
                 System.out.println("Exception occured while addStorage: " + e.getStackTrace());
         }
+        return retVal;
     }
 
-    public void addRoute(String routeNetwork, String routeNextHop) {
+    public boolean addRoute(String routeNetwork, String routeNextHop) {
+        boolean retVal = false;
         try {
             if (routeNetwork == null || routeNextHop == null) {
                 System.out.println("Missing mandatory route parameters!");
+                return retVal;
             }
             if (routes_ == null) {
                 routes_ = new JSONArray();
@@ -287,36 +296,42 @@ public class NEucaCometDataGenerator {
             JSONObject route = new JSONObject();
             route.put(JsonKeyRouteNetwork, routeNetwork);
             route.put(JsonKeyRouteNextHop, routeNextHop);
-            routes_.add(route);
+            retVal= routes_.add(route);
         }
         catch (Exception e) {
             System.out.println("Exception occured while addRoute: " + e.getStackTrace());
         }
+        return retVal;
     }
 
-    public void addScript(String scriptName, String scriptBody) {
+    public boolean addScript(String scriptName, String scriptBody) {
+        boolean retVal = false;
         try {
             if (scriptBody == null || scriptName == null) {
-                if(scripts_ == null) {
-                    scripts_ = new JSONArray();
-                }
                 System.out.println("Missing mandatory script parameters!");
-                JSONObject script = new JSONObject();
-                script.put(JsonKeyScriptName, scriptName);
-                script.put(JsonKeyScriptBody, scriptBody);
-                scripts_.add(script);
+                return retVal;
             }
+            if (scripts_ == null) {
+                scripts_ = new JSONArray();
+            }
+
+            JSONObject script = new JSONObject();
+            script.put(JsonKeyScriptName, scriptName);
+            script.put(JsonKeyScriptBody, scriptBody);
+            retVal = scripts_.add(script);
         }
         catch (Exception e) {
             System.out.println("Exception occured while addScript: " + e.getStackTrace());
         }
+        return retVal;
     }
 
-    public void remove(Family family, String key) {
+    public boolean remove(Family family, String key) {
+        boolean retVal = false;
         try {
             if(key == null) {
                 System.out.println("Missing mandatory key parameters!");
-                return;
+                return retVal;
             }
             JSONArray familyToBeUpdated = null;
             switch (family) {
@@ -338,7 +353,7 @@ public class NEucaCometDataGenerator {
             }
             if (familyToBeUpdated == null) {
                 System.out.println("familyToBeUpdated array not loaded");
-                return;
+                return retVal;
             }
 
             for(int i = 0; i < familyToBeUpdated.size(); ++i) {
@@ -346,6 +361,7 @@ public class NEucaCometDataGenerator {
                 if(u.containsValue(key)) {
                     System.out.println("Removed object with key " + key + " from " + family.toString());
                     familyToBeUpdated.remove(i);
+                    retVal = true;
                     break;
                 }
             }
@@ -353,6 +369,7 @@ public class NEucaCometDataGenerator {
         catch(Exception e) {
             System.out.println("Exception occured while removeUser: " + e.getMessage() + " " + e.getStackTrace().toString());
         }
+        return retVal;
     }
 
 }

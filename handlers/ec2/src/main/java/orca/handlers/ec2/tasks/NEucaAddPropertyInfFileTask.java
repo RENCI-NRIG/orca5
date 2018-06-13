@@ -93,30 +93,19 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, unitId, sliceId);
 
                     if(NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying users in");
                         modifyUsers(cometDataGenerator);
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying users out");
                     }
                     else if(NEucaCometDataGenerator.Family.interfaces.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying interfaces in");
                         modifyInterfaces(cometDataGenerator);
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying interfaces out");
                     }
                     else if(NEucaCometDataGenerator.Family.storages.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying storages in");
                         modifyStorages(cometDataGenerator);
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying storages out");
-
                     }
                     else if(NEucaCometDataGenerator.Family.routes.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying routes in");
                         modifyRoutes(cometDataGenerator);
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying routes out");
                     }
                     else if(NEucaCometDataGenerator.Family.scripts.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying scripts in");
                         modifyScripts(cometDataGenerator);
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: modifying scripts out");
                     }
                     // COMET KOMAL
 
@@ -211,6 +200,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
     }
 
     private void modifyUsers(NEucaCometDataGenerator cometDataGenerator) {
+        System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users);
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_);
         String [] arrOfStr = value_.split(":");
@@ -218,10 +208,13 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: Incorret number of parameters");
             return;
         }
-        cometDataGenerator.addUser(key_, arrOfStr[0], arrOfStr[1]);
-        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users);
+        if(cometDataGenerator.addUser(key_, arrOfStr[0], arrOfStr[1])) {
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users);
+        }
+        System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: OUT");
     }
     private void modifyInterfaces(NEucaCometDataGenerator cometDataGenerator) {
+        System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces);
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_);
         String [] arrOfStr = value_.split(":");
@@ -229,70 +222,72 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: Incorret number of parameters");
             return;
         }
+        boolean save = false;
         if(arrOfStr.length == 2) {
-            cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], null, null, null);
+            save = cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], null, null, null);
         }
         else if(arrOfStr.length == 3) {
-            cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null);
+            save |= cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null);
         }
-        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
+        if(save) {
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
+        }
+        System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: OUT");
     }
     private void modifyStorages(NEucaCometDataGenerator cometDataGenerator) {
+        System.out.println("NEucaAddPropertyInfFileTask::modifyStorages: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storages);
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.storages, key_);
-        String [] arrOfStr = value_.split(":");
-        if(arrOfStr.length < 3) {
+        String[] arrOfStr = value_.split(":");
+        if (arrOfStr.length < 3) {
             System.out.println("NEucaAddPropertyInfFileTask::modifyStorages: Incorret number of parameters");
             return;
         }
-        if(arrOfStr.length == 3) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null,
+        boolean save = false;
+        if (arrOfStr.length == 3) {
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null,
                     null, null, null, null, null,
                     null);
-        }
-        else if(arrOfStr.length == 4) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], null,
+        } else if (arrOfStr.length == 4) {
+            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], null,
                     null, null, null, null, null,
                     null);
-        }
-        else if(arrOfStr.length == 5) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+        } else if (arrOfStr.length == 5) {
+            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     null, null, null, null, null,
                     null);
-        }
-        else if(arrOfStr.length == 6) {
+        } else if (arrOfStr.length == 6) {
             cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], null, null, null, null,
                     null);
-        }
-        else if(arrOfStr.length == 7) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+        } else if (arrOfStr.length == 7) {
+            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], null, null, null,
                     null);
-        }
-        else if(arrOfStr.length == 8) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+        } else if (arrOfStr.length == 8) {
+            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], null, null,
                     null);
-        }
-        else if(arrOfStr.length == 9) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+        } else if (arrOfStr.length == 9) {
+            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], arrOfStr[8], null,
                     null);
-        }
-        else if(arrOfStr.length == 10) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+        } else if (arrOfStr.length == 10) {
+            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], arrOfStr[8], arrOfStr[9],
                     null);
-        }
-        else if(arrOfStr.length == 11) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+        } else if (arrOfStr.length == 11) {
+            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], arrOfStr[8], arrOfStr[9],
                     arrOfStr[10]);
         }
-        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storages);
+        if (save) {
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storages);
+        }
+        System.out.println("NEucaAddPropertyInfFileTask::modifyStorages: OUT");
     }
     private void modifyRoutes(NEucaCometDataGenerator cometDataGenerator) {
+        System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes);
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_);
         String [] arrOfStr = value_.split(":");
@@ -300,19 +295,24 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: Incorret number of parameters");
             return;
         }
-        cometDataGenerator.addRoute(key_, arrOfStr[0]);
-        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
+        if(cometDataGenerator.addRoute(key_, arrOfStr[0])) {
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
+        }
+        System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: OUT");
     }
     private void modifyScripts(NEucaCometDataGenerator cometDataGenerator) {
+        System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts);
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_);
-        String [] arrOfStr = value_.split(":");
-        if(arrOfStr.length < 1) {
+        String[] arrOfStr = value_.split(":");
+        if (arrOfStr.length < 1) {
             System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: Incorret number of parameters");
             return;
         }
-        cometDataGenerator.addScript(key_, arrOfStr[0]);
-        cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts);
+        if (cometDataGenerator.addScript(key_, arrOfStr[0])) {
+            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts);
+        }
+        System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: OUT");
     }
 
     public void setFile(String file) {
