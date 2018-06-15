@@ -57,11 +57,9 @@
             <version>1.1.1</version>
         </dependency>
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-java-client</artifactId>
+            <groupId>org.renci.io.swagger</groupId>
+            <artifactId>swagger-java-comet-client</artifactId>
             <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/tools/lib/swagger-java-client-1.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
@@ -140,7 +138,7 @@
                                         <exclude name="*-sources.jar" /> 
                                     </fileset> 
                                 </copy>
-                                <copy file="${maven.dependency.io.swagger.swagger-java-client.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.org.renci.io.swagger.swagger-java-comet-client.jar.path}" todir="target/package/lib" flatten="true" />
                                 <copy file="${maven.dependency.io.swagger.swagger-annotations.jar.path}" todir="target/package/lib" flatten="true" />
                                 <copy file="${maven.dependency.com.squareup.okhttp.okhttp.jar.path}" todir="target/package/lib" flatten="true" />
                                 <copy file="${maven.dependency.com.squareup.okhttp.logging-interceptor.jar.path}" todir="target/package/lib" flatten="true" />

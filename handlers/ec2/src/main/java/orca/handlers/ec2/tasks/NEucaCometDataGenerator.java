@@ -205,7 +205,7 @@ public class NEucaCometDataGenerator {
     public boolean addInterface(String mac, String state, String ipVersion, String ip, String hosteth, String vlanTag) {
         boolean retVal = false;
         try {
-            if (mac == null || state == null || ipVersion == null || hosteth == null) {
+            if (mac == null || state == null || ipVersion == null) {
                 System.out.println("NEucaCometDataGenerator::addInterface: Missing mandatory interface parameters!");
                 return retVal;
             }

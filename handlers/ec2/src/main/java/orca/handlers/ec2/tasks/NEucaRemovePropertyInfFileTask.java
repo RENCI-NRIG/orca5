@@ -88,44 +88,44 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                     NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, unitId, sliceId);
 
                     if(NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing users in");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing users in");
                         if(cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users) &&
                            cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_)) {
                             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users);
                         }
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing users out");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing users out");
                     }
                     else if(NEucaCometDataGenerator.Family.interfaces.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing interfaces in");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing interfaces in");
                         if(cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces) &&
                         cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_)) {
                             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
                         }
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing interfaces out");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing interfaces out");
                     }
                     else if(NEucaCometDataGenerator.Family.storages.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing storages in");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing storages in");
                         if(cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storages) &&
                         cometDataGenerator.remove(NEucaCometDataGenerator.Family.storages, key_)) {
                             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storages);
                         }
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing storages out");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing storages out");
                     }
                     else if(NEucaCometDataGenerator.Family.routes.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing routes in");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing routes in");
                         if(cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes) &&
                         cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_)) {
                             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
                         }
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing routes out");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing routes out");
                     }
                     else if(NEucaCometDataGenerator.Family.scripts.toString().equals(section_)) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing scripts in");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing scripts in");
                         if(cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts) &&
                         cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_)) {
                             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts);
                         }
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: removing scripts out");
+                        System.out.println("NEucaRemovePropertyInfFileTask::execute: removing scripts out");
                     }
                     // COMET KOMAL
 
