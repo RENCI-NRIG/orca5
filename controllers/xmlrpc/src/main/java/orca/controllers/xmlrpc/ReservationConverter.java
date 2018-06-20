@@ -1805,14 +1805,27 @@ public class ReservationConverter implements LayerConstant {
                 // Reading the configuration properties to fetch modify.x.unit.number.interface which is used for constructing Network Interface Properties
                 Properties config = OrcaConverter.fill(rmg.getConfigurationProperties());
                 int index = PropList.highestPropIndex(config, UnitProperties.ModifySubcommandPrefix);
-                String numInterfacePropName = UnitProperties.ModifyPrefix + index + "." + ReservationConverter.PropertyParentNumInterface;
+                String numInterfacePropName = ReservationConverter.PropertyParentNumInterface;
+
+                // This is to handle scenario when VM has interfaces at the create time, in that case number of interfaces should be fetched from
+                // unit.number.interface instead of modify.x.unit.number.interface
+                if(index != 0) {
+                    numInterfacePropName = UnitProperties.ModifyPrefix + index + "." + ReservationConverter.PropertyParentNumInterface;
+                }
+                else {
+                    logger.debug("ModifiedReservation: index null");
+                }
+
                 local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
                 // modify properties for adding/deleting interfaces from links
-                String num_interface_str = local.getProperty(ReservationConverter.PropertyParentNumInterface);
                 // Fetch from config properties if not available in Local issue 208
-                if(num_interface_str == null) {
-                    num_interface_str = config.getProperty(numInterfacePropName);
-                }
+                // Always using config. Local contains the value of the interfaces present at the Slice creation
+                // Thus resulting in incorrect count if modifies have occured after the initial create
+                // E.g. At slice creation if node has 1 Vlan interface Local unit.number.interface will always have value 1
+                // even if 2 modify operations to add 2 vlans have been successful
+                logger.debug("ModifiedReservation: fetching " + numInterfacePropName);
+                String num_interface_str = config.getProperty(numInterfacePropName);
+
                 int num_interface = 0;
                 if (num_interface_str != null)
                     num_interface = Integer.valueOf(num_interface_str);
@@ -1926,6 +1939,7 @@ public class ReservationConverter implements LayerConstant {
                 // for unit.number.interface will be incorrect. The below code ensures that correct value for unit.number.interface = existing interfaces(num_interface) + new interfaces(m_p)
                 // NOTE: ReservationConverter.PropertyParentNumInterface is same as UnitProperties.UnitNumberInterface
                 if(m_p > 0) {
+                    logger.debug("ModifiedReservation Setting  PropertyParentNumInterface : " + m_p + "+" + num_interface);
                     local.setProperty(ReservationConverter.PropertyParentNumInterface, String.valueOf(m_p + num_interface));
                 }
 
