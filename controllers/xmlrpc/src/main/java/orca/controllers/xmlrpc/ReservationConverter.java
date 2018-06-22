@@ -1817,14 +1817,36 @@ public class ReservationConverter implements LayerConstant {
                 }
 
                 local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
-                // modify properties for adding/deleting interfaces from links
-                // Fetch from config properties if not available in Local issue 208
-                // Always using config. Local contains the value of the interfaces present at the Slice creation
-                // Thus resulting in incorrect count if modifies have occured after the initial create
-                // E.g. At slice creation if node has 1 Vlan interface Local unit.number.interface will always have value 1
-                // even if 2 modify operations to add 2 vlans have been successful
+                
+                // All config properties without a modify prefix are loaded into local properties
+                // Any update to local properties is saved as modify.x.<propertyname> as a result of modifySlice
+                // Example:
+                // For a VM created with two interfaces unit.number.interface is set to 2 in config properties
+                // On reciept of a modify to add an interface to the VM this unit.number.interface is loaded into localProperties too
+                // So at the beginning of the modify; unit.number.interface(local) and unit.number.interface(config) are both 2
+                // After modify is successful; the code updates unit.number.interface(local) and sends it to update
+                // unit.number.interface(local) is saved as modify.x.unit.number.interface in config properties. At this point unit.number.interface is still 2
+                // On subsequent modify unit.number.interface(local) is filled with value from unit.number.interface(config) i.e. 2
+                // modify.x.unit.number.interface = 3; Code should always use modify.x.unit.number.interface if present; otherwise use unit.number.interface
+                //
+                // The above approach works fine; but AUT framework does not work on config properties and requires local properties
+                // In order for AUT framework to continue to work, a check is added to use higher of the local or config property value for unit.number.interface
                 logger.debug("ModifiedReservation: fetching " + numInterfacePropName);
+                logger.debug("ModifiedReservation: config unit.number.interface=" + config.getProperty(numInterfacePropName) +
+                        " local unit.number.interface=" + local.getProperty(PropertyParentNumInterface));
+
                 String num_interface_str = config.getProperty(numInterfacePropName);
+
+                // AUT is using local properties for assert validations; so keeping the logic to use the higher value.
+                String local_num_interface_str = local.getProperty(PropertyParentNumInterface);
+
+                // This if block will only be true for AUT
+                if((num_interface_str == null && local_num_interface_str != null) ||
+                   (num_interface_str !=null && local_num_interface_str != null && 
+                    Integer.valueOf(local_num_interface_str) > Integer.valueOf(num_interface_str))) {
+                    logger.debug("ModifiedReservation: Using local unit.number.interface=" + local_num_interface_str);
+                    num_interface_str= local_num_interface_str;
+                }
 
                 int num_interface = 0;
                 if (num_interface_str != null)

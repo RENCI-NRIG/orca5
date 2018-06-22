@@ -105,9 +105,9 @@ public class OrcaRegressionModifyTest {
             // Multiple modify to add interface
             { "src/test/resources/208_create_slice_request_with_vlan.rdf",
                     Arrays.asList( "src/test/resources/208_modify_add_vlan1_with_no_ip_2.rdf",
-                            "src/test/resources/208_modify_add_vlan1_with_no_ip_2.rdf",
-                            "src/test/resources/208_modify_add_vlan1_with_no_ip_2.rdf"),
-                    Arrays.asList(3, 4, 5) }
+                            "src/test/resources/208_modify_add_vlan2_with_no_ip_2.rdf",
+                            "src/test/resources/208_modify_add_vlan3_with_no_ip_2.rdf"),
+                    Arrays.asList(4, 5, 6) }
         });
     }
 
