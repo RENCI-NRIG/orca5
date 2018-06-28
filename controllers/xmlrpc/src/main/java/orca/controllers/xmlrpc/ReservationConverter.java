@@ -1802,17 +1802,20 @@ public class ReservationConverter implements LayerConstant {
                 logger.debug("ModifiedReservation:d_uri=" + d_uri + ";" + dd.getGUID() + ";reservation="
                         + rmg.getReservationID());
                 Properties local = OrcaConverter.fill(rmg.getLocalProperties());
-                // Reading the configuration properties to fetch modify.x.unit.number.interface which is used for constructing Network Interface Properties
-                Properties config = OrcaConverter.fill(rmg.getConfigurationProperties());
-                int index = PropList.highestPropIndex(config, UnitProperties.ModifySubcommandPrefix);
-                String numInterfacePropName = UnitProperties.ModifyPrefix + index + "." + ReservationConverter.PropertyParentNumInterface;
                 local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
-                // modify properties for adding/deleting interfaces from links
-                String num_interface_str = local.getProperty(ReservationConverter.PropertyParentNumInterface);
-                // Fetch from config properties if not available in Local issue 208
+                // Reading the configuration properties to fetch unit.number.interface which is used for constructing Network Interface Properties
+                Properties config = OrcaConverter.fill(rmg.getConfigurationProperties());
+                String num_interface_str = config.getProperty(PropertyParentNumInterface);
+
+                // If unit.number.interface does not exist in config, try to fetch it from local
                 if(num_interface_str == null) {
-                    num_interface_str = config.getProperty(numInterfacePropName);
+                    num_interface_str= local.getProperty(PropertyParentNumInterface);
+                    logger.debug("ModifiedReservation: Using local unit.number.interface=" + num_interface_str);
                 }
+                else {
+                    logger.debug("ModifiedReservation: Using local unit.number.interface=" + num_interface_str);
+                }
+
                 int num_interface = 0;
                 if (num_interface_str != null)
                     num_interface = Integer.valueOf(num_interface_str);
@@ -1926,6 +1929,7 @@ public class ReservationConverter implements LayerConstant {
                 // for unit.number.interface will be incorrect. The below code ensures that correct value for unit.number.interface = existing interfaces(num_interface) + new interfaces(m_p)
                 // NOTE: ReservationConverter.PropertyParentNumInterface is same as UnitProperties.UnitNumberInterface
                 if(m_p > 0) {
+                    logger.debug("ModifiedReservation: Setting unit.number.interface=" + m_p + " + " + num_interface);
                     local.setProperty(ReservationConverter.PropertyParentNumInterface, String.valueOf(m_p + num_interface));
                 }
 

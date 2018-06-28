@@ -13,9 +13,11 @@ import java.util.StringTokenizer;
 import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.common.meta.ConfigurationProperties;
 import orca.shirako.container.OrcaConfiguration;
+import orca.shirako.plugins.config.Config;
 import orca.shirako.plugins.config.OrcaAntTask;
 
 import org.apache.tools.ant.BuildException;
+import java.util.UUID;
 
 abstract class NEucaInfFileGenerator {
     org.apache.tools.ant.Project project;
@@ -324,8 +326,12 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
         temp = getProject().getProperty(OrcaConfiguration.CometHost);
         if (temp != null) {
             out.println("comethost=" + temp);
-            out.println("cometreadtoken=" + unitId + "-rid");
-            cometDataGenerator = new NEucaCometDataGenerator(temp, unitId, sliceId);
+            UUID readToken = UUID.randomUUID();
+            out.println("cometreadtoken=" + readToken.toString());
+            UUID writeToken = UUID.randomUUID();
+            cometDataGenerator = new NEucaCometDataGenerator(temp, unitId, sliceId, readToken.toString(), writeToken.toString());
+            getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken.toString());
+            getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken, writeToken.toString());
         } else {
             out.println(";comethost= Not Specified");
         }
@@ -668,7 +674,8 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             out.print("\n\n");
 
             if(cometDataGenerator != null) {
-                cometDataGenerator.addRoute(routeNetwork, routeNexthop);
+                // TODO: allow device and gateway to be configured too
+                cometDataGenerator.addRoute(routeNetwork, routeNexthop, null, null);
             }
         }
         if(cometDataGenerator != null && routes.length > 0) {

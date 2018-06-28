@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import orca.shirako.plugins.config.Config;
 
 public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
     protected String file_;
@@ -85,7 +86,9 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                     String unitId = getProject().getProperty(UnitProperties.UnitID);
                     String sliceId= getProject().getProperty(UnitProperties.UnitSliceID);
                     String cometHost = getProject().getProperty(OrcaConfiguration.CometHost);
-                    NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, unitId, sliceId);
+                    String readToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken);
+                    String writeToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken);
+                    NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, unitId, sliceId, readToken, writeToken);
 
                     if(NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
                         System.out.println("NEucaRemovePropertyInfFileTask::execute: removing users in");

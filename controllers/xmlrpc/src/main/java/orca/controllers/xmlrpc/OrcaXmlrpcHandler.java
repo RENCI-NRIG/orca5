@@ -777,24 +777,25 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                                         // modify.suffix
                                         host_interface = StringProcessor.getHostInterface(config, unit_parent_url);
                                         parent_prefix = UnitProperties.ModifyPrefix;
+                                        logger.debug("KOMAL: modifyRemove: host_interface=" + host_interface + " parent_prefix=" + parent_prefix);
                                         // added by me 09/30/16 /ib because I don't think this every happens
-                                        logger.error("Unable to find local properties to perform REMOVEIFACE modify");
-                                        throw new Exception(
-                                                "Unable to find local properties to perform REMOVEIFACE modify");
+                                        //logger.error("Unable to find local properties to perform REMOVEIFACE modify");
+                                        //throw new Exception(
+                                        //        "Unable to find local properties to perform REMOVEIFACE modify");
                                     }
 
                                     // commented out as a result of above /ib 09/30/16
-                                    // if(host_interface==null){
-                                    // logger.warn("Unable to find the parent interface
-                                    // index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
-                                    // continue;
-                                    // }
+                                    if(host_interface==null){
+                                        logger.warn("KOMAL: Unable to find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
+                                        continue;
+                                     }
 
                                     logger.debug("modifyRemove: host_interface=" + host_interface + ";tag=" + unit_tag
                                             + ";parent url=" + unit_parent_url);
 
                                     Properties ethModifyProperties = getNetworkEthModifyProperties(parent_prefix,
                                             host_interface, unit_tag, config, logger);
+                                    logger.debug("KOMAL: modifyRemove: ethProperties: " + ethModifyProperties.toString());
                                     modifyProperties.putAll(ethModifyProperties);
 
                                 }
@@ -974,8 +975,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                                 for (int i = 0; i < p; i++) {
                                     String key = ReservationConverter.PropertyExistParent + String.valueOf(i);
                                     r_id = local.getProperty(key);
-                                    if (r_id != null)
+                                    if (r_id != null) {
                                         rr_d_list.add(new ReservationID(r_id));
+                                    }
                                 }
                             }
                             p_str = local.getProperty(ReservationConverter.PropertyNumNewParentReservations);

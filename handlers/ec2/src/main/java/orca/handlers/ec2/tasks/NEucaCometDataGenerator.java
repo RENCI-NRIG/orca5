@@ -34,6 +34,8 @@ public class NEucaCometDataGenerator {
     // Route fields
     public final static String JsonKeyRouteNetwork = "routeNetwork";
     public final static String JsonKeyRouteNextHop = "routeNextHop";
+    public final static String JsonKeyRouteDevice = "device";
+    public final static String JsonKeyRouteGateway = "gateway";
 
     // Script fields
     public final static String JsonKeyScriptName = "scriptName";
@@ -56,6 +58,8 @@ public class NEucaCometDataGenerator {
     private JSONArray scripts_;
     private String unitId_;
     private String sliceId_;
+    private String readToken_;
+    private String writeToken_;
 
     private NEucaCometInterface comet_;
 
@@ -69,8 +73,10 @@ public class NEucaCometDataGenerator {
         unitId_ = null;
         sliceId_ = null;
         comet_ = null;
+        readToken_ = null;
+        writeToken_ = null;
     }
-    public NEucaCometDataGenerator(String cometHost, String unitId, String sliceId)  {
+    public NEucaCometDataGenerator(String cometHost, String unitId, String sliceId, String readToken, String writeToken)  {
         users_ = null;
         interfaces_ = null;
         storages_ = null;
@@ -78,6 +84,8 @@ public class NEucaCometDataGenerator {
         scripts_ = null;
         unitId_ = unitId;
         sliceId_ = sliceId;
+        readToken_ = readToken;
+        writeToken_ = writeToken;
         comet_ = new NEucaCometInterface(cometHost);
         comet_.setSslCaCert();
     }
@@ -89,7 +97,7 @@ public class NEucaCometDataGenerator {
                 // Family = family.toString()
                 // Key = unitId_
                 // readToken = unitId_ + "-rid"
-                JSONArray value = comet_.read(sliceId_, unitId_, unitId_+"-rid", family.toString());
+                JSONArray value = comet_.read(sliceId_, unitId_, readToken_, family.toString());
                 if(value != null) {
                     switch (family) {
                         case users:
@@ -166,11 +174,11 @@ public class NEucaCometDataGenerator {
                 String value = getObject(family);
                 if(value != null && !value.isEmpty()) {
                     System.out.println("NEucaCometDataGenerator::saveObject: Saving family: " + family + " value: " + value);
-                    return comet_.write(sliceId_, unitId_, unitId_ + "-rid", unitId_ + "-wid", family.toString(), value);
+                    return comet_.write(sliceId_, unitId_, readToken_, writeToken_, family.toString(), value);
                 }
                 else {
                     System.out.println("NEucaCometDataGenerator::saveObject: Removing family: " + family);
-                    return comet_.remove(sliceId_, unitId_, unitId_ + "-rid", unitId_ + "-wid", family.toString());
+                    return comet_.remove(sliceId_, unitId_, readToken_, writeToken_, family.toString());
                 }
             }
         }
@@ -283,7 +291,7 @@ public class NEucaCometDataGenerator {
         return retVal;
     }
 
-    public boolean addRoute(String routeNetwork, String routeNextHop) {
+    public boolean addRoute(String routeNetwork, String routeNextHop, String device, String gateway) {
         boolean retVal = false;
         try {
             if (routeNetwork == null || routeNextHop == null) {
@@ -296,6 +304,12 @@ public class NEucaCometDataGenerator {
             JSONObject route = new JSONObject();
             route.put(JsonKeyRouteNetwork, routeNetwork);
             route.put(JsonKeyRouteNextHop, routeNextHop);
+            if(device != null) {
+                route.put(JsonKeyRouteDevice, device);
+            }
+            if(gateway != null) {
+                route.put(JsonKeyRouteGateway, gateway);
+            }
             retVal= routes_.add(route);
         }
         catch (Exception e) {

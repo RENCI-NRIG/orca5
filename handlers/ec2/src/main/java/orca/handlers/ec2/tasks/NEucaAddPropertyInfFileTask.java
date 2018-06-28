@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import orca.shirako.common.meta.UnitProperties;
 import orca.shirako.common.meta.ConfigurationProperties;
 import orca.shirako.container.OrcaConfiguration;
+import orca.shirako.core.Unit;
 import orca.shirako.plugins.config.OrcaAntTask;
 
 import org.apache.tools.ant.BuildException;
@@ -28,6 +29,8 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import orca.shirako.plugins.config.Config;
+
 
 public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
     protected String file_;
@@ -90,7 +93,9 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     String unitId = getProject().getProperty(UnitProperties.UnitID);
                     String sliceId= getProject().getProperty(UnitProperties.UnitSliceID);
                     String cometHost = getProject().getProperty(OrcaConfiguration.CometHost);
-                    NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, unitId, sliceId);
+                    String readToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken);
+                    String writeToken = getProject().getProperty(UnitProperties.UnitCometWriteToken);
+                    NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, unitId, sliceId, readToken, writeToken);
 
                     if(NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
                         modifyUsers(cometDataGenerator);
@@ -297,7 +302,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: Incorrect number of parameters");
             return;
         }
-        if(cometDataGenerator.addRoute(key_, arrOfStr[0])) {
+        if(cometDataGenerator.addRoute(key_, arrOfStr[0], null, null)) {
             cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
         }
         System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: OUT");
