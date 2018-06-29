@@ -60,10 +60,7 @@ import orca.shirako.common.meta.ResourcePoolDescriptor;
 import orca.shirako.common.meta.ResourcePoolsDescriptor;
 import orca.shirako.common.meta.ResourceProperties;
 import orca.shirako.common.meta.UnitProperties;
-import orca.util.CompressEncode;
-import orca.util.ID;
-import orca.util.ResourceType;
-import orca.util.VersionUtils;
+import orca.util.*;
 import orca.util.password.hash.OrcaPasswordHash;
 
 import org.apache.log4j.Logger;
@@ -775,20 +772,25 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                                         // "modify."
                                         // is incorrect, since modify properties are modify.[index].suffix, not
                                         // modify.suffix
+                                        // 06/28/2018 kthare10 - Interfaces added by modify operations are not present in local properties
+                                        // and need to be searched in config properties. getHostInterface looks for properties
+                                        // with modify. prefix and then compares its values with unit_parent_url provided to identify the modify index
                                         host_interface = StringProcessor.getHostInterface(config, unit_parent_url);
                                         parent_prefix = UnitProperties.ModifyPrefix;
                                         // added by me 09/30/16 /ib because I don't think this every happens
-                                        logger.error("Unable to find local properties to perform REMOVEIFACE modify");
-                                        throw new Exception(
-                                                "Unable to find local properties to perform REMOVEIFACE modify");
+                                        // 06/28/2018 kthare10 - commented based on above explanation
+                                        //logger.error("Unable to find local properties to perform REMOVEIFACE modify");
+                                        //throw new Exception(
+                                        //        "Unable to find local properties to perform REMOVEIFACE modify");
                                     }
 
                                     // commented out as a result of above /ib 09/30/16
-                                    // if(host_interface==null){
-                                    // logger.warn("Unable to find the parent interface
-                                    // index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
-                                    // continue;
-                                    // }
+                                    // 06/28/2018 kthare10 - uncommented based on above explanation
+                                    //
+                                    if(host_interface==null){
+                                       logger.warn("Unable to find the parent interface index:unit_tag="+unit_tag+";parent_url="+unit_parent_url);
+                                       continue;
+                                    }
 
                                     logger.debug("modifyRemove: host_interface=" + host_interface + ";tag=" + unit_tag
                                             + ";parent url=" + unit_parent_url);

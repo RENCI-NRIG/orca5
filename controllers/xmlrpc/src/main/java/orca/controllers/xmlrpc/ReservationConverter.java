@@ -1804,7 +1804,8 @@ public class ReservationConverter implements LayerConstant {
                 Properties local = OrcaConverter.fill(rmg.getLocalProperties());
                 // Reading the configuration properties to fetch modify.x.unit.number.interface which is used for constructing Network Interface Properties
                 Properties config = OrcaConverter.fill(rmg.getConfigurationProperties());
-                int index = PropList.highestPropIndex(config, UnitProperties.ModifySubcommandPrefix);
+                int index = PropList.highestPropIndex(config, UnitProperties.ModifySubcommandPrefix,
+                                                      UnitProperties.ModifyPrefix + ModifyHelper.ModifySubcommand.ADDIFACE.getName());
                 String numInterfacePropName = ReservationConverter.PropertyParentNumInterface;
 
                 // This is to handle scenario when VM has interfaces at the create time, in that case number of interfaces should be fetched from
@@ -1817,7 +1818,7 @@ public class ReservationConverter implements LayerConstant {
                 }
 
                 local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
-                
+
                 // All config properties without a modify prefix are loaded into local properties
                 // Any update to local properties is saved as modify.x.<propertyname> as a result of modifySlice
                 // Example:
