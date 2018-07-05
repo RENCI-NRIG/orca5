@@ -737,6 +737,31 @@ public class PropList
 
         return sb.toString();
     }
+
+
+    /**
+     * Find the highest index of the property name of a pattern
+     * keyStartWith.[index] and value matches. Character '.' can be used as a separator
+     * inside the keyStartsWith pattern.
+     * @param p
+     * @param keyStartsWith
+     * @param value
+     * @return
+     */
+    public static int highestPropIndex(Properties p, String keyStartsWith, String value) {
+        int highestIndex = 0;
+        int countSeparators = keyStartsWith.split("\\.").length;
+        for(String key : p.stringPropertyNames()) {
+            if(key.startsWith(keyStartsWith) && p.get(key).equals(value)){
+                String indexString = key.split("\\.")[countSeparators];
+                int index = Integer.parseInt(indexString);
+                if(index >= highestIndex){
+                    highestIndex = index;
+                }
+            }
+        }
+        return highestIndex;
+    }
     
     /**
      * Find the highest index of the property name of a pattern 
