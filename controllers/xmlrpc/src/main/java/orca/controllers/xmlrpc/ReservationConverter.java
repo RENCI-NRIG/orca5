@@ -1802,18 +1802,51 @@ public class ReservationConverter implements LayerConstant {
                 logger.debug("ModifiedReservation:d_uri=" + d_uri + ";" + dd.getGUID() + ";reservation="
                         + rmg.getReservationID());
                 Properties local = OrcaConverter.fill(rmg.getLocalProperties());
-                local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
-                // Reading the configuration properties to fetch unit.number.interface which is used for constructing Network Interface Properties
+                // Reading the configuration properties to fetch modify.x.unit.number.interface which is used for constructing Network Interface Properties
                 Properties config = OrcaConverter.fill(rmg.getConfigurationProperties());
-                String num_interface_str = config.getProperty(PropertyParentNumInterface);
+                int index = PropList.highestPropIndex(config, UnitProperties.ModifySubcommandPrefix,
+                                                      UnitProperties.ModifyPrefix + ModifyHelper.ModifySubcommand.ADDIFACE.getName());
+                String numInterfacePropName = ReservationConverter.PropertyParentNumInterface;
 
-                // If unit.number.interface does not exist in config, try to fetch it from local
-                if(num_interface_str == null) {
-                    num_interface_str= local.getProperty(PropertyParentNumInterface);
-                    logger.debug("ModifiedReservation: Using local unit.number.interface=" + num_interface_str);
+                // This is to handle scenario when VM has interfaces at the create time, in that case number of interfaces should be fetched from
+                // unit.number.interface instead of modify.x.unit.number.interface
+                if(index != 0) {
+                    numInterfacePropName = UnitProperties.ModifyPrefix + index + "." + ReservationConverter.PropertyParentNumInterface;
                 }
                 else {
-                    logger.debug("ModifiedReservation: Using local unit.number.interface=" + num_interface_str);
+                    logger.debug("ModifiedReservation: index null");
+                }
+
+                local.setProperty(ReservationConverter.PropertyModifyVersion, String.valueOf(ne.getModifyVersion()));
+
+                // All config properties without a modify prefix are loaded into local properties
+                // Any update to local properties is saved as modify.x.<propertyname> as a result of modifySlice
+                // Example:
+                // For a VM created with two interfaces unit.number.interface is set to 2 in config properties
+                // On reciept of a modify to add an interface to the VM this unit.number.interface is loaded into localProperties too
+                // So at the beginning of the modify; unit.number.interface(local) and unit.number.interface(config) are both 2
+                // After modify is successful; the code updates unit.number.interface(local) and sends it to update
+                // unit.number.interface(local) is saved as modify.x.unit.number.interface in config properties. At this point unit.number.interface is still 2
+                // On subsequent modify unit.number.interface(local) is filled with value from unit.number.interface(config) i.e. 2
+                // modify.x.unit.number.interface = 3; Code should always use modify.x.unit.number.interface if present; otherwise use unit.number.interface
+                //
+                // The above approach works fine; but AUT framework does not work on config properties and requires local properties
+                // In order for AUT framework to continue to work, a check is added to use higher of the local or config property value for unit.number.interface
+                logger.debug("ModifiedReservation: fetching " + numInterfacePropName);
+                logger.debug("ModifiedReservation: config unit.number.interface=" + config.getProperty(numInterfacePropName) +
+                        " local unit.number.interface=" + local.getProperty(PropertyParentNumInterface));
+
+                String num_interface_str = config.getProperty(numInterfacePropName);
+
+                // AUT is using local properties for assert validations; so keeping the logic to use the higher value.
+                String local_num_interface_str = local.getProperty(PropertyParentNumInterface);
+
+                // This if block will only be true for AUT
+                if((num_interface_str == null && local_num_interface_str != null) ||
+                   (num_interface_str !=null && local_num_interface_str != null && 
+                    Integer.valueOf(local_num_interface_str) > Integer.valueOf(num_interface_str))) {
+                    logger.debug("ModifiedReservation: Using local unit.number.interface=" + local_num_interface_str);
+                    num_interface_str= local_num_interface_str;
                 }
 
                 int num_interface = 0;
@@ -1929,7 +1962,7 @@ public class ReservationConverter implements LayerConstant {
                 // for unit.number.interface will be incorrect. The below code ensures that correct value for unit.number.interface = existing interfaces(num_interface) + new interfaces(m_p)
                 // NOTE: ReservationConverter.PropertyParentNumInterface is same as UnitProperties.UnitNumberInterface
                 if(m_p > 0) {
-                    logger.debug("ModifiedReservation: Setting unit.number.interface=" + m_p + " + " + num_interface);
+                    logger.debug("ModifiedReservation Setting  PropertyParentNumInterface : " + m_p + "+" + num_interface);
                     local.setProperty(ReservationConverter.PropertyParentNumInterface, String.valueOf(m_p + num_interface));
                 }
 

@@ -1,6 +1,5 @@
 package orca.controllers.xmlrpc;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,7 +8,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 
-import orca.controllers.OrcaController;
 import orca.controllers.xmlrpc.statuswatch.IStatusUpdateCallback;
 import orca.controllers.xmlrpc.statuswatch.ReservationIDWithModifyIndex;
 import orca.manage.IOrcaServiceManager;
@@ -20,7 +18,6 @@ import orca.manage.beans.ReservationMng;
 import orca.shirako.common.ReservationID;
 import orca.shirako.common.meta.UnitProperties;
 import orca.util.PropList;
-import org.apache.log4j.Logger;
 
 /**
  * Class that implements some of the modify logic, including enqueuing/dequeuing modify operations on a per-reservation
@@ -32,7 +29,6 @@ import org.apache.log4j.Logger;
 public class ModifyHelper {
 
     static final Map<ReservationID, Queue<ModifyOperation>> modifyQueues = new HashMap<>();
-    static final Logger logger = OrcaController.getLogger("ModifyHelper");
 
     // lists known widely-used modify commands
     public enum ModifySubcommand {
@@ -418,15 +414,6 @@ public class ModifyHelper {
             // add the subcommand as a property after everything
             modifyProperties.put(UnitProperties.ModifySubcommandPrefix + index,
                     UnitProperties.ModifyPrefix + modifySubcommand);
-
-            // Removing modify.<index>. prefix from unit.number.interface property. This is done to ensure modifyAddInterface works
-            // as expected as ReservationConverter code expects unit.number.interface to have no prefix.
-            String numInterfaceStr = modifyProperties.getProperty(UnitProperties.ModifyPrefix + index + "." + UnitProperties.UnitNumberInterface);
-            if(numInterfaceStr != null) {
-                modifyProperties.remove(UnitProperties.ModifyPrefix + index + "." + UnitProperties.UnitNumberInterface);
-                modifyProperties.setProperty(UnitProperties.UnitNumberInterface, numInterfaceStr);
-                logger.debug("modifySliver: modifyProperties=" + modifyProperties.toString());
-            }
 
             sm.modifyReservation(res, modifyProperties);
 
