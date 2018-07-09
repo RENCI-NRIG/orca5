@@ -9,7 +9,7 @@
     <artifactId>
          boot 
     </artifactId> 
-    <version>5.4.3-SNAPSHOT</version> 
+    <version>5.4.4-SNAPSHOT</version> 
     <packaging>
          jar 
     </packaging> 
@@ -23,7 +23,7 @@
         <artifactId>
              orca 
         </artifactId> 
-        <version>5.4.3-SNAPSHOT</version> 
+        <version>5.4.4-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 

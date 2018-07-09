@@ -101,7 +101,13 @@ public class OrcaRegressionModifyTest {
                     "src/test/resources/208_modify_readd_vlan2_with_no_ip.rdf",
                     "src/test/resources/208_modify_add_vlan4_with_no_ip.rdf",
                     "src/test/resources/208_modify_add_vlan5_with_no_ip.rdf" ),
-                    Arrays.asList(3, 4, 5, 6, 6, 7, 8, 9) }
+                    Arrays.asList(3, 4, 5, 6, 6, 7, 8, 9) },
+            // Multiple modify to add interface
+            { "src/test/resources/208_create_slice_request_with_vlan.rdf",
+                    Arrays.asList( "src/test/resources/208_modify_add_vlan1_with_no_ip_2.rdf",
+                            "src/test/resources/208_modify_add_vlan2_with_no_ip_2.rdf",
+                            "src/test/resources/208_modify_add_vlan3_with_no_ip_2.rdf"),
+                    Arrays.asList(4, 5, 6) }
         });
     }
 
@@ -164,9 +170,12 @@ public class OrcaRegressionModifyTest {
             // Nodes added in NodeGroup Increase need to have a Network interface
             assertReservationsHaveNetworkInterface(computedReservations);
             assertSliceHasNoDuplicateInterfaces(slice);
-        } else if (requestFilename.contains("208_")) {
+        } else if (requestFilename.contains("208_create_slice_request.rdf")) {
             System.out.println("Checking for Network Interfaces");
             assertSliceHasExpectedVlans(slice, computedReservations, 7);
+        } else if (requestFilename.contains("208_create_slice_request_with_vlan.rdf")) {
+            System.out.println("Checking for Network Interfaces");
+            assertSliceHasExpectedVlans(slice, computedReservations, 4);
         }
     }
     
