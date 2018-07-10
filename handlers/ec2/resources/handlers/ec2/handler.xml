@@ -1228,6 +1228,38 @@
 			<then>
 				<echo message="running under emulation...exiting" />
 				<property name="shirako.target.code" value="0" />
+                <if>
+                    <equals arg1="${cloud.type}" arg2="nova-essex" />
+                    <then>
+                        <echo message="EC2_HOME=${ec2.home}" />
+                        <echo message="EC2_DIR=${ec2.dir}" />
+                        <echo message="EUCA_KEY_DIR=${ec2.keys}" />
+                        <echo message="EC2_LOG_DIR=${ec2.log.dir}" />
+                        <echo message="EC2_LOG_FILE=${ec2.log.file}" />
+                        <echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
+                        <echo message="SLICE_ID=${unit.sliceid}" />
+                        <echo message="UNIT_ID=${unit.id}" />
+                        <echo message="UNIT_READ_TOKEN=${shirako.save.unit.comet.readToken}" />
+                        <echo message="UNIT_WRITE_TOKEN=${shirako.save.unit.comet.writeToken}" />
+                        <!-- if comet, remove scope -->
+                        <var name="code" unset="true" />
+                        <var name="remove.scope.output" unset="true" />
+                        <exec executable="${ec2.scripts}/comet-remove-vm-scope" resultproperty="code" outputproperty="remove.scope.output">
+                            <env key="EC2_HOME" value="${ec2.home}" />
+                            <env key="EC2_DIR" value="${ec2.dir}" />
+                            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                            <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                            <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                            <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                            <env key="SLICE_ID" value="${unit.sliceid}" />
+                            <env key="UNIT_ID" value="${unit.id}" />
+                            <env key="UNIT_READ_TOKEN" value="${shirako.save.unit.comet.readToken}" />
+                            <env key="UNIT_WRITE_TOKEN" value="${shirako.save.unit.comet.writeToken}" />
+                        </exec>
+                        <echo>result code: ${code}</echo>
+                        <echo>output: ${remove.scope.output}</echo>
+                    </then>
+                </if>
 			</then>
 			<else>
 				<!-- optionally close proxy to this host -->
@@ -1292,6 +1324,39 @@
 						</exec>
 						<echo>result code: ${code}</echo>
 						<echo>output: ${remove.iface.output}</echo>
+					</then>
+				</if>
+
+				<if>
+					<equals arg1="${cloud.type}" arg2="nova-essex" />
+					<then>
+						<echo message="EC2_HOME=${ec2.home}" />
+						<echo message="EC2_DIR=${ec2.dir}" />
+                        <echo message="EUCA_KEY_DIR=${ec2.keys}" />
+						<echo message="EC2_LOG_DIR=${ec2.log.dir}" />
+						<echo message="EC2_LOG_FILE=${ec2.log.file}" />
+						<echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
+						<echo message="SLICE_ID=${unit.sliceid}" />
+                        <echo message="UNIT_ID=${unit.id}" />
+						<echo message="UNIT_READ_TOKEN=${shirako.save.unit.comet.readToken}" />
+						<echo message="UNIT_WRITE_TOKEN=${shirako.save.unit.comet.writeToken}" />
+						<!-- if comet, remove scope -->
+						<var name="code" unset="true" />
+						<var name="remove.scope.output" unset="true" />
+						<exec executable="${ec2.scripts}/comet-remove-vm-scope" resultproperty="code" outputproperty="remove.scope.output">
+							<env key="EC2_HOME" value="${ec2.home}" />
+							<env key="EC2_DIR" value="${ec2.dir}" />
+							<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+							<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+							<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+							<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+							<env key="SLICE_ID" value="${unit.sliceid}" />
+							<env key="UNIT_ID" value="${unit.id}" />
+							<env key="UNIT_READ_TOKEN" value="${shirako.save.unit.comet.readToken}" />
+							<env key="UNIT_WRITE_TOKEN" value="${shirako.save.unit.comet.writeToken}" />
+						</exec>
+						<echo>result code: ${code}</echo>
+						<echo>output: ${remove.scope.output}</echo>
 					</then>
 				</if>
 
