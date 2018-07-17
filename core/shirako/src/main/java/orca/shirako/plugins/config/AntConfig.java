@@ -50,6 +50,9 @@ public class AntConfig extends Config {
     public static final String PropertySecureCommunication = "secure.communication";
     public static final String PropertyEmulation = "emulation";
     public static final String PropertyCometHost = "comethost";
+    public static final String PropertyCaCert = "cacert";
+    public static final String PropertyClientCertKeyStore = "clientkeystore";
+    public static final String PropertyClientCertKeyStorePwd = "clientkeystorepwd";
     public static final String PropertyNodeAgentPort = "na.port";
     public static final String PropertyNodeAgentProtocol = "na.protocol";
     public static final String PropertyNodeAgentUri = "na.uri";
@@ -359,6 +362,9 @@ public class AntConfig extends Config {
         PropList.setProperty(properties, PropertyNodeAgentProtocol, config.getNodeAgentProtocol());
         PropList.setProperty(properties, PropertyNodeAgentUri, config.getNodeAgentUri());
         PropList.setProperty(properties, PropertyCometHost, config.getCometHost());
+        PropList.setProperty(properties, PropertyCaCert, config.getCaCert());
+        PropList.setProperty(properties, PropertyClientCertKeyStore, config.getClientCertKeyStore());
+        PropList.setProperty(properties, PropertyClientCertKeyStorePwd, config.getClientCertKeyStorePwd());
     }
 
     /**

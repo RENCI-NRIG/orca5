@@ -93,4 +93,10 @@ public interface IOrcaConfiguration {
     public String getNodeAgentUri();
 
     public String getCometHost();
+
+    public String getCaCert();
+
+    public String getClientCertKeyStore();
+
+    public String getClientCertKeyStorePwd();
 }

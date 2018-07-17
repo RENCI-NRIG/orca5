@@ -45,7 +45,7 @@ public class NEucaCometDataGenerator {
     public enum Family {
         users,
         interfaces,
-        storages,
+        storage,
         routes,
         scripts
     };
@@ -53,7 +53,7 @@ public class NEucaCometDataGenerator {
     // DATA
     private JSONArray users_;
     private JSONArray interfaces_;
-    private JSONArray storages_;
+    private JSONArray storage_;
     private JSONArray routes_;
     private JSONArray scripts_;
     private String unitId_;
@@ -67,7 +67,7 @@ public class NEucaCometDataGenerator {
     public NEucaCometDataGenerator() {
         users_ = null;
         interfaces_ = null;
-        storages_ = null;
+        storage_ = null;
         routes_ = null;
         scripts_ = null;
         unitId_ = null;
@@ -76,10 +76,11 @@ public class NEucaCometDataGenerator {
         readToken_ = null;
         writeToken_ = null;
     }
-    public NEucaCometDataGenerator(String cometHost, String unitId, String sliceId, String readToken, String writeToken)  {
+    public NEucaCometDataGenerator(String cometHost, String caCert, String clientCertKeyStore, String clientCertKeyStorePwd,
+                                   String unitId, String sliceId, String readToken, String writeToken)  {
         users_ = null;
         interfaces_ = null;
-        storages_ = null;
+        storage_ = null;
         routes_ = null;
         scripts_ = null;
         unitId_ = unitId;
@@ -87,7 +88,7 @@ public class NEucaCometDataGenerator {
         readToken_ = readToken;
         writeToken_ = writeToken;
         comet_ = new NEucaCometInterface(cometHost);
-        comet_.setSslCaCert();
+        comet_.setSslCaCert(caCert, clientCertKeyStore, clientCertKeyStorePwd);
     }
     public boolean loadObject(Family family) {
         try {
@@ -106,8 +107,8 @@ public class NEucaCometDataGenerator {
                         case interfaces:
                             interfaces_ = value;
                             break;
-                        case storages:
-                            storages_ = value;
+                        case storage:
+                            storage_ = value;
                             break;
                         case routes:
                             routes_ = value;
@@ -121,7 +122,8 @@ public class NEucaCometDataGenerator {
             }
         }
         catch (Exception e) {
-            System.out.println("NEucaCometDataGenerator::loadObject: Exception occurred while loadingObject: " + e.getStackTrace());
+            System.out.println("NEucaCometDataGenerator::loadObject: Exception occurred while loadingObject: " + e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -139,9 +141,9 @@ public class NEucaCometDataGenerator {
                         return interfaces_.toString();
                     }
                     break;
-                case storages:
-                    if (storages_ != null && storages_.size() > 0) {
-                        return storages_.toString();
+                case storage:
+                    if (storage_ != null && storage_.size() > 0) {
+                        return storage_.toString();
                     }
                     break;
                 case routes:
@@ -157,7 +159,8 @@ public class NEucaCometDataGenerator {
             }
         }
         catch (Exception e) {
-            System.out.println("NEucaCometDataGenerator::getObject: Exception occurred while getObject: " + e.getStackTrace());
+            System.out.println("NEucaCometDataGenerator::getObject: Exception occurred while getObject: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -183,7 +186,8 @@ public class NEucaCometDataGenerator {
             }
         }
         catch (Exception e) {
-            System.out.println("NEucaCometDataGenerator::saveObject: Exception occurred while saveObject: " + e.getStackTrace());
+            System.out.println("NEucaCometDataGenerator::saveObject: Exception occurred while saveObject: " + e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -205,7 +209,8 @@ public class NEucaCometDataGenerator {
             retVal = users_.add(u);
         }
         catch(Exception e) {
-            System.out.println("NEucaCometDataGenerator::addUser: Exception occurred while addUser: " + e.getMessage() + " " + e.getStackTrace().toString());
+            System.out.println("NEucaCometDataGenerator::addUser: Exception occurred while addUser: " + e.getMessage());
+            e.printStackTrace();
         }
         return retVal;
     }
@@ -236,7 +241,8 @@ public class NEucaCometDataGenerator {
 
         }
         catch(Exception e) {
-                System.out.println("NEucaCometDataGenerator::addInterface: Exception occurred while addInterface: " + e.getStackTrace());
+            System.out.println("NEucaCometDataGenerator::addInterface: Exception occurred while addInterface: " + e.getMessage());
+            e.printStackTrace();
         }
         return retVal;
     }
@@ -246,30 +252,25 @@ public class NEucaCometDataGenerator {
                            String fsType, String fsOptions, String fsShouldFormat, String fsMountPoint) {
         boolean retVal = false;
         try {
-            if (device == null || storageType == null || targetIp == null || targetPort == null) {
+            if (device == null || storageType == null || targetIp == null ||
+                targetPort == null || targetLun == null || targetChapUser  == null ||
+                targetChapSecret == null || targetShouldAttach == null) {
                 System.out.println("NEucaCometDataGenerator::addStorage: Missing mandatory storage parameters!");
                 return retVal;
             }
-            if (storages_ == null) {
-                storages_ = new JSONArray();
+            if (storage_ == null) {
+                storage_ = new JSONArray();
             }
             JSONObject storage = new JSONObject();
             storage.put(JsonKeyStorageDevice, device);
             storage.put(JsonKeyStorageType, storageType);
             storage.put(JsonKeyStorageTargetIp, targetIp);
             storage.put(JsonKeyStorageTargetPort, targetPort);
-            if (targetLun != null) {
-                storage.put(JsonKeyStorageTargetLun, targetLun);
-            }
-            if (targetChapUser != null) {
-                storage.put(JsonKeyStorageTargetChapUser, targetChapUser);
-            }
-            if (targetChapSecret != null) {
-                storage.put(JsonKeyStorageTargetChapSecret, targetChapSecret);
-            }
-            if (targetShouldAttach != null) {
-                storage.put(JsonKeyStorageTargetShouldAttach, targetShouldAttach);
-            }
+            storage.put(JsonKeyStorageTargetLun, targetLun);
+            storage.put(JsonKeyStorageTargetChapUser, targetChapUser);
+            storage.put(JsonKeyStorageTargetChapSecret, targetChapSecret);
+            storage.put(JsonKeyStorageTargetShouldAttach, targetShouldAttach);
+
             if (fsType != null) {
                 storage.put(JsonKeyStorageFsType, fsType);
             }
@@ -283,10 +284,11 @@ public class NEucaCometDataGenerator {
                 storage.put(JsonKeyStorageFsMountPoint, fsMountPoint);
             }
 
-            retVal = storages_.add(storage);
+            retVal = storage_.add(storage);
         }
         catch (Exception e) {
-                System.out.println("NEucaCometDataGenerator::addStorage: Exception occurred while addStorage: " + e.getStackTrace());
+            System.out.println("NEucaCometDataGenerator::addStorage: Exception occurred while addStorage: " + e.getMessage());
+            e.printStackTrace();
         }
         return retVal;
     }
@@ -313,7 +315,8 @@ public class NEucaCometDataGenerator {
             retVal= routes_.add(route);
         }
         catch (Exception e) {
-            System.out.println("NEucaCometDataGenerator::addRoute: Exception occurred while addRoute: " + e.getStackTrace());
+            System.out.println("NEucaCometDataGenerator::addRoute: Exception occurred while addRoute: " + e.getMessage());
+            e.printStackTrace();
         }
         return retVal;
     }
@@ -335,7 +338,8 @@ public class NEucaCometDataGenerator {
             retVal = scripts_.add(script);
         }
         catch (Exception e) {
-            System.out.println("NEucaCometDataGenerator::addScript: Exception occurred while addScript: " + e.getStackTrace());
+            System.out.println("NEucaCometDataGenerator::addScript: Exception occurred while addScript: " + e.getMessage());
+            e.printStackTrace();
         }
         return retVal;
     }
@@ -355,14 +359,14 @@ public class NEucaCometDataGenerator {
                 case interfaces:
                     familyToBeUpdated = interfaces_;
                     break;
-                case storages:
-                    familyToBeUpdated = storages_;
+                case storage:
+                    familyToBeUpdated = storage_;
                     break;
                 case routes:
                     familyToBeUpdated = routes_;
                     break;
                 case scripts:
-                    familyToBeUpdated = storages_;
+                    familyToBeUpdated = scripts_;
                     break;
             }
             if (familyToBeUpdated == null) {
@@ -381,7 +385,8 @@ public class NEucaCometDataGenerator {
             }
         }
         catch(Exception e) {
-            System.out.println("NEucaCometDataGenerator::remove: Exception occurred while removeUser: " + e.getMessage() + " " + e.getStackTrace().toString());
+            System.out.println("NEucaCometDataGenerator::remove: Exception occurred while removeUser: " + e.getMessage());
+            e.printStackTrace();
         }
         return retVal;
     }

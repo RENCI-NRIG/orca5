@@ -324,21 +324,29 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
         }
 
         temp = getProject().getProperty(OrcaConfiguration.CometHost);
-        if (temp != null) {
+        String caCert = getProject().getProperty(OrcaConfiguration.CaCert);
+        String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.ClientKeyStore);
+        String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.ClientKeyStorePwd);
+        if (temp != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
             out.println("comethost=" + temp);
             UUID readToken = UUID.randomUUID();
             out.println("cometreadtoken=" + readToken.toString());
             UUID writeToken = UUID.randomUUID();
-            cometDataGenerator = new NEucaCometDataGenerator(temp, unitId, sliceId, readToken.toString(), writeToken.toString());
+            cometDataGenerator = new NEucaCometDataGenerator(temp, caCert, clientCertKeyStore, clientCertKeyStorePwd,
+                    unitId, sliceId, readToken.toString(), writeToken.toString());
             getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken.toString());
             getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken, writeToken.toString());
         } else {
+            System.out.println("cometHost=" + temp + " caCert=" + caCert + " clientCertKeyStore=" +
+                    clientCertKeyStore + " clientCertKeyStorePwd=" + clientCertKeyStorePwd);
             out.println(";comethost= Not Specified");
         }
     }
 
     protected void generateUsers(PrintWriter out) throws Exception {
-        out.println("[users]");
+        if(cometDataGenerator == null) {
+            out.println("[users]");
+        }
 
         StringTokenizer logins = new StringTokenizer(
                 getProject().getProperty(ConfigurationProperties.ConfigSSHNumLogins), ",");
@@ -355,14 +363,17 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             String sudo = getProject().getProperty(
                     ConfigurationProperties.ConfigSSHPrefix + user + ConfigurationProperties.ConfigSSHSudoSuffix);
 
-            out.println(login + "=" + sudo + ":" + key);
-
-            if(cometDataGenerator != null) {
+            if(cometDataGenerator == null) {
+                out.println(login + "=" + sudo + ":" + key);
+            }
+            else {
                 cometDataGenerator.addUser(login, sudo, key);
             }
         }
         if(cometDataGenerator != null) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users);
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users)) {
+                throw new NEucaCometException("Failed to save users in Comet");
+            }
         }
     }
 
@@ -430,7 +441,9 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
     protected void generateInterfaces(PrintWriter out) throws Exception {
         System.out.println("Processing interfaces section");
-        out.println("[interfaces]");
+        if(cometDataGenerator == null) {
+            out.println("[interfaces]");
+        }
 
         Integer[] eths = getEths();
 
@@ -479,14 +492,16 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
                 continue;
             }
 
-            out.print(mac.replace(":", "") + "=" + state + ":" + ipVersion);
+            if(cometDataGenerator == null) {
+                out.print(mac.replace(":", "") + "=" + state + ":" + ipVersion);
 
-            // attaching to vlan tag
-            if (ip != null) {
-                out.print(":" + ip);
+                // attaching to vlan tag
+                if (ip != null) {
+                    out.print(":" + ip);
+                }
+                out.println();
             }
-            out.println();
-            if(cometDataGenerator != null) {
+            else {
                 cometDataGenerator.addInterface(mac.replace(":", "") , state, ipVersion, ip, hosteth, vlanTag);
             }
 
@@ -495,13 +510,17 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         }
         if(cometDataGenerator != null && eths.length > 0) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces)) {
+                throw new NEucaCometException("Failed to save interfaces in Comet");
+            }
         }
     }
 
     protected void generateStorage(PrintWriter out) throws Exception {
         System.out.println("Processing storage section");
-        out.println("[storage]");
+        if(cometDataGenerator == null) {
+            out.println("[storage]");
+        }
 
         Integer[] stores = getStores();
 
@@ -598,21 +617,23 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
                 fs_mount_point = "";
             }
 
-            out.print("dev" + i + "=");
-            out.print(store_type);
-            out.print(":" + target_ip);
-            out.print(":" + target_port);
-            out.print(":" + target_lun);
-            out.print(":" + target_chap_user);
-            out.print(":" + target_chap_secret);
-            out.print(":" + target_should_attach);
-            out.print(":" + fs_type);
-            out.print(":" + fs_options);
-            out.print(":" + fs_should_format);
-            out.print(":" + fs_mount_point);
+            if(cometDataGenerator == null) {
+                out.print("dev" + i + "=");
+                out.print(store_type);
+                out.print(":" + target_ip);
+                out.print(":" + target_port);
+                out.print(":" + target_lun);
+                out.print(":" + target_chap_user);
+                out.print(":" + target_chap_secret);
+                out.print(":" + target_should_attach);
+                out.print(":" + fs_type);
+                out.print(":" + fs_options);
+                out.print(":" + fs_should_format);
+                out.print(":" + fs_mount_point);
 
-            out.println();
-            if(cometDataGenerator != null) {
+                out.println();
+            }
+            else {
                 cometDataGenerator.addStorage("dev" +i, store_type, target_ip, target_port, target_lun,
                                               target_chap_user, target_chap_secret, target_should_attach,
                                               fs_type, fs_options, fs_should_format, fs_mount_point);
@@ -620,7 +641,9 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         }
         if(cometDataGenerator != null && stores.length > 0) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storages);
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage)) {
+                throw new NEucaCometException("Failed to save storage in Comet");
+            }
         }
     }
 
@@ -657,7 +680,9 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
     protected void generateRoutes(PrintWriter out) throws Exception {
         System.out.println("Processing routes section");
-        out.println("[routes]");
+        if(cometDataGenerator == null) {
+            out.println("[routes]");
+        }
 
         Integer[] routes = getRoutes();
         for (int i = 0; i < routes.length; i++) {
@@ -670,16 +695,19 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             if (routeNexthop == null)
                 continue;
 
-            out.print(routeNetwork.toString() + "=" + routeNexthop);
-            out.print("\n\n");
-
-            if(cometDataGenerator != null) {
+            if(cometDataGenerator == null) {
+                out.print(routeNetwork.toString() + "=" + routeNexthop);
+                out.print("\n\n");
+            }
+            else {
                 // TODO: allow device and gateway to be configured too
                 cometDataGenerator.addRoute(routeNetwork, routeNexthop, null, null);
             }
         }
         if(cometDataGenerator != null && routes.length > 0) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes);
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes)) {
+                throw new NEucaCometException("Failed to save routes in Comet");
+            }
         }
     }
 
@@ -716,7 +744,9 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
     protected void generateScripts(PrintWriter out) throws Exception {
         System.out.println("Processing scripts section");
-        out.println("[scripts]");
+        if(cometDataGenerator == null) {
+            out.println("[scripts]");
+        }
 
         String config = getProject().getProperty(UnitProperties.UnitInstanceConfig);
         if (config == null) {
@@ -724,10 +754,11 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
         }
 
         System.out.println("BootScript: " + config);
-        out.print("bootscript=" + sanitizeBootScript(config));
-        out.print("\n\n");
-
-        if(cometDataGenerator != null) {
+        if(cometDataGenerator == null) {
+            out.print("bootscript=" + sanitizeBootScript(config));
+            out.print("\n\n");
+        }
+        else {
             cometDataGenerator.addScript("bootscript", sanitizeBootScript(config));
         }
 
@@ -740,16 +771,19 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             if (scriptBody == null)
                 continue;
 
-            out.print("script_" + scriptNum.toString() + "=" + sanitizeBootScript(scriptBody));
-            out.print("\n\n");
-
-            if(cometDataGenerator != null) {
+            if(cometDataGenerator == null) {
+                out.print("script_" + scriptNum.toString() + "=" + sanitizeBootScript(scriptBody));
+                out.print("\n\n");
+            }
+            else {
                 cometDataGenerator.addScript("script_" + scriptNum.toString(), sanitizeBootScript(scriptBody));
             }
         }
 
         if(cometDataGenerator != null && (config != null || scripts.length > 0)) {
-            cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts);
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts)) {
+                throw new NEucaCometException("Failed to save scripts in Comet");
+            }
         }
     }
 
@@ -773,33 +807,7 @@ public class NEucaGenerateInfFileTask extends OrcaAntTask {
             PrintWriter out = new PrintWriter(new FileWriter(new File(file)));
 
             System.out.println("file: " + file + ", cloudType: " + cloudType);
-
-            System.out.println("PRUTH-TEST: numlogins:        " + getProject().getProperty("config.ssh.numlogins"));
-            StringTokenizer logins = new StringTokenizer(getProject().getProperty("config.ssh.numlogins"), ",");
-            while (logins.hasMoreElements()) {
-                String user = "user" + logins.nextElement().toString();
-                System.out.println("PRUTH-TEST: " + user + ":        "
-                        + getProject().getProperty("config.ssh." + user + ".login"));
-                System.out.println(
-                        "PRUTH-TEST: " + user + ":        " + getProject().getProperty("config.ssh." + user + ".keys"));
-                System.out.println(
-                        "PRUTH-TEST: " + user + ":        " + getProject().getProperty("config.ssh." + user + ".sudo"));
-            }
-            System.out.println("PRUTH-TEST: management ip: " + getProject().getProperty("shirako.save.unit.manage.ip"));
-            System.out.println("PRUTH-TEST: host:          " + getProject().getProperty("shirako.save.unit.ec2.host"));
-
             NEucaInfFileGenerator generator;
-
-            // if (cloudType.compareTo("nova-essex") == 0){
-            //// Quantum Neuca Plugin v1.x
-            // generator = new NEucaInfFileGenerator_v1(getProject());
-            // } else {
-            //// Original Neuca v0.x
-            // generator = new NEucaInfFileGenerator_v0(getProject());
-            // }
-
-            // Currently all types use rack type NEucaInfFileGenerator_v1
-            // No current need for above code.
             generator = new NEucaInfFileGenerator_v1(getProject());
 
             generator.doIt(out);

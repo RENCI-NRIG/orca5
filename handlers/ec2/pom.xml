@@ -59,7 +59,7 @@
         <dependency>
             <groupId>org.renci.io.swagger</groupId>
             <artifactId>swagger-java-comet-client</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>

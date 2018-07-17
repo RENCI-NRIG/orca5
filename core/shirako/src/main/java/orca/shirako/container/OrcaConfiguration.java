@@ -39,6 +39,21 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public static final String CometHost = "comethost";
 
     /**
+     * CA Cert for Comet
+     */
+    public static final String CaCert = "cacert";
+
+    /**
+     * Client Cert KeyStore for Comet
+     */
+    public static final String ClientKeyStore = "clientkeystore";
+
+    /**
+     * Client Cert KeyStore Password for Comet
+     */
+    public static final String ClientKeyStorePwd = "clientkeystorepwd";
+
+    /**
      * Are we using secure communication with the node agent service: true|false.
      */
     public static final String PropertySecureCommunication = "secure.communication";
@@ -99,6 +114,9 @@ public class OrcaConfiguration implements IOrcaConfiguration
     protected String nodeAgentProtocol = "http";
     protected String nodeAgentUri = "/axis2/services/NodeAgentService";
     protected String cometHost;
+    protected String caCert;
+    protected String clientCertKeyStore;
+    protected String clientCertKeyStorePwd;
 
     /**
      * Class name for the ticket factory implementation.
@@ -165,6 +183,21 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public String getCometHost()
     {
         return cometHost;
+    }
+
+    public String getCaCert()
+    {
+        return caCert;
+    }
+
+    public String getClientCertKeyStore()
+    {
+        return clientCertKeyStore;
+    }
+
+    public String getClientCertKeyStorePwd()
+    {
+        return clientCertKeyStorePwd;
     }
 
     /**
@@ -278,6 +311,18 @@ public class OrcaConfiguration implements IOrcaConfiguration
 
         if (properties.containsKey(OrcaConfiguration.CometHost)) {
             cometHost = properties.getProperty(OrcaConfiguration.CometHost);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CaCert)) {
+            caCert = properties.getProperty(OrcaConfiguration.CaCert);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.ClientKeyStore)) {
+            clientCertKeyStore = properties.getProperty(OrcaConfiguration.ClientKeyStore);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.ClientKeyStorePwd)) {
+            clientCertKeyStorePwd = properties.getProperty(OrcaConfiguration.ClientKeyStorePwd);
         }
 
         if (properties.containsKey(TicketFactoryClass)){
