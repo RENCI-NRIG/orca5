@@ -91,7 +91,12 @@
             <artifactId>threetenbp</artifactId>
             <version>1.3.5</version>
         </dependency>
-    </dependencies> 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+    </dependencies>
     <build> 
         <plugins> 
             <plugin> 
@@ -145,6 +150,7 @@
                                 <copy file="${maven.dependency.com.google.code.gson.gson.jar.path}" todir="target/package/lib" flatten="true" />
                                 <copy file="${maven.dependency.org.threeten.threetenbp.jar.path}" todir="target/package/lib" flatten="true" />
                                 <copy file="${maven.dependency.com.squareup.okio.okio.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.org.apache.commons.commons-lang3.jar.path}" todir="target/package/lib" flatten="true" />
                                 <mkdir dir="target/package/tools" />
                                 <copy todir="target/package/tools"> 
                                     <fileset dir="resources/tools" /> 

@@ -6,34 +6,38 @@ unitId="aa491da3-3f23-4a5a-9b9e-33f98884570b"
 readToken="361a67ac-db43-49ac-8868-54c1abe34b60"
 writeToken="7b1c4d09-2440-498a-bebb-a54aaaf16c5b"
 family="interfaces"
+comethost="https://13.59.255.221:8111/"
 
-resp = CometInterface.get_family(cid, unitId, readToken, family)
-if resp.status_code != 200:
-    raise ApiError('Cannot Read Family: {}'.format(resp.status_code))
-if resp.json()["value"] and not resp.json()["value"]["error"]:
-    value = resp.json()["value"]["value"]
-    interfaces = json.loads(json.loads(value)["val_"])
-    for x in interfaces:
-        if x["mac"] == "fe163e007908":
-            x["ip"] = "1.2.3.4"
-    updatedVal = json.loads(value)
-    updatedVal["val_"] = json.dumps(interfaces)
-
-    resp = CometInterface.update_family(cid, unitId, readToken, writeToken, family, updatedVal)
+try:
+    resp = CometInterface.get_family(comethost,cid, unitId, readToken, family)
     if resp.status_code != 200:
-        raise ApiError('Cannot Update Family: {}'.format(resp.status_code))
+        raise ApiError('Cannot Read Family: {}'.format(resp.status_code))
+    if resp.json()["value"] and not resp.json()["value"]["error"]:
+        value = resp.json()["value"]["value"]
+        interfaces = json.loads(json.loads(value)["val_"])
+        for x in interfaces:
+            if x["mac"] == "fe163e007908":
+                x["ip"] = "1.2.3.4"
+        updatedVal = json.loads(value)
+        updatedVal["val_"] = json.dumps(interfaces)
 
-resp = CometInterface.enumerate_families(cid, readToken)
-if resp.status_code != 200:
-    raise ApiError('Cannot Enumerate Scope: {}'.format(resp.status_code))
-    value = resp.json()["value"]["entries"]
-    for x in value:
-            print ("Family:" + x["family"])
+        resp = CometInterface.update_family(comethost,cid, unitId, readToken, writeToken, family, updatedVal)
+        if resp.status_code != 200:
+            raise ApiError('Cannot Update Family: {}'.format(resp.status_code))
 
-resp = CometInterface.delete_family(cid, unitId, readToken, writeToken, family)
-if resp.status_code != 200:
-    raise ApiError('Cannot Delete Family: {}'.format(resp.status_code))
+    resp = CometInterface.enumerate_families(cid, readToken)
+    if resp.status_code != 200:
+        raise ApiError('Cannot Enumerate Scope: {}'.format(resp.status_code))
+        value = resp.json()["value"]["entries"]
+        for x in value:
+                print ("Family:" + x["family"])
 
-r = CometInterface.delete_families(cid, unitId, readToken, writeToken)
-if r != True:
-   raise ApiError('Cannot Delete Families')
+    resp = CometInterface.delete_family(comethost,cid, unitId, readToken, writeToken, family)
+    if resp.status_code != 200:
+        raise ApiError('Cannot Delete Family: {}'.format(resp.status_code))
+
+    r = CometInterface.delete_families(comethost, cid, unitId, readToken, writeToken)
+    if r != True:
+       raise ApiError('Cannot Delete Families')
+except Exception as e:
+    print("Exception occurred: " + str(type(e)) + " : " + str(e) + "\n")

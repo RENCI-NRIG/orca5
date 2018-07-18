@@ -42,18 +42,14 @@ public class NEucaCometInterface {
     private InputStream sslClientCertKS;
 
     NEucaCometInterface(String cometHost) {
-
         apiClient = new ApiClient();
         apiClient.setBasePath(cometHost);
         api = new DefaultApi(apiClient);
-
-
     }
 
     public void setSslCaCert(String caCert, String clientCertKeyStore, String clientCertKeyStorePwd) {
         try {
             if(sslCaCert == null && apiClient != null) {
-                //TODO load cert from properties
                 sslCaCert = new FileInputStream(caCert);
                 sslClientCertKS = new FileInputStream(clientCertKeyStore);
                 apiClient.setSslCaCert(sslCaCert);
@@ -69,7 +65,7 @@ public class NEucaCometInterface {
             }
         }
         catch (Exception e) {
-            System.out.println("NEucaCometInterface::setSslCaCert: Exception occurred while constructing NEucaCometInterface");
+            System.out.println("NEucaCometInterface::setSslCaCert: Exception occurred while constructing NEucaCometInterface cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -110,11 +106,11 @@ public class NEucaCometInterface {
             }
         }
         catch (ApiException e) {
-            System.out.println("NEucaCometInterface::read: ApiException occurred while read: " + e.getMessage());
+            System.out.println("NEucaCometInterface::read: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
             e.printStackTrace();
         }
         catch (Exception e) {
-            System.out.println("NEucaCometInterface::read: Exception occurred while read: " + e.getMessage());
+            System.out.println("NEucaCometInterface::read: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
             e.printStackTrace();
         }
         return returnValue;
@@ -133,11 +129,11 @@ public class NEucaCometInterface {
             returnValue = true;
         }
         catch (ApiException e) {
-            System.out.println("NEucaCometInterface::write: ApiException occurred while write: " + e.getMessage());
+            System.out.println("NEucaCometInterface::write: ApiException occurred while write: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
             e.printStackTrace();
         }
         catch (Exception e) {
-            System.out.println("NEucaCometInterface::write: Exception occurred while write: " + e.getMessage());
+            System.out.println("NEucaCometInterface::write: Exception occurred while write: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
             e.printStackTrace();
         }
         return returnValue;
@@ -155,11 +151,11 @@ public class NEucaCometInterface {
             returnValue = true;
         }
         catch (ApiException e) {
-            System.out.println("NEucaCometInterface::remove: ApiException occurred while remove: " + e.getMessage());
+            System.out.println("NEucaCometInterface::remove: ApiException occurred while remove: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
             e.printStackTrace();
         }
         catch (Exception e) {
-            System.out.println("NEucaCometInterface::remove: Exception occurred while remove: " + e.getMessage());
+            System.out.println("NEucaCometInterface::remove: Exception occurred while remove: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
             e.printStackTrace();
         }
         return returnValue;

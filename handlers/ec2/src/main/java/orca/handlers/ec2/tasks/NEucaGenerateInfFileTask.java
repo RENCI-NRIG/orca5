@@ -17,7 +17,8 @@ import orca.shirako.plugins.config.Config;
 import orca.shirako.plugins.config.OrcaAntTask;
 
 import org.apache.tools.ant.BuildException;
-import java.util.UUID;
+import org.apache.commons.lang3.RandomStringUtils;
+import java.security.SecureRandom;
 
 abstract class NEucaInfFileGenerator {
     org.apache.tools.ant.Project project;
@@ -210,6 +211,13 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
     String outputProperty;
     NEucaCometDataGenerator cometDataGenerator;
 
+    final static char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-.")).toCharArray();
+
+    public static String generateRandomString() {
+        String randomStr = RandomStringUtils.random( 10, 0, possibleCharacters.length-1, true, true, possibleCharacters, new SecureRandom() );
+        return randomStr;
+    }
+
     public NEucaInfFileGenerator_v1(org.apache.tools.ant.Project project) {
         super();
 
@@ -323,19 +331,22 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             out.println(";nova_id= Not Specified");
         }
 
+        // Create Comet Data Generator object if Comet is configured
         temp = getProject().getProperty(OrcaConfiguration.CometHost);
         String caCert = getProject().getProperty(OrcaConfiguration.CaCert);
         String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.ClientKeyStore);
         String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.ClientKeyStorePwd);
         if (temp != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
             out.println("comethost=" + temp);
-            UUID readToken = UUID.randomUUID();
-            out.println("cometreadtoken=" + readToken.toString());
-            UUID writeToken = UUID.randomUUID();
+            String readToken = generateRandomString();
+            out.println("cometreadtoken=" + readToken);
+            String writeToken = generateRandomString();
             cometDataGenerator = new NEucaCometDataGenerator(temp, caCert, clientCertKeyStore, clientCertKeyStorePwd,
-                    unitId, sliceId, readToken.toString(), writeToken.toString());
-            getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken.toString());
-            getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken, writeToken.toString());
+                    unitId, sliceId, readToken, writeToken);
+
+            // Save the readToken and writeToken in the properties
+            getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken);
+            getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken, writeToken);
         } else {
             System.out.println("cometHost=" + temp + " caCert=" + caCert + " clientCertKeyStore=" +
                     clientCertKeyStore + " clientCertKeyStorePwd=" + clientCertKeyStorePwd);
