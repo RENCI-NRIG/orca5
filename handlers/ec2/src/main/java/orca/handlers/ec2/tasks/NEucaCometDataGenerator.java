@@ -1,3 +1,12 @@
+/*
+ *
+ * @class
+ *
+ * @brief This class implements an interface to generate Instance Meta Data JSON based on input and save
+ * the generated JSON in Comet
+ *
+ *
+ */
 package orca.handlers.ec2.tasks;
 
 import org.json.simple.*;
@@ -76,6 +85,7 @@ public class NEucaCometDataGenerator {
         readToken_ = null;
         writeToken_ = null;
     }
+
     public NEucaCometDataGenerator(String cometHost, String caCert, String clientCertKeyStore, String clientCertKeyStorePwd,
                                    String unitId, String sliceId, String readToken, String writeToken)  {
         users_ = null;
@@ -90,14 +100,20 @@ public class NEucaCometDataGenerator {
         comet_ = new NEucaCometInterface(cometHost);
         comet_.setSslCaCert(caCert, clientCertKeyStore, clientCertKeyStorePwd);
     }
+
+    /*
+     * @brief function to load/read existing data from comet. The read meta data is maintained in the JSON objects
+     * which are later used for subsequent operations
+     *
+     * @param family - Specifies category of the metadata to be read from comet
+     *
+     * @return true for success; false otherwise
+     *
+     */
+
     public boolean loadObject(Family family) {
         try {
             if (unitId_ != null && sliceId_ != null) {
-                // Send Rest Request to get
-                // ContextId = sliceId_
-                // Family = family.toString()
-                // Key = unitId_
-                // readToken = unitId_ + "-rid"
                 JSONArray value = comet_.read(sliceId_, unitId_, readToken_, family.toString());
                 if(value != null) {
                     switch (family) {
@@ -128,6 +144,14 @@ public class NEucaCometDataGenerator {
         return false;
     }
 
+    /*
+     * @brief function returns the specific category of the meta data requested
+     *
+     * @param family - Specifies category of the metadata to be read from comet
+     *
+     * @return String containing the metadata in case of success; otherwise null
+     *
+     */
     public String getObject(Family family) {
         try {
             switch (family) {
@@ -165,15 +189,18 @@ public class NEucaCometDataGenerator {
         return null;
     }
 
+    /*
+     * @brief function saves the constructed json meta data in comet by invoke writeScope API
+     *
+     * @param family - Specifies category of the metadata to be saved to comet
+     *
+     * @return true for success; otherwise false
+     *
+     */
     public boolean saveObject(Family family) {
         try {
             if (unitId_ != null && sliceId_ != null) {
                 // Send Rest Request to get
-                // ContextId = sliceId_
-                // Family = family.toString()
-                // Key = unitId_
-                // readToken = unitId_ + "-rid"
-                // writeToken = unitId_ + "-wid"
                 String value = getObject(family);
                 if(value != null && !value.isEmpty()) {
                     System.out.println("NEucaCometDataGenerator::saveObject: Saving family: " + family + " value: " + value);
@@ -192,6 +219,16 @@ public class NEucaCometDataGenerator {
         return false;
     }
 
+    /*
+     * @brief function adds a user to the Users JSON object
+     *
+     * @param user - user name
+     * @param sudo - sudo permissions
+     * @param key - keys
+     *
+     * @return true for success; otherwise false
+     *
+     */
     public boolean addUser(String user, String sudo, String key) {
         boolean retVal = false;
         try {
@@ -215,6 +252,19 @@ public class NEucaCometDataGenerator {
         return retVal;
     }
 
+    /*
+     * @brief function adds an interface to the interfaces JSON object
+     *
+     * @param mac - mac address
+     * @param state - state of the interface up or down
+     * @param ipVersion - ipv4 or ipv6
+     * @param ip - ip address
+     * @param hosteth - host ethernet interface to which the interface is bound to
+     * @param vlanTag - vlan tag
+     *
+     * @return true for success; otherwise false
+     *
+     */
     public boolean addInterface(String mac, String state, String ipVersion, String ip, String hosteth, String vlanTag) {
         boolean retVal = false;
         try {
@@ -247,6 +297,25 @@ public class NEucaCometDataGenerator {
         return retVal;
     }
 
+    /*
+     * @brief function adds storage to the storage JSON object
+     *
+     * @param device - device name
+     * @param storageType - storage type
+     * @param targetIp - ip address
+     * @param targetPort - target Port
+     * @param targetLun - target Lun
+     * @param targetChapUser - targetChapUser
+     * @param targetChapSecret - targetChapSecret
+     * @param targetShouldAttach - targetShouldAttach
+     * @param fsType - fsType
+     * @param fsOptions - fsOptions
+     * @param fsShouldFormat - fsShouldFormat
+     * @param fsMountPoint - fsMountPoint
+     *
+     * @return true for success; otherwise false
+     *
+     */
     public boolean addStorage(String device, String storageType, String targetIp, String targetPort, String targetLun,
                            String targetChapUser, String targetChapSecret, String targetShouldAttach,
                            String fsType, String fsOptions, String fsShouldFormat, String fsMountPoint) {
@@ -293,6 +362,17 @@ public class NEucaCometDataGenerator {
         return retVal;
     }
 
+    /*
+     * @brief function adds route to the routes JSON object
+     *
+     * @param routeNetwork - route network
+     * @param routeNextHop - route next hop
+     * @param device - device
+     * @param gateway - gateway
+     *
+     * @return true for success; otherwise false
+     *
+     */
     public boolean addRoute(String routeNetwork, String routeNextHop, String device, String gateway) {
         boolean retVal = false;
         try {
@@ -321,6 +401,15 @@ public class NEucaCometDataGenerator {
         return retVal;
     }
 
+    /*
+     * @brief function adds script to the scripts JSON object
+     *
+     * @param scriptName - scriptName
+     * @param scriptBody - scriptBody
+     *
+     * @return true for success; otherwise false
+     *
+     */
     public boolean addScript(String scriptName, String scriptBody) {
         boolean retVal = false;
         try {
@@ -344,6 +433,15 @@ public class NEucaCometDataGenerator {
         return retVal;
     }
 
+    /*
+     * @brief function removes specific element from specific category of JSON representing meta data
+     *
+     * @param family - Specifies category of the metadata
+     * @param key - element to be removed
+     *
+     * @return true for success; otherwise false
+     *
+     */
     public boolean remove(Family family, String key) {
         boolean retVal = false;
         try {

@@ -94,9 +94,11 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                         String readToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken);
                         String writeToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken);
 
+                        // Instantiate comet data generator
                         NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, caCert, clientCertKeyStore,
                                 clientCertKeyStorePwd, unitId, sliceId, readToken, writeToken);
 
+                        // Update users
                         if (NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing users in");
                             if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users) &&
@@ -105,7 +107,11 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store users in comet");
                                 }
                             }
+                            else {
+                                throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store users in comet");
+                            }
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing users out");
+                           //Update interfaces
                         } else if (NEucaCometDataGenerator.Family.interfaces.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing interfaces in");
                             if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces) &&
@@ -114,7 +120,11 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store interfaces in comet");
                                 }
                             }
+                            else {
+                                throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store interfaces in comet");
+                            }
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing interfaces out");
+                            // Update Storage
                         } else if (NEucaCometDataGenerator.Family.storage.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing storage in");
                             if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage) &&
@@ -123,7 +133,11 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store storage in comet");
                                 }
                             }
+                            else {
+                                throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store storage in comet");
+                            }
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing storage out");
+                            // Update routes
                         } else if (NEucaCometDataGenerator.Family.routes.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing routes in");
                             if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes) &&
@@ -132,7 +146,11 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store routes in comet");
                                 }
                             }
+                            else {
+                                throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store routes in comet");
+                            }
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing routes out");
+                            // Update scripts
                         } else if (NEucaCometDataGenerator.Family.scripts.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing scripts in");
                             if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts) &&
@@ -140,6 +158,9 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                                 if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts)){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store scripts in comet");
                                 }
+                            }
+                            else {
+                                throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store scripts in comet");
                             }
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing scripts out");
                         }

@@ -14,6 +14,15 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import javax.net.ssl.KeyManagerFactory;
 
+/*
+ *
+ * @class
+ *
+ * @brief This class represents the value saved in Comet.
+ *
+ *
+ */
+
 class CometValue extends Value {
     CometValue(String v) {
         val_ = v;
@@ -31,6 +40,14 @@ class CometValue extends Value {
     private String val_;
 }
 
+/*
+ *
+ * @class
+ *
+ * @brief This class implements an interface to interact with Comet by invoking REST APIs
+ *
+ *
+ */
 public class NEucaCometInterface {
     public final static String ReponseOk = "OK";
     public final static String JsonKeyValue = "value";
@@ -41,12 +58,23 @@ public class NEucaCometInterface {
     private InputStream sslCaCert;
     private InputStream sslClientCertKS;
 
+    /*
+     * @brief Constructor
+     */
     NEucaCometInterface(String cometHost) {
         apiClient = new ApiClient();
         apiClient.setBasePath(cometHost);
         api = new DefaultApi(apiClient);
     }
 
+    /*
+     * @brief funtion to set the CA certficate, client certificate and key
+     *
+     * @param caCert - complete path of the CA certificate
+     * @param clientCertKeyStore - complete path of the Client certificate keystore
+     * @param clientCertKeyStorePwd - Client certificate keystore password
+     *
+     */
     public void setSslCaCert(String caCert, String clientCertKeyStore, String clientCertKeyStorePwd) {
         try {
             if(sslCaCert == null && apiClient != null) {
@@ -70,6 +98,16 @@ public class NEucaCometInterface {
         }
     }
 
+    /*
+     * @brief funtion invokes readScope REST API to read meta data from Comet for a specific category
+     *
+     * @param contextId - Context Id(sliceId)
+     * @param readToken - Read Token (random generated string)
+     * @param family - Specifies category of the metadata
+     *
+     * @return true for success; false otherwise
+     *
+     */
     public JSONArray read(String contextId, String key, String readToken, String family) {
         JSONArray returnValue = null;
         try {
@@ -115,6 +153,20 @@ public class NEucaCometInterface {
         }
         return returnValue;
     }
+
+    /*
+     * @brief funtion invokes writeScope REST API to write meta data from Comet for a specific category
+     *
+     * @param contextId - Context Id(sliceId)
+     * @param key - key (UnitId)
+     * @param readToken - Read Token (random generated string)
+     * @param writeToken - Write Token (random generated string)
+     * @param family - Specifies category of the metadata
+     * @param value - Specifies Json containing metadata to be saved
+     *
+     * @return true for success; false otherwise
+     *
+     */
     public boolean write(String contextId, String key, String readToken, String writeToken, String family, String value) {
         boolean returnValue = false;
         try {
@@ -138,6 +190,19 @@ public class NEucaCometInterface {
         }
         return returnValue;
     }
+
+    /*
+     * @brief funtion invokes deletScope REST API to delete meta data from Comet for a specific category
+     *
+     * @param contextId - Context Id(sliceId)
+     * @param key - key (UnitId)
+     * @param readToken - Read Token (random generated string)
+     * @param writeToken - Write Token (random generated string)
+     * @param family - Specifies category of the metadata
+     *
+     * @return true for success; false otherwise
+     *
+     */
     public boolean remove(String contextId, String key, String readToken, String writeToken, String family) {
         boolean returnValue = false;
         try {

@@ -96,6 +96,8 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.ClientKeyStorePwd);
                     String unitId = getProject().getProperty(UnitProperties.UnitID);
                     String sliceId = getProject().getProperty(UnitProperties.UnitSliceID);
+
+
                     NEucaCometDataGenerator cometDataGenerator = null;
 
                     if( cometHost != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
@@ -209,6 +211,14 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
         }
     }
 
+    /*
+     * @brief function to update users as part of modifySlice
+     *
+     * @param cometDataGenerator - Comet Data Generator
+     *
+     * @throws NEucaCometException in case of error
+     *
+     */
     private void modifyUsers(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users);
@@ -223,8 +233,20 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Unable to store users in comet");
             }
         }
+        else {
+            throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Unable to add users in comet");
+        }
         System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: OUT");
     }
+
+    /*
+     * @brief function to update interfaces as part of modifySlice
+     *
+     * @param cometDataGenerator - Comet Data Generator
+     *
+     * @throws NEucaCometException in case of error
+     *
+     */
     private void modifyInterfaces(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces);
@@ -241,16 +263,25 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             save = cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], null, null, null);
         }
         else if(arrOfStr.length == 3) {
-            save |= cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null);
+            save = cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null);
         }
         if(save) {
-            save |= cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
+            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
         }
         if(!save) {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyInterfaces: Unable to store interfaces in comet");
         }
         System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: OUT");
     }
+
+    /*
+     * @brief function to update storage as part of modifySlice
+     *
+     * @param cometDataGenerator - Comet Data Generator
+     *
+     * @throws NEucaCometException in case of error
+     *
+     */
     private void modifyStorage(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyStorage: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage);
@@ -266,46 +297,55 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     null, null, null, null, null,
                     null);
         } else if (arrOfStr.length == 4) {
-            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], null,
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], null,
                     null, null, null, null, null,
                     null);
         } else if (arrOfStr.length == 5) {
-            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     null, null, null, null, null,
                     null);
         } else if (arrOfStr.length == 6) {
-            cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], null, null, null, null,
                     null);
         } else if (arrOfStr.length == 7) {
-            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], null, null, null,
                     null);
         } else if (arrOfStr.length == 8) {
-            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], null, null,
                     null);
         } else if (arrOfStr.length == 9) {
-            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], arrOfStr[8], null,
                     null);
         } else if (arrOfStr.length == 10) {
-            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], arrOfStr[8], arrOfStr[9],
                     null);
         } else if (arrOfStr.length == 11) {
-            save |= cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
+            save = cometDataGenerator.addStorage(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], arrOfStr[3], arrOfStr[4],
                     arrOfStr[5], arrOfStr[6], arrOfStr[7], arrOfStr[8], arrOfStr[9],
                     arrOfStr[10]);
         }
         if (save) {
-            save |= cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage);
+            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage);
         }
         if(!save) {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyStorage: Unable to store storage in comet");
         }
         System.out.println("NEucaAddPropertyInfFileTask::modifyStorage: OUT");
     }
+
+    /*
+     * @brief function to update routes as part of modifySlice
+     *
+     * @param cometDataGenerator - Comet Data Generator
+     *
+     * @throws NEucaCometException in case of error
+     *
+     */
     private void modifyRoutes(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes);
@@ -320,8 +360,20 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyRoutes: Unable to store routes in comet");
             }
         }
+        else {
+            throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Unable to add routes in comet");
+        }
         System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: OUT");
     }
+
+    /*
+     * @brief function to update scripts as part of modifySlice
+     *
+     * @param cometDataGenerator - Comet Data Generator
+     *
+     * @throws NEucaCometException in case of error
+     *
+     */
     private void modifyScripts(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: IN");
         cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts);
@@ -335,6 +387,9 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts)){
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyScripts: Unable to store scripts in comet");
             }
+        }
+        else {
+            throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Unable to add scripts in comet");
         }
         System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: OUT");
     }

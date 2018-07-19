@@ -1,3 +1,11 @@
+/*
+ *
+ * @class
+ *
+ * @brief This class implements exception raised in case of any failure on comet interface
+ *
+ *
+ */
 package orca.handlers.ec2.tasks;
 
 public class NEucaCometException extends Exception {
