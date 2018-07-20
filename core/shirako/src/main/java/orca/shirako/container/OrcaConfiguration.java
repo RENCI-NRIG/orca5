@@ -54,6 +54,16 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public static final String ClientKeyStorePwd = "clientkeystorepwd";
 
     /**
+     * Client Cert for Comet
+     */
+    public static final String ClientCert = "clientcert";
+
+    /**
+     * Client Cert key for Comet
+     */
+    public static final String ClientKey = "clientkey";
+
+    /**
      * Are we using secure communication with the node agent service: true|false.
      */
     public static final String PropertySecureCommunication = "secure.communication";
@@ -117,6 +127,8 @@ public class OrcaConfiguration implements IOrcaConfiguration
     protected String caCert;
     protected String clientCertKeyStore;
     protected String clientCertKeyStorePwd;
+    protected String clientCert;
+    protected String clientKey;
 
     /**
      * Class name for the ticket factory implementation.
@@ -198,6 +210,16 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public String getClientCertKeyStorePwd()
     {
         return clientCertKeyStorePwd;
+    }
+
+    public String getClientCert()
+    {
+        return clientCert;
+    }
+
+    public String getClientKey()
+    {
+        return clientKey;
     }
 
     /**
@@ -323,6 +345,14 @@ public class OrcaConfiguration implements IOrcaConfiguration
 
         if (properties.containsKey(OrcaConfiguration.ClientKeyStorePwd)) {
             clientCertKeyStorePwd = properties.getProperty(OrcaConfiguration.ClientKeyStorePwd);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.ClientCert)) {
+            clientCert = properties.getProperty(OrcaConfiguration.ClientCert);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.ClientKey)) {
+            clientKey = properties.getProperty(OrcaConfiguration.ClientKey);
         }
 
         if (properties.containsKey(TicketFactoryClass)){

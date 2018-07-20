@@ -53,6 +53,8 @@ public class AntConfig extends Config {
     public static final String PropertyCaCert = "cacert";
     public static final String PropertyClientCertKeyStore = "clientkeystore";
     public static final String PropertyClientCertKeyStorePwd = "clientkeystorepwd";
+    public static final String PropertyClientCert = "clientcert";
+    public static final String PropertyClientKey = "clientkey";
     public static final String PropertyNodeAgentPort = "na.port";
     public static final String PropertyNodeAgentProtocol = "na.protocol";
     public static final String PropertyNodeAgentUri = "na.uri";
@@ -365,6 +367,8 @@ public class AntConfig extends Config {
         PropList.setProperty(properties, PropertyCaCert, config.getCaCert());
         PropList.setProperty(properties, PropertyClientCertKeyStore, config.getClientCertKeyStore());
         PropList.setProperty(properties, PropertyClientCertKeyStorePwd, config.getClientCertKeyStorePwd());
+        PropList.setProperty(properties, PropertyClientCert, config.getClientCert());
+        PropList.setProperty(properties, PropertyClientKey, config.getClientKey());
     }
 
     /**

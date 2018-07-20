@@ -55,17 +55,20 @@ for i in os.environ:
 try:
     # DO THE WORK
     LOG.debug("comet-remove-vm-scope: " + str(sys.argv))
-    LOG.debug("comet-remove-vm-scope: comethos=" + os.environ['COMETHOST'] + 
+    LOG.debug("comet-remove-vm-scope: comethost=" + os.environ['COMETHOST'] + 
+              " caCert= " + os.environ['COMETHOST'] +
+              " clientCert= " + os.environ['CLIENTCERT'] +
+              " clientKey= " + os.environ['CLIENTKEY'] +
               " sliceId= " + os.environ['SLICE_ID'] + 
               " unitId=" + os.environ['UNIT_ID'] + 
               " readToken=" + os.environ['UNIT_READ_TOKEN'] + 
               " writeToken=" + os.environ['UNIT_WRITE_TOKEN'])
 
-    res = CometInterface.delete_families(os.environ['COMETHOST'],
-                                         os.environ['SLICE_ID'],
-                                         os.environ['UNIT_ID'],
-                                         os.environ['UNIT_READ_TOKEN'],
-                                         os.environ['UNIT_WRITE_TOKEN'])
+    comet = CometInterface(os.environ['COMETHOST'], os.environ['CACERT'], os.environ['CLIENTCERT'], os.environ['CLIENTKEY'])
+    res = comet.delete_families(os.environ['SLICE_ID'],
+                                os.environ['UNIT_ID'],
+                                os.environ['UNIT_READ_TOKEN'],
+                                os.environ['UNIT_WRITE_TOKEN'])
     if res == True:
         print 'OK'
 

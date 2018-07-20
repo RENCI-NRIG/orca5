@@ -99,4 +99,8 @@ public interface IOrcaConfiguration {
     public String getClientCertKeyStore();
 
     public String getClientCertKeyStorePwd();
+
+    public String getClientCert();
+
+    public String getClientKey();
 }
