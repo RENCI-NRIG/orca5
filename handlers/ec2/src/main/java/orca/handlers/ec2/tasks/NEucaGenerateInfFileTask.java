@@ -260,18 +260,18 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             out.println(";slice_id= Not Specified");
         }
 
+        String rId = null;
         temp = getProject().getProperty(UnitProperties.UnitReservationID);
         if (temp != null) {
             out.println("reservation_id=" + temp);
+            rId = temp;
         } else {
             out.println(";reservation_id= Not Specified");
         }
 
-        String unitId = null;
         temp = getProject().getProperty(UnitProperties.UnitID);
         if (temp != null) {
             out.println("unit_id=" + temp);
-            unitId = temp;
         } else {
             out.println(";unit_id= Not Specified");
         }
@@ -334,9 +334,9 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         // Create Comet Data Generator object if Comet is configured
         temp = getProject().getProperty(OrcaConfiguration.CometHost);
-        String caCert = getProject().getProperty(OrcaConfiguration.CaCert);
-        String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.ClientKeyStore);
-        String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.ClientKeyStorePwd);
+        String caCert = getProject().getProperty(OrcaConfiguration.CometCaCert);
+        String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.CometClientKeyStore);
+        String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.CometClientKeyStorePwd);
 
         // Save comethost and readToken in global section of Openstack meta data
         if (temp != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
@@ -347,7 +347,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
             // Instantiate cometDataGenerator
             cometDataGenerator = new NEucaCometDataGenerator(temp, caCert, clientCertKeyStore, clientCertKeyStorePwd,
-                    unitId, sliceId, readToken, writeToken);
+                    rId, sliceId, readToken, writeToken);
 
             // Save the readToken and writeToken in the properties
             getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken);

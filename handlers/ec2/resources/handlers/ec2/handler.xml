@@ -1314,13 +1314,13 @@
                             <echo message="EC2_LOG_FILE=${ec2.log.file}" />
                             <echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
                             <echo message="SLICE_ID=${unit.sliceid}" />
-                            <echo message="UNIT_ID=${unit.id}" />
+                            <echo message="R_ID=${unit.rid}" />
                             <echo message="UNIT_READ_TOKEN=${shirako.save.unit.comet.readToken}" />
                             <echo message="UNIT_WRITE_TOKEN=${shirako.save.unit.comet.writeToken}" />
                             <echo message="COMETHOST=${comethost}" />
-                            <echo message="CLIENTCERT=${clientcert}" />
-                            <echo message="CLIENTKEY=${clientkey}" />
-                            <echo message="CACERT=${cacert}" />
+                            <echo message="COMETCLIENTCERT=${comet.clientcert}" />
+                            <echo message="COMETCLIENTKEY=${comet.clientkey}" />
+                            <echo message="COMETCACERT=${comet.cacert}" />
                             <!-- if comet, remove scope -->
                             <var name="code" unset="true" />
                             <var name="remove.scope.output" unset="true" />
@@ -1332,11 +1332,11 @@
                                 <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                                 <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
                                 <env key="COMETHOST" value="${comethost}" />
-                                <env key="CLIENTCERT" value="${clientcert}" />
-                                <env key="CLIENTKEY" value="${clientkey}" />
-                                <env key="CACERT" value="${cacert}" />
+                                <env key="COMETCLIENTCERT" value="${comet.clientcert}" />
+                                <env key="COMETCLIENTKEY" value="${comet.clientkey}" />
+                                <env key="COMETCACERT" value="${comet.cacert}" />
                                 <env key="SLICE_ID" value="${unit.sliceid}" />
-                                <env key="UNIT_ID" value="${unit.id}" />
+                                <env key="R_ID" value="${unit.rid}" />
                                 <env key="UNIT_READ_TOKEN" value="${shirako.save.unit.comet.readToken}" />
                                 <env key="UNIT_WRITE_TOKEN" value="${shirako.save.unit.comet.writeToken}" />
                             </exec>
@@ -1440,13 +1440,13 @@
                             <echo message="EC2_LOG_FILE=${ec2.log.file}" />
                             <echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
                             <echo message="SLICE_ID=${unit.sliceid}" />
-                            <echo message="UNIT_ID=${unit.id}" />
+                            <echo message="R_ID=${unit.rid}" />
                             <echo message="UNIT_READ_TOKEN=${shirako.save.unit.comet.readToken}" />
                             <echo message="UNIT_WRITE_TOKEN=${shirako.save.unit.comet.writeToken}" />
                             <echo message="COMETHOST=${comethost}" />
-                            <echo message="CLIENTCERT=${clientcert}" />
-                            <echo message="CLIENTKEY=${clientkey}" />
-                            <echo message="CACERT=${cacert}" />                            
+                            <echo message="COMETCLIENTCERT=${comet.clientcert}" />
+                            <echo message="COMETCLIENTKEY=${comet.clientkey}" />
+                            <echo message="COMETCACERT=${comet.cacert}" />
                             <!-- if comet, remove scope -->
                             <var name="code" unset="true" />
                             <var name="remove.scope.output" unset="true" />
@@ -1458,11 +1458,11 @@
                                 <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                                 <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
                                 <env key="COMETHOST" value="${comethost}" />
-                                <env key="CLIENTCERT" value="${clientcert}" />
-                                <env key="CLIENTKEY" value="${clientkey}" />
-                                <env key="CACERT" value="${cacert}" />
+                                <env key="COMETCLIENTCERT" value="${comet.clientcert}" />
+                                <env key="COMETCLIENTKEY" value="${comet.clientkey}" />
+                                <env key="COMETCACERT" value="${comet.cacert}" />
                                 <env key="SLICE_ID" value="${unit.sliceid}" />
-                                <env key="UNIT_ID" value="${unit.id}" />
+                                <env key="R_ID" value="${unit.rid}" />
                                 <env key="UNIT_READ_TOKEN" value="${shirako.save.unit.comet.readToken}" />
                                 <env key="UNIT_WRITE_TOKEN" value="${shirako.save.unit.comet.writeToken}" />
                             </exec>

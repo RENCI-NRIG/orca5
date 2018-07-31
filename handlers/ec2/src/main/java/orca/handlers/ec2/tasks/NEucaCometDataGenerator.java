@@ -65,7 +65,7 @@ public class NEucaCometDataGenerator {
     private JSONArray storage_;
     private JSONArray routes_;
     private JSONArray scripts_;
-    private String unitId_;
+    private String rId_;
     private String sliceId_;
     private String readToken_;
     private String writeToken_;
@@ -79,7 +79,7 @@ public class NEucaCometDataGenerator {
         storage_ = null;
         routes_ = null;
         scripts_ = null;
-        unitId_ = null;
+        rId_ = null;
         sliceId_ = null;
         comet_ = null;
         readToken_ = null;
@@ -87,13 +87,13 @@ public class NEucaCometDataGenerator {
     }
 
     public NEucaCometDataGenerator(String cometHost, String caCert, String clientCertKeyStore, String clientCertKeyStorePwd,
-                                   String unitId, String sliceId, String readToken, String writeToken)  {
+                                   String rId, String sliceId, String readToken, String writeToken)  {
         users_ = null;
         interfaces_ = null;
         storage_ = null;
         routes_ = null;
         scripts_ = null;
-        unitId_ = unitId;
+        rId_ = rId;
         sliceId_ = sliceId;
         readToken_ = readToken;
         writeToken_ = writeToken;
@@ -113,8 +113,8 @@ public class NEucaCometDataGenerator {
 
     public boolean loadObject(Family family) {
         try {
-            if (unitId_ != null && sliceId_ != null) {
-                JSONArray value = comet_.read(sliceId_, unitId_, readToken_, family.toString());
+            if (rId_ != null && sliceId_ != null) {
+                JSONArray value = comet_.read(sliceId_, rId_, readToken_, family.toString());
                 if(value != null) {
                     switch (family) {
                         case users:
@@ -199,16 +199,16 @@ public class NEucaCometDataGenerator {
      */
     public boolean saveObject(Family family) {
         try {
-            if (unitId_ != null && sliceId_ != null) {
+            if (rId_ != null && sliceId_ != null) {
                 // Send Rest Request to get
                 String value = getObject(family);
                 if(value != null && !value.isEmpty()) {
                     System.out.println("NEucaCometDataGenerator::saveObject: Saving family: " + family + " value: " + value);
-                    return comet_.write(sliceId_, unitId_, readToken_, writeToken_, family.toString(), value);
+                    return comet_.write(sliceId_, rId_, readToken_, writeToken_, family.toString(), value);
                 }
                 else {
                     System.out.println("NEucaCometDataGenerator::saveObject: Removing family: " + family);
-                    return comet_.remove(sliceId_, unitId_, readToken_, writeToken_, family.toString());
+                    return comet_.remove(sliceId_, rId_, readToken_, writeToken_, family.toString());
                 }
             }
         }

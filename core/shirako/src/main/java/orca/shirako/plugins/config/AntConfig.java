@@ -50,11 +50,11 @@ public class AntConfig extends Config {
     public static final String PropertySecureCommunication = "secure.communication";
     public static final String PropertyEmulation = "emulation";
     public static final String PropertyCometHost = "comethost";
-    public static final String PropertyCaCert = "cacert";
-    public static final String PropertyClientCertKeyStore = "clientkeystore";
-    public static final String PropertyClientCertKeyStorePwd = "clientkeystorepwd";
-    public static final String PropertyClientCert = "clientcert";
-    public static final String PropertyClientKey = "clientkey";
+    public static final String PropertyCometCaCert = "comet.cacert";
+    public static final String PropertyCometClientCertKeyStore = "comet.clientkeystore";
+    public static final String PropertyCometClientCertKeyStorePwd = "comet.clientkeystorepwd";
+    public static final String PropertyCometClientCert = "comet.clientcert";
+    public static final String PropertyCometClientKey = "comet.clientkey";
     public static final String PropertyNodeAgentPort = "na.port";
     public static final String PropertyNodeAgentProtocol = "na.protocol";
     public static final String PropertyNodeAgentUri = "na.uri";
@@ -364,11 +364,11 @@ public class AntConfig extends Config {
         PropList.setProperty(properties, PropertyNodeAgentProtocol, config.getNodeAgentProtocol());
         PropList.setProperty(properties, PropertyNodeAgentUri, config.getNodeAgentUri());
         PropList.setProperty(properties, PropertyCometHost, config.getCometHost());
-        PropList.setProperty(properties, PropertyCaCert, config.getCaCert());
-        PropList.setProperty(properties, PropertyClientCertKeyStore, config.getClientCertKeyStore());
-        PropList.setProperty(properties, PropertyClientCertKeyStorePwd, config.getClientCertKeyStorePwd());
-        PropList.setProperty(properties, PropertyClientCert, config.getClientCert());
-        PropList.setProperty(properties, PropertyClientKey, config.getClientKey());
+        PropList.setProperty(properties, PropertyCometCaCert, config.getCometCaCert());
+        PropList.setProperty(properties, PropertyCometClientCertKeyStore, config.getCometClientCertKeyStore());
+        PropList.setProperty(properties, PropertyCometClientCertKeyStorePwd, config.getCometClientCertKeyStorePwd());
+        PropList.setProperty(properties, PropertyCometClientCert, config.getCometClientCert());
+        PropList.setProperty(properties, PropertyCometClientKey, config.getCometClientKey());
     }
 
     /**

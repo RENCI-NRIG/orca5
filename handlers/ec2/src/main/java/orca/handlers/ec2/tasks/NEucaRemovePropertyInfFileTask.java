@@ -84,19 +84,19 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
 
                     // Update Comet if configured
                     String cometHost = getProject().getProperty(OrcaConfiguration.CometHost);
-                    String caCert = getProject().getProperty(OrcaConfiguration.CaCert);
-                    String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.ClientKeyStore);
-                    String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.ClientKeyStorePwd);
+                    String caCert = getProject().getProperty(OrcaConfiguration.CometCaCert);
+                    String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.CometClientKeyStore);
+                    String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.CometClientKeyStorePwd);
 
                     if( cometHost != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
-                        String unitId = getProject().getProperty(UnitProperties.UnitID);
+                        String rId = getProject().getProperty(UnitProperties.UnitReservationID);
                         String sliceId = getProject().getProperty(UnitProperties.UnitSliceID);
                         String readToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken);
                         String writeToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken);
 
                         // Instantiate comet data generator
                         NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, caCert, clientCertKeyStore,
-                                clientCertKeyStorePwd, unitId, sliceId, readToken, writeToken);
+                                clientCertKeyStorePwd, rId, sliceId, readToken, writeToken);
 
                         // Update users
                         if (NEucaCometDataGenerator.Family.users.toString().equals(section_)) {

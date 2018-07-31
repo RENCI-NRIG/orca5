@@ -94,13 +94,13 @@ public interface IOrcaConfiguration {
 
     public String getCometHost();
 
-    public String getCaCert();
+    public String getCometCaCert();
 
-    public String getClientCertKeyStore();
+    public String getCometClientCertKeyStore();
 
-    public String getClientCertKeyStorePwd();
+    public String getCometClientCertKeyStorePwd();
 
-    public String getClientCert();
+    public String getCometClientCert();
 
-    public String getClientKey();
+    public String getCometClientKey();
 }

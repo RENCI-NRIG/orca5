@@ -91,10 +91,10 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
 
                     // Update Comet if configured
                     String cometHost = getProject().getProperty(OrcaConfiguration.CometHost);
-                    String caCert = getProject().getProperty(OrcaConfiguration.CaCert);
-                    String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.ClientKeyStore);
-                    String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.ClientKeyStorePwd);
-                    String unitId = getProject().getProperty(UnitProperties.UnitID);
+                    String caCert = getProject().getProperty(OrcaConfiguration.CometCaCert);
+                    String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.CometClientKeyStore);
+                    String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.CometClientKeyStorePwd);
+                    String rId = getProject().getProperty(UnitProperties.UnitReservationID);
                     String sliceId = getProject().getProperty(UnitProperties.UnitSliceID);
 
 
@@ -106,7 +106,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                         String writeToken = getProject().getProperty(UnitProperties.UnitCometWriteToken);
 
                         cometDataGenerator = new NEucaCometDataGenerator(cometHost, caCert, clientCertKeyStore,
-                                clientCertKeyStorePwd, unitId, sliceId, readToken, writeToken);
+                                clientCertKeyStorePwd, rId, sliceId, readToken, writeToken);
 
                         if (NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
                             modifyUsers(cometDataGenerator);
@@ -154,16 +154,6 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                         key = line.split("=")[0].trim();
                         System.out.println("NEucaAddPropertyInfFileTask::execute: processing key: " + key);
                         // find key
-
-                        if (section.equals("global")) {
-                            if(key.equals("unit_id")) {
-                                unitId = key;
-                            }
-                            else if(key.equals("slice_id")) {
-                                sliceId = key;
-                            }
-
-                        }
                         if (section.equals("interfaces")) {
                             if (!processedKey && key.equals(key_)) {
                                 // modify an existing interface

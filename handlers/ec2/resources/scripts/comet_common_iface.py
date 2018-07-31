@@ -33,11 +33,11 @@ class CometInterface:
         return headers
 
     @classmethod
-    def get_family(self, sliceId, unitId, readToken, family):
+    def get_family(self, sliceId, rId, readToken, family):
         params = {
             'contextID':sliceId,
             'family':family,
-            'Key':unitId,
+            'Key':rId,
             'readToken':readToken
         }
         if self._verify == False:
@@ -52,11 +52,11 @@ class CometInterface:
         return response
 
     @classmethod
-    def update_family(self, sliceId, unitId, readToken, writeToken, family, value):
+    def update_family(self, sliceId, rId, readToken, writeToken, family, value):
         params = {
             'contextID':sliceId,
             'family':family,
-            'Key':unitId,
+            'Key':rId,
             'readToken':readToken,
             'writeToken':writeToken
         }
@@ -71,11 +71,11 @@ class CometInterface:
         return response
 
     @classmethod
-    def delete_family(self, sliceId, unitId, readToken, writeToken, family):
+    def delete_family(self, sliceId, rId, readToken, writeToken, family):
         params = {
             'contextID':sliceId,
             'family':family,
-            'Key':unitId,
+            'Key':rId,
             'readToken':readToken,
             'writeToken':writeToken
         }
@@ -108,15 +108,15 @@ class CometInterface:
         return response
 
     @classmethod
-    def delete_families(self, sliceId, unitId, readToken, writeToken):
+    def delete_families(self, sliceId, rId, readToken, writeToken):
         retVal=True
         response = self.enumerate_families(sliceId, readToken)
         if response.status_code != 200:
             raise CometException('delete_families: Cannot Enumerate Scope: ' + str(response.status_code))
         if response.json()["value"] and response.json()["value"]["entries"]:
             for key in response.json()["value"]["entries"]:
-                LOG.debug ("delete_families: Deleting Family: '" + key["family"] + "' SliceId: '" + sliceId + "' unitId: '" + unitId + "'")
-                response = self.delete_family(sliceId, unitId, readToken, writeToken, key["family"])
+                LOG.debug ("delete_families: Deleting Family: '" + key["family"] + "' SliceId: '" + sliceId + "' rId: '" + rId + "'")
+                response = self.delete_family(sliceId, rId, readToken, writeToken, key["family"])
                 if response.status_code != 200:
                     LOG.debug('delete_families: Cannot Delete Family: ' + key["family"])
                     retVal|=False

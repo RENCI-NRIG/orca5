@@ -41,27 +41,27 @@ public class OrcaConfiguration implements IOrcaConfiguration
     /**
      * CA Cert for Comet
      */
-    public static final String CaCert = "cacert";
+    public static final String CometCaCert = "comet.cacert";
 
     /**
      * Client Cert KeyStore for Comet
      */
-    public static final String ClientKeyStore = "clientkeystore";
+    public static final String CometClientKeyStore = "comet.clientkeystore";
 
     /**
      * Client Cert KeyStore Password for Comet
      */
-    public static final String ClientKeyStorePwd = "clientkeystorepwd";
+    public static final String CometClientKeyStorePwd = "comet.clientkeystorepwd";
 
     /**
      * Client Cert for Comet
      */
-    public static final String ClientCert = "clientcert";
+    public static final String CometClientCert = "comet.clientcert";
 
     /**
      * Client Cert key for Comet
      */
-    public static final String ClientKey = "clientkey";
+    public static final String CometClientKey = "comet.clientkey";
 
     /**
      * Are we using secure communication with the node agent service: true|false.
@@ -124,11 +124,11 @@ public class OrcaConfiguration implements IOrcaConfiguration
     protected String nodeAgentProtocol = "http";
     protected String nodeAgentUri = "/axis2/services/NodeAgentService";
     protected String cometHost;
-    protected String caCert;
-    protected String clientCertKeyStore;
-    protected String clientCertKeyStorePwd;
-    protected String clientCert;
-    protected String clientKey;
+    protected String cometCaCert;
+    protected String cometClientCertKeyStore;
+    protected String cometClientCertKeyStorePwd;
+    protected String cometClientCert;
+    protected String cometClientKey;
 
     /**
      * Class name for the ticket factory implementation.
@@ -197,29 +197,29 @@ public class OrcaConfiguration implements IOrcaConfiguration
         return cometHost;
     }
 
-    public String getCaCert()
+    public String getCometCaCert()
     {
-        return caCert;
+        return cometCaCert;
     }
 
-    public String getClientCertKeyStore()
+    public String getCometClientCertKeyStore()
     {
-        return clientCertKeyStore;
+        return cometClientCertKeyStore;
     }
 
-    public String getClientCertKeyStorePwd()
+    public String getCometClientCertKeyStorePwd()
     {
-        return clientCertKeyStorePwd;
+        return cometClientCertKeyStorePwd;
     }
 
-    public String getClientCert()
+    public String getCometClientCert()
     {
-        return clientCert;
+        return cometClientCert;
     }
 
-    public String getClientKey()
+    public String getCometClientKey()
     {
-        return clientKey;
+        return cometClientKey;
     }
 
     /**
@@ -335,24 +335,24 @@ public class OrcaConfiguration implements IOrcaConfiguration
             cometHost = properties.getProperty(OrcaConfiguration.CometHost);
         }
 
-        if (properties.containsKey(OrcaConfiguration.CaCert)) {
-            caCert = properties.getProperty(OrcaConfiguration.CaCert);
+        if (properties.containsKey(OrcaConfiguration.CometCaCert)) {
+            cometCaCert = properties.getProperty(OrcaConfiguration.CometCaCert);
         }
 
-        if (properties.containsKey(OrcaConfiguration.ClientKeyStore)) {
-            clientCertKeyStore = properties.getProperty(OrcaConfiguration.ClientKeyStore);
+        if (properties.containsKey(OrcaConfiguration.CometClientKeyStore)) {
+            cometClientCertKeyStore = properties.getProperty(OrcaConfiguration.CometClientKeyStore);
         }
 
-        if (properties.containsKey(OrcaConfiguration.ClientKeyStorePwd)) {
-            clientCertKeyStorePwd = properties.getProperty(OrcaConfiguration.ClientKeyStorePwd);
+        if (properties.containsKey(OrcaConfiguration.CometClientKeyStorePwd)) {
+            cometClientCertKeyStorePwd = properties.getProperty(OrcaConfiguration.CometClientKeyStorePwd);
         }
 
-        if (properties.containsKey(OrcaConfiguration.ClientCert)) {
-            clientCert = properties.getProperty(OrcaConfiguration.ClientCert);
+        if (properties.containsKey(OrcaConfiguration.CometClientCert)) {
+            cometClientCert = properties.getProperty(OrcaConfiguration.CometClientCert);
         }
 
-        if (properties.containsKey(OrcaConfiguration.ClientKey)) {
-            clientKey = properties.getProperty(OrcaConfiguration.ClientKey);
+        if (properties.containsKey(OrcaConfiguration.CometClientKey)) {
+            cometClientKey = properties.getProperty(OrcaConfiguration.CometClientKey);
         }
 
         if (properties.containsKey(TicketFactoryClass)){
