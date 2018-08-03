@@ -12,6 +12,9 @@ import org.json.simple.JSONValue;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.net.ssl.KeyManagerFactory;
 
 /*
@@ -53,6 +56,7 @@ public class NEucaCometInterface {
     public final static String JsonKeyValue = "value";
     public final static String JsonKeyVal = "val_";
 
+    private ArrayList<String> cometHosts_;
     private ApiClient apiClient;
     private DefaultApi api;
     private InputStream sslCaCert;
@@ -61,9 +65,9 @@ public class NEucaCometInterface {
     /*
      * @brief Constructor
      */
-    NEucaCometInterface(String cometHost) {
+    NEucaCometInterface(String cometHosts) {
+        cometHosts_ = new ArrayList<String>(Arrays.asList(cometHosts.split(",")));
         apiClient = new ApiClient();
-        apiClient.setBasePath(cometHost);
         api = new DefaultApi(apiClient);
     }
 
@@ -108,44 +112,153 @@ public class NEucaCometInterface {
      * @return true for success; false otherwise
      *
      */
+    private CometResponse readScopeGet(String contextId, String key, String readToken, String family) {
+        CometResponse response = null;
+        Collections.shuffle(cometHosts_);
+        for (String host : cometHosts_) {
+            System.out.println("NEucaCometInterface::writeScopePost: Using cometHost=" + host);
+            apiClient.setBasePath(host);
+            try {
+                response = null;
+                response = api.readScopeGet(contextId, family, key, readToken);
+                break;
+            }
+            catch (ApiException e) {
+                System.out.println("NEucaCometInterface::readScopeGet: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
+                e.printStackTrace();
+                continue;
+            }
+            catch (Exception e) {
+                System.out.println("NEucaCometInterface::readScopeGet: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return response;
+    }
+
+    /*
+     * @brief funtion invokes writeScope REST API to write meta data from Comet for a specific category
+     *
+     * @param contextId - Context Id(sliceId)
+     * @param key - key (UnitId)
+     * @param readToken - Read Token (random generated string)
+     * @param writeToken - Write Token (random generated string)
+     * @param family - Specifies category of the metadata
+     * @param value - Specifies Json containing metadata to be saved
+     *
+     * @return true for success; false otherwise
+     *
+     */
+    private CometResponse writeScopePost(String contextId, String key, String readToken, String writeToken, String family, String value) {
+        CometResponse response = null;
+        CometValue v = new CometValue(value);
+        Collections.shuffle(cometHosts_);
+        for (String host : cometHosts_) {
+            System.out.println("NEucaCometInterface::writeScopePost: Using cometHost=" + host);
+            apiClient.setBasePath(host);
+            try {
+                response = null;
+                response = api.writeScopePost(v, contextId, family, key, readToken, writeToken);
+                break;
+            }
+            catch (ApiException e) {
+                System.out.println("NEucaCometInterface::writeScopePost: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
+                e.printStackTrace();
+                continue;
+            }
+            catch (Exception e) {
+                System.out.println("NEucaCometInterface::writeScopePost: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return response;
+    }
+
+
+    /*
+     * @brief funtion invokes deletScope REST API to delete meta data from Comet for a specific category
+     *
+     * @param contextId - Context Id(sliceId)
+     * @param key - key (UnitId)
+     * @param readToken - Read Token (random generated string)
+     * @param writeToken - Write Token (random generated string)
+     * @param family - Specifies category of the metadata
+     *
+     * @return true for success; false otherwise
+     *
+     */
+    private CometResponse deleteScopeDelete(String contextId, String key, String readToken, String writeToken, String family) {
+        CometResponse response = null;
+        Collections.shuffle(cometHosts_);
+        for (String host : cometHosts_) {
+            System.out.println("NEucaCometInterface::deleteScopeDelete: Using cometHost=" + host);
+            apiClient.setBasePath(host);
+            try {
+                response = null;
+                response = api.deleteScopeDelete(contextId, family, key, readToken, writeToken);
+                break;
+            }
+            catch (ApiException e) {
+                System.out.println("NEucaCometInterface::deleteScopeDelete: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
+                e.printStackTrace();
+                continue;
+            }
+            catch (Exception e) {
+                System.out.println("NEucaCometInterface::deleteScopeDelete: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return response;
+    }
+
+    /*
+     * @brief funtion invokes readScope REST API to read meta data from Comet for a specific category
+     *
+     * @param contextId - Context Id(sliceId)
+     * @param readToken - Read Token (random generated string)
+     * @param family - Specifies category of the metadata
+     *
+     * @return true for success; false otherwise
+     *
+     */
     public JSONArray read(String contextId, String key, String readToken, String family) {
         JSONArray returnValue = null;
         try {
-            CometResponse response = api.readScopeGet(contextId, family, key, readToken);
-            if (!response.getStatus().equals(ReponseOk)) {
-                System.out.println("NEucaCometInterface::read: Unable to read data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
-                System.out.println("NEucaCometInterface::read: Status: " + response.getStatus() + "Message: " + response.getMessage());
-                return returnValue;
-            }
-            com.google.gson.internal.LinkedTreeMap o1 = (com.google.gson.internal.LinkedTreeMap) response.getValue();
-            if( o1 != null) {
-                if(o1.containsKey(JsonKeyValue)) {
-                    System.out.println("NEucaCometInterface::read: value=" + o1.get(JsonKeyValue));
-                    JSONObject o2 = (JSONObject)JSONValue.parse(o1.get(JsonKeyValue).toString());
-                    if(o2 != null) {
-                        if(o2.containsKey(JsonKeyVal)) {
-                            System.out.println("NEucaCometInterface::read: found " + JsonKeyVal + "=" + o2.get("val_").toString());
-                            returnValue = (JSONArray) JSONValue.parse(o2.get("val_").toString());
-                        }
-                        else {
-                            System.out.println("NEucaCometInterface::read: not found " + JsonKeyVal);
-                        }
-                    }
-                    else {
-                        System.out.println("NEucaCometInterface::read: Unable to get JSONObject value");
-                    }
+            CometResponse response = readScopeGet(contextId, family, key, readToken);
+            if(response != null) {
+                if (!response.getStatus().equals(ReponseOk)) {
+                    System.out.println("NEucaCometInterface::read: Unable to read data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
+                    System.out.println("NEucaCometInterface::read: Status: " + response.getStatus() + "Message: " + response.getMessage());
+                    return returnValue;
                 }
-                else {
-                    System.out.println("NEucaCometInterface::read: CometResponse does not contain value");
+                com.google.gson.internal.LinkedTreeMap o1 = (com.google.gson.internal.LinkedTreeMap) response.getValue();
+                if (o1 != null) {
+                    if (o1.containsKey(JsonKeyValue)) {
+                        System.out.println("NEucaCometInterface::read: value=" + o1.get(JsonKeyValue));
+                        JSONObject o2 = (JSONObject) JSONValue.parse(o1.get(JsonKeyValue).toString());
+                        if (o2 != null) {
+                            if (o2.containsKey(JsonKeyVal)) {
+                                System.out.println("NEucaCometInterface::read: found " + JsonKeyVal + "=" + o2.get("val_").toString());
+                                returnValue = (JSONArray) JSONValue.parse(o2.get("val_").toString());
+                            } else {
+                                System.out.println("NEucaCometInterface::read: not found " + JsonKeyVal);
+                            }
+                        } else {
+                            System.out.println("NEucaCometInterface::read: Unable to get JSONObject value");
+                        }
+                    } else {
+                        System.out.println("NEucaCometInterface::read: CometResponse does not contain value");
+                    }
+                } else {
+                    System.out.println("NEucaCometInterface::read: unable to load json object from CometResponse");
                 }
             }
             else {
-                System.out.println("NEucaCometInterface::read: unable to load json object from CometResponse");
+                System.out.println("NEucaCometInterface::read: response null");
             }
-        }
-        catch (ApiException e) {
-            System.out.println("NEucaCometInterface::read: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
-            e.printStackTrace();
         }
         catch (Exception e) {
             System.out.println("NEucaCometInterface::read: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
@@ -170,19 +283,19 @@ public class NEucaCometInterface {
     public boolean write(String contextId, String key, String readToken, String writeToken, String family, String value) {
         boolean returnValue = false;
         try {
-            CometValue v = new CometValue(value);
-            CometResponse response = api.writeScopePost(v, contextId, family, key, readToken, writeToken);
-            if (!response.getStatus().equals(ReponseOk)) {
-                System.out.println("NEucaCometInterface::write: Unable to write data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
-                System.out.println("NEucaCometInterface::write: Status: " + response.getStatus() + " Message: " + response.getMessage());
-                return returnValue;
+            CometResponse response = writeScopePost(contextId, family, key, readToken, writeToken, value);
+            if(response != null) {
+                if (!response.getStatus().equals(ReponseOk)) {
+                    System.out.println("NEucaCometInterface::write: Unable to write data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
+                    System.out.println("NEucaCometInterface::write: Status: " + response.getStatus() + " Message: " + response.getMessage());
+                    return returnValue;
+                }
+                System.out.println("NEucaCometInterface::write: Write successful: " + response.getMessage());
+                returnValue = true;
             }
-            System.out.println("NEucaCometInterface::write: Write successful: " + response.getMessage());
-            returnValue = true;
-        }
-        catch (ApiException e) {
-            System.out.println("NEucaCometInterface::write: ApiException occurred while write: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
-            e.printStackTrace();
+            else {
+                System.out.println("NEucaCometInterface::write: response null");
+            }
         }
         catch (Exception e) {
             System.out.println("NEucaCometInterface::write: Exception occurred while write: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
@@ -206,18 +319,19 @@ public class NEucaCometInterface {
     public boolean remove(String contextId, String key, String readToken, String writeToken, String family) {
         boolean returnValue = false;
         try {
-            CometResponse response = api.deleteScopeDelete(contextId, family, key, readToken, writeToken);
-            if (!response.getStatus().equals(ReponseOk)) {
-                System.out.println("NEucaCometInterface::remove: Unable to remove data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
-                System.out.println("NEucaCometInterface::remove: Status: " + response.getStatus() + " Message: " + response.getMessage());
-                return returnValue;
+            CometResponse response = deleteScopeDelete(contextId, family, key, readToken, writeToken);
+            if(response != null) {
+                if (!response.getStatus().equals(ReponseOk)) {
+                    System.out.println("NEucaCometInterface::remove: Unable to remove data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
+                    System.out.println("NEucaCometInterface::remove: Status: " + response.getStatus() + " Message: " + response.getMessage());
+                    return returnValue;
+                }
+                System.out.println("NEucaCometInterface::remove: Remove successful" + response.getMessage());
+                returnValue = true;
             }
-            System.out.println("NEucaCometInterface::remove: Remove successful" + response.getMessage());
-            returnValue = true;
-        }
-        catch (ApiException e) {
-            System.out.println("NEucaCometInterface::remove: ApiException occurred while remove: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
-            e.printStackTrace();
+            else {
+                System.out.println("NEucaCometInterface::remove: response null");
+            }
         }
         catch (Exception e) {
             System.out.println("NEucaCometInterface::remove: Exception occurred while remove: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());

@@ -65,10 +65,10 @@ try:
               " writeToken=" + os.environ['UNIT_WRITE_TOKEN'])
 
     comet = CometInterface(os.environ['COMETHOST'], os.environ['COMETCACERT'], os.environ['COMETCLIENTCERT'], os.environ['COMETCLIENTKEY'])
-    res = comet.delete_families(os.environ['SLICE_ID'],
+    res = comet.invokeRoundRobinApi('delete_families', os.environ['SLICE_ID'],
                                 os.environ['R_ID'],
                                 os.environ['UNIT_READ_TOKEN'],
-                                os.environ['UNIT_WRITE_TOKEN'])
+                                os.environ['UNIT_WRITE_TOKEN'], None, None)
     if res == True:
         print 'OK'
 

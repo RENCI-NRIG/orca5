@@ -340,14 +340,15 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         // Save comethost and readToken in global section of Openstack meta data
         if (temp != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
-            out.println("comethost=" + temp);
             String readToken = generateRandomString();
-            out.println("cometreadtoken=" + readToken);
             String writeToken = generateRandomString();
 
             // Instantiate cometDataGenerator
             cometDataGenerator = new NEucaCometDataGenerator(temp, caCert, clientCertKeyStore, clientCertKeyStorePwd,
                     rId, sliceId, readToken, writeToken);
+
+            out.println("comethost=" + temp);
+            out.println("cometreadtoken=" + readToken);
 
             // Save the readToken and writeToken in the properties
             getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken);

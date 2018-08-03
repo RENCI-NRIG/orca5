@@ -69,7 +69,6 @@ public class NEucaCometDataGenerator {
     private String sliceId_;
     private String readToken_;
     private String writeToken_;
-
     private NEucaCometInterface comet_;
 
     // Constructors
@@ -86,7 +85,20 @@ public class NEucaCometDataGenerator {
         writeToken_ = null;
     }
 
-    public NEucaCometDataGenerator(String cometHost, String caCert, String clientCertKeyStore, String clientCertKeyStorePwd,
+    /*
+     * @brief constructor
+     *
+     * @param cometHostList         list of comethost names
+     * @param caCert                Ca Certificate
+     * @param clientCertKeyStore    client certificate key store
+     * @param clientCertKeyStorePwd client certificate key store password
+     * @param rid                   reservation id
+     * @param sliceId               slice Id
+     * @param readToken             readToken
+     * @param writeToken            writeToken
+     *
+     */
+    public NEucaCometDataGenerator(String cometHosts, String caCert, String clientCertKeyStore, String clientCertKeyStorePwd,
                                    String rId, String sliceId, String readToken, String writeToken)  {
         users_ = null;
         interfaces_ = null;
@@ -97,7 +109,7 @@ public class NEucaCometDataGenerator {
         sliceId_ = sliceId;
         readToken_ = readToken;
         writeToken_ = writeToken;
-        comet_ = new NEucaCometInterface(cometHost);
+        comet_ = new NEucaCometInterface(cometHosts);
         comet_.setSslCaCert(caCert, clientCertKeyStore, clientCertKeyStorePwd);
     }
 
@@ -115,7 +127,7 @@ public class NEucaCometDataGenerator {
         try {
             if (rId_ != null && sliceId_ != null) {
                 JSONArray value = comet_.read(sliceId_, rId_, readToken_, family.toString());
-                if(value != null) {
+                if (value != null) {
                     switch (family) {
                         case users:
                             users_ = value;
