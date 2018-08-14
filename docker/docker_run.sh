@@ -72,7 +72,7 @@ fi
 var_sleep=15
 if [[ $OSTYPE == darwin* ]]
 then
-  let "var_sleep *= 15"
+  let "var_sleep *= 5"
 fi
 
 # The MySQL container probably doesn't need to be restarted

@@ -34,6 +34,36 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public static final String Emulation = "emulation";
 
     /**
+     * Are we using comet
+     */
+    public static final String CometHost = "comethost";
+
+    /**
+     * CA Cert for Comet
+     */
+    public static final String CometCaCert = "comet.cacert";
+
+    /**
+     * Client Cert KeyStore for Comet
+     */
+    public static final String CometClientKeyStore = "comet.clientkeystore";
+
+    /**
+     * Client Cert KeyStore Password for Comet
+     */
+    public static final String CometClientKeyStorePwd = "comet.clientkeystorepwd";
+
+    /**
+     * Client Cert for Comet
+     */
+    public static final String CometClientCert = "comet.clientcert";
+
+    /**
+     * Client Cert key for Comet
+     */
+    public static final String CometClientKey = "comet.clientkey";
+
+    /**
      * Are we using secure communication with the node agent service: true|false.
      */
     public static final String PropertySecureCommunication = "secure.communication";
@@ -93,6 +123,12 @@ public class OrcaConfiguration implements IOrcaConfiguration
     protected String nodeAgentPortNumber = "6";
     protected String nodeAgentProtocol = "http";
     protected String nodeAgentUri = "/axis2/services/NodeAgentService";
+    protected String cometHost;
+    protected String cometCaCert;
+    protected String cometClientCertKeyStore;
+    protected String cometClientCertKeyStorePwd;
+    protected String cometClientCert;
+    protected String cometClientKey;
 
     /**
      * Class name for the ticket factory implementation.
@@ -154,6 +190,36 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public String getNodeAgentUri()
     {
         return nodeAgentUri;
+    }
+
+    public String getCometHost()
+    {
+        return cometHost;
+    }
+
+    public String getCometCaCert()
+    {
+        return cometCaCert;
+    }
+
+    public String getCometClientCertKeyStore()
+    {
+        return cometClientCertKeyStore;
+    }
+
+    public String getCometClientCertKeyStorePwd()
+    {
+        return cometClientCertKeyStorePwd;
+    }
+
+    public String getCometClientCert()
+    {
+        return cometClientCert;
+    }
+
+    public String getCometClientKey()
+    {
+        return cometClientKey;
     }
 
     /**
@@ -263,6 +329,30 @@ public class OrcaConfiguration implements IOrcaConfiguration
 
         if (properties.containsKey(OrcaConfiguration.NaUri)) {
             nodeAgentUri = properties.getProperty(OrcaConfiguration.NaUri);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CometHost)) {
+            cometHost = properties.getProperty(OrcaConfiguration.CometHost);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CometCaCert)) {
+            cometCaCert = properties.getProperty(OrcaConfiguration.CometCaCert);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CometClientKeyStore)) {
+            cometClientCertKeyStore = properties.getProperty(OrcaConfiguration.CometClientKeyStore);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CometClientKeyStorePwd)) {
+            cometClientCertKeyStorePwd = properties.getProperty(OrcaConfiguration.CometClientKeyStorePwd);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CometClientCert)) {
+            cometClientCert = properties.getProperty(OrcaConfiguration.CometClientCert);
+        }
+
+        if (properties.containsKey(OrcaConfiguration.CometClientKey)) {
+            cometClientKey = properties.getProperty(OrcaConfiguration.CometClientKey);
         }
 
         if (properties.containsKey(TicketFactoryClass)){
