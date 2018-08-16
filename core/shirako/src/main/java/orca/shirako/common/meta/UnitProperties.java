@@ -92,6 +92,12 @@ public interface UnitProperties {
     public static final String UnitEC2PrivateIP     = "unit.ec2.private.ip";
     public static final String UnitEC2Host          = "unit.ec2.host";
 
+    /*
+     * Comet Properties
+     */
+    public static final String UnitCometReadToken = "unit.comet.readToken";
+    public static final String UnitCometWriteToken = "unit.comet.writeToken";
+
     /* 
      * xCAT
      */

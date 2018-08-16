@@ -91,4 +91,16 @@ public interface IOrcaConfiguration {
     public String getNodeAgentServiceUrl(String address);
 
     public String getNodeAgentUri();
+
+    public String getCometHost();
+
+    public String getCometCaCert();
+
+    public String getCometClientCertKeyStore();
+
+    public String getCometClientCertKeyStorePwd();
+
+    public String getCometClientCert();
+
+    public String getCometClientKey();
 }

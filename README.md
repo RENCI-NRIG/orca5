@@ -45,3 +45,8 @@ You can also use [Ahab](https://github.com/RENCI-NRIG/ahab) to programmatically 
 - Merge code into `master`
 
 Your code will not be formatted to follow the Orca style guidelines using the normal maven build commands (e.g. `mvn clean install`), but it can be formatted using the maven command `mvn formatter:format`.  The style guidelines can also be imported into Eclipse from the file [orca_formatter_style.xml](/tools/build/src/main/resources/orca/orca_formatter_style.xml)
+
+## Orca deployment structure in ExoGENI
+
+- [Actor deployment](link)
+- [ORCA AM](link)
