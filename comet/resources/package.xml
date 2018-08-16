@@ -1,0 +1,22 @@
+<extensionPackage xmlns="http://issg.cs.duke.edu/shirako/manage/extensions/beans" id="87DBB2BE-7977-4463-A0CB-F6043735DEF9"> 
+    <name>
+         Comet Library 
+    </name> 
+    <description>
+         Provides Comet Interface. 
+    </description> 
+    <plugins> 
+        <!-- Eucalyptus --> 
+        <plugin id="1" type="10" actorType="3"> 
+            <name>
+                Comet Interface
+            </name> 
+            <description>
+                 Provides support for Comet APIs. 
+            </description> 
+            <className>
+                 orca.comet.NEucaCometDataGenerator
+            </className>
+        </plugin> 
+    </plugins> 
+</extensionPackage>
