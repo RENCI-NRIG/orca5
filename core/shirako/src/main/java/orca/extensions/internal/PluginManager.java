@@ -54,7 +54,7 @@ public class PluginManager
      * Returns the specified plugin.
      * @param packageId package identifier
      * @param pluginId plugin identifier
-     * @return
+     * @return returns the specified plugin
      */
     public Plugin getPlugin(PackageId packageId, PluginId pluginId)
     {
@@ -82,7 +82,7 @@ public class PluginManager
      * @param packageId package identifier
      * @param type plugin type
      * @param actorType plugin actor type
-     * @return
+     * @return returns the list of installed plugins
      */
     public Plugin[] getPlugins(PackageId packageId, int type, int actorType)
     {
@@ -109,8 +109,8 @@ public class PluginManager
 
     /**
      * Initializes the plugin manager. Called by the management layer.
-     * @param manager reference to the management layer
-     * @throws Exception
+     * @param database ip database
+     * @throws Exception in case of error
      */
     public void initialize(IPackageDatabase database) throws Exception
     {
@@ -129,7 +129,7 @@ public class PluginManager
      * @param packageId package id
      * @param pluginId plugin id
      * @return true | false
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected boolean isRegistered(PackageId packageId, PluginId pluginId) throws Exception
     {
@@ -142,7 +142,7 @@ public class PluginManager
      * Registers this plugin. Throws an exception if an instance of this plugin
      * has already been registered. Registration involves a database access.
      * @param plugin plugin instance
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void register(Plugin plugin) throws Exception
     {
@@ -157,6 +157,7 @@ public class PluginManager
     /**
      * Unregisters all plugins for the specified package.
      * @param packageId package identifier
+     * @throws Exception in case of error
      */
     public void unregister(PackageId packageId) throws Exception
     {
@@ -167,6 +168,7 @@ public class PluginManager
      * Unregisters this plugin.
      * @param packageId package identifier
      * @param pluginId plugin identifier
+     * @throws Exception in case of error
      */
     public void unregister(PackageId packageId, PluginId pluginId) throws Exception
     {

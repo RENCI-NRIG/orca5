@@ -27,7 +27,7 @@ public interface IServiceManager extends IClientActor, IServiceManagerPublic
      *
      * @param reservation reservation to be redeemed
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
      * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
      */
@@ -51,7 +51,7 @@ public interface IServiceManager extends IClientActor, IServiceManagerPublic
      *
      * @param reservation reservation to be redeemed
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
      * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
      */

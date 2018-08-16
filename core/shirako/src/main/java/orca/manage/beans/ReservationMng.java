@@ -23,28 +23,28 @@ import java.util.Map;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="reservationMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="reservationID" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="sliceID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="requestedEnd" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="resourceType" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="state" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="pendingState" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="localProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="requestProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="resourceProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="notices" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="reservationMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="reservationID" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="sliceID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="requestedEnd" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="resourceType" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="state" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="pendingState" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="localProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="requestProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="resourceProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="notices" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -139,7 +139,7 @@ public class ReservationMng {
 
     /**
      * Gets the value of the start property.
-     * 
+     * @return value of the start property
      */
     public long getStart() {
         return start;
@@ -147,7 +147,7 @@ public class ReservationMng {
 
     /**
      * Sets the value of the start property.
-     * 
+     * @param value value of the start property
      */
     public void setStart(long value) {
         this.start = value;
@@ -155,7 +155,7 @@ public class ReservationMng {
 
     /**
      * Gets the value of the end property.
-     * 
+     * @return value of the end property
      */
     public long getEnd() {
         return end;
@@ -163,7 +163,7 @@ public class ReservationMng {
 
     /**
      * Sets the value of the end property.
-     * 
+     * @param value value of the end property
      */
     public void setEnd(long value) {
         this.end = value;
@@ -171,7 +171,7 @@ public class ReservationMng {
 
     /**
      * Gets the value of the requestedEnd property.
-     * 
+     * @return value of the requestedEnd property
      */
     public long getRequestedEnd() {
         return requestedEnd;
@@ -179,7 +179,7 @@ public class ReservationMng {
 
     /**
      * Sets the value of the requestedEnd property.
-     * 
+     * @param value value of the requestedEnd property
      */
     public void setRequestedEnd(long value) {
         this.requestedEnd = value;
@@ -211,7 +211,7 @@ public class ReservationMng {
 
     /**
      * Gets the value of the units property.
-     * 
+     * @return value of the units property
      */
     public int getUnits() {
         return units;
@@ -219,7 +219,7 @@ public class ReservationMng {
 
     /**
      * Sets the value of the units property.
-     * 
+     * @param value value of the units property
      */
     public void setUnits(int value) {
         this.units = value;
@@ -227,7 +227,7 @@ public class ReservationMng {
 
     /**
      * Gets the value of the state property.
-     * 
+     * @return value of the state property
      */
     public int getState() {
         return state;
@@ -235,7 +235,7 @@ public class ReservationMng {
 
     /**
      * Sets the value of the state property.
-     * 
+     * @param value of the state property
      */
     public void setState(int value) {
         this.state = value;
@@ -243,7 +243,7 @@ public class ReservationMng {
 
     /**
      * Gets the value of the pendingState property.
-     * 
+     * @return value of the pendingState property
      */
     public int getPendingState() {
         return pendingState;
@@ -251,7 +251,7 @@ public class ReservationMng {
 
     /**
      * Sets the value of the pendingState property.
-     * 
+     * @param value value of the pendingState property
      */
     public void setPendingState(int value) {
         this.pendingState = value;

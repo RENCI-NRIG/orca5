@@ -20,18 +20,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="logicalMachineCalendarMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="cpu" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/>
- *         &lt;element name="memory" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/>
- *         &lt;element name="bandwidth" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/>
- *         &lt;element name="disk" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="logicalMachineCalendarMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="cpu" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/&gt;
+ *         &lt;element name="memory" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/&gt;
+ *         &lt;element name="bandwidth" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/&gt;
+ *         &lt;element name="disk" type="{http://www.nicl.duke.edu/orca/manage/beans}resourceCalendarMng"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

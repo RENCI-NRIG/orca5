@@ -32,7 +32,7 @@ public class PersistenceUtils implements PersistenceProperties {
      * 
      * @param item
      *            a Persistable type
-     * @throws PersistenceException
+     * @throws PersistenceException in case of error
      */
     public static void resolve(Class<?> item) throws PersistenceException {
         if (!Persistable.class.isAssignableFrom(item)) {
@@ -53,8 +53,9 @@ public class PersistenceUtils implements PersistenceProperties {
      * 
      * @param toPersist
      *            object to persist
+     * @param <V> Type of the parameter
      * @return Properties list representing the persisted object
-     * @throws PersistenceException
+     * @throws PersistenceException in case of error
      */
     public static <V extends Persistable> Properties save(V toPersist) throws PersistenceException {
         if (toPersist == null) {
@@ -78,9 +79,10 @@ public class PersistenceUtils implements PersistenceProperties {
     /**
      * Restores an object from a Properties list
      * 
-     * @param savedState
+     * @param savedState saved properties
+     * @param <V> Type of the parameter
      * @return the restored object
-     * @throws PersistenceException
+     * @throws PersistenceException in case of error
      */
     public static <V extends Persistable> V restore(Properties savedState)
             throws PersistenceException {
@@ -90,9 +92,11 @@ public class PersistenceUtils implements PersistenceProperties {
     /**
      * Restores an object from a Properties list
      * 
-     * @param savedState
+     * @param savedState saved properties
+     * @param overrideCustomRestorer flag indicating if custom restorer is overriden
+     * @param <V> Type of the parameter
      * @return the restored object
-     * @throws PersistenceException
+     * @throws PersistenceException in case of error
      */
     public static <V extends Persistable> V restore(Properties savedState,
             boolean overrideCustomRestorer) throws PersistenceException {
@@ -109,10 +113,12 @@ public class PersistenceUtils implements PersistenceProperties {
      * Restores an object from a Properties list using the specified class
      * loader.
      * 
-     * @param savedState
-     * @param cl
-     * @return
-     * @throws PersistenceException
+     * @param savedState saved properties
+     * @param cl class loader
+     * @param overrideCustomRestorer flag indicating if custom restorer is overriden
+     * @param <V> Type of the parameter
+     * @return the restored object
+     * @throws PersistenceException in case of exception
      */
     public static <V extends Persistable> V restore(Properties savedState, ClassLoader cl,
             boolean overrideCustomRestorer) throws PersistenceException {
@@ -197,8 +203,11 @@ public class PersistenceUtils implements PersistenceProperties {
      * 
      * @param obj
      *            object to recover
-     * @param parent
-     * @param savedState
+     * @param parent parent object
+     * @param savedState saved Properties
+     * @param <V> Type of the object 
+     * @param <Y> Type of the parent 
+     * @throws orca.util.OrcaException in case of error
      */
     public static <V extends Recoverable, Y extends RecoverParent> void recover(V obj, Y parent,
             Properties savedState) throws OrcaException {

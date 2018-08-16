@@ -39,7 +39,7 @@ public interface IServiceManagerReservation extends IClientReservation {
 
     /**
      * Returns the name of the join state.
-     * @return
+     * @return name of the join state
      */
     public String getJoinStateName();
 
@@ -140,40 +140,40 @@ public interface IServiceManagerReservation extends IClientReservation {
      * Adds a redeem predecessor to this reservation: the passed in reservation
      * must be redeem before this reservation. Specifies filter to allow properties from the predecessor
      * to be passed to this reservation.
-     * @param r
-     * @param filter
+     * @param r reservation
+     * @param filter filter
      */
     public void addRedeemPredecessor(IServiceManagerReservation r, Properties filter);
 
     /**
      * Returns the redeem predecessors list for the reservation.
-     * @return
+     * @return redeem predecessors list for the reservation
      */
     public List<IServiceManagerReservation> getRedeemPredecessors();
     
     /**
      * Returns the join predecessors list for the reservation
-     * @return
+     * @return join predecessors list for the reservation
      */
     public List<IServiceManagerReservation> getJoinPredecessors();
 
     /**
      * @deprecated use addJoinPredecessor instead
-     * @param predecessor
-     * @param filter
+     * @param predecessor predecessor
+     * @param filter filter
      */
     public void setJoinPredecessor(IServiceManagerReservation predecessor, Properties filter);
     /**
      * Sets a configuration property.
-     * @param key
-     * @param value
+     * @param key key
+     * @param value value
      */
     
     public void setConfigurationProperty(String key, String value);
     /**
      * Sets a request property.
-     * @param key
-     * @param value
+     * @param key key
+     * @param value value
      */
     public void setRequestProperty(String key, String value);    
 }

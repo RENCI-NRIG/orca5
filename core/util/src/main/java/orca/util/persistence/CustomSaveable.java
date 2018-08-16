@@ -11,7 +11,7 @@ public interface CustomSaveable {
 	/**
 	 * Finishes saving the object
 	 * @param p current saved state
-	 * @throws PersistenceException
+	 * @throws PersistenceException in case of error
 	 */
 	public void save(Properties p) throws PersistenceException;
 }

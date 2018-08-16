@@ -20,17 +20,17 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="configMappingMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="key" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="file" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="properties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="configMappingMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="key" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="file" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="properties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

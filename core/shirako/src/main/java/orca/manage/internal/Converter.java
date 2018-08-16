@@ -413,9 +413,8 @@ public class Converter extends OrcaConverter {
 	/**
 	 * Returns the specified plugin converted to <code>PluginMng</code>.
 	 * 
-	 * @param packageId package identifier
-	 * @param pluginId plugin identifier
-	 * @return
+	 * @param l list of PlugingMng 
+	 * @param ps array of plugins
 	 */
 	public static void fillPlugin(List<PluginMng> l, Plugin[] ps) {
 		if (ps != null) {
@@ -513,9 +512,9 @@ public class Converter extends OrcaConverter {
 	/**
 	 * Converts a UserMng object to a User object
 	 * 
-	 * @param mng
-	 * @return
-	 * @throws Exception
+	 * @param mng user mng object
+	 * @return user object
+	 * @throws Exception in case of error
 	 */
 	public static User fill(UserMng mng) throws Exception {
 		User user = new User();
@@ -613,8 +612,8 @@ public class Converter extends OrcaConverter {
 	 * properties list into a <code>PackageMng</code> object.
 	 * 
 	 * @param p properties list
-	 * @return
-	 * @throws Exception
+	 * @return package mng
+	 * @throws Exception in case of error
 	 */
 	public static PackageMng fillExtensionPackage(Properties p) throws Exception {
 		PackageMng result = new PackageMng();
@@ -632,7 +631,7 @@ public class Converter extends OrcaConverter {
 	 * 
 	 * @param p properties list representing a serialized plugin descriptor.
 	 * @return the <code>PluginMng</code> object
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 */
 	public static PluginMng fillPluginMng(Properties p) throws Exception {
 		PluginMng mng = new PluginMng();
@@ -703,9 +702,9 @@ public class Converter extends OrcaConverter {
 	/**
 	 * Converts a serialized User object to a UserMng object
 	 * 
-	 * @param p
-	 * @return
-	 * @throws Exception
+	 * @param p properties
+	 * @return user object
+	 * @throws Exception in case of error
 	 */
 	public static UserMng fillUserMng(Properties p) throws Exception {
 		UserMng mng = new UserMng();
@@ -739,9 +738,9 @@ public class Converter extends OrcaConverter {
 	/**
 	 * Converts a vector of serialized User objects to UserMng objects
 	 * 
-	 * @param v
-	 * @return
-	 * @throws Exception
+	 * @param l list of userMng
+	 * @param v list of properties
+	 * @throws Exception in case of error
 	 */
 	public static void fillUser(List<UserMng> l, Vector<Properties> v) throws Exception {
 		if ((v != null) && (v.size() > 0)) {
@@ -924,8 +923,8 @@ public class Converter extends OrcaConverter {
 	/**
 	 * Checks if a term has expired
 	 * 
-	 * @param term
-	 * @return
+	 * @param term term
+	 * @return true for success; false otherwise
 	 */
 	public static boolean isExpired(Term term) {
 		boolean result = false;

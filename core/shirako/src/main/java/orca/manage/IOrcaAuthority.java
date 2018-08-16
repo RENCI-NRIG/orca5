@@ -21,44 +21,44 @@ import orca.shirako.common.UnitID;
 public interface IOrcaAuthority extends IOrcaServerActor {
 	/**
 	 * Retrieves all leases the site has issued to service managers. 
-	 * @return
+	 * @return returns list of reservations
 	 */
 	public List<ReservationMng> getAuthorityReservations();
 	/**
 	 * Retrieves all units in the specified reservation
-	 * @param reservationID
-	 * @return
+	 * @param reservationID reservation id
+	 * @return returns list of units for specific reservation 
 	 */
 	public List<UnitMng> getUnits(ReservationID reservationID);
 	/**
 	 * Returns the inventory of the actor
-	 * @return
+	 * @return returns list of units 
 	 */
 	public List<UnitMng> getInventory();
 	/**
 	 * Returns the inventory of the actor in the specified slice.
-	 * @param sliceId
-	 * @return
+	 * @param sliceId slice id
+	 * @return list of the inventory for the slice
 	 */
 	public List<UnitMng> getInventory(SliceID sliceId);
 	/**
 	 * Returns the specified inventory item
-	 * @param unit
-	 * @return
+	 * @param unit unit id
+	 * @return return the specified inventory item
 	 */
 	public UnitMng getUnit(UnitID unit);
 	
 	/**
 	 * Transfers inventory to the specified slice
-	 * @param sliceId
-	 * @param unit
-	 * @return
+	 * @param sliceId slice id
+	 * @param unit unit id 
+	 * @return true for success; false otherwise
 	 */
 	public boolean transferInventory(SliceID sliceId, UnitID unit);
 	/**
 	 * Transfers inventory back from the specified slice
-	 * @param unit
-	 * @return
+	 * @param unit unit id
+	 * @return true for success; false otherwise
 	 */
 	public boolean untransferInventory(UnitID unit);
 	

@@ -39,7 +39,7 @@ public class PathGuesser
     
     /**
      * Returns the web application's base directory.
-     * @return
+     * @return string contatining wev application's base directory path
      */
     public static String getWebBase() {
         PathGuesser p = new PathGuesser();

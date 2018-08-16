@@ -6,7 +6,7 @@ package orca.util.persistence;
  * Overrides the generic restore method in PersistenceUtils.
  * @author aydan
  *
- * @param <T>
+ * @param <T> Type of the parameter
  */
 public interface Saver<T> {
 	String save(T obj) throws PersistenceException;

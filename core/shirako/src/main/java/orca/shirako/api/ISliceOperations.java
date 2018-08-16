@@ -68,7 +68,7 @@ public interface ISliceOperations
      *
      * @param slice slice to remove
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeSlice(ISlice slice) throws Exception;
 
@@ -78,7 +78,7 @@ public interface ISliceOperations
      *
      * @param sliceID slice identifier
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeSlice(SliceID sliceID) throws Exception;
 

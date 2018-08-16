@@ -25,12 +25,12 @@ public interface IOrcaComponent {
 	public List<ProtocolProxyMng> getProtocols();
 	/**
 	 * Type identifier for the component.
-	 * @return
+	 * @return returns type id
 	 */
 	public String getTypeID();
 	/**
 	 * Returns the last error/success for this component.
-	 * @return
+	 * @return returns last error/success
 	 */
 	public OrcaError getLastError();
 }

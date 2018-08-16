@@ -38,6 +38,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetReservationUnitsResponse }
+     * @return created instance
      * 
      */
     public GetReservationUnitsResponse createGetReservationUnitsResponse() {
@@ -46,6 +47,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ModifyReservationRequest }
+     * @return created instance
      * 
      */
     public ModifyReservationRequest createModifyReservationRequest() {
@@ -55,6 +57,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetReservationUnitsRequest }
      * 
+     * @return created instance
      */
     public GetReservationUnitsRequest createGetReservationUnitsRequest() {
         return new GetReservationUnitsRequest();
@@ -63,6 +66,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ModifyReservationResponse }
      * 
+     * @return created instance
      */
     public ModifyReservationResponse createModifyReservationResponse() {
         return new ModifyReservationResponse();

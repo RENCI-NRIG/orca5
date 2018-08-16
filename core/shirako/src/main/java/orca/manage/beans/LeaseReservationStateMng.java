@@ -19,15 +19,15 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="LeaseReservationStateMng">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}reservationStateMng">
- *       &lt;sequence>
- *         &lt;element name="joining" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="LeaseReservationStateMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}reservationStateMng"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="joining" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/extension&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

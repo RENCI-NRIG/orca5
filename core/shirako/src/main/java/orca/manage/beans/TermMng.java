@@ -19,18 +19,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="termMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="startTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="endTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="ticketTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="newStartTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="termMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="startTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="endTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="ticketTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="newStartTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -51,7 +51,7 @@ public class TermMng {
 
     /**
      * Gets the value of the startTime property.
-     * 
+     * @return value of the startTime property
      */
     public long getStartTime() {
         return startTime;
@@ -59,7 +59,7 @@ public class TermMng {
 
     /**
      * Sets the value of the startTime property.
-     * 
+     * @param value value of the startTime property
      */
     public void setStartTime(long value) {
         this.startTime = value;
@@ -67,7 +67,7 @@ public class TermMng {
 
     /**
      * Gets the value of the endTime property.
-     * 
+     * @return value of the endTime property
      */
     public long getEndTime() {
         return endTime;
@@ -75,7 +75,7 @@ public class TermMng {
 
     /**
      * Sets the value of the endTime property.
-     * 
+     * @param value value of the endTime property
      */
     public void setEndTime(long value) {
         this.endTime = value;
@@ -83,7 +83,7 @@ public class TermMng {
 
     /**
      * Gets the value of the ticketTime property.
-     * 
+     * @return value of the ticketTime property
      */
     public long getTicketTime() {
         return ticketTime;
@@ -91,7 +91,7 @@ public class TermMng {
 
     /**
      * Sets the value of the ticketTime property.
-     * 
+     * @param value value of the ticketTime property
      */
     public void setTicketTime(long value) {
         this.ticketTime = value;
@@ -99,7 +99,7 @@ public class TermMng {
 
     /**
      * Gets the value of the newStartTime property.
-     * 
+     * @return value of the newStartTime property
      */
     public long getNewStartTime() {
         return newStartTime;
@@ -107,7 +107,7 @@ public class TermMng {
 
     /**
      * Sets the value of the newStartTime property.
-     * 
+     * @param value value of the newStartTime property
      */
     public void setNewStartTime(long value) {
         this.newStartTime = value;

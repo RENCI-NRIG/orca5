@@ -40,6 +40,7 @@ public class PackageId implements Cloneable
 
     /**
      * Loads the specified string as an identifier
+     * @param id string identifier
      */
     public PackageId(String id)
     {

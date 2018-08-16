@@ -38,12 +38,12 @@ public class AbacServerUtil {
 	
 	/**
 	 * create a slice credential
-	 * @param sliceAuthorityPrivateKey
-	 * @param sliceAuthorityCertificate
-	 * @param userCertificate
-	 * @param sliceId
-	 * @param privilege
-	 * @throws Exception
+	 * @param sliceAuthorityPrivateKey slice priavte key
+	 * @param sliceAuthorityCertificate slice certificate
+	 * @param userCertificate user certificate
+	 * @param sliceId slice Id
+         * @return return the 509 certificate
+	 * @throws Exception in case of error
 	 */
 	public static X509V2AttributeCertificate createSliceCredential(PrivateKey sliceAuthorityPrivateKey, X509Certificate sliceAuthorityCertificate, 
 			X509Certificate userCertificate, ID sliceId) throws Exception{
@@ -57,12 +57,13 @@ public class AbacServerUtil {
 	
 	/**
 	 * create an attribute certificate
-	 * @param assignerPrivateKey
-	 * @param assignerCertificate
-	 * @param assigneeCertificate
-	 * @param objectId
-	 * @param privilege
-	 * @throws Exception
+	 * @param assignerPrivateKey assigner private key
+	 * @param assignerCertificate assigner certificate
+	 * @param assigneeCertificate assignee certificate
+	 * @param objectId object id
+	 * @param privilege privileges
+         * @return returns 509V2 certificate
+	 * @throws Exception in case of error
 	 */
 	public static X509V2AttributeCertificate createCredential(PrivateKey assignerPrivateKey, X509Certificate assignerCertificate, 
 										X509Certificate assigneeCertificate, ID objectId, String privilege) throws Exception{
@@ -106,8 +107,8 @@ public class AbacServerUtil {
 	
 	/**
 	 * generate name for a credential output file
-	 * @param cred
-	 * @return
+	 * @param cred credential
+	 * @return name for a credential output file
 	 */
 	public static String getCredentialFileName(Credential cred){
 		StringBuffer result = new StringBuffer();
@@ -120,11 +121,11 @@ public class AbacServerUtil {
 	
 	/**
 	 * register an already existing credential
-	 * @param objectId
-	 * @param certificate
-	 * @param userCertificate
-	 * @param fileName
-	 * @throws Exception
+	 * @param userCertificate user certificate 
+	 * @param objectId object Id
+	 * @param certificate certificate
+	 * @param fileName file name 
+	 * @throws Exception in case of error
 	 */
 	public static void registerCredential(X509Certificate userCertificate, String objectId, String certificate, String fileName) throws Exception{
 		
@@ -189,8 +190,8 @@ public class AbacServerUtil {
 	
 	/**
 	 * Creates directory with the given name
-	 * @param file
-	 * @return
+	 * @param file file to be created
+	 * @return true for success; otherwise false
 	 */
     public static boolean createDirectory(File file) {
 	    if (file.exists())
@@ -203,6 +204,9 @@ public class AbacServerUtil {
     
     /**
      * returns hash of the public key
+     * @param cert certificate
+     * @return string containing the hask of public key
+     * @throws Exception in case of error
      */
     public static String extractKeyId(X509Certificate cert) throws Exception{
     	return new Identity(cert).getKeyID();

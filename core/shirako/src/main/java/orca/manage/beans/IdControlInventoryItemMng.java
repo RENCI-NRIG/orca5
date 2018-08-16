@@ -22,18 +22,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="IdControlInventoryItemMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="nodeID" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="nodeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="available" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="free" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="IdControlInventoryItemMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="nodeID" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="nodeName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="available" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="free" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -105,7 +105,7 @@ public class IdControlInventoryItemMng {
 
     /**
      * Gets the value of the available property.
-     * 
+     * @return value of available property
      */
     public boolean isAvailable() {
         return available;
@@ -113,7 +113,7 @@ public class IdControlInventoryItemMng {
 
     /**
      * Sets the value of the available property.
-     * 
+     * @param value available property
      */
     public void setAvailable(boolean value) {
         this.available = value;
@@ -139,7 +139,7 @@ public class IdControlInventoryItemMng {
      * Objects of the following type(s) are allowed in the list
      * {@link Long }
      * 
-     * 
+     * @return list of free 
      */
     public List<Long> getFree() {
         if (free == null) {

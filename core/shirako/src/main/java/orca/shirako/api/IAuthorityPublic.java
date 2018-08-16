@@ -25,7 +25,7 @@ public interface IAuthorityPublic
      * @param reservation the reservation
      * @param caller the slice owner
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void close(IReservation reservation, AuthToken caller) throws Exception;
 
@@ -35,7 +35,7 @@ public interface IAuthorityPublic
      * @param reservation reservation to extend
      * @param caller owner of the reservation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendLease(IReservation reservation, AuthToken caller) throws Exception;
 
@@ -45,7 +45,7 @@ public interface IAuthorityPublic
      * @param reservation reservation to modify
      * @param caller owner of the reservation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modifyLease(IReservation reservation, AuthToken caller) throws Exception;
     
@@ -56,7 +56,7 @@ public interface IAuthorityPublic
      * @param callback callback object
      * @param caller owner of the reservation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void redeem(IReservation reservation, IServiceManagerCallbackProxy callback,
                        AuthToken caller) throws Exception;

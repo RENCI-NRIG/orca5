@@ -56,13 +56,13 @@ public class PropList
      * Get a boolean property from a property list. The value defaults
      * to false if the property is not present.
      *
-     * @param p
-     * @param descr
-     * @param pname
+     * @param p properties
+     * @param descr description
+     * @param pname parameter name
      *
      * @return false by default, true if property set
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static boolean getBooleanProperty(Properties p, String descr, String pname)
                                       throws Exception
@@ -112,13 +112,13 @@ public class PropList
      * Get a property whose value is of type InetAddress from the
      * slice's property list.
      *
+     * @param properties property 
      * @param name property name
-     * @param name DOCUMENT ME!
      * @param required true iff property is required
      *
-     * @return DOCUMENT ME!
+     * @return InetAddress
      *
-     * @throws exception if property is malformed, or if required and missing
+     * @throws Exception if property is malformed, or if required and missing
      */
     public static InetAddress getInetProperty(Properties properties, String name, boolean required)
                                        throws Exception
@@ -161,13 +161,13 @@ public class PropList
     /**
      * Gets an integer property from a property list.
      *
-     * @param p
-     * @param descr
-     * @param pname
+     * @param p properties
+     * @param descr description
+     * @param pname property name
      *
      * @return 0 if property does not exist, otherwise the integer property
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static int getIntProperty(Properties p, String descr, String pname)
                               throws Exception
@@ -255,13 +255,13 @@ public class PropList
      * throws a meaningful exception if it is not present or if it is
      * malformed.
      *
-     * @param p
-     * @param descr
-     * @param pname
+     * @param p properties
+     * @param descr description 
+     * @param pname property name
      *
      * @return 0 if no property, otherwise the integer property
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static int getReqIntProperty(Properties p, String descr, String pname)
                                  throws Exception
@@ -285,13 +285,13 @@ public class PropList
      * Gets a required property from a property list, and throws a
      * meaningful exception if it is not present.
      *
-     * @param p
-     * @param descr
-     * @param pname
+     * @param p properties
+     * @param descr description
+     * @param pname property name
      *
      * @return string of the required property
      *
-     * @throws Exception
+     * @throws Exception if property not found
      */
     public static String getReqProperty(Properties p, String descr, String pname)
                                  throws Exception
@@ -425,8 +425,8 @@ public class PropList
 
     /**
      * Merge two non-null lists (if either is null, nothing happens)
-     * @param from
-     * @param to
+     * @param from source properties
+     * @param to target properties
      */
     public static void mergePropertiesPriority(Properties from, Properties to)
     {
@@ -452,10 +452,10 @@ public class PropList
      * Reads the value of the given property. It is expected that the
      * value is of boolean type.
      *
-     * @param p
-     * @param property
+     * @param p properties
+     * @param property name
      *
-     * @return
+     * @return value of the property
      *
      * @throws Exception if the value of the given property cannot be
      *         recognized as a valid boolean
@@ -480,14 +480,14 @@ public class PropList
     /**
      * Saves an int value in the prop list
      *
-     * @param p
-     * @param value
-     * @param descr
-     * @param pname
+     * @param p properties
+     * @param value to be set
+     * @param descr description 
+     * @param pname property name
      *
      * @return an integer of the return from setProperty, 0 otherwise
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static int saveIntProperty(Properties p, int value, String descr, String pname)
                                throws Exception
@@ -639,7 +639,7 @@ public class PropList
      *
      * @return The resulting properties list
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static Properties toProperties(String s) throws Exception
     {
@@ -656,11 +656,11 @@ public class PropList
     /**
      * Converts a string to a properties list
      *
-     * @param s
+     * @param s string
      *
-     * @return
+     * @return properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static Properties toProperties2(String s) throws Exception
     {
@@ -693,7 +693,7 @@ public class PropList
      *
      * @return The string representation of this properties list
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static String toString(Properties properties) throws Exception
     {
@@ -710,9 +710,9 @@ public class PropList
     /**
      * Converts a properties list to a string
      *
-     * @param p
+     * @param p properties
      *
-     * @return
+     * @return string containing properties
      */
     public static String toString2(Properties p)
     {
@@ -742,9 +742,9 @@ public class PropList
      * Find the highest index of the property name of a pattern 
      * keyStartWith.[index]. Character '.' can be used as a separator
      * inside the keyStartsWith pattern.
-     * @param p
-     * @param keyStartsWith
-     * @return
+     * @param p properties
+     * @param keyStartsWith pattern
+     * @return index for the property name of the pattern
      */
     public static int highestPropIndex(Properties p, String keyStartsWith) {
         int highestIndex = 0;
@@ -763,8 +763,8 @@ public class PropList
     
     /**
      * Prepend string to all property names
-     * @param p
-     * @param prefix
+     * @param p properties
+     * @param prefix string to be prepended
      */
     public static void renamePropertyNames(Properties p, String prefix) {
     	Iterator<Map.Entry<Object,Object>> i = p.entrySet().iterator();

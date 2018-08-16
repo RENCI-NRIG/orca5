@@ -96,9 +96,9 @@ public class ContainerManagementObject extends ManagementObject {
 
 	/**
 	 * Authentication entry point for external callers.
-	 * @param login
-	 * @param password
-	 * @return
+	 * @param login login
+	 * @param password password
+	 * @return result
 	 */
 	public ResultStringMng login(String login, String password) {
 		ResultStringMng result = new ResultStringMng();
@@ -127,8 +127,8 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Internal callers are trusted and do not require credentials.
 	 * This method produces an AuthToken that grants code running
 	 * in the JVM admin rights.
-	 * @return
-	 * @throws Exception
+	 * @return auth token
+	 * @throws Exception in case of error
 	 */
 	public AuthToken loginInternal() throws Exception {
 		// generate a new random user login
@@ -167,6 +167,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Obtains all user records
 	 * 
 	 * @param auth Credentials of the caller
+	 * @return all user records
 	 */
 	public ResultUserMng getUsers(AuthToken auth) {
 		ResultUserMng result = new ResultUserMng();
@@ -197,7 +198,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param name user name
 	 * @param auth Credentials of the caller
-	 * @return
+	 * @return specified user
 	 */
 	public ResultUserMng getUser(String name, AuthToken auth) {
 		ResultUserMng result = new ResultUserMng();
@@ -228,7 +229,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param user User description
 	 * @param auth Credentials of the caller
-	 * @return
+	 * @return result
 	 */
 	public ResultMng addUser(UserMng user, AuthToken auth) {
 		ResultMng result = new ResultMng();
@@ -280,7 +281,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param user User record
 	 * @param auth Credentials of the caller
-	 * @return
+	 * @return result
 	 */
 	public ResultMng updateUser(UserMng user, AuthToken auth) {
 		ResultMng result = new ResultMng();
@@ -310,9 +311,9 @@ public class ContainerManagementObject extends ManagementObject {
 	/**
 	 * Removes the specified user record
 	 * 
-	 * @param user
-	 * @param auth
-	 * @return
+	 * @param user User record
+	 * @param auth Credentials of the caller
+	 * @return result
 	 */
 	public ResultMng removeUser(String user, AuthToken auth) {
 		ResultMng result = new ResultMng();
@@ -341,7 +342,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param bytes Package bytes
 	 * @param caller Identity of the caller
-	 * @return
+	 * @return result
 	 */
 	public ResultMng installPackage(byte[] bytes, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -371,7 +372,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * @param packageID Package identifier
 	 * @param bytes Package bytes
 	 * @param caller Identity of the caller
-	 * @return
+	 * @return result
 	 */
 	public ResultMng upgradePackage(PackageId packageID, byte[] bytes, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -401,7 +402,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param packageID Package identifier
 	 * @param caller Identity of the caller
-	 * @return
+	 * @return result
 	 */
 	public ResultMng uninstallPackage(PackageId packageID, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -431,7 +432,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param packageID Package identifier
 	 * @param caller Identity of the caller
-	 * @return
+	 * @return package
 	 */
 	public ResultPackageMng getPackage(PackageId packageID, AuthToken caller) {
 		ResultPackageMng result = new ResultPackageMng();
@@ -465,7 +466,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Retrieves all installed extension packages
 	 * 
 	 * @param caller Identity of the caller
-	 * @return
+	 * @return package
 	 */
 	public ResultPackageMng getPackages(AuthToken caller) {
 		ResultPackageMng result = new ResultPackageMng();
@@ -497,7 +498,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * @param packageID Package identifier
 	 * @param pluginID Plugin identifier
 	 * @param caller Identity of the caller
-	 * @return
+	 * @return plugin
 	 */
 	public ResultPluginMng getPlugin(PackageId packageID, PluginId pluginID, AuthToken caller) {
 		ResultPluginMng result = new ResultPluginMng();
@@ -536,7 +537,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * @param type Plugin type
 	 * @param actorType Actor type
 	 * @param caller Identity of the caller
-	 * @return
+	 * @return plugin
 	 */
 	public ResultPluginMng getPlugins(PackageId packageID, int type, int actorType, AuthToken caller) {
 		ResultPluginMng result = new ResultPluginMng();
@@ -574,6 +575,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param configuration Serialization of the configuration
 	 * @param caller Identity of the caller
+	 * @return result
 	 */
 	public synchronized ResultMng addConfiguration(byte[] configuration, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -602,6 +604,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param stream Input stream for the configuration file
 	 * @param caller Identity of the caller
+	 * @return result
 	 */
 	public synchronized ResultMng addConfiguration(InputStream stream, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -630,6 +633,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param configuration Serialization of the configuration
 	 * @param caller Identity of the caller
+	 * @return result
 	 */
 	public synchronized ResultMng configure(byte[] configuration, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -663,7 +667,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Returns all actors operable by the specified user
 	 * 
 	 * @param caller User credentials
-	 * @return
+	 * @return all actors
 	 */
 	public ResultActorMng getActors(AuthToken caller) {
 		ResultActorMng result = new ResultActorMng();
@@ -690,6 +694,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * from the database).
 	 * 
 	 * @param caller User credentials
+	 * @return all actors
 	 */
 	public ResultActorMng getActorsFromDatabase(AuthToken caller) {
 		ResultActorMng result = new ResultActorMng();
@@ -743,6 +748,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * @param type Actor type
 	 * @param status Actor status
 	 * @param caller User credentials
+	 * @return returns all actors
 	 */
 	public ResultActorMng getActorsFromDatabase(String name, int type, int status, AuthToken caller) {
 		ResultActorMng result = new ResultActorMng();
@@ -815,6 +821,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * ActorRegistry).
 	 * 
 	 * @param caller User credentials
+	 * @return all service managers 
 	 */
 	public ResultActorMng getServiceManagers(AuthToken caller) {
 		ResultActorMng result = new ResultActorMng();
@@ -840,7 +847,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Returns all brokers operable by this actor (uses the ActorRegistry)
 	 * 
 	 * @param caller User credentials
-	 * @return
+	 * @return all brokers 
 	 */
 	public ResultActorMng getBrokers(AuthToken caller) {
 		ResultActorMng result = new ResultActorMng();
@@ -866,7 +873,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Obtains all sites operable by the specified user (uses the ActorRegistry)
 	 * 
 	 * @param caller User credentials
-	 * @return
+	 * @return all sites 
 	 */
 	public ResultActorMng getAuthorities(AuthToken caller) {
 		ResultActorMng result = new ResultActorMng();
@@ -892,8 +899,10 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Creates a new actor
 	 * 
 	 * @param actor Actor description
-	 * @param bokers Brokers to associate this actor with caller Identity of the
+	 * @param brokers Brokers to associate this actor with caller Identity of the
 	 *            caller
+	 * @param caller caller auth token 
+	 * @return returns the result 
 	 */
 	public ResultMng addActor(ActorCreateMng actor, ProxyMng[] brokers, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -938,7 +947,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param actorName Name of the actor
 	 * @param user User credentials
-	 * @return
+	 * @return result
 	 */
 	public ResultMng startActor(String actorName, AuthToken user) {
 		ResultMng result = new ResultMng();
@@ -971,9 +980,9 @@ public class ContainerManagementObject extends ManagementObject {
 	/**
 	 * Stops an active actor
 	 * 
-	 * @param actorName
-	 * @param user
-	 * @return
+	 * @param actorName actor name
+	 * @param user user
+	 * @return result
 	 */
 	public ResultMng stopActor(String actorName, AuthToken user) {
 		ResultMng result = new ResultMng();
@@ -1011,7 +1020,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param actorName Name of the actor
 	 * @param user User credentials
-	 * @return
+	 * @return result
 	 */
 	public ResultMng removeActor(String actorName, AuthToken user) {
 		ResultMng result = null;
@@ -1062,7 +1071,8 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param actor Actor description
 	 * @param myactor Actor object
-	 * @throws Exception
+	 * @param caller caller 
+	 * @throws Exception in case of error
 	 */
 	protected void installApplications(ActorCreateMng actor, IActor myactor, AuthToken caller) throws Exception {
 //		boolean createSlice = true;
@@ -1099,7 +1109,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param actor Actor object
 	 * @param brokers Array of brokers
-	 * @throws Exception
+	 * @throws Exception in case of errors
 	 */
 	protected void attachBrokers(IActor actor, ProxyMng[] brokers) throws Exception {
 		if (actor.getType() != OrcaConstants.ActorTypeSiteAuthority) {
@@ -1128,7 +1138,8 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param actor Actor object
 	 * @param controller Controller description
-	 * @throws Exception
+	 * @return controller factory
+	 * @throws Exception in case of error
 	 */
 	protected IControllerFactory attachController(IActor actor, PluginCreateMng controller) throws Exception {
 		Plugin controllerPlugin = Globals.getContainer().getPluginManager()
@@ -1184,8 +1195,8 @@ public class ContainerManagementObject extends ManagementObject {
 	 * Creates the actor object
 	 * 
 	 * @param actor Actor description
-	 * @return
-	 * @throws Exception
+	 * @return actor created
+	 * @throws Exception in case of error
 	 */
 	protected IActor createActor(ActorCreateMng actor) throws Exception {
 		PluginCreateMng actorPluginMng = actor.getActorPlugin();
@@ -1303,9 +1314,9 @@ public class ContainerManagementObject extends ManagementObject {
 
 	/**
 	 * Returns the specified management object. 
-	 * @param key management object identifier
+	 * @param objectID management object identifier
 	 * @return the ManagementObject on success, or null if not found
-	 * @throws Exception
+	 * @throws  OrcaManagementException in case of error
 	 */
 	public IManagementObject getManagementObject(ID objectID) throws OrcaManagementException {
 		return Globals.getContainer().getManagementObjectManager().getManagementObject(objectID);
@@ -1324,7 +1335,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param protocol Protocol name
 	 * @param caller User credentials
-	 * @return
+	 * @return all broker proxies
 	 */
 	public ResultProxyMng getBrokerProxies(String protocol, AuthToken caller) {
 		ResultProxyMng result = new ResultProxyMng();
@@ -1355,7 +1366,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param protocol Protocol name
 	 * @param caller User credentials
-	 * @return
+	 * @return all broker proxies
 	 */
 	public ResultProxyMng getSiteProxies(String protocol, AuthToken caller) {
 		ResultProxyMng result = new ResultProxyMng();
@@ -1385,7 +1396,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param protocol Protocol
 	 * @param caller Caller identity
-	 * @return
+	 * @return all broker and site proxies
 	 */
 	public ResultProxyMng getProxies(String protocol, AuthToken caller) {
 		ResultProxyMng result = new ResultProxyMng();
@@ -1478,7 +1489,7 @@ public class ContainerManagementObject extends ManagementObject {
 	 * 
 	 * @param type Actor type (Converter.Type*)
 	 * @param user <code>AuthToken</code> of the user
-	 * @return
+	 * @return list of all actors of the specified type operable by the user
 	 */
 	protected ArrayList<IActor> getActors(int type, AuthToken user) {
 		ArrayList<IActor> list = new ArrayList<IActor>();
@@ -1509,8 +1520,8 @@ public class ContainerManagementObject extends ManagementObject {
 	/**
 	 * Obtains the specified actor from the database
 	 * 
-	 * @param name
-	 * @return
+	 * @param name actor name
+	 * @return actor properties
 	 */
 	protected Properties getActorDB(String name) {
 		try {
@@ -1529,7 +1540,7 @@ public class ContainerManagementObject extends ManagementObject {
 	/**
 	 * Obtains all actors from the database
 	 * 
-	 * @return
+	 * @return vector of properties
 	 */
 	protected Vector<Properties> getActorsDB() {
 		try {
@@ -1544,7 +1555,7 @@ public class ContainerManagementObject extends ManagementObject {
 	/**
 	 * Obtains all sites from the database
 	 * 
-	 * @return
+	 * @return vector of properties
 	 */
 	protected Vector<Properties> getSitesDB() {
 		Vector<Properties> result = null;
@@ -1653,6 +1664,8 @@ public class ContainerManagementObject extends ManagementObject {
 
 	/**
 	 * Retrieves the complete inventory
+	 * @param caller caller auth token 
+	 * @return complete inventory
 	 */
 	public ResultUnitMng getInventory(AuthToken caller) {
 		ResultUnitMng result = new ResultUnitMng();
@@ -1691,6 +1704,9 @@ public class ContainerManagementObject extends ManagementObject {
 
 	/**
 	 * Retrieves all machines
+	 * @param unit unit id
+	 * @param caller caller auth token 
+	 * @return Retrieves all machines
 	 */
 	public ResultUnitMng getInventory(UnitID unit, AuthToken caller) {
 		ResultUnitMng result = new ResultUnitMng();

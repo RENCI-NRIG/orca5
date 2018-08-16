@@ -25,7 +25,7 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * @param resources
      *            resource set representing resources to be used for allocation
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void donate(ResourceSet resources) throws Exception;
 
@@ -35,9 +35,9 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * Any nodes that reside on ejected hosts should be marked as failed. The
      * policy should take no action to destroy those nodes.
      * 
-     * @param resources
+     * @param resources resources to be ejected
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void eject(ResourceSet resources) throws Exception;
 
@@ -73,6 +73,7 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * 
      * @return true, if the request has been fulfilled, false, if the allocation
      *         of resources will be delayed until a later time.
+     * @throws Exception in case of error
      */
     public boolean bind(IAuthorityReservation reservation) throws Exception;
 
@@ -85,7 +86,7 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * @param cycle
      *            the cycle the authority is making assignment for
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void assign(long cycle) throws Exception;
 
@@ -94,13 +95,13 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * to correct the deficit. The policy can attempt to correct the deficit,
      * fail the reservation, or indicate that the reservation should be sent
      * back to the client with the deficit.
+     * See {@link IAuthorityReservation#setSendWithDeficit(boolean)}
      * 
      * @param reservation
      *            reservation with deficit
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      * 
-     * @see {@link IAuthorityReservation#setSendWithDeficit(boolean)}
      */
     public void correctDeficit(IAuthorityReservation reservation) throws Exception;
 
@@ -136,6 +137,7 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * 
      * @return true, if the request has been fulfilled, false, if the allocation
      *         of resources will be delayed until a later time.
+     * @throws Exception in case of error
      */
     public boolean extend(IAuthorityReservation reservation) throws Exception;
 
@@ -151,13 +153,13 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * failure is corrected and the resources are safe to be reused, the
      * administrator will issue a call to {@link #freed(ResourceSet)}, which is
      * used to free resources unconditionally.
+     * See {@link #closed(ResourceReservation)}
      * 
      * @param resources
      *            the resource set to be released
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      * 
-     * @see {@link #closed(ResourceReservation)}
      */
     public void release(ResourceSet resources) throws Exception;
 
@@ -169,9 +171,9 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * resources are no longer in use. The policy should disregard any state
      * information that individual resource units may contain.
      * 
-     * @param resources
+     * @param resources resources
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void freed(ResourceSet resources) throws Exception;
 
@@ -193,7 +195,7 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * @return 0 success, -1, at least one resource has hosted units on it and
      *         cannot be marked unavailable
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public int unavailable(ResourceSet resources) throws Exception;
 
@@ -201,9 +203,9 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * Informs the policy that inventory resources previously marked as
      * unavailable are now available.
      * 
-     * @param resources
+     * @param resources resources to be marked available
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void available(ResourceSet resources) throws Exception;
 

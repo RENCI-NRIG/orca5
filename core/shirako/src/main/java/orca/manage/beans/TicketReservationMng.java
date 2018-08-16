@@ -21,18 +21,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ticketReservationMng">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}reservationMng">
- *       &lt;sequence>
- *         &lt;element name="broker" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="ticketProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="renewable" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="renewTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *       &lt;/sequence>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="ticketReservationMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}reservationMng"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="broker" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="ticketProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="renewable" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="renewTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/extension&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -107,7 +107,7 @@ public class TicketReservationMng
 
     /**
      * Gets the value of the renewable property.
-     * 
+     * @return value of the renewable property
      */
     public boolean isRenewable() {
         return renewable;
@@ -115,7 +115,7 @@ public class TicketReservationMng
 
     /**
      * Sets the value of the renewable property.
-     * 
+     * @param value value of the renewable property
      */
     public void setRenewable(boolean value) {
         this.renewable = value;
@@ -123,7 +123,7 @@ public class TicketReservationMng
 
     /**
      * Gets the value of the renewTime property.
-     * 
+     * @return value of the renewTime property
      */
     public long getRenewTime() {
         return renewTime;
@@ -131,7 +131,7 @@ public class TicketReservationMng
 
     /**
      * Sets the value of the renewTime property.
-     * 
+     * @param value value of the renewTime property
      */
     public void setRenewTime(long value) {
         this.renewTime = value;

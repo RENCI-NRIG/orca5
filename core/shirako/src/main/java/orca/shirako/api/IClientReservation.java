@@ -142,7 +142,7 @@ public interface IClientReservation extends IReservation
     
     /**
      * Get the value of renewable flag
-     * @return
+     * @return value of renewable flag
      */
     public boolean getRenewable();
     

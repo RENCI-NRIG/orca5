@@ -20,24 +20,24 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="actorCreateMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="siteName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="actorPlugin" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginCreateMng"/>
- *         &lt;element name="controllerPlugin" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginCreateMng" minOccurs="0"/>
- *         &lt;element name="policyPlugin" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginCreateMng" minOccurs="0"/>
- *         &lt;element name="applicationPlugins" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginsMng"/>
- *         &lt;element name="managerPlugins" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginsMng"/>
- *         &lt;element name="portalPlugins" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginsMng"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="actorCreateMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="siteName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="actorPlugin" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginCreateMng"/&gt;
+ *         &lt;element name="controllerPlugin" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginCreateMng" minOccurs="0"/&gt;
+ *         &lt;element name="policyPlugin" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginCreateMng" minOccurs="0"/&gt;
+ *         &lt;element name="applicationPlugins" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginsMng"/&gt;
+ *         &lt;element name="managerPlugins" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginsMng"/&gt;
+ *         &lt;element name="portalPlugins" type="{http://www.nicl.duke.edu/orca/manage/beans}pluginsMng"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -115,7 +115,7 @@ public class ActorCreateMng {
 
     /**
      * Gets the value of the type property.
-     * 
+     * @return type of property
      */
     public int getType() {
         return type;
@@ -123,7 +123,7 @@ public class ActorCreateMng {
 
     /**
      * Sets the value of the type property.
-     * 
+     * @param value type of property
      */
     public void setType(int value) {
         this.type = value;

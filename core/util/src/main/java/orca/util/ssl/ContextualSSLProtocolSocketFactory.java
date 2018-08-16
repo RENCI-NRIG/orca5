@@ -31,11 +31,9 @@ import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
  *     Protocol hostSpecificHttps = new Protocol("https", csf, 443);
  *     Protocol.registerProtocol("https", hostSpecificHttps);
  *     </pre>
- * </p>
  * <p>
  * When using with apache XMLRPC, remember to use <b>XmlRpcCommonsTransportFactory</b> with client,
  * otherwise this will be ignored and default JSSE mechanisms will be used
- * </p>
  */
 public class ContextualSSLProtocolSocketFactory implements
 		SecureProtocolSocketFactory {
@@ -130,9 +128,9 @@ public class ContextualSSLProtocolSocketFactory implements
     
     /**
      * Associate a custom context factory with host:port
-     * @param fact
-     * @param host
-     * @param port
+     * @param fact SSL context factory
+     * @param host hostname
+     * @param port port number
      */
     public synchronized void addHostContextFactory(SSLContextFactory fact, String host, int port) {
     	contexts.put(new HostPortPair(host, port), fact);
@@ -180,8 +178,8 @@ public class ContextualSSLProtocolSocketFactory implements
      *  
      * @param host the host name/IP
      * @param port the port on the host
-     * @param clientHost the local host name/IP to bind the socket to
-     * @param clientPort the port on the local machine
+     * @param localAddress the local host name/IP to bind the socket to
+     * @param localPort the port on the local machine
      * @param params {@link HttpConnectionParams Http connection parameters}
      * 
      * @return Socket a new socket

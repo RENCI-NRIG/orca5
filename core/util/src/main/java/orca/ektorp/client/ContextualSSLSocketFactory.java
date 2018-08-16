@@ -344,7 +344,17 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
     }
     
     /**
-     * @deprecated Use {@link #SSLSocketFactory(String, KeyStore, String, KeyStore, SecureRandom, X509HostnameVerifier)}
+     * @deprecated Use {@link SSLSocketFactory#SSLSocketFactory(String, KeyStore, String, KeyStore, SecureRandom, X509HostnameVerifier)}
+     * @param algorithm string specifying algorithm
+     * @param keystore key store
+     * @param keystorePassword string containing key store password
+     * @param truststore trust store
+     * @param random random
+     * @param nameResolver host name resolver
+     * @throws NoSuchAlgorithmException in case of invalid algorithm
+     * @throws KeyManagementException in case of invalid key
+     * @throws KeyStoreException in case of invalid key 
+     * @throws UnrecoverableKeyException in case of unrecoverable key     
      */
     @Deprecated
     public ContextualSSLSocketFactory(
@@ -362,6 +372,16 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.1
+     * @param algorithm string specifying algorithm
+     * @param keystore key store
+     * @param keystorePassword string containing key store password
+     * @param truststore trust store
+     * @param random random
+     * @param hostnameVerifier host name verifier 
+     * @throws NoSuchAlgorithmException in case of invalid algorithm
+     * @throws KeyManagementException in case of invalid key
+     * @throws KeyStoreException in case of invalid key 
+     * @throws UnrecoverableKeyException in case of unrecoverable key     
      */
     public ContextualSSLSocketFactory(
             String algorithm,
@@ -378,6 +398,17 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.1
+     * @param algorithm string specifying algorithm
+     * @param keystore key store
+     * @param keystorePassword string containing key store password
+     * @param truststore trust store
+     * @param random random
+     * @param trustStrategy trust strategy 
+     * @param hostnameVerifier host name verifier 
+     * @throws NoSuchAlgorithmException in case of invalid algorithm
+     * @throws KeyManagementException in case of invalid key
+     * @throws KeyStoreException in case of invalid key 
+     * @throws UnrecoverableKeyException in case of unrecoverable key     
      */
     public ContextualSSLSocketFactory(
             String algorithm,
@@ -416,6 +447,12 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.1
+     * @param trustStrategy trust strategy 
+     * @param hostnameVerifier host name verifier 
+     * @throws NoSuchAlgorithmException in case of invalid algorithm
+     * @throws KeyManagementException in case of invalid key
+     * @throws KeyStoreException in case of invalid key 
+     * @throws UnrecoverableKeyException in case of unrecoverable key     
      */
     public ContextualSSLSocketFactory(
             final TrustStrategy trustStrategy,
@@ -426,6 +463,11 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.1
+     * @param trustStrategy trust strategy 
+     * @throws NoSuchAlgorithmException in case of invalid algorithm
+     * @throws KeyManagementException in case of invalid key
+     * @throws KeyStoreException in case of invalid key 
+     * @throws UnrecoverableKeyException in case of unrecoverable key     
      */
     public ContextualSSLSocketFactory(
             final TrustStrategy trustStrategy)
@@ -438,7 +480,9 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
     }
 
     /**
-     * @deprecated Use {@link #SSLSocketFactory(SSLContext)}
+     * @deprecated Use {@link SSLSocketFactory#SSLSocketFactory(SSLContext)}
+     * @param sslContext SSL Context
+     * @param nameResolver Host Name Resolver
      */
     @Deprecated
     public ContextualSSLSocketFactory(
@@ -451,6 +495,8 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.1
+     * @param sslContext SSL Context
+     * @param hostnameVerifier Host Name Verifier 
      */
     public ContextualSSLSocketFactory(
             final SSLContext sslContext, final X509HostnameVerifier hostnameVerifier) {
@@ -465,6 +511,8 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.2
+     * @param socketfactory SSL Socket Factory
+     * @param hostnameVerifier Host Name Verifier 
      */
     public ContextualSSLSocketFactory(
             final javax.net.ssl.SSLSocketFactory socketfactory, 
@@ -481,6 +529,8 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
      * @param params Optional parameters. Parameters passed to this method will have no effect.
      *               This method will create a unconnected instance of {@link Socket} class.
      * @since 4.1
+     * @throws IOException in case of error
+     * @return returns the created socket
      */
     public Socket createSocket(final HttpParams params) throws IOException {
     	//Here!
@@ -499,6 +549,14 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.1
+     * @param socket socket
+     * @param remoteAddress remote address
+     * @param localAddress local address
+     * @param params HTTP params
+     * @throws IOException in case of IO error
+     * @throws UnknownHostException in case of unknonwn host
+     * @throws ConnectTimeoutException in case of connect timeout
+     * @return returns the socket
      */
     public Socket connectSocket(
             final Socket socket,
@@ -562,7 +620,7 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
      * Checks whether a socket connection is secure.
      * This factory creates TLS/SSL socket connections
      * which, by default, are considered secure.
-     * <br/>
+     * &lt;br/&gt;
      * Derived classes may override this method to perform
      * runtime checks, for example based on the cypher suite.
      *
@@ -589,6 +647,13 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @since 4.2
+     * @param socket socket
+     * @param host host 
+     * @param port port
+     * @param params HTTP params
+     * @throws IOException in case of IO error
+     * @throws UnknownHostException in case of unknonwn host
+     * @return returns the socket
      */
     public Socket createLayeredSocket(
         final Socket socket,
@@ -611,6 +676,13 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @deprecated use {@link #createLayeredSocket(Socket, String, int, HttpParams)}
+     * @param socket socket
+     * @param host host 
+     * @param port port
+     * @param autoClose flag indicating if socket should be autoClosed
+     * @throws IOException in case of IO error
+     * @throws UnknownHostException in case of unknonwn host
+     * @return returns the socket
      */
     public Socket createLayeredSocket(
         final Socket socket,
@@ -646,6 +718,16 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @deprecated Use {@link #connectSocket(Socket, InetSocketAddress, InetSocketAddress, HttpParams)}
+     * @param socket socket
+     * @param host host 
+     * @param port port
+     * @param localAddress local address
+     * @param localPort local port
+     * @param params HTTP params
+     * @throws IOException in case of IO error
+     * @throws UnknownHostException in case of unknonwn host
+     * @throws ConnectTimeoutException in case of connect timeout 
+     * @return returns the socket
      */
     @Deprecated
     public Socket connectSocket(
@@ -673,6 +755,13 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
 
     /**
      * @deprecated Use {@link #createLayeredSocket(Socket, String, int, boolean)}
+     * @param socket socket
+     * @param host host 
+     * @param port port
+     * @param autoClose flag indicating if socket should be autoClosed
+     * @throws IOException in case of IO error
+     * @throws UnknownHostException in case of unknonwn host
+     * @return returns the socket
      */
     @Deprecated
     public Socket createSocket(
@@ -690,6 +779,8 @@ public class ContextualSSLSocketFactory implements SchemeLayeredSocketFactory,
      * call {@link SSLSocket#setEnabledCipherSuites(java.lang.String[])}.
      *
      * @since 4.2
+     * @param socket SSL socket
+     * @throws IOException in case of error
      */
     protected void prepareSocket(final SSLSocket socket) throws IOException {
     }

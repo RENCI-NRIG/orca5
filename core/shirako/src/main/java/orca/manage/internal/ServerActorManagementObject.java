@@ -66,7 +66,8 @@ public class ServerActorManagementObject extends ActorManagementObject {
 	/**
 	 * Retrieves all reservations for which this actor is the broker
 	 * 
-	 * @return
+	 * @param caller caller auth token
+	 * @return all reservation
 	 */
 	public ResultReservationMng getBrokerReservations(AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -169,6 +170,8 @@ public class ServerActorManagementObject extends ActorManagementObject {
 
 	/**
 	 * Retrieves all inventory slices
+	 * @param caller caller auth token
+	 * @return returns slice
 	 */
 	public ResultSliceMng getInventorySlices(AuthToken caller) {
 		ResultSliceMng result = new ResultSliceMng();
@@ -205,6 +208,8 @@ public class ServerActorManagementObject extends ActorManagementObject {
 
 	/**
 	 * Retrieves all client slices
+	 * @param caller caller auth token
+	 * @return returns slice
 	 */
 	public ResultSliceMng getClientSlices(AuthToken caller) {
 		ResultSliceMng result = new ResultSliceMng();
@@ -244,6 +249,8 @@ public class ServerActorManagementObject extends ActorManagementObject {
 	 * 
 	 * @param slice
 	 *            Slice Description
+	 * @param caller caller auth token
+	 * @return returns result 
 	 */
 	public ResultStringMng addClientSlice(SliceMng slice, AuthToken caller) {
 		ResultStringMng result = new ResultStringMng();
@@ -318,8 +325,9 @@ public class ServerActorManagementObject extends ActorManagementObject {
 	 * 
 	 * @param client
 	 *            client
-	 * @param certificate
-	 * @param caller
+	 * @param certificate certificate
+	 * @param caller caller auth token
+	 * @return result
 	 */
 	public ResultMng registerClient(ClientMng client, CertificateMng certificate, AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -435,7 +443,8 @@ public class ServerActorManagementObject extends ActorManagementObject {
 	/**
 	 * Retrieves all client reservations
 	 * 
-	 * @return
+	 * @param caller caller
+	 * @return all reservations
 	 */
 	public ResultReservationMng getClientReservations(AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -504,13 +513,17 @@ public class ServerActorManagementObject extends ActorManagementObject {
 	}
 
 	/**
-	 * @param clientSliceName
-	 * @param poolName
-	 * @param ticketId
-	 * @param start
-	 * @param end
-	 * @param units
-	 * @return
+	 * export the resources for a slice 
+	 * @param clientSliceID client Slice Id
+	 * @param poolID pool slice id
+	 * @param start start date
+	 * @param end end date
+	 * @param units units
+	 * @param ticketProperties ticket properties  
+	 * @param resourceProperties resource properties
+	 * @param sourceTicketID source ticket id
+	 * @param caller auth token for the caller
+	 * @return result string
 	 */
 	public ResultStringMng exportResources(SliceID clientSliceID, SliceID poolID, Date start,
 			Date end, int units, Properties ticketProperties, Properties resourceProperties,
@@ -614,13 +627,16 @@ public class ServerActorManagementObject extends ActorManagementObject {
 	}
 
 	/**
-	 * @param clientSliceName
-	 * @param poolName
-	 * @param ticketId
-	 * @param start
-	 * @param end
-	 * @param units
-	 * @return
+	 * @param clientSliceID client slice ID
+	 * @param resourceType resource type
+	 * @param start start date
+	 * @param end end date
+	 * @param units units
+	 * @param ticketProperties ticketProperties
+	 * @param resourceProperties resourceProperties
+	 * @param sourceTicketID sourceTicketID
+	 * @param caller caller
+	 * @return result
 	 */
 	public ResultStringMng exportResources(SliceID clientSliceID, ResourceType resourceType,
 			Date start, Date end, int units, Properties ticketProperties,
@@ -671,13 +687,16 @@ public class ServerActorManagementObject extends ActorManagementObject {
 	}
 
 	/**
-	 * @param clientSliceName
-	 * @param poolName
-	 * @param ticketId
-	 * @param start
-	 * @param end
-	 * @param units
-	 * @return
+	 * @param resourceType resource type
+	 * @param start start date
+	 * @param end end date
+	 * @param units units
+	 * @param ticketProperties ticketProperties
+	 * @param resourceProperties resourceProperties
+	 * @param sourceTicketID sourceTicketID
+	 * @param client client 
+	 * @param caller caller
+	 * @return result
 	 */
 	public ResultStringMng exportResources(ResourceType resourceType, Date start, Date end,
 			int units, Properties ticketProperties, Properties resourceProperties,

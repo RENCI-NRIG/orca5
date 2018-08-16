@@ -164,7 +164,7 @@ public class Plugin
     /**
      * Serializes th object into a properties list.
      * @return properties list representing the object
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Properties save() throws Exception
     {
@@ -177,7 +177,7 @@ public class Plugin
     /**
      * Serializes the object into the given properties list.
      * @param p properties list
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void save(Properties p) throws Exception
     {
@@ -197,7 +197,7 @@ public class Plugin
     /**
      * Deserializes the object from the given properties list.
      * @param p properties list
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void reset(Properties p) throws Exception
     {

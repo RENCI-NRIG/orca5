@@ -25,50 +25,50 @@ public interface IOrcaActor extends IOrcaComponent
 {
 	/**
 	 * Obtains the actor certificate.
-	 * @return
+	 * @return returns  the actor certificate
 	 */
 	public Certificate getCertificate();
 	/**
 	 * Adds the specified certificate in the actor keystore under the
 	 * given alias.
-	 * @param certificate
-	 * @param alias
-	 * @return
+	 * @param certificate certificate to be registered
+	 * @param alias alias
+	 * @return true for success; false otherwise
 	 */
 	public boolean registerCertificate(Certificate certificate, String alias);
 	/**
 	 * Removes the certificate under the given alias from the actor keystore.
-	 * @param alias
-	 * @return
+	 * @param alias alias
+	 * @return true for success; false otherwise
 	 */
 	public boolean unregisterCertificate(String alias);
 	/**
 	 * Obtains the certificate with the specified alias
-	 * @param alias
-	 * @return
+	 * @param alias alias
+	 * @return returns the certifciate
 	 */
 	public Certificate getCertificate(String alias);
 	/**
 	 * Obtains all slices.
-	 * @return
+	 * @return returns list of all the slices
 	 */
 	public List<SliceMng> getSlices();
 	/**
 	 * Obtains the specified slice
-	 * @param sliceId
-	 * @return
+	 * @param sliceId slice id
+	 * @return returns the specified slice
 	 */
 	public SliceMng getSlice(SliceID sliceId);
 	/**
 	 * Adds a new slice
-	 * @param slice
-	 * @return
+	 * @param slice slice
+	 * @return returns slice id
 	 */
 	public SliceID addSlice(SliceMng slice);
 	/**
 	 * Removes the specified slice
-	 * @param sliceId
-	 * @return
+	 * @param sliceId slice id
+	 * @return true for success; false otherwise
 	 */
 	public boolean removeSlice(SliceID sliceId);
 	/**
@@ -78,40 +78,40 @@ public interface IOrcaActor extends IOrcaComponent
 	 * <li>desription</li>
 	 * <li>all properties lists</li>
 	 * </ul>
-	 * @param slice
-	 * @return
+	 * @param slice slice 
+	 * @return true for success; false otherwise
 	 */
 	public boolean updateSlice(SliceMng slice);
 	/**
 	 * Obtains all reservations
-	 * @return
+	 * @return returns list of the reservations
 	 */
     public List<ReservationMng> getReservations();
     /**
      * Obtains all reservations in the specified state.
      * See OrcaConstants.ReservationState*.
-     * @param state
-     * @return
+     * @param state state
+     * @return list of the reservations in the specified state
      */
     public List<ReservationMng> getReservations(int state);
     /**
-     * Obtains all reservations in the specified state.
-     * @param sliceID
-     * @return
+     * Obtains all reservations in the specified slice.
+     * @param sliceID slice ID
+     * @return list of the reservations for the specific slice
      */
     public List<ReservationMng> getReservations(SliceID sliceID);
     /**
      * Obtains all reservations in the given slice in the specified state.
      * See OrcaConstants.ReservationState*.
-     * @param sliceID
-     * @param state
-     * @return
+     * @param sliceID slice id
+     * @param state state
+     * @return list of the reservations for specific slice in specific state
      */
     public List<ReservationMng> getReservations(SliceID sliceID, int state);
     /**
      * Obtains the specified reservation
-     * @param reservationID
-     * @return
+     * @param reservationID reservation id
+     * @return returns the reservation identified by id
      */
     public ReservationMng getReservation(ReservationID reservationID);    
     /**
@@ -120,51 +120,51 @@ public interface IOrcaActor extends IOrcaComponent
      * <ul>
      * <li>all properties lists</li>
      * </ul> 
-     * @param reservation
-     * @return
+     * @param reservation reservation to be updated
+     * @return true for success; false otherwise
      */
     public boolean updateReservation(ReservationMng reservation);
     /**
      * Closes the specified reservation
-     * @param reservationID
-     * @return
+     * @param reservationID reservation id
+     * @return true for success; false otherwise
      */
     public boolean closeReservation(ReservationID reservationID);
     /**
      * Closes all reservations in the specified slice.
-     * @param sliceID
-     * @return
+     * @param sliceID slice ID
+     * @return true for success; false otherwise
      */
     public boolean closeReservations(SliceID sliceID);
     /**
      * Removes the specified reservation.
      * Note only closed reservations can be removed.
-     * @param reservationID
-     * @return
+     * @param reservationID reservation id of the reservation to be removed
+     * @return true for success; false otherwise
      */
     public boolean removeReservation(ReservationID reservationID);    
     
     /**
      * Returns the state of the specified reservation.
-     * @param reservationID
-     * @return
+     * @param reservationID reservation id
+     * @return returns the state of the specific reservation
      */
     public ReservationStateMng getReservationState(ReservationID reservationID);
     /**
      * Returns the state of each of the specified reservations.
      * The order in the return list matches the order in the @reservations list.
-     * @param reservations
-     * @return
+     * @param reservations list of reservations
+     * @return list of state of the specified reservations
      */
     public List<ReservationStateMng> getReservationState(List<ReservationID> reservations);
     /**
      * Returns the name of the actor.
-     * @return
+     * @return returns name of the actor
      */
     public String getName();
     /**
      * Returns the guid of the actor.
-     * @return
+     * @return returns guid of the actor
      */
     public ID getGuid();
     /**
@@ -174,20 +174,20 @@ public interface IOrcaActor extends IOrcaComponent
     public ID createEventSubscription();
     /**
      * Deletes the specified event subscription.
-     * @param subscriptionID
-     * @return
+     * @param subscriptionID subscription id
+     * @return true for success; false otherwise
      */
     public boolean deleteEventSubscription(ID subscriptionID);
     /**
      * Drains all events from the specified subscription.
-     * @param subscriptionID
-     * @param timeout
-     * @return
+     * @param subscriptionID subscription id
+     * @param timeout timeout
+     * @return list of the events drained out
      */
     public List<EventMng> drainEvents(ID subscriptionID, int timeout);
     /**
      * Creates clone of this proxy to make it possible to be used by a separate thread.
-     * @return
+     * @return returns the cloned actor
      */
     public IOrcaActor clone();
 }

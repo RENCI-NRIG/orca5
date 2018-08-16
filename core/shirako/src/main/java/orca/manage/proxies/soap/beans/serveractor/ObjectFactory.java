@@ -38,7 +38,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetClientCertificateRequest }
-     * 
+     * @return created instance
      */
     public GetClientCertificateRequest createGetClientCertificateRequest() {
         return new GetClientCertificateRequest();
@@ -47,6 +47,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientReservationsResponse }
      * 
+     * @return created instance
      */
     public GetClientReservationsResponse createGetClientReservationsResponse() {
         return new GetClientReservationsResponse();
@@ -55,6 +56,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientSlicesRequest }
      * 
+     * @return created instance
      */
     public GetClientSlicesRequest createGetClientSlicesRequest() {
         return new GetClientSlicesRequest();
@@ -63,6 +65,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link UnregisterClientRequest }
      * 
+     * @return created instance
      */
     public UnregisterClientRequest createUnregisterClientRequest() {
         return new UnregisterClientRequest();
@@ -71,6 +74,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ExportResourcesRequest }
      * 
+     * @return created instance
      */
     public ExportResourcesRequest createExportResourcesRequest() {
         return new ExportResourcesRequest();
@@ -79,6 +83,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventorySlicesResponse }
      * 
+     * @return created instance
      */
     public GetInventorySlicesResponse createGetInventorySlicesResponse() {
         return new GetInventorySlicesResponse();
@@ -87,6 +92,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddClientSliceResponse }
      * 
+     * @return created instance
      */
     public AddClientSliceResponse createAddClientSliceResponse() {
         return new AddClientSliceResponse();
@@ -95,6 +101,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetBrokerReservationsResponse }
      * 
+     * @return created instance
      */
     public GetBrokerReservationsResponse createGetBrokerReservationsResponse() {
         return new GetBrokerReservationsResponse();
@@ -103,6 +110,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventoryReservationsRequest }
      * 
+     * @return created instance
      */
     public GetInventoryReservationsRequest createGetInventoryReservationsRequest() {
         return new GetInventoryReservationsRequest();
@@ -111,6 +119,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientsRequest }
      * 
+     * @return created instance
      */
     public GetClientsRequest createGetClientsRequest() {
         return new GetClientsRequest();
@@ -119,6 +128,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientReservationsRequest }
      * 
+     * @return created instance
      */
     public GetClientReservationsRequest createGetClientReservationsRequest() {
         return new GetClientReservationsRequest();
@@ -127,6 +137,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientSlicesResponse }
      * 
+     * @return created instance
      */
     public GetClientSlicesResponse createGetClientSlicesResponse() {
         return new GetClientSlicesResponse();
@@ -135,6 +146,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ExportResourcesResponse }
      * 
+     * @return created instance
      */
     public ExportResourcesResponse createExportResourcesResponse() {
         return new ExportResourcesResponse();
@@ -143,6 +155,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventoryReservationsResponse }
      * 
+     * @return created instance
      */
     public GetInventoryReservationsResponse createGetInventoryReservationsResponse() {
         return new GetInventoryReservationsResponse();
@@ -151,6 +164,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientsResponse }
      * 
+     * @return created instance
      */
     public GetClientsResponse createGetClientsResponse() {
         return new GetClientsResponse();
@@ -159,6 +173,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientResponse }
      * 
+     * @return created instance
      */
     public GetClientResponse createGetClientResponse() {
         return new GetClientResponse();
@@ -167,6 +182,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddClientSliceRequest }
      * 
+     * @return created instance
      */
     public AddClientSliceRequest createAddClientSliceRequest() {
         return new AddClientSliceRequest();
@@ -175,6 +191,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientCertificateResponse }
      * 
+     * @return created instance
      */
     public GetClientCertificateResponse createGetClientCertificateResponse() {
         return new GetClientCertificateResponse();
@@ -183,6 +200,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetBrokerReservationsRequest }
      * 
+     * @return created instance
      */
     public GetBrokerReservationsRequest createGetBrokerReservationsRequest() {
         return new GetBrokerReservationsRequest();
@@ -191,6 +209,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link UnregisterClientResponse }
      * 
+     * @return created instance
      */
     public UnregisterClientResponse createUnregisterClientResponse() {
         return new UnregisterClientResponse();
@@ -199,6 +218,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventorySlicesRequest }
      * 
+     * @return created instance
      */
     public GetInventorySlicesRequest createGetInventorySlicesRequest() {
         return new GetInventorySlicesRequest();
@@ -207,6 +227,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link RegisterClientResponse }
      * 
+     * @return created instance
      */
     public RegisterClientResponse createRegisterClientResponse() {
         return new RegisterClientResponse();
@@ -215,6 +236,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link RegisterClientRequest }
      * 
+     * @return created instance
      */
     public RegisterClientRequest createRegisterClientRequest() {
         return new RegisterClientRequest();
@@ -223,6 +245,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetClientRequest }
      * 
+     * @return created instance
      */
     public GetClientRequest createGetClientRequest() {
         return new GetClientRequest();

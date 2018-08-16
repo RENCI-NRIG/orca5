@@ -1129,11 +1129,11 @@ public abstract class Actor implements IActor {
      * Waits until the actor's event queue is drained or the specified timeout
      * expires.
      * 
-     * @param ms
+     * @param ms timeout in milliseconds
      * @return true if the actor's event queue was drained before the timeout
      *         expired, false if the timeout expired before the queue was
      *         drained
-     * @throws InterruptedException
+     * @throws InterruptedException if interrupted
      */
     public boolean awaitNoEvents(long ms) throws InterruptedException {
         long now = System.currentTimeMillis();

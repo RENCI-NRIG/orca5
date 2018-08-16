@@ -94,7 +94,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 * @param reservation
 	 *            reservation to extend the ticket for
 	 * 
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 * 
 	 * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
 	 */
@@ -149,7 +149,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 * @param reservation
 	 *            reservation to obtain a ticket for
 	 * 
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 * 
 	 * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
 	 */
@@ -173,7 +173,7 @@ public interface IClientActor extends IActor, IClientPublic {
      *
      * @param reservationID reservationID for the reservation to modify
      * @param modifyProperties property list for modify
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modify(ReservationID reservationID, Properties modifyProperties) throws Exception;
 	

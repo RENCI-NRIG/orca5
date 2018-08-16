@@ -169,7 +169,7 @@ public class KeyManager
      * @param certificateFile certificate file
      * @param outputFile public key file
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void exportCertificatePublicKey(final String certificateFile, final String outputFile)
                                     throws Exception
@@ -190,7 +190,7 @@ public class KeyManager
      * @param key key
      * @param fileName file
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void exportKey(final Key key, final String fileName) throws Exception
     {
@@ -208,7 +208,7 @@ public class KeyManager
      * @param alias key alias
      * @param keyPass key password
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void exportPublicKeyFromStore(final String outputFile, final String keyStore,
                                          final String ksPass, final String alias,
@@ -227,7 +227,7 @@ public class KeyManager
      *
      * @param fileName file name
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void generateKeyPair(final String fileName) throws Exception
     {
@@ -242,7 +242,7 @@ public class KeyManager
      *
      * @return a key pair
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public KeyPair generateKeyPair(final String algorithm, final int keySize)
                             throws Exception
@@ -264,7 +264,7 @@ public class KeyManager
      * @param keySize key size
      * @param fileName file name (prefix)
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void generateKeyPair(final String algorithm, final int keySize, final String fileName)
                          throws Exception
@@ -287,7 +287,7 @@ public class KeyManager
      *
      * @return private key
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public PrivateKey importPrivateKeyFromFile(final String fileName) throws Exception
     {
@@ -309,7 +309,7 @@ public class KeyManager
      *
      * @return public key
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public PublicKey importPublicKeyFromFile(final String fileName) throws Exception
     {

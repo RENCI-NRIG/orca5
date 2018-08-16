@@ -40,7 +40,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * @param set set to add
      * @param configure if true, configuration actions will be triggered for all
      *            added units
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void add(IConcreteSet set, boolean configure) throws Exception;
 
@@ -84,7 +84,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * be passed to another actor.
      * @param protocol protocol
      * @return a {@link Properties} list representing this concrete set
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Properties encode(String protocol) throws Exception;    
     /**
@@ -92,13 +92,13 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * passed in properties list.
      * @param enc encoded {@link Properties} list describing this concrete set
      * @param plugin {@link IShirakoPlugin} of containing actor
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void decode(Properties enc, IShirakoPlugin plugin) throws Exception;    
     /**
      * Collects any released (closed) and/or failed resources.
      * @return a concrete set containing released and or/failed resources
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public IConcreteSet collectReleased() throws Exception;
 
@@ -114,7 +114,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * Return a proxy or reference for the unique site that owns these
      * resources.
      * @return the authority that owns the resources
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public IAuthorityProxy getSiteProxy() throws Exception;
 
@@ -150,13 +150,13 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * @param set set containing the update data
      * @param configure if true, configuration actions will be triggered for all
      *            modified units
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modify(IConcreteSet set, boolean configure) throws Exception;
 
     /**
      * Checks the status of pending operations.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void probe() throws Exception;
 
@@ -168,7 +168,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * @param set set to remove
      * @param configure if true, configuration actions will be triggered for all
      *            removed units
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void remove(IConcreteSet set, boolean configure) throws Exception;
 
@@ -221,7 +221,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * This method will be called during recovery to ensure that all pending
      * actions are restarted. If a unit has an outstanding action that has not
      * completed yet, that action would have to be restarted during this call.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void restartActions() throws Exception;
 }
