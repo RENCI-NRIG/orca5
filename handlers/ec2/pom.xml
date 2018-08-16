@@ -52,6 +52,11 @@
             </version> 
         </dependency>
         <dependency>
+            <groupId>orca</groupId>
+            <artifactId>comet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
@@ -143,14 +148,6 @@
                                         <exclude name="*-sources.jar" /> 
                                     </fileset> 
                                 </copy>
-                                <copy file="${maven.dependency.org.renci.io.swagger.swagger-java-comet-client.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.io.swagger.swagger-annotations.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.squareup.okhttp.okhttp.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.squareup.okhttp.logging-interceptor.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.google.code.gson.gson.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.org.threeten.threetenbp.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.squareup.okio.okio.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.org.apache.commons.commons-lang3.jar.path}" todir="target/package/lib" flatten="true" />
                                 <mkdir dir="target/package/tools" />
                                 <copy todir="target/package/tools"> 
                                     <fileset dir="resources/tools" /> 
@@ -170,7 +167,16 @@
                                     <fileset dir="resources/web"> 
                                         <include name="**/*" /> 
                                     </fileset> 
-                                </copy> 
+                                </copy>
+                                <copy file="${maven.dependency.org.renci.io.swagger.swagger-java-comet-client.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.io.swagger.swagger-annotations.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.squareup.okhttp.okhttp.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.squareup.okhttp.logging-interceptor.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.google.code.gson.gson.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.org.threeten.threetenbp.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.squareup.okio.okio.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.org.apache.commons.commons-lang3.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.orca.comet.jar.path}" todir="target/package/lib" flatten="true" />
                                 <copy file="resources/scripts/install.sh" todir="target/package" /> 
                                 <copy file="resources/package.xml" todir="target/package" /> 
                                 <tar tarfile="target/${name.prefix}.tar" basedir="target/package" /> 

@@ -30,6 +30,7 @@ import java.io.FileReader;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import orca.shirako.plugins.config.Config;
+import orca.comet.*;
 
 
 public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
@@ -219,7 +220,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Incorrect number of parameters");
         }
         if(cometDataGenerator.addUser(key_, arrOfStr[0], arrOfStr[1])) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users, "")) {
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Unable to store users in comet");
             }
         }
@@ -256,7 +257,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             save = cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null);
         }
         if(save) {
-            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
+            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces, "");
         }
         if(!save) {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyInterfaces: Unable to store interfaces in comet");
@@ -320,7 +321,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     arrOfStr[10]);
         }
         if (save) {
-            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage);
+            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage, "");
         }
         if(!save) {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyStorage: Unable to store storage in comet");
@@ -346,7 +347,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyRoutes: Incorrect number of parameters");
         }
         if(cometDataGenerator.addRoute(key_, arrOfStr[0], null, null)) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes, "")) {
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyRoutes: Unable to store routes in comet");
             }
         }
@@ -374,7 +375,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyScripts: Incorrect number of parameters");
         }
         if (cometDataGenerator.addScript(key_, arrOfStr[0])) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts)){
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts, "")){
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyScripts: Unable to store scripts in comet");
             }
         }
