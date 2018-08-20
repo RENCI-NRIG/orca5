@@ -11,6 +11,48 @@
   
   <!--<property file="test.properties" />-->
 
+    <!-- Useful macros -->
+    <macrodef name="delete.instance" description="delete an instance in case of failure">
+    <sequential>
+        <!-- optionally close proxy to this host -->
+        <if>
+            <!-- statically specified in ec2.site.properties -->
+            <equals arg1="${ec2.use.proxy}" arg2="true" />
+            <then>
+                <!-- all properties passed to proxy script should be statically specified in ec2.site.properties.
+                    See wiki notes on proxies for meaning of these properties.
+                -->
+                <echo message="un-configuring ${proxy.type} proxy via host ${proxy.proxy.ip}" />
+                <var name="code" unset="true" />
+                <var name="message" unset="true" />
+                <exec executable="${ec2.scripts}/stop-proxy" resultproperty="code" outputproperty="proxy.script.output">
+                    <env key="PROXY_TYPE" value="${proxy.type}" />
+                    <env key="PROXY_PROXY_IP" value="${proxy.proxy.ip}" />
+                    <env key="PROXY_INSTANCE_IP" value="${shirako.save.unit.manage.ip}" />
+                    <env key="PROXY_USER" value="${proxy.user}" />
+                    <env key="PROXY_SSH_KEY" value="${proxy.ssh.key}" />
+                    <env key="PROXY_SCRIPT_PATH" value="${proxy.script.path}" />
+                </exec>
+                <echo message="stop-proxy exit code: ${code} ${proxy.script.output}" />
+            </then>
+        </if>
+        <echo message="terminating instance: ${shirako.save.unit.ec2.instance}" />
+        <!-- be sure not to save exit code (renamed nocode), since we don't care here if stop exits successfully -->
+        <exec executable="${ec2.scripts}/${cloud.type}-stop" resultproperty="nocode" outputproperty="terminate.instance.output">
+            <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+            <env key="EC2_HOME" value="${ec2.home}" />
+            <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+            <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+            <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+            <env key="EC2_DIR" value="${ec2.dir}" />
+            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+            <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
+            <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+            <arg value="${shirako.save.unit.ec2.instance}" />
+        </exec>
+    </sequential>
+    </macrodef>
+
 	<target name="join" depends="resolve.configuration">
 		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
 		<tstamp prefix="start">
@@ -474,41 +516,7 @@
 										<echo message="neuca.ini: ${neuca.ini}" />
 									</try>
 									<catch>
-                                        <!-- optionally close proxy to this host -->
-                                        <if>
-                                            <!-- statically specified in ec2.site.properties -->
-                                            <equals arg1="${ec2.use.proxy}" arg2="true" />
-                                            <then>
-                                                <!-- all properties passed to proxy script should be statically specified in ec2.site.properties.
-                                                    See wiki notes on proxies for meaning of these properties.
-                                                -->
-                                                <echo message="un-configuring ${proxy.type} proxy via host ${proxy.proxy.ip}" />
-                                                <var name="code" unset="true" />
-                                                <var name="message" unset="true" />
-                                                <exec executable="${ec2.scripts}/stop-proxy" resultproperty="code" outputproperty="proxy.script.output">
-                                                    <env key="PROXY_TYPE" value="${proxy.type}" />
-                                                    <env key="PROXY_PROXY_IP" value="${proxy.proxy.ip}" />
-                                                    <env key="PROXY_INSTANCE_IP" value="${shirako.save.unit.manage.ip}" />                                                    <env key="PROXY_USER" value="${proxy.user}" />
-                                                    <env key="PROXY_SSH_KEY" value="${proxy.ssh.key}" />
-                                                    <env key="PROXY_SCRIPT_PATH" value="${proxy.script.path}" />
-                                                </exec>
-                                                <echo message="stop-proxy exit code: ${code} ${proxy.script.output}" />
-                                            </then>
-                                        </if>
-										<echo message="terminating instance: ${shirako.save.unit.ec2.instance}" />
-										<!-- be sure not to save exit code (renamed nocode), since we don't care here if stop exits successfully -->
-										<exec executable="${ec2.scripts}/${cloud.type}-stop" resultproperty="nocode" outputproperty="terminate.instance.output">
-											<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-											<env key="EC2_HOME" value="${ec2.home}" />
-											<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-											<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-											<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-											<env key="EC2_DIR" value="${ec2.dir}" />
-											<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-											<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
-											<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
-											<arg value="${shirako.save.unit.ec2.instance}" />
-										</exec>
+                                        <delete.instance/>
                                         <fail message="${failmsg}" />
 									</catch>
 								</trycatch>
@@ -565,6 +573,16 @@
 												</exec>
 												<echo>result code: ${code}</echo>
 												<echo>output: ${add.iface.output}</echo>
+                                                <if>
+                                                    <not>
+                                                        <equals arg1="${code}" arg2="0"/>
+                                                    </not>
+                                                    <then>
+                                                        <echo message="neuca-quantum-add-iface: failed to add interface" />
+                                                        <delete.instance/>
+                                                        <fail message="${add.iface.output}" />
+                                                    </then>
+                                                </if>
 												<if>
 													<isset property="instance.quantum.ifaces" />
 													<then>
@@ -911,6 +929,15 @@
                     </exec>
                     <echo>result code: ${code}</echo>
                     <echo>output: ${add.iface.output}</echo>
+					<if>
+						<not>
+							<equals arg1="${code}" arg2="0"/>
+						</not>
+						<then>
+                            <echo message="neuca-quantum-add-iface: failed to add interface" />
+                            <fail message="${add.iface.output}" />
+						</then>
+					</if>
 
                     <!-- add properties to userdata file -->
                     <echo message="About to update userdata file: "/>
