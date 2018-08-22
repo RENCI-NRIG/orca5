@@ -135,10 +135,10 @@ public class NEucaCometDataGenerator {
      *
      */
 
-    public boolean loadObject(Family family) {
+    public boolean loadObject(Family family, String familySuffix) {
         try {
             if (rId_ != null && sliceId_ != null) {
-                JSONArray value = comet_.read(sliceId_, rId_, readToken_, family.toString());
+                JSONArray value = comet_.read(sliceId_, rId_, readToken_, family.toString() + familySuffix);
                 if (value != null) {
                     switch (family) {
                         case users:
@@ -244,12 +244,12 @@ public class NEucaCometDataGenerator {
                 // Send Rest Request to get
                 String value = getObject(family);
                 if(value != null && !value.isEmpty()) {
-                    System.out.println("NEucaCometDataGenerator::saveObject: Saving family: " + family + " value: " + value);
-                    return comet_.write(sliceId_, rId_, readToken_, writeToken_, family.toString(), value);
+                    System.out.println("NEucaCometDataGenerator::saveObject: Saving family: " + family+familySuffix + " value: " + value);
+                    return comet_.write(sliceId_, rId_, readToken_, writeToken_, family.toString() + familySuffix, value);
                 }
                 else {
                     System.out.println("NEucaCometDataGenerator::saveObject: Removing family: " + family);
-                    return comet_.remove(sliceId_, rId_, readToken_, writeToken_, family.toString());
+                    return comet_.remove(sliceId_, rId_, readToken_, writeToken_, family.toString() + familySuffix);
                 }
             }
             else {

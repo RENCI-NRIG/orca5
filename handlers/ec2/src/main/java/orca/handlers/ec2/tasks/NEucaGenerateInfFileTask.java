@@ -350,6 +350,14 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
             out.println("comethost=" + temp);
             out.println("cometreadtoken=" + readToken);
+            temp = getProject().getProperty(UnitProperties.SliceCometReadToken);
+            if (temp != null) {
+                out.println("slicecometreadtoken=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.SliceCometWriteToken);
+            if (temp != null) {
+                out.println("slicecometwritetoken=" + temp);
+            }
 
             // Save the readToken and writeToken in the properties
             getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken);
@@ -359,6 +367,8 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
                     clientCertKeyStore + " clientCertKeyStorePwd=" + clientCertKeyStorePwd);
             out.println(";comethost= Not Specified");
             out.println(";cometreadtoken= Not Specified");
+            out.println("slicecometreadtoken= Not Specified");
+            out.println("slicecometwritetoken= Not Specified");
         }
     }
 

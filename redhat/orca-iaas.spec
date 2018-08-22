@@ -209,6 +209,7 @@ cp -R server/orca/lib %{buildroot}%{conf_dir}/sm-14080
 mkdir -p %{buildroot}%{conf_dir}/sm-14080/ssl
 # Populate controller-11080
 cp -R controllers/xmlrpc/config %{buildroot}%{conf_dir}/controller-11080
+mkdir -p %{buildroot}%{conf_dir}/controller-11080/ssl
 
 # Clean up .git* files that came as a result of the copy
 find %{buildroot}%{conf_dir} -type d -name .git -print0 | xargs -0 rm -rf
@@ -354,9 +355,11 @@ exit 0
 %defattr(-, %{exogeni_user_id}, %{exogeni_group_id})
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/controller-11080
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/controller-11080/config
+%attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/controller-11080/ssl
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{log_dir}/controller-11080
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/controller-11080
 %attr(755, root, root) %{_initrddir}/orca_controller-11080
+%{conf_dir}/controller-11080/ssl
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_controller-11080
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 

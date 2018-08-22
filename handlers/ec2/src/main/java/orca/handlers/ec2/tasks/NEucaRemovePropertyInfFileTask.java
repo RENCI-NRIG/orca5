@@ -102,7 +102,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                         // Update users
                         if (NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing users in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_)) {
                                 if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store users in comet");
@@ -115,7 +115,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                            //Update interfaces
                         } else if (NEucaCometDataGenerator.Family.interfaces.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing interfaces in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_)) {
                                 if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store interfaces in comet");
@@ -128,7 +128,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                             // Update Storage
                         } else if (NEucaCometDataGenerator.Family.storage.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing storage in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.storage, key_)) {
                                 if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store storage in comet");
@@ -141,7 +141,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                             // Update routes
                         } else if (NEucaCometDataGenerator.Family.routes.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing routes in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_)) {
                                 if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store routes in comet");
@@ -154,7 +154,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                             // Update scripts
                         } else if (NEucaCometDataGenerator.Family.scripts.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing scripts in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_)) {
                                 if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store scripts in comet");

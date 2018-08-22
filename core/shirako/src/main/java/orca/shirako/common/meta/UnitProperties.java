@@ -232,4 +232,10 @@ public interface UnitProperties {
 	public static final String SliceStitchPerformed = "performed";
 	public static final String SliceStitchUndone = "undone";
 	public static final String SliceStitchDN = "stitch.dn";
+
+    /**
+     * Comet specific properties
+     */
+    public static final String SliceCometReadToken = "slice.comet.readToken";
+    public static final String SliceCometWriteToken = "slice.comet.writeToken";
 }

@@ -212,7 +212,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyUsers(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_);
         String [] arrOfStr = value_.split(":");
         if(arrOfStr.length < 2) {
@@ -240,7 +240,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyInterfaces(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_);
         String [] arrOfStr = value_.split(":");
         System.out.println("val: " + value_);
@@ -275,7 +275,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyStorage(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyStorage: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.storage, key_);
         String[] arrOfStr = value_.split(":");
         if (arrOfStr.length < 3) {
@@ -339,7 +339,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyRoutes(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_);
         String [] arrOfStr = value_.split(":");
         if(arrOfStr.length < 1) {
@@ -367,7 +367,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyScripts(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_);
         String[] arrOfStr = value_.split(":");
         if (arrOfStr.length < 1) {

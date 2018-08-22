@@ -226,7 +226,16 @@
                                         <exclude name="*test*.jar" /> 
                                         <exclude name="*-sources.jar" /> 
                                     </fileset> 
-                                </copy> 
+                                </copy>
+                                <copy file="${maven.dependency.org.renci.io.swagger.swagger-java-comet-client.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.io.swagger.swagger-annotations.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.squareup.okhttp.okhttp.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.squareup.okhttp.logging-interceptor.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.google.code.gson.gson.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.org.threeten.threetenbp.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.com.squareup.okio.okio.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.org.apache.commons.commons-lang3.jar.path}" todir="target/package/lib" flatten="true" />
+                                <copy file="${maven.dependency.orca.comet.jar.path}" todir="target/package/lib" flatten="true" />
                                 <!-- ssh keys --> 
                                 <mkdir dir="target/package/keys" /> 
                                 <copy todir="target/package/keys"> 
@@ -412,7 +421,57 @@
             <version>
                  1.3.3 
             </version> 
-        </dependency> 
+        </dependency>
+        <dependency>
+            <groupId>orca</groupId>
+            <artifactId>comet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.renci.io.swagger</groupId>
+            <artifactId>swagger-java-comet-client</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.15</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>1.14.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.threeten</groupId>
+            <artifactId>threetenbp</artifactId>
+            <version>1.3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
     </dependencies> 
     <profiles> 
         <profile> 

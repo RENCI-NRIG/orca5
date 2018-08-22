@@ -33,6 +33,8 @@ public class OrcaController {
     public static final String OrcaUser = "orca.manage.user";
     public static final String OrcaLogin = "orca.manage.password";
     public static final String ControllerServiceManager = "controller.sm.guid";
+    public static final String CometPubKeysEnabled = "orca.comet.pubkeys.enabled";
+    public static final String CometHostNamesEnabled = "orca.comet.hosts.enabled";
 
     public OrcaConnectionFactory orca;
     protected boolean fresh = true;

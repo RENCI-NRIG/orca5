@@ -227,7 +227,7 @@ public class NEucaCometInterface {
     public JSONArray read(String contextId, String key, String readToken, String family) {
         JSONArray returnValue = null;
         try {
-            CometResponse response = readScopeGet(contextId, family, key, readToken);
+            CometResponse response = readScopeGet(contextId, key, readToken, family);
             if(response != null) {
                 if (!response.getStatus().equals(ReponseOk)) {
                     System.out.println("NEucaCometInterface::read: Unable to read data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
@@ -283,7 +283,7 @@ public class NEucaCometInterface {
     public boolean write(String contextId, String key, String readToken, String writeToken, String family, String value) {
         boolean returnValue = false;
         try {
-            CometResponse response = writeScopePost(contextId, family, key, readToken, writeToken, value);
+            CometResponse response = writeScopePost(contextId, key, readToken, writeToken, family, value);
             if(response != null) {
                 if (!response.getStatus().equals(ReponseOk)) {
                     System.out.println("NEucaCometInterface::write: Unable to write data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
@@ -319,7 +319,7 @@ public class NEucaCometInterface {
     public boolean remove(String contextId, String key, String readToken, String writeToken, String family) {
         boolean returnValue = false;
         try {
-            CometResponse response = deleteScopeDelete(contextId, family, key, readToken, writeToken);
+            CometResponse response = deleteScopeDelete(contextId, key, readToken, writeToken, family);
             if(response != null) {
                 if (!response.getStatus().equals(ReponseOk)) {
                     System.out.println("NEucaCometInterface::remove: Unable to remove data for context:" + contextId + " key:" + key + " readToken:" + readToken + " family:" + family);
