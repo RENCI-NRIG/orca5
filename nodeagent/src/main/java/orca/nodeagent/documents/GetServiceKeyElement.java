@@ -19,7 +19,7 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
     /**
      * isReaderMTOMAware
-     * 
+      *@param reader reader
      * @return true if the reader supports MTOM
      */
     public static boolean isReaderMTOMAware(javax.xml.stream.XMLStreamReader reader) {
@@ -36,8 +36,8 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
     /**
      *
-     * @param parentQName
-     * @param factory
+      * @param parentQName parentQName
+      * @param factory factory
      * @return org.apache.axiom.om.OMElement
      */
     public org.apache.axiom.om.OMElement getOMElement(final javax.xml.namespace.QName parentQName,
@@ -51,8 +51,8 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
     /**
      *
-     * @param parentQName
-     * @param factory
+      * @param parentQName parentQName
+      * @param factory factory
      * @return org.apache.axiom.om.OMElement
      */
     public org.apache.axiom.om.OMDataSource getOMDataSource(final javax.xml.namespace.QName parentQName,
@@ -90,6 +90,12 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
             /**
              * Util method to write an attribute with the ns prefix
+       * @param prefix prefix
+       * @param namespace namespace
+       * @param attName attName
+       * @param attValue attValue
+       * @param xmlWriter xmlWriter
+       * @throws javax.xml.stream.XMLStreamException in case of error
              */
             private void writeAttribute(java.lang.String prefix, java.lang.String namespace, java.lang.String attName,
                     java.lang.String attValue, javax.xml.stream.XMLStreamWriter xmlWriter)
@@ -106,6 +112,11 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
             /**
              * Util method to write an attribute without the ns prefix
+       * @param namespace namespace
+       * @param attName attName
+       * @param attValue attValue
+       * @param xmlWriter xmlWriter
+       * @throws javax.xml.stream.XMLStreamException in case of error
              */
             private void writeAttribute(java.lang.String namespace, java.lang.String attName, java.lang.String attValue,
                     javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
@@ -119,6 +130,10 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
             /**
              * Register a namespace prefix
+       * @param namespace namespace
+       * @param xmlWriter xmlWriter
+       * @return java.lang.String
+       * @throws javax.xml.stream.XMLStreamException in case of error
              */
             private java.lang.String registerPrefix(javax.xml.stream.XMLStreamWriter xmlWriter,
                     java.lang.String namespace) throws javax.xml.stream.XMLStreamException {
@@ -140,6 +155,7 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
             /**
              * Create a prefix
+             * @return String
              */
             private java.lang.String createPrefix() {
                 return "ns" + (int) Math.random();
@@ -151,7 +167,8 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
 
     /**
      * databinding method to get an XML representation of this object
-     *
+       * @param qName qName
+       * @return javax.xml.stream.XMLStreamReader
      */
     public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName) {
 
@@ -174,6 +191,9 @@ public class GetServiceKeyElement implements org.apache.axis2.databinding.ADBBea
          * it is a complex type and the reader is at the event just after the outer start element Postcondition: If this
          * object is an element, the reader is positioned at its end element If this object is a complex type, the
          * reader is positioned at the end element of its outer element
+       * @param reader reader
+       * @return GetServiceKeyElement 
+       * @throws java.lang.Exception in case of error
          */
         public static GetServiceKeyElement parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception {
             GetServiceKeyElement object = new GetServiceKeyElement();

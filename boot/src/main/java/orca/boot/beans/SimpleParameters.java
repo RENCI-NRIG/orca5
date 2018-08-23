@@ -21,15 +21,15 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="simpleParameters">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="parameter" type="{http://issg.cs.duke.edu/sharp/boot}simpleParameter" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="simpleParameters"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="parameter" type="{http://issg.cs.duke.edu/sharp/boot}simpleParameter" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -62,7 +62,7 @@ public class SimpleParameters {
      * Objects of the following type(s) are allowed in the list
      * {@link SimpleParameter }
      * 
-     * 
+     * @return list of simple params
      */
     public List<SimpleParameter> getParameter() {
         if (parameter == null) {

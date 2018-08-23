@@ -92,8 +92,8 @@ public class LabelSyncThread implements Runnable {
     /**
      * returns true if acquired
      * 
-     * @param sec
-     * @return
+     * @param sec sec
+     * @return true or false
      */
     public static boolean tryLock(int sec) {
         boolean ret = false;
@@ -137,7 +137,7 @@ public class LabelSyncThread implements Runnable {
     /**
      * Return cached wait time from properties or default
      * 
-     * @return
+     * @return cached wait time from properties or default
      */
     public static int getWaitTime() {
         if (waitTimeInt > 0)

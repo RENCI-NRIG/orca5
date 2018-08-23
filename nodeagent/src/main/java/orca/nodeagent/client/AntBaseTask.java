@@ -156,7 +156,7 @@ public class AntBaseTask extends Task {
     }
 
     /**
-     * @param exitCodePropert
+     * @param exitCodeProperty
      *            the exitCodePropert to set
      */
     public void setExitCodeProperty(String exitCodeProperty) {

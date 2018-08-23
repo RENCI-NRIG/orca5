@@ -42,6 +42,7 @@ public interface IServiceManagerPolicy extends IClientPolicy {
      *            term requested from site authority
      * @param actualTerm
      *            term received from site authority
+     * @throws Exception in case of error
      */
     public void leaseSatisfies(ResourceSet requestedResources, ResourceSet actualResources,
             Term requestedTerm, Term actualTerm) throws Exception;

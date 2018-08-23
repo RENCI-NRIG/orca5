@@ -34,6 +34,7 @@ public class ConfigurationMapping implements Persistable
      * Creates a new instance from a previously serialized instance.
      * @param p properties list containing a serialized mapping
      * @return new mapping instance
+     * @throws Exception in case of error
      */
     public static ConfigurationMapping newInstance(final Properties p) throws Exception
     {

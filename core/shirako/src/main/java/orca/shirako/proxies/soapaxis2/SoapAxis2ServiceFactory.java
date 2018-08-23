@@ -92,9 +92,9 @@ public class SoapAxis2ServiceFactory implements IServiceFactory
      * 
      * @param actor actor
      * 
-     * @return DOCUMENT ME!
+     * @throws Exception in case of error
      * 
-     * @throws File object pointing to the service descriptor
+     * @return File object pointing to the service descriptor
      */
     public File getDescriptor(IActor actor) throws Exception
     {

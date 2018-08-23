@@ -70,10 +70,9 @@ public class GeniAmV1Handler extends XmlrpcHandlerHelper implements IGeniAmV1Int
     /**
      * ProtoGENI compresses and base-64 encodes the output, so lets shall
      * 
-     * @param credentials
-     * @param options
-     * @return
-     * @throws Exception
+     * @param credentials credentials
+     * @param options options
+     * @return compressed output
      */
     public String ListResources(Object[] credentials, Map<?, ?> options) {
 
@@ -107,13 +106,11 @@ public class GeniAmV1Handler extends XmlrpcHandlerHelper implements IGeniAmV1Int
     /**
      * Convert request from XML to NDL and submit
      * 
-     * @param slice_urn
-     * @param credentials
-     * @param resReq
-     * @param users
-     * @return
-     * @throws IOException
-     * @throws InetNetworkException
+     * @param slice_urn slice_urn
+     * @param credentials credentials
+     * @param resReq resReq
+     * @param users users
+     * @return ndl request
      */
     @SuppressWarnings("unchecked")
     public String CreateSliver(String slice_urn, Object[] credentials, String resReq, List<Map<String, ?>> users) {
@@ -158,9 +155,6 @@ public class GeniAmV1Handler extends XmlrpcHandlerHelper implements IGeniAmV1Int
         }
     }
 
-    /**
-     * 
-     */
     public String SliverStatus(String slice_urn, Object[] credentials) {
         IOrcaServiceManager sm = null;
 
@@ -295,8 +289,9 @@ public class GeniAmV1Handler extends XmlrpcHandlerHelper implements IGeniAmV1Int
      * Right now this is same as deleteSliver It is unclear from the documentation as to how Shutdown differs from
      * deleteSliver
      * 
-     * @param sliceId
-     * @return
+     * @param slice_urn slice_urn
+     * @param credentials credentials
+     * @return true or false
      */
     public boolean Shutdown(String slice_urn, Object[] credentials) {
         IOrcaServiceManager sm = null;

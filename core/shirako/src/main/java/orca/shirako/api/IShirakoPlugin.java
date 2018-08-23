@@ -80,7 +80,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      * @param reservation
      *            restored reservation
      * 
-     * @throws Exception
+     * @throws OrcaException
      *             if rebuilding state fails
      */
     public void revisit(IReservation reservation) throws OrcaException;
@@ -92,7 +92,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      * @param slice
      *            restored slice
      * 
-     * @throws Exception
+     * @throws OrcaException
      *             if rebuilding state fails
      */
     public void revisit(ISlice slice) throws OrcaException;
@@ -222,7 +222,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
     /**
      * Sets the ticket factory.
      * 
-     * @param ticketFactory
+     * @param ticketFactory ticketFactory
      */
     public void setTicketFactory(IResourceTicketFactory ticketFactory);
 

@@ -61,7 +61,7 @@ public class LogicalInventory
 
     /**
      * Adds a machine to the logical inventory
-     * @param machine
+     * @param machine machine
      */
     public synchronized void addMachine(MachineState machine)
     {
@@ -75,7 +75,11 @@ public class LogicalInventory
 
     /**
      * Reserves a set of resources
-     * @param allotment
+     * @param allotment allotment
+     * @param maxResources maxResources
+     * @param start start
+     * @param end end
+     * @throws Exception in case of error
      */
     public synchronized void reserve(AllotmentTable allotment, long[] maxResources, Date start,
                                      Date end) throws Exception
@@ -94,7 +98,11 @@ public class LogicalInventory
 
     /**
      * Reserves a set of resources
-     * @param allotment
+     * @param id id
+     * @param maxResources maxResources
+     * @param start start
+     * @param end end
+     * @throws Exception in case of error
      */
     public synchronized void reserve(ID id, long[] maxResources, Date start, Date end)
                               throws Exception
@@ -110,7 +118,7 @@ public class LogicalInventory
 
     /**
      * Ticks all logical machines
-     * @param time
+     * @param time time
      */
     public synchronized void tick(long time)
     {
@@ -124,7 +132,7 @@ public class LogicalInventory
 
     /**
      * WARNING: not thread-safe!!!
-     * @return
+     * @return Iterator
      */
     public Iterator<MachineState> iterator()
     {

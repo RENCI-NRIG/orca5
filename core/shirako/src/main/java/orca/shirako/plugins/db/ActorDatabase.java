@@ -127,9 +127,9 @@ public class ActorDatabase extends MySqlBase implements IDatabase
 
     /**
      * Get the auto-generated key from the Slice Name
-     * @param sliceName
-     * @return key
-     * @throws Exception
+     * @param guid guid
+     * @return auto-generated key from the Slice Name
+     * @throws Exception in case of error
      */
     protected String getSliceIdFromGuid(SliceID guid) throws Exception
     {
@@ -170,6 +170,8 @@ public class ActorDatabase extends MySqlBase implements IDatabase
 
     /*
      * Interface implementation.
+     * @param slice slice
+     * @throws Exception in case of error
      */
     public void addSlice(ISlice slice) throws Exception
     {
@@ -227,8 +229,11 @@ public class ActorDatabase extends MySqlBase implements IDatabase
 
     /**
      * Get results of a query from a connection
-     * @param query
-     * @return
+     * @param query query
+     * @param c c
+     * @param nm nm
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     private Vector<Properties> getQueryResult(String query, Connection c, String nm) throws Exception {
     	
@@ -474,6 +479,10 @@ public class ActorDatabase extends MySqlBase implements IDatabase
     
     /**
      * Use state id to find matching reservations. 
+     * @param sliceID sliceID
+     * @param state state
+     * @throws Exception in case of error
+     * @return vector of properties
      */
     public Vector<Properties> getReservations(SliceID sliceID, Integer state) throws Exception {
         Connection connection = getConnection();
@@ -627,6 +636,9 @@ public class ActorDatabase extends MySqlBase implements IDatabase
 
     /**
      * Use SQL pattern to find matching reservtions. Notice, this is NOT a regex!
+     * @param sqlPattern sqlPattern
+     * @throws Exception in case of error
+     * @return vector of properties
      */
     public Vector<Properties> getReservations(String sqlPattern) throws Exception {
         Connection connection = getConnection();

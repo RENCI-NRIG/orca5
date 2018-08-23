@@ -42,6 +42,7 @@ public interface IProxy extends IActorIdentity, Persistable
     /**
      * Executes the specified request.
      * @param request rpc request
+     * @throws RPCException in case of error
      */
     public void execute(IRPCRequestState request) throws RPCException;
     

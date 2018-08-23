@@ -165,6 +165,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
     /**
      * Retrieves all reservations representing resources held by this
      * actor Broker/service manager.
+     * @param sliceId sliceId
      *
      * @return vector of properties
      *
@@ -205,6 +206,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
     /**
      * Retrieves all reservation records matching SQL pattern (not REGEX!)
      *
+     * @param sqlPat sqlPat
      * @return vector of properties
      *
      * @throws Exception in case of error
@@ -214,7 +216,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
     
     /**
      * Retrieves all reservation records matching this state
-     * @param state
+     * @param state state
      * @return vector of properties
      * @throws Exception in case of error
      */
@@ -223,7 +225,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
     /**
      * Retrieves the specified reservation records.
      * The order in the return vector is the same order as @rids
-     * @param rids
+     * @param rids rids
      * @return vector of properties
      * @throws Exception in case of error
      */
@@ -245,6 +247,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * slice and match the specified string
      *
      * @param sliceID slice id
+     * @param str str
      *
      * @return vector of properties
      *

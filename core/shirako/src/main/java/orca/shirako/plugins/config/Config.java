@@ -135,8 +135,9 @@ public class Config implements Initializable, Persistable
 
     /**
      * @param token A token to use for the callback
-     * @param p
-     * @throws Exception
+     * @param token token
+     * @param p p
+     * @throws Exception in case of error
      */
     public void join(ConfigToken token, Properties p) throws Exception
     {

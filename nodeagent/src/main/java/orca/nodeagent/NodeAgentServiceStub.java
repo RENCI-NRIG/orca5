@@ -115,6 +115,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Constructor that takes in a configContext
+     * @param configurationContext configurationContext
+     * @param targetEndpoint targetEndpoint
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public NodeAgentServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext,
             java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
@@ -133,6 +136,7 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Default Constructor
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public NodeAgentServiceStub() throws org.apache.axis2.AxisFault {
 
@@ -142,6 +146,8 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Constructor taking the target endpoint
+     * @param targetEndpoint targetEndpoint
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public NodeAgentServiceStub(java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
         this(null, targetEndpoint);
@@ -150,8 +156,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#uninstallDriver
-     * @param param220
+     * @param param220 param220
+     * @return orca.nodeagent.documents.ResultElement
+     * @throws java.rmi.RemoteException in case of error
      * 
      */
     public orca.nodeagent.documents.ResultElement uninstallDriver(
@@ -244,8 +251,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.nodeagent.NodeAgentService#startuninstallDriver
-     * @param param220
+     * @param param220 param220
+     * @param callback callback  
+     * @throws java.rmi.RemoteException in case of error
      * 
      */
     public void startuninstallDriver(
@@ -305,8 +313,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#executeScript
-     * @param param222
+      * @param param222 param222
+      * @return orca.nodeagent.documents.ScriptResultElement
+      * @throws java.rmi.RemoteException in case of error
      * 
      */
     public orca.nodeagent.documents.ScriptResultElement executeScript(
@@ -399,9 +408,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.nodeagent.NodeAgentService#startexecuteScript
-     * @param param222
-     * 
+      * @param param222 param222
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error     
      */
     public void startexecuteScript(
 
@@ -460,9 +469,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#testFunc
-     * @param param224
-     * 
+      * @param param224 param224
+      * @return orca.nodeagent.documents.TestFuncResultElement
+      * @throws java.rmi.RemoteException in case of error
      */
     public orca.nodeagent.documents.TestFuncResultElement testFunc(
 
@@ -554,9 +563,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.nodeagent.NodeAgentService#starttestFunc
-     * @param param224
-     * 
+      * @param param224 param224
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      */
     public void starttestFunc(
 
@@ -615,9 +624,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#executeObjectDriver
-     * @param param226
-     * 
+      * @param param226 param226
+      * @return orca.nodeagent.documents.ResultElement
+      * @throws java.rmi.RemoteException in case of error
      */
     public orca.nodeagent.documents.ResultElement executeObjectDriver(
 
@@ -708,9 +717,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature for Asynchronous Invocations
-     * 
-     * @see orca.nodeagent.NodeAgentService#startexecuteObjectDriver
-     * @param param226
+      * @param param226 param226
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      * 
      */
     public void startexecuteObjectDriver(
@@ -769,9 +778,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature
-     * 
-     * @see orca.nodeagent.NodeAgentService#unregisterKey
-     * @param param228
+      * @param param228 param228
+      * @return orca.nodeagent.documents.UnregisterKeyResultElement
+      * @throws java.rmi.RemoteException in case of error
      * 
      */
     public orca.nodeagent.documents.UnregisterKeyResultElement unregisterKey(
@@ -863,9 +872,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature for Asynchronous Invocations
-     * 
-     * @see orca.nodeagent.NodeAgentService#startunregisterKey
-     * @param param228
+      * @param param228 param228
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      * 
      */
     public void startunregisterKey(
@@ -924,9 +933,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature
-     * 
-     * @see orca.nodeagent.NodeAgentService#executeDriver
-     * @param param230
+      * @param param230 param230
+      * @return orca.nodeagent.documents.ResultElement
+      * @throws java.rmi.RemoteException in case of error
      * 
      */
     public orca.nodeagent.documents.ResultElement executeDriver(
@@ -1019,9 +1028,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.nodeagent.NodeAgentService#startexecuteDriver
-     * @param param230
-     * 
+      * @param param230 param230
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      */
     public void startexecuteDriver(
 
@@ -1080,9 +1089,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#upgradeDriver
-     * @param param232
-     * 
+      * @param param232 param232
+      * @return orca.nodeagent.documents.ResultElement
+      * @throws java.rmi.RemoteException in case of error
      */
     public orca.nodeagent.documents.ResultElement upgradeDriver(
 
@@ -1173,10 +1182,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature for Asynchronous Invocations
-     * 
-     * @see orca.nodeagent.NodeAgentService#startupgradeDriver
-     * @param param232
-     * 
+      * @param param232 param232
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      */
     public void startupgradeDriver(
 
@@ -1235,9 +1243,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#registerAuthorityKey
-     * @param param234
-     * 
+      * @param param234 param234
+      * @return orca.nodeagent.documents.RegisterAuthorityKeyResultElement
+      * @throws java.rmi.RemoteException in case of error
      */
     public orca.nodeagent.documents.RegisterAuthorityKeyResultElement registerAuthorityKey(
 
@@ -1330,9 +1338,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.nodeagent.NodeAgentService#startregisterAuthorityKey
-     * @param param234
-     * 
+      * @param param234 param234
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      */
     public void startregisterAuthorityKey(
 
@@ -1392,9 +1400,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#getServiceKey
-     * @param param236
-     * 
+      * @param param236 param236
+      * @return orca.nodeagent.documents.GetServiceKeyResultElement
+      * @throws java.rmi.RemoteException in case of error
      */
     public orca.nodeagent.documents.GetServiceKeyResultElement getServiceKey(
 
@@ -1485,9 +1493,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature for Asynchronous Invocations
-     * 
-     * @see orca.nodeagent.NodeAgentService#startgetServiceKey
-     * @param param236
+      * @param param236 param236
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      * 
      */
     public void startgetServiceKey(
@@ -1546,9 +1554,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature
-     * 
-     * @see orca.nodeagent.NodeAgentService#registerKey
-     * @param param238
+      * @param param238 param238
+      * @return orca.nodeagent.documents.RegisterKeyResultElement
+      * @throws java.rmi.RemoteException in case of error
      * 
      */
     public orca.nodeagent.documents.RegisterKeyResultElement registerKey(
@@ -1641,9 +1649,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.nodeagent.NodeAgentService#startregisterKey
-     * @param param238
-     * 
+      * @param param238 param238
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      */
     public void startregisterKey(
 
@@ -1702,9 +1710,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.nodeagent.NodeAgentService#installDriver
-     * @param param240
-     * 
+      * @param param240 param240
+      * @return orca.nodeagent.documents.ResultElement
+      * @throws java.rmi.RemoteException in case of error
      */
     public orca.nodeagent.documents.ResultElement installDriver(
 
@@ -1796,9 +1804,9 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.nodeagent.NodeAgentService#startinstallDriver
-     * @param param240
-     * 
+      * @param param240 param240
+      * @param callback callback
+      * @throws java.rmi.RemoteException in case of error
      */
     public void startinstallDriver(
 
@@ -1856,6 +1864,8 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * A utility method that copies the namepaces from the SOAPEnvelope
+     * @param env env
+     * @return Map
      */
     private java.util.Map getEnvelopeNamespaces(org.apache.axiom.soap.SOAPEnvelope env) {
         java.util.Map returnMap = new java.util.HashMap();
@@ -2098,6 +2108,8 @@ public class NodeAgentServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * get the default envelope
+     * @param factory factory
+     * @return SOAPEnvelope
      */
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory) {
         return factory.getDefaultEnvelope();

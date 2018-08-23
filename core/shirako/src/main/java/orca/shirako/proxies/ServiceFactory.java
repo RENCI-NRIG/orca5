@@ -40,6 +40,7 @@ public class ServiceFactory
      * Deploys the actor services for the specified protocol.
      * @param protocol protocol
      * @param actor actor
+     * @throws Exception in case of error
      */
     public void deploy(final ProtocolDescriptor protocol, final IActor actor) throws Exception
     {
@@ -56,6 +57,7 @@ public class ServiceFactory
      * Undeploys the actor services for the specified protocol.
      * @param protocol protocol
      * @param actor actor
+     * @throws Exception in case of error
      */
     public void undeploy(final ProtocolDescriptor protocol, final IActor actor) throws Exception
     {
@@ -66,7 +68,7 @@ public class ServiceFactory
     }
     /**
      * Returns the factory instance.
-     * @return
+     * @return factory instance
      */
     public static ServiceFactory getInstance()
     {

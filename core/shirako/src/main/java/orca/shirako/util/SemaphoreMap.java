@@ -38,7 +38,7 @@ public class SemaphoreMap {
 	
 	/**
 	 * safely acquire a semaphore with this name (create if necessary)
-	 * @param semName
+	 * @param semName semName
 	 */
 	public void acquire(String semName) {
 		
@@ -53,9 +53,9 @@ public class SemaphoreMap {
 	
 	/**
 	 * try acquire the semaphore for specified timeout
-	 * @param semName
-	 * @param timeout
-	 * @param unit
+	 * @param semName semName
+	 * @param timeout timeout 
+	 * @param unit unit
 	 */
 	public void tryAcquire(String semName, long timeout, TimeUnit unit) {
 		
@@ -70,7 +70,7 @@ public class SemaphoreMap {
 	
 	/**
 	 * safely release this semaphore
-	 * @param semName
+	 * @param semName semName
 	 */
 	public void release(String semName) {
     	Semaphore sem = getSem(semName);
@@ -87,7 +87,7 @@ public class SemaphoreMap {
 	
 	/**
 	 * Delete the semaphore from map (garbage collection)
-	 * @param semName
+	 * @param semName semName
 	 */
 	public void delete(String semName) {
 		Semaphore sem = null;

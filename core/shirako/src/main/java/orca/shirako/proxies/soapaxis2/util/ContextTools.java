@@ -36,8 +36,8 @@ public class ContextTools
     /**
      * Attaches the authtoken of an actor that is about to send a message to
      * another actor to the specified call
-     * @param call
-     * @param authToken
+     * @param context context 
+     * @param authToken authToken
      */
     public static void setMyAuthToken(MessageContext context, AuthToken authToken)
     {
@@ -51,8 +51,8 @@ public class ContextTools
 
     /**
      * Attaches the auth token of a caller to the message context
-     * @param context
-     * @param authToken
+     * @param context context 
+     * @param authToken authToken
      */
     public static void setClientAuthToken(MessageContext context, AuthToken authToken)
     {
@@ -61,8 +61,8 @@ public class ContextTools
 
     /**
      * Retrieves the auth token of local actor making the current call
-     * @param context
-     * @return
+     * @param context context
+     * @return AuthToken
      */
     public static AuthToken getMyAuthToken(MessageContext context)
     {
@@ -72,7 +72,7 @@ public class ContextTools
     /**
      * Retrieves the auth token of the remote client that has initiated the
      * current request.
-     * @return
+     * @return AuthToken
      */
     public static AuthToken getClientAuthToken()
     {

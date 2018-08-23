@@ -55,7 +55,7 @@ import orca.util.persistence.Recoverable;
  * through Mapper or the Reservation class with the Manager lock held. <br>
  * <br>
  * <b>Implementation notes</b>
- * <li>The unit count is updated immediately to reflect additions or deletions
+ * The unit count is updated immediately to reflect additions or deletions
  * from the set. Updates to the unit count must occur only in the locked
  * methods. Configuration actions on the ConcreteSet (e.g., as resources join
  * and leave the set) must occur only in unlocked methods (e.g., "service"). A
@@ -63,17 +63,17 @@ import orca.util.persistence.Recoverable;
  * it is unlocked, which could race with an incoming unsolicited lease (which
  * are currently allowed), or with overlapping requests on the same set (which
  * are currently not allowed).
- * <li>ResourceSet was conceived as supporting methods that are independent of
+ * ResourceSet was conceived as supporting methods that are independent of
  * context and type of ConcreteSet. That ideal has eroded somewhat, and some key
  * fields and methods are specific to a particular context or role. Someday it
  * may be useful to break this into subclasses.
- * <li>Currently leases are validated only with validateIncoming(). There may be
+ * Currently leases are validated only with validateIncoming(). There may be
  * some additional checks to enforce.
- * <li>No changes to ResourceData on merges. Needs thought and documentation. We
+ * No changes to ResourceData on merges. Needs thought and documentation. We
  * should remove the properties argument on ConcreteSet.change.
- * <li>The 'null ticket corner case' (see above) is a source of complexity, and
+ * The 'null ticket corner case' (see above) is a source of complexity, and
  * should be cleaned up.
- * <li>Calls that "reach around" ResourceSet to the concrete set are
+ * Calls that "reach around" ResourceSet to the concrete set are
  * discouraged/deprecated.
  */
 public class ResourceSet implements Persistable, Recoverable {
@@ -195,7 +195,7 @@ public class ResourceSet implements Persistable, Recoverable {
      * @param lost a set of lost resources
      * @param modified a set of modified resources
      * @param type resource type
-     * @param rd resource properties
+     * @param rdata resource properties
      */
     public ResourceSet(IConcreteSet gained, IConcreteSet lost, IConcreteSet modified, ResourceType type, ResourceData rdata) {
         this.type = type;
@@ -207,7 +207,7 @@ public class ResourceSet implements Persistable, Recoverable {
 
     /**
      * Creates an empty resource set with the specified resource type.
-     * @param type
+     * @param type type
      */
     public ResourceSet(ResourceType type) {
         this(null, null, null, type, null);
@@ -306,6 +306,7 @@ public class ResourceSet implements Persistable, Recoverable {
      * within the ConcreteSet until collected. These are cached by a
      * prepareProbe.
      * @return a ResourceSet
+     * @throws Exception in case of error
      */
 
     public ResourceSet collectReleased() throws Exception {
@@ -447,7 +448,7 @@ public class ResourceSet implements Persistable, Recoverable {
     /**
      * Estimate the concrete resource units the resource set will contain at the
      * specified date.
-     * @param then the date
+     * @param when the date
      * @return number of concrete units
      */
     public int getConcreteUnits(Date when) {
@@ -501,6 +502,7 @@ public class ResourceSet implements Persistable, Recoverable {
      * Returns a string of notices or events pertaining to the underlying
      * resources. The event notices are consumed: subsequent calls return only
      * new information. May return null.
+     * @return Notice
      */
     public Notice getNotices() {
         if (resources == null) {
@@ -562,7 +564,7 @@ public class ResourceSet implements Persistable, Recoverable {
      * Returns a proxy to the site authority, which owns the resources
      * represented in the set.
      * @return site authority proxy.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public IAuthorityProxy getSiteProxy() throws Exception {
         if (resources == null) {
@@ -647,8 +649,8 @@ public class ResourceSet implements Persistable, Recoverable {
 
     /**
      * Ensures that the set can be merged with another set.
-     * @param set to be merged with the current set
-     * @throws Exception
+     * @param in to be merged with the current set
+     * @throws Exception in case of error
      */
     protected void mergeCompatible(ResourceSet in) throws Exception {
         if (in.resources == null) {
@@ -742,7 +744,7 @@ public class ResourceSet implements Persistable, Recoverable {
     /**
      * Prepares a probe: updates ConcreteSet to reflect underlying resource
      * status.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void prepareProbe() throws Exception {
         if (resources != null) {
@@ -758,7 +760,7 @@ public class ResourceSet implements Persistable, Recoverable {
 
     /**
      * Probe (no-op)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void probe() throws Exception {
     }
@@ -788,8 +790,7 @@ public class ResourceSet implements Persistable, Recoverable {
 
     /**
      * Complete service for a term extension (server side).
-     * @param term the new term
-     * @throws Exception
+     * @throws Exception in case of error
      */
 
     public void serviceExtend() throws Exception {
@@ -850,8 +851,7 @@ public class ResourceSet implements Persistable, Recoverable {
 
     /**
      * Complete service for a term extension (server side).
-     * @param term the new term
-     * @throws Exception
+     * @throws Exception in case of error
      */
 
     public void serviceModify() throws Exception {
@@ -881,10 +881,8 @@ public class ResourceSet implements Persistable, Recoverable {
      * Service a resource set update (client side). Any changes to existing
      * concrete resources should have been left in "updated" by an update
      * operation.
-     * @param slice the slice for this reservation
-     * @param rid the reservation ID
-     * @param term the term of the reservation
-     * @throws Exception
+     * @param reservation reservation
+     * @throws Exception in case of error
      */
     public void serviceUpdate(IClientReservation reservation) throws Exception {
         IConcreteSet cs = updated;
@@ -1001,8 +999,8 @@ public class ResourceSet implements Persistable, Recoverable {
      * <p>
      * This method will typically be called with the kernel lock on.
      * </p>
-     * @param rset incoming resources
-     * @throws Exception
+     * @param set incoming resources
+     * @throws Exception in case of error
      */
     public void supply(ResourceSet set) throws Exception {
         mergeCompatible(set);
@@ -1028,7 +1026,7 @@ public class ResourceSet implements Persistable, Recoverable {
      * attributes are already into place and no new transfer of attributes takes
      * place.
      * @param incoming resources to transfer into the current set
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void transfer(ResourceSet incoming) throws Exception {
         /*
@@ -1085,7 +1083,7 @@ public class ResourceSet implements Persistable, Recoverable {
     
     /**
      * Validates a fresh <code>ResourceSet</code> passed in from outside. *
-     * @throws Exception thrown if the set is determined to be invalid
+     * @throws Exception in case of error thrown if the set is determined to be invalid
      */
     protected void validate() throws Exception {
         if (units < 0) {
@@ -1098,7 +1096,7 @@ public class ResourceSet implements Persistable, Recoverable {
      * request (server) or in an incoming ticket or lease update (client).
      * Called for each incoming request/update to check validity with no locks
      * held.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void validateIncoming() throws Exception {
         validate();
@@ -1111,8 +1109,8 @@ public class ResourceSet implements Persistable, Recoverable {
     /**
      * Validate match between abstract and concrete ResourceSet in a ResourceSet
      * representing an incoming ticket.
-     * @param Term optional term associated with ResourceSet
-     * @throws Exception if validation fails
+     * @param t optional term associated with ResourceSet
+     * @throws Exception in case of error if validation fails
      */
     public void validateIncomingTicket(Term t) throws Exception {
         // validateIncoming();
@@ -1139,7 +1137,7 @@ public class ResourceSet implements Persistable, Recoverable {
     /**
      * Validates a <code>ResourceSet</code> that is about to be sent to another
      * actor. Client-side only.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void validateOutgoing() throws Exception {
         validate();

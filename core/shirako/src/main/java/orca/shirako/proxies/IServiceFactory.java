@@ -13,14 +13,16 @@ public interface IServiceFactory
     /**
      * Deploys the services for the actor.
      * @param actor actor
-     * @throws Exception
+     * @param protocol protocol
+     * @throws Exception in case of error
      */
     public void deploy(ProtocolDescriptor protocol, IActor actor) throws Exception;
     
     /**
      * Undeploys the services for the actor.
      * @param actor actor
-     * @throws Exception
+     * @param protocol protocol
+     * @throws Exception in case of error
      */
     public void undeploy(ProtocolDescriptor protocol, IActor actor) throws Exception;
 }

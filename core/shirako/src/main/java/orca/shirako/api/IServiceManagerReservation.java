@@ -124,8 +124,8 @@ public interface IServiceManagerReservation extends IClientReservation {
 
     /**
      * @deprecated use {@link #addRedeemPredecessor(IServiceManagerReservation, Properties)}
-     * @param predecessor
-     * @param filter
+     * @param predecessor predecessor
+     * @param filter filter
      */
     public void setRedeemPredecessor(IServiceManagerReservation predecessor, Properties filter);
 

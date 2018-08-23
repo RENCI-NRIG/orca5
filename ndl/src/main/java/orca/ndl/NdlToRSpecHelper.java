@@ -74,7 +74,7 @@ public class NdlToRSpecHelper {
      * Decode a string that may have been urlencoded
      * 
      * @param s
-     * @return
+     * @return String
      */
     private static String decodeUrlString(String s) {
         if (s == null)
@@ -94,8 +94,8 @@ public class NdlToRSpecHelper {
     /**
      * Guess controller URL from domain name
      * 
-     * @param domainUrl
-     * @return
+     * @param domainUrl domainUrl
+     * @return String
      */
     public static String getControllerForSite(String domainUrl) {
         domainUrl = decodeUrlString(domainUrl);
@@ -118,8 +118,8 @@ public class NdlToRSpecHelper {
      * Get a urn for CM from a domain URL like so: domainUrl =
      * http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain cmUrn = urn:publicid:IDN+rcivmsite+authority+cm
      * 
-     * @param domainUrl
-     * @return
+     * @param domainUrl domainUrl
+     * @return String
      */
     public static String cmFromDomain(String domainUrl) {
         String ret = UNKNOWN_CM_URN;
@@ -137,8 +137,8 @@ public class NdlToRSpecHelper {
     /**
      * Similar to cmFromDomain, except generates ids (e.g. for stitching extension)
      * 
-     * @param domainUrl
-     * @return
+     * @param domainUrl domainUrl
+     * @return String
      */
     public static String idFromDomain(String domainUrl) {
         String ret = UNKNOWN;
@@ -156,8 +156,8 @@ public class NdlToRSpecHelper {
     /**
      * Assumes pattern xxx.rdf#xxx:switch:port:port:port:type
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @return String
      */
     private static String massageName(final String n) {
         String name = n.replaceAll("[#/]", ":");
@@ -192,12 +192,12 @@ public class NdlToRSpecHelper {
     /**
      * Generate a component id from a URL and a domain URL
      * 
-     * @param domainUrl
+     * @param domainUrl domainUrl
      * @param type
      *            - [node, link, interface]
      * @param name
      *            - unique name
-     * @return
+     * @return String
      */
     public static String cidUrnFromUrl(String domainUrl, UrnType type, String name) {
         String ret = UNKNOWN_COMPONENT_URN;
@@ -243,14 +243,14 @@ public class NdlToRSpecHelper {
     /**
      * Generate a component id from a URL and a domain URL and concatenation of names
      * 
-     * @param domainUrl
+     * @param domainUrl domainUrl
      * @param type
      *            - [node, link, interface]
      * @param name1
      *            - unique name
      * @param name2
      *            - unique name
-     * @return
+     * @return String
      */
     public static String cidUrnFromUrl(String domainUrl, UrnType type, String name1, String name2) {
         String ret = UNKNOWN_COMPONENT_URN;
@@ -293,9 +293,9 @@ public class NdlToRSpecHelper {
     /**
      * Check if there is a specific domain in the urn
      * 
-     * @param urn
-     * @param against
-     * @return
+     * @param urn urn
+     * @param against against
+     * @return true or false
      */
     public static boolean specificDomainCheck(String urn, String against) {
         String pid = PublicId.decodeURN(urn);
@@ -306,9 +306,9 @@ public class NdlToRSpecHelper {
     /**
      * Check that the domain matches what is expected (e.g. dom=exogeni.net)
      * 
-     * @param urn
-     * @param dom
-     * @return
+     * @param urn urn
+     * @param dom dom
+     * @return true or false
      */
     public static boolean domainNameSpaceCheck(String urn, Set<String> dom) {
         String pid = PublicId.decodeURN(urn);
@@ -324,8 +324,8 @@ public class NdlToRSpecHelper {
     /**
      * Generate a domain name space according to convention
      * 
-     * @param urn
-     * @return
+     * @param urn urn
+     * @return String
      */
     public static String generateDomainNameSpace(String urn) {
         String pid = PublicId.decodeURN(urn);
@@ -338,8 +338,8 @@ public class NdlToRSpecHelper {
     /**
      * generate a site name from domain name URN
      * 
-     * @param domain
-     * @return
+     * @param urn urn 
+     * @return String
      */
     public static String generateSiteName(String urn) {
         String pid = PublicId.decodeURN(urn);
@@ -352,8 +352,8 @@ public class NdlToRSpecHelper {
     /**
      * Based on urn that has exogeni.net:xxxsite, generate NDL domain xxxsite.rdf#xxxsite
      * 
-     * @param urn
-     * @return
+     * @param urn urn
+     * @return String
      */
     public static String generateDomainName(String urn) {
         // blah.rdf#blah is the scheme (for vm site domains only!)
@@ -418,6 +418,7 @@ public class NdlToRSpecHelper {
      *            - sliver name
      * @param rack
      *            - exogeni.net:rcivmsite
+     * @return String
      */
     public static String sliverUrnFromRack(String sid, String rack) {
 
@@ -430,8 +431,8 @@ public class NdlToRSpecHelper {
     /**
      * Convert a sliver urn into a proper URL.
      * 
-     * @param urn
-     * @return
+     * @param urn urn
+     * @return String
      */
     public static String sliverUrlFromURN(String urn) {
         String url = NdlCommons.ORCA_NS;
@@ -451,8 +452,8 @@ public class NdlToRSpecHelper {
     /**
      * Convert a interfacer urn into a proper URL.
      * 
-     * @param urn
-     * @return
+     * @param urn urn
+     * @return String
      */
     public static String interfaceUrlFromURN(String urn) {
         String url = NdlCommons.ORCA_NS;
@@ -471,6 +472,8 @@ public class NdlToRSpecHelper {
 
     /**
      * sometimes getLocalName is not good enough so we strip off orca name space and call it a day
+     * @param r r
+     * @return String
      */
     public static String getTrueName(Resource r) {
         if (r == null)
@@ -483,8 +486,8 @@ public class NdlToRSpecHelper {
     /**
      * Equivalent to getTrueName(r.getURI());
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return String
      */
     public static String getTrueName(String r) {
         if (r == null)
@@ -495,7 +498,9 @@ public class NdlToRSpecHelper {
     }
 
     /**
-     * ORCA equivalent of client id comes in the form of <GUID>#<client id> so get the client id from that
+     * ORCA equivalent of client id comes in the form of GUID#client id so get the client id from that
+     * @param r r 
+     * @return String
      */
     public static String getClientId(Resource r) {
         String ret = getTrueName(r);
@@ -506,8 +511,8 @@ public class NdlToRSpecHelper {
     /**
      * Sometimes we only have a string (not the resource) containing the client id as above
      * 
-     * @param s
-     * @return
+     * @param s s
+     * @return String
      */
     public static String getClientId(String s) {
         String ret = s;
@@ -520,13 +525,13 @@ public class NdlToRSpecHelper {
     }
 
     /**
-     * Turn a DOM node into string, with or without namespace declarations, with or without <xml header
+     * Turn a DOM node into string, with or without namespace declarations, with or without xml header
      * 
-     * @param n
-     * @param withNS
-     * @param withHeader
-     * @return
-     * @throws Exception
+     * @param n n
+     * @param withNS withNs
+     * @param withHeader withHeader
+     * @return String
+     * @throws Exception in case of error
      */
     public static String domToString(Node n, boolean withNS, boolean withHeader) throws Exception {
         DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
@@ -545,10 +550,10 @@ public class NdlToRSpecHelper {
     }
 
     /**
-     * Strip <? ?> header from XML string
+     * Strip &lt;? ?&gt; header from XML string
      * 
-     * @param s
-     * @return
+     * @param s s
+     * @return String
      */
     public static String stripXmlHead(String s) {
         return s.replaceAll("<\\?.*\\?>", "");
@@ -556,8 +561,8 @@ public class NdlToRSpecHelper {
 
     /**
      * Strip namespace declarations from XML string
-     * 
-     * @return
+     * @param s s
+     * @return String
      */
     public static String stripXmlNs(String s) {
         return s.replaceAll("xmlns.*?(\"|\').*?(\"|\')", "");
@@ -566,8 +571,8 @@ public class NdlToRSpecHelper {
     /**
      * Parse a string into a DOM and return a NodeList
      * 
-     * @param s
-     * @return
+     * @param s s
+     * @return node list
      */
     public static NodeList parseXmlToDOM(String s) {
         try {

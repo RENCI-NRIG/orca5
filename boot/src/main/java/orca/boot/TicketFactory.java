@@ -48,9 +48,9 @@ public class TicketFactory {
      * Parses the string representation of a physical ticket and produces a java ticket object. The code applies
      * heuristics to determine the type of the ticket.
      * 
-     * @param ticketString
-     * @return
-     * @throws Exception
+     * @param ticketString ticketString
+     * @return ITicket
+     * @throws Exception in case of error
      */
     public static ITicket getTicket(String ticketString) throws Exception {
         if (ticketString == null) {

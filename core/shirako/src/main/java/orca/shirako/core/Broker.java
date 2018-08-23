@@ -128,7 +128,7 @@ public class Broker extends Actor implements IBroker {
      * @param cycle
      *            cycle
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void bid(final long cycle) throws Exception {
         /*

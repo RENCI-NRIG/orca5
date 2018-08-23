@@ -37,10 +37,10 @@ public class CertificateUtil {
     /**
      * converts a certificate chain string in to a list of certificate objects
      * 
-     * @param certChainString
+     * @param certChainString certChainString
      * @return list of certificate objects
-     * @throws CertificateException
-     * @throws IOException
+     * @throws CertificateException in case of error 
+     * @throws IOException in case of error
      */
     public static List<X509Certificate> getCertChain(String certChainString) throws CertificateException, IOException {
 
@@ -77,9 +77,9 @@ public class CertificateUtil {
     /**
      * converts a pem encoded certificate string in to a certificate object
      * 
-     * @param pemString
-     * @return
-     * @throws CertificateException
+     * @param pemString pemString
+     * @return X509Certificate
+     * @throws CertificateException in case of error
      */
     public static X509Certificate createCertFromPem(String pemString) throws CertificateException {
         ByteArrayInputStream bytearrayinputstream = new ByteArrayInputStream(Base64.decode(pemString));
@@ -91,9 +91,9 @@ public class CertificateUtil {
     /**
      * verifies if the given certificate chain has a path up to a trusted authority
      * 
-     * @param certChain
-     * @param trustKeyStorePath
-     * @param keyStorePassword
+     * @param certChain certChain
+     * @param trustKeyStorePath trustKeyStorePath
+     * @param keyStorePassword keyStorePassword
      * @return the trusted root authority
      * @throws CertPathValidatorException
      *             - if a path does not exist
@@ -144,10 +144,10 @@ public class CertificateUtil {
     /**
      * Method to get the keyid of a certificate; Calls getKeyidFromDER to do the actual work
      * 
-     * @param cert
+     * @param cert cert
      * @return string representing the sha-1 hash of the public key in cert
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
+     * @throws NoSuchAlgorithmException in case of error
+     * @throws IOException in case of error
      */
 
     public static String getCertKeyid(X509Certificate cert) throws NoSuchAlgorithmException, IOException {
@@ -173,9 +173,9 @@ public class CertificateUtil {
     /**
      * Method to find keyid from a DER encoded object (public key in this case)
      * 
-     * @param obj
-     * @return
-     * @throws NoSuchAlgorithmException
+     * @param obj obj
+     * @return keyid from a DER encoded object
+     * @throws NoSuchAlgorithmException in case of error
      */
     public static String getKeyidFromDER(DEREncodable obj) throws NoSuchAlgorithmException {
         String returnString = null;
@@ -215,8 +215,8 @@ public class CertificateUtil {
     /**
      * Method to convert to hex from byte array
      * 
-     * @param bytes
-     * @return
+     * @param bytes bytes
+     * @return hex
      */
     public static String hexify(byte bytes[]) {
 

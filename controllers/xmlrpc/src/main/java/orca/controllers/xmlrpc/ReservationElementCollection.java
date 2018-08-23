@@ -184,9 +184,11 @@ public class ReservationElementCollection {
      * 
      * I am assuming that the vms and links are known by URL and that the velocity template does not know anything about
      * the format of the URL.
+     * @return collection of URL names of all VMs
      */
 
     /* methods for vm info */
+
 
     // Returns the URL names of all VMs
     public Collection<String> vm_getVMs() {

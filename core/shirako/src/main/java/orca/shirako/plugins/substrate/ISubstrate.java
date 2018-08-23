@@ -7,7 +7,7 @@ import orca.shirako.core.Unit;
 public interface ISubstrate extends IShirakoPlugin {
     /**
      * Returns the substrate database.
-     * @return
+     * @return the substrate database
      */
     public ISubstrateDatabase getSubstrateDatabase();
 
@@ -36,8 +36,8 @@ public interface ISubstrate extends IShirakoPlugin {
 
     /**
      * Updates only the properties of an existing unit that is already part of the substrate.
-     * @param r reservation that contains the unit
-     * @param unit unit to be modified.
+     * @param reservation reservation that contains the unit
+     * @param u unit to be modified.
      */
 	public void updateProps(IReservation reservation, Unit u);
 	

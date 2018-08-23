@@ -48,6 +48,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 *            resource set describing the resources to claim
 	 * 
 	 * @return DOCUMENT ME!
+	 * @throws Exception in case of failure
 	 */
 	public IClientReservation claim(ReservationID reservationID, ResourceSet resources) throws Exception;
 
@@ -63,6 +64,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 *            broker proxy
 	 * 
 	 * @return DOCUMENT ME!
+     * @throws Exception in case of failure
 	 */
 	public IClientReservation claim(ReservationID reservationID, ResourceSet resources, IBrokerProxy broker)
 			throws Exception;
@@ -82,6 +84,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 *            DOCUMENT ME!
 	 * 
 	 * @return DOCUMENT ME!
+     * @throws Exception in case of failure
 	 */
 	public IClientReservation claim(ReservationID reservationID, ResourceSet resources, ISlice slice,
 			IBrokerProxy broker) throws Exception;
@@ -96,7 +99,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 * 
 	 * @throws Exception in case of error
 	 * 
-	 * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
+	 * @see orca.shirako.api.IReservationOperations#register(IReservation)
 	 */
 	public void extendTicket(IClientReservation reservation) throws Exception;
 
@@ -151,7 +154,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 * 
 	 * @throws Exception in case of error
 	 * 
-	 * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
+	 * @see orca.shirako.api.IReservationOperations#register(IReservation)
 	 */
 	public void ticket(IClientReservation reservation) throws Exception;
 

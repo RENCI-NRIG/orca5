@@ -648,6 +648,8 @@
 
         /**
         *  get the default envelope
+         * @param factory factory
+         * @return      SOAPEnvelope
         */
         private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory){
         return factory.getDefaultEnvelope();
@@ -855,6 +857,8 @@
 
         /**
         *  A utility method that copies the namepaces from the SOAPEnvelope
+         * @param env env
+         * @return java.util.Map
         */
         private java.util.Map getEnvelopeNamespaces(org.apache.axiom.soap.SOAPEnvelope env){
         java.util.Map returnMap = new java.util.HashMap();

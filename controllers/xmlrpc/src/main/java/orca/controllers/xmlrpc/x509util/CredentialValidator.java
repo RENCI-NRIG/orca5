@@ -47,12 +47,12 @@ public class CredentialValidator {
     /**
      * function to validate if a given credential
      * 
-     * @param sliceUrn
-     * @param credentialString
-     * @param requiredPrivilege
-     * @param clientCertificateChain
-     * @returns slice expiration date
-     * @throws CredentialException
+     * @param sliceUrn sliceUrn
+     * @param credentialString credentialString
+     * @param requiredPrivilege requiredPrivilege
+     * @param userCert userCert
+     * @return slice expiration date
+     * @throws CredentialException in case of error
      */
     public static Date validateCredential(String sliceUrn, String credentialString, Set<String> requiredPrivilege,
             X509Certificate userCert) throws CredentialException {
@@ -110,9 +110,9 @@ public class CredentialValidator {
     /**
      * Method to check the type of credential - "abac", "privilege"
      * 
-     * @param credential
-     *            string
+     * @param credentialString credentialString 
      * @return type of credential
+     * @throws CredentialException in case of error
      */
 
     public static String checkCredentialType(String credentialString) throws CredentialException {
@@ -134,11 +134,15 @@ public class CredentialValidator {
      * function to validate if a speaks-for credential is valid given the spoken for user urn and the caller certificate
      * from the SSL connection
      * 
-     * @param credentialString
-     * @param spoken_for_user_urn
-     * @param callerCert
-     * @returns certificate of signing user inside speaks-for credential
-     * @throws CredentialException
+     * @param credentialString credentialString
+     * @param spoken_for_user_urn spoken_for_user_urn
+     * @param callerCert callerCert
+     * @return certificate of signing user inside speaks-for credential
+     * @throws CredentialException in case of error
+     * @throws CertificateException in case of error
+     * @throws CertPathValidatorException in case of error
+     * @throws XMLSignatureException in case of error
+     * @throws MarshalException in case of error
      */
 
     public static X509Certificate validateSpeaksForCredential(String credentialString, String spoken_for_user_urn,
@@ -295,8 +299,8 @@ public class CredentialValidator {
     /**
      * Only check the client certs against a trust root
      * 
-     * @param clientCertificate
-     * @throws CredentialException
+     * @param clientCertificate clientCertificate
+     * @throws CredentialException in case of error
      */
     public static void checkTrustRoot(X509Certificate[] clientCertificate) throws CredentialException {
 

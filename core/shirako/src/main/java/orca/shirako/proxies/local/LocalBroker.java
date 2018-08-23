@@ -33,7 +33,7 @@ public class LocalBroker extends LocalProxy implements IBrokerProxy {
 
     /**
      * Create a new proxy for the specified actor
-     * @param actor
+     * @param actor actor
      */
     public LocalBroker(IActor actor) {
         super(actor);
@@ -72,8 +72,7 @@ public class LocalBroker extends LocalProxy implements IBrokerProxy {
      * Converts a reservation to be passed from one actor to another
      * @param r The reservation
      * @param auth The auth token of the caller
-     * @throws Exception
-     * @return
+     * @return IBrokerReservation
      */
     protected IBrokerReservation passReservation(IClientReservation r, AuthToken auth)  {
 

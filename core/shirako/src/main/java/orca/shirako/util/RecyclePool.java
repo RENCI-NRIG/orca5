@@ -68,6 +68,7 @@ public class RecyclePool
     /**
      * Allocate a unique number. SPARSE, with delayed recycling.
      * @return reserved number
+     * @throws Exception in case of error
      */
     public long allocate() throws Exception
     {
@@ -104,6 +105,7 @@ public class RecyclePool
     /**
      * Release a previously allocated number.
      * @param number released number
+     * @throws Exception in case of error
      */
     public void release(long number) throws Exception
     {
@@ -121,6 +123,7 @@ public class RecyclePool
     /**
      * Indicate that a number is reserved. For use in recovery.
      * @param number reserved number
+     * @throws Exception in case of error
      */
     public void reserve(long number) throws Exception
     {
@@ -150,6 +153,7 @@ public class RecyclePool
 
     /**
      * Indicate that all unused numbers in the range are reserved.
+     * @throws Exception in case of error
      */
     public void reserveAll() throws Exception
     {

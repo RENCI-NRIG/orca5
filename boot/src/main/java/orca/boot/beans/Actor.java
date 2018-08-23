@@ -20,31 +20,31 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="actor">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="instance" type="{http://issg.cs.duke.edu/sharp/boot}instance"/>
- *         &lt;element name="owner" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="publicKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/>
- *         &lt;element name="privateKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/>
- *         &lt;element name="monitor" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/>
- *         &lt;element name="mapper" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/>
- *         &lt;element name="plugin" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/>
- *         &lt;element name="slice" type="{http://issg.cs.duke.edu/sharp/boot}slice" minOccurs="0"/>
- *         &lt;element name="siteName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="pools" type="{http://issg.cs.duke.edu/sharp/boot}pools" minOccurs="0"/>
- *         &lt;element name="controls" type="{http://issg.cs.duke.edu/sharp/boot}controls" minOccurs="0"/>
- *         &lt;element name="inventory" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="policy" type="{http://issg.cs.duke.edu/sharp/boot}policy" minOccurs="0"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="actor"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="instance" type="{http://issg.cs.duke.edu/sharp/boot}instance"/&gt;
+ *         &lt;element name="owner" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="publicKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/&gt;
+ *         &lt;element name="privateKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/&gt;
+ *         &lt;element name="monitor" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/&gt;
+ *         &lt;element name="mapper" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/&gt;
+ *         &lt;element name="plugin" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/&gt;
+ *         &lt;element name="slice" type="{http://issg.cs.duke.edu/sharp/boot}slice" minOccurs="0"/&gt;
+ *         &lt;element name="siteName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="pools" type="{http://issg.cs.duke.edu/sharp/boot}pools" minOccurs="0"/&gt;
+ *         &lt;element name="controls" type="{http://issg.cs.duke.edu/sharp/boot}controls" minOccurs="0"/&gt;
+ *         &lt;element name="inventory" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="policy" type="{http://issg.cs.duke.edu/sharp/boot}policy" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

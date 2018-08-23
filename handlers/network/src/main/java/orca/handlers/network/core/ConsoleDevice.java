@@ -36,7 +36,7 @@ public abstract class ConsoleDevice implements INetworkDevice {
      *            expected response
      * @param timeout
      *            timeout
-     * @throws CommandException
+     * @throws CommandException in case of error
      */
     public abstract void executeCommand(String cmd, String response, String timeout) throws CommandException;
 
@@ -48,9 +48,9 @@ public abstract class ConsoleDevice implements INetworkDevice {
     /**
      * Load script as an input source
      * 
-     * @param cmd
-     * @return
-     * @throws CommandException
+     * @param cmd cmd
+     * @return InputSource
+     * @throws CommandException in case of error
      */
     protected InputSource loadScript(String cmd) throws CommandException {
         if (basepath == null) {
@@ -68,9 +68,9 @@ public abstract class ConsoleDevice implements INetworkDevice {
     /**
      * Load script as a string
      * 
-     * @param name
-     * @return
-     * @throws CommandException
+     * @param name name
+     * @return String
+     * @throws CommandException in case of error
      */
     protected String loadScriptString(String name) throws CommandException {
         if (basepath == null) {
@@ -104,8 +104,8 @@ public abstract class ConsoleDevice implements INetworkDevice {
      * 
      * @param script
      *            script to execute
-     * @param in
-     * @throws CommandException
+     * @param properties properties
+     * @throws CommandException in case of error
      */
     public void executeScript(String script, Properties properties) throws CommandException {
         logger.debug("Executing script: " + script + " properties=" + properties);

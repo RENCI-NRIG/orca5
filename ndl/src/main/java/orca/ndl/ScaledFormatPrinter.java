@@ -41,8 +41,8 @@ public class ScaledFormatPrinter {
      * "bps". Example: you can print value of bandwidth=10000000 as System.out.println(new
      * ScaledFormatPrinter(bandwidth, "bps")) and you will see 10Mbps as the result.
      * 
-     * @param value
-     * @param type
+     * @param value value
+     * @param type type
      */
     public ScaledFormatPrinter(double value, String type) {
         this.value = value;

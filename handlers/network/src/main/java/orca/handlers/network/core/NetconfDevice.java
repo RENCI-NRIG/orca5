@@ -60,8 +60,8 @@ public class NetconfDevice extends ConsoleDevice {
     /**
      * Get a text of current device configuration as text (multi-line)
      * 
-     * @return
-     * @throws CommandException
+     * @return String
+     * @throws CommandException in case of error
      */
     public String getDeviceConfiguration() throws CommandException {
         try {
@@ -82,8 +82,8 @@ public class NetconfDevice extends ConsoleDevice {
     /**
      * Get a buffered reader of the configuration (convenient for reading line-by-line)
      * 
-     * @return
-     * @throws CommandException
+     * @return buffered reader
+     * @throws CommandException in case of error
      */
     public BufferedReader getDeviceConfigurationReader() throws CommandException {
         return new BufferedReader(new StringReader(getDeviceConfiguration()));
@@ -103,8 +103,8 @@ public class NetconfDevice extends ConsoleDevice {
     /**
      * Execute a configuration change command modifying runtime configuration
      * 
-     * @param cmd
-     * @throws CommandException
+     * @param cmd cmd
+     * @throws CommandException in case of error
      */
     public void executeCommand(String cmd) throws CommandException {
         if (device == null)
@@ -122,10 +122,10 @@ public class NetconfDevice extends ConsoleDevice {
      * Perform variable substitutions in the script. Variable names and values are in the properties. Variables in the
      * script should appear as {$VariableName}
      * 
-     * @param data
-     * @param props
-     * @return
-     * @throws CommandException
+     * @param data data
+     * @param props props
+     * @return String
+     * @throws CommandException in case of error
      */
     public static String replaceVars(String data, Properties props) throws CommandException {
         String cmd = data;

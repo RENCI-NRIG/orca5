@@ -99,7 +99,7 @@ public class MerlinKeyRegister extends Merlin {
     /**
      * Returns the singleton instance.
      * 
-     * @return
+     * @return MerlinKeyRegister
      */
     public static MerlinKeyRegister getInstance() {
         return mr;
@@ -167,6 +167,7 @@ public class MerlinKeyRegister extends Merlin {
 
     /**
      * Sets the keystore to be used by the Merlin Provider.
+     * @param arg0 arg0
      */
     public void setKeyStore(KeyStore arg0) {
         super.setKeyStore(arg0);
@@ -176,7 +177,7 @@ public class MerlinKeyRegister extends Merlin {
     /**
      * Tries recovery for a new instance of the Merlin Provider,
      * 
-     * @return
+     * @return int
      */
     public static synchronized int checkRecovery() {
         // check if there is a file in /data containing the first alias and
@@ -304,7 +305,7 @@ public class MerlinKeyRegister extends Merlin {
      *            this alias should be "authoritykey", we will use "authoritykey"
      * @param cert
      *            the first trusted certificate to be added
-     * @return
+     * @return int
      */
     public static synchronized int createServiceKeyStore(String alias, Certificate cert) {
         if (keyStore != null) {
@@ -410,7 +411,7 @@ public class MerlinKeyRegister extends Merlin {
     /**
      * Retrieves the service key.
      * 
-     * @return
+     * @return Certificate
      */
     public static synchronized Certificate getServiceKey() {
         logger.debug("Merlin request for service key");
@@ -430,7 +431,7 @@ public class MerlinKeyRegister extends Merlin {
     /**
      * Retrieves the first certificate registered with the node
      * 
-     * @return
+     * @return Certificate
      */
     public static synchronized Certificate getAuthorityKey() {
         logger.debug("Merlin request for authority key");
@@ -451,12 +452,12 @@ public class MerlinKeyRegister extends Merlin {
      * Adds a certificate to the keystore. Allows multiple clients to use the node. The actor invoking this function has
      * to be trusted.
      * 
-     * @param alias
-     * @param cert
-     * @throws IOException
-     * @throws KeyStoreException
-     * @throws CertificateException
-     * @throws NoSuchAlgorithmException
+     * @param alias alias
+     * @param cert cert
+     * @throws IOException in case of error 
+     * @throws KeyStoreException in case of error
+     * @throws CertificateException in case of error
+     * @throws NoSuchAlgorithmException in case of error
      */
     public void addKeyToKeystore(String alias, Certificate cert)
             throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
@@ -475,11 +476,11 @@ public class MerlinKeyRegister extends Merlin {
     /**
      * Removes a trusted key from the node. The actor invoking this function has to be trusted.
      * 
-     * @param alias
-     * @throws IOException
-     * @throws KeyStoreException
-     * @throws NoSuchAlgorithmException
-     * @throws CertificateException
+     * @param alias alias
+     * @throws IOException in case of error
+     * @throws KeyStoreException in case of error
+     * @throws NoSuchAlgorithmException in case of error
+     * @throws CertificateException in case of error
      */
     public void removeKeyFromKeyStore(String alias)
             throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
@@ -496,7 +497,7 @@ public class MerlinKeyRegister extends Merlin {
     /**
      * Generates the node certificate when the first trusted key is registered with the node.
      * 
-     * @return
+     * @return int
      */
     private static int generateServiceCertificate() {
         logger.debug("generate service certificate called");

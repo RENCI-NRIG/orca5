@@ -16,17 +16,17 @@ public interface INdlManifestModelListener extends INdlCommonModelListener {
     /**
      * Sets manifest URI
      * 
-     * @param i
-     * @param m
+     * @param i i
+     * @param m m
      */
     public void ndlManifest(Resource i, OntModel m);
 
     /**
      * A LinkConnection object.
      * 
-     * @param l
-     * @param m
-     * @param interfaces
+     * @param l l
+     * @param m m
+     * @param interfaces interfaces
      * @param parent
      *            NetworkConnection (if any)
      */
@@ -35,12 +35,11 @@ public interface INdlManifestModelListener extends INdlCommonModelListener {
     /**
      * A CrossConnect object with bandwidth and label. Never repeated.
      * 
-     * @param c
-     * @param m
-     * @param domain
-     * @param bw
-     * @param label
-     * @param interfaces
+     * @param c c
+     * @param m m
+     * @param bw bw
+     * @param label label
+     * @param interfaces interfaces
      * @param parent
      *            NetworkConnection (if any)
      */
@@ -51,8 +50,8 @@ public interface INdlManifestModelListener extends INdlCommonModelListener {
      * Return the proper sequence of resources (nodes, linkconnections, crossconnects etc) for a NetworkConnection.
      * Never repeated.
      * 
-     * @param c
-     * @param m
+     * @param c c
+     * @param m m
      * @param path
      *            - list of paths (for multipoint connections).
      * @param roots

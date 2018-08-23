@@ -53,7 +53,7 @@ public class ConfigurationTools {
      *            The object
      * @param param
      *            Parameter desciption
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static void attachParameter(Object object, Parameter param) throws Exception {
         Class<?> cl = null;
@@ -76,7 +76,8 @@ public class ConfigurationTools {
      *            The object to make the call on
      * @param methodName
      *            The method name
-     * @throws Exception
+     * @return Object
+     * @throws Exception in case of error
      */
     public static Object callMethod(Object object, String methodName) throws Exception {
         // create the argument array
@@ -100,7 +101,8 @@ public class ConfigurationTools {
      *            The class of the argument
      * @param argument
      *            The argument
-     * @throws Exception
+     * @throws Exception in case of error
+     * @return Object
      */
     public static Object callMethod(Object object, String methodName, Class<?> argumentClass, Object argument)
             throws Exception {
@@ -126,7 +128,8 @@ public class ConfigurationTools {
      *            The name of the class of the argument
      * @param argument
      *            The argument
-     * @throws Exception
+     * @throws Exception in case of error
+     * @return Object
      */
     public static Object callMethod(Object object, String methodName, String argumentClass, Object argument)
             throws Exception {
@@ -136,9 +139,9 @@ public class ConfigurationTools {
     /**
      * Creates an object instance and sets up its custom parameters
      * 
-     * @param inst
-     * @return
-     * @throws Exception
+     * @param inst inst
+     * @return object
+     * @throws Exception in case of error
      */
     public static Object createInstance(Instance inst) throws Exception {
         Class<?> objectClass = Class.forName(inst.getClassName());
@@ -189,7 +192,7 @@ public class ConfigurationTools {
      * @param data
      *            The CryptoKey bean
      * @return PrivateKey
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static PrivateKey decodePrivateKey(CryptoKey data) throws Exception {
         if (data == null) {
@@ -208,7 +211,7 @@ public class ConfigurationTools {
      * @param data
      *            The CryptoKey bean
      * @return PublicKey
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static PublicKey decodePublicKey(CryptoKey data) throws Exception {
         if (data == null) {
@@ -228,7 +231,7 @@ public class ConfigurationTools {
      * @param param
      *            The parameter bean
      * @return The object
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static Object getObject(Parameter param) throws Exception {
         String type = param.getType();
@@ -300,8 +303,8 @@ public class ConfigurationTools {
     /**
      * Converts a boot.beans.Rdata to slices.ResourceData
      * 
-     * @param beanRData
-     * @return
+     * @param beanRData beanRData
+     * @return ResourceData
      */
     public static ResourceData getResourceData(Rdata beanRData) {
         ResourceData rdata = new ResourceData();
@@ -368,8 +371,8 @@ public class ConfigurationTools {
      * 
      * @param location
      *            The file path
-     * @return
-     * @throws Exception
+     * @return Properties
+     * @throws Exception in case of error
      */
     public static Properties loadProperties(String location) throws Exception {
         URL url = new URL(location);

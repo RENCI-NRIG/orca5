@@ -153,7 +153,7 @@ public interface IAuthorityPolicy extends IServerPolicy {
      * failure is corrected and the resources are safe to be reused, the
      * administrator will issue a call to {@link #freed(ResourceSet)}, which is
      * used to free resources unconditionally.
-     * See {@link #closed(ResourceReservation)}
+     * See {@link #freed(ResourceSet)}
      * 
      * @param resources
      *            the resource set to be released

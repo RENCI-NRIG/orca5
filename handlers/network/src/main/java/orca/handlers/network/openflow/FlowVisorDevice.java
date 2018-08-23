@@ -54,12 +54,12 @@ public class FlowVisorDevice extends XMLRPCDevice implements OpenFlowConstants {
     /**
      * Create an IP based flow space
      * 
-     * @param name
-     * @param dpid
-     * @param priority
-     * @param srcIP
-     * @param dstIP
-     * @throws CommandException
+     * @param name name
+     * @param dpid dpid 
+     * @param priority priority
+     * @param srcIP srcIP
+     * @param dstIP dstIP
+     * @throws CommandException in case of error
      */
     public void addIPFlowSpace(String name, String dpid, String priority, String srcIP, String dstIP)
             throws CommandException {
@@ -96,13 +96,13 @@ public class FlowVisorDevice extends XMLRPCDevice implements OpenFlowConstants {
     /**
      * Create a VLAN based flow space on specific ports
      * 
-     * @param name
-     * @param dpid
-     * @param priority
-     * @param tag
-     * @param ports
+     * @param name name
+     * @param dpid dpid
+     * @param priority priority
+     * @param tag tag
+     * @param ports 
      *            - can be a combination of range and comma-separated list: a-b,c,d,e-f etc. It can also say 'any'
-     * @throws CommandException
+     * @throws CommandException in case of error
      */
     public void addVlanFlowSpace(String name, String dpid, String priority, int tag, String ports)
             throws CommandException {

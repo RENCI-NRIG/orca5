@@ -126,7 +126,7 @@ public class ServiceManager extends Actor implements IServiceManager {
      * Bids for resources as dictated by the plugin bidding policy for the
      * current cycle.
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void bid() throws Exception {
         /*
@@ -253,7 +253,7 @@ public class ServiceManager extends Actor implements IServiceManager {
 
     /**
      * Redeem all reservations.
-     * @param set
+     * @param set set
      */
     public void extendLease(final ReservationSet set){
         for (IReservation r: set) {
@@ -366,7 +366,7 @@ public class ServiceManager extends Actor implements IServiceManager {
 
     /**
      * Redeem all reservations.
-     * @param set
+     * @param set set
      */
     public void redeem(final ReservationSet set){
         for (IReservation r: set) {

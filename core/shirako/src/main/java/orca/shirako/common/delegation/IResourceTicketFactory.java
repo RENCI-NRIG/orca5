@@ -26,19 +26,19 @@ public interface IResourceTicketFactory
 	
 	/**
 	 * Sets the actor this factory belongs to.
-	 * @param actor
+	 * @param actor actor
 	 */
 	void setActor(IActor actor);
 	
 	/**
 	 * Returns the actor represented by this factory.
-	 * @return
+	 * @return actor
 	 */
 	IActor getActor();
 	
 	/**
 	 * Initializes the factory.
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 */
 	void initialize() throws Exception;
 	
@@ -52,7 +52,8 @@ public interface IResourceTicketFactory
 	 * @param bins bins references by the delegation
 	 * @param properties properties list
 	 * @param holder identifier of the holder of the delegation
-	 * @return
+	 * @return ResourceDelegation
+     * @throws DelegationException in case of error
 	 */
 	ResourceDelegation makeDelegation(int units, ResourceVector vector, Term term, ResourceType type, 
 			 ID[] sources, ResourceBin[] bins, Properties properties,
@@ -61,62 +62,62 @@ public interface IResourceTicketFactory
 	
 	/**
 	 * Makes a root delegation.
-	 * @param units
-	 * @param term
-	 * @param type
-	 * @return
-	 * @throws DelegationException
+	 * @param units units
+	 * @param term term
+	 * @param type type
+	 * @return ResourceDelegation
+	 * @throws DelegationException in case of error
 	 */
 	ResourceDelegation makeDelegation(int units, Term term, ResourceType type) throws DelegationException;
 
     /**
      * Makes a root delegation.
-     * @param units
-     * @param term
-     * @param type
-     * @param properties
-     * @return
-     * @throws DelegationException
+     * @param units units
+     * @param term term 
+     * @param type type
+     * @param properties properties
+     * @return ResourceDelegation
+     * @throws DelegationException in case of error
      */
     ResourceDelegation makeDelegation(int units, Term term, ResourceType type, Properties properties) throws DelegationException;
 
     /**
 	 * Makes a delegation to the specified holder.
-	 * @param units
-	 * @param term
-	 * @param type
-	 * @param holder
-	 * @return
-	 * @throws DelegationException
+	 * @param units units
+	 * @param term term
+	 * @param type type
+	 * @param holder holder
+	 * @return ResourceDelegation 
+	 * @throws DelegationException in case of error
 	 */
 	ResourceDelegation makeDelegation(int units, Term term, ResourceType type, ID holder) throws DelegationException;
 
     /**
      * Makes a delegation to the specified holder.
-     * @param units
-     * @param term
-     * @param type
-     * @param properties
-     * @param holder
-     * @return
-     * @throws DelegationException
+     * @param units units
+     * @param term term
+     * @param type type
+     * @param properties properties
+     * @param holder holder
+     * @return ResourceDelegation
+     * @throws DelegationException in case of error
      */
     ResourceDelegation makeDelegation(int units, Term term, ResourceType type, Properties properties, ID holder) throws DelegationException;
 
     /**
 	 * Creates a new root ticket.
 	 * @param delegation root delegation
-	 * @return
-	 * @throws TicketException
+	 * @return ResourceTicket
+	 * @throws TicketException in case of error
 	 */
 	ResourceTicket makeTicket(ResourceDelegation delegation) throws TicketException;
 
 	/**
 	 * Creates a new ticket from the specified source ticket.
-	 * @param source
-	 * @param delegation
-	 * @return
-	 * @throws TicketException
+	 * @param source source
+	 * @param delegation delegation
+	 * @return ResourceTicket
+	 * @throws TicketException in case of error
 	 */
 	ResourceTicket makeTicket(ResourceTicket source, ResourceDelegation delegation) throws TicketException;
 	
@@ -125,15 +126,15 @@ public interface IResourceTicketFactory
 	 * Note: all sources must share the same root delegation.
 	 * @param sources source tickets
 	 * @param delegation delegation
-	 * @return
-	 * @throws TicketException
+	 * @return ResourceTicket
+	 * @throws TicketException in case of error
 	 */
 	ResourceTicket makeTicket(ResourceTicket[] sources, ResourceDelegation delegation) throws TicketException;
 	
 	/**
 	 * Makes a deep clone of the specified resource ticket.
-	 * @param original
-	 * @return
+	 * @param original original
+	 * @return ResourceTicket
 	 */
 	ResourceTicket clone(ResourceTicket original);
 	

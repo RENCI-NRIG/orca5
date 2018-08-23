@@ -171,7 +171,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Returns the geni AM api version
      * 
-     * @return
+     * @return map of string and object
      */
     public Map<String, Object> getVersion() {
         Map<String, Object> result = new HashMap<String, Object>();
@@ -184,7 +184,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Returns resource representations for all resources across all AMs
      * 
-     * @return
+     * @return map of string and object
      */
 
     public Map<String, Object> listResources(Object[] credentials, Map<?, ?> options) {
@@ -259,7 +259,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
      *            (NDL request)
      * @param users
      *            (user logins and lists of ssh keys for each login; field names are "login", "sudo" and "keys")
-     * @return
+     * @return map of string and object
      */
     public Map<String, Object> createSlice(String slice_urn, Object[] credentials, String resReq,
             List<Map<String, ?>> users) {
@@ -446,8 +446,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Returns the status of the reservations in the input slice
      * 
-     * @param slice_urn
-     * @return
+     * @param slice_urn slice_urn
+     * @param credentials credentials
+     * @return map of string and object
      */
     public Map<String, Object> sliceStatus(String slice_urn, Object[] credentials) {
         try {
@@ -1052,12 +1053,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Copy properties for Networking reservations, in ModifyRemove
      *
-     * @param parent_prefix
-     * @param host_interface
-     * @param unit_tag
-     * @param config
-     * @param logger
-     * @return
+     * @param parent_prefix parent_prefix
+     * @param host_interface host_interface
+     * @param unit_tag unit_tag
+     * @param config config
+     * @param logger logger
+     * @return Properties
      */
     protected static Properties getNetworkEthModifyProperties(String parent_prefix, String host_interface,
             String unit_tag, Properties config, Logger logger) {
@@ -1088,11 +1089,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Copy properties shared by Networking and LUN reservations, in ModifyRemove
      *
-     * @param parent_prefix
-     * @param host_interface
-     * @param config
-     * @param logger
-     * @return
+     * @param parent_prefix parent_prefix
+     * @param host_interface host_interface
+     * @param config config
+     * @param logger logger
+     * @return Properties
      */
     protected static Properties getEthModifyProperties(String parent_prefix, String host_interface, Properties config,
             Logger logger) {
@@ -1125,11 +1126,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
      * Permit stitching by other slices to this sliver with password. This call does not check the type of the sliver,
      * only its existence within the given slice and simply puts the hashed password onto properties of the reservation.
      * 
-     * @param slice_urn
-     * @param sliver_guid
-     * @param pass
-     * @param credentials
-     * @return
+     * @param slice_urn slice_urn
+     * @param sliver_guid  sliver_guid
+     * @param pass pass
+     * @param credentials credentials
+     * @return map of string and object
      */
     public Map<String, Object> permitSliceStitch(String slice_urn, String sliver_guid, String pass,
             Object[] credentials) {
@@ -1297,14 +1298,14 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
      * It then computes the necessary properties and invoked the modify on the node to add an interface for the
      * corresponding link.
      * 
-     * @param from_slice_urn
-     * @param from_sliver_guid
-     * @param to_slice_urn
-     * @param to_sliver_guid
-     * @param to_pass
-     * @param node_properties
-     * @param credentials
-     * @return
+     * @param from_slice_urn from_slice_urn
+     * @param from_sliver_guid from_sliver_guid
+     * @param to_slice_urn to_slice_urn
+     * @param to_sliver_guid to_sliver_guid
+     * @param to_pass to_pass
+     * @param node_properties node_properties
+     * @param credentials credentials
+     * @return map of string and object
      */
     public Map<String, Object> performSliceStitch(String from_slice_urn, String from_sliver_guid, String to_slice_urn,
             String to_sliver_guid, String to_pass, Map<String, ?> node_properties, Object[] credentials) {
@@ -1569,12 +1570,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Undo previously create stitch. No password required, can be initiated by either side of the stitch.
      * 
-     * @param from_slice_urn
-     * @param from_sliver_guid
-     * @param to_slice_urn
-     * @param to_sliver_guid
-     * @param credentials
-     * @return
+     * @param from_slice_urn from_slice_urn
+     * @param from_sliver_guid from_sliver_guid
+     * @param to_slice_urn to_slice_urn
+     * @param to_sliver_guid to_sliver_guid
+     * @param credentials credentials
+     * @return map of string to object
      */
     public Map<String, Object> undoSliceStitch(String from_slice_urn, String from_sliver_guid, String to_slice_urn,
             String to_sliver_guid, Object[] credentials) {
@@ -1797,8 +1798,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Deletes the slices in the slice with input sliceId; Issue close on all underlying reservations
      * 
-     * @param sliceId
-     * @return
+     * @param slice_urn slice_urn
+     * @param credentials credentials
+     * @return map of string to object
      */
     public Map<String, Object> deleteSlice(String slice_urn, Object[] credentials) {
         IOrcaServiceManager sm = null;
@@ -1918,8 +1920,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Retrieve urns/names of all slices belonging to the owner of the credentials
      * 
-     * @param credentials
-     * @return
+     * @param credentials credentials
+     * @return map of string to object
      */
     public Map<String, Object> listSlices(Object[] credentials) {
         List<String> ret = new ArrayList<String>();
@@ -1958,7 +1960,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     }
 
     /**
-     * 
+     * @param slice_urn slice_urn
+     * @param credentials credentials
+     * @param newTermEnd newTermEnd
+     * @return map of string to object
      */
     public Map<String, Object> renewSlice(String slice_urn, Object[] credentials, String newTermEnd) {
         IOrcaServiceManager sm = null;
@@ -2123,11 +2128,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
      * Return current and pending states of a sliver in a list of maps of pName, pValue. One map per unit. If
      * sliver_guids list is empty state of all reservations in the slice is returned
      * 
-     * @param slice_urn
-     * @param sliver_guid
+     * @param slice_urn slice_urn
+     * @param sliver_guids
      *            - list of guids
-     * @param credentials
-     * @return
+     * @param credentials credentials
+     * @return map of string to object
      */
     public Map<String, Object> getReservationStates(String slice_urn, List<String> sliver_guids, Object[] credentials) {
         IOrcaServiceManager sm = null;
@@ -2220,10 +2225,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Return unit properties of a sliver in a list of maps of pName, pValue. One map per unit.
      * 
-     * @param slice_urn
-     * @param sliver_guid
-     * @param credentials
-     * @return
+     * @param slice_urn slice_urn
+     * @param sliver_guid sliver_guid
+     * @param credentials credentials
+     * @return map of string to object
      */
     public Map<String, Object> getSliverProperties(String slice_urn, String sliver_guid, Object[] credentials) {
         IOrcaServiceManager sm = null;
@@ -2299,10 +2304,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
      * Get information about reservation stitches to other slices in the form of map of maps of maps (reservation id,
      * stitching guid, stitching properties)
      * 
-     * @param slice_urn
-     * @param sliver_guids
-     * @param credentials
-     * @return
+     * @param slice_urn slice_urn
+     * @param sliver_guids sliver_guids
+     * @param credentials credentials
+     * @return map of string to object
      */
     public Map<String, Object> getReservationSliceStitchInfo(String slice_urn, List<String> sliver_guids,
             Object[] credentials) {
@@ -2397,12 +2402,12 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
      * Takes on modify properties as a list of maps. Most times the list need only have one entry of one map, however
      * this way we can have multiple maps, as e.g. for modifying SSH keys
      * 
-     * @param slice_urn
-     * @param sliver_guid
-     * @param credentials
-     * @param modifySubcommand
-     * @param modifyProperties
-     * @return
+     * @param slice_urn slice_urn
+     * @param sliver_guid sliver_guid
+     * @param credentials credentials
+     * @param modifySubcommand modifySubcommand
+     * @param modifyProperties modifyProperties
+     * @return map of string to object
      */
     public Map<String, Object> modifySliver(String slice_urn, String sliver_guid, Object[] credentials,
             String modifySubcommand, List<Map<String, ?>> modifyProperties) {
@@ -2547,9 +2552,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Check against a list of patterns
      * 
-     * @param dn
-     * @return
-     * @throws Exception
+     * @param dn dn
+     * @param fileName fileName
+     * @return true or false
+     * @throws Exception in case of error
      */
     private boolean checkList(String dn, String fileName) throws Exception {
 
@@ -2566,8 +2572,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * Check this user against an optional blacklist and a mandatory whitelist (in that order)
      * 
-     * @param dn
-     * @return
+     * @param dn dn
+     * @return true or false
+     * @throws Exception in case of error
      */
     private boolean checkWhitelist(String dn) throws Exception {
 
@@ -2599,7 +2606,8 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     /**
      * This function runs a memory check. Returns true if memory state is OK, false otherwise.
      * 
-     * @return
+     * @param mThresh mThresh 
+     * @return true or false
      */
     private boolean checkMemory(Double mThresh) {
         try {

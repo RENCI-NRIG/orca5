@@ -179,6 +179,8 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
 
     /**
      * Send a command over stdin
+     * @param cmd cmd
+     * @throws IOException in case of error
      */
     protected void sendCommand(String cmd) throws IOException {
         byte[] cmdBytes = cmd.getBytes();
@@ -189,6 +191,9 @@ public abstract class SSHConsoleDevice extends ConsoleDevice {
 
     /**
      * Try reading some output from stdout.
+     * @param timeout timeout
+     * @return String
+     * @throws IOException in case of error
      */
     protected String readOutput(int timeout) throws IOException {
         final int BUFF_SIZE = 8192;

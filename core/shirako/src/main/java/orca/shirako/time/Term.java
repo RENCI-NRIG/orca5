@@ -34,7 +34,7 @@ import orca.util.persistence.Persistent;
  * </p>
  * <p>
  * The length of a term is measured as the number of milliseconds in the
- * <bold>closed</bold> interval [<code>newStart</code>,<code>end</code>].
+ * closed interval [<code>newStart</code>,<code>end</code>].
  * This number will be returned when calling {@link #getLength}. To obtain the
  * number of milliseconds in the closed interval [<code>start</code>,<code>end</code>],
  * use {@link #getFullLength()}.
@@ -99,7 +99,6 @@ public class Term implements Cloneable, Persistable
      *
      * @param t1 first term
      * @param t2 second term
-     * @param logger logger
      */
     public static void logComparison(final Term t1, final Term t2)
     {
@@ -686,7 +685,7 @@ public class Term implements Cloneable, Persistable
     /**
      * Returns a readable string representation of this term.
      *
-     * @return
+     * @return a readable string representation of this term
      */
     public String toReadableString()
     {

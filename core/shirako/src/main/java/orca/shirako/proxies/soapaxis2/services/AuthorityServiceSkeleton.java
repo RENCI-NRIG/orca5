@@ -48,8 +48,9 @@ public class AuthorityServiceSkeleton extends BrokerServiceSkeleton {
 
     /**
      * Converts a soap.beans.Reservation to a slices.Reservation
-     * @param beanReservation
-     * @return
+     * @param beanReservation beanReservation
+     * @return IAuthorityReservation
+     * @throws Exception in case of error
      */
     protected IAuthorityReservation passAuthority(orca.shirako.proxies.soapaxis2.beans.Reservation beanReservation) throws Exception {
         // translate all beans to slices objects

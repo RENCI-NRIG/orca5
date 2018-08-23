@@ -120,8 +120,8 @@ public class SliceStateMachine {
     /**
      * Create a new state machine for new or restored slice
      * 
-     * @param sid
-     * @param restore
+     * @param sid sid
+     * @param recover recover 
      */
     public SliceStateMachine(String sid, boolean recover) {
         if (recover)
@@ -150,7 +150,7 @@ public class SliceStateMachine {
      * We don't introduce a special state to flag when a slice is ALL FAILED, however this helper function helps decide
      * when to GC a slice
      * 
-     * @return
+     * @return true or false
      */
     public boolean allFailed() {
         List<ReservationMng> allRes = getSliceReservations();
@@ -168,9 +168,9 @@ public class SliceStateMachine {
     /**
      * Attempt to transition a slice to a new state
      * 
-     * @param cmd
-     * @return
-     * @throws SliceTransitionException
+     * @param cmd cmd
+     * @return SliceState
+     * @throws SliceTransitionException in case of error
      */
     public SliceState transitionSlice(SliceCommand cmd) throws SliceTransitionException {
 

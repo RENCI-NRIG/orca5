@@ -29,7 +29,7 @@ public class ReservationFactory
      *
      * @return reservation instance
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static IReservation createInstance(Properties p) throws Exception
     {

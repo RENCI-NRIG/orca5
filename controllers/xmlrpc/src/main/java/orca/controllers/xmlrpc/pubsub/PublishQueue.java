@@ -47,7 +47,7 @@ public final class PublishQueue implements Serializable {
     /**
      * Add a new slices for processing
      * 
-     * @param slice
+     * @param slice slice
      */
     public void addToNewSlicesQ(SliceState slice) {
         // locking this separately from the main object monitor /ib
@@ -59,7 +59,7 @@ public final class PublishQueue implements Serializable {
     /**
      * Add a modified slice to publish queue
      * 
-     * @param sliceID
+     * @param sliceID slice id
      */
     public void addToModifiedSlicesQ(String sliceID) {
         synchronized (modifiedSlices) {
@@ -70,7 +70,7 @@ public final class PublishQueue implements Serializable {
     /**
      * Flag slice as deleted
      * 
-     * @param sliceUrn
+     * @param sliceID sliceID
      */
     public void addToDeletedSlicesQ(String sliceID) {
         // locking this separately from main object monitor /ib
@@ -156,6 +156,8 @@ public final class PublishQueue implements Serializable {
 
     /**
      * If the singleton implements Serializable, then this method must be supplied.
+     * @throws ObjectStreamException in case of error
+     * @return Object
      */
     private Object readResolve() throws ObjectStreamException {
         return fINSTANCE;

@@ -39,8 +39,8 @@ public class SharpCertificate
 	
 	/**
 	 * Checks if the sharp certificate is rooted at the specified master certificate.
-	 * @param master
-	 * @return
+	 * @param root root 
+	 * @return true or false
 	 */
 	public boolean startsWith(Certificate root)
 	{
@@ -73,10 +73,10 @@ public class SharpCertificate
 	}
 	/**
 	 * Validates recursively the certificate chain.
-	 * @param issuer
-	 * @param holder
-	 * @param signature
-	 * @return
+	 * @param issuer issuer
+	 * @param holder holder 
+	 * @param signature signature
+	 * @return true or false
 	 */
 	protected boolean validateSignatures(SharpCertificate issuer, Certificate holder, byte[] signature)
 	{

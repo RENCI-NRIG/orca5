@@ -177,7 +177,8 @@ public class SoapAxis2BrokerProxy extends SoapAxis2Proxy implements IBrokerProxy
      * Converts a slices reservation to a reservation bean that can be sent over
      * SOAP.
      * @param reservation The slices reservation
-     * @return
+     * @param auth auth
+     * @return orca.shirako.proxies.soapaxis2.beans.Reservation
      */
     protected orca.shirako.proxies.soapaxis2.beans.Reservation passBrokerReservation(IReservation reservation, AuthToken auth) {
         IClientReservation r = (IClientReservation) reservation;

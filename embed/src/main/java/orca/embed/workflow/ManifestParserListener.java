@@ -473,6 +473,7 @@ public class ManifestParserListener implements INdlManifestModelListener, INdlRe
 
     /**
      * Various post-parse getters
+     * @return list of network elems
      */
 
     public LinkedList<NetworkElement> getDeviceList() {

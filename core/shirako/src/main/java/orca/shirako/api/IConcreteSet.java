@@ -125,6 +125,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
 
     /**
      * Returns the current number of units in the concrete set.
+     * @return the current number of units in the concrete set
      */
     public int getUnits();
 
@@ -164,7 +165,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * Removes the passed set from the current set. Optionally triggers
      * configuration actions for all removed units. If the lease term for the
      * concrete set has changed, this call must be followed by a call to
-     * {@link #extend(Term)}.
+     * extend(Term).
      * @param set set to remove
      * @param configure if true, configuration actions will be triggered for all
      *            removed units
@@ -186,6 +187,7 @@ public interface IConcreteSet extends Persistable, Recoverable {
      * @param type abstract resources resource type
      * @param units abstract resources units
      * @param term abstract resources term
+     * @throws Exception in case of error
      */
     public void validateConcrete(ResourceType type, int units, Term term) throws Exception;
 
