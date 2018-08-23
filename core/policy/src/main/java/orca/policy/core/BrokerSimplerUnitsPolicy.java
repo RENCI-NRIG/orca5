@@ -441,7 +441,7 @@ public class BrokerSimplerUnitsPolicy extends BrokerPriorityPolicy implements Qu
     /**
      * Recovers a ticketed reservation.
      * @param reservation reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitTicketed(final IBrokerReservation reservation) throws Exception {
         ResourceSet rset = reservation.getResources();

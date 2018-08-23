@@ -80,6 +80,7 @@
 
      /**
      * isReaderMTOMAware
+     * @param reader reader
      * @return true if the reader supports MTOM
      */
    public static boolean isReaderMTOMAware(javax.xml.stream.XMLStreamReader reader) {
@@ -96,8 +97,8 @@
      
         /**
         *
-        * @param parentQName
-        * @param factory
+        * @param parentQName parentQName
+        * @param factory factory
         * @return org.apache.axiom.om.OMElement
         */
        public org.apache.axiom.om.OMElement getOMElement(
@@ -114,8 +115,8 @@
 
      /**
      *
-     * @param parentQName
-     * @param factory
+     * @param parentQName parentQName
+     * @param factory factory
      * @return org.apache.axiom.om.OMElement
      */
     public org.apache.axiom.om.OMDataSource getOMDataSource(
@@ -342,6 +343,9 @@
         *                If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
+        * @param reader reader
+        * @return  Property
+        * @throws java.lang.Exception in case of error
         */
         public static Property parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
             Property object = new Property();

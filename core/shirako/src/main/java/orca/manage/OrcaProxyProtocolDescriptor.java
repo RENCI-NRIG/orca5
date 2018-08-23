@@ -47,7 +47,7 @@ public class OrcaProxyProtocolDescriptor
 
     /**
      * Returns the protocol name.
-     * @return
+     * @return protocol name
      */
     public String getProtocol()
     {

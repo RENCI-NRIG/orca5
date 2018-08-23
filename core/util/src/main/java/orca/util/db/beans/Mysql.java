@@ -22,15 +22,15 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="mysql">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="entry" type="{http://issg.cs.duke.edu/cod/plugins/beans}mysqlentry" maxOccurs="unbounded"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="mysql"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="entry" type="{http://issg.cs.duke.edu/cod/plugins/beans}mysqlentry" maxOccurs="unbounded"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -64,6 +64,7 @@ public class Mysql {
      * Objects of the following type(s) are allowed in the list
      * {@link Mysqlentry }
      * 
+     * @return list of the Entry 
      * 
      */
     public List<Mysqlentry> getEntry() {

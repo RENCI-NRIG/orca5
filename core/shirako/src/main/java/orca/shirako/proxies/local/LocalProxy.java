@@ -170,7 +170,7 @@ public class LocalProxy extends Proxy implements ICallbackProxy {
 
     /**
      * Returns the actor represented by this proxy
-     * @return
+     * @return IActor
      */
     public IActor getActor() {
         IActor result = ActorRegistry.getActor(getName());

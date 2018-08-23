@@ -36,16 +36,16 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * Performs initialization actions as a result of the actor being
      * added to the container.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void actorAdded() throws Exception;
 
     /**
      * Adds a new broker proxy record.
      *
-     * @param broker
+     * @param broker broker proxy
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void addBroker(IBrokerProxy broker) throws Exception;
 
@@ -55,7 +55,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * @param key key for the record
      * @param map mapping object
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void addConfigurationMapping(String key, ConfigurationMapping map)
                                  throws Exception;
@@ -64,9 +64,9 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * Adds a new record to the database representing this reservation
      * object.
      *
-     * @param reservation
+     * @param reservation reservation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void addReservation(IReservation reservation) throws Exception;
 
@@ -76,7 +76,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @param slice Slice object
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void addSlice(ISlice slice) throws Exception;
 
@@ -84,27 +84,27 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * Retrieves all reservations for which this actor acts as a
      * broker.
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getBrokerReservations() throws Exception;
 
     /**
      * Retrieves all reservations for which this actor acts as a site.
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getAuthorityReservations() throws Exception;
 
     /**
      * Retrieves all broker proxies.
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getBrokers() throws Exception;
 
@@ -113,9 +113,9 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * For a broker, should return only agent reservations. For a site, should
      * return both agent and authority reservations.
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getClientReservations() throws Exception;
 
@@ -127,7 +127,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * @return a vector containing one or more properties lists representing
      *         serialized client slices
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getClientSlices() throws Exception;
 
@@ -138,7 +138,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @return a vector containing a properties list
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getConfigurationMapping(String key) throws Exception;
 
@@ -148,7 +148,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * @return a vector containing one or more properties lists representing
      *         configuration mapping records
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getConfigurationMappings() throws Exception;
 
@@ -156,19 +156,20 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * Retrieves all reservations representing resources held by this
      * actor Broker/service manager.
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getHoldings() throws Exception;
 
     /**
      * Retrieves all reservations representing resources held by this
      * actor Broker/service manager.
+     * @param sliceId sliceId
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getHoldings(SliceID sliceId) throws Exception;
 
@@ -178,7 +179,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * @return a vector containing one or more properties lists representing
      *         serialized inventory slices
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getInventorySlices() throws Exception;
 
@@ -187,56 +188,57 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @param rid Reservation identifier
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservation(ReservationID rid) throws Exception;
 
     /**
      * Retrieves all reservation records.
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservations() throws Exception;
     
     /**
      * Retrieves all reservation records matching SQL pattern (not REGEX!)
      *
-     * @return
+     * @param sqlPat sqlPat
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservations(String sqlPat) throws Exception;
     
     
     /**
      * Retrieves all reservation records matching this state
-     * @param state
-     * @return
-     * @throws Exception
+     * @param state state
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservations(Integer state) throws Exception;
     
     /**
      * Retrieves the specified reservation records.
      * The order in the return vector is the same order as @rids
-     * @param rids
-     * @return
-     * @throws Exception
+     * @param rids rids
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservations(List<ReservationID> rids) throws Exception;
     /**
      * Retrieves all reservation records that belong to the specified
      * slice.
      *
-     * @param sliceID
+     * @param sliceID slice id
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservations(SliceID sliceID) throws Exception;
 
@@ -244,20 +246,21 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * Retrieves all reservation records that belong to the specified
      * slice and match the specified string
      *
-     * @param sliceID
+     * @param sliceID slice id
+     * @param str str
      *
-     * @return
+     * @return vector of properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservations(SliceID sliceID, String str) throws Exception;
 
     /**
      * Retrieves all reservations with a specific state in this slice
-     * @param sliceID
-     * @param state
-     * @return
-     * @throws Exception
+     * @param sliceID slice id
+     * @param state state
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getReservations(SliceID sliceID, Integer state) throws Exception;
     
@@ -272,7 +275,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @return a vector containing a properties list
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getSlice(ResourceType type) throws Exception;
 
@@ -283,7 +286,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @return a vector containing a properties list
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getSlice(SliceID sliceID) throws Exception;
 
@@ -293,7 +296,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * @return a vector containing one or more properties lists representing
      *         serialized slices
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Vector<Properties> getSlices() throws Exception;
 
@@ -304,9 +307,9 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
     /**
      * Removes the specified broker proxy record.
      *
-     * @param broker
+     * @param broker broker proxy
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeBroker(IBrokerProxy broker) throws Exception;
 
@@ -315,16 +318,16 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @param key key
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeConfigurationMapping(String key) throws Exception;
 
     /**
      * Removes the corresponding reservation object.
      *
-     * @param rid
+     * @param rid reservation id
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeReservation(ReservationID rid) throws Exception;
 
@@ -333,7 +336,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @param sliceID slice name
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeSlice(SliceID sliceID) throws Exception;
 
@@ -357,16 +360,16 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * database state. If true, when the database class starts it will clean
      * any state in the database. Default: false.
      *
-     * @param value
+     * @param value value
      */
     public void setResetState(boolean value);
 
     /**
      * Updates the specified broker proxy record.
      *
-     * @param broker
+     * @param broker broker proxy
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateBroker(IBrokerProxy broker) throws Exception;
 
@@ -376,7 +379,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      * @param key record key
      * @param map mapping object
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateConfigurationMapping(String key, ConfigurationMapping map)
                                     throws Exception;
@@ -384,9 +387,9 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
     /**
      * Updates the corresponding reservation object.
      *
-     * @param reservation
+     * @param reservation reservation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateReservation(IReservation reservation) throws Exception;
 
@@ -395,7 +398,7 @@ public interface IDatabase extends Initializable, Persistable, Recoverable
      *
      * @param slice slice object
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateSlice(ISlice slice) throws Exception;
 }

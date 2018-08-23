@@ -85,7 +85,7 @@ public class DriverFactory
      * @param id Unique driver identifier
      * @param className Name of the class implementing the driver. The class
      *            should be resolvable by the class loader
-     * @return
+     * @return int
      */
     public int install(DriverId id, String className)
     {
@@ -125,7 +125,7 @@ public class DriverFactory
      * Upgrades the specified driver
      * @param id Driver identifier
      * @param className Class name for the driver class
-     * @return
+     * @return int
      */
     public int upgrade(DriverId id, String className)
     {
@@ -156,7 +156,7 @@ public class DriverFactory
     /**
      * Uninstalls the specified driver
      * @param id Driver identifier
-     * @return
+     * @return int
      */
     public int uninstall(DriverId id)
     {
@@ -196,7 +196,7 @@ public class DriverFactory
     /**
      * Obtains a driver
      * @param id Driver identifier
-     * @return
+     * @return IDriver
      */
     public IDriver getDriver(DriverId id)
     {
@@ -219,7 +219,7 @@ public class DriverFactory
     /**
      * Releases a driver after use
      * @param driver The driver
-     * @return
+     * @return int
      */
     public int releaseDriver(IDriver driver)
     {
@@ -251,7 +251,7 @@ public class DriverFactory
     /**
      * Loads the installed drivers
      * @param file File name
-     * @return
+     * @return int
      */
     public int load(String file)
     {
@@ -261,6 +261,7 @@ public class DriverFactory
     /**
      * Saves the installed drivers
      * @param file File name
+     * @return int
      */
     public int save(String file)
     {
@@ -270,7 +271,7 @@ public class DriverFactory
     /**
      * Obtains the specified Driver entry
      * @param id
-     * @return
+     * @return DriverEntry
      */
     protected DriverEntry getDriverEntry(DriverId id)
     {

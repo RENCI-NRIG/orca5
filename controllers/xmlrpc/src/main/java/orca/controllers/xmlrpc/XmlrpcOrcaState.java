@@ -135,7 +135,7 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Get hold of the Update Thread object
      * 
-     * @return
+     * @return ReservationStatusUpdateThread
      */
     public static ReservationStatusUpdateThread getSUT() {
         return sut;
@@ -144,7 +144,7 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Get hold of Slice Defer Thread object
      * 
-     * @return
+     * @return SliceDeferThread
      */
     public static SliceDeferThread getSDT() {
         return sdt;
@@ -180,7 +180,7 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Passes in by reference, so it can be modified
      * 
-     * @return
+     * @return hashmap of string and bitset
      */
     public synchronized HashMap<String, BitSet> getControllerAssignedLabel() {
         return controllerAssignedLabel;
@@ -223,7 +223,7 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Add new previously constructed slice
      * 
-     * @param s
+     * @param s s
      */
     public void addSlice(XmlrpcControllerSlice s) {
         if (s != null) {
@@ -236,7 +236,7 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Remove slice form Orca state by slice object (slice lock must be held)
      * 
-     * @param s
+     * @param s s
      */
     public void removeSlice(XmlrpcControllerSlice s) {
         if (s != null) {
@@ -251,7 +251,7 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Remove slice from Orca state by id (slice lock must be held)
      * 
-     * @param sid
+     * @param sid sid
      */
     public void removeSlice(SliceID sid) {
         if (sid != null) {
@@ -266,8 +266,8 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Get an existing controller slice for this ID
      * 
-     * @param sid
-     * @return
+     * @param sid sid
+     * @return XmlrpcControllerSlice
      */
     public XmlrpcControllerSlice getSlice(SliceID sid) {
         if (sid == null)
@@ -281,8 +281,8 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * Get an existing controller slice for this urn
      * 
-     * @param urn
-     * @return
+     * @param urn urn
+     * @return XmlrpcControllerSlice
      */
     public XmlrpcControllerSlice getSlice(String urn) {
         String sid = XmlrpcControllerSlice.getSliceIDForUrn(urn);
@@ -428,8 +428,8 @@ public final class XmlrpcOrcaState implements Serializable {
      * Get all slices for this user dn. This used to skip Dead or Closed slices, but those are now returned to allow a
      * user to examine a slice that failed on creation from Issue 88: https://github.com/RENCI-NRIG/orca5/issues/88
      *
-     * @param userDn
-     * @return
+     * @param userDn userDn
+     * @return list of slices
      */
     public List<String> getSlices(String userDn) {
 
@@ -453,6 +453,8 @@ public final class XmlrpcOrcaState implements Serializable {
 
     /**
      * If the singleton implements Serializable, then this method must be supplied.
+     * @return Object
+     * @throws ObjectStreamException in case of error
      */
     private Object readResolve() throws ObjectStreamException {
         return fINSTANCE;
@@ -471,6 +473,7 @@ public final class XmlrpcOrcaState implements Serializable {
 
     /**
      * Recover by querying the SM
+     * @throws Exception in case of error
      */
     public synchronized void recover() throws Exception {
         logger.info("Recovering XmlrpcOrcaState");
@@ -576,8 +579,11 @@ public final class XmlrpcOrcaState implements Serializable {
     /**
      * recover the slice from parsing the manifest
      * 
-     * @param sm
-     * @param sid
+     * @param sm sm
+     * @param sid sid
+     * @param name name
+     * @param userDN userDN
+     * @param users users
      */
     private XmlrpcControllerSlice recoverSlice(IOrcaServiceManager sm, String sid, String name, String userDN,
             List<Map<String, ?>> users) {
@@ -604,6 +610,7 @@ public final class XmlrpcOrcaState implements Serializable {
 
     /**
      * Recover tags by querying the SM
+     * @param sm sm
      */
     public synchronized void syncTags(IOrcaServiceManager sm) {
         logger.info("Sync global tag for domains");

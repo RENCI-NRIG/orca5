@@ -20,18 +20,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="handler">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/>
- *       &lt;/all>
- *       &lt;attribute name="packageId" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="path" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="pluginId" type="{http://www.w3.org/2001/XMLSchema}string" />
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="handler"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *       &lt;attribute name="packageId" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="path" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="pluginId" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

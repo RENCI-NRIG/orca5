@@ -24,7 +24,7 @@ import javax.net.ssl.X509KeyManager;
  * The intent of the class is to be used together with the ContextualSSLProtocolFactory
  * which can then be used with apache XMLRPC client. By calling setCurrentGuid() immediately
  * prior to making XMLRPC call, you can ensure that the XMLRPC client uses a specific identity.
- * <p>
+ * </p>
  * <p>
  * The implementation is thread safe
  * </p>
@@ -75,9 +75,9 @@ public class MultiKeyManager implements X509KeyManager {
 	
 	/**
 	 * Add a private key with specific alias/guid to multikey entry
-	 * @param g
-	 * @param k
-	 * @param c
+	 * @param g guid
+	 * @param k key
+	 * @param c certificate
 	 */
 	public synchronized void addPrivateKey(String g, PrivateKey k, Certificate c) {
 		Certificate[] chain = { c };
@@ -101,9 +101,9 @@ public class MultiKeyManager implements X509KeyManager {
 	
 	/**
 	 * Add a private key with a certificate chain.
-	 * @param g
-	 * @param k
-	 * @param chain
+	 * @param g guid
+	 * @param k key
+	 * @param chain certificate array
 	 */
 	public synchronized void addPrivateKey(String g, PrivateKey k, Certificate[] chain) {
 		try {
@@ -126,8 +126,8 @@ public class MultiKeyManager implements X509KeyManager {
 	
 	/**
 	 * Add a trusted certificate to multikey store
-	 * @param g
-	 * @param c
+	 * @param g guid
+	 * @param c certificate
 	 */
 	public synchronized void addTrustedCert(String g, Certificate c) {
 		try {
@@ -217,10 +217,10 @@ public class MultiKeyManager implements X509KeyManager {
 	
 	/**
 	 * Find a X509 Key Manager compatible with a particular algorithm
-	 * @param algorithm
-	 * @param kmFact
-	 * @return
-	 * @throws NoSuchAlgorithmException
+	 * @param algorithm algorithm
+	 * @param kmFact key manager factory
+	 * @return returns X509 Key Manager
+	 * @throws NoSuchAlgorithmException in case of failure to generate key manager
 	 */
 	public static X509KeyManager getX509KeyManager(String algorithm, KeyManagerFactory kmFact)
 	throws NoSuchAlgorithmException {

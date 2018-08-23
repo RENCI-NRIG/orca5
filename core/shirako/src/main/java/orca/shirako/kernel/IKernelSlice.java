@@ -68,7 +68,7 @@ public interface IKernelSlice extends ISlice
      * Prepares to register a new slice.  Clears previous state, such
      * as list of reservations in the slice.
      *
-     * @throws Exception if validity checks fail
+     * @throws OrcaException if validity checks fail
      */
     public void prepare() throws OrcaException;
 
@@ -77,7 +77,7 @@ public interface IKernelSlice extends ISlice
      *
      * @param reservation reservation to register
      *
-     * @throws Exception
+     * @throws OrcaException in case of error
      */
     public void register(IKernelReservation reservation) throws Exception;
 
@@ -89,7 +89,6 @@ public interface IKernelSlice extends ISlice
      *
      * @return the reservation with that ID
      *
-     * @throws Exception
      */
     public IKernelReservation softLookup(ReservationID rid);
 

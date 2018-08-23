@@ -35,15 +35,15 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * Informs the control about a source ticket. Depending on the control
      * implementation, the control may choose to treat each source ticket as
      * inventory.
-     * @param r
-     * @throws Exception
+     * @param r r
+     * @throws Exception in case of error
      */
     public void donate(IClientReservation r) throws Exception;
 
     /**
      * Informs the control about physical inventory.
      * @param set set of inventory resources (inventory units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void donate(ResourceSet set) throws Exception;
 
@@ -51,7 +51,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * Forcefully removes the specified resources from the control's inventory.
      * @param rset set of resources to eject from the inventory (inventory
      *            units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void eject(ResourceSet rset) throws Exception;
 
@@ -62,14 +62,14 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * control), the control will be notified through
      * {@link #freed(ResourceSet)}.
      * @param resources set of released resources (allocated units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void release(ResourceSet resources) throws Exception;
 
     /**
      * Notifies the control that inventory resources are now available for use.
      * @param rset inventory resources that have become available (inventory units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void available(ResourceSet rset) throws Exception;
 
@@ -77,7 +77,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * Indicates that some inventory resources should be marked as unavailable.
      * @param rset resources (inventory units)
      * @return -1 if at least one resource unit is currently in use; 0 otherwise
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public int unavailable(ResourceSet rset) throws Exception;
 
@@ -85,7 +85,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * Indicates that previously committed resources have been freed. Most
      * likely these resources represent failed allocations.
      * @param set set of freed resources (allocated units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void freed(ResourceSet set) throws Exception;
 
@@ -93,7 +93,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * Notifies the control that some inventory resources have failed and cannot
      * be used to satisfy client requests.
      * @param set set of failed resources (inventory units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void failed(ResourceSet set) throws Exception;
 
@@ -101,7 +101,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * Notifies the policy that previously failed resources have been recovered
      * and can be safely used to satisfy client requests.
      * @param set set of recovered resources
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void recovered(ResourceSet set) throws Exception;
 
@@ -109,7 +109,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * Assigns resources to the reservation.
      * @param reservation reservation
      * @return resources assigned to the reservation (allocated units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public ResourceSet assign(IAuthorityReservation reservation) throws Exception;
 
@@ -124,7 +124,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
      * reservation must be sent back to the client even though it has a deficit.
      * @param reservation reservation with a deficit
      * @return resources allocated/removed so that the deficit is corrected (allocated units)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public ResourceSet correctDeficit(IAuthorityReservation reservation) throws Exception;
 
@@ -148,7 +148,7 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
     /**
      * Recovers state for a reservation.
      * @param r reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void revisit(IReservation r) throws Exception;
 
@@ -185,20 +185,20 @@ public interface IResourceControl extends Initializable, Persistable, Recoverabl
 
     /**
      * Instructs the control the handle the specified type.
-     * @param type
+     * @param type type
      */
     public void addType(ResourceType type);
     
     /**
      * Informs the control that it no longer handles the specified type.
-     * @param type
+     * @param type type
      */
     public void removeType(ResourceType type);
     
     /**
      * Registers the specified resource type with the resource control.
      * FIXME: what is the relationship with addType. Should there be unregister
-     * @param type
+     * @param type type
      */
     public void registerType(ResourceType type);
 

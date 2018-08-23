@@ -159,8 +159,9 @@ public class JuniperRouterDevice extends JunosSSLDevice implements IRouterDevice
     /**
      * The parameter e is of the form ge-[a-b]/[c-d]/[e-f], ... where a, b, c, d ,e ,f are non-negative integers
      * 
-     * @param e
+     * @param e e
      * @return a list of string to which this pseudo-regular expression expands
+     * @throws CommandException in case of error
      */
     protected static List<String> expandInterfacePattern(String e) throws CommandException {
 
@@ -187,9 +188,10 @@ public class JuniperRouterDevice extends JunosSSLDevice implements IRouterDevice
     }
 
     /**
-     * @param vlanTag
+     * @param vlanTag vlanTag
      * @param ports
      *            - of type xe-[0-9]/[0-9]/[0-9], ge-[0-9]/[0-9]/[0-9]
+     * @throws CommandException in case of error
      */
     public void addAccessPortsToVLAN(String vlanTag, String ports) throws CommandException {
         commandBuffer = "";

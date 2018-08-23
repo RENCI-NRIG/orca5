@@ -20,7 +20,7 @@ import orca.shirako.util.ReservationList;
  * <code>SourceCalendar</code> organizes state for a reservation used as a
  * source for client reservations. A source calendar maintains a list of
  * "outlays", client reservations that have been allocated from the source
- * reservation. The outlay calendar is organized by <bold>real</bold> time.
+ * reservation. The outlay calendar is organized by real time.
  * <p>
  * The calendar also maintains a list of incoming extension requests for
  * reservations that have been satisfied from the underlying source
@@ -51,6 +51,7 @@ public class SourceCalendar
 
     /**
      * Creates a new instance.
+     * @param clock clock
      * @param source source reservation
      */
     public SourceCalendar(ActorClock clock, IReservation source)

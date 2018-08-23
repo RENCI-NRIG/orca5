@@ -83,7 +83,8 @@ public class AuthorityManagementObject extends ServerActorManagementObject {
 	/**
 	 * Retrieves all reservations for which this actor is the authority
 	 * 
-	 * @return
+	 * @param caller caller auth token
+	 * @return all reservations
 	 */
 	public ResultReservationMng getAuthorityReservations(AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -291,8 +292,9 @@ public class AuthorityManagementObject extends ServerActorManagementObject {
 	/**
 	 * Returns all units that belong to this reservation.
 	 * 
-	 * @reservationID Reservation id
-	 * @caller AuthToken of the caller
+	 * @param reservationID Reservation id
+	 * @param caller AuthToken of the caller
+         * @return return the result unit
 	 */
 	public ResultUnitMng getReservationUnits(ReservationID reservationID, AuthToken caller) {
 		ResultUnitMng result = new ResultUnitMng();
@@ -331,8 +333,9 @@ public class AuthorityManagementObject extends ServerActorManagementObject {
 	/**
 	 * Returns all units that belong to this reservation.
 	 * 
-	 * @reservationID Reservation id
-	 * @caller AuthToken of the caller
+	 * @param unitID unit id
+	 * @param caller AuthToken of the caller
+         * @return return the result unit
 	 */
 	public ResultUnitMng getUnit(UnitID unitID, AuthToken caller) {
 		ResultUnitMng result = new ResultUnitMng();

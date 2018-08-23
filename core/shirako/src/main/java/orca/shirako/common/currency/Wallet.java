@@ -25,7 +25,7 @@ public class Wallet
     
     /**
      * Adds a new credits note to the wallet.
-     * @param note
+     * @param note note
      */
     public void add(CreditsNote note)
     {

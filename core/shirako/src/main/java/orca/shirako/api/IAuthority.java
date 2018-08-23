@@ -23,9 +23,9 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
      * Informs the actor that the following resources are available for
      * allocation.
      *
-     * @param resources
+     * @param resources resources
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void available(ResourceSet resources) throws Exception;
 
@@ -36,16 +36,16 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
      * @param resources resource set representing resources to be used for
      *        allocation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void donate(ResourceSet resources) throws Exception;
 
     /**
      * Ejects the specified resources from the inventory.
      *
-     * @param resources
+     * @param resources resources
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void eject(ResourceSet resources) throws Exception;
 
@@ -55,7 +55,7 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
      * @param reservation reservation representing a request for a lease
      *        extension
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendLease(IAuthorityReservation reservation) throws Exception;
 
@@ -65,7 +65,7 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
      * @param reservation reservation representing a request for a lease
      *        modification
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modifyLease(IAuthorityReservation reservation) throws Exception;
     
@@ -76,7 +76,7 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
      *
      * @param resources resource set representing freed resources
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void freed(ResourceSet resources) throws Exception;
 
@@ -85,7 +85,7 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
      *
      * @param reservation reservation representing a request for a new lease
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void redeem(IAuthorityReservation reservation) throws Exception;
 
@@ -93,11 +93,11 @@ public interface IAuthority extends IServerActor, IAuthorityPublic
      * Informs the actor that previously donated resources are no
      * longer available for allocation.
      *
-     * @param resources
+     * @param resources resources
      *
      * @return DOCUMENT ME!
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public int unavailable(ResourceSet resources) throws Exception;
 

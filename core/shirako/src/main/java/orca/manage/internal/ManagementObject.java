@@ -59,7 +59,7 @@ import org.apache.log4j.Logger;
  * <p>
  * A <code>ManagerObject</code> can be associated with a given actor. A
  * <code>ManagerObject</code> is associated with an actor if
- * {@link #getActorName()) returns a valid actor name. All manager objects not
+ * {@link ManagementObject#getActorName()} returns a valid actor name. All manager objects not
  * associated with an actor are considered "container-level", even though they
  * may interact with one or more actors.
  * </p>
@@ -86,7 +86,7 @@ public class ManagementObject implements IManagementObject
     /**
      * Unique identifier for this proxy type. All instances of this class should
      * have the same.
-     * <code>typeID<code>, but they may each have a different <code>id</code>.
+     * <code>typeID</code>, but they may each have a different <code>id</code>.
      */
     protected ID typeID;
 
@@ -137,8 +137,7 @@ public class ManagementObject implements IManagementObject
 
     /**
      * Performs initialization of the manager object
-     * @param manager
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void initialize() throws Exception
     {
@@ -155,7 +154,7 @@ public class ManagementObject implements IManagementObject
 
     /**
      * Performs recovery actions for this manager object.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void recover() throws Exception
     {
@@ -224,7 +223,7 @@ public class ManagementObject implements IManagementObject
 
     /**
      * Restore this object from a properties list
-     * @param p
+     * @param p properties
      */
     public void reset(Properties p)
     {
@@ -280,6 +279,7 @@ public class ManagementObject implements IManagementObject
     /**
      * Converts the given stack trace into a string
      * @param trace Stack trace
+     * @return Stack trace string
      */
     public String getStackTraceString(StackTraceElement[] trace)
     {
@@ -311,8 +311,8 @@ public class ManagementObject implements IManagementObject
 	/**
 	 * Checks if the given user is an administrator
 	 * 
-	 * @param token
-	 * @return
+	 * @param token token
+	 * @return true for success; false otherwise
 	 */
 	public boolean isAdmin(AuthToken token) {
 		if (token == null) {
@@ -338,7 +338,7 @@ public class ManagementObject implements IManagementObject
 	 * <li>The user has been granted the right to operate the actor</li>
 	 * </ul>
 	 * 
-	 * @param wrapper Name of the actor
+	 * @param actorName Name of the actor
 	 * @param userToken User credentials
 	 * @return True if the user can operate on the actor, false otherwise
 	 */

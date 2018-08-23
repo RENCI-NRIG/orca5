@@ -58,8 +58,10 @@ public class ResourceBin
     /**
      * Makes a new resource bin.
      * @param guid unique identifier
+     * @param parentGuid parentGuid
      * @param physicalUnits number of physical units
      * @param vector resource vector
+     * @param term term
      */
     public ResourceBin(ID guid, ID parentGuid, int physicalUnits, ResourceVector vector, Term term)
     {
@@ -72,7 +74,7 @@ public class ResourceBin
     
     /**
      * Returns the unique identifier of the bin.
-     * @return
+     * @return guid
      */
     public ID getGuid()
     {
@@ -81,7 +83,7 @@ public class ResourceBin
     
     /**
      * Returns the bin's parent identifier.
-     * @return
+     * @return parent guid
      */
     public ID getParentGuid()
     {
@@ -90,7 +92,7 @@ public class ResourceBin
     
     /**
      * Returns the number of physical units in the bin.
-     * @return
+     * @return physical units
      */
     public int getPhysicalUnits()
     {
@@ -99,7 +101,7 @@ public class ResourceBin
 
     /**
      * Returns the resource vector of the bin.
-     * @return
+     * @return resource vector
      */
     public ResourceVector getVector()
     {

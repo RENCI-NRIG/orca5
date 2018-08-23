@@ -20,8 +20,8 @@ public interface INdlRequestModelListener extends INdlCommonModelListener {
     /**
      * Sets reservation URI
      * 
-     * @param i
-     * @param m
+     * @param i i
+     * @param m m
      */
     public void ndlReservation(Resource i, OntModel m);
 
@@ -35,15 +35,15 @@ public interface INdlRequestModelListener extends INdlCommonModelListener {
     /**
      * Sets reservation term
      * 
-     * @param t
+     * @param d
      *            term resource
-     * @param m
-     * @param years
-     * @param months
-     * @param days
-     * @param hours
-     * @param minutes
-     * @param seconds
+     * @param m m
+     * @param years years
+     * @param months months
+     * @param days days
+     * @param hours hours
+     * @param minutes minutes
+     * @param seconds seconds
      */
     public void ndlReservationTermDuration(Resource d, OntModel m, int years, int months, int days, int hours,
             int minutes, int seconds);
@@ -51,8 +51,8 @@ public interface INdlRequestModelListener extends INdlCommonModelListener {
     /**
      * List of resources in the reservation
      * 
-     * @param r
-     * @param m
+     * @param r r
+     * @param m m
      */
     public void ndlReservationResources(List<Resource> r, OntModel m);
 
@@ -70,18 +70,18 @@ public interface INdlRequestModelListener extends INdlCommonModelListener {
     /**
      * Sets reservation start date
      * 
-     * @param s
-     * @param m
-     * @param start
+     * @param s s
+     * @param m m
+     * @param start start
      */
     public void ndlReservationStart(Literal s, OntModel m, Date start);
 
     /**
      * sets reservation end date
      * 
-     * @param e
-     * @param m
-     * @param end
+     * @param e e
+     * @param m m
+     * @param end end
      */
     public void ndlReservationEnd(Literal e, OntModel m, Date end);
 
@@ -96,27 +96,27 @@ public interface INdlRequestModelListener extends INdlCommonModelListener {
     /**
      * All declared dependencies of this node
      * 
-     * @param ni
-     * @param m
-     * @param dependencies
+     * @param ni ni
+     * @param m m
+     * @param dependencies dependencies
      */
     public void ndlNodeDependencies(Resource ni, OntModel m, Set<Resource> dependencies);
 
     /**
      * All sub-slices within this reservation
      * 
-     * @param sl
-     * @param m
+     * @param sl sl
+     * @param m m
      */
     public void ndlSlice(Resource sl, OntModel m);
 
     /**
      * Broadcast connection, similar to NetworkConnection
      * 
-     * @param bl
-     * @param om
-     * @param bandwidth
-     * @param interfaces
+     * @param bl bl
+     * @param om om
+     * @param bandwidth bandwidth
+     * @param interfaces interfaces
      */
     public void ndlBroadcastConnection(Resource bl, OntModel om, long bandwidth, List<Resource> interfaces);
 

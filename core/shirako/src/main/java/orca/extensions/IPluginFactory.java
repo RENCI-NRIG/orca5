@@ -25,7 +25,7 @@ public interface IPluginFactory
      * Creates all necessary objects that this factory produces. The environment
      * will call this method before calling any of the factory's accessor
      * methods.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void create() throws Exception;
 
@@ -46,13 +46,14 @@ public interface IPluginFactory
     /**
      * Passes configuration properties to be used by the factory.
      * @param p properties list
+     * @throws Exception in case of error
      */
     public void configure(Properties p) throws Exception;
 
     /**
      * Passes configuration properties to be used by the factory.
      * @param p properties serialized as a string.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void configure(String p) throws Exception;
 }

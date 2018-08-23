@@ -26,7 +26,8 @@ public interface IReservationOperations
     /**
      * Fails the specified reservation.
      * @param rid reservation id
-     * @throws Exception
+     * @param message message
+     * @throws Exception in case of error
      */
     public void fail(ReservationID rid, String message) throws Exception;
     /**
@@ -39,9 +40,9 @@ public interface IReservationOperations
      *
      * @param reservation reservation to close
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.ResourceReservation)
+     * @see IReservationOperations#register(IReservation)
      */
     public void close(IReservation reservation) throws Exception;
 
@@ -55,9 +56,9 @@ public interface IReservationOperations
      *
      * @param rid identifier of reservation to close
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.ResourceReservation)
+     * @see IReservationOperations#register(IReservation)
      */
     public void close(ReservationID rid) throws Exception;
 
@@ -70,7 +71,7 @@ public interface IReservationOperations
      *
      * @param reservations set of reservations to close
      *
-     * @see #close(ResourceReservation)
+     * @see IReservationOperations#close(IReservation)
      */
     public void close(ReservationSet reservations);
 
@@ -90,9 +91,9 @@ public interface IReservationOperations
      *        extension
      * @param term term for extension (must extend the current term)
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.ResourceReservation)
+     * @see IReservationOperations#register(IReservation)
      */
     public void extend(IReservation reservation, ResourceSet resources, Term term)
                 throws Exception;
@@ -113,9 +114,9 @@ public interface IReservationOperations
      *        extension
      * @param term term for extension (must extend the current term)
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.ResourceReservation)
+     * @see IReservationOperations#register(IReservation)
      */
     public void extend(ReservationID rid, ResourceSet rset, Term term) throws Exception;
 
@@ -144,7 +145,7 @@ public interface IReservationOperations
      *
      * @param reservation reservation to register
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void register(IReservation reservation) throws Exception;
 
@@ -159,7 +160,7 @@ public interface IReservationOperations
      * @throws Exception if an error occurs or when trying to remove a
      *         reservation that is neither failed or closed.
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.ResourceReservation)
+     * @see IReservationOperations#register(IReservation)
      */
     public void removeReservation(IReservation reservation) throws Exception;
 
@@ -174,7 +175,7 @@ public interface IReservationOperations
      * @throws Exception if an error occurs or when trying to remove a
      *         reservation that is neither failed or closed.
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.ResourceReservation)
+     * @see IReservationOperations#register(IReservation)
      */
     public void removeReservation(ReservationID rid) throws Exception;
 
@@ -184,7 +185,7 @@ public interface IReservationOperations
      *
      * @param reservation reservation to register
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void reregister(IReservation reservation) throws Exception;
 
@@ -194,7 +195,7 @@ public interface IReservationOperations
      *
      * @param reservation reservation to unregister
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void unregister(IReservation reservation) throws Exception;
 
@@ -203,7 +204,7 @@ public interface IReservationOperations
      *
      * @param rid identifier of reservation to unregister
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void unregister(ReservationID rid) throws Exception;
 }

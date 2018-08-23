@@ -52,8 +52,8 @@ public class MapSet
 
     /**
      * Returns true iff the map contains the vale
-     * @param mapkey
-     * @param ovalue
+     * @param mapkey mapkey
+     * @param ovalue ovalue
      * @return if the map contains the value
      */
     public boolean containsValue(Object mapkey, Object ovalue)
@@ -65,8 +65,8 @@ public class MapSet
 
     /**
      * Gets the object indexed by (mapKey, oKey).
-     * @param mapkey a key for a map in this MapSet
-     * @param okey a key for an object in the selected map
+     * @param mapKey a key for a map in this MapSet
+     * @param oKey a key for an object in the selected map
      * @return the indexed object, or null
      */
     public Object get(Object mapKey, Object oKey)
@@ -132,8 +132,8 @@ public class MapSet
     /**
      * Puts an object in this MapSet, indexed by keys for the map and for the
      * object within the map.
-     * @param mapkey a key for the map in this MapSet
-     * @param okey a key for the object in the selected map
+     * @param mapKey a key for the map in this MapSet
+     * @param oKey a key for the object in the selected map
      * @param obj the object to put in the selected map
      * @return object formerly indexed at (mapKey, oKey), or null
      */

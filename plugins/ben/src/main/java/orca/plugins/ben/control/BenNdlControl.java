@@ -135,8 +135,8 @@ public class BenNdlControl extends ResourceControl {
     /**
      * Handle the request
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return RequestReservation
      */
     protected RequestReservation handleRequest(IAuthorityReservation r) {
         ResourceSet requested = r.getRequestedResources();
@@ -179,8 +179,8 @@ public class BenNdlControl extends ResourceControl {
     /**
      * This function has a side-effect of setting type
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return Properties
      */
     protected Properties getTicketProperties(IAuthorityReservation r) {
         // get the requested resources
@@ -295,7 +295,7 @@ public class BenNdlControl extends ResourceControl {
     /**
      * Cleanup connection state for a failed or closed unit
      * 
-     * @param u
+     * @param u u
      */
     protected void closeConnectionCleanup(Unit u) {
         logger.debug("closeConnectionCleanup() called for " + u.getReservationID());
@@ -503,8 +503,8 @@ public class BenNdlControl extends ResourceControl {
     /**
      * Returns the status code contained in the properties list. To be use in configuration handlers.
      * 
-     * @param properties
-     * @return
+     * @param properties properties
+     * @return int
      */
     protected int getResultCode(Properties properties) {
         int result = 0;

@@ -81,6 +81,7 @@ public class ActorServiceSkeleton {
      * Actor setup. This code interacts with the ActorRegistry within this
      * container to retrieve the necessary objects needed to initialize the
      * service
+     * @throws Exception in case of error
      */
     protected void initialize() throws Exception {
         /*
@@ -106,7 +107,8 @@ public class ActorServiceSkeleton {
      * endpoint and identified by the given auth token.
      * @param url callback endpoint
      * @param authToken auth token of the service
-     * @return
+     * @return ICallbackProxy
+     * @throws Exception in case of error
      */
     protected ICallbackProxy getCallback(String url, AuthToken authToken) throws Exception {
         /*
@@ -120,8 +122,8 @@ public class ActorServiceSkeleton {
     /**
      * Extracts the concrete set from a SOAP reservation
      * @param r The SOAP reservation
-     * @return
-     * @throws Exception
+     * @return IConcreteSet
+     * @throws Exception in case of error
      */
     protected IConcreteSet getConcrete(Reservation r) throws Exception {
         ResourceSet soapSet = r.getResourceSet();
@@ -141,8 +143,8 @@ public class ActorServiceSkeleton {
     /**
      * Converts a SOAP reservation to a ReservationClient
      * @param reservation The SOAP reservation
-     * @return
-     * @throws Exception
+     * @return IClientReservation
+     * @throws Exception in case of error
      */
     protected IClientReservation passClient(Reservation reservation) throws Exception {
         /*

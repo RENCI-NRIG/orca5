@@ -96,9 +96,10 @@ public class OrcaReservationTerm {
     /**
      * Set the duration. normalization must be performed explicitly (if desired)
      * 
-     * @param d
-     * @param h
-     * @param m
+     * @param d d
+     * @param h h
+     * @param m m
+     * @param s s 
      */
     public void setDuration(int d, int h, int m, int s) {
         if ((d < 0) || (h < 0) || (m < 0) || (s < 0))
@@ -143,7 +144,7 @@ public class OrcaReservationTerm {
     }
 
     /**
-     * Normalizes the duration values (hours < 24, minutes < 60)
+     * Normalizes the duration values (hours less than 24, minutes less than 60)
      */
     public void normalizeDuration() {
         if (durationInMinutes(dDays, dHours, dMins) == 0)

@@ -47,9 +47,9 @@ public abstract class Proxy implements IProxy {
 
     /**
      * Obtains a callback for the specified actor and protocol
-     * @param actor
-     * @param protocol
-     * @return
+     * @param actor actor
+     * @param protocol protocol
+     * @return ICallbackProxy
      */
     public static ICallbackProxy getCallback(IActor actor, String protocol) {
         if (actor == null) {
@@ -77,8 +77,8 @@ public abstract class Proxy implements IProxy {
      * no new object is created. Otherwise, the method creates the proxy object
      * and registers it with the <code>ActorRegistry</code>
      * @param p Properties list representing the proxy
-     * @return
-     * @throws Exception
+     * @return IProxy
+     * @throws Exception in case of error
      */
     public static IProxy getProxy(Properties p) throws Exception {
         String type = PropList.getRequiredProperty(p, PropertyProxyType);
@@ -121,8 +121,8 @@ public abstract class Proxy implements IProxy {
      * @param p Properties list representing the proxy
      * @param register If true, the resulting proxy is registered with the
      *            container's <code>ActorRegistry</code>
-     * @return
-     * @throws Exception
+     * @return Proxy
+     * @throws Exception in case of error
      */
     private static Proxy recoverProxy(Properties p, boolean register) throws Exception {
     	Proxy proxy = PersistenceUtils.restore(p, true);
@@ -203,6 +203,7 @@ public abstract class Proxy implements IProxy {
      * Clones the resource set, but without any of the concrete sets. Preserves
      * only the configuration properties. This method should be used when
      * sending a redeem/extend/close request to an authority.
+     * @param set resource set
      * @return a resources set that is a copy of the current but without any
      *         concrete sets.
      */
@@ -233,6 +234,7 @@ public abstract class Proxy implements IProxy {
      * Clones the resource set, but without any of the concrete sets. Preserves
      * only the request properties. This method should be used when sending a
      * request to a broker.
+     * @param set resource set
      * @return a resources set that is a copy of the current but without any
      *         concrete sets.
      */
@@ -257,6 +259,7 @@ public abstract class Proxy implements IProxy {
      * Clones the resource set, but without any of the concrete sets. Preserves
      * only the resource properties. This method should be used when sending an
      * update ticket/update lease.
+     * @param set resource set
      * @return a resources set that is a copy of the current but without any
      *         concrete sets.
      */
@@ -288,6 +291,7 @@ public abstract class Proxy implements IProxy {
      * ========================================================================
      * Persistence
      * ========================================================================
+     * @return returns actor name
      */
     public String getName() {
         return actorName;
@@ -295,7 +299,7 @@ public abstract class Proxy implements IProxy {
 
     /**
      * Returns the type of this proxy
-     * @return
+     * @return proxy type
      */
     public String getType() {
         return proxyType;
@@ -307,7 +311,7 @@ public abstract class Proxy implements IProxy {
     
     /**
      * {@inheritDoc}
-     * @return
+     * @return Logger
      */
     public Logger getLogger() {
         return logger;

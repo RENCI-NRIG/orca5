@@ -55,7 +55,7 @@ public abstract class SyncNetworkBaseTask extends NetworkBaseTask {
     /**
      * This needs to be overwritten. Entry to this is guaranteed to be synchronized by deviceAddress
      * 
-     * @throws BuildException
+     * @throws BuildException in case of error
      */
     public abstract void synchronizedExecute() throws BuildException;
 

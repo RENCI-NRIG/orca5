@@ -45,7 +45,9 @@ public class AccessMonitor
 
     /**
      * Gets the unique identity object associated with an AuthToken.
+     * @param auth auth token
      * @return identity object (credential)
+     * @throws Exception in case of error
      */
     public Credentials getCredentials(AuthToken auth) throws Exception
     {
@@ -55,7 +57,9 @@ public class AccessMonitor
     /**
      * Gets the unique identity object associated with an identity reference
      * (whose interpretation is implementation-specific).
+     * @param name name of the object
      * @return identity object (credential)
+     * @throws Exception in case of error
      */
     public Object getCredential(String name) throws Exception
     {

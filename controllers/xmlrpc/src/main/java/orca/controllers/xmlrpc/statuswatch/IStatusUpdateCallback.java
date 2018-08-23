@@ -23,11 +23,11 @@ public interface IStatusUpdateCallback<ID> {
     /**
      * All reservations in indicated group have gone to Active or have OK modify status
      * 
-     * @param cause
+     * @param ok 
      *            - reservations that transitioned to Active or OK modify status
      * @param actOn
      *            - reservations that need to be acted on
-     * @throws StatusCallbackException
+     * @throws StatusCallbackException in case of error
      */
     public void success(List<ID> ok, List<ReservationID> actOn) throws StatusCallbackException;
 
@@ -40,7 +40,7 @@ public interface IStatusUpdateCallback<ID> {
      *            - reservations in the same group that went Active or OK
      * @param actOn
      *            - reservations to be acted on
-     * @throws StatusCallbackException
+     * @throws StatusCallbackException in case of error
      */
     public void failure(List<ID> failed, List<ID> ok, List<ReservationID> actOn) throws StatusCallbackException;
 }

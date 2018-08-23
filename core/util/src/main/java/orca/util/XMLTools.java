@@ -66,9 +66,10 @@ public class XMLTools
     /**
      * Converts the specified DOM node into an xml string
      *
-     * @param node
+     * @param node specified dom node
      *
-     * @return
+     * @return returns string containing xml
+     * @throws Exception in case of error
      */
     public static String xmlToString(Node node) throws Exception
     {

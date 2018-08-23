@@ -67,6 +67,7 @@ public class MappingHandler implements IRequestEmbedder {
 
     /**
      * Create a handler with NO model (idm is not set)
+     * @throws NdlException in case of error
      */
     public MappingHandler() throws NdlException {
         NdlModel.setGlobalJenaRedirections();
@@ -76,9 +77,9 @@ public class MappingHandler implements IRequestEmbedder {
     /**
      * Create handler with in-memory model
      * 
-     * @param substrateFile
-     * @throws IOException
-     * @
+     * @param substrateFile substrateFile
+     * @throws IOException in case of error
+     * @throws NdlException in case of error 
      */
     public MappingHandler(String substrateFile) throws IOException, NdlException {
         idm = NdlModel.getModelFromFile(substrateFile, OntModelSpec.OWL_MEM_RDFS_INF, true);
@@ -88,10 +89,10 @@ public class MappingHandler implements IRequestEmbedder {
      * Create handler with TDB-backed model in a directory with specified path prefix. If substrate file is null, a
      * blank model is created, otherwise it is filled in from specified file.
      * 
-     * @param substrateFile
-     * @param tdbPrefix
-     * @throws IOException
-     * @throws NdlException
+     * @param substrateFile substrateFile
+     * @param tdbPrefix tdbPrefix
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public MappingHandler(String substrateFile, String tdbPrefix) throws IOException, NdlException {
         if (substrateFile != null)
@@ -104,7 +105,7 @@ public class MappingHandler implements IRequestEmbedder {
     /**
      * Create a handler based on existing model
      * 
-     * @param idm_model
+     * @param idm_model idm_model
      */
     public MappingHandler(OntModel idm_model) {
         idm = idm_model;
@@ -113,8 +114,10 @@ public class MappingHandler implements IRequestEmbedder {
     /**
      * Create a blank TDB-backed model or recover existing model from the same folder
      * 
-     * @param tdbPrefix
-     * @param recover
+     * @param tdbPrefix tdbPrefix
+     * @param recover recover
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public MappingHandler(String tdbPrefix, Boolean recover) throws IOException, NdlException {
         if (recover) {

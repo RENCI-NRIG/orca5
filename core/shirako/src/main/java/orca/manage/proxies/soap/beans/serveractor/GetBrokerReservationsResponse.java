@@ -25,16 +25,16 @@ import orca.manage.beans.ResultMng;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="status" type="{http://www.nicl.duke.edu/orca/manage/beans}resultMng"/>
- *         &lt;element name="reservations" type="{http://www.nicl.duke.edu/orca/manage/beans}reservationMng" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="status" type="{http://www.nicl.duke.edu/orca/manage/beans}resultMng"/&gt;
+ *         &lt;element name="reservations" type="{http://www.nicl.duke.edu/orca/manage/beans}reservationMng" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -95,7 +95,7 @@ public class GetBrokerReservationsResponse {
      * Objects of the following type(s) are allowed in the list
      * {@link ReservationMng }
      * 
-     * 
+     * @return list of reservation
      */
     public List<ReservationMng> getReservations() {
         if (reservations == null) {

@@ -11,12 +11,12 @@ public interface IEvent{
 	/**
 	 * Returns the ID of the actor that contains the object that generated
 	 * the event. Can be null for container-level events.
-	 * @return
+	 * @return actor id
 	 */
 	public ID getActorID();
 	/**
 	 * An optional properties list describing the event.
-	 * @return
+	 * @return properties
 	 */
 	public Properties getProperties();
 }

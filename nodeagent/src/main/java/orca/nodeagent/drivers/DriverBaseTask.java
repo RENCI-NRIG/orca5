@@ -58,7 +58,7 @@ public abstract class DriverBaseTask extends AntBaseTask {
     /**
      * Sets the service location
      * 
-     * @param location
+     * @param location location
      */
     public void setLocation(String location) {
         this.location = location;
@@ -67,7 +67,7 @@ public abstract class DriverBaseTask extends AntBaseTask {
     /**
      * Sets the path to the local repository
      * 
-     * @param repository
+     * @param repository repository
      */
     public void setRepository(String repository) {
         this.repository = repository;
@@ -76,7 +76,7 @@ public abstract class DriverBaseTask extends AntBaseTask {
     /**
      * Sets the path to the local axis2.xml
      * 
-     * @param config
+     * @param config config
      */
     public void setConfig(String config) {
         this.config = config;
@@ -121,8 +121,8 @@ public abstract class DriverBaseTask extends AntBaseTask {
     /**
      * Returns a service stub
      * 
-     * @return
-     * @throws Exception
+     * @return NodeAgentServiceStub
+     * @throws Exception in case of error
      */
     protected NodeAgentServiceStub getStub() throws Exception {
         // if (repository != null || config != null) {

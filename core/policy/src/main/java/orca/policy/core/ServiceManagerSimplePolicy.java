@@ -114,7 +114,7 @@ public class ServiceManagerSimplePolicy extends ServiceManagerCalendarPolicy
      * @param suggestedTerm suggested term
      * @param currentTerm current term
      * @return extension term
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected Term getExtendTerm(final Term suggestedTerm, final Term currentTerm)
                           throws Exception
@@ -179,11 +179,9 @@ public class ServiceManagerSimplePolicy extends ServiceManagerCalendarPolicy
     /**
      * For each newly requested reservation, assigns a term to request, and a
      * broker to bid from.
-     * @param demand a set of reservations that indicate the demand for
-     *            resources
-     * @param pending a set of reservations that are currently pending
+     * @param cycle cycle
      * @return non-null set of new bids
-     * @throws Exception rare
+     * @throws Exception in case of error rare
      */
     protected ReservationSet processDemand(final long cycle) throws Exception
     {
@@ -236,10 +234,9 @@ public class ServiceManagerSimplePolicy extends ServiceManagerCalendarPolicy
     /**
      * Returns a fresh ReservationSet of expiring reservations to try to renew
      * in this bidding cycle, and suggest new terms for them.
-     * @param renewing a set of reservations that are up for renewal
-     * @param pending a set of reservations that are pending
+     * @param cycle cycle
      * @return non-null set of renewals
-     * @throws Exception rare
+     * @throws Exception in case of error rare
      */
     protected ReservationSet processRenewing(final long cycle) throws Exception
     {

@@ -73,6 +73,9 @@ public abstract class SSHConsolePromptDevice extends SSHConsoleDevice {
 
     /**
      * Discard all output until a line with a pattern occurs.
+     * @param pat pat
+     * @param timeout timeout
+     * @throws IOException in case of error
      */
     protected void discardUntilPattern(Pattern pat, int timeout) throws IOException {
         int conditions;

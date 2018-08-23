@@ -16,7 +16,7 @@ public class SpringWSUtils {
 	/**
 	 * Obtains the Orca Spring-WS application context.
 	 * 
-	 * @return
+	 * @return Orca Spring-WS application context
 	 */
 	public static XmlWebApplicationContext getSpringApplicationContext() {
 		if (Globals.ServletContext == null) {
@@ -33,6 +33,7 @@ public class SpringWSUtils {
 	 *            spring application context
 	 * @param bean
 	 *            bean
+     * @param name name
 	 */
 	public static void addBean(XmlWebApplicationContext context, Class<?> bean,
 			String name) {

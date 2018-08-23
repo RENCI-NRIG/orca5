@@ -149,8 +149,8 @@ public class Units implements Collection<Unit> {
      * Returns a new collection that contains the units
      * from this collection that are not in the passed in
      * collection.
-     * @param units
-     * @return
+     * @param units units
+     * @return returns units
      */
     public Units missing(Units units){
         // clone this collection

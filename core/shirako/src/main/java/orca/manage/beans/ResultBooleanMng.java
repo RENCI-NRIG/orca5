@@ -20,16 +20,16 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="resultBooleanMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="status" type="{http://www.nicl.duke.edu/orca/manage/beans}resultMng"/>
- *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="resultBooleanMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="status" type="{http://www.nicl.duke.edu/orca/manage/beans}resultMng"/&gt;
+ *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -72,7 +72,7 @@ public class ResultBooleanMng {
 
     /**
      * Gets the value of the result property.
-     * 
+     * @return value of the result property
      */
     public boolean isResult() {
         return result;
@@ -80,7 +80,7 @@ public class ResultBooleanMng {
 
     /**
      * Sets the value of the result property.
-     * 
+     * @param value value of the result property
      */
     public void setResult(boolean value) {
         this.result = value;

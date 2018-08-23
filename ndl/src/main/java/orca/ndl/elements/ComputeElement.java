@@ -74,11 +74,11 @@ public class ComputeElement extends NetworkElement {
     /**
      * Notice that this doesn't copy interfaces, clientInterfaces, dependencies or 
      * the resourceMap. Those are handled on the individual basis in CloudHandler and ModifyHandler
-     * @param m
-     * @param req_m
-     * @param url
-     * @param name
-     * @return
+     * @param m m
+     * @param req_m req_m
+     * @param url url
+     * @param name name
+     * @return ComputeElement
      */
     public ComputeElement partialCopy(OntModel m, OntModel req_m, String url, String name) {
         ComputeElement ce = new ComputeElement(m, url, name);

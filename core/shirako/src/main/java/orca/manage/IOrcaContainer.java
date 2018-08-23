@@ -51,10 +51,10 @@ import orca.util.ID;
  * </p>
  * <p>
  * All functions that return a given type of object, for example
- * {@link #getPlugins(int, AuthToken)}, return an array of the requested
+ * {@link IOrcaContainer#getPlugins(int, int)}, return an array of the requested
  * objects, which can be obtained by invoking the <code>getResult</code> method.
  * Note that, even for functions that always return a single element, for
- * example {@link #getPlugin(String, String, AuthToken)}, that object will be
+ * example {@link #getPlugin(PackageId, PluginId)}, that object will be
  * wrapped inside an array of size one. Array objects are not guaranteed to be
  * non-null if the array should contain 0 elements. Always check the return of
  * getResult() for null.
@@ -117,7 +117,7 @@ public interface IOrcaContainer extends IOrcaComponent {
 	 *            user login
 	 * @param password
 	 *            password
-	 * @return
+	 * @return true for sucess; false otherwise
 	 */
 	public boolean setUserPassword(String login, String password);
 
@@ -158,9 +158,9 @@ public interface IOrcaContainer extends IOrcaComponent {
 	/**
 	 * Obtains the certificate of the specified actor.
 	 * 
-	 * @param actorName
-	 *            actor name
-	 * @return
+	 * @param guid 
+	 *            guid 
+	 * @return returns the certificate
 	 */
 	public Certificate getCertificate(ID guid);
 
@@ -176,22 +176,22 @@ public interface IOrcaContainer extends IOrcaComponent {
 
 	/**
 	 * Obtains the specified service manager.
-	 * @param guid
-	 * @return
+	 * @param guid guid
+	 * @return specified service manager
 	 */
 	public IOrcaServiceManager getServiceManager(ID guid);
 	
 	/**
 	 * Obtains the specified broker.
-	 * @param guid
-	 * @return
+	 * @param guid broker guid
+	 * @return specified broker
 	 */
 	public IOrcaBroker getBroker(ID guid);
 
 	/**
 	 * Obtains the specified site authority.
-	 * @param guid
-	 * @return
+	 * @param guid guid
+	 * @return specified site authority
 	 */
 	public IOrcaAuthority getAuthority(ID guid);
 
@@ -434,8 +434,8 @@ public interface IOrcaContainer extends IOrcaComponent {
 	/**
 	 * Obtains the specified unit.
 	 * 
-	 * @param name
-	 *            unit name
+	 * @param unit 
+	 *            unit id 
 	 * @return the unit record, null otherwise
 	 */
 	public UnitMng getInventory(UnitID unit);
@@ -481,9 +481,9 @@ public interface IOrcaContainer extends IOrcaComponent {
 	/**
 	 * Transfer the specified unit back to the container.
 	 * 
-	 * @param name
+	 * @param unit 
 	 *            unit
-	 * @param name
+	 * @param actorGuid 
 	 *            actor guid
 	 * @return true on success, false otherwise
 	 */

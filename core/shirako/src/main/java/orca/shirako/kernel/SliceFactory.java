@@ -29,6 +29,7 @@ public class SliceFactory implements ISliceFactory
      * @param p properties list describing a previous slice object instance
      *
      * @return DOCUMENT ME!
+     * @throws Exception in case of error
      */
     public static IKernelSlice createInstance(Properties p) throws Exception
     {

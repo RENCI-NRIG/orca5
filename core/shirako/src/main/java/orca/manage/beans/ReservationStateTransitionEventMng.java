@@ -20,17 +20,17 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="reservationStateTransitionEventMng">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}eventMng">
- *       &lt;sequence>
- *         &lt;element name="reservationId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="sliceId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="state" type="{http://www.nicl.duke.edu/orca/manage/beans}reservationStateMng"/>
- *       &lt;/sequence>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="reservationStateTransitionEventMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}eventMng"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="reservationId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="sliceId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="state" type="{http://www.nicl.duke.edu/orca/manage/beans}reservationStateMng"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/extension&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

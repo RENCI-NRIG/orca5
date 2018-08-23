@@ -22,8 +22,8 @@ public class Serializer {
     /**
      * Serializes a properties list to a properties element
      * 
-     * @param p
-     * @return
+     * @param p p
+     * @return PropertiesElement
      */
     public static PropertiesElement serialize(Properties p) {
         PropertiesElement result = new PropertiesElement();
@@ -47,7 +47,8 @@ public class Serializer {
     /**
      * Serializes a properties element to a properties list
      * 
-     * @param e
+     * @param e e
+     * @return Properties
      */
     public static Properties serialize(PropertiesElement e) {
         Properties p = new Properties();

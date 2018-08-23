@@ -36,6 +36,7 @@ public abstract class IMAGEPROXYCallbackHandler {
 
     /**
      * Get the client data
+     * @return Object
      */
 
     public Object getClientData() {
@@ -44,14 +45,14 @@ public abstract class IMAGEPROXYCallbackHandler {
 
     /**
      * auto generated Axis2 call back method for RegisterImage method
-     *
+     * @param param17 param17
      */
     public void receiveResultRegisterImage(orca.handlers.ec2.tasks.imgproxy.RegisterImageResponse param17) {
     }
 
     /**
      * auto generated Axis2 Error handler
-     *
+     * @param e e
      */
     public void receiveErrorRegisterImage(java.lang.Exception e) {
     }

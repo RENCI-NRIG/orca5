@@ -17,8 +17,8 @@ import java.lang.annotation.Target;
 public @interface Recover {
 	/**
 	 * Obtains the class responsible for recovering instances of the annotated type.
-	 * The returned class must implement Recoverer<T>
-	 * @return
+	 * The returned class must implement Recoverer&lt;T&gt;
+	 * @return returns the responsible class
 	 */
 	Class<?> value();
 }

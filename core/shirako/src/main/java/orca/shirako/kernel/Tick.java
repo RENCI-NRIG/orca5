@@ -278,6 +278,7 @@ public abstract class Tick implements Initializable, ITicker
 
     /**
      * Stops the worker thread(s).
+     * @throws Exception in case of error
      */
     protected abstract void stopWorker() throws Exception;
 

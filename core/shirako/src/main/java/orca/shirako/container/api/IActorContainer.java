@@ -34,7 +34,7 @@ public interface IActorContainer extends IContainerClock
     /**
      * Initializes the container manager.
      * @param configuration container configuration
-     * @throws Exception if the configuration is invalid
+     * @throws ContainerInitializationException if the configuration is invalid
      */
     void initialize(IOrcaAdminConfiguration configuration) throws ContainerInitializationException;
 
@@ -81,21 +81,21 @@ public interface IActorContainer extends IContainerClock
     /**
      * Loads the container configuration.
      * @param config serialized configuration.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void loadConfiguration(byte[] config) throws Exception;
 
     /**
      * Loads the container configuration.
      * @param config input stream with configuration information
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void loadConfiguration(InputStream config) throws Exception;
 
     /**
      * Loads the container configuration.
      * @param fileName container configuration file
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void loadConfiguration(String fileName) throws Exception;
 
@@ -105,7 +105,7 @@ public interface IActorContainer extends IContainerClock
      * register the actor with the clock! Clock registration is a separate
      * phase.
      * @param actor actor to register
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void registerActor(IActor actor) throws Exception;
 
@@ -146,7 +146,7 @@ public interface IActorContainer extends IContainerClock
 
     /**
      * Returns the container certificate.
-     * @return
+     * @return the container certificate
      */
     public Certificate getCertificate();
     

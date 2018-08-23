@@ -32,6 +32,7 @@ public class ActorRegistry
 
     /**
      * Resets the registry: removes all actors, proxies, and callbacks
+     * @throws Exception in case of error
      */
     public static void clear() throws Exception
     {
@@ -40,8 +41,8 @@ public class ActorRegistry
 
     /**
      * Get local actor entry based on either name or guid
-     * @param actorNameOrGuid
-     * @return
+     * @param actorNameOrGuid actorNameOrGuid
+     * @return local actor
      */
     public static IActor getActor(String actorNameOrGuid)
     {
@@ -86,9 +87,8 @@ public class ActorRegistry
 
     /**
      * Registers an actor
-     * @param actor
-     * @param serviceEndPoint
-     * @throws Exception
+     * @param actor actor
+     * @throws Exception in case of error
      */
     public static void registerActor(IActor actor) throws Exception
     {
@@ -109,8 +109,8 @@ public class ActorRegistry
 
     /**
      * Register a proxy to an actor
-     * @param proxy
-     * @throws Exception
+     * @param proxy proxy
+     * @throws Exception in case of error
      */
     public static void registerProxy(IProxy proxy) throws Exception
     {
@@ -279,8 +279,8 @@ public class ActorRegistry
 
     /**
      * Registers the specified actor by name and guid
-     * @param actor
-     * @throws Exception
+     * @param actor actor
+     * @throws Exception in case of error
      */
     private void registerActorPrivate(IActor actor) throws Exception
     {

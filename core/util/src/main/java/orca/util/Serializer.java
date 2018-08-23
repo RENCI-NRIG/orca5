@@ -26,9 +26,9 @@ public class Serializer
      * Converts a hashtable storing ID objects to a comma separated
      * string
      *
-     * @param ids
+     * @param ids vector of the ID objects
      *
-     * @return
+     * @return comma separated string
      */
     public static String idsToString(Vector<ID> ids)
     {
@@ -53,9 +53,9 @@ public class Serializer
      * Converts a comma separated list of identifiers into a Hashtable
      * of identifier objects.
      *
-     * @param ids
+     * @param ids comma separated ids
      *
-     * @return
+     * @return vector of ID objects
      */
     public static Vector<ID> stringToIDs(String ids)
     {
@@ -78,7 +78,7 @@ public class Serializer
      *
      * @return resulting properties list
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static Properties toProperties(String s) throws Exception
     {
@@ -95,11 +95,11 @@ public class Serializer
     /**
      * Converts a string to a properties list.
      *
-     * @param s
+     * @param s property string
      *
-     * @return
+     * @return properties object
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static Properties toProperties2(String s) throws Exception
     {
@@ -132,7 +132,6 @@ public class Serializer
      *
      * @return The string representation of this properties list
      *
-     * @throws Exception
      */
     public static String toString(Properties properties)
     {

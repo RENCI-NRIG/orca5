@@ -70,6 +70,7 @@ public class NdlManifestParser extends NdlCommons {
      * You will see things in the following order (never twice): - Separate nodes and NetworkConnections - Nodes or
      * Crossconnects within NetworkConnection - LinkConnections within NetworkConnection - path of network connection -
      * Stand-alone LinkConnections - Interfaces
+     * @throws NdlException in case of error
      */
     public synchronized void processManifest() throws NdlException {
         if (manifestModel == null)

@@ -83,7 +83,7 @@ public class ExtensionPackage
     /**
      * Deserializes the object from the given properties list.
      * @param p properties list
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void reset(Properties p) throws Exception
     {
@@ -95,7 +95,7 @@ public class ExtensionPackage
     /**
      * Serializes the object into a properties list.
      * @return a properties list
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Properties save() throws Exception
     {
@@ -108,7 +108,7 @@ public class ExtensionPackage
     /**
      * Serializes the object into the given properties list.
      * @param p properties list to serialize into
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void save(Properties p) throws Exception
     {

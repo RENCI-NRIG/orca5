@@ -34,8 +34,8 @@ public class BenNdlPropertiesConverter {
     /**
      * Returns a normalized domain name.
      * 
-     * @param d
-     * @return
+     * @param d d
+     * @return String
      */
     public static String getDomainName(Device d) {
         String temp = d.getURI();

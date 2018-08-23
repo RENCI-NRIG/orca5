@@ -38,7 +38,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AddReservationsRequest }
-     * 
+     * @return created instance
      */
     public AddReservationsRequest createAddReservationsRequest() {
         return new AddReservationsRequest();
@@ -47,6 +47,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ClaimResourcesResponse }
      * 
+     * @return created instance
      */
     public ClaimResourcesResponse createClaimResourcesResponse() {
         return new ClaimResourcesResponse();
@@ -55,6 +56,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPoolInfoResponse }
      * 
+     * @return created instance
      */
     public GetPoolInfoResponse createGetPoolInfoResponse() {
         return new GetPoolInfoResponse();
@@ -62,6 +64,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetBrokersRequest }
+     * @return created instance
      * 
      */
     public GetBrokersRequest createGetBrokersRequest() {
@@ -71,6 +74,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetBrokerRequest }
      * 
+     * @return created instance
      */
     public GetBrokerRequest createGetBrokerRequest() {
         return new GetBrokerRequest();
@@ -79,6 +83,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link DemandReservationsResponse }
      * 
+     * @return created instance
      */
     public DemandReservationsResponse createDemandReservationsResponse() {
         return new DemandReservationsResponse();
@@ -87,6 +92,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPoolInfoRequest }
      * 
+     * @return created instance
      */
     public GetPoolInfoRequest createGetPoolInfoRequest() {
         return new GetPoolInfoRequest();
@@ -95,6 +101,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link DemandReservationRequest }
      * 
+     * @return created instance
      */
     public DemandReservationRequest createDemandReservationRequest() {
         return new DemandReservationRequest();
@@ -103,6 +110,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddReservationRequest }
      * 
+     * @return created instance
      */
     public AddReservationRequest createAddReservationRequest() {
         return new AddReservationRequest();
@@ -111,6 +119,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link DemandReservationsRequest }
      * 
+     * @return created instance
      */
     public DemandReservationsRequest createDemandReservationsRequest() {
         return new DemandReservationsRequest();
@@ -119,6 +128,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetBrokerResponse }
      * 
+     * @return created instance
      */
     public GetBrokerResponse createGetBrokerResponse() {
         return new GetBrokerResponse();
@@ -127,6 +137,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ClaimResourcesRequest }
      * 
+     * @return created instance
      */
     public ClaimResourcesRequest createClaimResourcesRequest() {
         return new ClaimResourcesRequest();
@@ -135,6 +146,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link DemandReservationResponse }
      * 
+     * @return created instance
      */
     public DemandReservationResponse createDemandReservationResponse() {
         return new DemandReservationResponse();
@@ -143,6 +155,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ExtendReservationResponse }
      * 
+     * @return created instance
      */
     public ExtendReservationResponse createExtendReservationResponse() {
         return new ExtendReservationResponse();
@@ -150,6 +163,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AddReservationsResponse }
+     * @return created instance
      * 
      */
     public AddReservationsResponse createAddReservationsResponse() {
@@ -159,6 +173,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddBrokerRequest }
      * 
+     * @return created instance
      */
     public AddBrokerRequest createAddBrokerRequest() {
         return new AddBrokerRequest();
@@ -167,6 +182,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddBrokerResponse }
      * 
+     * @return created instance
      */
     public AddBrokerResponse createAddBrokerResponse() {
         return new AddBrokerResponse();
@@ -175,6 +191,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetBrokersResponse }
      * 
+     * @return created instance
      */
     public GetBrokersResponse createGetBrokersResponse() {
         return new GetBrokersResponse();
@@ -183,6 +200,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ExtendReservationRequest }
      * 
+     * @return created instance
      */
     public ExtendReservationRequest createExtendReservationRequest() {
         return new ExtendReservationRequest();
@@ -191,6 +209,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AddReservationResponse }
      * 
+     * @return created instance
      */
     public AddReservationResponse createAddReservationResponse() {
         return new AddReservationResponse();

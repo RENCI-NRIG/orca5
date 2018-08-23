@@ -87,7 +87,7 @@ public class RequestWorkflow {
     /**
      * Create a workflow based on a specific embedding algorithm and ndl model parser listener
      * 
-     * @param algm
+     * @param algm algm
      */
     public RequestWorkflow(IRequestEmbedder algm) {
         assert (algm != null);
@@ -120,8 +120,15 @@ public class RequestWorkflow {
 
     /**
      * Run the workflow
-     * 
-     * @throws Exception
+     * @param domainResourcePools domainResourcePools
+     * @param abstractModels abstractModels
+     * @param resReq resReq
+     * @param userDN userDN
+     * @param controller_url controller_url
+     * @param sliceId sliceId
+     * @return SystemNativeError
+     * @throws NdlException in case of error
+     * @throws IOException in case of error
      */
     public synchronized SystemNativeError run(DomainResourcePools domainResourcePools, List<String> abstractModels,
             String resReq, String userDN, String controller_url, String sliceId) throws NdlException, IOException {
@@ -409,8 +416,9 @@ public class RequestWorkflow {
     /**
      * Restore the workflow for a slice, that is passed in as WorkflowRecoverySetter interface
      * 
-     * @param logger
-     * @param slice
+     * @param logger logger
+     * @param slice slice
+     * @param globalAssignedLabels globalAssignedLabels
      */
     public void recover(Logger logger, HashMap<String, BitSet> globalAssignedLabels, WorkflowRecoverySetter slice) {
         // open the models
@@ -442,12 +450,12 @@ public class RequestWorkflow {
 
     /**
      * 
-     * @param logger
-     * @param slice
+     * @param logger logger
+     * @param sliceSetter 
      *            - an object like a slice but with limited API conforming to WorkflowRecoverySetter interface
      *            (optional, can be null)
-     * @param reqModel
-     * @param manModel
+     * @param reqModel reqModel
+     * @param manModel manModel
      */
     public void recover(Logger logger, WorkflowRecoverySetter sliceSetter, OntModel reqModel, OntModel manModel) {
         requestModel = reqModel;
@@ -549,8 +557,8 @@ public class RequestWorkflow {
     /**
      * Set controller label for this domain
      * 
-     * @param domain
-     * @param label
+     * @param domain domain
+     * @param label label
      */
     public void setControllerLabel(String domain, int label) {
         logger.debug("Setting RequestWorkflow.controllerAssignedLabel " + label + " for domain " + domain);
@@ -560,9 +568,9 @@ public class RequestWorkflow {
     /**
      * This static function adds label to a map of bitsets (any map)
      * 
-     * @param cal
-     * @param domain
-     * @param label
+     * @param cal cal
+     * @param domain domain
+     * @param label label
      */
     public static void setBitsetLabel(Map<String, BitSet> cal, String domain, int label) {
         if (cal.containsKey(domain)) {

@@ -75,7 +75,7 @@ public class MySqlBase implements DatabaseBase
      * @param rs The ResultSet
      * @param type Object type (node, machine, etc)
      * @return Translated properties list
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected Vector<Properties> createSearchResultsTyped(ResultSet rs, String type) throws Exception {
         Vector<Properties> result = new Vector<Properties>();
@@ -157,7 +157,7 @@ public class MySqlBase implements DatabaseBase
     protected String mySqlPasswd;
     /**
      * MySql Connections Options. Default empty.
-     * e.g. "&verifyServerCertificate=false&useSSL=true"
+     * e.g. "{@literal &}verifyServerCertificate=false{@literal &}useSSL=true"
      * https://github.com/RENCI-NRIG/exogeni/issues/173
      * https://github.com/RENCI-NRIG/orca5/pull/156
      */
@@ -198,7 +198,7 @@ public class MySqlBase implements DatabaseBase
 
     /**
      * Creates a new instance.
-     * @param mapFile
+     * @param mapFile mapFile name
      */
     public MySqlBase(String mapFile)
     {
@@ -210,7 +210,7 @@ public class MySqlBase implements DatabaseBase
 
     /**
      * Checks the database and resets it if needed.
-     * @throws Exception
+     * @throws SQLException in case of error
      */
     protected void checkDb() throws SQLException
     {
@@ -227,7 +227,6 @@ public class MySqlBase implements DatabaseBase
     /**
      * Deregister the sun ODBC bridge driver. We don't need it and it is broken
      * on some platforms
-     * @throws Exception
      */
     protected void checkDrivers()
     {
@@ -250,7 +249,7 @@ public class MySqlBase implements DatabaseBase
     /**
      * Get a connection from the pool.
      * @return connection
-     * @throws SQLException
+     * @throws SQLException in case of error
      */
     public Connection getConnection() throws SQLException
     {
@@ -343,7 +342,7 @@ public class MySqlBase implements DatabaseBase
     /**
      * Load the JDBC drivers. The driver's init blocks will register themselves
      * with the DriverManager
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void loadDrivers() throws Exception
     {
@@ -354,8 +353,8 @@ public class MySqlBase implements DatabaseBase
 
     /**
      * Resets the database to a clean state.
-     * @param connection
-     * @throws SQLException
+     * @param connection connection object
+     * @throws SQLException in case of error
      */
     protected void resetDB(Connection connection) throws SQLException
     {
@@ -363,8 +362,8 @@ public class MySqlBase implements DatabaseBase
 
     /**
      * Return the connection to the pool
-     * @param connection
-     * @throws SQLException
+     * @param connection connection object
+     * @throws SQLException in case of error
      */
     public void returnConnection(Connection connection) throws SQLException
     {

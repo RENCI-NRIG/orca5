@@ -18,7 +18,7 @@ public interface IOrcaClientActor extends IOrcaComponent{
      * Adds the reservation to the actor's state and returns the assigned reservation ID.
      * The reservation must refer to a valid slice.
      * The reservation ID is also attached to the passed in reservation object.
-     * @param reservation
+     * @param reservation reservation
      * @return null on failure, assigned reservation ID otherwise
      */
     public ReservationID addReservation(TicketReservationMng reservation);
@@ -27,15 +27,15 @@ public interface IOrcaClientActor extends IOrcaComponent{
      * Each reservation must refer to a valid slice.
      * The reservation ID is also attached to the passed in reservation object.
      * The operation is atomic: all of the reservations are added or none of them is added.
-     * @param reservation
+     * @param reservation reservation
      * @return null on failure, list of assigned ReservationIDs on success.
      */
     public List<ReservationID> addReservations(List<TicketReservationMng> reservation);   
     /**
      * Demands the specified reservation.
      * A reservation can be demanded only if has been added and it is in the Nascent state.
-     * @param reservationID
-     * @return
+     * @param reservationID reservation id
+     * @return true for sucess; false otherwise
      */
     public boolean demand(ReservationID reservationID);
     /**
@@ -44,46 +44,46 @@ public interface IOrcaClientActor extends IOrcaComponent{
      * The reservation must refer to a valid slice. It can also indicate 
      * redeem predecessors.
      * See {@link IOrcaActor#updateReservation(ReservationMng)}
-     * @param reservation
-     * @return
+     * @param reservation reservation
+     * @return true for sucess; false otherwise
      */
 	public boolean demand(ReservationMng reservation);
     /**
      * Retuns all brokers known to the actor.
-     * @return
+     * @return list of all brokers
      */
 	public List<ProxyMng> getBrokers();
 	/**
 	 * Returns the broker with the specified ID.
-	 * @param broker
-	 * @return
+	 * @param broker broker id
+	 * @return returns specified broker
 	 */
 	public ProxyMng getBroker(ID broker);
 	/**
 	 * Adds a new broker.
-	 * @param broker
-	 * @return
+	 * @param broker broker
+	 * @return true for sucess; false otherwise
 	 */
 	public boolean addBroker(ProxyMng broker);
 	/**
 	 * Obtains the resources available at the specified broker
-	 * @param broker
-	 * @return
+	 * @param broker broker
+	 * @return list of pool info
 	 */
 	public List<PoolInfoMng> getPoolInfo(ID broker);
 	/**
 	 * Claims resources exported by the specified broker
-	 * @param brokerGuid
-	 * @param sliceID
-	 * @param reservationId
-	 * @return
+	 * @param brokerGuid broker guid
+	 * @param sliceID slice id
+	 * @param reservationId reservation id
+	 * @return reservation
 	 */
 	public ReservationMng claimResources(ID brokerGuid, SliceID sliceID, ReservationID reservationId);
 	/**
 	 * Claims resources exported by the specified broker
-	 * @param brokerGuid
-	 * @param reservationID
-	 * @return
+	 * @param brokerGuid broker guid
+	 * @param reservationID reservation id
+	 * @return reservation
 	 */
 	public ReservationMng claimResources(ID brokerGuid, ReservationID reservationID);
 

@@ -4,7 +4,7 @@ public interface IDevice {
     /**
      * Establishes a connection with the device.
      * 
-     * @throws CommandException
+     * @throws CommandException in case of error
      */
     public void connect() throws CommandException;
 
@@ -16,21 +16,21 @@ public interface IDevice {
     /**
      * Returns true if a connection to the device exists.
      * 
-     * @return
+     * @return true or false
      */
     public boolean isConnected();
 
     /**
      * Sets the device name.
      * 
-     * @param name
+     * @param name name
      */
     public void setName(String name);
 
     /**
      * Gets the device name
      * 
-     * @return
+     * @return name
      */
     public String getName();
 

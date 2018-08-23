@@ -19,8 +19,8 @@ public class SoapAxis2ServletContextInitializer
     /**
      * Initializes an axis2 configuration context, so that all services
      * instantiated within this container reside in the same context.
-     * @param config
-     * @throws Exception
+     * @param config config
+     * @throws Exception in case of error
      */
     public void initialize(IOrcaConfiguration config) throws Exception
     {

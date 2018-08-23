@@ -20,18 +20,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="pluginCreateMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="packageId" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="configurationString" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="pluginCreateMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="packageId" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="configurationString" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

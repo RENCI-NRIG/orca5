@@ -375,7 +375,7 @@ public class BrokerSimpleUnitsPolicy extends BrokerPriorityPolicy
     /**
      * Recovers a ticketed reservation.
      * @param reservation reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitTicketed(final IBrokerReservation reservation) throws Exception
     {
@@ -395,7 +395,7 @@ public class BrokerSimpleUnitsPolicy extends BrokerPriorityPolicy
     /**
      * Recovers an active ticketed reservation
      * @param reservation reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitTicketedNone(final IBrokerReservation reservation) throws Exception
     {
@@ -411,7 +411,7 @@ public class BrokerSimpleUnitsPolicy extends BrokerPriorityPolicy
     /**
      * Recovers a ticketed priming reservation.
      * @param reservation reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitTicketedPriming(final IBrokerReservation reservation) throws Exception
     {

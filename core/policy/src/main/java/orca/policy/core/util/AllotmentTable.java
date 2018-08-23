@@ -26,8 +26,8 @@ public class AllotmentTable
 
     /**
      * Constructor.
-     * @param startTime
-     * @param endTime
+     * @param startTime startTime
+     * @param endTime endTime
      */
     public AllotmentTable(Date startTime, Date endTime)
     {
@@ -36,7 +36,7 @@ public class AllotmentTable
 
     /**
      * Add an entry to the allotment
-     * @param entry
+     * @param entry entry
      */
     public void addEntry(AllotmentEntry entry)
     {
@@ -52,6 +52,8 @@ public class AllotmentTable
      * Determine the max amount of resources that can be allocated to a request.
      * First determine the most amount of growth per unit the machines can
      * handle, and then decide on the max resources to be granted.
+     * @param minResources minResources
+     * @param resourceLimit resourceLimit
      * @return maxResources
      */
     public long[] findMaxResources(long[] minResources, long[] resourceLimit)
@@ -129,7 +131,7 @@ public class AllotmentTable
     /**
      * Determine the total number of units that have been allocated across the
      * table
-     * @return
+     * @return total number of units
      */
     public int totalUnits()
     {
@@ -183,7 +185,7 @@ public class AllotmentTable
 
     /**
      * Retun an iterator
-     * @return
+     * @return iterator
      */
     public Iterator iterator()
     {
@@ -192,7 +194,7 @@ public class AllotmentTable
 
     /**
      * Return the hashtable of the allotments
-     * @return
+     * @return hashtable of the allotments
      */
     public Hashtable<ID, AllotmentEntry> getAllotment()
     {

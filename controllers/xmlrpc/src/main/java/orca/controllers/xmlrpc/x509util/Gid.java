@@ -127,8 +127,8 @@ public class Gid {
     /**
      * finds if the gid is signed by the passed gid
      * 
-     * @param signer
-     * @return
+     * @param signer signer
+     * @return true or false
      */
     public boolean isSignedBy(Gid signer) {
         try {
@@ -143,10 +143,10 @@ public class Gid {
      * verifies if the certificate chain has a path up to a trusted authority also if the namespace constraints are
      * followed
      * 
-     * @param trustKeyStorePath
-     * @param keyStorePassword
-     * @throws CertPathValidatorException
-     * @throws CertificateException
+     * @param trustKeyStorePath trustKeyStorePath
+     * @param keyStorePassword keyStorePassword
+     * @throws CertPathValidatorException in case of error
+     * @throws CertificateException in case of error
      */
     public void verifyCertChain(String trustKeyStorePath, String keyStorePassword)
             throws CertPathValidatorException, CertificateException {
@@ -172,9 +172,9 @@ public class Gid {
     /**
      * verifies if the issuers namespace is a prefix of the subjects namespace
      * 
-     * @param subjectGid
-     * @param issuerGid
-     * @throws CertificateException
+     * @param subjectGid subjectGid
+     * @param issuerGid issuerGid
+     * @throws CertificateException in case of error
      */
     private void verifyIssuerDomain(Gid subjectGid, Gid issuerGid) throws CertificateException {
         logger.debug("Subject HRN: " + subjectGid.getHrn());

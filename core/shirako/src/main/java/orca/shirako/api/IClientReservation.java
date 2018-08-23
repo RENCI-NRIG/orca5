@@ -142,7 +142,7 @@ public interface IClientReservation extends IReservation
     
     /**
      * Get the value of renewable flag
-     * @return
+     * @return value of renewable flag
      */
     public boolean getRenewable();
     
@@ -210,13 +210,13 @@ public interface IClientReservation extends IReservation
     
     /**
      * Sets the policy associated with this resservation.
-     * @param policy
+     * @param policy policy
      */
     public void setPolicy(IClientPolicy policy);
     
     /**
      * Returns the client callback proxy for this reservation.
-     * @return
+     * @return IClientCallbackProxy
      */
     public IClientCallbackProxy getClientCallbackProxy();
 }

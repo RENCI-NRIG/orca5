@@ -29,8 +29,8 @@ public class PropertiesConverter {
     /**
      * Returns a normalized domain name.
      * 
-     * @param d
-     * @return
+     * @param d d
+     * @return normalized domain name
      */
     public static String getDomainName(Device d) {
         // System.out.println("getDomainName(): d.getResourceType(): " + d.getResourceType().toString() + " |

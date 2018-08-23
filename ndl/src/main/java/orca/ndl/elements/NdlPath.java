@@ -82,7 +82,7 @@ public class NdlPath extends NdlCommons {
      * Is the path complete, or are there left over elements that didn't fit. Leftover elements may be a normal
      * occurrence.
      * 
-     * @return
+     * @return true or false
      */
     public boolean pathComplete() {
         return unattached.size() == 0;
@@ -91,9 +91,9 @@ public class NdlPath extends NdlCommons {
     /**
      * Recursive version of tryPath - does a search of all possible paths with backtracking.
      * 
-     * @param end
-     * @param path
-     * @return
+     * @param end end
+     * @param path path
+     * @return true or false
      */
     private boolean tryPathRecursive(PathElement end, List<PathElement> path) {
 
@@ -187,9 +187,9 @@ public class NdlPath extends NdlCommons {
     /**
      * Try to build path to the specified end
      * 
-     * @param end
-     * @param path
-     * @return
+     * @param end end
+     * @param path path
+     * @return true or false
      */
     private boolean tryPath(PathElement end, List<PathElement> path) {
 
@@ -247,9 +247,9 @@ public class NdlPath extends NdlCommons {
     /**
      * assemble path elements in proper sequence without gaps.
      * 
-     * @param start
-     * @param end
-     * @return
+     * @param start start
+     * @param end end
+     * @return list of path elements
      */
 
     private List<PathElement> assemblePath(Resource start, Resource end) throws NdlException {
@@ -302,9 +302,9 @@ public class NdlPath extends NdlCommons {
     /**
      * Convert path from PathElements to resources
      * 
-     * @param path
-     * @return
-     * @throws NdlException
+     * @param path path
+     * @return list of resources
+     * @throws NdlException in case of error
      */
     private List<Resource> convertPath(List<PathElement> path) throws NdlException {
         // walk the linked list to assemble the array
@@ -329,8 +329,8 @@ public class NdlPath extends NdlCommons {
      * from ends to multicast roots followed by the list of paths between roots. This method is destructive! Calling it
      * second time will not provide correct results.
      * 
-     * @return
-     * @throws NdlException
+     * @return list of paths in this graph
+     * @throws NdlException in case of error
      */
     public List<List<Resource>> getPaths() throws NdlException {
         // if (unattached.size() > 0)
@@ -412,8 +412,8 @@ public class NdlPath extends NdlCommons {
     /**
      * Force this element to be an end element (otherwise it is inferred by the quantity of the interfaces)
      * 
-     * @param r
-     * @throws NdlException
+     * @param r r
+     * @throws NdlException in case of error
      */
     public void addEndElement(Resource r) throws NdlException {
         if (debug)
@@ -424,7 +424,8 @@ public class NdlPath extends NdlCommons {
     /**
      * Add new element into path
      * 
-     * @param r
+     * @param r r
+     * @throws NdlException in case of error
      */
     public void addElement(Resource r) throws NdlException {
         List<Resource> interfaces = getResourceInterfaces(r);
@@ -447,8 +448,8 @@ public class NdlPath extends NdlCommons {
     /**
      * Add a multicast root node
      * 
-     * @param r
-     * @throws NdlException
+     * @param r r
+     * @throws NdlException in case of error
      */
     public void addRoot(Resource r) throws NdlException {
         if (debug)
@@ -459,8 +460,8 @@ public class NdlPath extends NdlCommons {
     /**
      * Return known roots (if any - null if none)
      * 
-     * @return
-     * @throws NdlException
+     * @return list of resources
+     * @throws NdlException in case of error
      */
     public List<Resource> getRoots() throws NdlException {
         if (roots.size() == 0)

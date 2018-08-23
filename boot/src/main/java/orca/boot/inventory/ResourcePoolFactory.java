@@ -44,6 +44,7 @@ public class ResourcePoolFactory implements IResourcePoolFactory {
 
     /**
      * Modifies the resource pool descriptor as needed
+     * @throws ConfigurationException in case of error
      */
     protected void updateDescriptor() throws ConfigurationException {
         /*
@@ -56,8 +57,8 @@ public class ResourcePoolFactory implements IResourcePoolFactory {
 
     /**
      * Creates the term for the source reservation.
-     * 
-     * @throws ConfigurationException
+     * @return Term 
+     * @throws ConfigurationException in case of error
      */
     protected Term createTerm() throws ConfigurationException {
         ActorClock clock = substrate.getActor().getActorClock();
@@ -79,8 +80,10 @@ public class ResourcePoolFactory implements IResourcePoolFactory {
     /**
      * Creates the resource ticket for the source reservation
      * 
-     * @param state
-     * @throws ConfigurationException
+     * @param term term
+     * @return ResourceTicket
+     *
+     * @throws ConfigurationException in case of error
      */
     protected ResourceTicket createResourceTicket(Term term) throws ConfigurationException {
         // NOTE/FIXME: we could/should use the properties list inside the delegation to pass in properties
@@ -98,8 +101,8 @@ public class ResourcePoolFactory implements IResourcePoolFactory {
     /**
      * Use this function to set additional resource and local properties to be associated with the source reservation.
      * 
-     * @return
-     * @throws ConfigurationException
+     * @return ResourceData
+     * @throws ConfigurationException in case of error
      */
     protected ResourceData createResourceData() throws ConfigurationException {
         ResourceData rdata = new ResourceData();

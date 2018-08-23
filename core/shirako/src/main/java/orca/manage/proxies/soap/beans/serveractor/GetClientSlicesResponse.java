@@ -25,16 +25,16 @@ import orca.manage.beans.SliceMng;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="status" type="{http://www.nicl.duke.edu/orca/manage/beans}resultMng"/>
- *         &lt;element name="slices" type="{http://www.nicl.duke.edu/orca/manage/beans}sliceMng" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="status" type="{http://www.nicl.duke.edu/orca/manage/beans}resultMng"/&gt;
+ *         &lt;element name="slices" type="{http://www.nicl.duke.edu/orca/manage/beans}sliceMng" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -95,7 +95,7 @@ public class GetClientSlicesResponse {
      * Objects of the following type(s) are allowed in the list
      * {@link SliceMng }
      * 
-     * 
+     * @return list of slice
      */
     public List<SliceMng> getSlices() {
         if (slices == null) {

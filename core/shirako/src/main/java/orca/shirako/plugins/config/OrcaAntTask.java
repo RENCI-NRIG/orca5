@@ -165,7 +165,7 @@ public class OrcaAntTask extends Task {
     }
 
     /**
-     * @param exitCodePropert the exitCodePropert to set
+     * @param exitCodeProperty the exitCodePropert to set
      */
     public void setExitCodeProperty(String exitCodeProperty) {
         this.exitCodeProperty = exitCodeProperty;

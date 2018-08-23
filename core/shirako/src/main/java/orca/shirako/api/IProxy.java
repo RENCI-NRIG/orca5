@@ -41,13 +41,14 @@ public interface IProxy extends IActorIdentity, Persistable
     
     /**
      * Executes the specified request.
-     * @param request
+     * @param request rpc request
+     * @throws RPCException in case of error
      */
     public void execute(IRPCRequestState request) throws RPCException;
     
     /**
      * Returns the logger used by the proxy.
-     * @return
+     * @return logger
      */
     public Logger getLogger();
 }

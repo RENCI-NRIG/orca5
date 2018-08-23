@@ -99,7 +99,7 @@ public class BrokerPriorityPolicy extends BrokerSimplePolicy
      * Allows additional configuration of priority between multiple types of
      * requests as specified in <code>REQUEST_TYPE</code>. For example,
      * requests for "master" nodes may be given priority over "worker" requests.
-     * <p/> {@inheritDoc}
+     * {@inheritDoc}
      */
     public void allocate(final long cycle) throws Exception
     {
@@ -162,8 +162,8 @@ public class BrokerPriorityPolicy extends BrokerSimplePolicy
 
     /**
      * Processes a list of configuration properties
-     * @param p
-     * @throws Exception
+     * @param p p
+     * @throws Exception in case of error
      */
     @Override
     public void configure(final Properties p) throws Exception

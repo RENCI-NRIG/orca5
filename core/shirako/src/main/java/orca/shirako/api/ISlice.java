@@ -39,7 +39,6 @@ import orca.util.persistence.Referenceable;
  * <li> broker client slices - are client slices that represent the requests
  * from a broker that acts as a client of the containing actor</li>
  * </ul>
- * </p>
  * <p>
  * Each slice contains a number of properties lists, which can be used to store
  * properties applicable to all reservations associated with the slice.
@@ -47,11 +46,9 @@ import orca.util.persistence.Referenceable;
  * Each reservation can also override a property inherited by the slice, but
  * defining it in its appropriate properties list.
  * <p>
- * <p>
  * Slices within a service manager can be associated with an optional
  * controller. The controller can represent a specific application and the slice
  * will contain the reservations that belong to the application.
- * </p>
  */
 public interface ISlice extends Persistable, Recoverable, Referenceable
 {

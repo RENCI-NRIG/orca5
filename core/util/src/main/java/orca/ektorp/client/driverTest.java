@@ -28,8 +28,8 @@ import org.ektorp.impl.StdCouchDbInstance;
 public class driverTest {
 
 	/**
-	 * @param args
-	 * @throws MalformedURLException 
+	 * @param args arguments
+	 * @throws MalformedURLException in case of malformed URL
 	 */
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws MalformedURLException {

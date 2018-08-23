@@ -22,25 +22,25 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="pool">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="label" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="attributes" type="{http://issg.cs.duke.edu/sharp/boot}attributes" minOccurs="0"/>
- *         &lt;element name="handler" type="{http://issg.cs.duke.edu/sharp/boot}handler"/>
- *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/>
- *         &lt;element name="inventory" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/all>
- *       &lt;attribute name="factory" type="{http://www.w3.org/2001/XMLSchema}string" />
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="pool"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="label" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
+ *         &lt;element name="attributes" type="{http://issg.cs.duke.edu/sharp/boot}attributes" minOccurs="0"/&gt;
+ *         &lt;element name="handler" type="{http://issg.cs.duke.edu/sharp/boot}handler"/&gt;
+ *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/&gt;
+ *         &lt;element name="inventory" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *       &lt;attribute name="factory" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -143,7 +143,7 @@ public class Pool {
 
     /**
      * Gets the value of the units property.
-     * 
+     * @return value of the units property
      */
     public int getUnits() {
         return units;
@@ -152,6 +152,7 @@ public class Pool {
     /**
      * Sets the value of the units property.
      * 
+     * @param value value
      */
     public void setUnits(int value) {
         this.units = value;

@@ -42,7 +42,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      * 
      * @param p
      *            configuration properties
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void configure(Properties p) throws Exception;
 
@@ -64,7 +64,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      *            does not have access to the actor object and the method MUST
      *            use the actor object being passed).
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void initializeKeyStore(IActor actor) throws Exception;
 
@@ -80,7 +80,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      * @param reservation
      *            restored reservation
      * 
-     * @throws Exception
+     * @throws OrcaException
      *             if rebuilding state fails
      */
     public void revisit(IReservation reservation) throws OrcaException;
@@ -92,7 +92,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      * @param slice
      *            restored slice
      * 
-     * @throws Exception
+     * @throws OrcaException
      *             if rebuilding state fails
      */
     public void revisit(ISlice slice) throws OrcaException;
@@ -127,7 +127,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      * 
      * @return a slice object
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public ISlice createSlice(SliceID sliceID, String name, ResourceData properties, Object other)
             throws Exception;
@@ -154,7 +154,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
      * 
      * @return True if the validation succeeds
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     // XXX: not needed. rework the code to get rid of it
     public boolean validateIncoming(IReservation reservation, AuthToken auth) throws Exception;
@@ -207,7 +207,7 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
     /**
      * Sets the handler engine.
      * 
-     * @param config
+     * @param config handler engine
      */
 
     public void setConfig(Config config);
@@ -215,21 +215,21 @@ public interface IShirakoPlugin extends Initializable, Persistable, Recoverable 
     /**
      * Returns the handler engine.
      * 
-     * @return
+     * @return handler engine
      */
     public Config getConfig();
 
     /**
      * Sets the ticket factory.
      * 
-     * @param ticketFactory
+     * @param ticketFactory ticketFactory
      */
     public void setTicketFactory(IResourceTicketFactory ticketFactory);
 
     /**
      * Obtains the ticket factory.
      * 
-     * @return
+     * @return ticket factory
      */
     public IResourceTicketFactory getTicketFactory();
 

@@ -20,21 +20,21 @@ public interface IDriver
 {
     /**
      * Returns the unique driver identifier.
-     * @return
+     * @return DriverId
      */
     public DriverId getId();
 
     /**
      * Initialize the driver
-     * @return
-     * @throws Exception
+     * @return int
+     * @throws Exception in case of error
      */
     public int initialize() throws Exception;
 
     /**
      * Cleanup any relevant state.
-     * @return
-     * @throws Exception
+     * @return int
+     * @throws Exception in case of error
      */
     public int cleanup() throws Exception;
 
@@ -44,8 +44,8 @@ public interface IDriver
      * @param actionId action identifier
      * @param in Properties list describing the request
      * @param out Output properties list
-     * @return
-     * @throws Exception
+     * @return int
+     * @throws Exception in case of error
      */
     public int dispatch(String actionId, Properties in, Properties out) throws Exception;
 
@@ -55,21 +55,21 @@ public interface IDriver
      * @param actionId action identifier
      * @param in Properties list describing the request
      * @param out Output properties list
-     * @return
-     * @throws Exception
+     * @return int 
+     * @throws Exception in case of error
      */
     public int dispatch2(String objectId, String actionId, Properties in, Properties out)
                   throws Exception;
 
     /**
      * If the driver maintains state between calls, this method should return true.
-     * @return
+     * @return true or false
      */
     public boolean isStateful();
 
     /**
      * Sets the factory used to create this driver
-     * @param factory
+     * @param factory factory
      */
     public void setFactory(DriverFactory factory);
 }

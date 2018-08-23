@@ -15,8 +15,9 @@ public class IMAGEPROXYSkeleton {
     /**
      * Auto generated method signature
      * 
-     * @param param0
-     * 
+     * @param param0 param0
+     * @return orca.handlers.ec2.tasks.imgproxy.RegisterImageResponse
+     * @throws ExceptionException in case of error
      */
     public orca.handlers.ec2.tasks.imgproxy.RegisterImageResponse RegisterImage(
             orca.handlers.ec2.tasks.imgproxy.RegisterImage param0)

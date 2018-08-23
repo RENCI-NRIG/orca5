@@ -128,8 +128,9 @@ public class Ciena8700Device extends RouterSSHPromptDevice implements IMappingRo
     /**
      * The parameter e is of the form [a-b]/[c-d], ... where a, b, c, d are non-negative integers
      *
-     * @param e
+     * @param e e
      * @return a list of string to which this pseudo-regular expression expands
+     * @throws CommandException in case of error
      */
     protected static List<String> parseInterfaceList(String e) throws CommandException {
 

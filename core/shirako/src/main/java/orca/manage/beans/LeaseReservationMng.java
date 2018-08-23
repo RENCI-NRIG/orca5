@@ -22,18 +22,18 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="leaseReservationMng">
- *   &lt;complexContent>
- *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}ticketReservationMng">
- *       &lt;sequence>
- *         &lt;element name="authority" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="joinState" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="leasedUnits" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="redeemPredecessors" type="{http://www.nicl.duke.edu/orca/manage/beans}reservationPredecessorMng" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="leaseReservationMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;extension base="{http://www.nicl.duke.edu/orca/manage/beans}ticketReservationMng"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="authority" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="joinState" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="leasedUnits" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="redeemPredecessors" type="{http://www.nicl.duke.edu/orca/manage/beans}reservationPredecessorMng" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/extension&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -81,7 +81,7 @@ public class LeaseReservationMng
 
     /**
      * Gets the value of the joinState property.
-     * 
+     * @return value of joinState property
      */
     public int getJoinState() {
         return joinState;
@@ -89,7 +89,7 @@ public class LeaseReservationMng
 
     /**
      * Sets the value of the joinState property.
-     * 
+     * @param value joinState property
      */
     public void setJoinState(int value) {
         this.joinState = value;
@@ -97,7 +97,7 @@ public class LeaseReservationMng
 
     /**
      * Gets the value of the leasedUnits property.
-     * 
+     * @return value of the leasedUnits property
      */
     public int getLeasedUnits() {
         return leasedUnits;
@@ -105,7 +105,7 @@ public class LeaseReservationMng
 
     /**
      * Sets the value of the leasedUnits property.
-     * 
+     * @param value value of the leasedUnits property
      */
     public void setLeasedUnits(int value) {
         this.leasedUnits = value;
@@ -131,7 +131,7 @@ public class LeaseReservationMng
      * Objects of the following type(s) are allowed in the list
      * {@link ReservationPredecessorMng }
      * 
-     * 
+     * @return list of predecessors
      */
     public List<ReservationPredecessorMng> getRedeemPredecessors() {
         if (redeemPredecessors == null) {

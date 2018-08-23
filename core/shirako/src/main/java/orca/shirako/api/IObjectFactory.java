@@ -27,6 +27,7 @@ public interface IObjectFactory
      *        object
      *
      * @return DOCUMENT ME!
+     * @throws Exception in case of error
      */
     public Object newInstance(Properties properties) throws Exception;
 }

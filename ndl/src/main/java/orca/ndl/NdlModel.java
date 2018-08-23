@@ -93,7 +93,7 @@ public class NdlModel {
     /**
      * Set common redirections for a specific document manager
      * 
-     * @param dm
+     * @param dm dm
      */
     public static void setJenaRedirections(OntDocumentManager dm) {
 
@@ -126,7 +126,7 @@ public class NdlModel {
     /**
      * Close model and remove its disk space
      * 
-     * @param m
+     * @param m m
      */
     public static void closeModel(OntModel m) {
         if (m == null)
@@ -162,15 +162,16 @@ public class NdlModel {
      * Create a new model. If spec is null, OntModelSpec.OWL_MEM - simple in-memory model will be built. For inference
      * use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager.
      * 
-     * @param modelStream
-     * @param spec
+     * @param modelStream modelStream
+     * @param spec spec
      * @param uniqueDM
      *            - unique document manager (usually yes)
-     * @param modelType
+     * @param t 
      *            - in-memory, TDB ephemeral or persistent
      * @param folderName
      *            - optionally, the name of the folder where to save TDB (temprorary will be created if null)
-     * @return
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getModelFromStream(InputStream modelStream, OntModelSpec spec, boolean uniqueDM, ModelType t,
             String folderName) throws NdlException {
@@ -244,13 +245,13 @@ public class NdlModel {
     /**
      * Get an in-memory model from specified stream
      * 
-     * @param modelStream
+     * @param modelStream modelStream
      * @param spec
      *            - model spec
      * @param uniqueDM
      *            - create a unique document manager (usually yes)
-     * @return
-     * @throws NdlException
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getModelFromStream(InputStream modelStream, OntModelSpec spec, boolean uniqueDM)
             throws NdlException {
@@ -261,11 +262,11 @@ public class NdlModel {
      * Get an in-memory model from file. If spec is null, OntModelSpec.OWL_MEM - simple in memory model will be built.
      * For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager.
      * 
-     * @param aFile
-     * @param spec
-     * @param uniqueDM
-     * @return
-     * @throws NdlException
+     * @param aFile aFile 
+     * @param spec spec
+     * @param uniqueDM uniqueDM
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getModelFromFile(String aFile, OntModelSpec spec, boolean uniqueDM) throws NdlException {
         return getModelFromFile(aFile, spec, uniqueDM, ModelType.InMemory, null);
@@ -275,13 +276,15 @@ public class NdlModel {
      * Get a model from file. If spec is null, OntModelSpec.OWL_MEM - simple in memory model will be built. For
      * inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager.
      * 
-     * @param aFile
-     * @param uniqueDM
-     * @param modelType
+     * @param aFile aFile
+     * @param spec spec 
+     * @param uniqueDM uniqueDM
+     * @param t 
      *            - in-memory, TDB persistent or ephemeral
      * @param folderName
      *            - for TDB
-     * @return
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getModelFromFile(String aFile, OntModelSpec spec, boolean uniqueDM, ModelType t,
             String folderName) throws NdlException {
@@ -300,16 +303,16 @@ public class NdlModel {
      * inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager. If TDB is
      * indicated, folder name can be specified (this will make the model non-ephemeral - persistent across shutdowns)
      * 
-     * @param modelStream
-     * @param spec
-     * @param uniqueDM
+     * @param modelStream modelStream
+     * @param spec spec
+     * @param uniqueDM uniqueDM
      *            - need a unique DocumentManager (usually yes)
-     * @param modelType
+     * @param t 
      *            - in-memory, TDB ephemeral or persistent
      * @param folderName
      *            - optional name of the folder for TDB
-     * @return
-     * @throws NdlException
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getRequestModelFromStream(InputStream modelStream, OntModelSpec spec, boolean uniqueDM,
             ModelType t, String folderName) throws NdlException {
@@ -406,11 +409,11 @@ public class NdlModel {
      * Create an in-memory request model. If spec is null, OntModelSpec.OWL_MEM - simple in memory model will be built.
      * For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new DocumentManager.
      * 
-     * @param modelStream
-     * @param spec
-     * @param uniqueDM
-     * @return
-     * @throws NdlException
+     * @param modelStream modelStream
+     * @param spec spec
+     * @param uniqueDM uniqueDM
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getRequestModelFromStream(InputStream modelStream, OntModelSpec spec, boolean uniqueDM)
             throws NdlException {
@@ -420,15 +423,15 @@ public class NdlModel {
     /**
      * Create a blank model
      * 
-     * @param spec
-     * @param uniqueDM
+     * @param spec spec
+     * @param uniqueDM uniqueDM
      *            - with unique document manager
-     * @param modelType
+     * @param t 
      *            - in-memory, TDB persistent or ephemeral
      * @param folderName
      *            - optionally (null permitted) specify the name of the folder to store the model
-     * @return
-     * @throws NdlException
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel createModel(OntModelSpec spec, boolean uniqueDM, ModelType t, String folderName)
             throws NdlException {
@@ -491,10 +494,10 @@ public class NdlModel {
     /**
      * Create a blank in-memory model
      * 
-     * @param spec
-     * @param uniqueDM
-     * @return
-     * @throws NdlException
+     * @param spec spec
+     * @param uniqueDM uniqueDM
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel createModel(OntModelSpec spec, boolean uniqueDM) throws NdlException {
         return createModel(spec, uniqueDM, ModelType.InMemory, null);
@@ -505,10 +508,12 @@ public class NdlModel {
      * memory model will be built. For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a
      * new DocumentManager.
      * 
-     * @param s
-     * @param uniqueDM
+     * @param s s
+     * @param spec spec 
+     * @param uniqueDM uniqueDM
      *            - use a unique DM
-     * @return
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getModelFromString(String s, OntModelSpec spec, boolean uniqueDM) throws NdlException {
         assert (s != null);
@@ -523,15 +528,16 @@ public class NdlModel {
      * will be built. For inference use OntModelSpec.RDFS_MEM_TRANS_INF. Optionally create a model with a new
      * DocumentManager.
      * 
-     * @param s
-     * @param spec
+     * @param s s
+     * @param spec spec
      * @param uniqueDM
      *            - use a unique DM
      * @param t
      *            ModelType (in-memory, tdb ephemeral or persistent)
      * @param folderName
      *            for tdb models
-     * @return
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getModelFromString(String s, OntModelSpec spec, boolean uniqueDM, ModelType t,
             String folderName) throws NdlException {
@@ -549,8 +555,8 @@ public class NdlModel {
      *            - directory where TDB store is
      * @param s
      *            - OntModelSpec for the model
-     * @return
-     * @throws NdlException
+     * @return OntModel
+     * @throws NdlException in case of error
      */
     public static OntModel getModelFromTDB(String d, OntModelSpec s) throws NdlException {
         assert (d != null);

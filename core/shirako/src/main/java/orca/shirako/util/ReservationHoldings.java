@@ -291,7 +291,7 @@ public class ReservationHoldings
 
     /**
      * Removes all reservations that have end time not after the given cycle.
-     * @param time
+     * @param time time
      */
     public void tick(final long time)
     {

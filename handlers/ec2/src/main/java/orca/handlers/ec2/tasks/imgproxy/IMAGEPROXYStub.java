@@ -58,6 +58,9 @@ public class IMAGEPROXYStub extends org.apache.axis2.client.Stub {
 
     /**
      * Constructor that takes in a configContext
+     * @param configurationContext configurationContext
+     * @param targetEndpoint targetEndpoint
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public IMAGEPROXYStub(org.apache.axis2.context.ConfigurationContext configurationContext,
             java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
@@ -75,6 +78,7 @@ public class IMAGEPROXYStub extends org.apache.axis2.client.Stub {
 
     /**
      * Default Constructor
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public IMAGEPROXYStub() throws org.apache.axis2.AxisFault {
 
@@ -84,6 +88,8 @@ public class IMAGEPROXYStub extends org.apache.axis2.client.Stub {
 
     /**
      * Constructor taking the target endpoint
+     * @param targetEndpoint targetEndpoint
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public IMAGEPROXYStub(java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
         this(null, targetEndpoint);
@@ -92,8 +98,10 @@ public class IMAGEPROXYStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * 
-     * @see orca.handlers.ec2.tasks.imgproxy.IMAGEPROXY#RegisterImage
-     * @param param18
+     * @param param18 param18
+     * @throws java.rmi.RemoteException in case of error
+     * @throws orca.handlers.ec2.tasks.imgproxy.ExceptionException in case of error
+     * @return orca.handlers.ec2.tasks.imgproxy.RegisterImageResponse
      * 
      */
     public orca.handlers.ec2.tasks.imgproxy.RegisterImageResponse RegisterImage(
@@ -190,8 +198,9 @@ public class IMAGEPROXYStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * 
-     * @see orca.handlers.ec2.tasks.imgproxy.IMAGEPROXY#startRegisterImage
-     * @param param18
+     * @param param18 param18
+     * @param callback callback
+     * @throws java.rmi.RemoteException in case of error
      * 
      */
     public void startRegisterImage(

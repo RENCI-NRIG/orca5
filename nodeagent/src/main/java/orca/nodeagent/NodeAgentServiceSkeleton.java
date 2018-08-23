@@ -46,8 +46,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * Executes the specified script
      * 
-     * @param arg
-     * @return
+     * @param arg arg
+     * @return ScriptResultElement
      */
     public ScriptResultElement executeScript(ScriptElement arg) {
         logger.info("Received an executeScript request");
@@ -69,8 +69,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * Installs a driver.
      * 
-     * @param arg
-     * @return
+     * @param arg arg
+     * @return ResultElement
      */
     public ResultElement installDriver(DriverElement arg) {
         logger.info("Received an install driver request");
@@ -95,8 +95,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * Upgrades an already installed driver
      * 
-     * @param arg
-     * @return
+     * @param arg arg
+     * @return ResultElement
      */
     public ResultElement upgradeDriver(DriverElement arg) {
         logger.info("Received an upgrade driver request");
@@ -121,8 +121,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * Uninstalls an installed driver
      * 
-     * @param arg
-     * @return
+     * @param arg arg
+     * @return ResultElement
      */
     public ResultElement uninstallDriver(DriverElement arg) {
         logger.info("Received an uninstall driver request");
@@ -143,8 +143,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * Invokes an action on a driver
      * 
-     * @param arg
-     * @return
+     * @param arg arg
+     * @return ResultElement
      */
     public ResultElement executeDriver(DriverRequestElement arg) {
         logger.info("Received an executeDriver request");
@@ -170,8 +170,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * Invokes an action on a driver
      * 
-     * @param arg
-     * @return
+     * @param arg arg
+     * @return ResultElement
      */
     public ResultElement executeObjectDriver(DriverObjectRequestElement arg) {
         logger.info("Received an executeDriver request");
@@ -225,8 +225,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * registers a public key/certificate with the server
      * 
-     * @param rk
-     * @return
+     * @param rk rk
+     * @return RegisterKeyResultElement 
      */
     public RegisterKeyResultElement registerKey(RegisterKeyElement rk) {
         logger.info("Received registerKey request");
@@ -245,8 +245,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * unregister a public key/certificate with the server
      * 
-     * @param urk
-     * @return
+     * @param urk urk
+     * @return UnregisterKeyResultElement 
      */
     public UnregisterKeyResultElement unregisterKey(UnregisterKeyElement urk) {
         logger.info("Received an unregisterKey request");
@@ -264,8 +264,8 @@ public class NodeAgentServiceSkeleton {
     /**
      * register the first key/certificate with the server
      * 
-     * @param rfk
-     * @return
+     * @param rak rak
+     * @return RegisterAuthorityKeyResultElement 
      */
 
     /*
@@ -278,6 +278,8 @@ public class NodeAgentServiceSkeleton {
 
     /**
      * register the authority key with the service this should be the first function called
+     * @param rak rak
+     * @return RegisterAuthorityKeyResultElement
      */
     public RegisterAuthorityKeyResultElement registerAuthorityKey(RegisterAuthorityKeyElement rak) {
         logger.info("Received registerAuthorityKey request");
@@ -299,10 +301,8 @@ public class NodeAgentServiceSkeleton {
         return gskre;
     }
 
-    /*
-     * ==================================================================== Helper functions
-     * ====================================================================
-     */
+     // ==================================================================== Helper functions
+     // ====================================================================
     protected ResultElement sendResult(int code, Properties p) {
         ResultElement result = new ResultElement();
         result.setCode(code);

@@ -70,6 +70,7 @@ public abstract class BrokerCalendarPolicy extends BrokerPolicy
      * reservation from the closing calendar (if it belongs to it).
      *
      * @param reservation reservation to add
+     * @throws Exception in case of error
      */
     protected void addForApprovalCalendar(final IBrokerReservation reservation)
                                    throws Exception
@@ -90,9 +91,8 @@ public abstract class BrokerCalendarPolicy extends BrokerPolicy
     /**
      * Records the reservation in the calendar.
      *
-     * @param reservation
+     * @param reservation reservation
      *
-     * @throws Exception
      */
     protected void addToCalendar(final IBrokerReservation reservation)
     {
@@ -149,7 +149,7 @@ public abstract class BrokerCalendarPolicy extends BrokerPolicy
      * requests in the holdings calendar. Note that the policy module must add
      * bids to the pending set, or they may not install in the calendar.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void checkPending() throws Exception
     {
@@ -283,7 +283,7 @@ public abstract class BrokerCalendarPolicy extends BrokerPolicy
      *
      * @return renew cycle
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected abstract long getRenew(IClientReservation reservation) throws Exception;
 
@@ -431,7 +431,7 @@ public abstract class BrokerCalendarPolicy extends BrokerPolicy
      *
      * @param r reservation to recover
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitClient(final IClientReservation r) throws Exception
     {
@@ -475,7 +475,7 @@ public abstract class BrokerCalendarPolicy extends BrokerPolicy
      *
      * @param r reservation to recover
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitServer(final IBrokerReservation r) throws Exception
     {

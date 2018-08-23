@@ -100,7 +100,7 @@ public interface IServerReservation extends IReservation
     
     /**
      * Returns data to be sent back to the client in an update message.
-     * @return
+     * @return data to be sent back to the client in an update message
      */
     public UpdateData getUpdateData();
 }

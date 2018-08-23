@@ -39,6 +39,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventoryRequest }
      * 
+     * @return created instance
      */
     public GetInventoryRequest createGetInventoryRequest() {
         return new GetInventoryRequest();
@@ -47,6 +48,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link SetUserPasswordRequest }
      * 
+     * @return created instance
      */
     public SetUserPasswordRequest createSetUserPasswordRequest() {
         return new SetUserPasswordRequest();
@@ -55,6 +57,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPackagesRequest }
      * 
+     * @return created instance
      */
     public GetPackagesRequest createGetPackagesRequest() {
         return new GetPackagesRequest();
@@ -63,6 +66,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link LogoutResponse }
      * 
+     * @return created instance
      */
     public LogoutResponse createLogoutResponse() {
         return new LogoutResponse();
@@ -71,6 +75,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUsersResponse }
      * 
+     * @return created instance
      */
     public GetUsersResponse createGetUsersResponse() {
         return new GetUsersResponse();
@@ -79,6 +84,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPluginRequest }
      * 
+     * @return created instance
      */
     public GetPluginRequest createGetPluginRequest() {
         return new GetPluginRequest();
@@ -87,6 +93,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPackagesResponse }
      * 
+     * @return created instance
      */
     public GetPackagesResponse createGetPackagesResponse() {
         return new GetPackagesResponse();
@@ -95,6 +102,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUnitResponse }
      * 
+     * @return created instance
      */
     public GetUnitResponse createGetUnitResponse() {
         return new GetUnitResponse();
@@ -103,6 +111,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUserRequest }
      * 
+     * @return created instance
      */
     public GetUserRequest createGetUserRequest() {
         return new GetUserRequest();
@@ -111,6 +120,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetCertificateRequest }
      * 
+     * @return created instance
      */
     public GetCertificateRequest createGetCertificateRequest() {
         return new GetCertificateRequest();
@@ -119,6 +129,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetActorsRequest }
      * 
+     * @return created instance
      */
     public GetActorsRequest createGetActorsRequest() {
         return new GetActorsRequest();
@@ -127,6 +138,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetProxiesResponse }
      * 
+     * @return created instance
      */
     public GetProxiesResponse createGetProxiesResponse() {
         return new GetProxiesResponse();
@@ -135,6 +147,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetManagementObjectResponse }
      * 
+     * @return created instance
      */
     public GetManagementObjectResponse createGetManagementObjectResponse() {
         return new GetManagementObjectResponse();
@@ -143,6 +156,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetActorsFromDatabaseRequest }
      * 
+     * @return created instance
      */
     public GetActorsFromDatabaseRequest createGetActorsFromDatabaseRequest() {
         return new GetActorsFromDatabaseRequest();
@@ -151,6 +165,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link LoginResponse }
      * 
+     * @return created instance
      */
     public LoginResponse createLoginResponse() {
         return new LoginResponse();
@@ -159,6 +174,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link LogoutRequest }
      * 
+     * @return created instance
      */
     public LogoutRequest createLogoutRequest() {
         return new LogoutRequest();
@@ -167,6 +183,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetActorsResponse }
      * 
+     * @return created instance
      */
     public GetActorsResponse createGetActorsResponse() {
         return new GetActorsResponse();
@@ -175,6 +192,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUsersRequest }
      * 
+     * @return created instance
      */
     public GetUsersRequest createGetUsersRequest() {
         return new GetUsersRequest();
@@ -183,6 +201,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUserResponse }
      * 
+     * @return created instance
      */
     public GetUserResponse createGetUserResponse() {
         return new GetUserResponse();
@@ -191,6 +210,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetActorsFromDatabaseResponse }
      * 
+     * @return created instance
      */
     public GetActorsFromDatabaseResponse createGetActorsFromDatabaseResponse() {
         return new GetActorsFromDatabaseResponse();
@@ -199,6 +219,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link LoginRequest }
      * 
+     * @return created instance
      */
     public LoginRequest createLoginRequest() {
         return new LoginRequest();
@@ -207,6 +228,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link SetUserPasswordResponse }
      * 
+     * @return created instance
      */
     public SetUserPasswordResponse createSetUserPasswordResponse() {
         return new SetUserPasswordResponse();
@@ -215,6 +237,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUnitRequest }
      * 
+     * @return created instance
      */
     public GetUnitRequest createGetUnitRequest() {
         return new GetUnitRequest();
@@ -223,6 +246,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPluginResponse }
      * 
+     * @return created instance
      */
     public GetPluginResponse createGetPluginResponse() {
         return new GetPluginResponse();
@@ -231,6 +255,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventoryResponse }
      * 
+     * @return created instance
      */
     public GetInventoryResponse createGetInventoryResponse() {
         return new GetInventoryResponse();
@@ -239,6 +264,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPluginsResponse }
      * 
+     * @return created instance
      */
     public GetPluginsResponse createGetPluginsResponse() {
         return new GetPluginsResponse();
@@ -247,6 +273,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetProxiesRequest }
      * 
+     * @return created instance
      */
     public GetProxiesRequest createGetProxiesRequest() {
         return new GetProxiesRequest();
@@ -255,6 +282,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetCertificateResponse }
      * 
+     * @return created instance
      */
     public GetCertificateResponse createGetCertificateResponse() {
         return new GetCertificateResponse();
@@ -263,6 +291,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetPluginsRequest }
      * 
+     * @return created instance
      */
     public GetPluginsRequest createGetPluginsRequest() {
         return new GetPluginsRequest();
@@ -271,6 +300,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetManagementObjectRequest }
      * 
+     * @return created instance
      */
     public GetManagementObjectRequest createGetManagementObjectRequest() {
         return new GetManagementObjectRequest();

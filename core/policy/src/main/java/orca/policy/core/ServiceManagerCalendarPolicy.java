@@ -64,7 +64,7 @@ public abstract class ServiceManagerCalendarPolicy extends ServiceManagerPolicy
      * requests in the holdings calendar. Note that the policy module must add
      * bids to the pending set, or they may not install in the calendar.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void checkPending() throws Exception
     {
@@ -320,7 +320,7 @@ public abstract class ServiceManagerCalendarPolicy extends ServiceManagerPolicy
      *
      * @return the close time of the reservation (cycle)
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected abstract long getClose(IClientReservation reservation, Term term)
                               throws Exception;
@@ -356,7 +356,7 @@ public abstract class ServiceManagerCalendarPolicy extends ServiceManagerPolicy
      *
      * @return the redeem time of the reservation (cycle)
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected abstract long getRedeem(final IClientReservation reservation)
                                throws Exception;
@@ -392,7 +392,7 @@ public abstract class ServiceManagerCalendarPolicy extends ServiceManagerPolicy
      *
      * @return the renew time of the reservation (cycle)
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected abstract long getRenew(final IClientReservation reservation)
                               throws Exception;
@@ -415,7 +415,7 @@ public abstract class ServiceManagerCalendarPolicy extends ServiceManagerPolicy
      *
      * @param r reservation to check
      *
-     * @return
+     * @return true or false
      */
     protected boolean isExpired(final IReservation r)
     {

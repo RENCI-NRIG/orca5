@@ -40,6 +40,7 @@ public class ResourceTicket implements Persistable, Recoverable
     /**
      * Creates a root ticket from the specified delegation.
      * @param delegation root delegation
+     * @param factory factory
      */
     public ResourceTicket(IResourceTicketFactory factory, ResourceDelegation delegation)
     {
@@ -63,6 +64,7 @@ public class ResourceTicket implements Persistable, Recoverable
      * Creates a new ticket from the given source ticket and delegation. 
      * @param source source ticket
      * @param delegation delegation
+     * @param factory factory
      */
     public ResourceTicket(IResourceTicketFactory factory, ResourceTicket source, ResourceDelegation delegation)
     {    	
@@ -147,7 +149,7 @@ public class ResourceTicket implements Persistable, Recoverable
 
     /**
      * Returns the resource type of the resource represented by this ticket.
-     * @return
+     * @return ResourceType
      */
     public ResourceType getResourceType()
     {
@@ -157,7 +159,7 @@ public class ResourceTicket implements Persistable, Recoverable
     /**
      * Returns a properties list with additional information about the resources
      * represented by this ticket.
-     * @return
+     * @return Properties
      */
     public Properties getProperties()
     {
@@ -176,7 +178,7 @@ public class ResourceTicket implements Persistable, Recoverable
 
     /**
      * Returns the ticket unique identifier.
-     * @return
+     * @return guid
      */
     public ID getGuid()
     {
@@ -185,7 +187,7 @@ public class ResourceTicket implements Persistable, Recoverable
 
     /**
      * Returns the term represented by this ticket.
-     * @return
+     * @return term
      */
     public Term getTerm()
     {
@@ -194,7 +196,7 @@ public class ResourceTicket implements Persistable, Recoverable
 
     /**
      * Returns the number of units represented by this ticket.
-     * @return
+     * @return units
      */
     public int getUnits()
     {
@@ -203,7 +205,7 @@ public class ResourceTicket implements Persistable, Recoverable
 
     /**
      * Returns the resource vector of each unit represented by this ticket.
-     * @return
+     * @return resource vector
      */
     public ResourceVector getResourceVector()
     {

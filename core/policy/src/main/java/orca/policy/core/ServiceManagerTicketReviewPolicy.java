@@ -45,7 +45,7 @@ public class ServiceManagerTicketReviewPolicy extends ServiceManagerSimplePolicy
      * Check to make sure all reservations are Ticketed (not Failed or Nascent)
      * before calling the parent method.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     @Override
     protected void checkPending() throws Exception {
