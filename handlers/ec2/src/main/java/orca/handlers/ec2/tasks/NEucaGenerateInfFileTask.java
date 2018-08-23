@@ -358,6 +358,22 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             if (temp != null) {
                 out.println("slicecometwritetoken=" + temp);
             }
+            temp = getProject().getProperty(UnitProperties.UnitCometHostsGroupToRead);
+            if (temp != null) {
+                out.println("comethostsgroupread=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.UnitCometHostsGroupToWrite);
+            if (temp != null) {
+                out.println("comethostsgroupwrite=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.UnitCometPubKeysGroupToRead);
+            if (temp != null) {
+                out.println("cometpubkeysgroupread=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.UnitCometPubKeysGroupToWrite);
+            if (temp != null) {
+                out.println("cometpubkeysgroupwrite=" + temp);
+            }
 
             // Save the readToken and writeToken in the properties
             getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken);
@@ -369,6 +385,10 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
             out.println(";cometreadtoken= Not Specified");
             out.println("slicecometreadtoken= Not Specified");
             out.println("slicecometwritetoken= Not Specified");
+            out.println("comethostsgroupread= Not Specified");
+            out.println("comethostsgroupwrite= Not Specified");
+            out.println("cometpubkeysgroupread= Not Specified");
+            out.println("cometpubkeysgroupwrite= Not Specified");
         }
     }
 

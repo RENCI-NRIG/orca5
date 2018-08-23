@@ -260,32 +260,35 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
         logger.debug("deleteSliceCometContext(): Issuing Comet context delete for reservation: " +
                 currRes.getReservationID().toString());
+
+        String cometHosts = OrcaController.getProperty(OrcaConfiguration.CometHost);
+        String caCert = OrcaController.getProperty(OrcaConfiguration.CometCaCert);
+        String clientCertKeyStore = OrcaController.getProperty(OrcaConfiguration.CometClientKeyStore);
+        String clientCertKeyStorePwd = OrcaController.getProperty(OrcaConfiguration.CometClientKeyStorePwd);
+
+        if(cometHosts == null || caCert == null || clientCertKeyStore == null || clientCertKeyStorePwd == null) {
+            logger.error("deleteSliceCometContext(): deleteSliceCometContext was given incomplete comet config");
+            return;
+        }
         Properties local = OrcaConverter.fill(currRes.getLocalProperties());
         String readToken = local.getProperty(UnitProperties.SliceCometReadToken);
         String writeToken = local.getProperty(UnitProperties.SliceCometWriteToken);
         if(readToken != null && writeToken != null) {
-            String cometHosts = OrcaController.getProperty(OrcaConfiguration.CometHost);
-            String caCert = OrcaController.getProperty(OrcaConfiguration.CometCaCert);
-            String clientCertKeyStore = OrcaController.getProperty(OrcaConfiguration.CometClientKeyStore);
-            String clientCertKeyStorePwd = OrcaController.getProperty(OrcaConfiguration.CometClientKeyStorePwd);
-
-            if(cometHosts == null || caCert == null || clientCertKeyStore == null || clientCertKeyStorePwd == null) {
-                logger.error("deleteSliceCometContext(): deleteSliceCometContext was given incomplete comet config");
-                return;
-            }
 
             NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHosts, caCert,
                     clientCertKeyStore, clientCertKeyStorePwd,
                     currRes.getReservationID(), currRes.getSliceID(), readToken, writeToken);
-            if (OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) {
-                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.keys, "all")) {
-                    logger.error("createSliceCometContext(): failed to delete keys in Comet");
+            if (OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
+                    OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) {
+                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.pubkeys, "all")) {
+                    logger.error("deleteSliceCometContext(): failed to delete keys in Comet");
                 }
                 else {
                     logger.debug("deleteSliceCometContext(): Pubkeys enabled, deleteing them from Comet in group all");
                 }
             }
-            if (OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
+            if (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
+                    OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
                 if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.hosts, "all")) {
                     logger.error("createSliceCometContext(): failed to save hosts in Comet");
                 }
@@ -317,8 +320,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             TicketReservationMng currRes = it.next();
             String rType = currRes.getResourceType();
             if (rType.endsWith("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {
-                if(OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true") ||
-                        OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
+                if((OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
+                        OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) ||
+                        (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
+                                OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true"))) {
                     deleteSliceCometContext(currRes);
                 }
             }
@@ -339,41 +344,53 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
         String clientCertKeyStore = OrcaController.getProperty(OrcaConfiguration.CometClientKeyStore);
         String clientCertKeyStorePwd = OrcaController.getProperty(OrcaConfiguration.CometClientKeyStorePwd);
 
-        Properties local = OrcaConverter.fill(currRes.getLocalProperties());
-        local.setProperty(UnitProperties.SliceCometReadToken, readToken);
-        local.setProperty(UnitProperties.SliceCometWriteToken, writeToken);
-
         if(cometHosts == null || caCert == null || clientCertKeyStore == null || clientCertKeyStorePwd == null) {
-            logger.error("createSliceCometContext(): deleteSliceCometContext was given incomplete comet config");
+            logger.error("createSliceCometContext(): createSliceCometContext was given incomplete comet config");
             return;
         }
+
+        Properties local = OrcaConverter.fill(currRes.getLocalProperties());
+
+        boolean updateProps = false;
 
         NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHosts, caCert,
                 clientCertKeyStore, clientCertKeyStorePwd,
                 currRes.getReservationID(), currRes.getSliceID(), readToken, writeToken);
 
-        if (OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) {
-            cometDataGenerator.addKey("", "");
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.keys, "all")) {
+        if (OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
+                OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) {
+            cometDataGenerator.addKey("");
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.pubkeys, "all")) {
                 logger.error("createSliceCometContext(): failed to save keys in Comet");
                 throw new NEucaCometException("Failed to save keys in Comet");
             }
             else {
+                updateProps = true;
+                local.setProperty(UnitProperties.UnitCometPubKeysGroupToRead, "all");
+                local.setProperty(UnitProperties.UnitCometPubKeysGroupToWrite, "all");
                 logger.debug("createSliceCometContext(): Pubkeys enabled, saving them in Comet in group all");
             }
         }
-        if (OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
+        if (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
+                OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
             cometDataGenerator.addHost(local.getProperty(UnitProperties.UnitHostName), "");
             if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.hosts, "all")) {
                 logger.error("createSliceCometContext(): failed to save hosts in Comet");
                 throw new NEucaCometException("Failed to save hosts in Comet");
             }
             else {
+                updateProps = true;
+                local.setProperty(UnitProperties.UnitCometHostsGroupToRead, "all");
+                local.setProperty(UnitProperties.UnitCometHostsGroupToWrite, "all");
                 logger.debug("createSliceCometContext(): Etchosts enabled saving them in Comet in group all for host=" +
                         local.getProperty(UnitProperties.UnitHostName));
             }
         }
-        currRes.setLocalProperties(OrcaConverter.merge(local, currRes.getLocalProperties()));
+        if(updateProps) {
+            local.setProperty(UnitProperties.SliceCometReadToken, readToken);
+            local.setProperty(UnitProperties.SliceCometWriteToken, writeToken);
+            currRes.setLocalProperties(OrcaConverter.merge(local, currRes.getLocalProperties()));
+        }
     }
 
     private void createSliceCometContext(XmlrpcControllerSlice s) throws NEucaCometException {
@@ -395,8 +412,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             TicketReservationMng currRes = it.next();
             String rType = currRes.getResourceType();
             if (rType.endsWith("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {
-                if(OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true") ||
-                        OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
+                if((OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
+                        OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) ||
+                        (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
+                                OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true"))) {
                     String writeToken = RandomStringUtils.random(10, true, true);
                     createSliceCometContext(currRes, readToken, writeToken);
                 }
@@ -1057,8 +1076,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
                     // Find the slice readToken and writeToken from an existing VM otherwise generate tokens
                     String readToken = null;
-                    if (OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true") ||
-                            OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
+                    if ((OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
+                            OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) ||
+                            (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
+                                    OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true"))) {
                         List<ReservationMng> modifyReservations = m_map.get(ModifyType.MODIFY.toString());
                         for (ReservationMng rr : modifyReservations) {
                             String rType = rr.getResourceType();
@@ -1088,8 +1109,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
 
                             if (rType.endsWith("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {
-                                if (OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true") ||
-                                        OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
+                                if((OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
+                                        OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) ||
+                                        (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
+                                                OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true"))) {
                                     logger.debug("modifySlice: issuing add comet context for modify: " + rr.getReservationID().toString());
                                     String writeToken = RandomStringUtils.random(10, true, true);
                                     createSliceCometContext((TicketReservationMng)rr, readToken, writeToken);
@@ -1097,8 +1120,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                             }
                         } catch (Exception ex) {
                             if (rType.endsWith("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {
-                                if (OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true") ||
-                                        OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true")) {
+                                if((OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
+                                        OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) ||
+                                        (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
+                                                OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true"))) {
                                     logger.error("modifySlice: issuing delete comet context for modify: " + rr.getReservationID().toString());
                                     deleteSliceCometContext((TicketReservationMng)rr);
                                 }

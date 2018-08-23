@@ -66,7 +66,7 @@ public class NEucaCometDataGenerator {
         routes,
         scripts,
         hosts,
-        keys
+        pubkeys
     };
 
     // DATA
@@ -159,7 +159,7 @@ public class NEucaCometDataGenerator {
                         case hosts:
                             hosts_ = value;
                             break;
-                        case keys:
+                        case pubkeys:
                             keys_ = value;
                             break;
                     }
@@ -215,7 +215,7 @@ public class NEucaCometDataGenerator {
                         return hosts_.toString();
                     }
                     break;
-                case keys:
+                case pubkeys:
                     if (keys_ != null && keys_.size() > 0) {
                         return keys_.toString();
                     }
@@ -513,15 +513,14 @@ public class NEucaCometDataGenerator {
      * @brief function adds key to the Keys JSON object
      *
      * @param publicKey - publicKey
-     * @param privateKey - privateKey
      *
      * @return true for success; otherwise false
      *
      */
-    public boolean addKey(String publicKey, String privateKey) {
+    public boolean addKey(String publicKey) {
         boolean retVal = false;
         try {
-            if (publicKey == null || privateKey == null) {
+            if (publicKey == null) {
                 System.out.println("NEucaCometDataGenerator::addKey: Missing mandatory key parameters!");
                 return retVal;
             }
@@ -531,7 +530,6 @@ public class NEucaCometDataGenerator {
 
             JSONObject key = new JSONObject();
             key.put(JsonKeyPublicKey, publicKey);
-            key.put(JsonKeyPrivateKey, privateKey);
             retVal = keys_.add(key);
         }
         catch (Exception e) {
@@ -577,7 +575,7 @@ public class NEucaCometDataGenerator {
                 case hosts:
                     familyToBeUpdated = hosts_;
                     break;
-                case keys:
+                case pubkeys:
                     familyToBeUpdated = keys_;
                     break;
             }
