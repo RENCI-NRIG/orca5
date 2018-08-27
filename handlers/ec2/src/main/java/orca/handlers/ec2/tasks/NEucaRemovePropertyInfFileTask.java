@@ -88,6 +88,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                     String caCert = getProject().getProperty(OrcaConfiguration.CometCaCert);
                     String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.CometClientKeyStore);
                     String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.CometClientKeyStorePwd);
+                    NEucaCometDataGenerator cometDataGenerator = null;
 
                     if( cometHost != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
                         String rId = getProject().getProperty(UnitProperties.UnitReservationID);
@@ -96,7 +97,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                         String writeToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken);
 
                         // Instantiate comet data generator
-                        NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, caCert, clientCertKeyStore,
+                        cometDataGenerator = new NEucaCometDataGenerator(cometHost, caCert, clientCertKeyStore,
                                 clientCertKeyStorePwd, rId, sliceId, readToken, writeToken);
 
                         // Update users
@@ -169,42 +170,50 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
 
                     boolean processedKey = false;
                     while (line != null) {
-                        System.out.println("NEucaRemovePropertyInfFileTask::execute: line = " + line);
+                        if(cometDataGenerator == null) {
+                            System.out.println("NEucaRemovePropertyInfFileTask::execute: line = " + line);
 
-                        // if there is nothing to remove, just copy lines
-                        if (section_ == null || key_ == null) {
-                            sb.append(line);
-                            sb.append(System.lineSeparator());
-                            line = userdataSource.readLine();
-                            processedKey = true;
-                            continue;
+                            // if there is nothing to remove, just copy lines
+                            if (section_ == null || key_ == null) {
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                                line = userdataSource.readLine();
+                                processedKey = true;
+                                continue;
+                            }
+
+                            Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
+                            Matcher matcher = pattern.matcher(line);
+                            if (matcher.find()) {
+                                prev_section = section;
+                                section = matcher.group(1);
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                                System.out.println("found section " + section);
+                                line = userdataSource.readLine();
+                                continue;
+                            }
+
+                            // check to see if we checked all the existing interfaces. if so, add the new one.
+                            String key = line.split("=")[0].trim();
+                            System.out.println("NEucaRemovePropertyInfFileTask::execute: processing line:  key: " + key + ", section: " + section);
+
+                            // skip if we find a match... remember we are removing the key/value
+                            if (!(section.equals(section_) && key.equals(key_))) {
+                                System.out.println("NEucaRemovePropertyInfFileTask::execute: Keeping line: " + line);
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                            } else {
+                                System.out.println("NEucaRemovePropertyInfFileTask::execute: Deleting line: " + line);
+                            }
                         }
-
-                        Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
-                        Matcher matcher = pattern.matcher(line);
-                        if (matcher.find()) {
-                            prev_section = section;
-                            section = matcher.group(1);
+                        else
+                        {
                             sb.append(line);
-                            sb.append(System.lineSeparator());
-                            System.out.println("found section " + section);
-                            line = userdataSource.readLine();
-                            continue;
+                            if(!line.isEmpty()) {
+                                sb.append(System.lineSeparator());
+                            }
                         }
-
-                        // check to see if we checked all the existing interfaces. if so, add the new one.
-                        String key = line.split("=")[0].trim();
-                        System.out.println("NEucaRemovePropertyInfFileTask::execute: processing line:  key: " + key + ", section: " + section);
-
-                        // skip if we find a match... remember we are removing the key/value
-                        if (!(section.equals(section_) && key.equals(key_))) {
-                            System.out.println("NEucaRemovePropertyInfFileTask::execute: Keeping line: " + line);
-                            sb.append(line);
-                            sb.append(System.lineSeparator());
-                        } else {
-                            System.out.println("NEucaRemovePropertyInfFileTask::execute: Deleting line: " + line);
-                        }
-
                         line = userdataSource.readLine();
                     }
 

@@ -87,9 +87,6 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     userdataNew = userdataOld_;
                 }
                 else {
-                    StringBuilder sb = new StringBuilder();
-                    String line = userdataSource.readLine();
-
                     // Update Comet if configured
                     String cometHost = getProject().getProperty(OrcaConfiguration.CometHost);
                     String caCert = getProject().getProperty(OrcaConfiguration.CometCaCert);
@@ -122,53 +119,62 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                         }
                     }
 
+                    StringBuilder sb = new StringBuilder();
+                    String line = userdataSource.readLine();
+
                     boolean processedKey = false;
                     while (line != null) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: line = " + line);
+                        if(cometDataGenerator == null) {
+                            System.out.println("NEucaAddPropertyInfFileTask::execute: line = " + line);
 
-                        // if there is nothing to add, just copy lines
-                        if (section_ == null || key_ == null || value_ == null) {
-                            sb.append(line);
-                            sb.append(System.lineSeparator());
-                            line = userdataSource.readLine();
-                            processedKey = true;
-                            continue;
-                        }
+                            // if there is nothing to add, just copy lines
+                            if (section_ == null || key_ == null || value_ == null) {
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                                line = userdataSource.readLine();
+                                processedKey = true;
+                                continue;
+                            }
 
-                        // Look up which section to process; section could be any of [global, users, interfaces, storage, routes, scripts]
-                        Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
-                        Matcher matcher = pattern.matcher(line);
-                        if (matcher.find()) {
-                            prev_section = section;
-                            section = matcher.group(1);
-                            System.out.println("NEucaAddPropertyInfFileTask::execute: found section " + section);
-                        }
+                            // Look up which section to process; section could be any of [global, users, interfaces, storage, routes, scripts]
+                            Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
+                            Matcher matcher = pattern.matcher(line);
+                            if (matcher.find()) {
+                                prev_section = section;
+                                section = matcher.group(1);
+                                System.out.println("NEucaAddPropertyInfFileTask::execute: found section " + section);
+                            }
 
-                        // check to see if we checked all the existing interfaces. if so, add the new one.
-                        if (!processedKey && prev_section.equals(section_)) {
-                            System.out.println(
-                                    "NEucaAddPropertyInfFileTask::execute: Adding new key to " + prev_section + " section of userdata: " + key_.trim());
-                            sb.append(key_.trim() + "=" + value_.trim() + "\n");
-                            processedKey = true;
-                        }
-
-                        key = line.split("=")[0].trim();
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: processing key: " + key);
-                        // find key
-                        if (section.equals("interfaces")) {
-                            if (!processedKey && key.equals(key_)) {
-                                // modify an existing interface
-                                System.out.println("NEucaAddPropertyInfFileTask::execute: Modifying interface ing userdata: " + key);
+                            // check to see if we checked all the existing interfaces. if so, add the new one.
+                            if (!processedKey && prev_section.equals(section_)) {
+                                System.out.println(
+                                        "NEucaAddPropertyInfFileTask::execute: Adding new key to " + prev_section + " section of userdata: " + key_.trim());
                                 sb.append(key_.trim() + "=" + value_.trim() + "\n");
+                                processedKey = true;
+                            }
+
+                            key = line.split("=")[0].trim();
+                            System.out.println("NEucaAddPropertyInfFileTask::execute: processing key: " + key);
+                            // find key
+                            if (section.equals("interfaces")) {
+                                if (!processedKey && key.equals(key_)) {
+                                    // modify an existing interface
+                                    System.out.println("NEucaAddPropertyInfFileTask::execute: Modifying interface ing userdata: " + key);
+                                    sb.append(key_.trim() + "=" + value_.trim() + "\n");
+                                } else {
+                                    System.out.println("NEucaAddPropertyInfFileTask::execute: Ignoring interface in userdata: " + key);
+                                    sb.append(line);
+                                }
                             } else {
-                                System.out.println("NEucaAddPropertyInfFileTask::execute: Ignoring interface in userdata: " + key);
                                 sb.append(line);
                             }
-                        } else {
+                        }
+                        else {
                             sb.append(line);
                         }
-
-                        sb.append(System.lineSeparator());
+                        if(!line.isEmpty()) {
+                            sb.append(System.lineSeparator());
+                        }
                         line = userdataSource.readLine();
                     }
 
@@ -178,7 +184,6 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                         sb.append(key_.trim() + " = " + value_.trim() + "\n");
                         processedKey = true;
                     }
-
                     userdataNew = sb.toString();
                 }
             } finally {
