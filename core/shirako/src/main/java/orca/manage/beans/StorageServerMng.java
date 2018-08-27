@@ -20,20 +20,20 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="storageServerMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="ip" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="controlServer" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="base" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="storageServerMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="ip" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="controlServer" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="base" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -106,7 +106,7 @@ public class StorageServerMng {
 
     /**
      * Gets the value of the type property.
-     * 
+     * @return value of the type property
      */
     public int getType() {
         return type;
@@ -114,7 +114,7 @@ public class StorageServerMng {
 
     /**
      * Sets the value of the type property.
-     * 
+     * @param value of the type property
      */
     public void setType(int value) {
         this.type = value;

@@ -11,8 +11,8 @@ public interface ICertificatePolicy
 
     /**
      * Deals with a new ticket.
-     * @param ticket
-     * @throws Exception
+     * @param ticket ticket
+     * @throws Exception in case of error
      */
 	public void  onUpdateTicket(Ticket ticket) throws Exception;
 }  

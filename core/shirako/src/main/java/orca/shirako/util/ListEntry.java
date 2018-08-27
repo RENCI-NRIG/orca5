@@ -18,7 +18,7 @@ public class ListEntry
     
     /**
      * Initializes the head of a linked list.
-     * @param list
+     * @param list list
      */
     public static void InitializeListHead(ListEntry list)    
     {

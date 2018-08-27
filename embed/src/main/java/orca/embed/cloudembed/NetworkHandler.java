@@ -45,7 +45,7 @@ public class NetworkHandler extends MappingHandler {
         /**
          * Merge label maps
          * 
-         * @param t
+         * @param t t
          */
         void merge(NHState t) {
             for (String key : t.localAssignedLabel.keySet()) {
@@ -75,9 +75,9 @@ public class NetworkHandler extends MappingHandler {
     /**
      * Create handler with in-memory model
      * 
-     * @param substrateFile
-     * @throws IOException
-     * @throws NdlException
+     * @param substrateFile substrateFile
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public NetworkHandler(String substrateFile) throws IOException, NdlException {
         super(substrateFile);
@@ -86,10 +86,10 @@ public class NetworkHandler extends MappingHandler {
     /**
      * Create handler with TDB-backed model in a directory with specified path prefix
      * 
-     * @param substrateFile
-     * @param tdbPrefix
-     * @throws IOException
-     * @throws NdlException
+     * @param substrateFile substrateFile
+     * @param tdbPrefix tdbPrefix
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public NetworkHandler(String substrateFile, String tdbPrefix) throws IOException, NdlException {
         super(substrateFile, tdbPrefix);
@@ -375,7 +375,8 @@ public class NetworkHandler extends MappingHandler {
     /**
      * Return propertly list encoding the current state of assigned labels
      * 
-     * @return
+     * @return Properties
+     * @throws Exception in case of error
      */
     public Properties saveLocalLabels() throws Exception {
         return PersistenceUtils.save(nhState);
@@ -384,7 +385,8 @@ public class NetworkHandler extends MappingHandler {
     /**
      * OR the incoming map's bitsets with what we have already
      * 
-     * @param alm
+     * @param hStateProps hStateProps
+     * @throws PersistenceException in case of error
      */
     public void restoreAssignedLabels(Properties hStateProps) throws PersistenceException {
         NHState tmpState = PersistenceUtils.restore(hStateProps);

@@ -114,8 +114,8 @@ public class SliceDeferThread implements Runnable {
     /**
      * Is this slice in defer queue or being processed now?
      * 
-     * @param s
-     * @return
+     * @param s s
+     * @return true or false
      */
     public boolean inDeferredQueue(XmlrpcControllerSlice s) {
         queueLock.lock();

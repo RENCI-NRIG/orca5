@@ -20,8 +20,8 @@ public interface INdlAbstractDelegationModelListener extends INdlCommonModelList
     /**
      * Network domain with its service(s), available labelSet(s) and interfaces
      * 
-     * @param dom
-     * @param m
+     * @param dom dom
+     * @param m m
      * @param netServices
      *            - network services of this domain
      * @param interfaces

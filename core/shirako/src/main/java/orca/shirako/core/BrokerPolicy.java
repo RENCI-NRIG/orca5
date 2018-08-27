@@ -247,10 +247,10 @@ public class BrokerPolicy extends Policy implements IBrokerPolicy, QueryProperti
     /**
      * Creates a new resource set using the source and the specified delegation.
      * 
-     * @param source
-     * @param delegation
-     * @return
-     * @throws TicketException
+     * @param source source
+     * @param delegation delegation 
+     * @return returns ResourceSet 
+     * @throws TicketException in case of error
      */
     public ResourceSet extract(ResourceSet source, ResourceDelegation delegation)
             throws TicketException {
@@ -280,8 +280,8 @@ public class BrokerPolicy extends Policy implements IBrokerPolicy, QueryProperti
     /**
      * Returns the client id.
      * 
-     * @param reservation
-     * @return
+     * @param reservation reservation
+     * @return returns client id
      */
     public ID getClientID(IServerReservation reservation) {
         return reservation.getClientAuthToken().getGuid();

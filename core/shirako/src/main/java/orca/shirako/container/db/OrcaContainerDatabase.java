@@ -340,7 +340,7 @@ public class OrcaContainerDatabase extends MySqlBase implements IOrcaContainerDa
 
     /**
      * Adds a record for the admin user, if necessary
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void addAdminUser() throws Exception {
         if (adminLogin != null) {

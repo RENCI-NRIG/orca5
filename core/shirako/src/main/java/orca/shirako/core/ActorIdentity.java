@@ -30,6 +30,7 @@ public class ActorIdentity implements IActorIdentity
     /**
          * Creates a new instance.
          * @param name actor name
+         * @param guid guid 
          */
     public ActorIdentity(final String name, final ID guid)
     {

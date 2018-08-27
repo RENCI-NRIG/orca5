@@ -93,7 +93,7 @@ public class DriverClient {
      * Returns a stub for communicating with the node agent service.
      * 
      * @return node agent service stub
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected synchronized NodeAgentServiceStub getStub() throws Exception {
         if (stub == null) {

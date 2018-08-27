@@ -96,7 +96,7 @@ public class KernelWrapper {
 
 	/**
 	 * Blocks until there are no more reservations in a pending state.
-	 * @throws InterruptedException
+	 * @throws InterruptedException in case of error
 	 */
     public void awaitNothingPending() throws InterruptedException {
     	kernel.awaitNothingPending();
@@ -110,7 +110,7 @@ public class KernelWrapper {
      * @param reservation reservation describing the claim request
      * @param caller caller identity
      * @param callback callback proxy
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void claimRequest(final IBrokerReservation reservation, final AuthToken caller, IClientCallbackProxy callback) throws Exception {
         if ((reservation == null) || (caller == null) || (callback == null)) {
@@ -138,7 +138,8 @@ public class KernelWrapper {
     /**
      * Fails the specified reservation.
      * @param rid reservation id
-     * @throws Exception
+     * @param message message
+     * @throws Exception in case of error
      */
     public void fail(final ReservationID rid, String message) throws Exception {
         if (rid == null) {
@@ -156,7 +157,7 @@ public class KernelWrapper {
      * may return before all close operations have completed. Check the
      * reservation state to determine when close completes.
      * @param rid identifier of reservation to close
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void close(final ReservationID rid) throws Exception {
         if (rid == null) {
@@ -200,7 +201,7 @@ public class KernelWrapper {
      * @param compareSequenceNumbers if true, the incoming sequence number will
      *            be compared to the local sequence number to detect fresh
      *            requests, if false, no comparison will be performed.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void closeRequest(final IReservation reservation, final AuthToken caller, final boolean compareSequenceNumbers) throws Exception {
         if ((reservation == null) || (caller == null)) {
@@ -264,7 +265,7 @@ public class KernelWrapper {
      * Prepare/hold a ticket for "will call" claim by a client.
      * @param reservation reservation to be exported
      * @param client client identity
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void export(final IBrokerReservation reservation, final AuthToken client) throws Exception {
         if ((reservation == null) || (reservation.getSlice() == null)) {
@@ -295,7 +296,7 @@ public class KernelWrapper {
      * Role: Service Manager
      * </p>
      * @param reservation reservation describing the extend request
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendLease(final IServiceManagerReservation reservation) throws Exception {
         if (reservation == null) {
@@ -332,7 +333,7 @@ public class KernelWrapper {
      * @param compareSequenceNumbers if true, the incoming sequence number will
      *            be compared to the local sequence number to detect fresh
      *            requests, if false, no comparison will be performed.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendLeaseRequest(final IAuthorityReservation reservation, final AuthToken caller, boolean compareSequenceNumbers) throws Exception {
         if ((reservation == null) || (caller == null)) {
@@ -398,7 +399,7 @@ public class KernelWrapper {
      * @param compareSequenceNumbers if true, the incoming sequence number will
      *            be compared to the local sequence number to detect fresh
      *            requests, if false, no comparison will be performed.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modifyLeaseRequest(final IAuthorityReservation reservation, final AuthToken caller, boolean compareSequenceNumbers) throws Exception {
         if ((reservation == null) || (caller == null)) {
@@ -461,7 +462,7 @@ public class KernelWrapper {
      * @param resources resources for extension
      * @param term term for extension
      * @return 0 on success, a negative exit code on error
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public int extendReservation(final ReservationID rid, final ResourceSet resources, final Term term) throws Exception {
         if ((rid == null) || (resources == null) || (term == null)) {
@@ -477,7 +478,7 @@ public class KernelWrapper {
      * Role: Broker or Service Manager
      * </p>
      * @param reservation reservation describing the ticket extension request
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendTicket(final IClientReservation reservation) throws Exception {
         if (reservation == null) {
@@ -515,7 +516,7 @@ public class KernelWrapper {
      * @param compareSequenceNumbers if true, the incoming sequence number will
      *            be compared to the local sequence number to detect fresh
      *            requests, if false, no comparison will be performed.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendTicketRequest(final IBrokerReservation reservation, final AuthToken caller, boolean compareSequenceNumbers) throws Exception {
         if ((reservation == null) || (caller == null)) {
@@ -581,8 +582,7 @@ public class KernelWrapper {
      * Role: Service Manager
      * </p>
      * @param reservation reservation describing the modify request
-     * @param modifyProps modify properties
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modifyLease(final IServiceManagerReservation reservation) throws Exception {
     	
@@ -741,7 +741,7 @@ public class KernelWrapper {
      *            the slice object in the reservation. This flag is considered
      *            only if the slice referenced by the reservation is not
      *            registered with the kernel.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     private void handleReserve(IKernelReservation reservation, AuthToken identity, boolean createNewSlice, boolean verifyCredentials) throws Exception {
         /* Perform some simple sanity check */
@@ -803,7 +803,7 @@ public class KernelWrapper {
      * previously filed request.
      * @param r the reservation
      * @param auth the slice owner
-     * @throws Exception
+     * @throws Exception in case of error
      */
     private void handleUpdateReservation(final IKernelReservation r, final AuthToken auth) throws Exception {
     	Properties authProperties = r.getRequestedResources().getRequestProperties();
@@ -834,7 +834,7 @@ public class KernelWrapper {
      * Role: Service Manager.
      * </p>
      * @param reservation the reservation being redeemed
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void redeem(final IServiceManagerReservation reservation) throws Exception {
         if (reservation == null) {
@@ -881,7 +881,7 @@ public class KernelWrapper {
      * @param compareSequenceNumbers if true, the incoming sequence number will
      *            be compared to the local sequence number to detect fresh
      *            requests, if false, no comparison will be performed.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void redeemRequest(final IAuthorityReservation reservation, AuthToken caller, IServiceManagerCallbackProxy callback, boolean compareSequenceNumbers) throws Exception {
         if ((reservation == null) || (caller == null) || (callback == null)) {
@@ -1010,6 +1010,7 @@ public class KernelWrapper {
      * removed.
      * </p>
      * @param rid identifier of reservation to remove
+     * @throws Exception in case of error
      */
     public void removeReservation(final ReservationID rid) throws Exception {
         if (rid == null) {
@@ -1027,7 +1028,7 @@ public class KernelWrapper {
      * failed reservations.
      * </p>
     * @param sliceID identifier of slice to remove
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeSlice(final SliceID sliceID) throws Exception {
         if (sliceID == null) {
@@ -1065,7 +1066,7 @@ public class KernelWrapper {
      * Registers the slice with the kernel: adds the slice object to the kernel
      * data structures. The slice object must have an existing database record.
      * @param slice slice to register
-     * @throws Exception if the slice is already registered or a database error
+     * @throws OrcaException if the slice is already registered or a database error
      *             occurs. If a database error occurs, the slice will be
      *             unregistered.
      */
@@ -1081,7 +1082,7 @@ public class KernelWrapper {
     /**
      * Checks all reservations for completions or problems. We might want to do
      * these a few at a time.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void tick() throws Exception {
         kernel.tick();
@@ -1095,7 +1096,7 @@ public class KernelWrapper {
      * </p>
      * @param reservation reservation parameters for ticket request
      * @param destination identity of the actor the request must be sent to
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void ticket(final IClientReservation reservation, final IActorIdentity destination) throws Exception {
         if ((reservation == null) || (destination == null) || !(reservation instanceof IKernelClientReservation)) {
@@ -1132,7 +1133,7 @@ public class KernelWrapper {
      * @param compareSequenceNumbers if true, the incoming sequence number will
      *            be compared to the local sequence number to detect fresh
      *            requests, if false, no comparison will be performed.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void ticketRequest(final IBrokerReservation reservation, final AuthToken caller, final IClientCallbackProxy callback, final boolean compareSequenceNumbers) throws Exception {
         if ((reservation == null) || (caller == null) || (callback == null)) {
@@ -1245,7 +1246,7 @@ public class KernelWrapper {
     /**
      * Unregisters the reservation from the kernel data structures.
      * <p>
-     * <b>Note:<b> does not remove the reservation database record.
+     * <b>Note:</b> does not remove the reservation database record.
      * </p> *
      * <p>
      * <b>Note:</b>Only failed, closed, or close waiting reservations can be
@@ -1253,7 +1254,7 @@ public class KernelWrapper {
      * </p>
      * @param rid identifier for reservation to unregister
      * @throws IllegalArgumentException when the passed in argument is illegal
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void unregisterReservation(final ReservationID rid) throws Exception {
         if (rid == null) {
@@ -1270,7 +1271,7 @@ public class KernelWrapper {
      * or failed reservations.
      * </p>
      * @param sliceID identifier of slice to unregister
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void unregisterSlice(final SliceID sliceID) throws Exception {
         if (sliceID == null) {
@@ -1288,7 +1289,7 @@ public class KernelWrapper {
      * @param reservation reservation describing the update
      * @param udd status of the update
      * @param caller identity of the caller
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateLease(final IReservation reservation, final UpdateData udd, final AuthToken caller) throws Exception {
         if ((reservation == null) || (udd == null) || (caller == null)) {
@@ -1322,7 +1323,7 @@ public class KernelWrapper {
      * @param reservation reservation describing the update
      * @param udd status of the update
      * @param caller identity of the caller
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateTicket(final IReservation reservation, final UpdateData udd, final AuthToken caller) throws Exception {
         if ((reservation == null) || (udd == null) || (caller == null)) {

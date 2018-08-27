@@ -38,8 +38,8 @@ public class Translate {
 
     /**
      * Translates a soap.beans.Properties to java.util.Properties
-     * @param beanProperties
-     * @return
+     * @param beanProperties beanProperties
+     * @return java.util.Properties
      */
     public static java.util.Properties translate(orca.shirako.proxies.soapaxis2.beans.Properties beanProperties) {
         java.util.Properties properties = new java.util.Properties();
@@ -59,7 +59,8 @@ public class Translate {
 
     /**
      * Translates a java.util.Properties to a soap.beans.Properties
-     * @param properties
+     * @param properties properties
+     * @return orca.shirako.proxies.soapaxis2.beans.Properties
      */
     public static orca.shirako.proxies.soapaxis2.beans.Properties translate(java.util.Properties properties) {
         orca.shirako.proxies.soapaxis2.beans.Properties result = new orca.shirako.proxies.soapaxis2.beans.Properties();
@@ -90,7 +91,7 @@ public class Translate {
      * <code>soap.beans.ResourceData</code>
      * @param resourceData The <code>slices.ResourceData</code> object
      * @param direction The direction of the call
-     * @return
+     * @return orca.shirako.proxies.soapaxis2.beans.ResourceData
      */
     public static orca.shirako.proxies.soapaxis2.beans.ResourceData translate(orca.shirako.util.ResourceData resourceData, int direction) {
         if (resourceData != null) {
@@ -138,9 +139,8 @@ public class Translate {
     /**
      * Translates a <code>soap.beans.ResourceData</code> to a
      * <code>slices.ResourceData</code>.
-     * @param resourceData The <code>slices.ResourceData</code> object
-     * @param direction The direction of the call
-     * @return
+     * @param beanResourceData The <code>slices.ResourceData</code> object
+     * @return beanResourceData
      */
     public static orca.shirako.util.ResourceData translate(orca.shirako.proxies.soapaxis2.beans.ResourceData beanResourceData) {
         if (beanResourceData != null) {
@@ -173,8 +173,8 @@ public class Translate {
 
     /**
      * Translates a soap.beans.Slice to slices.Slice
-     * @param beanSlice
-     * @return
+     * @param beanSlice beanSlice
+     * @return ISlice
      */
     public static ISlice translate(orca.shirako.proxies.soapaxis2.beans.Slice beanSlice) {
         if (beanSlice != null) {
@@ -193,8 +193,8 @@ public class Translate {
 
     /**
      * Translates a slices.Slice to soap.beans.Slice
-     * @param slice
-     * @return
+     * @param slice slice
+     * @return beanSlice
      */
     public static orca.shirako.proxies.soapaxis2.beans.Slice translate(ISlice slice) {
         orca.shirako.proxies.soapaxis2.beans.Slice result = new orca.shirako.proxies.soapaxis2.beans.Slice();
@@ -205,8 +205,8 @@ public class Translate {
 
     /**
      * Translates a soap.beans.UpdateData to slices.UpdateData
-     * @param beanUpdateData
-     * @return
+     * @param beanUpdateData beanUpdateData
+     * @return orca.shirako.util.UpdateData
      */
     public static orca.shirako.util.UpdateData translate(orca.shirako.proxies.soapaxis2.beans.UpdateData beanUpdateData) {
         if (beanUpdateData.getFailed()) {
@@ -218,8 +218,8 @@ public class Translate {
 
     /**
      * Translates a slices.UpdateData to soap.beans.updateData
-     * @param updateData
-     * @return
+     * @param updateData updateData
+     * @return beanUpdateData
      */
     public static orca.shirako.proxies.soapaxis2.beans.UpdateData translate(orca.shirako.util.UpdateData updateData) {
         orca.shirako.proxies.soapaxis2.beans.UpdateData result = new orca.shirako.proxies.soapaxis2.beans.UpdateData();
@@ -230,8 +230,8 @@ public class Translate {
 
     /**
      * Translates a soap.beans.Term to slices.Term
-     * @param beanTerm
-     * @return
+     * @param beanTerm beanTerm
+     * @return term
      */
     public static orca.shirako.time.Term translate(orca.shirako.proxies.soapaxis2.beans.Term beanTerm) {
         orca.shirako.time.Term term = new orca.shirako.time.Term();
@@ -253,8 +253,8 @@ public class Translate {
 
     /**
      * Translates slices.Term to soap.beans.Term
-     * @param term
-     * @return
+     * @param term term
+     * @return beanTerm
      */
     public static orca.shirako.proxies.soapaxis2.beans.Term translate(orca.shirako.time.Term term) {
         orca.shirako.proxies.soapaxis2.beans.Term beanTerm = new orca.shirako.proxies.soapaxis2.beans.Term();

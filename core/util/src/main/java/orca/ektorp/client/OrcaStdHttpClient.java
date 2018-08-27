@@ -250,8 +250,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		/**
 		 * Will set host, port and possible enables SSL based on the properties if the supplied URL.
 		 * This method overrides the properties: host, port and enableSSL. 
-		 * @param url
-		 * @return
+		 * @param url url
+		 * @return returns the builder
 		 */
 		public Builder url(URL url){
 			this.host = url.getHost();
@@ -298,7 +298,7 @@ public class OrcaStdHttpClient implements HttpClient {
 		 * <p>
 		 * Disabled by default (for backward compatibility).
 		 * 
-		 * @param b
+		 * @param b flag indicating if compression is enabled(true)/disabled(false)
 		 * @return This builder
 		 */
 		public Builder compression(boolean b){
@@ -308,8 +308,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		/**
 		 * Controls if the http client should cache response entities.
 		 * Default is true.
-		 * @param b
-		 * @return
+		 * @param b flag indicating if compression is enabled(true)/disabled(false)
+		 * @return This builder
 		 */
 		public Builder caching(boolean b) {
 			caching = b;
@@ -464,8 +464,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		 * If set to true, a monitor thread will be started that cleans up idle
 		 * connections every 30 seconds.
 		 * 
-		 * @param b
-		 * @return
+		 * @param b true if IdleConnectionCleanup is enabled; false otherwise
+		 * @return This Builder
 		 */
 		public Builder cleanupIdleConnections(boolean b) {
 			cleanupIdleConnections = b;
@@ -477,8 +477,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		 * parameters port, maxConnections, connectionTimeout and socketTimeout
 		 * are ignored.
 		 * 
-		 * @param cm
-		 * @return
+		 * @param cm client connection manager
+		 * @return This Builder
 		 */
 		public Builder connectionManager(ClientConnectionManager cm) {
 			conman = cm;
@@ -489,8 +489,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		 * Set to true in order to enable SSL sockets. Note that the CouchDB
 		 * host must be accessible through a https:// path Default is false.
 		 * 
-		 * @param s
-		 * @return
+		 * @param b boolen value
+		 * @return This Builder
 		 */
 		public Builder enableSSL(boolean b) {
 			enableSSL = b;
@@ -502,8 +502,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		 * configured to "https". Will override any setting of
 		 * relaxedSSLSettings.
 		 * 
-		 * @param f
-		 * @return
+		 * @param f SSL factory
+		 * @return This Builder
 		 */
 		public Builder sslSocketFactory(SSLSocketFactory f) {
 			sslSocketFactory = f;
@@ -514,8 +514,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		 * If set to true all SSL certificates and hosts will be trusted. This
 		 * might be handy during development. default is false.
 		 * 
-		 * @param b
-		 * @return
+		 * @param b boolean value
+		 * @return This Builder
 		 */
 		public Builder relaxedSSLSettings(boolean b) {
 			relaxedSSLSettings = b;
@@ -527,8 +527,8 @@ public class OrcaStdHttpClient implements HttpClient {
 		 * Using expect continue can reduce stale connection problems for PUT / POST operations.
 		 * body. Enabled by default.
 		 * 
-		 * @param b
-		 * @return
+		 * @param b boolean value
+		 * @return This Builder
 		 */
 		public Builder useExpectContinue(boolean b) {
 			useExpectContinue = b;

@@ -21,22 +21,22 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="instance">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="className" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/>
- *         &lt;element name="parameters" type="{http://issg.cs.duke.edu/sharp/boot}parameters" minOccurs="0"/>
- *       &lt;/all>
- *       &lt;attribute name="collection" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="init" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
- *       &lt;attribute name="input" type="{http://www.w3.org/2001/XMLSchema}string" default="false" />
- *       &lt;attribute name="instance" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="instance"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="className" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/&gt;
+ *         &lt;element name="parameters" type="{http://issg.cs.duke.edu/sharp/boot}parameters" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *       &lt;attribute name="collection" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="init" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" /&gt;
+ *       &lt;attribute name="input" type="{http://www.w3.org/2001/XMLSchema}string" default="false" /&gt;
+ *       &lt;attribute name="instance" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

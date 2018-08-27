@@ -27,62 +27,61 @@ public interface IPackageDatabase
 {
     /**
      * Add a new extension package record
-     * @param p
-     * @throws Exception
+     * @param p package
+     * @throws Exception in case of error
      */
     public void addPackage(ExtensionPackage p) throws Exception;
 
     /**
      * Removes the specified package record
-     * @param id
-     * @throws Exception
+     * @param id package id
+     * @throws Exception in case of error
      */
     public void removePackage(PackageId id) throws Exception;
 
     /**
      * Return the specified package record
-     * @param id
-     * @return
-     * @throws Exception
+     * @param id package id
+     * @return returns vector of properties for the specified package
+     * @throws Exception in case of error
      */
     public Vector<Properties> getPackage(PackageId id) throws Exception;
 
     /**
      * Return all package records
-     * @return
-     * @throws Exception
+     * @return returns vector of the packages
+     * @throws Exception in case of error
      */
     public Vector<Properties> getPackages() throws Exception;
 
     /**
      * Adds a new plugin record
-     * @param plugin
-     * @throws Exception
+     * @param plugin plugin to be added
+     * @throws Exception in case of error
      */
     public void addPlugin(Plugin plugin) throws Exception;
 
     /**
      * Removes the specified plugin record
-     * @param packageId
-     * @param pluginId
-     * @return
-     * @throws Exception
+     * @param packageId package id
+     * @param pluginId plugin id
+     * @throws Exception in case of error
      */
     public void removePlugin(PackageId packageId, PluginId pluginId) throws Exception;
 
     /**
      * Removes all plugin records for the specified package
-     * @param packageId
-     * @throws Exception
+     * @param packageId package id
+     * @throws Exception in case of error
      */
     public void removePlugins(PackageId packageId) throws Exception;
 
     /**
      * Returns the specified plugin record
-     * @param packageId
-     * @param pluginId
-     * @return
-     * @throws Exception
+     * @param packageId package id
+     * @param pluginId plugin id
+     * @return returns vector of the package properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getPlugin(PackageId packageId, PluginId pluginId)
                                  throws Exception;
@@ -93,8 +92,8 @@ public interface IPackageDatabase
      * @param packageId  package identifier, if null it is ignored
      * @param pluginType see Plugin.Type*
      * @param actorType see OrcaConstants.ActorType*
-     * @return
-     * @throws Exception
+     * @return returns vector of the package properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getPlugins(PackageId packageId, int pluginType, int actorType)
                                   throws Exception;

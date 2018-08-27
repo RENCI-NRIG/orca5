@@ -60,7 +60,7 @@ public class DomainResourceType implements LayerConstant, Comparable<DomainResou
      * 
      * @param rdf
      *            file name
-     * @param typeName
+     * @param typeName typeName
      * @return domain/type, e.g. rencivmsite/vm, nlr/vlan
      */
     public static String generateDomainName(String rdf, String typeName) {

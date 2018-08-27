@@ -50,7 +50,7 @@ public abstract class RestTask extends OrcaAntTask {
     /**
      * Defaults to 80
      * 
-     * @return
+     * @return int
      */
     protected int getPort() {
         if (asUrl.getPort() == -1)
@@ -112,7 +112,7 @@ public abstract class RestTask extends OrcaAntTask {
     /**
      * Collect properties with the specified prefix
      * 
-     * @return
+     * @return JSONObject
      */
     protected JSONObject collectPluginProperties() {
         JSONObject p = new JSONObject();
@@ -135,8 +135,7 @@ public abstract class RestTask extends OrcaAntTask {
     /**
      * Post to http POST object. Resulting properties are put back on the project
      * 
-     * @param se
-     * @return
+     * @throws BuildException in case of error
      */
     protected void doPost() throws BuildException {
         DefaultHttpClient client = new DefaultHttpClient();

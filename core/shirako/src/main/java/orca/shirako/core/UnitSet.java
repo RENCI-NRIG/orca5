@@ -86,8 +86,8 @@ public class UnitSet implements IConcreteSet, CustomRecoverable {
 	/**
 	 * Creates a unit set populated with the specified units.
 	 * 
-	 * @param substrate
-	 * @param units
+	 * @param plugin plugin
+	 * @param units units
 	 */
 	public UnitSet(IShirakoPlugin plugin, Units units) {
 		if (!(plugin instanceof ISubstrate)) {
@@ -102,7 +102,7 @@ public class UnitSet implements IConcreteSet, CustomRecoverable {
 	/**
 	 * Copy constructor.
 	 * 
-	 * @param uset
+	 * @param uset uset
 	 */
 	public UnitSet(UnitSet uset) {
 		this(uset, uset.substrate);
@@ -164,8 +164,8 @@ public class UnitSet implements IConcreteSet, CustomRecoverable {
 	/**
 	 * Ensures that the passed set is an instance of <code>UnitSet</code>.
 	 * 
-	 * @param set
-	 * @throws RuntimeException
+	 * @param set set
+	 * @throws RuntimeException in case of error
 	 */
 	protected void ensureType(IConcreteSet set) throws RuntimeException {
 		if (!(set instanceof UnitSet)) {

@@ -70,7 +70,7 @@ public class User
     /**
      * Checks if this user can operate on the specified actor
      * @param actorName Name of the actor
-     * @return
+     * @return true for success; false otherwise
      */
     public boolean canOperate(String actorName)
     {
@@ -90,7 +90,7 @@ public class User
 
     /**
      * Returns the actors this user can operate
-     * @return
+     * @return the actors this user can operate
      */
     public String[] getActors()
     {
@@ -99,7 +99,7 @@ public class User
 
     /**
      * Returns the first name
-     * @return
+     * @return the first name
      */
     public String getFirst()
     {
@@ -108,7 +108,7 @@ public class User
 
     /**
      * Returns the last name
-     * @return
+     * @return the last name
      */
     public String getLast()
     {
@@ -117,7 +117,7 @@ public class User
 
     /**
      * Returns the login name
-     * @return
+     * @return login name
      */
     public String getLogin()
     {
@@ -126,7 +126,7 @@ public class User
 
     /**
      * Returns the roles granted to this user
-     * @return
+     * @return roles granted to user
      */
     public String[] getRoles()
     {
@@ -136,7 +136,7 @@ public class User
     /**
      * Checks if this user holds the specified role
      * @param role role name.
-     * @return
+     * @return true for success; false otherwise
      */
     public boolean hasRole(String role)
     {
@@ -156,7 +156,7 @@ public class User
 
     /**
      * Checks if this user is an admin
-     * @return
+     * @return true for success; false otherwise
      */
     public boolean isAdmin()
     {
@@ -165,8 +165,8 @@ public class User
 
     /**
      * Deserializes the object from the given properties list
-     * @param p
-     * @throws Exception
+     * @param p properties
+     * @throws Exception in case of error
      */
     public void reset(Properties p) throws Exception
     {
@@ -180,8 +180,8 @@ public class User
 
     /**
      * Serializes the object into a properties list
-     * @return
-     * @throws Exception
+     * @return properties
+     * @throws Exception in case of error
      */
     public Properties save() throws Exception
     {
@@ -193,8 +193,8 @@ public class User
 
     /**
      * Serializes the object into the given properties list
-     * @param p
-     * @throws Exception
+     * @param p properties
+     * @throws Exception in case of error
      */
     public void save(Properties p) throws Exception
     {
@@ -207,7 +207,7 @@ public class User
 
     /**
      * Sets the actors this user can operate
-     * @param actors
+     * @param actors array of actors
      */
     public void setActors(String[] actors)
     {
@@ -219,7 +219,7 @@ public class User
     }
     /**
      * Sets the first name
-     * @param first
+     * @param first first name
      */
     public void setFirst(String first)
     {
@@ -228,7 +228,7 @@ public class User
 
     /**
      * Sets the last name
-     * @param last
+     * @param last last name
      */
     public void setLast(String last)
     {
@@ -237,7 +237,7 @@ public class User
 
     /**
      * Sets the login name
-     * @param login
+     * @param login login name
      */
     public void setLogin(String login)
     {
@@ -246,7 +246,7 @@ public class User
 
     /**
      * Sets the roles granted to this user
-     * @param roles
+     * @param roles roles
      */
     public void setRoles(String[] roles)
     {

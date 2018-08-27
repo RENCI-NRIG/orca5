@@ -155,7 +155,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Set a list of computed reservations for this slice
      * 
-     * @param l
+     * @param l l
      */
     public void addComputedReservations(TicketReservationMng l) {
         if (computedReservations == null)
@@ -166,7 +166,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Set a list of computed reservations for this slice
      * 
-     * @param l
+     * @param l l
      */
     public void setComputedReservations(List<TicketReservationMng> l) {
         computedReservations = l;
@@ -175,7 +175,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * get the computed reservations (may or may not have been submitted to orca yet)
      * 
-     * @return
+     * @return list of ticket reservations
      */
     public List<TicketReservationMng> getComputedReservations() {
         return computedReservations;
@@ -183,8 +183,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 
     /**
      * Get the actual reservations
-     * 
-     * @return
+     * @param sm sm
+     * @return list of reservatios
      */
     public List<ReservationMng> getAllReservations(IOrcaServiceManager sm) {
 
@@ -196,9 +196,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Get reservations in specific states
      * 
-     * @param sm
-     * @param state
-     * @return
+     * @param sm sm
+     * @param states state
+     * @return list of reservations
      */
     public List<ReservationMng> getReservationsByState(IOrcaServiceManager sm, int... states) {
         if (sm == null)
@@ -213,9 +213,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Get a reservation units, belonging to this slice based on reservation id (or null)
      * 
-     * @param sm
-     * @param res
-     * @return
+     * @param sm sm
+     * @param res res
+     * @return list of units
      */
     public List<UnitMng> getUnits(IOrcaServiceManager sm, String res) {
         try {
@@ -228,9 +228,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Get reservation states, both actual and pending
      * 
-     * @param sm
-     * @param res
-     * @return
+     * @param sm sm
+     * @param res res
+     * @return list of reservations
      */
     public List<ReservationStateMng> getReservationStates(IOrcaServiceManager sm, List<String> res) {
         try {
@@ -249,8 +249,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Conversion
      * 
-     * @param p
-     * @return
+     * @param p p
+     * @return map of str to str
      */
     public static Map<String, String> fromProperties(Properties p) {
         Map<String, String> m = new HashMap<String, String>();
@@ -295,7 +295,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Get all SSH logins concatenated as a comma-separated string
      * 
-     * @return
+     * @return string
      */
     public String getLoginsAsString() {
         StringBuilder r = new StringBuilder();
@@ -386,8 +386,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * This method is called when deleteSlice is called; The urn of the deleted slice is pushed to the deleted slices Q
      * 
-     * @param slice_urn
-     * @param logger
+     * @param logger logger
      */
     public void deleteFromPublishQ(Logger logger) {
         // check if publish is enabled in xmlrpc.controller.properties
@@ -407,8 +406,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Pushes the slice with slice_urn in the queue for publishing manifests
      * 
-     * @param slice_urn
-     * @param logger
+     * @param logger logger
      */
     public void publishManifest(Logger logger) {
 
@@ -481,8 +479,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Does the slice consist of only failed reservations
      * 
-     * @return
-     * @throws SliceStateMachine.SliceTransitionException
+     * @return true or false
+     * @throws SliceStateMachine.SliceTransitionException in case of error
      */
     public boolean allFailed() throws SliceStateMachine.SliceTransitionException {
         return stateMachine.allFailed();
@@ -499,7 +497,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * When was the first attempt to delete/gc this slice (null possible)
      * 
-     * @return
+     * @return Date
      */
     public Date getDeleteAttempt() {
         return firstDeleteAttempt;
@@ -508,7 +506,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Re-evaluate the state of the slice
      * 
-     * @throws SliceStateMachine.SliceTransitionException
+     * @throws SliceStateMachine.SliceTransitionException in case of error
      */
     private SliceStateMachine.SliceState reevaluate() throws SliceStateMachine.SliceTransitionException {
         return stateMachine.transitionSlice(SliceStateMachine.SliceCommand.REEVALUATE);
@@ -516,6 +514,9 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
 
     /**
      * Restore inner workings of the slice (workflow, reservation converter etc)
+     * @param logger logger
+     * @param globalAssignedLabels globalAssignedLabels
+     * @param shared_IP_set shared_IP_set
      */
     public void recover(Logger logger, HashMap<String, BitSet> globalAssignedLabels,
             HashMap<String, LinkedList<String>> shared_IP_set) {
@@ -543,8 +544,8 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Use recovered reservation info to get restorable information into the recovered slice
      * 
-     * @param r
-     * @param logger
+     * @param r r
+     * @param logger logger
      */
     public void addRecoveredReservation(ReservationMng r, Logger logger) {
         logger.info("Slice " + slice.getSliceID() + "/" + sliceUrn + " seeking additional recovery information from "
@@ -600,7 +601,7 @@ public class XmlrpcControllerSlice implements RequestWorkflow.WorkflowRecoverySe
     /**
      * Prepare a StringBuilder with basic reservation information as returned by createSlice() and modifySlice()
      * 
-     * @return
+     * @return StringBuilder
      */
     protected StringBuilder getComputedReservationSummary() {
 

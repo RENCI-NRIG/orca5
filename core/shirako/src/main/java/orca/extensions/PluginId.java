@@ -40,6 +40,7 @@ public class PluginId implements Cloneable
 
     /**
      * Loads the specified string as an identifier
+     * @param id plugin id
      */
     public PluginId(String id)
     {

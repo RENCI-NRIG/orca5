@@ -40,7 +40,7 @@ public class ThingTable
      * Associate a thing record with a thing name. Verify that the name and
      * record are minimally valid.
      * @param thingname the name of the thing
-     * @param s the thing
+     * @param thing the thing
      * @throws Exception thrown if thing name is null
      * @throws Exception thrown if there is no descriptor
      * @throws Exception thrown if the thing is already active
@@ -115,6 +115,7 @@ public class ThingTable
 
     /**
      * Set logger
+     * @param logger logger
      */
     public void setLogger(Logger logger)
     {
@@ -130,7 +131,6 @@ public class ThingTable
      * Do a soft lookup on a thing name and return thing
      * @param thingname the name of the thing
      * @return the thing associated with that thing name
-     * @throws Exception thrown if thing name is null
      */
     public Object softLookup(String thingname)
     {

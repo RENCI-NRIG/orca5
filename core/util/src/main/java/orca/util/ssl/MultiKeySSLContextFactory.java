@@ -54,7 +54,7 @@ public class MultiKeySSLContextFactory implements ContextualSSLProtocolSocketFac
 	/**
 	 * Will use a custom trust manager
 	 * @param m (can be null)
-	 * @param tm
+	 * @param tm trust manager
 	 */
 	public MultiKeySSLContextFactory(MultiKeyManager m, TrustManager[] tm) {
 		mkm = m;

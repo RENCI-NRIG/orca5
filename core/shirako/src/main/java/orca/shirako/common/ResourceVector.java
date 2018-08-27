@@ -89,8 +89,8 @@ public class ResourceVector
     }
 
     /**
-     * Subtracts the specified vector from this instance.
-     * @param other vector to subtract
+     * Multiplies the specified vector from this instance.
+     * @param times vector to subtract
      */
     public void multiply(int times)
     {
@@ -132,7 +132,7 @@ public class ResourceVector
     /**
      * Checks if this instance contains the specified vector.
      * @param other vector to check
-     * @return
+     * @return true or false
      */
     public boolean contains(ResourceVector other)
     {
@@ -148,7 +148,7 @@ public class ResourceVector
     /**
      * Checks if this instance contains the specified vector.
      * @param other vector to check
-     * @return
+     * @return true or false
      */
     public boolean containsOrEquals(ResourceVector other)
     {
@@ -164,7 +164,7 @@ public class ResourceVector
     /**
      * Checks if this instance has a negative value for
      * one of its dimensions.
-     * @return
+     * @return true or false
      */
     public boolean hasNegativeDimension()
     {

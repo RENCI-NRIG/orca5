@@ -61,7 +61,7 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
 
     /**
      * isReaderMTOMAware
-     * 
+     * @param reader reader
      * @return true if the reader supports MTOM
      */
     public static boolean isReaderMTOMAware(javax.xml.stream.XMLStreamReader reader) {
@@ -69,7 +69,7 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
 
         try {
             isReaderMTOMAware = java.lang.Boolean.TRUE
-                    .equals(reader.getProperty(org.apache.axiom.om.OMConstants.IS_DATA_HANDLERS_AWARE));
+                .equals(reader.getProperty(org.apache.axiom.om.OMConstants.IS_DATA_HANDLERS_AWARE));
         } catch (java.lang.IllegalArgumentException e) {
             isReaderMTOMAware = false;
         }
@@ -77,9 +77,8 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
     }
 
     /**
-     *
-     * @param parentQName
-     * @param factory
+     * @param parentQName parentQName
+     * @param factory factory
      * @return org.apache.axiom.om.OMElement
      */
     public org.apache.axiom.om.OMElement getOMElement(final javax.xml.namespace.QName parentQName,
@@ -92,9 +91,8 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
     }
 
     /**
-     *
-     * @param parentQName
-     * @param factory
+     * @param parentQName parentQName
+     * @param factory factory
      * @return org.apache.axiom.om.OMElement
      */
     public org.apache.axiom.om.OMDataSource getOMDataSource(final javax.xml.namespace.QName parentQName,
@@ -106,102 +104,113 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
             public void serialize(javax.xml.stream.XMLStreamWriter xmlWriter)
                     throws javax.xml.stream.XMLStreamException {
 
-                java.lang.String prefix = parentQName.getPrefix();
-                java.lang.String namespace = parentQName.getNamespaceURI();
+                    java.lang.String prefix = parentQName.getPrefix();
+                    java.lang.String namespace = parentQName.getNamespaceURI();
 
-                if (namespace != null) {
-                    java.lang.String writerPrefix = xmlWriter.getPrefix(namespace);
-                    if (writerPrefix != null) {
-                        xmlWriter.writeStartElement(namespace, parentQName.getLocalPart());
-                    } else {
-                        if (prefix == null) {
-                            prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
-                        }
-
-                        xmlWriter.writeStartElement(prefix, parentQName.getLocalPart(), namespace);
-                        xmlWriter.writeNamespace(prefix, namespace);
-                        xmlWriter.setPrefix(prefix, namespace);
-                    }
-                } else {
-                    xmlWriter.writeStartElement(parentQName.getLocalPart());
-                }
-
-                if (localExceptionTracker) {
-
-                    if (localException != null) {
-                        // write null attribute
-                        java.lang.String namespace2 = "http://imageproxy.orca";
-                        if (!namespace2.equals("")) {
-                            java.lang.String prefix2 = xmlWriter.getPrefix(namespace2);
-
-                            if (prefix2 == null) {
-                                prefix2 = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
-
-                                xmlWriter.writeStartElement(prefix2, "Exception", namespace2);
-                                xmlWriter.writeNamespace(prefix2, namespace2);
-                                xmlWriter.setPrefix(prefix2, namespace2);
-
-                            } else {
-                                xmlWriter.writeStartElement(namespace2, "Exception");
+                    if (namespace != null) {
+                        java.lang.String writerPrefix = xmlWriter.getPrefix(namespace);
+                        if (writerPrefix != null) {
+                            xmlWriter.writeStartElement(namespace, parentQName.getLocalPart());
+                        } else {
+                            if (prefix == null) {
+                                prefix = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
                             }
 
-                        } else {
-                            xmlWriter.writeStartElement("Exception");
+                            xmlWriter.writeStartElement(prefix, parentQName.getLocalPart(), namespace);
+                            xmlWriter.writeNamespace(prefix, namespace);
+                            xmlWriter.setPrefix(prefix, namespace);
                         }
-                        localException.serialize(xmlWriter);
-                        xmlWriter.writeEndElement();
                     } else {
+                        xmlWriter.writeStartElement(parentQName.getLocalPart());
+                    }
 
-                        // write null attribute
-                        java.lang.String namespace2 = "http://imageproxy.orca";
-                        if (!namespace2.equals("")) {
-                            java.lang.String prefix2 = xmlWriter.getPrefix(namespace2);
+                    if (localExceptionTracker) {
 
-                            if (prefix2 == null) {
-                                prefix2 = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
+                        if (localException != null) {
+                            // write null attribute
+                            java.lang.String namespace2 = "http://imageproxy.orca";
+                            if (!namespace2.equals("")) {
+                                java.lang.String prefix2 = xmlWriter.getPrefix(namespace2);
 
-                                xmlWriter.writeStartElement(prefix2, "Exception", namespace2);
-                                xmlWriter.writeNamespace(prefix2, namespace2);
-                                xmlWriter.setPrefix(prefix2, namespace2);
+                                if (prefix2 == null) {
+                                    prefix2 = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
+
+                                    xmlWriter.writeStartElement(prefix2, "Exception", namespace2);
+                                    xmlWriter.writeNamespace(prefix2, namespace2);
+                                    xmlWriter.setPrefix(prefix2, namespace2);
+
+                                } else {
+                                    xmlWriter.writeStartElement(namespace2, "Exception");
+                                }
 
                             } else {
-                                xmlWriter.writeStartElement(namespace2, "Exception");
+                                xmlWriter.writeStartElement("Exception");
+                            }
+                            localException.serialize(xmlWriter);
+                            xmlWriter.writeEndElement();
+                        } else {
+
+                            // write null attribute
+                            java.lang.String namespace2 = "http://imageproxy.orca";
+                            if (!namespace2.equals("")) {
+                                java.lang.String prefix2 = xmlWriter.getPrefix(namespace2);
+
+                                if (prefix2 == null) {
+                                    prefix2 = org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
+
+                                    xmlWriter.writeStartElement(prefix2, "Exception", namespace2);
+                                    xmlWriter.writeNamespace(prefix2, namespace2);
+                                    xmlWriter.setPrefix(prefix2, namespace2);
+
+                                } else {
+                                    xmlWriter.writeStartElement(namespace2, "Exception");
+                                }
+
+                            } else {
+                                xmlWriter.writeStartElement("Exception");
                             }
 
-                        } else {
-                            xmlWriter.writeStartElement("Exception");
-                        }
+                            // write the nil attribute
+                            writeAttribute("xsi", "http://www.w3.org/2001/XMLSchema-instance", "nil", "true", xmlWriter);
+                            xmlWriter.writeEndElement();
 
-                        // write the nil attribute
-                        writeAttribute("xsi", "http://www.w3.org/2001/XMLSchema-instance", "nil", "true", xmlWriter);
-                        xmlWriter.writeEndElement();
+                        }
 
                     }
 
-                }
-
-                xmlWriter.writeEndElement();
+                    xmlWriter.writeEndElement();
 
             }
 
             /**
              * Util method to write an attribute with the ns prefix
+             * @param prefix prefix
+             * @param namespace namespace
+             * @param attName attName
+             * @param attValue attValue
+             * @param xmlWriter xmlWriter
+             * @throws javax.xml.stream.XMLStreamException in case of error
              */
             private void writeAttribute(java.lang.String prefix, java.lang.String namespace, java.lang.String attName,
                     java.lang.String attValue, javax.xml.stream.XMLStreamWriter xmlWriter)
                     throws javax.xml.stream.XMLStreamException {
-                if (xmlWriter.getPrefix(namespace) == null) {
-                    xmlWriter.writeNamespace(prefix, namespace);
-                    xmlWriter.setPrefix(prefix, namespace);
+                    if (xmlWriter.getPrefix(namespace) == null) {
+                        xmlWriter.writeNamespace(prefix, namespace);
+                        xmlWriter.setPrefix(prefix, namespace);
 
-                }
+                    }
 
-                xmlWriter.writeAttribute(namespace, attName, attValue);
+                    xmlWriter.writeAttribute(namespace, attName, attValue);
 
             }
 
             /**
              * Util method to write an attribute without the ns prefix
+             * @param namespace namespace
+             * @param attName attName
+             * @param attValue attValue
+             * @param xmlWriter xmlWriter
+             * @throws javax.xml.stream.XMLStreamException in case of error
              */
             private void writeAttribute(java.lang.String namespace, java.lang.String attName, java.lang.String attValue,
                     javax.xml.stream.XMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
@@ -215,6 +224,10 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
 
             /**
              * Register a namespace prefix
+             * @param namespace namespace
+             * @param xmlWriter xmlWriter
+             * @return java.lang.String
+             * @throws javax.xml.stream.XMLStreamException in case of error
              */
             private java.lang.String registerPrefix(javax.xml.stream.XMLStreamWriter xmlWriter,
                     java.lang.String namespace) throws javax.xml.stream.XMLStreamException {
@@ -236,6 +249,7 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
 
             /**
              * Create a prefix
+             * @return java.lang.String
              */
             private java.lang.String createPrefix() {
                 return "ns" + (int) Math.random();
@@ -247,7 +261,8 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
 
     /**
      * databinding method to get an XML representation of this object
-     *
+     * @param qName qName
+     * @return javax.xml.stream.XMLStreamReader
      */
     public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName) {
 
@@ -276,6 +291,9 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
          * it is a complex type and the reader is at the event just after the outer start element Postcondition: If this
          * object is an element, the reader is positioned at its end element If this object is a complex type, the
          * reader is positioned at the end element of its outer element
+         * @param reader reader
+         * @return Exception 
+         * @throws java.lang.Exception in case of error
          */
         public static Exception parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception {
             Exception object = new Exception();
@@ -287,7 +305,7 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
 
                 if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance", "type") != null) {
                     java.lang.String fullTypeName = reader
-                            .getAttributeValue("http://www.w3.org/2001/XMLSchema-instance", "type");
+                        .getAttributeValue("http://www.w3.org/2001/XMLSchema-instance", "type");
                     if (fullTypeName != null) {
                         java.lang.String nsPrefix = fullTypeName.substring(0, fullTypeName.indexOf(":"));
                         nsPrefix = nsPrefix == null ? "" : nsPrefix;
@@ -336,7 +354,7 @@ public class Exception implements org.apache.axis2.databinding.ADBBean {
 
                     reader.next();
 
-                } // End of if for expected property start element
+                        } // End of if for expected property start element
 
                 while (!reader.isStartElement() && !reader.isEndElement())
                     reader.next();

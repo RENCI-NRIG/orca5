@@ -17,8 +17,8 @@ import java.lang.annotation.Target;
 public @interface Save {
 	/**
 	 * Returns the class responsible for saving intances of the annotated type.
-	 * The class must implement Saver<T>.
-	 * @return
+	 * The class must implement Saver&lt;T&gt;.
+	 * @return returns the responsible class
 	 */
 	Class<?> value();
 }

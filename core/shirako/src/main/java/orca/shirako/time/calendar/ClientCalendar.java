@@ -29,7 +29,7 @@ import java.util.Date;
  * <li>renewing: a list of reservations organized by the time they must be
  * renewed (cycle)</li>
  * <li>holdings: a list of active/granted reservations associated with their
- * lease term. This list should be maintained using <bold>real</bold> time, not
+ * lease term. This list should be maintained using real time, not
  * cycles.</li>
  * </ul>
  * <p>

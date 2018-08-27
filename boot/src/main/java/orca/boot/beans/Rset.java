@@ -21,20 +21,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="rset">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="resourceData" type="{http://issg.cs.duke.edu/sharp/boot}rdata" minOccurs="0"/>
- *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="rset"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="resourceData" type="{http://issg.cs.duke.edu/sharp/boot}rdata" minOccurs="0"/&gt;
+ *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
+ *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
+ *         &lt;element name="properties" type="{http://issg.cs.duke.edu/sharp/boot}properties" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -79,7 +79,7 @@ public class Rset {
 
     /**
      * Gets the value of the units property.
-     * 
+     * @return value of the units property. 
      */
     public int getUnits() {
         return units;
@@ -88,6 +88,7 @@ public class Rset {
     /**
      * Sets the value of the units property.
      * 
+     * @param value value
      */
     public void setUnits(int value) {
         this.units = value;

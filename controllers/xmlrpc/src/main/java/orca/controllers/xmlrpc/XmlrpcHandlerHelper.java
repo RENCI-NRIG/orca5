@@ -90,9 +90,9 @@ public class XmlrpcHandlerHelper {
 
     /**
      * 
-     * @param filePath
-     * @return
-     * @throws java.io.IOException
+     * @param filePath filePath
+     * @return String
+     * @throws java.io.IOException in case of error
      */
     public static String readFileAsString(String filePath) throws java.io.IOException {
         byte[] buffer = new byte[(int) new File(filePath).length()];
@@ -105,9 +105,9 @@ public class XmlrpcHandlerHelper {
     /**
      * To deal with RFC3339 Date
      * 
-     * @param datestring
-     * @return
-     * @throws java.text.ParseException
+     * @param datestring datestring
+     * @return Date
+     * @throws java.text.ParseException in case of error
      */
     public static Date parseRFC3339Date(String datestring) throws java.text.ParseException {
         Date d = new Date();
@@ -200,10 +200,11 @@ public class XmlrpcHandlerHelper {
     /**
      * Use slice URN/name to determine slice reservations
      * 
-     * @param slice_urn
-     * @return
-     * @throws Exception
-     * @throws CredentialException
+     * @param sm sm
+     * @param sl sl
+     * @return list of reservations
+     * @throws Exception in case of error
+     * @throws CredentialException in case of error
      */
     public static List<ReservationMng> getAllSliceReservations(IOrcaServiceManager sm, XmlrpcControllerSlice sl)
             throws Exception {
@@ -224,10 +225,10 @@ public class XmlrpcHandlerHelper {
     /**
      * Use guid to determine all slice reservations
      * 
-     * @param sid
-     * @return
-     * @throws Exception
-     * @throws CredentialException
+     * @param sid sid
+     * @param sm sm
+     * @return list of reservations
+     * @throws Exception in case of error
      */
     public static List<ReservationMng> getAllSliceReservationsByGuid(IOrcaServiceManager sm, String sid)
             throws Exception {
@@ -251,11 +252,18 @@ public class XmlrpcHandlerHelper {
     /**
      * Function to do the GENI (non ABAC) authorization check, if required.
      * 
-     * @param sliceUrn
-     * @param credentials
-     * @param requiredPrivilege
+     * @param sliceUrn sliceUrn
+     * @param credentials credentials
+     * @param requiredPrivilege requiredPrivilege
+     * @param options options
+     * @param verifyCredentials verifyCredentials
+     * @param logger logger
      * @return expiration date
-     * @throws CredentialException
+     * @throws CredentialException in case of error
+     * @throws CertificateException in case of error
+     * @throws CertPathValidatorException in case of error
+     * @throws XMLSignatureException in case of error
+     * @throws MarshalException in case of error
      */
     public static Date validateGeniCredential(String sliceUrn, Object[] credentials, String[] requiredPrivilege,
             Map<String, Object> options, boolean verifyCredentials, Logger logger) throws CredentialException,
@@ -368,12 +376,13 @@ public class XmlrpcHandlerHelper {
      * Orca light credential validation - simply check that the presented cert is still valid and traceable to a known
      * trust root. Ignores all input parameters and gets the client cert chain from the servlet. (11/29/2011) /ib
      * 
-     * @param sliceUrn
-     * @param credentials
-     * @param requiredPrivilege
-     * @param logger
-     * @param verifyCredentials
-     * @throws CredentialException
+     * @param sliceUrn sliceUrn 
+     * @param credentials credentials
+     * @param requiredPrivilege requiredPrivilege
+     * @param logger logger
+     * @param verifyCredentials verifyCredentials
+     * @return String
+     * @throws CredentialException in case of error
      */
     @SuppressWarnings("unchecked")
     public static String validateOrcaCredential(String sliceUrn, Object[] credentials, String[] requiredPrivilege,
@@ -537,10 +546,11 @@ public class XmlrpcHandlerHelper {
     /**
      * Validate ownership of a sliver by a given DN
      * 
-     * @param sm
-     * @param sliver_guid
-     * @param userDN
-     * @return
+     * @param sm sm
+     * @param sliver_guid sliver guid
+     * @param userDN user dn
+     * @return true or false
+     * @throws NoOwnerDNOnReservation in case of error
      */
     public static boolean validateSliverOwner(IOrcaServiceManager sm, String sliver_guid, String userDN)
             throws NoOwnerDNOnReservation {
@@ -568,9 +578,11 @@ public class XmlrpcHandlerHelper {
     /**
      * alternative version of reservation ownership validation, if we already have ReservationMng object on hand
      * 
-     * @param rm
-     * @param userDN
-     * @return
+     * @param rm rm
+     * @param userDN user dn
+     *
+     * @return true or false
+     * @throws NoOwnerDNOnReservation in case of error
      */
     public static boolean validateSliverOwner(ReservationMng rm, String userDN) throws NoOwnerDNOnReservation {
         try {
@@ -596,9 +608,10 @@ public class XmlrpcHandlerHelper {
      * helper function looks at list of reservations, makes sure at least one reservation has a DN property matching the
      * supplied string
      * 
-     * @param l
-     * @param userDN
-     * @return
+     * @param l l
+     * @param userDN user dn
+     * @return true or false
+     * @throws NoOwnerDNOnReservation in case of errorr
      */
     public static boolean validateSliverListOwner(List<ReservationMng> l, String userDN) throws NoOwnerDNOnReservation {
         if (l == null)
@@ -618,9 +631,9 @@ public class XmlrpcHandlerHelper {
     /**
      * Validate that offered list of reservations is part of the list of slice reservations
      * 
-     * @param sliceRes
-     * @param resList
-     * @return
+     * @param sliceRes slice res
+     * @param resList res list
+     * @return true or false
      */
     public static boolean validateSliverListSlice(List<ReservationMng> sliceRes, List<String> resList) {
         if ((resList == null) || (sliceRes == null))
@@ -641,9 +654,9 @@ public class XmlrpcHandlerHelper {
     /**
      * Return DN or subjectAlternativeName URN in the certificate used for this SSL session
      * 
-     * @param logger
-     * @return
-     * @throws CredentialException
+     * @param logger logger
+     * @return string
+     * @throws CredentialException in case of error
      */
     public static String getCredentialDN(Logger logger) throws CredentialException {
 
@@ -678,10 +691,10 @@ public class XmlrpcHandlerHelper {
     /**
      * Get extension value as string from a cert
      * 
-     * @param X509Certificate
-     * @param oid
-     * @return
-     * @throws IOException
+     * @param X509Certificate certificate
+     * @param oid oid
+     * @return list if string
+     * @throws IOException in case of error
      */
     public static List<String> getExtensionValue(X509Certificate X509Certificate, String oid) throws IOException {
         byte[] extensionValue = X509Certificate.getExtensionValue(oid);
@@ -698,8 +711,8 @@ public class XmlrpcHandlerHelper {
     /**
      * Try to recursively extract strings from DER object
      * 
-     * @param derObject
-     * @return
+     * @param derObject der object
+     * @return list of strings
      */
     private static List<String> getDERStrings(DERObject derObject) {
 
@@ -750,9 +763,9 @@ public class XmlrpcHandlerHelper {
     /**
      * Convert byte string to DER Object
      * 
-     * @param data
-     * @return
-     * @throws IOException
+     * @param data data
+     * @return der object
+     * @throws IOException in case of error
      */
     private static DERObject toDERObject(byte[] data) {
         ASN1InputStream asnInputStream = null;
@@ -776,9 +789,9 @@ public class XmlrpcHandlerHelper {
     /**
      * Make RR calls to converters until success or list exhausted
      * 
-     * @param call
-     * @param params
-     * @return
+     * @param call call
+     * @param params param
+     * @return map of str to object
      */
     @SuppressWarnings("unchecked")
     protected Map<String, Object> callConverter(String call, Object[] params) {
@@ -825,10 +838,11 @@ public class XmlrpcHandlerHelper {
     /**
      * Get the manifest in a standard way based on ORCA state
      * 
-     * @param instance
-     * @param slice_urn
-     * @param logger
-     * @return
+     * @param instance instance
+     * @param slice_urn slice urn
+     * @param logger logger
+     * @return string
+     * @throws OrcaControllerException in case of error 
      */
     public static String getSliceManifest(XmlrpcOrcaState instance, String slice_urn, Logger logger)
             throws OrcaControllerException {
@@ -915,11 +929,12 @@ public class XmlrpcHandlerHelper {
     /**
      * Get all slice reservations in a standard way
      * 
-     * @param instance
-     * @param slice_urn
-     * @param userDN
-     * @param logger
-     * @throws OrcaControllerException
+     * @param instance instance
+     * @param slice_urn slice urn
+     * @param userDN user dn
+     * @param logger logger
+     * @return list of reservations
+     * @throws OrcaControllerException in case of error
      */
     public static List<ReservationMng> getSliceReservations(XmlrpcOrcaState instance, String slice_urn, String userDN,
             Logger logger) throws OrcaControllerException {
@@ -973,14 +988,14 @@ public class XmlrpcHandlerHelper {
      * increment (if indicated, otherwise use current highest index). It also calls updateReservation on SM to save the
      * new properties. ReservationMng object is modified and not safe to use afterwards
      * 
-     * @param sm
-     * @param rm
-     * @param propPrefix
+     * @param sm sm
+     * @param rm rm
+     * @param propPrefix prop prefix
      * @param increment
      *            - increment index or not
      * @param p
      *            - new properties
-     * @return
+     * @return integer
      */
     public static Integer addIndexedLocalProperties(IOrcaServiceManager sm, ReservationMng rm, String propPrefix,
             boolean increment, Properties p) {
@@ -1029,14 +1044,11 @@ public class XmlrpcHandlerHelper {
      * Add new local properties to reservation of the form prefix.suffix. It also calls updateReservation on SM to save
      * the new properties. ReservationMng object is modified and not safe to use afterwards
      * 
-     * @param sm
-     * @param rm
-     * @param propPrefix
-     * @param increment
-     *            - increment index or not
+     * @param sm sm
+     * @param rm rm
+     * @param propPrefix prop prefix
      * @param p
      *            - new properties
-     * @return
      */
     public static void addLocalProperties(IOrcaServiceManager sm, ReservationMng rm, String propPrefix, Properties p) {
         try {
@@ -1073,8 +1085,9 @@ public class XmlrpcHandlerHelper {
      * Find an active stitch to the given reservation and return its GUID (stitch which has a performed property, but no
      * undone property)
      * 
-     * @param local
-     * @return
+     * @param local local
+     * @param to to
+     * @return string
      */
     public static String findActiveStitch(Properties local, String to) {
         String retGuid = null;
@@ -1104,8 +1117,8 @@ public class XmlrpcHandlerHelper {
     /**
      * Return a list of guids (possibly empty) of all stitches
      * 
-     * @param local
-     * @return
+     * @param local local
+     * @return set of string
      */
     public static Set<String> findAllStitches(Properties local) {
         Set<String> ret = new HashSet<>();
@@ -1127,9 +1140,9 @@ public class XmlrpcHandlerHelper {
     /**
      * Return as map properties of a given stitch
      * 
-     * @param local
-     * @param stitchGuid
-     * @return
+     * @param local local
+     * @param stitchGuid stitch guid
+     * @return properties
      */
     public static Properties getStitchProperties(Properties local, String stitchGuid) {
         Properties ret = new Properties();
@@ -1148,9 +1161,9 @@ public class XmlrpcHandlerHelper {
     /**
      * Find index of modify operation matching this stitch operation guid
      * 
-     * @param config
-     * @param guid
-     * @return
+     * @param config config
+     * @param guid guid
+     * @return int
      */
     public static int findModifyIndexForStitch(Properties config, String guid) {
         int retIndex = -1;
@@ -1185,8 +1198,8 @@ public class XmlrpcHandlerHelper {
      * Obtain a short domain name from RESOURCE resource.domain.value property (XXXvmsite/vm or XXXvmsite/vlan or
      * XXXNet/vlan)
      * 
-     * @param mng
-     * @return
+     * @param mng mng
+     * @return string
      */
     public static String getShortDomain(ReservationMng mng) {
         // Look at 'resource.domain.value' RESOURCE property which will XXXvmsite/vm or XXXvmsite/vlan or XXXNet/vlan,

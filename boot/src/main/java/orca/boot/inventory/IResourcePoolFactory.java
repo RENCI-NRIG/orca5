@@ -10,30 +10,33 @@ public interface IResourcePoolFactory {
     /**
      * Sets the substrate.
      * 
-     * @param substrate
+     * @param substrate substrate
+     * @throws ConfigurationException in case of error
      */
     void setSubstrate(ISubstrate substrate) throws ConfigurationException;
 
     /**
      * Sets the initial resource pools descriptor. The factory can modify the descriptor as needed.
      * 
-     * @param desc
+     * @param desc desc
+     * @throws ConfigurationException in case of error
      */
     void setDescriptor(ResourcePoolDescriptor desc) throws ConfigurationException;
 
     /**
      * Returns the final pool descriptor.
      * 
-     * @return
+     * @return ResourcePoolDescriptor
+     * @throws ConfigurationException in case of error
      */
     ResourcePoolDescriptor getDescriptor() throws ConfigurationException;
 
     /**
      * Returns the source reservation for this resource pool.
      * 
-     * @param slice
-     * @return
-     * @throws ConfigurationException
+     * @param slice slice
+     * @return IClientReservation
+     * @throws ConfigurationException in case of error
      */
     IClientReservation createSourceReservation(ISlice slice) throws ConfigurationException;
 }

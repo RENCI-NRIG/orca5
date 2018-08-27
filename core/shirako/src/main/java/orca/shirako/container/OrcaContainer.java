@@ -417,8 +417,7 @@ public class OrcaContainer <T> implements IActorContainer  {
 
     /**
      * Persists time configuration
-     * @param init
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void persistContainer() throws Exception {
         Properties p = new Properties();
@@ -428,8 +427,7 @@ public class OrcaContainer <T> implements IActorContainer  {
 
     /**
      * Persists time configuration
-     * @param init
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void persistTime() throws Exception {
         Properties p = new Properties();
@@ -804,8 +802,8 @@ public class OrcaContainer <T> implements IActorContainer  {
      * required by the actor, registers actor proxies and callbacks. Must not
      * register the actor with the clock! Clock registration is a separate
      * phase.
-     * @param actor
-     * @throws Exception
+     * @param actor actor
+     * @throws Exception in case of error
      */
     public void registerActor(IActor actor) throws Exception {
         ((IOrcaContainerDatabase) db).addActor(actor);
@@ -819,6 +817,7 @@ public class OrcaContainer <T> implements IActorContainer  {
      * Registers the given certificate with the admin key store.
      * @param certificate the certificate
      * @param alias alias for the certificate
+     * @return result code
      */
     protected int registerCertificate(Certificate certificate, String alias) {
         int code = 0;
@@ -836,7 +835,7 @@ public class OrcaContainer <T> implements IActorContainer  {
     /**
      * Unregisters the actor from the container.
      * @param actor actor
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void unregisterActor(IActor actor) throws Exception {
         // do not delete from the database!!!
@@ -852,6 +851,8 @@ public class OrcaContainer <T> implements IActorContainer  {
     /**
      * Performs the common steps required to register an actor with the
      * container.
+     * @param actor actor
+     * @throws Exception in case of error
      */
     protected void registerCommon(IActor actor) throws Exception {
         // add the actor to the actor registry
@@ -893,9 +894,8 @@ public class OrcaContainer <T> implements IActorContainer  {
     }
     /**
      * Remove actor metadata
-     * @param name actor name;
-     * @return
-     * @throws Exception
+     * @param actorName actor name;
+     * @throws Exception in case of error
      */
     // FIXME: use guid
     public void removeActor(String actorName) throws Exception {
@@ -909,8 +909,8 @@ public class OrcaContainer <T> implements IActorContainer  {
 
     /**
      * Remove actor database
-     * @param actorName
-     * @throws Exception
+     * @param actorName actor name
+     * @throws Exception in case of error
      */
     public void removeActorDatabase(String actorName) throws Exception {
         db.removeActorDatabase(actorName);
@@ -927,7 +927,7 @@ public class OrcaContainer <T> implements IActorContainer  {
     /**
      * Deploys the required services for this actor.
      * @param actor actor
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void deployServices(IActor actor) throws Exception {
         Globals.Log.debug("Deploying services for actor: " + actor.getName());
@@ -939,7 +939,7 @@ public class OrcaContainer <T> implements IActorContainer  {
     /**
      * Undeploys services for the actor
      * @param actor actor
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void undeployServices(final IActor actor) throws Exception {
     	Globals.Log.debug("Undeploying services for actor: " + actor.getName());
@@ -951,7 +951,7 @@ public class OrcaContainer <T> implements IActorContainer  {
     /**
      * Registers all proxies for the specified actor.
      * @param actor actor
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void registerProxies(IActor actor) throws Exception {
     	Globals.Log.debug("Registering proxies for actor: " + actor.getName());
@@ -982,7 +982,7 @@ public class OrcaContainer <T> implements IActorContainer  {
     /**
      * Registers a recovered actor.
      * @param actor recovered actor
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void registerRecoveredActor(IActor actor) throws Exception {
         Globals.Log.debug("Regisering a recovered actor");
@@ -1180,7 +1180,7 @@ public class OrcaContainer <T> implements IActorContainer  {
 
     /**
      * Returns the manager object manager
-     * @return
+     * @return the manager object manager
      */
     public ManagementObjectManager getManagementObjectManager() {
         return managementObjectManager;
@@ -1209,7 +1209,7 @@ public class OrcaContainer <T> implements IActorContainer  {
 
     /**
      * Returns the package manager
-     * @return
+     * @return the package manager
      */
     public PackageManager getPackageManager() {
         return packageManager;
@@ -1217,7 +1217,7 @@ public class OrcaContainer <T> implements IActorContainer  {
 
     /**
      * Returns the plugin manager
-     * @return
+     * @return the plugin manager
      */
     public PluginManager getPluginManager() {
         return pluginManager;
@@ -1225,8 +1225,8 @@ public class OrcaContainer <T> implements IActorContainer  {
 
     /**
      * Returns the root forlder for the specified package
-     * @param id
-     * @return
+     * @param id id
+     * @return the root forlder for the specified package
      */
     public String getPackageRootFolder(PackageId id) {
         return PackageManager.getPackageRootFolder(id);

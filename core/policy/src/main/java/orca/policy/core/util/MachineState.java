@@ -104,7 +104,7 @@ public class MachineState
     /**
      * Return the bandwidth list
      *
-     * @return
+     * @return UnitsList
      */
     public UnitsList getBandwidth()
     {
@@ -119,7 +119,7 @@ public class MachineState
     /**
      * Return the cpu list
      *
-     * @return
+     * @return UnitsList
      */
     public UnitsList getCpu()
     {
@@ -134,7 +134,7 @@ public class MachineState
     /**
      * Return the machine's id
      *
-     * @return
+     * @return id
      */
     public ID getId()
     {
@@ -144,7 +144,7 @@ public class MachineState
     /**
      * Return the memory list
      *
-     * @return
+     * @return UnitsList
      */
     public UnitsList getMemory()
     {
@@ -158,8 +158,8 @@ public class MachineState
 
     /**
      * Return the storage list
-     *
-     * @return
+     * 
+     * @return UnitsList
      */
     public UnitsList getStorage()
     {
@@ -233,11 +233,11 @@ public class MachineState
     /**
      * Releases resources from this machine
      *
-     * @param start
-     * @param end
-     * @param r
+     * @param start start
+     * @param end end
+     * @param r r
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void release(Date start, Date end, ResourceEntry r) throws Exception
     {
@@ -264,11 +264,11 @@ public class MachineState
     /**
      * Reserves resources from this machine. Assumes same order as space().
      *
-     * @param start
-     * @param end
-     * @param maxResources
+     * @param start start
+     * @param end end
+     * @param maxResources maxResources
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized void reserve(Date start, Date end, long[] maxResources)
                               throws Exception
@@ -284,11 +284,11 @@ public class MachineState
     /**
      * Reserves resources from this machine
      *
-     * @param start
-     * @param end
-     * @param r
+     * @param start start
+     * @param end end
+     * @param r r
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized void reserve(Date start, Date end, ResourceEntry r)
                               throws Exception
@@ -322,7 +322,7 @@ public class MachineState
     /**
      * Tick each of the resources for cleaning
      *
-     * @param time
+     * @param time time
      */
     public synchronized void tick(long time)
     {

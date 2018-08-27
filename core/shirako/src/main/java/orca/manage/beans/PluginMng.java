@@ -20,25 +20,25 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="pluginMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="className" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="configurationTemplate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="factory" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="packageId" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="portalLevel" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="actorType" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="pluginMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="className" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="configurationTemplate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="factory" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="packageId" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="portalLevel" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="actorType" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -163,7 +163,7 @@ public class PluginMng {
 
     /**
      * Gets the value of the factory property.
-     * 
+     * @return value of the factory property
      */
     public boolean isFactory() {
         return factory;
@@ -171,7 +171,7 @@ public class PluginMng {
 
     /**
      * Sets the value of the factory property.
-     * 
+     * @param value value of the factory property
      */
     public void setFactory(boolean value) {
         this.factory = value;
@@ -251,7 +251,7 @@ public class PluginMng {
 
     /**
      * Gets the value of the type property.
-     * 
+     * @return value of the type property
      */
     public int getType() {
         return type;
@@ -259,7 +259,7 @@ public class PluginMng {
 
     /**
      * Sets the value of the type property.
-     * 
+     * @param value value of the type property
      */
     public void setType(int value) {
         this.type = value;
@@ -267,7 +267,7 @@ public class PluginMng {
 
     /**
      * Gets the value of the portalLevel property.
-     * 
+     * @return value of the portalLevel property
      */
     public int getPortalLevel() {
         return portalLevel;
@@ -275,7 +275,7 @@ public class PluginMng {
 
     /**
      * Sets the value of the portalLevel property.
-     * 
+     * @param value value of the portalLevel property
      */
     public void setPortalLevel(int value) {
         this.portalLevel = value;
@@ -283,7 +283,7 @@ public class PluginMng {
 
     /**
      * Gets the value of the actorType property.
-     * 
+     * @return value of the actorType property
      */
     public int getActorType() {
         return actorType;
@@ -291,7 +291,7 @@ public class PluginMng {
 
     /**
      * Sets the value of the actorType property.
-     * 
+     * @param value value of the actorType property
      */
     public void setActorType(int value) {
         this.actorType = value;

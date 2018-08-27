@@ -27,9 +27,10 @@ public interface IServiceManager extends IClientActor, IServiceManagerPublic
      *
      * @param reservation reservation to be redeemed
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
+     * @see orca.shirako.api.IReservationOperations#register(IReservation)
+     * @throws Exception in case of error
      */
     public void extendLease(IServiceManagerReservation reservation) throws Exception;
 
@@ -42,6 +43,7 @@ public interface IServiceManager extends IClientActor, IServiceManagerPublic
      * place.
      *
      * @param set set of reservations to extend the lease for
+     * @throws Exception in case of error
      */
     public void extendLease(ReservationSet set) throws Exception;
 
@@ -51,9 +53,10 @@ public interface IServiceManager extends IClientActor, IServiceManagerPublic
      *
      * @param reservation reservation to be redeemed
      *
-     * @throws Exception
+     * @throws Exception in case of error
      *
-     * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
+     * @see orca.shirako.api.IReservationOperations#register(IReservation)
+     * @throws Exception in case of error
      */
     public void redeem(IServiceManagerReservation reservation) throws Exception;
 

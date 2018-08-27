@@ -21,7 +21,7 @@ import orca.util.ResourceType;
  * <ul>
  *  <li>Addition of new inventory units for a given period of time</li>
  *  <li>Reservation of a number of units over a period of time</li>
- *  <li>Releasing of a number of units over a period of time</li<
+ *  <li>Releasing of a number of units over a period of time</li>
  * </ul>
  * @author aydan
  */

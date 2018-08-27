@@ -45,7 +45,7 @@ public class ManifestPublisher {
     /**
      * prepare XMPP publisher object
      * 
-     * @param args
+     * @throws Exception in case of error
      */
     public void prepareXMPP() throws Exception {
 
@@ -99,7 +99,7 @@ public class ManifestPublisher {
     /**
      * prepare XMPP publisher object
      * 
-     * @param args
+     * @throws Exception in case of error
      */
     public void createAccountAndDisconnect() throws Exception {
 
@@ -131,9 +131,9 @@ public class ManifestPublisher {
     /**
      * Main method to publish the manifest for a given actor and slice
      * 
-     * @param actor_id
-     * @param slice_id
-     * @param manifest
+     * @param actor_id actor_id
+     * @param slice_id slice_id
+     * @param manifest manifest
      */
 
     public void publishManifest(String actor_id, String slice_id, String manifest) {
@@ -161,9 +161,8 @@ public class ManifestPublisher {
     /**
      * Main method to publish slicList for an SM actor
      * 
-     * @param actor_id
-     * @param slice_id
-     * @param manifest
+     * @param actor_id actor_id
+     * @param sliceListString sliceListString
      */
 
     public void publishSliceList(String actor_id, String sliceListString) {

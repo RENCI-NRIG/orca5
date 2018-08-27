@@ -23,27 +23,27 @@ import orca.manage.beans.PropertiesMng;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="auth" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/>
- *         &lt;element name="clientSliceId" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="resourcePoolId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="ticketId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="resourceType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="startTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="stopTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="ticketProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="resourceProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="clientName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="clientGuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="auth" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/&gt;
+ *         &lt;element name="clientSliceId" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="resourcePoolId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="ticketId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="resourceType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="startTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="stopTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="ticketProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="resourceProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="clientName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="clientGuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -230,7 +230,7 @@ public class ExportResourcesRequest {
 
     /**
      * Gets the value of the startTime property.
-     * 
+     * @return value of the startTime property
      */
     public long getStartTime() {
         return startTime;
@@ -238,7 +238,7 @@ public class ExportResourcesRequest {
 
     /**
      * Sets the value of the startTime property.
-     * 
+     * @param value value of the startTime property
      */
     public void setStartTime(long value) {
         this.startTime = value;
@@ -246,7 +246,7 @@ public class ExportResourcesRequest {
 
     /**
      * Gets the value of the stopTime property.
-     * 
+     * @return value of the stopTime property
      */
     public long getStopTime() {
         return stopTime;
@@ -254,7 +254,7 @@ public class ExportResourcesRequest {
 
     /**
      * Sets the value of the stopTime property.
-     * 
+     * @param value value of the stopTime property
      */
     public void setStopTime(long value) {
         this.stopTime = value;
@@ -262,7 +262,7 @@ public class ExportResourcesRequest {
 
     /**
      * Gets the value of the units property.
-     * 
+     * @return value of the units property
      */
     public int getUnits() {
         return units;
@@ -270,7 +270,7 @@ public class ExportResourcesRequest {
 
     /**
      * Sets the value of the units property.
-     * 
+     * @param value value
      */
     public void setUnits(int value) {
         this.units = value;

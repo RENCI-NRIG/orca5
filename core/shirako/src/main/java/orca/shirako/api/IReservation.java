@@ -240,7 +240,7 @@ public interface IReservation extends Persistable, CustomRecoverable, Referencea
     
     /**
      * Returns the error message associated with this reservation.
-     * @return
+     * @return error message associated with this reservation
      */
     public String getNotices();
     public void setup();

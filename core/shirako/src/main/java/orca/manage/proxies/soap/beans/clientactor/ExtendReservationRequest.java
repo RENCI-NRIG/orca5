@@ -23,22 +23,22 @@ import orca.manage.beans.PropertiesMng;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="auth" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/>
- *         &lt;element name="reservationID" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="endTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="newUnits" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="newResourceType" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="requestProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng"/>
- *         &lt;element name="configProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="guid" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="auth" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/&gt;
+ *         &lt;element name="reservationID" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="endTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="newUnits" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="newResourceType" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="requestProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng"/&gt;
+ *         &lt;element name="configProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -148,6 +148,7 @@ public class ExtendReservationRequest {
     /**
      * Gets the value of the endTime property.
      * 
+     * @return value of the endTime property
      */
     public long getEndTime() {
         return endTime;
@@ -155,7 +156,7 @@ public class ExtendReservationRequest {
 
     /**
      * Sets the value of the endTime property.
-     * 
+     * @param value value of the endTime property
      */
     public void setEndTime(long value) {
         this.endTime = value;
@@ -164,6 +165,7 @@ public class ExtendReservationRequest {
     /**
      * Gets the value of the newUnits property.
      * 
+     * @return value of the newUnits property 
      */
     public int getNewUnits() {
         return newUnits;
@@ -171,7 +173,7 @@ public class ExtendReservationRequest {
 
     /**
      * Sets the value of the newUnits property.
-     * 
+     * @param value value of the newUnits property
      */
     public void setNewUnits(int value) {
         this.newUnits = value;

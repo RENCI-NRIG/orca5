@@ -60,11 +60,9 @@ public abstract class JunosSSLDevice implements INetworkDevice, IJunosInteractor
 
     /**
      * 
-     * @param deviceAddress
-     * @param uid
-     * @param password
-     * @param validate
-     *            - validate server cert?
+     * @param deviceAddress deviceAddress
+     * @param uid uid
+     * @param password password
      */
     public JunosSSLDevice(String deviceAddress, String uid, String password) {
         this.deviceAddress = deviceAddress;

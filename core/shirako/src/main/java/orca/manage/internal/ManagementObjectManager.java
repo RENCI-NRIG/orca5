@@ -109,8 +109,7 @@ public class ManagementObjectManager
     /**
      * Retrieves the specified manager object.
      * @param id object guid
-     * @return
-     * @throws Exception
+     * @return returns Management object
      */
     public IManagementObject getManagementObject(ID id)
     {
@@ -122,7 +121,8 @@ public class ManagementObjectManager
     /**
      * Performs initialization. If the system is recovering after a
      * shutdown/crash, loads all manager objects that pertain to the container.
-     * @throws Exception
+     * @param database database 
+     * @throws Exception in case of error
      */
     public void initialize(IManagementObjectDatabase database) throws Exception
     {
@@ -149,7 +149,7 @@ public class ManagementObjectManager
     /**
      * Loads all manager objects associated with the specific actor.
      * @param actorName actor name
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void loadActorManagementObjects(String actorName) throws Exception
     {
@@ -161,7 +161,7 @@ public class ManagementObjectManager
 
     /**
      * Loads all manager objects not associated with specific actors
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void loadContainerManagerObjects() throws Exception
     {
@@ -173,8 +173,8 @@ public class ManagementObjectManager
 
     /**
      * Loads the specified management objects
-     * @param v
-     * @throws Exception
+     * @param v vector of properties
+     * @throws Exception in case of error
      */
     protected void loadObjects(Vector<Properties> v) throws Exception
     {
@@ -203,8 +203,8 @@ public class ManagementObjectManager
 
     /**
      * Registers a new management object
-     * @param object
-     * @throws Exception
+     * @param object management object
+     * @throws Exception in case of error
      */
     public void registerManagerObject(IManagementObject object) throws Exception
     {
@@ -263,7 +263,7 @@ public class ManagementObjectManager
     /**
      * Unloads all management objects associated with the specific actor.
      * @param actorName actor name
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void unloadActorManagerObjects(String actorName) throws Exception
     {
@@ -273,8 +273,8 @@ public class ManagementObjectManager
 
     /**
      * Unloads the specified management objects
-     * @param v
-     * @throws Exception
+     * @param v vector of properties
+     * @throws Exception in case of error
      */
     protected void unloadObjects(Vector<Properties> v) throws Exception
     {
@@ -306,7 +306,8 @@ public class ManagementObjectManager
 
     /**
      * Unregisters the specified management object
-     * @param id
+     * @param id management object id
+     * @throws Exception in case of error
      */
     public void unregisterManager(ID id) throws Exception
     {

@@ -44,7 +44,7 @@ public interface IContainerClock
 
     /**
      * Stops the clock.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void stop() throws Exception;
 

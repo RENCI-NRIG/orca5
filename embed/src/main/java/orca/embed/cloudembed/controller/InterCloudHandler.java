@@ -46,9 +46,9 @@ public class InterCloudHandler extends ModifyHandler {
     /**
      * Create handler with in-memory model
      * 
-     * @param substrateFile
-     * @throws IOException
-     * @
+     * @param substrateFile substrateFile
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public InterCloudHandler(String substrateFile) throws IOException, NdlException {
         super(substrateFile);
@@ -57,10 +57,10 @@ public class InterCloudHandler extends ModifyHandler {
     /**
      * Create handler with TDB-backed model in a directory with specified path prefix
      * 
-     * @param substrateFile
-     * @param tdbPrefix
-     * @throws IOException
-     * @throws NdlException
+     * @param substrateFile substrateFile
+     * @param tdbPrefix tdbPrefix
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public InterCloudHandler(String substrateFile, String tdbPrefix) throws IOException, NdlException {
         super(substrateFile, tdbPrefix);
@@ -69,10 +69,10 @@ public class InterCloudHandler extends ModifyHandler {
     /**
      * Create a handler with TDB-backed blank model or try to recover existing TDB model
      * 
-     * @param tdbPrefix
-     * @param recover
-     * @throws IOException
-     * @throws NdlException
+     * @param tdbPrefix tdbPrefix
+     * @param recover recover
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public InterCloudHandler(String tdbPrefix, Boolean recover) throws IOException, NdlException {
         super(tdbPrefix, recover);

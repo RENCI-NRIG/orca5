@@ -108,7 +108,7 @@ public class XCatGenerateBashFileTask extends XCatGenerateBashFileBaseTask {
     /**
      * Get storage volume indices
      * 
-     * @return
+     * @return Integer[]
      */
     protected Integer[] getStores() {
         HashSet<Integer> set = new HashSet<Integer>();
@@ -144,7 +144,7 @@ public class XCatGenerateBashFileTask extends XCatGenerateBashFileBaseTask {
     /**
      * Get all interface indices
      * 
-     * @return
+     * @return Integer[]
      */
     protected Integer[] getEths() {
         HashSet<Integer> set = new HashSet<Integer>();

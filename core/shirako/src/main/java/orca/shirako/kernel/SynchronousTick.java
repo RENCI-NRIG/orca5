@@ -35,7 +35,7 @@ public class SynchronousTick extends Tick
     protected class TickWorker extends Thread
     {
         /**
-         * Threshold for sleeping: if the time remaining is >
+         * Threshold for sleeping: if the time remaining is greater 
          * threshold then we will not sleep.
          */
         public static final long Threshold = 50;
@@ -211,7 +211,7 @@ public class SynchronousTick extends Tick
     /**
      * Stops the worker thread(s).
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void stopWorker() throws Exception
     {

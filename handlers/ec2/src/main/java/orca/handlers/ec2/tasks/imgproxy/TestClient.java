@@ -8,7 +8,7 @@ import org.apache.tools.ant.BuildException;
 public class TestClient {
 
     /**
-     * @param args
+     * @param args args
      */
     public static void main(String[] args) {
         // TODO Auto-generated method stub

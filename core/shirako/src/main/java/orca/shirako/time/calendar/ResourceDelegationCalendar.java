@@ -45,6 +45,7 @@ public class ResourceDelegationCalendar
      * @param start start time
      * @param end end time
      * @param units number of units
+     * @param vector resource vector
      */
     public ResourceDelegationCalendar(final long start, final long end, final int units, final ResourceVector vector)
     {
@@ -171,8 +172,8 @@ public class ResourceDelegationCalendar
 
     /**
      * Checks if there has been a split operation over the specified interval.
-     * @param start
-     * @param end
+     * @param start start
+     * @param end end
      * @return true if a split operation has taken place.
      */
     public boolean hasBeenSplit(final long start, final long end)
@@ -204,8 +205,8 @@ public class ResourceDelegationCalendar
     
     /**
      * Checks if there has been an extraction operation over the specified interval
-     * @param start
-     * @param end
+     * @param start start
+     * @param end end
      * @return true if an extract operation has taken place, false otherwise
      */
     public boolean hasBeenExtracted(final long start, final long end)
@@ -237,9 +238,9 @@ public class ResourceDelegationCalendar
 
     /**
      * Returns the minimum resource vector available over the specified interval.
-     * @param start
-     * @param end
-     * @return
+     * @param start start
+     * @param end end
+     * @return resource vector
      */
     public ResourceVector getMinVector(final long start, final long end)
     {
@@ -298,7 +299,7 @@ public class ResourceDelegationCalendar
 
     /**
      * Returns the max resource vector.
-     * @return
+     * @return the max resource vector
      */
     public ResourceVector getResourceVector()
     {
@@ -368,7 +369,7 @@ public class ResourceDelegationCalendar
      * 
      * @return list of conflict entries
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized AvailableResources[] release(final long start, final long end, final int units) throws Exception
     {
@@ -391,11 +392,11 @@ public class ResourceDelegationCalendar
      * 
      * @param start start time
      * @param end end time
-     * @param units number of units
+     * @param vector units
      * 
      * @return list of conflict entries
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized AvailableResources[] release(final long start, final long end, final ResourceVector vector) throws Exception
     {
@@ -423,7 +424,7 @@ public class ResourceDelegationCalendar
      * 
      * @return list of conflict entries
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized AvailableResources[] releaseConditional(final long start, final long end, final int units) throws Exception
     {
@@ -459,11 +460,11 @@ public class ResourceDelegationCalendar
      * 
      * @param start start time
      * @param end end time
-     * @param units number of units
+     * @param vector resource vector 
      * 
      * @return list of conflict entries
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized AvailableResources[] releaseConditional(final long start, final long end, final ResourceVector vector) throws Exception
     {
@@ -496,10 +497,11 @@ public class ResourceDelegationCalendar
      * not both.
      * 
      * @param units units to reserve/release
+     * @param isReserving isReserving
      * 
      * @return a list of conflict entries
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected AvailableResources[] reserve(final AvailableResources units, boolean isReserving) throws Exception
     {
@@ -704,7 +706,7 @@ public class ResourceDelegationCalendar
      * 
      * @return list of conflict entries
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized AvailableResources[] reserve(final long start, final long end, final int units) throws Exception
     {
@@ -730,7 +732,7 @@ public class ResourceDelegationCalendar
      * 
      * @return list of conflict entries
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized AvailableResources[] reserve(final long start, final long end, final ResourceVector vector) throws Exception
     {

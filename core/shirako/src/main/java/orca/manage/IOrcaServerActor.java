@@ -17,14 +17,14 @@ import orca.util.ResourceType;
 public interface IOrcaServerActor extends IOrcaActor {
 	/**
 	 * Returns all reservations for which this actor acts as a broker.
-	 * @return
+	 * @return list of the reservations
 	 */
 	public List<ReservationMng> getBrokerReservations();	
 	/**
 	 * Obtains all slices holding inventory, i.e., resources that can be
 	 * delegated to other actors.
 	 * 
-	 * @return
+	 * @return list of slices
 	 */
 	public List<SliceMng> getInventorySlices();
 
@@ -32,7 +32,7 @@ public interface IOrcaServerActor extends IOrcaActor {
 	 * Returns all resources held by this actor that can be used for delegations
 	 * to client actors.
 	 * 
-	 * @return
+	 * @return list of reservations
 	 */
 	public List<ReservationMng> getInventoryReservations();
 
@@ -40,77 +40,78 @@ public interface IOrcaServerActor extends IOrcaActor {
 	 * Returns all resources in the specified slice held by this actor that can
 	 * be used for delegations to client actors.
 	 * 
-	 * @return
+	 * @param sliceID slice id
+	 * @return list of reservations for specific slice
 	 */
 	public List<ReservationMng> getInventoryReservations(SliceID sliceID);
 
 	/**
 	 * Obtains all slices that hold delegated resources to other actors.
 	 * 
-	 * @return
+	 * @return list of client slices
 	 */
 	public List<SliceMng> getClientSlices();
 
 	/**
 	 * Adds a new client slice.
 	 * 
-	 * @param slice
-	 * @return
+	 * @param slice slice to be added
+	 * @return sliceid of the added slice
 	 */
 	public SliceID addClientSlice(SliceMng slice);
 
 	/**
 	 * Returns all registered clients of this server actor.
 	 * 
-	 * @return
+	 * @return list of clients
 	 */
 	public List<ClientMng> getClients();
 
 	/**
 	 * Returns the specified client record.
 	 * 
-	 * @param guid
-	 * @return
+	 * @param guid client guid 
+	 * @return specified client record
 	 */
 	public ClientMng getClient(ID guid);
 
 	/**
 	 * Returns the certificate of the specified client.
 	 * 
-	 * @param guid
-	 * @return
+	 * @param guid client guid
+	 * @return specified client certificate
 	 */
 	public Certificate getClientCertificate(ID guid);
 
 	/**
 	 * Registers a new client
 	 * 
-	 * @param client
-	 * @param certificate
-	 * @return
+	 * @param client client
+	 * @param certificate certificate
+	 * @return true for success; false otherwise
 	 */
 	public boolean registerClient(ClientMng client, Certificate certificate);
 
 	/**
 	 * Unregisters the specified client.
 	 * 
-	 * @param guid
-	 * @return
+	 * @param guid client guid
+	 * @return true for success; false otherwise
 	 */
 	public boolean unregisterClient(ID guid);
 
 	/**
 	 * Obtains all client reservations.
 	 * 
-	 * @return
+	 * @return list of client reservations
 	 */
 	public List<ReservationMng> getClientReservations();
 
 	/**
 	 * Obtains all client reservations in the specified slice.
 	 * 
-	 * @param slice
-	 * @return
+	 * @param slice slice id
+	 * @return list of reservations
 	 */
 	public List<ReservationMng> getClientReservations(SliceID slice);
 
@@ -121,15 +122,15 @@ public interface IOrcaServerActor extends IOrcaActor {
 	 * All properties passed into ticketProperties will be part of the ticket and signed.
 	 * All properties passed into resourceProperties will be attached as resource properties
 	 * to the resource set (unsigned). 
-	 * @param clientSliceID
-	 * @param poolID
-	 * @param start
-	 * @param end
-	 * @param units
-	 * @param ticketProperties
-	 * @param resourceProperties
-	 * @param ticketId
-	 * @return
+	 * @param clientSliceID client slice id
+	 * @param poolID pool slice id
+	 * @param start start date
+	 * @param end end date
+	 * @param units units
+	 * @param ticketProperties ticket properties
+	 * @param resourceProperties resource properties
+	 * @param ticketId ticket id
+	 * @return returns the reservation id
 	 */
 	public ReservationID exportResources(SliceID clientSliceID, SliceID poolID,
 			Date start, Date end, int units, Properties ticketProperties, Properties resourceProperties,

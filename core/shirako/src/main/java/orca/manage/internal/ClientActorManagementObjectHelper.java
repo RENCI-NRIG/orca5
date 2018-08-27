@@ -396,15 +396,17 @@ public class ClientActorManagementObjectHelper implements IClientActorManagement
 	/**
 	 * Claim previously exported resources
 	 * 
-	 * @param brokerName
+	 * @param brokerID
 	 *            Broker to claim the resources from
-	 * @param sliceName
+	 * @param sliceID
 	 *            Slice to store the claimed resources in (must be the same as
 	 *            the remote slice in which the resources have been exported to)
-	 * @param reservationId
+	 * @param reservationID
 	 *            Reservation identifier of the reservation representing the
 	 *            exported resources
-	 * @return
+         * @param caller
+         *           auth token of the caller
+	 * @return specific reservation
 	 */
 	public ResultReservationMng claimResources(ID brokerID, SliceID sliceID,
 			final ReservationID reservationID, AuthToken caller) {

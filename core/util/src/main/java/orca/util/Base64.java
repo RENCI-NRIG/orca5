@@ -351,6 +351,7 @@ public class Base64
         /**
          * Method added by PHIL. [Thanks, PHIL. -Rob] This pads the buffer
          * without closing the stream.
+         * @throws java.io.IOException in case of IP error
          */
         public void flushBase64() throws java.io.IOException
         {
@@ -380,6 +381,7 @@ public class Base64
          * Suspends encoding of the stream. May be helpful if you need to embed
          * a piece of base640-encoded data in a stream.
          * @since 1.5.1
+         * @throws java.io.IOException in case of IP error
          */
         public void suspendEncoding() throws java.io.IOException
         {
@@ -980,6 +982,7 @@ public class Base64
      * Encodes a byte array into Base64 notation. Does not GZip-compress data.
      * @param source The data to convert
      * @since 1.4
+     * @return returns string containing the encoded bytes
      */
     public static String encodeBytes(byte[] source)
     {
@@ -1007,6 +1010,7 @@ public class Base64
      * @see Base64#GZIP
      * @see Base64#DONT_BREAK_LINES
      * @since 2.0
+     * @return returns string containing the encoded bytes
      */
     public static String encodeBytes(byte[] source, int options)
     {
@@ -1019,6 +1023,7 @@ public class Base64
      * @param off Offset in array where conversion should begin
      * @param len Length of data to convert
      * @since 1.4
+     * @return returns string containing the encoded bytes
      */
     public static String encodeBytes(byte[] source, int off, int len)
     {
@@ -1048,6 +1053,7 @@ public class Base64
      * @see Base64#GZIP
      * @see Base64#DONT_BREAK_LINES
      * @since 2.0
+     * @return returns string containing the encoded bytes
      */
     public static String encodeBytes(byte[] source, int off, int len, int options)
     {

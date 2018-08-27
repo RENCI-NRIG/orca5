@@ -89,7 +89,7 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
      * unit, the IP address can be allocated in this function.
      * @param r reservation containing the unit
      * @param unit unit to prepare
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void prepareTransferIn(IReservation r, Unit unit) throws Exception {
     }
@@ -101,7 +101,7 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
      * completes. See {@link #processLeaveComplete(Object, Properties)}.
      * @param r reservation containing the unit
      * @param unit unit to prepare
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void prepareTransferOut(IReservation r, Unit unit) throws Exception {
     }
@@ -110,7 +110,7 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
      * Prepares the unit for modification.
      * @param r reservation containing the unit
      * @param unit unit to prepare
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void prepareModify(IReservation r, Unit unit) throws Exception {
     }
@@ -219,7 +219,7 @@ public class Substrate extends ShirakoPlugin implements ISubstrate {
 
     /**
      * Absorbs properties passed up by a handler.
-     * @param node node
+     * @param u unit 
      * @param properties properties
      */
     protected void mergeUnitProperties(Unit u, Properties properties) {

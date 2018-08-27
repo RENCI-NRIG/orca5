@@ -109,7 +109,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
     /**
      * Initializes all registered controls.
      * 
-     * @throws OrcaException
+     * @throws OrcaException in case of error
      */
     protected void initializeControls() throws OrcaException {
         for (IResourceControl c : controlsByGuid.values()) {
@@ -371,7 +371,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      *            The requests for this cycle
      * @param cycle
      *            The cycle
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void mapForCycle(ReservationSet requests, long cycle) throws Exception {
         if ((requests == null) || (requests.size() == 0)) {
@@ -400,7 +400,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      * 
      * @param bids
      *            set of deferred operations for this cycle (non-null)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void mapShrinking(ReservationSet bids) throws Exception {
         logger.debug("Processing shrinking requests");
@@ -433,7 +433,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      * 
      * @param bids
      *            set of deferred operations for this cycle (non-null)
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void mapGrowing(ReservationSet bids) throws Exception {
         logger.debug("Processing growing requests");
@@ -466,7 +466,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      * 
      * @param r
      *            the reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void map(IAuthorityReservation r) throws Exception {
         ResourceSet assigned = assign(r);
@@ -492,7 +492,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      * @param reservation
      *            the request
      * @return a set of resources for the request
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected ResourceSet assign(IAuthorityReservation reservation) throws Exception {
         IResourceControl rc = getControl(reservation.getRequestedResources().getType());
@@ -542,6 +542,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      *            reservation
      * @return <code>true</code> if the reservation expired; otherwise, return
      *         <code>false</code>
+     * @throws Exception in case of error
      */
     protected boolean isExpired(IReservation r) throws Exception {
         Date now = new Date(System.currentTimeMillis());
@@ -595,7 +596,6 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      * @param type
      *            resource type
      * @return a control
-     * @throws Exception
      */
     protected IResourceControl getControl(ResourceType type) {
         return (IResourceControl) controlsByResourceType.get(type);
@@ -639,7 +639,7 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      * @param c
      *            a control
      * @return a string representation of the control types
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected String getTypes(Hashtable<IResourceControl, List<String>> types, IResourceControl c)
             throws Exception {
@@ -667,10 +667,9 @@ public class AuthorityCalendarPolicy extends AuthorityPolicy implements CustomRe
      * policy plugin has already been initialized, the control should be
      * initialized.
      * 
-     * @param type
-     *            resource type
      * @param control
      *            the control
+     * @throws ConfigurationException in case of error
      */
     public void registerControl(IResourceControl control) throws ConfigurationException {
         registerControlTypes(control);

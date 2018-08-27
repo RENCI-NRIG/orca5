@@ -25,13 +25,8 @@ public class AllotmentEntry
     /**
      * Create an entry for the allotment table. Need to determine free space at
      * the machine and the per unit space.
-     * @param startTime
-     * @param endTime
-     * @param numElements
-     * @param id
-     * @param units
-     * @param resource
-     * @param machine
+     * @param units units
+     * @param machine machine
      */
     public AllotmentEntry(int units, ResourceEntry machine)
     {
@@ -65,7 +60,7 @@ public class AllotmentEntry
 
     /**
      * Return the resource's id
-     * @return
+     * @return id
      */
     public ID getId()
     {

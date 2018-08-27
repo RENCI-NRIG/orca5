@@ -38,7 +38,7 @@ public class LocalAuthority extends LocalBroker implements IAuthorityProxy {
 
     /**
      * Create a proxy to the specified actor
-     * @param actor
+     * @param actor actor
      */
     public LocalAuthority(IActor actor) {
         super(actor);

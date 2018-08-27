@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
 public @interface Restore {
 	/**
 	 * Returns the class responsible for restoring saved instances of the annotated type.
-	 * The class must implement Restorer<T>.
-	 * @return
+	 * The class must implement Restorer&lt;T&gt;.
+	 * @return returns the responsible class
 	 */
 	Class<?> value();
 }

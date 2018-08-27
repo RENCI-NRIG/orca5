@@ -201,7 +201,7 @@ public class Globals {
 	 * Can be called separately, in order to access configurations.
 	 * Alternatively, the Globals.start() method ensures that initialization has started.
 	 *
-	 * @throws ContainerInitializationException
+	 * @throws ContainerInitializationException in case of error
 	 */
 	public static void initialize() throws ContainerInitializationException {
 		synchronized (globalLock) {

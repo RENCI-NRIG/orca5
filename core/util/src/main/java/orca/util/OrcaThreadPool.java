@@ -73,7 +73,8 @@ public class OrcaThreadPool {
     
     /**
      * Executes the specified task asynchronously.
-     * @param task
+     * @param task task to be invoked later
+     * @throws CannotExecuteException if the thread pool is not running
      */
     public static void invokeLater(Runnable task) throws CannotExecuteException {
         synchronized(lock){
@@ -86,9 +87,12 @@ public class OrcaThreadPool {
 
     /**
      * Executes the specified task, waits for its completion, and returns its result
-     * @param r
-     * @throws InterruptedException
-     * @throws ExecutionException
+     * @param task future task to be executed
+     * @param <V> Type of the parameter
+     * @return returns V
+     * @throws InterruptedException if the task is interrupted
+     * @throws ExecutionException if exception occurs in task execution
+     * @throws CannotExecuteException if the thread pool is not running
      */
     public static <V> V invokeAndWait(FutureTask<V> task) throws InterruptedException, ExecutionException, CannotExecuteException {
      invokeLater(task);

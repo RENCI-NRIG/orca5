@@ -227,7 +227,7 @@ public interface IActor extends Initializable, Persistable, Recoverable, Recover
     /**
      * Adds an event
      * 
-     * @param incoming
+     * @param incoming incoming event
      */
     public void queueEvent(IActorEvent incoming);
 
@@ -235,9 +235,9 @@ public interface IActor extends Initializable, Persistable, Recoverable, Recover
      * Issues a query request to the specified actor. The call is non-blocking.
      * When the response from the remote actor is received, handler is invoked.
      * 
-     * @param actorProxy
-     * @param query
-     * @param handler
+     * @param actorProxy actor proxy
+     * @param query query
+     * @param handler handler
      */
     public void query(IActorProxy actorProxy, Properties query, IQueryResponseHandler handler);
 

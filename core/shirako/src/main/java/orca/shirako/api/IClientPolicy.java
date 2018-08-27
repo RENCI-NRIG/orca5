@@ -59,7 +59,6 @@ public interface IClientPolicy extends IPolicy {
      * but not null.</li>
      * </ul>
      * <br>
-     * </p>
      * 
      * @param cycle
      *            The current time
@@ -70,6 +69,7 @@ public interface IClientPolicy extends IPolicy {
      *         <li>extending - set of reservations to be extended. Can be null
      *         if no action should be taken
      *         </ul>
+     * @throws Exception in case of error
      */
     public Bids formulateBids(long cycle) throws Exception;
 
@@ -86,6 +86,7 @@ public interface IClientPolicy extends IPolicy {
      *            term requested from broker
      * @param actualTerm
      *            term received from broker
+     * @throws Exception in case of error
      */
     public void ticketSatisfies(ResourceSet requestedResources, ResourceSet actualResources,
             Term requestedTerm, Term actualTerm) throws Exception;
@@ -96,6 +97,7 @@ public interface IClientPolicy extends IPolicy {
      * 
      * @param reservation
      *            reservation for which an update ticket operation has completed
+     * @throws Exception in case of error
      */
     public void updateTicketComplete(IClientReservation reservation) throws Exception;
 }

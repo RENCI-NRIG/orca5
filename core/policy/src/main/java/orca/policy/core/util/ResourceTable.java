@@ -72,7 +72,7 @@ public class ResourceTable
 
     /**
      * Sort the entry to its new position in the list
-     * @param entry
+     * @param entry entry
      */
     public void sort(ResourceEntry entry)
     {
@@ -93,8 +93,8 @@ public class ResourceTable
 
     /**
      * Return the ResourceEntry at index
-     * @param index
-     * @return
+     * @param index index
+     * @return ResourceEntry at index
      */
     public ResourceEntry get(int index)
     {

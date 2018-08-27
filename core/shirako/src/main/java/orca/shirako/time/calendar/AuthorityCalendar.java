@@ -117,7 +117,7 @@ public class AuthorityCalendar extends BaseCalendar
 
     /**
      * Removes the specified reservation from the request list.
-     * @param reservation
+     * @param reservation reservation
      */
     public synchronized void removeRequest(final IReservation reservation)
     {
@@ -193,7 +193,7 @@ public class AuthorityCalendar extends BaseCalendar
     /**
      * Returns the active client reservations at the given time instance.
      *
-     * @param time time
+     * @param date date 
      *
      * @return set of client reservations active at the specified time instance
      */

@@ -265,13 +265,13 @@ public class Credential {
      * 
      * Verify does *NOT* ensure that an xmlrpc client's gid matches a credential gid, that
      * 
-     * @param trustStorePath
-     * @param trustStorePassword
-     * @throws CredentialException
-     * @throws CertPathValidatorException
-     * @throws CertificateException
-     * @throws XMLSignatureException
-     * @throws MarshalException
+     * @param trustStorePath trustStorePath
+     * @param trustStorePassword trustStorePassword
+     * @throws CredentialException in case of error
+     * @throws CertPathValidatorException in case of error
+     * @throws CertificateException in case of error
+     * @throws XMLSignatureException in case of error
+     * @throws MarshalException in case of error
      */
     public void verify(String trustStorePath, String trustStorePassword) throws CredentialException,
             CertPathValidatorException, CertificateException, XMLSignatureException, MarshalException {
@@ -312,7 +312,7 @@ public class Credential {
      * parents The expiry time on the child must be no later than the parent The signer of the child must be the owner
      * of the parent
      * 
-     * @throws CredentialException
+     * @throws CredentialException in case of error
      */
     private void verifyParent() throws CredentialException {
 
@@ -347,11 +347,11 @@ public class Credential {
      * verify if the credential's target gid was signed by (or is the same) the entity that signed the original
      * credential or an authority over that namespace.
      * 
-     * @param trustKeyStorePath
-     * @param keyStorePassword
-     * @throws CertPathValidatorException
-     * @throws CertificateException
-     * @throws CredentialException
+     * @param trustKeyStorePath trustKeyStorePath
+     * @param keyStorePassword keyStorePassword
+     * @throws CertPathValidatorException in case of error
+     * @throws CertificateException in case of error
+     * @throws CredentialException in case of error
      */
     private void verifyIssuer(String trustKeyStorePath, String keyStorePassword)
             throws CertPathValidatorException, CertificateException, CredentialException {
@@ -474,8 +474,8 @@ public class Credential {
     /**
      * checks if the credential has at least one of the given set of privileges
      * 
-     * @param requiredPrivilege
-     * @return
+     * @param requiredPrivilege requiredPrivilege
+     * @return true or false
      */
     public boolean hasPrivilege(Set<String> requiredPrivilege) {
         requiredPrivilege.retainAll(getPrivileges());

@@ -161,9 +161,9 @@ public class XCatGenerateBashFileBaseTask extends OrcaAntTask {
     /**
      * User-supplied post-boot script
      * 
-     * @param out
-     * @param config
-     * @throws Exception
+     * @param out out
+     * @param config config
+     * @throws Exception in case of error
      */
     protected void generateInstanceConfig(PrintWriter out, String config) throws Exception {
         System.out.println("Processing instanceConfig section");

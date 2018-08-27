@@ -19,8 +19,8 @@ public class CompressEncode {
 	
 	/**
 	 * Compress (gzip) and base64 encode the string
-	 * @param res
-	 * @return
+	 * @param inputString encoded string to be compressed
+	 * @return compressed encoded string
 	 */
 	public static String compressEncode(String inputString) {
 		// compress

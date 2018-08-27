@@ -186,8 +186,8 @@ public class ReservationConverter implements LayerConstant {
     /**
      * Resource constraints, like memoryCapacity, storageCapacity, numCPUCores
      *
-     * @param request
-     * @param element
+     * @param request request
+     * @param element element
      */
     public void setRequestConstraints(Properties request, NetworkElement element) {
         String pro_prefix = "request.";
@@ -790,15 +790,15 @@ public class ReservationConverter implements LayerConstant {
 
     /**
      *
-     * @param manifestModel
+     * @param manifestModel manifestModel
      *            unused
-     * @param dd
+     * @param dd dd
      *            unused
-     * @param parent
-     * @param site_host_interface
-     * @param num_parent
-     * @param num
-     * @return
+     * @param parent parent
+     * @param site_host_interface site_host_interface
+     * @param num_parent num_parent
+     * @param num num
+     * @return Properties
      */
     @Deprecated
     public Properties formInterfaceProperties(OntModel manifestModel, DomainElement dd,
@@ -808,11 +808,11 @@ public class ReservationConverter implements LayerConstant {
 
     /**
      *
-     * @param parent
-     * @param site_host_interface
-     * @param num_parent
-     * @param num
-     * @return
+     * @param parent parent
+     * @param site_host_interface site_host_interface
+     * @param num_parent num_parent
+     * @param num num
+     * @return Properties
      */
     public Properties formInterfaceProperties(Entry<DomainElement, OntResource> parent, String site_host_interface,
             int num_parent, int num) {
@@ -2199,9 +2199,9 @@ public class ReservationConverter implements LayerConstant {
      * Set the term. If the term is invalid (longer than the maximum duration), the term will be set for the maximum
      * duration.
      *
-     * @param term
-     * @param ignoreInvalidityOnRecoveryOrRenew
-     * @throws ReservationConverterException
+     * @param term term
+     * @param ignoreInvalidityOnRecoveryOrRenew ignoreInvalidityOnRecoveryOrRenew
+     * @throws ReservationConverterException in case of error
      */
     @Deprecated
     public void setLeaseTerm(OrcaReservationTerm term, boolean ignoreInvalidityOnRecoveryOrRenew)
@@ -2213,7 +2213,7 @@ public class ReservationConverter implements LayerConstant {
      * Set the term. If the term is invalid (longer than the maximum duration), the term will be set for the maximum
      * duration.
      *
-     * @param term
+     * @param term term
      */
     public void setLeaseTerm(OrcaReservationTerm term) {
         if (term == null) {
@@ -2359,8 +2359,9 @@ public class ReservationConverter implements LayerConstant {
     /**
      * Create login properties from users structure ("urn" and "keys" fields in each map, "keys" is a list)
      * 
-     * @param users
-     * @return
+     * @param users users
+     * @throws ReservationConverterException in case of error
+     * @return Properties
      */
     @SuppressWarnings("unchecked")
     public static Properties generateSSHProperties(List<Map<String, ?>> users) throws ReservationConverterException {
@@ -2469,8 +2470,8 @@ public class ReservationConverter implements LayerConstant {
      * Convert from properties back into the users structure - a list of maps with login, key, sudo and urn fields. Note
      * that upon restoration it concatenates all keys into a single string and puts it in list of size one.
      * 
-     * @param props
-     * @return
+     * @param props props
+     * @return list of maps with login, key, sudo and urn fields
      */
     public static List<Map<String, ?>> restoreUsers(List<PropertyMng> props) {
         List<Map<String, ?>> users = new ArrayList<Map<String, ?>>();
@@ -2534,7 +2535,7 @@ public class ReservationConverter implements LayerConstant {
     /**
      * Recover reservation converter fields from the previously recovered RequestWorkflow
      * 
-     * @param w
+     * @param w w
      */
     public void recover(RequestWorkflow w) {
         //
@@ -2546,7 +2547,7 @@ public class ReservationConverter implements LayerConstant {
     /**
      * Return a constant or a controller.max.duration property value (a long)
      * 
-     * @return
+     * @return controller.max.duration property value
      */
     public static long getMaxDuration() {
         String durString = OrcaController.getProperty(OrcaXmlrpcHandler.MAX_DURATION_PROP);

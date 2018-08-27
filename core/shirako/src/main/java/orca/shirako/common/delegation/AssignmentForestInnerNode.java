@@ -61,8 +61,9 @@ public class AssignmentForestInnerNode extends AssignmentForestNode
      * Splits the specified number of physical units from the current bin into a
      * new inventory node.
      * @param term term for the new node
-     * @param units number of physical units to split
+     * @param physicalUnits number of physical units to split
      * @return resulting inventory node
+     * @throws Exception in case of error
      */
     public AssignmentForestInnerNode split(Term term, int physicalUnits) throws Exception
     {
@@ -121,7 +122,8 @@ public class AssignmentForestInnerNode extends AssignmentForestNode
      * @param term term
      * @param virtualUnits virtual units to extract from each physical unit
      * @param vector resource vector for each virtual unit
-     * @return
+     * @return resulting node
+     * @throws Exception in case of error
      */
     public AssignmentForestInnerNode extract(Term term, int virtualUnits, ResourceVector vector) throws Exception
     {

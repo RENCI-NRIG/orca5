@@ -29,7 +29,7 @@ public class ChangeClasspath
      * @param loader class loader to add the path to
      * @param file file representing the path
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static void addFile(final ClassLoader loader, final File file) throws Exception
     {
@@ -41,7 +41,7 @@ public class ChangeClasspath
      *
      * @param file file representing the path
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static void addFile(final File file) throws Exception
     {
@@ -53,7 +53,7 @@ public class ChangeClasspath
      *
      * @param path path to add
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public static void addFile(final String path) throws Exception
     {
@@ -67,7 +67,7 @@ public class ChangeClasspath
      * @param loader class loader
      * @param url url to add
      *
-     * @throws Exception
+     * @throws RuntimeException in case of error
      */
     public static void addURL(final ClassLoader loader, final URL url) throws RuntimeException
     {

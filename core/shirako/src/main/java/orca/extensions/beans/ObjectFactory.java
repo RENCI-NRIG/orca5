@@ -38,7 +38,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ExtensionPackage }
-     * 
+     * @return returns instance of extension package
      */
     public ExtensionPackage createExtensionPackage() {
         return new ExtensionPackage();
@@ -46,6 +46,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Properties }
+     * @return returns instance of properties 
      * 
      */
     public Properties createProperties() {
@@ -54,6 +55,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Plugins }
+     * @return returns instance of plugins 
      * 
      */
     public Plugins createPlugins() {
@@ -62,6 +64,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Plugin }
+     * @return returns instance of plugin
      * 
      */
     public Plugin createPlugin() {
@@ -70,6 +73,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Property }
+     * @return returns instance of property 
      * 
      */
     public Property createProperty() {

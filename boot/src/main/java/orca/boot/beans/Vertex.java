@@ -20,22 +20,22 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="vertex">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="publicKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/>
- *         &lt;element name="privateKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/>
- *         &lt;element name="location" type="{http://issg.cs.duke.edu/sharp/boot}location" minOccurs="0"/>
- *         &lt;element name="certificate" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
- *       &lt;/all>
- *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="protocol" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
- *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="vertex"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="publicKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/&gt;
+ *         &lt;element name="privateKey" type="{http://issg.cs.duke.edu/sharp/boot}cryptoKey" minOccurs="0"/&gt;
+ *         &lt;element name="location" type="{http://issg.cs.duke.edu/sharp/boot}location" minOccurs="0"/&gt;
+ *         &lt;element name="certificate" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="protocol" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&gt;
+ *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

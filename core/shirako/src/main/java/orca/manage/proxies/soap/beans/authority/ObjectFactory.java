@@ -39,6 +39,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetReservationUnitsResponse }
      * 
+     * @return created instance
      */
     public GetReservationUnitsResponse createGetReservationUnitsResponse() {
         return new GetReservationUnitsResponse();
@@ -47,6 +48,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventoryRequest }
      * 
+     * @return created instance
      */
     public GetInventoryRequest createGetInventoryRequest() {
         return new GetInventoryRequest();
@@ -55,6 +57,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link UntransferInventoryRequest }
      * 
+     * @return created instance
      */
     public UntransferInventoryRequest createUntransferInventoryRequest() {
         return new UntransferInventoryRequest();
@@ -63,6 +66,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link TransferInventoryRequest }
      * 
+     * @return created instance
      */
     public TransferInventoryRequest createTransferInventoryRequest() {
         return new TransferInventoryRequest();
@@ -71,6 +75,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAuthorityReservationsRequest }
      * 
+     * @return created instance
      */
     public GetAuthorityReservationsRequest createGetAuthorityReservationsRequest() {
         return new GetAuthorityReservationsRequest();
@@ -79,6 +84,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link UntransferInventoryResponse }
      * 
+     * @return created instance
      */
     public UntransferInventoryResponse createUntransferInventoryResponse() {
         return new UntransferInventoryResponse();
@@ -87,6 +93,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link TransferInventoryResponse }
      * 
+     * @return created instance
      */
     public TransferInventoryResponse createTransferInventoryResponse() {
         return new TransferInventoryResponse();
@@ -95,6 +102,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetReservationUnitsRequest }
      * 
+     * @return created instance
      */
     public GetReservationUnitsRequest createGetReservationUnitsRequest() {
         return new GetReservationUnitsRequest();
@@ -103,6 +111,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUnitRequest }
      * 
+     * @return created instance
      */
     public GetUnitRequest createGetUnitRequest() {
         return new GetUnitRequest();
@@ -111,6 +120,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetAuthorityReservationsResponse }
      * 
+     * @return created instance
      */
     public GetAuthorityReservationsResponse createGetAuthorityReservationsResponse() {
         return new GetAuthorityReservationsResponse();
@@ -119,6 +129,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetUnitResponse }
      * 
+     * @return created instance
      */
     public GetUnitResponse createGetUnitResponse() {
         return new GetUnitResponse();
@@ -127,6 +138,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GetInventoryResponse }
      * 
+     * @return created instance
      */
     public GetInventoryResponse createGetInventoryResponse() {
         return new GetInventoryResponse();

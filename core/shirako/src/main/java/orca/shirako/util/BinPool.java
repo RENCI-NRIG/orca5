@@ -102,6 +102,7 @@ public class BinPool
      * from (to?) it, reducing the number of free units.
      * @param balls number of units needed
      * @return the selected bin
+     * @throws Exception in case of error
      */
     public Object findAndFillBin(int balls) throws Exception
     {

@@ -116,8 +116,8 @@ public class NdlModifyParser extends NdlParserHelper {
      * the underlying model is modified and only the re-written statements are used from then on. This call is
      * idempotent.
      * 
-     * @throws NdlException
-     * @return List<Resource> list of renamed items in the model
+     * @throws NdlException in case of error
+     * @return list of renamed items in the model
      */
     public List<Resource> rewriteModifyRequest() throws NdlException {
         return rewriteModifyRequest(null);
@@ -130,8 +130,8 @@ public class NdlModifyParser extends NdlParserHelper {
      * 
      * @param ns
      *            - the new prefix (can be null, auto-generated guid is used in this case)
-     * @return List<Resource> list of renamed items in the model
-     * @throws NdlException
+     * @return list of renamed items in the model
+     * @throws NdlException in case of error
      */
     public synchronized List<Resource> rewriteModifyRequest(String ns) throws NdlException {
         if (rewritten)
@@ -163,7 +163,7 @@ public class NdlModifyParser extends NdlParserHelper {
      * been called. If it has, the statements in the model are guaranteed unique compared to other requests. If not, you
      * may see a repetition of the same statements.
      * 
-     * @throws NdlException
+     * @throws NdlException in case of error
      */
     public synchronized void processModifyRequest() throws NdlException {
         if (modifyModel == null)

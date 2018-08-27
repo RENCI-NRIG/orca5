@@ -39,6 +39,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Mapping }
      * 
+     * @return return the Mapping instance
      */
     public Mapping createMapping() {
         return new Mapping();
@@ -47,6 +48,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Configuration }
      * 
+     * @return return the Configuration instance 
      */
     public Configuration createConfiguration() {
         return new Configuration();
@@ -55,6 +57,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Ldap }
      * 
+     * @return return the Ldap instance 
      */
     public Ldap createLdap() {
         return new Ldap();
@@ -63,6 +66,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Mysql }
      * 
+     * @return return the Mysql instance 
      */
     public Mysql createMysql() {
         return new Mysql();
@@ -71,6 +75,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ObjectClasses }
      * 
+     * @return return the ObjectClasses instance 
      */
     public ObjectClasses createObjectClasses() {
         return new ObjectClasses();
@@ -79,6 +84,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Mysqlentry }
      * 
+     * @return return the Mysqlentry instance 
      */
     public Mysqlentry createMysqlentry() {
         return new Mysqlentry();
@@ -87,6 +93,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Entry }
      * 
+     * @return return the Entry instance 
      */
     public Entry createEntry() {
         return new Entry();
@@ -95,6 +102,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Map }
      * 
+     * @return return the Map instance 
      */
     public Map createMap() {
         return new Map();
@@ -103,6 +111,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ObjectClass }
      * 
+     * @return return the ObjectClass instance 
      */
     public ObjectClass createObjectClass() {
         return new ObjectClass();
@@ -111,6 +120,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Attributes }
      * 
+     * @return return the Attributes instance 
      */
     public Attributes createAttributes() {
         return new Attributes();

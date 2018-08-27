@@ -67,8 +67,8 @@ public interface IServiceManagerReservationFactory
      * Creates an instance of <code>IServiceManagerReservation</code>.
      *
      * @param resources resource set
-     * @param term term
-     * @param slice slice
+     * @param term term term
+     * @param resources resources
      *
      * @return an instance of <code>IServiceManagerReservation</code>
      */

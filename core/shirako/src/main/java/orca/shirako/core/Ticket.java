@@ -237,7 +237,7 @@ public class Ticket implements IConcreteSet {
 
     /**
      * Returns the ticket properties.
-     * @return
+     * @return the ticket properties
      */
     public Properties getProperties() {
         if (resourceTicket == null) {
@@ -248,7 +248,7 @@ public class Ticket implements IConcreteSet {
 
     /**
      * Returns the <code>IShirakoPlugin</code> associated with this ticket.
-     * @return
+     * @return IShirakoPlugin associated with this ticket
      */
     public IShirakoPlugin getShirakoPlugin() {
         return plugin;
@@ -263,7 +263,7 @@ public class Ticket implements IConcreteSet {
 
     /**
      * Returns the ticket term.
-     * @return
+     * @return the ticket term
      */
     public Term getTerm() {
         if (resourceTicket == null) {
@@ -375,7 +375,6 @@ public class Ticket implements IConcreteSet {
      * client (service manager) this indicates that we have successfully scored
      * a ticket. The ticket has already been validated with validate().
      * @param reservation the slice for the reservation
-     * @throws Exception
      */
     public void setup(IReservation reservation) {
         this.reservation = reservation;

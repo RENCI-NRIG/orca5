@@ -86,8 +86,8 @@ public class Label implements Persistable {
     /**
      * Caller must provide a reference model
      * 
-     * @param m
-     * @return
+     * @param m m
+     * @return OntResource
      */
     public OntResource getResource(OntModel m) {
         if (m.isClosed())

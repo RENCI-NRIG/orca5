@@ -24,7 +24,7 @@ public interface IServerPolicy extends IPolicy {
      * @param cycle
      *            the cycle for this allocation
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void allocate(long cycle) throws Exception;
 
@@ -59,6 +59,7 @@ public interface IServerPolicy extends IPolicy {
      * 
      * @return true, if the request has been fulfilled, false, if the allocation
      *         of resources will be delayed until a later time.
+     * @throws Exception in case of error
      */
     public boolean bind(IBrokerReservation reservation) throws Exception;
 
@@ -76,7 +77,7 @@ public interface IServerPolicy extends IPolicy {
      * @param r
      *            reservation representing resources to be used for allocation
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void donate(IClientReservation r) throws Exception;
 
@@ -117,6 +118,7 @@ public interface IServerPolicy extends IPolicy {
      * 
      * @return true, if the request has been fulfilled, false, if the allocation
      *         of resources will be delayed until a later time.
+     * @throws Exception in case of error
      */
     public boolean extend(IBrokerReservation r) throws Exception;
 }

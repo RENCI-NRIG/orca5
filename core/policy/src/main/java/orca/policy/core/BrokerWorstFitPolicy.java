@@ -139,10 +139,10 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      * available resources for the duration of the request. Determines if the
      * request is new or an extension of a previous request.
      *
-     * @param requests
+     * @param requests requests
      * @param startCycle allocation cycle
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void allocate(final ReservationSet requests, final long startCycle)
                   throws Exception
@@ -269,7 +269,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      *
      * @param p properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     @Override
     public void configure(final Properties p) throws Exception
@@ -320,7 +320,6 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
     /**
      * Converts incoming ticket information into the broker's machine
      * representation and adds it to the brokers logical inventory.
-     * <p/>
      * {@inheritDoc}
      */
     public void donate(final IClientReservation r) throws Exception
@@ -414,7 +413,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      * @param start requested restart (real time)
      * @param end requested end (real time)
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void extendTicket(final IBrokerReservation r, final ResourceTable table,
                                 final Date start, final Date end) throws Exception
@@ -533,6 +532,9 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      * @param source source reservation
      * @param approved approved ticket term
      * @param units number of units
+     * @param properties properties
+     * @return ResourceSet
+     * @throws Exception in case of error
      */
     protected ResourceSet extractTicket(final IBrokerReservation reservation,
                                         final IClientReservation source, final Term approved,
@@ -605,7 +607,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      *
      * @return the allotment for this request
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public AllotmentTable findAllotment(final ResourceEntry request, final ResourceTable table,
                                         int unitsNeeded, final AllotmentTable allotment,
@@ -793,7 +795,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      *
      * @return a vector of logical identifiers
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected Vector<ID> getIdentifiers(final Properties p) throws Exception
     {
@@ -888,7 +890,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      *
      * @return the maximum requested resources for each resource dimension
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected long[] getMax(final ResourceSet set) throws Exception
     {
@@ -913,7 +915,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      *
      * @return the minimum requested resources for each resource dimension
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected long[] getMin(final ResourceSet set) throws Exception
     {
@@ -950,7 +952,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      *
      * @return current resource shares
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected long[] getShares(ResourceSet set) throws Exception
     {
@@ -1001,7 +1003,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      * @param end when the ticket will end
      * @param startTime auction start time. For extending requests this will equal start, but for new requests it may be different.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void issueTicket(final LogicalInventory inventory, final IBrokerReservation r,
                                final AllotmentTable allotment, final long[] maxResources,
@@ -1240,7 +1242,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      * @param ids list of identifiers
      * @param count number of identifiers to remove
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void removeIds(final Vector<ID> ids, final int count) throws Exception
     {
@@ -1272,7 +1274,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
     /**
      * Recovers a ticketed reservation.
      * @param reservation reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitTicketed(final IBrokerReservation reservation) throws Exception
     {
@@ -1292,7 +1294,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
     /**
      * Recovers an active ticketed reservation
      * @param reservation reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitTicketedNone(final IBrokerReservation reservation)
                                 throws Exception
@@ -1324,7 +1326,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
     /**
      * Recovers a ticketed priming reservation.
      * @param reservation reservation
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void revisitTicketedPriming(final IBrokerReservation reservation)
                                    throws Exception
@@ -1393,7 +1395,7 @@ public class BrokerWorstFitPolicy extends BrokerPriorityPolicy
      *
      * @return true if ticket successfully completed, false otherwise
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected boolean ticket(final IBrokerReservation r, final ResourceTable table,
                              final Date start, final Date end, final Date auctionStartTime)

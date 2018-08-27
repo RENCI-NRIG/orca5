@@ -52,7 +52,7 @@ interface IKernelReservation extends IReservation
     /**
      * Claims an exported "will call" reservation.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void claim() throws Exception;
 
@@ -64,14 +64,14 @@ interface IKernelReservation extends IReservation
     /**
      * Extends the reservation.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendLease() throws Exception;
     
     /**
      * Modifies the reservation.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modifyLease() throws Exception;
     
@@ -84,7 +84,7 @@ interface IKernelReservation extends IReservation
      *
      * @param actor actor
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendTicket(IActor actor) throws Exception;
 
@@ -99,6 +99,7 @@ interface IKernelReservation extends IReservation
      * Handles a duplicate request.
      *
      * @param operation operation type code
+     * @throws Exception in case of error
      */
     public void handleDuplicateRequest(int operation) throws Exception;
     /**
@@ -106,13 +107,14 @@ interface IKernelReservation extends IReservation
      *
      * @param callback callback object
      * @param logger for diagnostic logging
+     * @throws Exception in case of error
      */
     public void prepare(ICallbackProxy callback, Logger logger) throws Exception;
 
     /**
      * Prepares a reservation probe.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void prepareProbe() throws Exception;
 
@@ -121,7 +123,7 @@ interface IKernelReservation extends IReservation
      * operation completed, handle it and generate an update. If no pending
      * request completed then do nothing.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void probePending() throws Exception;
 
@@ -131,7 +133,7 @@ interface IKernelReservation extends IReservation
      *
      * @param policy the mapper for the reservation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void reserve(IPolicy policy) throws Exception;
 
@@ -140,14 +142,14 @@ interface IKernelReservation extends IReservation
      *
      * @return properties list with identifying information.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Properties saveID() throws Exception;
 
     /**
      * Finishes processing claim.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void serviceClaim() throws Exception;
 
@@ -159,47 +161,48 @@ interface IKernelReservation extends IReservation
     /**
      * Finishes processing extend lease.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void serviceExtendLease() throws Exception;
 
     /**
      * Finishes processing extend lease.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void serviceModifyLease() throws Exception;
     
     /**
      * Finishes processing extend ticket.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void serviceExtendTicket() throws Exception;
 
     /**
      * Finishes processing probe.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void serviceProbe() throws Exception;
 
     /**
      * Finishes processing reserve.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void serviceReserve() throws Exception;
 
     /**
      * Finishes processing update lease.
+     * @throws Exception in case of error
      */
     public void serviceUpdateLease() throws Exception;
 
     /**
      * Finishes processing update ticket.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void serviceUpdateTicket() throws Exception;
 
@@ -242,25 +245,26 @@ interface IKernelReservation extends IReservation
      * @param incoming incoming ticket update
      * @param udd update data
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateTicket(IReservation incoming, UpdateData udd) throws Exception;
 
     /**
      * Validates a reservation as it arrives at an actor.
+     * @throws Exception in case of error
      */
     public void validateIncoming() throws Exception;
 
     /**
      * Validates a reservation as it is about to leave an actor.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void validateOutgoing() throws Exception;
 
     /**
      * Processes a failed RPC request.
-     * @param failed
+     * @param failed failed
      */
     public void handleFailedRPC(FailedRPC failed);
 }
