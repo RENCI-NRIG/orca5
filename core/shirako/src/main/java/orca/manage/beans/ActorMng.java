@@ -20,26 +20,26 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="actorMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="owner" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="policyClass" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="eventHandler" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="loadSource" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="actorClass" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="online" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="managementClass" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="ID" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="policyGuid" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="actorMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="owner" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/&gt;
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="policyClass" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="eventHandler" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="loadSource" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="actorClass" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="online" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="managementClass" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="ID" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="policyGuid" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -96,7 +96,7 @@ public class ActorMng {
 
     /**
      * Gets the value of the type property.
-     * 
+     * @return type of property
      */
     public int getType() {
         return type;
@@ -104,7 +104,7 @@ public class ActorMng {
 
     /**
      * Sets the value of the type property.
-     * 
+     * @param value type of property
      */
     public void setType(int value) {
         this.type = value;
@@ -256,7 +256,7 @@ public class ActorMng {
 
     /**
      * Gets the value of the online property.
-     * 
+     * @return value of online property
      */
     public boolean isOnline() {
         return online;
@@ -264,7 +264,7 @@ public class ActorMng {
 
     /**
      * Sets the value of the online property.
-     * 
+     * @param value value of online property
      */
     public void setOnline(boolean value) {
         this.online = value;

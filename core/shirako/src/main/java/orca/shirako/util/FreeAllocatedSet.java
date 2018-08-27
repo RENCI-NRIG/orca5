@@ -10,7 +10,7 @@ import java.util.List;
  * add inventory items, {@link #allocate()} to allocate an item, and {@link #free(Object)} to free an item.
  * @author aydan
  *
- * @param <T>
+ * @param <T> type of unit
  */
 public class FreeAllocatedSet<T>
 {
@@ -77,6 +77,8 @@ public class FreeAllocatedSet<T>
     
     /**
      * Allocates an known item from the set.
+     * @param tag tag
+     * @param configTag configTag
      * @return an allocated item, or null if the set does not have a free item
      */
     public T allocate(T tag,boolean configTag)
@@ -100,6 +102,7 @@ public class FreeAllocatedSet<T>
     /**
      * Allocates the specified number of units.
      * @param count number of units to allocate.
+     * @return list of units
      */
     public List<T> allocate(int count)
     {
@@ -158,7 +161,7 @@ public class FreeAllocatedSet<T>
     
     /**
      * Frees the specified items.
-     * @param items
+     * @param items items
      */
     public void free(List<T> items) {
         for(T t : items) {
@@ -168,7 +171,7 @@ public class FreeAllocatedSet<T>
     
     /**
      * Returns the number of free items.
-     * @return
+     * @return number of free items
      */
     public int getFree()
     {
@@ -177,7 +180,7 @@ public class FreeAllocatedSet<T>
     
     /**
      * Returns the number of allocated items.
-     * @return
+     * @return number of allocated items
      */
     public int getAllocated()
     {

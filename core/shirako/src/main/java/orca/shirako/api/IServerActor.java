@@ -34,7 +34,7 @@ public interface IServerActor extends IActor, IServerPublic
      * @param reservation reservation representing resources to be used for
      *        allocation
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void donate(IClientReservation reservation) throws Exception;
 
@@ -45,7 +45,7 @@ public interface IServerActor extends IActor, IServerPublic
      * @param reservation reservation describing resources to export
      * @param client identity of the client resources will be exported to
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void export(IBrokerReservation reservation, AuthToken client) throws Exception;
 
@@ -59,7 +59,7 @@ public interface IServerActor extends IActor, IServerPublic
      *
      * @return DOCUMENT ME!
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public ReservationID export(ResourceSet resources, Term term, AuthToken client)
                          throws Exception;
@@ -67,6 +67,7 @@ public interface IServerActor extends IActor, IServerPublic
     /**
      * Registers a new client slice.
      * @param slice client slice
+     * @throws Exception in case of error
      */
     public void registerClientSlice(ISlice slice) throws Exception;
     
@@ -74,59 +75,59 @@ public interface IServerActor extends IActor, IServerPublic
      * Registers the specified client.
      * @param client client to register
      * @param certificate client certificate
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void registerClient(final Client client, Certificate certificate) throws Exception;
     /**
      * Unregisters the specified client.
      * @param guid client guid
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void unregisterClient(final ID guid) throws Exception;
     
     /**
      * Get a client specified by GUID
-     * @param guid
-     * @return
-     * @throws Exception
+     * @param guid guid
+     * @return client specified by GUID
+     * @throws Exception in case of error
      */
     public Client getClient(final ID guid) throws Exception;
     
     ///////////////////////////////////////////////////////
     /**
 	 * Processes an incoming claim request.
-	 * @param reservation
-	 * @param callback
-	 * @param caller
-	 * @throws Exception
+	 * @param reservation reservation
+	 * @param callback callback
+	 * @param caller caller
+	 * @throws Exception in case of error
 	 */
 	public void claim(final IReservation reservation, final IClientCallbackProxy callback, final AuthToken caller)
 			throws Exception;
 
 	/**
 	 * Processes an incoming ticket request.
-	 * @param reservation
-	 * @param callback
-	 * @param caller
-	 * @throws Exception
+	 * @param reservation reservation
+	 * @param callback callback
+	 * @param caller caller
+	 * @throws Exception in case of error
 	 */
     public void ticket(final IReservation reservation, final IClientCallbackProxy callback,
             final AuthToken caller) throws Exception;
     
     /**
      * Processes an incoming extendTicket request.
-     * @param reservation
-     * @param caller
-     * @throws Exception
+     * @param reservation reservation
+     * @param caller caller
+     * @throws Exception in case of error
      */
     public void extendTicket(final IReservation reservation, final AuthToken caller)
             throws Exception;
     
     /**
      * Processes an incoming relinquish request.
-     * @param reservation
-     * @param caller
-     * @throws Exception
+     * @param reservation reservation
+     * @param caller caller
+     * @throws Exception in case of error
      */
     public void relinquish(final IReservation reservation, final AuthToken caller) throws Exception;
 

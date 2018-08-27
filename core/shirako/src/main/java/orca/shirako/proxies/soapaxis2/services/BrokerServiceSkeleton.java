@@ -40,8 +40,8 @@ public class BrokerServiceSkeleton extends ActorServiceSkeleton {
     /**
      * Convert a SOAP reservation to an AgentReservation
      * @param reservation The SOAP reservation
-     * @return
-     * @throws Exception
+     * @return IBrokerReservation
+     * @throws Exception in case of error
      */
     protected IBrokerReservation passAgent(orca.shirako.proxies.soapaxis2.beans.Reservation reservation) throws Exception {
         ISlice slice = Translate.translate(reservation.getSlice());

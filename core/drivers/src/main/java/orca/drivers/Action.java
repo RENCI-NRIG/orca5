@@ -50,6 +50,7 @@ public class Action
 
     /**
      * Creates a new action record.
+     * @param actionKey actionKey
      * @param actionId action identifier
      * @param thread thread executing the action
      */

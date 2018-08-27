@@ -64,6 +64,8 @@ public interface IOrcaContainerDatabase extends IExtensionsDatabase, Initializab
 
     /**
      * Retrieves the actors defined in this container
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getActors() throws Exception;
 
@@ -71,28 +73,30 @@ public interface IOrcaContainerDatabase extends IExtensionsDatabase, Initializab
      * Retrieves the actors defined in this container
      * @param name actor name query string
      * @param type actor type (seed AbstractActor.Type*)
-     * @return
-     * @throws Exception
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getActors(String name, int type) throws Exception;
 
     /**
      * Retrieves the specified actor record
      * @param name actor name
-     * @throws Exception
+     * @return vector of props
+     * @throws Exception in case of error
      */
     public Vector<Properties> getActor(String name) throws Exception;
 
     /**
      * Adds a new actor record to the database
      * @param actor actor to be added
+     * @throws Exception in case of error
      */
     public void addActor(IActor actor) throws Exception;
 
     /**
      * Removes the specified actor record
      * @param actorName actor name
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeActor(String actorName) throws Exception;
 
@@ -100,42 +104,43 @@ public interface IOrcaContainerDatabase extends IExtensionsDatabase, Initializab
      * Destroy the database for this actor. Applies to actors storing their
      * database on the same database server as the container database.
      * @param actorName actor name
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeActorDatabase(String actorName) throws Exception;
 
     /**
      * Updates the actor's database record
-     * @param actor
+     * @param actor actor
+     * @throws Exception in case of error
      */
     public void updateActor(IActor actor) throws Exception;
 
     /**
      * Adds the time record to the database
-     * @param p
-     * @throws Exception
+     * @param p p
+     * @throws Exception in case of error
      */
     public void addTime(Properties p) throws Exception;
 
     /**
      * Retrieves the time record from the database
-     * @return
-     * @throws Exception
+     * @return vector of props
+     * @throws Exception in case of error
      */
     public Vector<Properties> getTime() throws Exception;
     
     /**
      * Retrieves all user records
-     * @return
-     * @throws Exception
+     * @return vector of props
+     * @throws Exception in case of error
      */
     public Vector<Properties> getUsers() throws Exception;
 
     /**
      * Retrieves the specified user record
      * @param userName user name
-     * @return
-     * @throws Exception
+     * @return vector of props
+     * @throws Exception in case of error
      */
     public Vector<Properties> getUser(String userName) throws Exception;
 
@@ -144,28 +149,28 @@ public interface IOrcaContainerDatabase extends IExtensionsDatabase, Initializab
     /**
      * Creates a new user record
      * @param user user
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void addUser(User user) throws Exception;
 
     /**
      * Sets the password for the specified user.
-     * @param login
-     * @param password
-     * @throws Exception
+     * @param login login 
+     * @param password password
+     * @throws Exception in case of error
      */
     public void setUserPassword(String login, String password) throws Exception;
     /**
      * Updates the specified user record
-     * @param user
-     * @throws Exception
+     * @param user user
+     * @throws Exception in case of error
      */
     public void updateUser(User user) throws Exception;
 
     /**
      * Removes the specified user record
-     * @param user
-     * @throws Exception
+     * @param user user
+     * @throws Exception in case of error
      */
     public void removeUser(String user) throws Exception;
 

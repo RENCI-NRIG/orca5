@@ -141,9 +141,9 @@ public class AbacUtil {
     
 	/**
 	 * Converts a certificate object into a pem encoded string
-	 * @param certificate
+	 * @param certificate certificate to be encoded
 	 * @return pem encoded certificate string
-	 * @throws CertificateEncodingException
+	 * @throws CertificateEncodingException in case of error
 	 */
 	public static String getPemEncodedCert(X509Certificate certificate) throws CertificateEncodingException{
 		return addPemCertHeaderFooter(Base64.encodeBytes(certificate.getEncoded()));
@@ -152,8 +152,8 @@ public class AbacUtil {
 	/**
 	 * Creates a certificate object from a pem encoded certificate string
 	 * @param pemEncodedCert - pem encoded certificate string
-	 * @return certificate
-	 * @throws CertificateException
+	 * @return certificate 
+	 * @throws CertificateException in case of error
 	 */
 	public static X509Certificate getCertificate(String pemEncodedCert) throws CertificateException{
 		return getCertificate(addPemCertHeaderFooter(pemEncodedCert).getBytes());
@@ -163,7 +163,7 @@ public class AbacUtil {
 	 * Creates a certificate object from a pem encoded certificate byte array
 	 * @param encoded - pem encoded certificate byte array
 	 * @return certificate
-	 * @throws CertificateException
+	 * @throws CertificateException in case of error
 	 */
 	public static X509Certificate getCertificate(byte[] encoded) throws CertificateException{
 		CertificateFactory factory = CertificateFactory.getInstance("X.509");
@@ -194,7 +194,7 @@ public class AbacUtil {
 	 * Creates an attribute certificate object from pem encoded certificate byte array
 	 * @param encoded - pem encoded certificate byte array
 	 * @return attribute certificate
-	 * @throws IOException
+	 * @throws IOException in case of error
 	 */
 	public static X509V2AttributeCertificate getAttributeCertificate(byte[] encoded) throws IOException{
 		X509V2AttributeCertificate cert = new X509V2AttributeCertificate(encoded);
@@ -211,12 +211,12 @@ public class AbacUtil {
     
 	/**
 	 * Creates an object specific policy for a given authority
-	 * @param authorityCert
-	 * @param authorityKey
-	 * @param trustAnchorRoleName
-	 * @param objectId
-	 * @param requiredPrivileges
-	 * @throws CertificateException
+	 * @param authorityCert certificate
+	 * @param authorityKey private key
+	 * @param trustAnchorRoleName role name
+	 * @param objectId object Id
+	 * @param requiredPrivileges privileges
+	 * @throws CertificateException in case of error
 	 */
 	public static void createObjectPolicy(X509Certificate authorityCert, PrivateKey authorityKey, 
 			String trustAnchorRoleName, ID objectId, String[] requiredPrivileges) throws CertificateException{
@@ -244,11 +244,10 @@ public class AbacUtil {
     
 	/**
 	 * Validates a given user
-	 * @param requester
-	 * @param authority
-	 * @param contextPath
+	 * @param requester certificate of the requester
+	 * @param authority authority certificate
 	 * @return true/false indicating whether the given user is trusted
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 */
 	public static boolean validateUser(X509Certificate requester, X509Certificate authority) throws Exception{
 		return checkPrivilege(requester, authority, null, new String[]{AbacRoleUser});
@@ -256,11 +255,10 @@ public class AbacUtil {
 
 	/**
 	 * Checks if according to the authority, the given principal has one of the required privileges
-	 * @param principal
-	 * @param authority
-	 * @param objectId
-	 * @param requiredPrivileges
-	 * @param contextPath
+	 * @param principal principal
+	 * @param authority authority certificate
+	 * @param objectId object id
+	 * @param requiredPrivileges privileges
 	 * @return true/false indicating if the principal has a reuiqred privilege
 	 */
 	public static boolean checkPrivilege(X509Certificate principal, X509Certificate authority, ID objectId, String[] requiredPrivileges){
@@ -380,10 +378,10 @@ public class AbacUtil {
 	
 	/**
 	 * Gets the context for a subject scoped to an object
-	 * @param subject
-	 * @param object
+	 * @param subject certificate of the subject
+	 * @param object object
 	 * @return context zip
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 */
 	public static File getLocalContextZip(X509Certificate subject, ID object) throws Exception{
 		return new File(createContextZip(subject, object));
@@ -432,10 +430,10 @@ public class AbacUtil {
 	}
 	/**
 	 * create a context archive for a given subject and object
-	 * @param subjectCertificate
-	 * @param objectId
-	 * @return
-	 * @throws CertificateException
+	 * @param subjectCertificate subject certificate
+	 * @param objectId object id
+	 * @return returns the context archive
+	 * @throws CertificateException in case of error
 	 */
 	public static String createContextZip(X509Certificate subjectCertificate, ID objectId) throws CertificateException{
 		try {
@@ -481,6 +479,9 @@ public class AbacUtil {
     }
 	/**
 	 * returns subject specific context home
+         * @param identity subject identity
+         * @return returns subject specific context home
+	 * @throws Exception in case of error
 	 */
 	public static String getContextHome(Identity identity) throws Exception{
 		return AbacContextHome + File.separator + identity.getKeyID();
@@ -488,6 +489,10 @@ public class AbacUtil {
     
 	/**
 	 * returns subject and object specific context home
+         * @param identity subject identity
+         * @param objectId object Id
+         * @return returns subject and object specific context home
+	 * @throws Exception in case of error
 	 */
 	public static String getContextHome(Identity identity, ID objectId) throws Exception{
 		return getContextHome(identity) + "_" + objectId.toSha1HashString();
@@ -495,6 +500,9 @@ public class AbacUtil {
     
 	/**
 	 * returns subject specific context home
+         * @param subjectCertificate subject certificate
+         * @return returns subject specific context home
+	 * @throws Exception in case of error
 	 */
 	public static String getContextHome(X509Certificate subjectCertificate) throws Exception{
 		return getContextHome(new Identity(subjectCertificate));
@@ -502,6 +510,10 @@ public class AbacUtil {
     
 	/**
 	 * returns subject and object specific context home
+         * @param subjectCertificate subject certificate
+         * @param objectId object Id
+         * @return returns subject and object specific context home
+	 * @throws Exception in case of error
 	 */
 	public static String getContextHome(X509Certificate subjectCertificate, ID objectId) throws Exception{
 		return getContextHome(subjectCertificate) + "_" + objectId.toSha1HashString();
@@ -509,8 +521,8 @@ public class AbacUtil {
     
 	/**
 	 * generate name for a credential output file
-	 * @param cred
-	 * @return
+	 * @param cred credential
+	 * @return return name for a credential file
 	 */
 	public static String getCredentialFileName(Credential cred){
 		StringBuffer result = new StringBuffer();

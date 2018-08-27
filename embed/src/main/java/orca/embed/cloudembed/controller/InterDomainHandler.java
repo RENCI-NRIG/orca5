@@ -58,9 +58,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
     /**
      * Create handler with in-memory model
      * 
-     * @param substrateFile
-     * @throws IOException
-     * @
+     * @param substrateFile substrateFile
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public InterDomainHandler(String substrateFile) throws IOException, NdlException {
         super(substrateFile);
@@ -69,10 +69,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
     /**
      * Create handler with TDB-backed model in a directory with specified path prefix
      * 
-     * @param substrateFile
-     * @param tdbPrefix
-     * @throws IOException
-     * @throws NdlException
+     * @param substrateFile substrateFile
+     * @param tdbPrefix tdbPrefix
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public InterDomainHandler(String substrateFile, String tdbPrefix) throws IOException, NdlException {
         super(substrateFile, tdbPrefix);
@@ -81,10 +81,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
     /**
      * Create a handler with TDB-backed blank model or try to recover existing TDB model
      * 
-     * @param tdbPrefix
-     * @param recover
-     * @throws IOException
-     * @throws NdlException
+     * @param tdbPrefix tdbPrefix
+     * @param recover recover
+     * @throws IOException in case of error
+     * @throws NdlException in case of error
      */
     public InterDomainHandler(String tdbPrefix, Boolean recover) throws IOException, NdlException {
         super(tdbPrefix, recover);
@@ -208,13 +208,13 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
     /**
      * processes the special cases of different edge nodes in the request: stitching, MP, ng, etc..
      *
-     * @param domainElement
-     * @param domainElementLink
-     * @param requestReservation
-     * @param networkConnection
-     * @param requestModel
-     * @param domainResourcePools
-     * @return
+     * @param domainElement domainElement
+     * @param domainElementLink domainElementLink
+     * @param requestReservation requestReservation
+     * @param networkConnection networkConnection
+     * @param requestModel requestModel
+     * @param domainResourcePools domainResourcePools
+     * @return SystemNativeError
      */
     protected SystemNativeError processEdges(DomainElement domainElement, DomainElement domainElementLink,
             RequestReservation requestReservation, NetworkConnection networkConnection, OntModel requestModel,
@@ -251,9 +251,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
 
     /**
      *
-     * @param elements
-     * @param requestModel
-     * @return
+     * @param elements elements
+     * @param requestModel requestModel
+     * @return true or false
      */
     protected boolean checkStitching(Collection<NetworkElement> elements, OntModel requestModel) {
         boolean isStitching = false;
@@ -1038,10 +1038,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
 
     /**
      *
-     * @param manifestModel
-     * @param topologyOnt
-     * @param edgeDevice
-     * @param edgeInterface
+     * @param manifestModel manifestModel
+     * @param topologyOnt topologyOnt
+     * @param edgeDevice edgeDevice
+     * @param edgeInterface edgeInterface
      */
     protected void addEdgeDeviceToTopology(OntModel manifestModel, OntResource topologyOnt, Device edgeDevice,
             OntResource edgeInterface) {

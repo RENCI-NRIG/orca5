@@ -25,7 +25,10 @@ public class NdlParserHelper extends NdlCommons {
     /**
      * Validate the request using the rules. Merge static rules and user-supplied rules
      * 
-     * @throws NdlException
+     * @param staticRuleFile staticRuleFile
+     * @param ruleFilePropertyName ruleFilePropertyName
+     * @param modelToCheck modelToCheck
+     * @throws NdlException in case of error
      */
     protected void validateRequest(String staticRuleFile, String ruleFilePropertyName, OntModel modelToCheck)
             throws NdlException {
@@ -136,8 +139,8 @@ public class NdlParserHelper extends NdlCommons {
     /**
      * Get Jena rules from a string builder. Null if rules can't be parsed
      * 
-     * @param combinedRules
-     * @return
+     * @param combinedRules combinedRules
+     * @return list of rules
      */
     private List<Rule> getRules(StringBuilder combinedRules) {
         InputStream is = new ByteArrayInputStream(combinedRules.toString().getBytes());
@@ -160,8 +163,8 @@ public class NdlParserHelper extends NdlCommons {
     /**
      * Read file as String
      * 
-     * @param fName
-     * @return
+     * @param fName fName
+     * @return String
      */
     public static String readFileIntoString(String fName) {
         String ret = null;
@@ -182,8 +185,8 @@ public class NdlParserHelper extends NdlCommons {
     /**
      * Read resource as String
      * 
-     * @param resource
-     * @return
+     * @param resource resource
+     * @return String
      */
     public static String readResourceIntoString(String resource) {
         String ret = null;

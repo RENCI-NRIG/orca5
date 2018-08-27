@@ -91,7 +91,7 @@ public interface IClientReservationFactory
     
     /**
      * Updates the reservation to represent a source for a site resource pool.
-     * @param rc
+     * @param rc client reservation
      */
     public void setAsSource(IClientReservation rc);
 }

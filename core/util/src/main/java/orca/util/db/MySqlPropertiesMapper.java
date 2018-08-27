@@ -134,7 +134,7 @@ public class MySqlPropertiesMapper extends PropertiesMapper
      *
      * @return converted properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Properties javaToMysql(final String category, final Properties p)
                            throws Exception
@@ -192,7 +192,7 @@ public class MySqlPropertiesMapper extends PropertiesMapper
      *
      * @return java properties
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public Properties mysqlToJava(String category, Properties mysqlProperties)
                            throws Exception
@@ -245,7 +245,8 @@ public class MySqlPropertiesMapper extends PropertiesMapper
      *
      * @return map
      *
-     * @throws Exception
+     * @throws IOException in case of error
+     * @throws JAXBException in case of error
      */
     protected Mapping readMysqlMapping() throws IOException, JAXBException
     {

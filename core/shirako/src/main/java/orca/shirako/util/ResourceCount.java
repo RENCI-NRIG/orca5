@@ -159,7 +159,7 @@ public class ResourceCount
      *
      * @param type resource type
      *
-     * @return
+     * @return count entry for the given resource type
      */
     protected CountsPerType getCounts(final ResourceType type)
     {

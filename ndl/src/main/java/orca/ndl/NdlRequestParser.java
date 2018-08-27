@@ -42,9 +42,9 @@ public class NdlRequestParser extends NdlParserHelper {
     /**
      * Create a parser on existing model
      * 
-     * @param reqModel
-     * @param l
-     * @throws NdlException
+     * @param reqModel reqModel
+     * @param l l
+     * @throws NdlException in case of error
      */
     public NdlRequestParser(OntModel reqModel, INdlRequestModelListener l) throws NdlException {
         listener = l;
@@ -58,11 +58,11 @@ public class NdlRequestParser extends NdlParserHelper {
     /**
      * Create a parser with a model that is explicitly in-memory or TDB persistent or ephemeral
      * 
-     * @param ndlRequest
-     * @param l
-     * @param t
-     * @param folderName
-     * @throws NdlException
+     * @param reqModel reqModel 
+     * @param l l
+     * @param t t
+     * @param folderName folderName
+     * @throws NdlException in case of error
      */
     public NdlRequestParser(OntModel reqModel, INdlRequestModelListener l, NdlModel.ModelType t, String folderName)
             throws NdlException {
@@ -81,9 +81,9 @@ public class NdlRequestParser extends NdlParserHelper {
     /**
      * Create a request parser with in-memory model
      * 
-     * @param ndlRequest
-     * @param l
-     * @throws NdlException
+     * @param ndlRequest ndlRequest
+     * @param l l
+     * @throws NdlException in case of error
      */
     public NdlRequestParser(String ndlRequest, INdlRequestModelListener l) throws NdlException {
 
@@ -109,11 +109,11 @@ public class NdlRequestParser extends NdlParserHelper {
     /**
      * Create a parser with a model that is explicitly in-memory or TDB persistent or ephemeral
      * 
-     * @param ndlRequest
-     * @param l
-     * @param t
-     * @param folderName
-     * @throws NdlException
+     * @param ndlRequest ndlRequest
+     * @param l l
+     * @param t t
+     * @param folderName folderName
+     * @throws NdlException in case of error
      */
     public NdlRequestParser(String ndlRequest, INdlRequestModelListener l, NdlModel.ModelType t, String folderName)
             throws NdlException {
@@ -144,8 +144,8 @@ public class NdlRequestParser extends NdlParserHelper {
     /**
      * Return true if a new element, false otherwise
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return true or false
      */
     private boolean checkNodeOrLink(Resource r) {
         return nodesAndLinks.add(r);
@@ -154,7 +154,7 @@ public class NdlRequestParser extends NdlParserHelper {
     /**
      * Query the request invoking the listener callbacks
      * 
-     * @throws NdlException
+     * @throws NdlException in case of error
      */
     public synchronized void processRequest() throws NdlException {
         if (requestModel == null)

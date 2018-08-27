@@ -107,7 +107,7 @@ public class Policy implements IPolicy {
      * @param message
      *            error message
      * 
-     * @throws Exception
+     * @throws OrcaException in case of error
      */
     protected void error(final String message) throws OrcaException {
         logger.error(message);
@@ -142,6 +142,7 @@ public class Policy implements IPolicy {
 
     /**
      * {@inheritDoc}
+     * @throws OrcaException in case of error
      */
     public void initialize() throws OrcaException {
         if (!initialized) {
@@ -174,7 +175,7 @@ public class Policy implements IPolicy {
      * @param message
      *            e
      * 
-     * @throws OrcaException
+     * @throws OrcaException in case of error
      */
     protected void internalError(final String message) throws OrcaException {
         logger.error("Internal error: " + message);
@@ -222,6 +223,7 @@ public class Policy implements IPolicy {
 
     /**
      * {@inheritDoc}
+     * @throws Exception in case of error
      */
     public void reset() throws Exception {
     }
@@ -232,6 +234,7 @@ public class Policy implements IPolicy {
 
     /**
      * {@inheritDoc}
+     * @throws Exception in case of error
      */
     public void revisit(final IReservation reservation) throws Exception {
     }

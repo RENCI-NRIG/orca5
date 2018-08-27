@@ -146,9 +146,9 @@ public class NdlGenerator {
 
     /**
      * if modify set to true, initializes a modify request
-     * 
-     * @param log
-     * @param modify
+     * @param guid guid
+     * @param log log
+     * @param modify modify
      */
     public NdlGenerator(String guid, Logger log, boolean modify) {
         l = log;
@@ -164,8 +164,9 @@ public class NdlGenerator {
     /**
      * Build a generator based on pre-existing request model in the parser.
      * 
-     * @param p
-     * @param log
+     * @param p p
+     * @param log log
+     * @throws NdlException in case of error
      */
     public NdlGenerator(NdlRequestParser p, Logger log) throws NdlException {
         l = log;
@@ -183,8 +184,9 @@ public class NdlGenerator {
     /**
      * Build a generator based on pre-existing modify model in the parser
      * 
-     * @param p
-     * @param log
+     * @param p p
+     * @param log log
+     * @throws NdlException in case of error 
      */
     public NdlGenerator(NdlModifyParser p, Logger log) throws NdlException {
         l = log;
@@ -218,7 +220,7 @@ public class NdlGenerator {
     /**
      * Get the working model
      * 
-     * @return
+     * @return OntModel
      */
     public OntModel getWorkingModel() {
         return blank;
@@ -268,6 +270,7 @@ public class NdlGenerator {
      * @param indName
      * @param clsName
      * @return Individual
+     * @throws NdlException in case of error
      */
     private Individual addIndividual(String indName, String prefix, String clsName) throws NdlException {
         assert (indName != null);
@@ -284,10 +287,10 @@ public class NdlGenerator {
     /**
      * Create an anonymous individual of a specified class
      * 
-     * @param prefix
+     * @param prefix prefix
      * @param clsName
-     * @return
-     * @throws NdlException
+     * @return Individual
+     * @throws NdlException in case of error
      */
     private Individual addAnonIndividual(String prefix, String clsName) throws NdlException {
         assert (prefix != null);
@@ -303,10 +306,10 @@ public class NdlGenerator {
      * Add a guaranteed unique individual to the model
      * 
      * @param indName
-     * @param prefix
+     * @param prefix prefix
      * @param clsName
-     * @return
-     * @throws NdlException
+     * @return Individual
+     * @throws NdlException in case of error
      */
     private Individual addUniqueIndividual(String indName, String prefix, String clsName) throws NdlException {
         assert (indName != null);
@@ -324,11 +327,12 @@ public class NdlGenerator {
     /**
      * add a property to an individual with value from model
      * 
-     * @param i
-     * @param prefix
-     * @param pName
+     * @param i i
+     * @param prefix prefix
+     * @param pName pName
      * @param uri
-     * @return
+     * @return Resource 
+     * @throws NdlException in case of error
      */
     private Resource addProperty(Individual i, String prefix, String pName, String uri) throws NdlException {
         assert (i != null);
@@ -345,12 +349,12 @@ public class NdlGenerator {
     /**
      * Add an property with RDFNode (can be a literal)
      * 
-     * @param i
-     * @param prefix
-     * @param pName
+     * @param i i
+     * @param prefix prefix
+     * @param pName pName
      * @param n
-     * @return
-     * @throws NdlException
+     * @return Resource 
+     * @throws NdlException in case of error
      */
     private Resource addProperty(Individual i, String prefix, String pName, RDFNode n) throws NdlException {
         assert (i != null);
@@ -367,11 +371,11 @@ public class NdlGenerator {
     /**
      * Remove property from an individual
      * 
-     * @param i
-     * @param prefix
-     * @param pName
+     * @param i i
+     * @param prefix prefix
+     * @param pName pName
      * @param from
-     * @throws NdlException
+     * @throws NdlException in case of error
      */
     private void removeProperty(Individual i, String prefix, String pName, String toRemove) throws NdlException {
         assert (i != null);
@@ -388,11 +392,11 @@ public class NdlGenerator {
     /**
      * add a property to an individual
      * 
-     * @param i
+     * @param i i
      * @param p
      * @param ob
-     * @return
-     * @throws NdlException
+     * @return Resource 
+     * @throws NdlException in case of error
      */
     private Resource addProperty(Individual i, Property p, Resource ob) throws NdlException {
         assert (i != null);
@@ -405,12 +409,13 @@ public class NdlGenerator {
     /**
      * add typed property to an individual
      * 
-     * @param i
-     * @param prefix
-     * @param pName
-     * @param val
-     * @param type
-     * @return
+     * @param i i
+     * @param prefix prefix
+     * @param pName pName
+     * @param val val
+     * @param type type
+     * @return Resource 
+     * @throws NdlException in case of error
      */
     public Resource addTypedProperty(Individual i, String prefix, String pName, String val, RDFDatatype type)
             throws NdlException {
@@ -427,12 +432,12 @@ public class NdlGenerator {
     /**
      * Add simple literal property
      * 
-     * @param i
-     * @param prefix
-     * @param pName
-     * @param val
-     * @return
-     * @throws NdlException
+     * @param i i
+     * @param prefix prefix
+     * @param pName pName
+     * @param val val
+     * @return Resource 
+     * @throws NdlException in case of error
      */
     public Resource addSimpleProperty(Individual i, String prefix, String pName, String val) throws NdlException {
         if (null == i) {
@@ -446,10 +451,10 @@ public class NdlGenerator {
     /**
      * Create a typed literal
      * 
-     * @param s
-     * @param typeURI
-     * @return
-     * @throws NdlException
+     * @param s s
+     * @param typeURI typeURI
+     * @return Literal 
+     * @throws NdlException in case of error
      */
     private Literal addTypedLiteral(String s, String typeURI) throws NdlException {
         return blank.createTypedLiteral(s, typeURI);
@@ -458,8 +463,9 @@ public class NdlGenerator {
     /**
      * declare a ComputeElement in the request model
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual declareComputeElement(String name) throws NdlException {
         Individual in = addIndividual(requestId + "#" + massageName(name), "compute", "ComputeElement");
@@ -469,11 +475,11 @@ public class NdlGenerator {
     /**
      * Declare a ComputeElement with existing url (from manifest) that will be modified. Modifies always require a guid.
      * 
-     * @param url
-     * @param guid
+     * @param url url
+     * @param guid guid
      *            (can be null)
-     * @return
-     * @throws NdlException
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual declareModifiedComputeElement(String url, String guid) throws NdlException {
 
@@ -494,9 +500,9 @@ public class NdlGenerator {
     /**
      * declare a stitching node
      * 
-     * @param name
-     * @return
-     * @throws NdlException
+     * @param name name
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual declareStitchingNode(String name) throws NdlException {
         Individual in = addIndividual(requestId + "#" + massageName(name), "topology", "Device");
@@ -507,8 +513,9 @@ public class NdlGenerator {
     /**
      * Declare storage node without parameters
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual declareISCSIStorageNode(String name) throws NdlException {
         Individual in = addIndividual(requestId + "#" + massageName(name), "storage", "ISCSI");
@@ -519,17 +526,17 @@ public class NdlGenerator {
     /**
      * Declare an ISCSI storage node
      * 
-     * @param name
-     * @param capacity
+     * @param name name
+     * @param capacity capacity
      * @param fstype
      *            - can be null
      * @param fsparam
      *            - can be null
-     * @param fsmnt
+     * @param fsmntpoint 
      *            point - can be null
-     * @param doFormat
-     * @return
-     * @throws NdlException
+     * @param doFormat doFormat
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual declareISCSIStorageNode(String name, long capacity, String fstype, String fsparam,
             String fsmntpoint, boolean doFormat) throws NdlException {
@@ -550,9 +557,10 @@ public class NdlGenerator {
     /**
      * declare a ServerCloud in the request model (with splittable property)
      * 
-     * @param name
-     * @param splittable
-     * @return
+     * @param name name
+     * @param splittable splittable
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual declareServerCloud(String name, boolean splittable) throws NdlException {
         Individual ind = addIndividual(requestId + "#" + massageName(name), "compute", "ServerCloud");
@@ -565,8 +573,9 @@ public class NdlGenerator {
     /**
      * declare an unsplittable (by default) ServerCloud in the request model
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual declareServerCloud(String name) throws NdlException {
         Individual group = addIndividual(requestId + "#" + massageName(name), "compute", "ServerCloud");
@@ -577,8 +586,9 @@ public class NdlGenerator {
     /**
      * declare an interface in the request model
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @throws NdlException in case of error
+     * @return Individual
      */
     public Individual declareInterface(String name) throws NdlException {
         return addIndividual(requestId + "#" + massageName(name), "topology", "Interface");
@@ -587,9 +597,9 @@ public class NdlGenerator {
     /**
      * Declare an existing interface for e.g. stitching (not in request namespace)
      * 
-     * @param url
-     * @return
-     * @throws NdlException
+     * @param url url
+     * @throws NdlException in case of error
+     * @return Individual
      */
     public Individual declareExistingInterface(String url) throws NdlException {
         OntClass cls = ref.getOntClass(ref.getNsPrefixUri("topology") + "Interface");
@@ -602,10 +612,10 @@ public class NdlGenerator {
     /**
      * Declare a unique stitchport interface based on URL and label with TaggedEthernet adaptation and a label
      * 
-     * @param url
-     * @param label
-     * @return
-     * @throws NdlException
+     * @param url url
+     * @param label label
+     * @throws NdlException in case of error
+     * @return Individual
      */
     public Individual declareStitchportInterface(String url, String label) throws NdlException {
         Individual retI = declareExistingInterface(generateStitchPortInterfaceUrl(url, label));
@@ -619,9 +629,10 @@ public class NdlGenerator {
     /**
      * Generate unique name for stitchport interface based on URL and label
      * 
-     * @param osp
-     * @return
-     * @throws NdlException
+     * @param url url 
+     * @param  label label
+     * @throws NdlException in case of error
+     * @return String 
      */
     private String generateStitchPortInterfaceUrl(String url, String label) throws NdlException {
         if ((url == null) || (label == null))
@@ -636,10 +647,10 @@ public class NdlGenerator {
     /**
      * declare a disk image
      * 
-     * @param name
-     * @param url
-     * @param guid
-     * @return
+     * @param url url
+     * @param guid guid
+     * @throws NdlException in case of error
+     * @return Individual 
      */
     public Individual declareDiskImage(String url, String guid) throws NdlException {
         if ((url == null) || (guid == null))
@@ -653,11 +664,11 @@ public class NdlGenerator {
     /**
      * Declare an image with a short name
      * 
-     * @param url
-     * @param guid
-     * @param shortName
-     * @return
-     * @throws NdlException
+     * @param url url
+     * @param guid guid
+     * @param shortName shortName
+     * @throws NdlException in case of error
+     * @return Individual 
      */
     public Individual declareDiskImage(String url, String guid, String shortName) throws NdlException {
         if ((url == null) || (guid == null) || (shortName == null))
@@ -673,9 +684,11 @@ public class NdlGenerator {
     /**
      * declare a network point-to-point connection at specific layer
      * 
-     * @param name
-     * @param bandwidth
-     * @return
+     * @param conn conn 
+     * @param prefix prefix
+     * @param layer layer
+     * @throws NdlException in case of error
+     * @return Individual 
      */
     public Individual addLayerToConnection(Individual conn, String prefix, String layer) throws NdlException {
         if (null == conn) {
@@ -689,9 +702,10 @@ public class NdlGenerator {
     /***
      * declare a network connection w/o layer
      * 
-     * @param name
-     * @param bandwidth
-     * @return
+     * @param conn conn 
+     * @param bandwidth bandwidth
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual addBandwidthToConnection(Individual conn, Long bandwidth) throws NdlException {
         if (null == conn) {
@@ -706,8 +720,9 @@ public class NdlGenerator {
     /**
      * some connections don't declare bandwidth. you can add label or bandwidth to it.
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareNetworkConnection(String name) throws NdlException {
         Individual conn = addIndividual(requestId + "#" + massageName(name), "topology", "NetworkConnection");
@@ -717,9 +732,9 @@ public class NdlGenerator {
     /**
      * Declare a broadcast connection. You can add label or bandwidth to it
      * 
-     * @param name
-     * @return
-     * @throws NdlException
+     * @param name name
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareBroadcastConnection(String name) throws NdlException {
         Individual conn = addIndividual(requestId + "#" + massageName(name), "topology", "BroadcastConnection");
@@ -729,9 +744,9 @@ public class NdlGenerator {
     /**
      * Declare a broadcast connection that already exists and will be modified
      * 
-     * @param url
-     * @return
-     * @throws NdlException
+     * @param url url
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifiedBroadcastConnection(String url) throws NdlException {
         OntClass cls = ref.getOntClass(ref.getNsPrefixUri("topology") + "BroadcastConnection");
@@ -749,9 +764,9 @@ public class NdlGenerator {
     /**
      * Add a layer:Label to an individual (e.g. VLAN tag to connection)
      * 
-     * @param c
-     * @param label
-     * @throws NdlException
+     * @param c c
+     * @param label label
+     * @throws NdlException in case of error
      */
     public void addLabelToIndividual(Individual c, String label) throws NdlException {
         if (null == c) {
@@ -767,9 +782,9 @@ public class NdlGenerator {
     /**
      * Add a literal rdfs:label to something
      * 
-     * @param c
-     * @param label
-     * @throws NdlException
+     * @param c c
+     * @param label label
+     * @throws NdlException in case of error
      */
     public void addRDFSLabelToIndividual(Individual c, String label) throws NdlException {
         if (null == c) {
@@ -783,8 +798,9 @@ public class NdlGenerator {
     /**
      * add interface to e.g. server or connection
      * 
-     * @param iface
-     * @param ind
+     * @param iface iface
+     * @param ind ind
+     * @throws NdlException in case of error
      */
     public void addInterfaceToIndividual(Individual iface, Individual ind) throws NdlException {
         if (null == iface) {
@@ -800,9 +816,9 @@ public class NdlGenerator {
     /**
      * Remove a previously linked interface from individual
      * 
-     * @param iface
-     * @param ind
-     * @throws NdlException
+     * @param iface iface
+     * @param ind ind
+     * @throws NdlException in case of error
      */
     public void removeInterfaceFromIndividual(String iface, Individual ind) throws NdlException {
         if (null == iface) {
@@ -820,8 +836,10 @@ public class NdlGenerator {
      * created individual, so if a model needs to contain multiple definitions of similar IP addresses, use
      * addUniqueIPIndividual() instead. It disassociates previously created IP individual from the interface.
      * 
-     * @param ip
-     * @param ind
+     * @param ip ip
+     * @param ind ind
+     * @throws NdlException in case of error
+     * @return Individual
      */
     public Individual addIPToIndividual(String ip, Individual ind) throws NdlException {
         ind.removeAll(NdlCommons.ip4LocalIPAddressProperty);
@@ -844,8 +862,9 @@ public class NdlGenerator {
      *            - ip address string
      * @param name
      *            - e.g. vlan name
-     * @param ind
-     * @throws NdlException
+     * @param ind ind
+     * @throws NdlException in case of error
+     * @return Individual
      */
     public Individual addUniqueIPToIndividual(String ip, String name, Individual ind) throws NdlException {
         if (null == ind) {
@@ -870,9 +889,9 @@ public class NdlGenerator {
      * Add netmask to an individual IP subject (the subject must have been added using addIPToIndividual or
      * addUniqueIPToIndividual
      * 
-     * @param ip
-     * @param netmask
-     * @throws NdlException
+     * @param ip ip
+     * @param netmask netmask
+     * @throws NdlException in case of error
      */
     public void addNetmaskToIP(Individual ip, String netmask) throws NdlException {
         if (null == ip) {
@@ -887,9 +906,9 @@ public class NdlGenerator {
      * Set IP on interface individual, including overwriting any existing IP (but not netmask). This function is
      * complimentary to the addIPToIndividual() and can undo its results.
      * 
-     * @param ip
-     * @param intf
-     * @throws NdlException
+     * @param ip ip
+     * @param intf intf
+     * @throws NdlException in case of error
      */
     public void setInterfaceIP(String ip, Individual intf) throws NdlException {
         if (null == intf) {
@@ -916,9 +935,9 @@ public class NdlGenerator {
      * Set netmask on interface, including overwriting any existing netmask (but not IP). This function is complimentary
      * to addNetmaskToIP() and can undo its results.
      * 
-     * @param nm
-     * @param intf
-     * @throws NdlException
+     * @param nm nm
+     * @param intf intf
+     * @throws NdlException in case of error
      */
     public void setInterfaceNetmask(String nm, Individual intf) throws NdlException {
         if (null == intf) {
@@ -943,9 +962,9 @@ public class NdlGenerator {
     /**
      * add hostinterface name literal to interface
      * 
-     * @param interfaceName
-     * @param intf
-     * @throws NdlException
+     * @param interfaceName interfaceName
+     * @param intf intf
+     * @throws NdlException in case of error
      */
     public void addNameToInterface(String interfaceName, Individual intf) throws NdlException {
         if (interfaceName != null)
@@ -956,14 +975,14 @@ public class NdlGenerator {
     /**
      * Add properties to storage node
      * 
-     * @param capacity
-     * @param fstype
-     * @param fsparam
-     * @param fsmntpoint
-     * @param doFormat
-     * @param in
+     * @param capacity capacity
+     * @param fstype fstype
+     * @param fsparam fsparam
+     * @param fsmntpoint fsmntpoint
+     * @param doFormat doFormat
+     * @param in 
      *            individual to add properties to
-     * @throws NdlException
+     * @throws NdlException in case of error
      */
     public void addPropertiesToStorage(long capacity, String fstype, String fsparam, String fsmntpoint,
             boolean doFormat, Individual in) throws NdlException {
@@ -985,8 +1004,9 @@ public class NdlGenerator {
     /***
      * Add a URN to individual (hasURN)
      * 
-     * @param urn
-     * @param ind
+     * @param urn urn
+     * @param ind ind
+     * @throws NdlException in case of error
      */
     public void addURNToIndividual(Individual ind, String urn) throws NdlException {
         if (null == ind) {
@@ -1000,9 +1020,9 @@ public class NdlGenerator {
     /**
      * Declare beginning of a term
      * 
-     * @param date
-     * @return
-     * @throws NdlException
+     * @param date date
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareTermBeginning(Date date) throws NdlException {
         if (null == date) {
@@ -1021,9 +1041,9 @@ public class NdlGenerator {
     /**
      * Declare term end
      * 
-     * @param date
-     * @return
-     * @throws NdlException
+     * @param date date
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareTermEnd(Date date) throws NdlException {
         if (null == date) {
@@ -1078,10 +1098,10 @@ public class NdlGenerator {
     /**
      * Declare term duration in units from java.util.Calendar
      * 
-     * @param dur
-     * @param units
-     * @return
-     * @throws NdlException
+     * @param dur dur
+     * @param units units
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareTermDuration(long dur, int units) throws NdlException {
         Individual res = addIndividual(requestId + "#TermDuration", "time", "DurationDescription");
@@ -1093,11 +1113,11 @@ public class NdlGenerator {
     /**
      * declare term duration of days, hrs and minutes (can be 0)
      * 
-     * @param d
-     * @param hr
-     * @param min
-     * @return
-     * @throws NdlException
+     * @param d d
+     * @param hr hr
+     * @param min min
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareTermDuration(long d, long hr, long min) throws NdlException {
         Individual t = addIndividual(requestId + "#TermDuration", "time", "DurationDescription");
@@ -1115,10 +1135,8 @@ public class NdlGenerator {
     /**
      * Declare a term from now using duration, units comes from java.util.Calandar
      * 
-     * @param dur
-     * @param units
-     * @return
-     * @throws NdlException
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareTerm() throws NdlException {
         Individual res = addIndividual(requestId + "#Term", "time", "Interval");
@@ -1162,8 +1180,10 @@ public class NdlGenerator {
     /**
      * Declare Reservation individual with start and end date
      *
-     * @param start
-     * @param end
+     * @param start start
+     * @param end end
+     * @throws NdlException in case of error
+     * @return Individual
      */
     public Individual declareReservation(Date start, Date end) throws NdlException {
         Individual res = addIndividual(requestId + "#", "request-schema", "Reservation");
@@ -1179,11 +1199,11 @@ public class NdlGenerator {
     /**
      * Declare a reservation with a start time and duration
      * 
-     * @param start
-     * @param dur
-     * @param units
-     * @return
-     * @throws NdlException
+     * @param start start
+     * @param dur dur
+     * @param units units
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareReservation(Date start, long dur, int units) throws NdlException {
         Individual res = addIndividual(requestId + "#", "request-schema", "Reservation");
@@ -1197,8 +1217,8 @@ public class NdlGenerator {
     /**
      * Declare an empty reservation
      * 
-     * @return
-     * @throws NdlException
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareReservation() throws NdlException {
         Individual res = addIndividual(requestId + "#", "request-schema", "Reservation");
@@ -1209,9 +1229,9 @@ public class NdlGenerator {
     /**
      * Declare a modify reservation with this name
      * 
-     * @param name
-     * @return
-     * @throws NdlException
+     * @param name name
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyReservation(String name) throws NdlException {
         Individual mres = addIndividual(requestId + "#" + name, "modify-schema", "ModifyReservation");
@@ -1225,14 +1245,14 @@ public class NdlGenerator {
     /**
      * Declare an element of a modify reservation that increases node count in a node group.
      * 
-     * @param modify
+     * @param mresI 
      *            reservation individual
      * @param ngUrl
      *            - URL of node group in question
      * @param count
      *            - the number to increase node count by
-     * @return
-     * @throws NdlException
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyElementNGIncreaseBy(Individual mresI, String ngUrl, Integer count)
             throws NdlException {
@@ -1259,11 +1279,11 @@ public class NdlGenerator {
     /**
      * Declare an element of a modify reservation that deletes a node from a node group
      * 
-     * @param mresI
-     * @param ngUrl
-     * @param nodeUrl
-     * @return
-     * @throws NdlException
+     * @param mresI mresI
+     * @param ngUrl ngUrl
+     * @param nodeUrl nodeUrl
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyElementNGDeleteNode(Individual mresI, String ngUrl, String nodeUrl)
             throws NdlException {
@@ -1290,10 +1310,11 @@ public class NdlGenerator {
     /**
      * Declare an element of a modify reservation that deletes a single node
      * 
-     * @param mresI
-     * @param link
-     * @return
-     * @throws NdlException
+     * @param mresI mresI
+     * @param elUrl elUrl
+     * @param guid guid
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyElementRemoveNode(Individual mresI, String elUrl, String guid) throws NdlException {
         if (null == mresI) {
@@ -1316,10 +1337,11 @@ public class NdlGenerator {
     /**
      * Declare an element of a modify reservation that deletes a single link
      * 
-     * @param mresI
-     * @param link
-     * @return
-     * @throws NdlException
+     * @param mresI mresI
+     * @param elUrl elUrl
+     * @param guid guid
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyElementRemoveLink(Individual mresI, String elUrl, String guid) throws NdlException {
         if (null == mresI) {
@@ -1342,10 +1364,10 @@ public class NdlGenerator {
     /**
      * Declare an element of a modify reservation that deletes a single element individual
      * 
-     * @param mresI
-     * @param link
-     * @return
-     * @throws NdlException
+     * @param mresI mresI
+     * @param el el 
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyElementRemoveElement(Individual mresI, Individual el) throws NdlException {
         // inputs are checked in doModifyElement()
@@ -1354,11 +1376,11 @@ public class NdlGenerator {
 
     /**
      *
-     * @param mresI
-     * @param el
-     * @param modifyAction
-     * @return
-     * @throws NdlException
+     * @param mresI mresI
+     * @param el el
+     * @param modifyAction modifyAction
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     protected Individual doModifyElement(Individual mresI, Individual el, String modifyAction) throws NdlException {
         if (null == mresI) {
@@ -1382,10 +1404,10 @@ public class NdlGenerator {
     /**
      * Declare an element of a modify reservation that adds a single element (node or link)
      * 
-     * @param mresI
-     * @param el
-     * @return
-     * @throws NdlException
+     * @param mresI mresI
+     * @param el el
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyElementAddElement(Individual mresI, Individual el) throws NdlException {
         // inputs are checked in doModifyElement()
@@ -1395,10 +1417,10 @@ public class NdlGenerator {
     /**
      * Declare an element to modify an existing node (add interface)
      * 
-     * @param mresI
-     * @param node
-     * @return
-     * @throws NdlException
+     * @param mresI mresI
+     * @param node node
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareModifyElementModifyNode(Individual mresI, Individual node) throws NdlException {
         // inputs are checked in doModifyElement()
@@ -1408,9 +1430,9 @@ public class NdlGenerator {
     /**
      * Declare a slice with a name
      * 
-     * @param sname
-     * @return
-     * @throws NdlException
+     * @param sname sname
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareSlice(String sname) throws NdlException {
         Individual s = addUniqueIndividual(requestId + "#" + massageName(sname), "geni", "Slice");
@@ -1423,9 +1445,9 @@ public class NdlGenerator {
     /**
      * Declare an openflow slice
      * 
-     * @param sname
-     * @return
-     * @throws NdlException
+     * @param sname sname
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareOfSlice(String sname) throws NdlException {
         Individual s = addUniqueIndividual(requestId + "#" + massageName(sname), "openflow", "OFSlice");
@@ -1438,10 +1460,10 @@ public class NdlGenerator {
     /**
      * Declare an openflow controller with this URL
      * 
-     * @param name
-     * @param url
-     * @return
-     * @throws NdlException
+     * @param name name
+     * @param url url
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareOfController(String name, String url) throws NdlException {
         Individual c = addUniqueIndividual(requestId + "#" + massageName(name), "openflow", "OFController");
@@ -1454,9 +1476,9 @@ public class NdlGenerator {
     /**
      * Declare a TCP proxy
      * 
-     * @param suffix
-     * @return
-     * @throws NdlException
+     * @param suffix suffix
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareTCPProxy(String suffix) throws NdlException {
         Individual prx = addUniqueIndividual(requestId + "#" + massageName(suffix), "domain", "TCPProxy");
@@ -1466,9 +1488,9 @@ public class NdlGenerator {
     /**
      * Add a proxy to (most likely node)
      * 
-     * @param proxy
-     * @param resI
-     * @throws NdlException
+     * @param proxy proxy
+     * @param resI resI
+     * @throws NdlException in case of error
      */
     public void addProxyToIndividual(Individual proxy, Individual resI) throws NdlException {
         if (null == proxy) {
@@ -1484,9 +1506,9 @@ public class NdlGenerator {
     /**
      * add a resource to the reservation
      * 
-     * @param resI
-     * @param toAdd
-     * @throws NdlException
+     * @param resI resI
+     * @param toAdd toAdd
+     * @throws NdlException in case of error
      */
     public void addResourceToReservation(Individual resI, Individual toAdd) throws NdlException {
         if (null == resI) {
@@ -1502,9 +1524,9 @@ public class NdlGenerator {
     /**
      * Add a sub-slice to reservation
      * 
-     * @param resI
-     * @param sl
-     * @throws NdlException
+     * @param resI resI
+     * @param sl sl
+     * @throws NdlException in case of error
      */
     public void addSliceToReservation(Individual resI, Individual sl) throws NdlException {
         if (null == resI) {
@@ -1520,9 +1542,9 @@ public class NdlGenerator {
     /**
      * Add DiskImage to reservation or node
      * 
-     * @param resI
-     * @param diskImage
-     * @throws NdlException
+     * @param resI resI
+     * @param diskImage diskImage
+     * @throws NdlException in case of error
      */
     public void addDiskImageToIndividual(Individual diskImage, Individual resI) throws NdlException {
         if (null == diskImage) {
@@ -1538,9 +1560,9 @@ public class NdlGenerator {
     /**
      * Add dependency to an individual (both should be NetworkElement subclasses)
      * 
-     * @param dependency
-     * @param ind
-     * @throws NdlException
+     * @param dependency dependency
+     * @param ind ind
+     * @throws NdlException in case of error
      */
     public void addDependOnToIndividual(Individual dependency, Individual ind) throws NdlException {
         if (null == dependency) {
@@ -1556,9 +1578,9 @@ public class NdlGenerator {
     /**
      * Add resource type to e.g. server from topology.owl
      * 
-     * @param resType
-     * @param ind
-     * @throws NdlException
+     * @param resType resType
+     * @param ind ind
+     * @throws NdlException in case of error
      */
     // public void addResourceTypeToServer(Individual ser, String topoRes) throws NdlException {
     // addProperty(ser, "topology", "hasResourceType",
@@ -1577,9 +1599,9 @@ public class NdlGenerator {
     /**
      * Add a term to a reservation
      * 
-     * @param resI
-     * @param Term
-     * @throws NdlException
+     * @param resI resI
+     * @param termI Term
+     * @throws NdlException in case of error
      */
     public void addTermToReservation(Individual termI, Individual resI) throws NdlException {
         if (null == termI) {
@@ -1595,8 +1617,8 @@ public class NdlGenerator {
     /**
      * try to get individual with this name from the request
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @return Individual    
      */
     public Individual getRequestIndividual(String name) {
         return blank.getIndividual(NdlCommons.ORCA_NS + requestId + "#" + massageName(name));
@@ -1605,8 +1627,8 @@ public class NdlGenerator {
     /**
      * get an individual that is not part of request namespace
      * 
-     * @param name
-     * @return
+     * @param name name
+     * @return Individual    
      */
     public Individual getNonrequestIndividual(String name) {
         return blank.getIndividual(NdlCommons.ORCA_NS + name);
@@ -1616,9 +1638,9 @@ public class NdlGenerator {
      * declare a domain site (appends /Domain to name as per convention; declares it in the general
      * http://geni-orca.renci.org/owl prefix, not request prefix)
      * 
-     * @param file
-     * @return
-     * @throws NdlException
+     * @param name name 
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareDomain(String name) throws NdlException {
         return addIndividual(name + "/Domain", "topology", "NetworkDomain");
@@ -1627,9 +1649,9 @@ public class NdlGenerator {
     /**
      * Make individual openflow capable (with version 1.0, 1.1 or 1.2)
      * 
-     * @param res
-     * @param version
-     * @throws NdlException
+     * @param res res
+     * @param version version
+     * @throws NdlException in case of error
      */
     public void addOpenFlowCapable(Individual res, String version) throws NdlException {
         if (null == res) {
@@ -1648,9 +1670,9 @@ public class NdlGenerator {
     /**
      * Bind node to domain
      * 
-     * @param dom
-     * @param node
-     * @throws NdlException
+     * @param dom dom
+     * @param node node
+     * @throws NdlException in case of error
      */
     public void addNodeToDomain(Individual dom, Individual node) throws NdlException {
         if (null == dom) {
@@ -1666,9 +1688,9 @@ public class NdlGenerator {
     /**
      * Add 'inDomain' property to individual
      * 
-     * @param dom
-     * @param ind
-     * @throws NdlException
+     * @param dom dom
+     * @param ind ind
+     * @throws NdlException in case of error
      */
     public void addDomainToIndividual(Individual dom, Individual ind) throws NdlException {
         if (null == dom) {
@@ -1684,10 +1706,10 @@ public class NdlGenerator {
     /**
      * Add node type from particular namespace to node
      * 
-     * @param ns
-     * @param tp
-     * @param node
-     * @throws NdlException
+     * @param ns ns
+     * @param tp tp
+     * @param node node
+     * @throws NdlException in case of error
      */
     public void addNodeTypeToCE(String ns, String tp, Individual node) throws NdlException {
         if (null == node) {
@@ -1700,10 +1722,10 @@ public class NdlGenerator {
     /**
      * Remove specific node type from node individual
      * 
-     * @param ns
-     * @param tp
-     * @param node
-     * @throws NdlException
+     * @param ns ns
+     * @param tp tp
+     * @param node node
+     * @throws NdlException in case of error
      */
     public void removeNodeTypeFromCE(String ns, String tp, Individual node) throws NdlException {
         if (null == node) {
@@ -1719,8 +1741,8 @@ public class NdlGenerator {
     /**
      * Removes ALL node types from particular node individual
      * 
-     * @param node
-     * @throws NdlException
+     * @param node node
+     * @throws NdlException in case of error
      */
     public void removeNodeTypeFromCE(Individual node) throws NdlException {
         if (null == node) {
@@ -1736,9 +1758,9 @@ public class NdlGenerator {
     /**
      * Add a post boot script string to a node
      * 
-     * @param pbscript
-     * @param node
-     * @throws NdlException
+     * @param pbscript pbscript
+     * @param node node
+     * @throws NdlException in case of error
      */
     public void addPostBootScriptToCE(String pbscript, Individual node) throws NdlException {
         if (null == node) {
@@ -1751,9 +1773,9 @@ public class NdlGenerator {
     /**
      * Add a port to be proxied to a proxy (no information how it will be proxied)
      * 
-     * @param port
-     * @param proxy
-     * @throws NdlException
+     * @param port port
+     * @param prx proxy
+     * @throws NdlException in case of error
      */
     public void addPortToProxy(String port, Individual prx) throws NdlException {
         if (null == prx) {
@@ -1766,11 +1788,11 @@ public class NdlGenerator {
     /**
      * Add a port with proxy information about it (new port and new IP address)
      * 
-     * @param port
-     * @param newPort
-     * @param newIp
-     * @param prx
-     * @throws NdlException
+     * @param port port
+     * @param newPort newport
+     * @param newIp newip
+     * @param prx prx
+     * @throws NdlException in case of error
      */
     public void addPortToProxy(String port, String newPort, String newIp, Individual prx) throws NdlException {
         if (null == prx) {
@@ -1783,11 +1805,11 @@ public class NdlGenerator {
     }
 
     /**
-     * Add number of compute elements to cluster <layer:numCE rdf:datatype="&xsd;integer">2</layer:numCE>
+     * Add number of compute elements to cluster 
      * 
-     * @param ns
-     * @param cluster
-     * @throws NdlException
+     * @param ns ns
+     * @param cluster cluster
+     * @throws NdlException in case of error
      */
     public void addNumCEsToCluster(Integer ns, Individual cluster) throws NdlException {
         if (null == ns) {
@@ -1803,7 +1825,8 @@ public class NdlGenerator {
     /**
      * Add a VM domain resource property (for Euca clusters)
      * 
-     * @param cluster
+     * @param cluster cluster
+     * @throws NdlException in case of error
      */
     public void addVMDomainProperty(Individual cluster) throws NdlException {
         if (null == cluster) {
@@ -1832,11 +1855,11 @@ public class NdlGenerator {
     /**
      * Add OpenFlow-relevant properties to a slice individual
      * 
-     * @param userEmail
-     * @param slicePass
-     * @param userCtrl
-     * @param slice
-     * @throws NdlException
+     * @param userEmail useremail
+     * @param slicePass slicepass
+     * @param userCtrl userctl
+     * @param slice slice
+     * @throws NdlException in case of error
      */
     public void addOfPropertiesToSlice(String userEmail, String slicePass, String userCtrl, Individual slice)
             throws NdlException {
@@ -1873,7 +1896,8 @@ public class NdlGenerator {
      *            - text blob
      * @param isXML
      *            - is it XML?
-     * @return
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual declareColor(String label, Map<String, String> keys, String blob, boolean isXML)
             throws NdlException {
@@ -1887,8 +1911,9 @@ public class NdlGenerator {
     /**
      * add keys to color
      * 
-     * @param color
-     * @param keys
+     * @param color color
+     * @param keys keys
+     * @throws NdlException in case of error
      */
     public void addKeysOnColor(Individual color, Map<String, String> keys) throws NdlException {
         if (keys == null || color == null)
@@ -1910,6 +1935,8 @@ public class NdlGenerator {
      *            - text blob
      * @param isXML
      *            - is it XML?
+     * @return Individual
+     * @throws NdlException in case of error
      */
     public Individual addBlobOnColor(Individual color, String blob, boolean isXML) throws NdlException {
         if (color == null)
@@ -1928,13 +1955,13 @@ public class NdlGenerator {
     /**
      * Use compression instead of xml literal to get around Jena bugs for XML literals
      * 
-     * @param color
-     * @param blob
-     * @param isXML
+     * @param color color
+     * @param blob blob
+     * @param isXML ixXML
      * @param xmlns
      *            - namespace for inner xml
-     * @return
-     * @throws NdlException
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual addBlobOnColor__(Individual color, String blob, boolean isXML, String xmlns) throws NdlException {
         if (color == null)
@@ -1957,6 +1984,7 @@ public class NdlGenerator {
      *            - network element
      * @param color
      *            - color
+     * @throws NdlException in case of error
      */
     public void encodeColorDependency(Individual from, Individual to, Individual color) throws NdlException {
         if (null == from) {
@@ -1992,8 +2020,8 @@ public class NdlGenerator {
      *            - interface
      * @param adaptTo
      *            - interface to be adapted
-     * @return
-     * @throws NdlException
+     * @throws NdlException in case of error
+     * @return Individual    
      */
     public Individual addEthernetAdaptation(Individual intf, Individual adaptTo) throws NdlException {
         if (null == intf) {
@@ -2010,9 +2038,9 @@ public class NdlGenerator {
     /**
      * Add addGuid property to this individual
      * 
-     * @param in
-     * @param guid
-     * @throws NdlException
+     * @param in in
+     * @param guid guid
+     * @throws NdlException in case of error
      */
     public void addGuid(Individual in, String guid) throws NdlException {
         if (null == in) {
@@ -2024,6 +2052,7 @@ public class NdlGenerator {
 
     /**
      * produce N3 output of the model
+     * @return String
      */
     public String toN3String() {
         StringWriter sw = new StringWriter();
@@ -2039,7 +2068,7 @@ public class NdlGenerator {
     /**
      * produce RDF-XML output of the model
      * 
-     * @return
+     * @return String
      */
     public String toXMLString() {
         StringWriter sw = new StringWriter();
@@ -2050,7 +2079,7 @@ public class NdlGenerator {
     /**
      * Produce Graphviz output for visualization
      * 
-     * @return
+     * @return String
      */
     public String getGVOutput() {
         return OntProcessor.substrateDotString(blank);

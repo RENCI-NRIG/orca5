@@ -20,17 +20,17 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="configuration" type="{http://issg.cs.duke.edu/cod/plugins/beans}configuration" minOccurs="0"/>
- *         &lt;element name="ldap" type="{http://issg.cs.duke.edu/cod/plugins/beans}ldap" minOccurs="0"/>
- *         &lt;element name="mysql" type="{http://issg.cs.duke.edu/cod/plugins/beans}mysql" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="configuration" type="{http://issg.cs.duke.edu/cod/plugins/beans}configuration" minOccurs="0"/&gt;
+ *         &lt;element name="ldap" type="{http://issg.cs.duke.edu/cod/plugins/beans}ldap" minOccurs="0"/&gt;
+ *         &lt;element name="mysql" type="{http://issg.cs.duke.edu/cod/plugins/beans}mysql" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

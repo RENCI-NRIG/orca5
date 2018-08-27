@@ -81,7 +81,7 @@ public abstract class InventoryForType {
      * Frees the specified number of resource units.
      * @param count number of units
      * @param request request properties
-     * @param response resource properties
+     * @param resource resource properties
      * @return new resource properties
      */
     public abstract Properties free(int count, Properties request, Properties resource);
@@ -95,13 +95,13 @@ public abstract class InventoryForType {
 
     /**
      * Returns the number of free units in the inventory pool.
-     * @return
+     * @return number of free units
      */
     public abstract int getFree();
 
     /**
      * Returns the number of allocated units from this inventory pool.
-     * @return
+     * @return number of allocated units
      */
     public abstract int getAllocated();
 }

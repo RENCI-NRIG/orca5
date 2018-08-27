@@ -123,7 +123,7 @@ public abstract class Driver implements IDriver
      * @param actionID action identifier
      * @param in incoming properties list
      * @param out outgoing properties list
-     * @return
+     * @return 0 on success, negative number if an error occurs
      */
     protected abstract int doDispatch(String actionName, Integer actionID, Properties in,
                                       Properties out);
@@ -140,6 +140,8 @@ public abstract class Driver implements IDriver
     /**
      * Returns the action key for the given operation.
      * @return action key
+     * @param action action
+     * @param in in
      */
     protected abstract String getActionKey(Integer action, Properties in);
 
@@ -148,6 +150,7 @@ public abstract class Driver implements IDriver
      * @param actionID action identifier
      * @param actionName action name
      * @param in incoming properties list
+     * @param out outgoing properties list
      * @return 0 - success, negative number - error
      */
     protected int prepareDispatch(Integer actionID, String actionName, Properties in, Properties out)

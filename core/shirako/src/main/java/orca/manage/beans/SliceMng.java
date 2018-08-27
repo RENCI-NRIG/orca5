@@ -20,25 +20,25 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="sliceMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="owner" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="localProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="requestProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="resourceProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/>
- *         &lt;element name="resourceType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="clientSlice" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="brokerClientSlice" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="sliceID" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="sliceMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="owner" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/&gt;
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="localProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="configurationProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="requestProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="resourceProperties" type="{http://www.nicl.duke.edu/orca/manage/beans}propertiesMng" minOccurs="0"/&gt;
+ *         &lt;element name="resourceType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="clientSlice" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="brokerClientSlice" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="sliceID" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -270,7 +270,7 @@ public class SliceMng {
 
     /**
      * Gets the value of the clientSlice property.
-     * 
+     * @return value of the clientSlice property
      */
     public boolean isClientSlice() {
         return clientSlice;
@@ -278,7 +278,7 @@ public class SliceMng {
 
     /**
      * Sets the value of the clientSlice property.
-     * 
+     * @param value value of the clientSlice property
      */
     public void setClientSlice(boolean value) {
         this.clientSlice = value;
@@ -286,7 +286,7 @@ public class SliceMng {
 
     /**
      * Gets the value of the brokerClientSlice property.
-     * 
+     * @return value of the brokerClientSlice property
      */
     public boolean isBrokerClientSlice() {
         return brokerClientSlice;
@@ -294,7 +294,7 @@ public class SliceMng {
 
     /**
      * Sets the value of the brokerClientSlice property.
-     * 
+     * @param value value of the brokerClientSlice property
      */
     public void setBrokerClientSlice(boolean value) {
         this.brokerClientSlice = value;

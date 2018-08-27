@@ -37,6 +37,7 @@ public class ID implements Cloneable, Comparable<ID> {
 
     /**
      * Loads the specified string as an identifier.
+     * @param id identifier
      */
     public ID(String id) {
         if (id == null) {

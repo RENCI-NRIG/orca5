@@ -12,7 +12,7 @@ import orca.shirako.util.RPCException;
  * RPCRequest object that describes the request that failed.
  * {@link #getErrorType()} describes the type of the error. Some errors are
  * transient, others are permanent. In general, errors marked as network are
- * considered transient, and all others--permanent. <br> {@link #getRequestType())}
+ * considered transient, and all others--permanent. <br> {@link #getRequestType()}
  * describes the request type of the failed RPC. {@link #getReservationID()}
  * returns the id of the reservation the RPC was made for, if the RPC was for a
  * reservation, or null otherwise.

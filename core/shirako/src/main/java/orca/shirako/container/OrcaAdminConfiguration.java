@@ -158,8 +158,8 @@ public class OrcaAdminConfiguration implements IOrcaAdminConfiguration {
 
     /**
      * Returns the container configuration loader.
-     * @return
-     * @throws Exception
+     * @return the container configuration loader
+     * @throws Exception in case of error
      */
     public IConfigurationLoader getConfigurationLoader() throws Exception {
         Class<?> c = Class.forName(configurationLoaderClass);
@@ -222,7 +222,7 @@ public class OrcaAdminConfiguration implements IOrcaAdminConfiguration {
      * name will be modified so that the original prefix will be replaced with
      * <code>newPrefix</code>
      * @param prefix property name prefix
-     * @param newPref new property name prefix
+     * @param newPrefix new property name prefix
      * @return properties list
      */
     protected Properties getProperties(final String prefix, final String newPrefix) {
@@ -241,7 +241,7 @@ public class OrcaAdminConfiguration implements IOrcaAdminConfiguration {
 
     /**
      * Processes the container configuration
-     * @throws Exception
+     * @throws ContainerInitializationException in case of error 
      */
     protected void processConfiguration() throws ContainerInitializationException {
         configurationLoaderClass = properties.getProperty(AdminConfigurationLoader);

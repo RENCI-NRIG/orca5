@@ -120,7 +120,7 @@ public class ConfigurationProcessor {
     /**
      * Instantiates the configuration
      * 
-     * @throws Exception
+     * @throws ConfigurationException in case of error
      */
     public void process() throws ConfigurationException {
         try {
@@ -160,7 +160,7 @@ public class ConfigurationProcessor {
     /**
      * Instantiates all actors
      * 
-     * @throws ConfigurationException
+     * @throws ConfigurationException in case of error
      */
     protected void createActors() throws ConfigurationException {
         try {
@@ -200,7 +200,7 @@ public class ConfigurationProcessor {
     /**
      * Performs final actor initialization
      * 
-     * @throws Exception
+     * @throws ConfigurationException in case of error
      */
     protected void initializeActors() throws ConfigurationException {
         for (IActor actor : actors) {
@@ -228,7 +228,7 @@ public class ConfigurationProcessor {
     /**
      * Creates a default slice per actor
      * 
-     * @throws Exception
+     * @throws ConfigurationException in case of error
      */
     protected void createDefaultSlice() throws ConfigurationException {
         for (IActor actor : actors) {
@@ -270,7 +270,7 @@ public class ConfigurationProcessor {
     /**
      * Processes the topology section
      * 
-     * @throws Exception
+     * @throws ConfigurationException in case of error
      */
     protected void processTopology() throws ConfigurationException {
         if (config.getTopology() != null) {
@@ -301,7 +301,7 @@ public class ConfigurationProcessor {
     /**
      * Exports and claims resources
      * 
-     * @throws Exception
+     * @throws ConfigurationException in case of error
      */
     protected void processExports() throws ConfigurationException {
         for (ExportInfo ei : toExport) {
@@ -318,7 +318,7 @@ public class ConfigurationProcessor {
     /**
      * Exports and claims resources
      * 
-     * @throws Exception
+     * @throws ConfigurationException in case of error
      */
     protected void processClaims() throws ConfigurationException {
         for (ExportInfo ei : toExport) {
@@ -331,7 +331,7 @@ public class ConfigurationProcessor {
      * 
      * @param actor
      *            description
-     * @throws ConfigurationException
+     * @throws ConfigurationException in case of error
      */
     protected void createActor(Actor actor) throws ConfigurationException {
         Globals.Log.info("Creating an actor: name=" + actor.getName());
@@ -544,9 +544,9 @@ public class ConfigurationProcessor {
     /**
      * Performs actor-independent setup.
      * 
-     * @param actor
-     * @return
-     * @throws Exception
+     * @param actor actor
+     * @return actor
+     * @throws ConfigurationException in case of error
      */
     protected IActor doCommon(Actor actor) throws ConfigurationException {
         // make the actor instance
@@ -559,8 +559,9 @@ public class ConfigurationProcessor {
     /**
      * Performs actor-dependent initialization
      * 
-     * @param oActor
-     * @param actor
+     * @param oActor oActor
+     * @param actor actor
+     * @throws ConfigurationException in case of error
      */
     public void doSpecific(IActor oActor, Actor actor) throws ConfigurationException {
         if (oActor instanceof IAuthority) {
@@ -658,8 +659,8 @@ public class ConfigurationProcessor {
     /**
      * Creates all proxies.
      * 
-     * @param edges
-     * @throws Exception
+     * @param edges edges
+     * @throws ConfigurationException in case of error
      */
     protected void createProxies(Edges edges) throws ConfigurationException {
         if (edges != null) {
@@ -672,10 +673,10 @@ public class ConfigurationProcessor {
     /**
      * Form partial cache entry based on vertex information in config
      * 
-     * @param actor
-     * @param v
+     * @param actor actor
+     * @param v v
      * @return guid of the actor
-     * @throws ConfigurationException
+     * @throws ConfigurationException in case of error
      */
     protected String vertexToRegistryCache(IActor actor, Vertex v) throws ConfigurationException {
         HashMap<String, String> res = new HashMap<String, String>();
@@ -715,8 +716,8 @@ public class ConfigurationProcessor {
     /**
      * Processes an edge.
      * 
-     * @param edge
-     * @throws Exception
+     * @param edge edge
+     * @throws ConfigurationException in case of error
      */
     protected void processEdge(Edges.Edge edge) throws ConfigurationException {
         Vertex from = edge.getFrom();
@@ -813,8 +814,8 @@ public class ConfigurationProcessor {
     /**
      * Exports resources
      * 
-     * @param info
-     * @throws Exception
+     * @param info info
+     * @throws ConfigurationException in case of error
      */
     protected void export(ExportInfo info) throws ConfigurationException {
         logger.info("Exporting resources from " + info.exporter.getName() + " to " + info.client.getName());
@@ -850,8 +851,8 @@ public class ConfigurationProcessor {
     /**
      * Claims resources
      * 
-     * @param info
-     * @throws Exception
+     * @param info info
+     * @throws ConfigurationException in case of error
      */
     protected void claim(ExportInfo info) throws ConfigurationException {
         // FIXME: use guid
@@ -878,9 +879,9 @@ public class ConfigurationProcessor {
      * Registers the required certificates so that from and to can communicate. This function appears to be deprecated
      * /ib, cert registration is now done in OrcaContainer.establishEdge()
      * 
-     * @param from
-     * @param to
-     * @throws Exception
+     * @param from from
+     * @param to to
+     * @throws ConfigurationException in case of error
      */
     protected void registerCertificates(Vertex from, Vertex to) throws ConfigurationException {
         IActor fromActor = ActorRegistry.getActor(from.getName());
@@ -978,9 +979,9 @@ public class ConfigurationProcessor {
     /**
      * Converts an authority proxy to an agent proxy. Used during initial setup for export and claim.
      * 
-     * @param authorityProxy
-     * @return
-     * @throws ConfigurationException
+     * @param authorityProxy authorityProxy
+     * @return agent proxy
+     * @throws ConfigurationException in case of error
      */
     public static Proxy getAgentProxy(Proxy authorityProxy) throws ConfigurationException {
         if (authorityProxy instanceof LocalAuthority) {

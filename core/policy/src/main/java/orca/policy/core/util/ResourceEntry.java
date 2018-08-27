@@ -41,9 +41,9 @@ public class ResourceEntry implements Comparable
      * Creates an array with the amount of space remaining on a machine. Assumes
      * the the ordering of the resources is the same on the request as in this
      * entry
-     * @param request
-     * @param multiplier
-     * @return
+     * @param request request
+     * @param multiplier multiplier
+     * @return array with the amount of space remaining on a machine
      */
     public long[] space(ResourceEntry request, int multiplier)
     {
@@ -60,9 +60,9 @@ public class ResourceEntry implements Comparable
      * Determines if a this entry satisfies the resource constraints of another
      * entry. Assumes the the ordering of the resources is the same on the
      * request as in this entry
-     * @param request
-     * @param multiplier
-     * @return
+     * @param request request
+     * @param multiplier multiplier
+     * @return true or false
      */
     public boolean satisfies(ResourceEntry request, int multiplier)
     {
@@ -82,10 +82,10 @@ public class ResourceEntry implements Comparable
     /**
      * Determine if there could be resources further in the table that could
      * satisfy the request
-     * @param request
-     * @param multiplier
-     * @param forward
-     * @return
+     * @param request request
+     * @param multiplier multiplier
+     * @param forward forward
+     * @return true or false
      */
     public boolean shouldContinue(ResourceEntry request, int multiplier, boolean forward)
     {
@@ -108,8 +108,8 @@ public class ResourceEntry implements Comparable
 
     /**
      * Add units to an element
-     * @param element
-     * @param units
+     * @param element element
+     * @param units units
      */
     public void addUnits(int element, long units)
     {
@@ -118,8 +118,8 @@ public class ResourceEntry implements Comparable
 
     /**
      * Remove units from an element
-     * @param element
-     * @param units
+     * @param element element
+     * @param units units
      */
     public void removeUnits(int element, long units)
     {
@@ -128,8 +128,8 @@ public class ResourceEntry implements Comparable
 
     /**
      * Return the number of available units of a particular resource element
-     * @param type
-     * @return
+     * @param element element 
+     * @return number of available units
      */
     public long getUnits(int element)
     {
@@ -138,7 +138,7 @@ public class ResourceEntry implements Comparable
 
     /**
      * Returns the resources
-     * @return
+     * @return the resources
      */
     public long[] getResources()
     {
@@ -147,7 +147,7 @@ public class ResourceEntry implements Comparable
 
     /**
      * Return the resource's id
-     * @return
+     * @return id
      */
     public ID getId()
     {
@@ -156,6 +156,8 @@ public class ResourceEntry implements Comparable
 
     /**
      * Compares this instance to another instance of the same class
+     * @param other other
+     * @return int
      */
     public int compareTo(Object other)
     {

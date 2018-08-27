@@ -36,7 +36,7 @@ public class CreateVLANTask extends G8264BaseTask {
     /**
      * Needs to convert to kbps in multiples of 64kbps
      * 
-     * @param qr
+     * @param qr qr
      */
     public void setVlanQosRate(String qr) {
         // for when qos is off
@@ -63,7 +63,7 @@ public class CreateVLANTask extends G8264BaseTask {
     /**
      * Needs to convert to one of the available values (and in kbps)
      * 
-     * @param qbs
+     * @param qbs qbs
      */
     public void setVlanQoSBurstSize(String qbs) {
         Long bs = 0L;

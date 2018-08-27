@@ -30,7 +30,7 @@ public interface IClientPublic
      * @param udd status of the remote operation.
      * @param caller identity of the caller
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void updateTicket(IReservation reservation, UpdateData udd, AuthToken caller)
                       throws Exception;

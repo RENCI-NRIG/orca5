@@ -25,51 +25,51 @@ public interface ClientDatabase
 {
     /**
      * Adds a new database record representing this client
-     * @param client
-     * @throws Exception
+     * @param client client
+     * @throws Exception in case of error
      */
     public void addClient(Client client) throws Exception;
 
     /**
      * Updates the database record for the specified client
-     * @param client
-     * @throws Exception
+     * @param client client
+     * @throws Exception in case of error
      */
     public void updateClient(Client client) throws Exception;
 
     /**
      * Removes the specified client record
      * FIXME: remove once we start indexing using guid
-     * @param name
-     * @throws Exception
+     * @param name name
+     * @throws Exception in case of error
      */
     public void removeClient(String name) throws Exception;
     
     /**
      * Removes the specified client record
      * @param guid client guid
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeClient(ID guid) throws Exception;
     /**
      * Retrieves the specified client record
      * FIXME: remove once we start indexing using guid
-     * @param name
-     * @return
-     * @throws Exception
+     * @param name name
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getClient(String name) throws Exception;
     /**
      * Retrieves the specified client record
      * @param guid client guid
-     * @return
-     * @throws Exception
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getClient(ID guid) throws Exception;
     /**
      * Retrieves all client records
-     * @return
-     * @throws Exception
+     * @return vector of properties
+     * @throws Exception in case of error
      */
     public Vector<Properties> getClients() throws Exception;
 }

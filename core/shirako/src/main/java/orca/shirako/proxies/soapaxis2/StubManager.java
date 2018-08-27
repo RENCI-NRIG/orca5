@@ -78,11 +78,11 @@ public class StubManager
 
     /**
      * Returns a stub for communication to destination by source.
-     * @param destination destination actor guid
      * @param source source actor guid
      * @param url url for destination service
      * @param type stub type (return, broker, site)
-     * @return
+     * @return stub for communication to destination by source
+     * @throws Exception in case of error
      */
     public Object getStub(ID source, String url, int type) throws Exception
     {

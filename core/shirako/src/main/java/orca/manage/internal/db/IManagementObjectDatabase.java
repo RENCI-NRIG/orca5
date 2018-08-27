@@ -27,51 +27,51 @@ public interface IManagementObjectDatabase
     /**
      * Registers a new manager object
      * @param manager The manager object
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void addManagerObject(IManagementObject manager) throws Exception;
 
     /**
      * Removes the specified manager object
      * @param id Unique identifier of the manager object
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void removeManagerObject(ID id) throws Exception;
 
     /**
      * Removes all manager objects associated with the specified actor
-     * @param actorName
-     * @throws Exception
+     * @param actorName actor name
+     * @throws Exception in case of error
      */
     public void removeManagerObjects(String actorName) throws Exception;
 
     /**
      * Returns the specified manager object
-     * @param key Key identifying the portal plugin
-     * @return
-     * @throws Exception
+     * @param id Key identifying the portal plugin
+     * @return returns vector of the properties of the specified object
+     * @throws Exception in case of error
      */
     public Vector<Properties> getManagerObject(ID id) throws Exception;
 
     /**
      * Retrieves all manager object
-     * @return
-     * @throws Exception
+     * @return returns vector of the properties of the specified object
+     * @throws Exception in case of error
      */
     public Vector<Properties> getManagerObjects() throws Exception;
 
     /**
      * Retrieves all manager objects associated with the given actor
      * @param actorName Name of the actor
-     * @return
-     * @throws Exception
+     * @return returns vector of the properties of the specified object
+     * @throws Exception in case of error
      */
     public Vector<Properties> getManagerObjects(String actorName) throws Exception;
 
     /**
      * Retrieves all manager objects that are not associated with actors
-     * @return
-     * @throws Exception
+     * @return returns vector of the properties of the specified object
+     * @throws Exception in case of error
      */
     public Vector<Properties> getManagerObjectsContainer() throws Exception;
 }

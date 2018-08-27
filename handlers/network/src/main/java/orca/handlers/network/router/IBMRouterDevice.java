@@ -188,7 +188,8 @@ public class IBMRouterDevice extends NetconfDevice implements IRouterDevice, Rou
     /**
      * Find an available VMAP index in the device (assuming 1-128)
      * 
-     * @return
+     * @return Integer in case of error
+     * @throws CommandException in case of error
      */
     protected Integer findFreeVmap() throws CommandException {
 
@@ -219,9 +220,9 @@ public class IBMRouterDevice extends NetconfDevice implements IRouterDevice, Rou
     /**
      * Find the vmap for this vlan tag or return null if nothing found
      * 
-     * @param vlan
-     * @return
-     * @throws CommandException
+     * @param vlan vlan
+     * @return integer
+     * @throws CommandException in case of error
      */
     protected Integer findVlanVmap(String vlan) throws CommandException {
         if (isEmulationEnabled())
@@ -283,9 +284,9 @@ public class IBMRouterDevice extends NetconfDevice implements IRouterDevice, Rou
     /**
      * FOr cases when we want to do connect/disconnect outside the function
      * 
-     * @param commandName
-     * @param commandBuffer
-     * @throws CommandException
+     * @param commandName commandName
+     * @param commandBuffer commandBuffer
+     * @throws CommandException in case of error
      */
     protected void genericUpdateCommandNoConnect(String commandName, String commandBuffer) throws CommandException {
         if (!isEmulationEnabled()) {
@@ -330,8 +331,9 @@ public class IBMRouterDevice extends NetconfDevice implements IRouterDevice, Rou
     /**
      * Expand a list of ports in the form of a-b,c,d,e-f into a list of individual names
      * 
-     * @param ports
-     * @return
+     * @param e e 
+     * @return list of ports
+     * @throws CommandException in case of error
      */
     protected static List<String> expandInterfacePattern(String e) throws CommandException {
 

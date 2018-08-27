@@ -7,8 +7,8 @@ public enum UnitState {
      * Returns true if the passed in state represents a pending state.
      * A state is pending if it is associated with an in progress operation.
      * Generally, all states that end in -ing are pending.
-     * @param state
-     * @return
+     * @param state state
+     * @return true or false
      */
     public static boolean isPending(UnitState state){
         return (state == PRIMING || state == MODIFYING || state == CLOSING);

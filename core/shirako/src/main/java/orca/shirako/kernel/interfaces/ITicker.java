@@ -36,7 +36,7 @@ import orca.util.Initializable;
  * of the container clock. Some implementations may guarantee that if an object
  * has received a notification for cycle <code>x</code>, the next
  * notification will be for cycle
- * <code>x+1</code. However, in general, no such guarantees are provided. As a matter of fact, code
+ * <code>x+1</code>. However, in general, no such guarantees are provided. As a matter of fact, code
  * executing in real time will often "skip" cycles. Therefore, subscribed object, in general, must be
  * able to handle correctly cases in which one or more clock cycle notifications are omitted.
  */
@@ -56,7 +56,7 @@ public interface ITicker extends Initializable
     /**
      * Stops/pauses the clock.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void stop() throws Exception;
 
@@ -79,7 +79,7 @@ public interface ITicker extends Initializable
     /**
      * Stops the clock and unregisters all registered items.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void clear() throws Exception;
 

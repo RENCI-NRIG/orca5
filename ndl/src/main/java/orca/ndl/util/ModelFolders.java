@@ -110,7 +110,7 @@ public class ModelFolders {
      * 
      * @param prefix
      *            - optional prefix
-     * @return
+     * @return file
      */
     public synchronized File createTempDirectory(String prefix) {
         File tmpDir = null;
@@ -128,8 +128,8 @@ public class ModelFolders {
     /**
      * Return a named directory (create if needed) with no exit hooks
      * 
-     * @param p
-     * @return
+     * @param p p
+     * @return file
      */
     public synchronized File createNamedDirectory(String p) {
         if (noMoreFolders)
@@ -147,7 +147,7 @@ public class ModelFolders {
      * Recursively delete folder/directory. Thank you StackOverflow
      * http://stackoverflow.com/questions/7768071/java-delete-a-folder-content
      * 
-     * @param folder
+     * @param folder folder
      */
     private static void deleteFolder(File folder) {
         File[] files = folder.listFiles();
@@ -166,7 +166,7 @@ public class ModelFolders {
     /**
      * Remove a folder recursively
      * 
-     * @param p
+     * @param p p
      */
     public static void deleteFolder(String p) {
         deleteFolder(new File(p));
@@ -175,8 +175,8 @@ public class ModelFolders {
     /**
      * Check if a model folder exists
      * 
-     * @param folder
-     * @return
+     * @param folder folder
+     * @return true or false
      */
     public static boolean folderExists(File folder) {
         if (folder == null)
@@ -187,8 +187,8 @@ public class ModelFolders {
     /**
      * Check if a model folder exists
      * 
-     * @param p
-     * @return
+     * @param p p
+     * @return true or false
      */
     public static boolean folderExists(String p) {
         if (p == null)
@@ -207,6 +207,7 @@ public class ModelFolders {
      *            - the path where it will be kept
      * @param e
      *            - whether it is ephemeral or permanent
+     * @throws Exception in case of error
      */
     public synchronized void put(OntModel m, Dataset ds, String path, boolean e) throws Exception {
         assert ((path != null) && (m != null) && (ds != null));
@@ -220,7 +221,8 @@ public class ModelFolders {
      * Remove a folder belonging to the model (hopefully after it is closed). The method returns false if the model is
      * still open or if the model didn't have a folder.
      * 
-     * @param m
+     * @param m m
+     * @return true or false
      */
     public synchronized boolean remove(OntModel m) {
         assert (m != null);

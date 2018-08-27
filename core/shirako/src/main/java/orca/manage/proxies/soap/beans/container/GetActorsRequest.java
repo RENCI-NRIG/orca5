@@ -22,16 +22,16 @@ import orca.manage.beans.AuthTokenMng;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="auth" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/>
- *         &lt;element name="actorType" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="auth" type="{http://www.nicl.duke.edu/orca/manage/beans}authTokenMng"/&gt;
+ *         &lt;element name="actorType" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -74,7 +74,7 @@ public class GetActorsRequest {
 
     /**
      * Gets the value of the actorType property.
-     * 
+     * @return value of the actorType property
      */
     public int getActorType() {
         return actorType;
@@ -82,7 +82,7 @@ public class GetActorsRequest {
 
     /**
      * Sets the value of the actorType property.
-     * 
+     * @param value value of the actorType property
      */
     public void setActorType(int value) {
         this.actorType = value;

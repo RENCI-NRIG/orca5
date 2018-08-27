@@ -328,7 +328,7 @@ public class Authority extends Actor implements IAuthority {
     
     /**
      * Redeem all reservations.
-     * @param set
+     * @param set reservation set
      */
     public void redeem(final ReservationSet set){
         for (IReservation r: set) {

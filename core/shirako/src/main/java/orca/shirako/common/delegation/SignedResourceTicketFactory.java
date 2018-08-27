@@ -117,7 +117,7 @@ public class SignedResourceTicketFactory extends SimpleResourceTicketFactory
 	/**
 	 * Obtains the certificate of the specified actor.
 	 * @param holder actor identity
-	 * @return
+	 * @return Certificate
 	 */
 	protected Certificate getHolderCertificate(ID holder)
 	{

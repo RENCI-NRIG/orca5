@@ -296,7 +296,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
      * If the model of the element was not set in the constructor, this method will set it based on the model of the
      * resource that is passed in
      * 
-     * @param r
+     * @param r r
      */
     public void setResource(OntResource r) {
         if (r != null) {

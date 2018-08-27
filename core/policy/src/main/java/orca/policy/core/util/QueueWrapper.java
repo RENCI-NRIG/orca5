@@ -19,7 +19,7 @@ public interface QueueWrapper
 {
     /**
      * Return an Iterator
-     * @return
+     * @return Iterator
      */
     public Iterator<IBrokerReservation> iterator();
 
@@ -43,7 +43,7 @@ public interface QueueWrapper
 
     /**
      * See if the queue contains this element
-     * @param r
+     * @param r r
      * @return true if it contains the element, false otherwise
      */
     public boolean contains(IBrokerReservation r);

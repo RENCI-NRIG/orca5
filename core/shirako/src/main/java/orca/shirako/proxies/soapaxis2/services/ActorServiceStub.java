@@ -85,6 +85,9 @@
     }
    /**
     Constructor that takes in a configContext
+    @param configurationContext configurationContext
+    @param targetEndpoint targetEndpoint
+    @throws org.apache.axis2.AxisFault in case of error
     */
    public ActorServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext,
         java.lang.String targetEndpoint)
@@ -104,6 +107,7 @@ _serviceClient.getOptions().setTimeOutInMilliSeconds(1000000000);
     }
     /**
      * Default Constructor
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public ActorServiceStub() throws org.apache.axis2.AxisFault {
         
@@ -112,6 +116,8 @@ _serviceClient.getOptions().setTimeOutInMilliSeconds(1000000000);
     }
     /**
      * Constructor taking the target endpoint
+     * @param targetEndpoint targetEndpoint
+     * @throws org.apache.axis2.AxisFault in case of error
      */
     public ActorServiceStub(java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
         this(null,targetEndpoint);
@@ -119,9 +125,10 @@ _serviceClient.getOptions().setTimeOutInMilliSeconds(1000000000);
         
                     /**
                     * Auto generated method signature
-                    * @see orca.shirako.proxies.soapaxis2.services.ActorService#updateLease
-                        * @param param100
-                    
+                    * @param param100 param100
+                    * @param authToken authToken
+                    * @return orca.shirako.proxies.soapaxis2.services.UpdateLeaseResponse
+                    * @throws java.rmi.RemoteException in case of failure
                     */
                     public orca.shirako.proxies.soapaxis2.services.UpdateLeaseResponse updateLease(
                     orca.shirako.proxies.soapaxis2.services.UpdateLease param100, orca.security.AuthToken authToken) throws java.rmi.RemoteException
@@ -214,9 +221,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
             
                 /**
                 * Auto generated method signature for Asynchronous Invocations
-                * @see orca.shirako.proxies.soapaxis2.services.ActorService#startupdateLease
-                    * @param param100
-                
+                * @param param100 param100
+                * @param callback callback
+                * @param authToken authToken
+                * @throws java.rmi.RemoteException in case of failure
                 */
                 public  void startupdateLease(
                  orca.shirako.proxies.soapaxis2.services.UpdateLease param100,
@@ -270,9 +278,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
                 
                     /**
                     * Auto generated method signature
-                    * @see orca.shirako.proxies.soapaxis2.services.ActorService#updateTicket
-                        * @param param102
-                    
+                    * @param param102 param102
+                    * @param authToken authToken
+                    * @throws java.rmi.RemoteException in case of failure
+                    * @return orca.shirako.proxies.soapaxis2.services.UpdateTicketResponse
                     */
                     public orca.shirako.proxies.soapaxis2.services.UpdateTicketResponse updateTicket(
                     orca.shirako.proxies.soapaxis2.services.UpdateTicket param102, orca.security.AuthToken authToken) throws java.rmi.RemoteException
@@ -365,9 +374,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
             
                 /**
                 * Auto generated method signature for Asynchronous Invocations
-                * @see orca.shirako.proxies.soapaxis2.services.ActorService#startupdateTicket
-                    * @param param102
-                
+                * @param param102 param102
+                * @param callback callback
+                * @param authToken authToken
+                * @throws java.rmi.RemoteException in case of error
                 */
                 public  void startupdateTicket(
                  orca.shirako.proxies.soapaxis2.services.UpdateTicket param102,
@@ -421,9 +431,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
                 
                     /**
                     * Auto generated method signature
-                    * @see orca.shirako.proxies.soapaxis2.services.ActorService#query
-                        * @param param104
-                    
+                    * @param param104 param104
+                    * @param authToken authToken
+                    * @return orca.shirako.proxies.soapaxis2.services.QueryResponse
+                    * @throws java.rmi.RemoteException in case of failure                    
                     */
                     public orca.shirako.proxies.soapaxis2.services.QueryResponse query(
                     orca.shirako.proxies.soapaxis2.services.Query param104, orca.security.AuthToken authToken) throws java.rmi.RemoteException
@@ -516,9 +527,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
             
                 /**
                 * Auto generated method signature for Asynchronous Invocations
-                * @see orca.shirako.proxies.soapaxis2.services.ActorService#startquery
-                    * @param param104
-                
+                * @param param104 param104
+                * @param callback callback
+                * @param authToken authToken
+                * @throws java.rmi.RemoteException in case of error
                 */
                 public  void startquery(
                  orca.shirako.proxies.soapaxis2.services.Query param104,
@@ -572,9 +584,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
                 
                     /**
                     * Auto generated method signature
-                    * @see orca.shirako.proxies.soapaxis2.services.ActorService#failedRPC
-                        * @param param106
-                    
+                    * @param param106 param106
+                    * @param authToken authToken
+                    * @return orca.shirako.proxies.soapaxis2.services.FailedRPCResponse
+                    * @throws java.rmi.RemoteException in case of error
                     */
                     public orca.shirako.proxies.soapaxis2.services.FailedRPCResponse failedRPC(
                     orca.shirako.proxies.soapaxis2.services.FailedRPC param106, orca.security.AuthToken authToken) throws java.rmi.RemoteException
@@ -667,9 +680,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
             
                 /**
                 * Auto generated method signature for Asynchronous Invocations
-                * @see orca.shirako.proxies.soapaxis2.services.ActorService#startfailedRPC
-                    * @param param106
-                
+                * @param param106 param106
+                * @param callback callback
+                * @param authToken authToken
+                * @throws java.rmi.RemoteException in case of failure
                 */
                 public  void startfailedRPC(
                  orca.shirako.proxies.soapaxis2.services.FailedRPC param106,
@@ -723,9 +737,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
                 
                     /**
                     * Auto generated method signature
-                    * @see orca.shirako.proxies.soapaxis2.services.ActorService#queryResult
-                        * @param param108
-                    
+                    * @param param108 param108
+                    * @param authToken authToken
+                    * @return orca.shirako.proxies.soapaxis2.services.QueryResultResponse
+                    * @throws java.rmi.RemoteException in case of failure
                     */
                     public orca.shirako.proxies.soapaxis2.services.QueryResultResponse queryResult(
                     orca.shirako.proxies.soapaxis2.services.QueryResult param108, orca.security.AuthToken authToken) throws java.rmi.RemoteException
@@ -818,9 +833,10 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
             
                 /**
                 * Auto generated method signature for Asynchronous Invocations
-                * @see orca.shirako.proxies.soapaxis2.services.ActorService#startqueryResult
-                    * @param param108
-                
+                * @param param108 param108
+                * @param callback callback
+                * @param authToken authToken
+                * @throws java.rmi.RemoteException in case of failure
                 */
                 public  void startqueryResult(
                  orca.shirako.proxies.soapaxis2.services.QueryResult param108,
@@ -874,6 +890,8 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
                 
        /**
         *  A utility method that copies the namepaces from the SOAPEnvelope
+        *  @param env SOAPEnvelope
+        *  @return java.util.Map
         */
        private java.util.Map getEnvelopeNamespaces(org.apache.axiom.soap.SOAPEnvelope env){
         java.util.Map returnMap = new java.util.HashMap();
@@ -1017,6 +1035,8 @@ orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext,
                         
         /**
         *  get the default envelope
+        *  @param factory SOAPFactory
+        *  @return SOAPEnvelope
         */
         private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory){
         return factory.getDefaultEnvelope();

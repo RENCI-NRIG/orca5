@@ -21,7 +21,7 @@ public interface Initializable
     /**
      * Initializes the object.
      *
-     * @throws Exception if initialization fails
+     * @throws OrcaException if initialization fails
      */
     public void initialize() throws OrcaException;
 }

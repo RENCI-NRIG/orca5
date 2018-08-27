@@ -24,6 +24,7 @@ public interface IKernelServiceManagerReservation extends IKernelClientReservati
      * Invoked internally before processing joins on an arriving initial lease
      * for a reservation. This gives subclasses an opportunity to manipulate
      * the property list or other attributes prior to the join. void.
+     * @throws Exception in case of error
      */
     public void prepareJoin() throws Exception;
 
@@ -32,6 +33,7 @@ public interface IKernelServiceManagerReservation extends IKernelClientReservati
      * Invoked internally before any initial redeem operation on a
      * reservation. This gives subclasses an opportunity to manipulate the
      * property list or other attributes prior to the redeem.
+     * @throws Exception in case of error
      */
     public void prepareRedeem() throws Exception;
 

@@ -116,7 +116,7 @@ public interface IPolicy extends Initializable, Persistable, Recoverable {
      * physical machines, currency, etc.
      * <p>
      * <b>Note:</b> For an authority resources are released using the
-     * {@link #IAuthorityPolicy.release(ResourceSet)} method. Authority policy
+     * {@link IAuthorityPolicy#release(ResourceSet)} method. Authority policy
      * implementations should not consider the resources of the passed
      * reservation as released. The release will take place once all
      * configuration actions complete.
@@ -125,9 +125,8 @@ public interface IPolicy extends Initializable, Persistable, Recoverable {
      * @param reservation
      *            closed reservation
      * 
-     * @throws Exception
      * 
-     * @see IAuthorityPolicy.release(ResourceSet)
+     * @see IAuthorityPolicy#release(ResourceSet)
      */
     public void closed(IReservation reservation);
 
@@ -185,7 +184,7 @@ public interface IPolicy extends Initializable, Persistable, Recoverable {
      * Post recovery entry point. This method will be invoked once all revisit
      * operations are complete and the actor is ready to operate normally.
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void reset() throws Exception;
 
@@ -200,6 +199,7 @@ public interface IPolicy extends Initializable, Persistable, Recoverable {
      * 
      * @param reservation
      *            reservation being recovered
+     * @throws Exception in case of error
      */
     public void revisit(IReservation reservation) throws Exception;
 
@@ -228,7 +228,7 @@ public interface IPolicy extends Initializable, Persistable, Recoverable {
     /**
      * Returns the globally unique identifier of this policy object instance.
      * 
-     * @return
+     * @return guid
      */
     public ID getGuid();
 }

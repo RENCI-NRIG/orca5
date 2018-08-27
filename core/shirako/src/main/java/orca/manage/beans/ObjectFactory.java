@@ -38,7 +38,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ResultMng }
-     * 
+     * @return instance of result
      */
     public ResultMng createResultMng() {
         return new ResultMng();
@@ -47,6 +47,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultEventMng }
      * 
+     * @return instance of result event
      */
     public ResultEventMng createResultEventMng() {
         return new ResultEventMng();
@@ -55,6 +56,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ReservationStateMng }
      * 
+     * @return instance of reservation state 
      */
     public ReservationStateMng createReservationStateMng() {
         return new ReservationStateMng();
@@ -63,6 +65,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultActorMng }
      * 
+     * @return instance of result actor 
      */
     public ResultActorMng createResultActorMng() {
         return new ResultActorMng();
@@ -71,6 +74,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultMachineMng }
      * 
+     * @return instance of result machine 
      */
     public ResultMachineMng createResultMachineMng() {
         return new ResultMachineMng();
@@ -79,6 +83,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AuthorityBasePolicyControlMng }
      * 
+     * @return instance of authority base plicy control 
      */
     public AuthorityBasePolicyControlMng createAuthorityBasePolicyControlMng() {
         return new AuthorityBasePolicyControlMng();
@@ -87,6 +92,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PropertyMng }
      * 
+     * @return instance of property 
      */
     public PropertyMng createPropertyMng() {
         return new PropertyMng();
@@ -95,6 +101,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultUserMng }
      * 
+     * @return instance of result user 
      */
     public ResultUserMng createResultUserMng() {
         return new ResultUserMng();
@@ -103,6 +110,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PluginMng }
      * 
+     * @return instance of plugin 
      */
     public PluginMng createPluginMng() {
         return new PluginMng();
@@ -111,6 +119,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ReservationMng }
      * 
+     * @return instance of reservation 
      */
     public ReservationMng createReservationMng() {
         return new ReservationMng();
@@ -119,6 +128,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link AuthTokenMng }
      * 
+     * @return instance of auth token 
      */
     public AuthTokenMng createAuthTokenMng() {
         return new AuthTokenMng();
@@ -127,6 +137,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link MachineMng }
      * 
+     * @return instance of machine 
      */
     public MachineMng createMachineMng() {
         return new MachineMng();
@@ -135,6 +146,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link StorageServerMng }
      * 
+     * @return instance of storage server 
      */
     public StorageServerMng createStorageServerMng() {
         return new StorageServerMng();
@@ -143,6 +155,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ControllerMng }
      * 
+     * @return instance of controller 
      */
     public ControllerMng createControllerMng() {
         return new ControllerMng();
@@ -151,6 +164,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PropertiesMng }
      * 
+     * @return instance of properties 
      */
     public PropertiesMng createPropertiesMng() {
         return new PropertiesMng();
@@ -159,6 +173,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link UserMng }
      * 
+     * @return instance of user 
      */
     public UserMng createUserMng() {
         return new UserMng();
@@ -167,6 +182,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultPackageMng }
      * 
+     * @return instance of result package 
      */
     public ResultPackageMng createResultPackageMng() {
         return new ResultPackageMng();
@@ -175,6 +191,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultCertificateMng }
      * 
+     * @return instance of result certificate 
      */
     public ResultCertificateMng createResultCertificateMng() {
         return new ResultCertificateMng();
@@ -183,6 +200,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link LeaseReservationMng }
      * 
+     * @return instance of lease reservation 
      */
     public LeaseReservationMng createLeaseReservationMng() {
         return new LeaseReservationMng();
@@ -191,6 +209,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultSliceMng }
      * 
+     * @return instance of result slice 
      */
     public ResultSliceMng createResultSliceMng() {
         return new ResultSliceMng();
@@ -198,6 +217,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ConfigMappingMng }
+     * @return instance of config mapping 
      * 
      */
     public ConfigMappingMng createConfigMappingMng() {
@@ -207,6 +227,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link StorageServerTypeMng }
      * 
+     * @return instance of storage server type 
      */
     public StorageServerTypeMng createStorageServerTypeMng() {
         return new StorageServerTypeMng();
@@ -215,6 +236,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ProxyMng }
      * 
+     * @return instance of proxy 
      */
     public ProxyMng createProxyMng() {
         return new ProxyMng();
@@ -223,6 +245,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ProtocolProxyMng }
      * 
+     * @return instance of protocol proxy 
      */
     public ProtocolProxyMng createProtocolProxyMng() {
         return new ProtocolProxyMng();
@@ -231,6 +254,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultActorDescriptorMng }
      * 
+     * @return instance of result actor descriptor 
      */
     public ResultActorDescriptorMng createResultActorDescriptorMng() {
         return new ResultActorDescriptorMng();
@@ -239,6 +263,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PoolInfoMng }
      * 
+     * @return instance of pool info 
      */
     public PoolInfoMng createPoolInfoMng() {
         return new PoolInfoMng();
@@ -246,6 +271,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ResultStringsMng }
+     * @return instance of result string 
      * 
      */
     public ResultStringsMng createResultStringsMng() {
@@ -254,6 +280,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LeaseReservationStateMng }
+     * @return instance of lease reservation state 
      * 
      */
     public LeaseReservationStateMng createLeaseReservationStateMng() {
@@ -262,6 +289,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ResultPoolInfoMng }
+     * @return instance 
      * 
      */
     public ResultPoolInfoMng createResultPoolInfoMng() {
@@ -270,6 +298,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ActorDescriptorMng }
+     * @return instance 
      * 
      */
     public ActorDescriptorMng createActorDescriptorMng() {
@@ -278,6 +307,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LogicalMachineMng }
+     * @return instance 
      * 
      */
     public LogicalMachineMng createLogicalMachineMng() {
@@ -287,6 +317,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResourceCalendarMng }
      * 
+     * @return instance 
      */
     public ResourceCalendarMng createResourceCalendarMng() {
         return new ResourceCalendarMng();
@@ -295,6 +326,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultIdControlInventoryMng }
      * 
+     * @return instance 
      */
     public ResultIdControlInventoryMng createResultIdControlInventoryMng() {
         return new ResultIdControlInventoryMng();
@@ -303,6 +335,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ReservationStateTransitionEventMng }
      * 
+     * @return instance 
      */
     public ReservationStateTransitionEventMng createReservationStateTransitionEventMng() {
         return new ReservationStateTransitionEventMng();
@@ -311,6 +344,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultBooleanMng }
      * 
+     * @return instance 
      */
     public ResultBooleanMng createResultBooleanMng() {
         return new ResultBooleanMng();
@@ -319,6 +353,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link LogicalMachineCalendarMng }
      * 
+     * @return instance 
      */
     public LogicalMachineCalendarMng createLogicalMachineCalendarMng() {
         return new LogicalMachineCalendarMng();
@@ -327,6 +362,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PortalPluginDescriptorMng }
      * 
+     * @return instance 
      */
     public PortalPluginDescriptorMng createPortalPluginDescriptorMng() {
         return new PortalPluginDescriptorMng();
@@ -335,6 +371,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultNodeMng }
      * 
+     * @return instance 
      */
     public ResultNodeMng createResultNodeMng() {
         return new ResultNodeMng();
@@ -343,6 +380,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultProxyMng }
      * 
+     * @return instance 
      */
     public ResultProxyMng createResultProxyMng() {
         return new ResultProxyMng();
@@ -351,6 +389,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link SliceMng }
      * 
+     * @return instance 
      */
     public SliceMng createSliceMng() {
         return new SliceMng();
@@ -359,6 +398,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ClientMng }
      * 
+     * @return instance 
      */
     public ClientMng createClientMng() {
         return new ClientMng();
@@ -367,6 +407,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultStorageServerTypeMng }
      * 
+     * @return instance 
      */
     public ResultStorageServerTypeMng createResultStorageServerTypeMng() {
         return new ResultStorageServerTypeMng();
@@ -375,6 +416,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultReservationStateMng }
      * 
+     * @return instance 
      */
     public ResultReservationStateMng createResultReservationStateMng() {
         return new ResultReservationStateMng();
@@ -383,6 +425,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ProtocolProxiesMng }
      * 
+     * @return instance 
      */
     public ProtocolProxiesMng createProtocolProxiesMng() {
         return new ProtocolProxiesMng();
@@ -391,6 +434,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link UnitMng }
      * 
+     * @return instance 
      */
     public UnitMng createUnitMng() {
         return new UnitMng();
@@ -399,6 +443,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultAuthorityBasePolicyControlMng }
      * 
+     * @return instance 
      */
     public ResultAuthorityBasePolicyControlMng createResultAuthorityBasePolicyControlMng() {
         return new ResultAuthorityBasePolicyControlMng();
@@ -407,6 +452,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultControlerMng }
      * 
+     * @return instance 
      */
     public ResultControlerMng createResultControlerMng() {
         return new ResultControlerMng();
@@ -414,6 +460,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlConfigMng }
+     * @return instance 
      * 
      */
     public XmlConfigMng createXmlConfigMng() {
@@ -423,6 +470,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PluginCreateMng }
      * 
+     * @return instance 
      */
     public PluginCreateMng createPluginCreateMng() {
         return new PluginCreateMng();
@@ -431,6 +479,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResourceCalendarEntryMng }
      * 
+     * @return instance 
      */
     public ResourceCalendarEntryMng createResourceCalendarEntryMng() {
         return new ResourceCalendarEntryMng();
@@ -439,6 +488,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultReservationMng }
      * 
+     * @return instance 
      */
     public ResultReservationMng createResultReservationMng() {
         return new ResultReservationMng();
@@ -447,6 +497,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultClientMng }
      * 
+     * @return instance 
      */
     public ResultClientMng createResultClientMng() {
         return new ResultClientMng();
@@ -455,6 +506,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link NodeMng }
      * 
+     * @return instance 
      */
     public NodeMng createNodeMng() {
         return new NodeMng();
@@ -463,6 +515,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ReservationPredecessorMng }
      * 
+     * @return instance 
      */
     public ReservationPredecessorMng createReservationPredecessorMng() {
         return new ReservationPredecessorMng();
@@ -471,6 +524,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link TermMng }
      * 
+     * @return instance 
      */
     public TermMng createTermMng() {
         return new TermMng();
@@ -479,6 +533,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IdControlInventoryMng }
      * 
+     * @return instance 
      */
     public IdControlInventoryMng createIdControlInventoryMng() {
         return new IdControlInventoryMng();
@@ -487,6 +542,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultUnitMng }
      * 
+     * @return instance 
      */
     public ResultUnitMng createResultUnitMng() {
         return new ResultUnitMng();
@@ -495,6 +551,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PluginsMng }
      * 
+     * @return instance 
      */
     public PluginsMng createPluginsMng() {
         return new PluginsMng();
@@ -503,6 +560,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link CertificateMng }
      * 
+     * @return instance 
      */
     public CertificateMng createCertificateMng() {
         return new CertificateMng();
@@ -511,6 +569,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ActorMng }
      * 
+     * @return instance 
      */
     public ActorMng createActorMng() {
         return new ActorMng();
@@ -519,6 +578,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ActorCreateMng }
      * 
+     * @return instance 
      */
     public ActorCreateMng createActorCreateMng() {
         return new ActorCreateMng();
@@ -527,6 +587,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link TicketReservationMng }
      * 
+     * @return instance 
      */
     public TicketReservationMng createTicketReservationMng() {
         return new TicketReservationMng();
@@ -535,6 +596,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link GenericEventMng }
      * 
+     * @return instance 
      */
     public GenericEventMng createGenericEventMng() {
         return new GenericEventMng();
@@ -543,6 +605,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PackageMng }
      * 
+     * @return instance 
      */
     public PackageMng createPackageMng() {
         return new PackageMng();
@@ -551,6 +614,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultXmlConfigMng }
      * 
+     * @return instance 
      */
     public ResultXmlConfigMng createResultXmlConfigMng() {
         return new ResultXmlConfigMng();
@@ -559,6 +623,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultStorageServerMng }
      * 
+     * @return instance 
      */
     public ResultStorageServerMng createResultStorageServerMng() {
         return new ResultStorageServerMng();
@@ -567,6 +632,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ListMng }
      * 
+     * @return instance 
      */
     public ListMng createListMng() {
         return new ListMng();
@@ -575,6 +641,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link IdControlInventoryItemMng }
      * 
+     * @return instance 
      */
     public IdControlInventoryItemMng createIdControlInventoryItemMng() {
         return new IdControlInventoryItemMng();
@@ -583,6 +650,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultBytesMng }
      * 
+     * @return instance 
      */
     public ResultBytesMng createResultBytesMng() {
         return new ResultBytesMng();
@@ -591,6 +659,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultPluginMng }
      * 
+     * @return instance 
      */
     public ResultPluginMng createResultPluginMng() {
         return new ResultPluginMng();
@@ -599,6 +668,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link ResultStringMng }
      * 
+     * @return instance 
      */
     public ResultStringMng createResultStringMng() {
         return new ResultStringMng();

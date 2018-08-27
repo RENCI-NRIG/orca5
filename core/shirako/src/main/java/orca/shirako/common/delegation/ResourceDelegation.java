@@ -169,7 +169,7 @@ public class ResourceDelegation
 	/**
      * Returns a hash map of all actor-local bins referenced by this delegation.
      * The map indexes bins by guid.
-     * @return
+     * @return hash map
      */
     public HashMap<ID, ResourceBin> getMap()
     {

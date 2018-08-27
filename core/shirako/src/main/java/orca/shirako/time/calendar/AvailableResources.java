@@ -45,6 +45,7 @@ public class AvailableResources implements Comparable<AvailableResources>
          * @param start start time
          * @param end end time
          * @param units number of units
+         * @param vector resource vector 
          */
     public AvailableResources(final long start, final long end, final int units, final ResourceVector vector)
     {

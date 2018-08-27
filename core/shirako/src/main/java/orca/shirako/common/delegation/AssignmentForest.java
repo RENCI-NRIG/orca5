@@ -78,7 +78,7 @@ public class AssignmentForest
 
     /**
      * Returns the roots of the forest.
-     * @return
+     * @return AssignmentForestInnerNode
      */
     public AssignmentForestInnerNode[] getRoots()
     {
@@ -87,7 +87,7 @@ public class AssignmentForest
 
     /**
      * Returns all inventory nodes.
-     * @return
+     * @return AssignmentForestInnerNode
      */
     public AssignmentForestInnerNode[] getInventory()
     {
@@ -97,7 +97,7 @@ public class AssignmentForest
     /**
      * Adds an allocated node to the forest. Note: the node should have already
      * been added to its parent's list of children.
-     * @param node
+     * @param node node
      */
     public void addAllocatedNode(AssignmentForestNode node)
     {
@@ -108,7 +108,7 @@ public class AssignmentForest
     /**
      * Adds an inventory node. Note: the node should have already been added to
      * its parent's list of children.
-     * @param node
+     * @param node node 
      */
     public void addInventoryNode(AssignmentForestInnerNode node)
     {
@@ -123,8 +123,9 @@ public class AssignmentForest
 
     /**
      * Adds a source ticket to the forest.
-     * @param ticket
-     * @throws Exception
+     * @param ticket ticket
+     * @param proxy proxy
+     * @throws Exception in case of error
      */
     public void addSourceTicket(ResourceTicket ticket, IAuthorityProxy proxy) throws Exception
     {
@@ -133,8 +134,8 @@ public class AssignmentForest
 
     /**
      * Adds an already allocated ticket to the forest.
-     * @param ticket
-     * @throws Exception
+     * @param ticket ticket
+     * @throws Exception in case of error
      */
     public void addAllocatedTicket(ResourceTicket ticket) throws Exception
     {
@@ -262,7 +263,7 @@ public class AssignmentForest
      * @param binID starting bin guid
      * @param bins hashmap of bins
      * @return array of <code>ResourceBin</code>-s.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected ResourceBin[] getBinPath(ID binID, HashMap<ID, ResourceBin> bins) throws Exception
     {
@@ -282,9 +283,9 @@ public class AssignmentForest
 
     /**
      * Checks if child was created from parent using a split operation.
-     * @param child
-     * @param parent
-     * @return
+     * @param child child
+     * @param parent parent
+     * @return true or false
      */
     protected boolean isSplit(ResourceBin child, ResourceBin parent)
     {
@@ -297,9 +298,9 @@ public class AssignmentForest
 
     /**
      * Checks if child was created from parent using an extract operation.
-     * @param child
-     * @param parent
-     * @return
+     * @param child child
+     * @param parent parent
+     * @return true of false
      */
     protected boolean isExtracted(ResourceBin child, ResourceBin parent)
     {
@@ -311,7 +312,7 @@ public class AssignmentForest
 
     /**
      * Returns the resource type of this forest.
-     * @return
+     * @return resourceType
      */
     public ResourceType getResourceType()
     {
@@ -320,7 +321,7 @@ public class AssignmentForest
 
     /**
      * Returns the properties for the resources represented by this forest.
-     * @return
+     * @return props
      */
     public Properties getProperties()
     {

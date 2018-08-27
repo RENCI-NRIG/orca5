@@ -48,6 +48,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 *            resource set describing the resources to claim
 	 * 
 	 * @return DOCUMENT ME!
+	 * @throws Exception in case of failure
 	 */
 	public IClientReservation claim(ReservationID reservationID, ResourceSet resources) throws Exception;
 
@@ -63,6 +64,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 *            broker proxy
 	 * 
 	 * @return DOCUMENT ME!
+     * @throws Exception in case of failure
 	 */
 	public IClientReservation claim(ReservationID reservationID, ResourceSet resources, IBrokerProxy broker)
 			throws Exception;
@@ -82,6 +84,7 @@ public interface IClientActor extends IActor, IClientPublic {
 	 *            DOCUMENT ME!
 	 * 
 	 * @return DOCUMENT ME!
+     * @throws Exception in case of failure
 	 */
 	public IClientReservation claim(ReservationID reservationID, ResourceSet resources, ISlice slice,
 			IBrokerProxy broker) throws Exception;
@@ -94,9 +97,9 @@ public interface IClientActor extends IActor, IClientPublic {
 	 * @param reservation
 	 *            reservation to extend the ticket for
 	 * 
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 * 
-	 * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
+	 * @see orca.shirako.api.IReservationOperations#register(IReservation)
 	 */
 	public void extendTicket(IClientReservation reservation) throws Exception;
 
@@ -149,9 +152,9 @@ public interface IClientActor extends IActor, IClientPublic {
 	 * @param reservation
 	 *            reservation to obtain a ticket for
 	 * 
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 * 
-	 * @see IReservationOperations#register(orca.shirako.kernel.Reservation)
+	 * @see orca.shirako.api.IReservationOperations#register(IReservation)
 	 */
 	public void ticket(IClientReservation reservation) throws Exception;
 
@@ -173,7 +176,7 @@ public interface IClientActor extends IActor, IClientPublic {
      *
      * @param reservationID reservationID for the reservation to modify
      * @param modifyProperties property list for modify
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void modify(ReservationID reservationID, Properties modifyProperties) throws Exception;
 	

@@ -19,9 +19,9 @@ public class XCatGenerateBashFileModTask extends XCatGenerateBashFileBaseTask {
     }
 
     /**
-     * Returns modify.<modindex> prefix of property names
+     * Returns modify.modindex prefix of property names
      * 
-     * @return
+     * @return String
      */
     protected String modifyPrefix() {
         return "modify." + modifyIndex;

@@ -19,17 +19,17 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="resourceCalendarEntryMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="resourceCalendarEntryMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -48,7 +48,7 @@ public class ResourceCalendarEntryMng {
 
     /**
      * Gets the value of the start property.
-     * 
+     * @return value of the start property
      */
     public long getStart() {
         return start;
@@ -56,7 +56,7 @@ public class ResourceCalendarEntryMng {
 
     /**
      * Sets the value of the start property.
-     * 
+     * @param value value of the start property
      */
     public void setStart(long value) {
         this.start = value;
@@ -64,7 +64,7 @@ public class ResourceCalendarEntryMng {
 
     /**
      * Gets the value of the end property.
-     * 
+     * @return value of the end property
      */
     public long getEnd() {
         return end;
@@ -72,7 +72,7 @@ public class ResourceCalendarEntryMng {
 
     /**
      * Sets the value of the end property.
-     * 
+     * @param value value of the end property
      */
     public void setEnd(long value) {
         this.end = value;
@@ -80,7 +80,7 @@ public class ResourceCalendarEntryMng {
 
     /**
      * Gets the value of the units property.
-     * 
+     * @return value of the units property
      */
     public long getUnits() {
         return units;
@@ -88,7 +88,7 @@ public class ResourceCalendarEntryMng {
 
     /**
      * Sets the value of the units property.
-     * 
+     * @param value value of the units property
      */
     public void setUnits(long value) {
         this.units = value;

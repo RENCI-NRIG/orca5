@@ -51,7 +51,7 @@ public class UserSet
 
     /**
      * Removes the record for the specifed user from the cache (if present)
-     * @param userName
+     * @param userName user name
      */
     public void flushUser(String userName)
     {
@@ -62,8 +62,8 @@ public class UserSet
 
     /**
      * Obtains the specified user record
-     * @param userName
-     * @return
+     * @param userName user name
+     * @return specific user
      */
     public User getUser(String userName)
     {
@@ -101,8 +101,8 @@ public class UserSet
 
     /**
      * Obtains the specified user record from the database
-     * @param userName
-     * @return
+     * @param userName user name
+     * @return specific user
      */
     protected User getUserDB(String userName)
     {

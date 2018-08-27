@@ -96,7 +96,7 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Performs recovery for this manager object
 	 * 
-	 * @throws Exception
+	 * @throws Exception in case of error
 	 */
 	@Override
 	protected void recover() throws Exception {
@@ -118,7 +118,7 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Attach the actor to this wrapper. Called at construction time.
 	 * 
-	 * @param actor
+	 * @param actor actor
 	 */
 	public void setActor(IActor actor) {
 		if (this.actor == null) {
@@ -137,6 +137,8 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 
 	/**
 	 * Retrieves all slices
+         * @param caller caller auth token
+         * @return return all slices
 	 */
 	public ResultSliceMng getSlices(AuthToken caller) {
 		ResultSliceMng result = new ResultSliceMng();
@@ -175,7 +177,8 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	 * Retrieves the specified slice
 	 * 
 	 * @param sliceID sliceName
-	 * @return
+	 * @param caller auth token for caller 
+	 * @return return slice
 	 */
 	public ResultSliceMng getSlice(SliceID sliceID, AuthToken caller) {
 		ResultSliceMng result = new ResultSliceMng();
@@ -262,7 +265,7 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	 * 
 	 * @param sliceID slice identifier.
 	 * @param caller caller identity
-	 * @return
+	 * @return result
 	 */
 	public ResultMng removeSlice(final SliceID sliceID, final AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -294,7 +297,8 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	 * Updates the specified slice
 	 * 
 	 * @param slice Slice description
-	 * @return
+	 * @param caller caller auth token 
+	 * @return result
 	 */
 	public ResultMng updateSlice(final SliceMng slice, AuthToken caller) {
 		final ResultMng result = new ResultMng();
@@ -336,7 +340,8 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Retrieves all reservations
 	 * 
-	 * @return
+	 * @param caller auth token
+	 * @return result
 	 */
 	public ResultReservationMng getReservations(AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -374,7 +379,9 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Retrieves all reservations
 	 * 
-	 * @return
+	 * @param state state
+	 * @param caller caller auth token
+	 * @return reservations
 	 */
 	public ResultReservationMng getReservations(int state, AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -412,8 +419,9 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Retrieves all reservations in the specified slice
 	 * 
-	 * @param sliceName Slice name
-	 * @return
+	 * @param sliceID slice id
+         * @param caller auth token for the caller 
+	 * @return returns the reservation
 	 */
 	public ResultReservationMng getReservations(SliceID sliceID, AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -451,8 +459,10 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Retrieves all reservations in the specified slice
 	 * 
-	 * @param sliceName Slice name
-	 * @return
+	 * @param sliceID Slice id 
+	 * @param state slice state
+	 * @param caller caller auth token 
+	 * @return returns reservation for specified slice
 	 */
 	public ResultReservationMng getReservations(SliceID sliceID, int state, AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -492,7 +502,8 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	 * Retrieves the specified reservation
 	 * 
 	 * @param reservationID reservation identifier
-	 * @return
+	 * @param caller caller auth token 
+	 * @return returns specified reservation
 	 */
 	public ResultReservationMng getReservation(ReservationID reservationID, AuthToken caller) {
 		ResultReservationMng result = new ResultReservationMng();
@@ -533,8 +544,8 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	 * Retrieves the specified reservation from the database
 	 * 
 	 * @param reservationID reservation identifier
-	 * @return
-	 * @throws Exception
+	 * @return returns specific reservation
+	 * @throws Exception in case of error
 	 */
 	protected IReservation getReservationFromDatabase(ReservationID reservationID) throws Exception {
 		IReservation r = null;
@@ -554,7 +565,8 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	 * Removes the specified reservation
 	 * 
 	 * @param reservationID reservation identifier
-	 * @return
+	 * @param caller caller auth token 
+	 * @return result
 	 */
 	public ResultMng removeReservation(final ReservationID reservationID, final AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -583,9 +595,9 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Closes the specified reservation
 	 * 
-	 * @param sliceName Slice name
 	 * @param reservationID Reservation id
-	 * @return
+	 * @param caller auth token for the caller
+	 * @return result
 	 */
 	public ResultMng closeReservation(final ReservationID reservationID, final AuthToken caller) {
 		ResultMng result = new ResultMng();
@@ -676,6 +688,7 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 
 	/**
 	 * Returns the actor associated with this wrapper
+	 * @return returns the actor
 	 */
 	public IActor getActor() {
 		return actor;
@@ -684,7 +697,7 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Returns the class of the policy implementation
 	 * 
-	 * @return
+	 * @return policy class
 	 */
 	public String getPolicyClass() {
 		IPolicy policy = actor.getPolicy();
@@ -872,8 +885,9 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 
 	/**
 	 * Retrieves the state of the specified reservation
-	 * 
-	 * @return
+	 * @param rid reservation id
+	 * @param caller caller auth token
+	 * @return reservation state
 	 */
 	public ResultReservationStateMng getReservationState(ReservationID rid, AuthToken caller) {
 		ResultReservationStateMng result = new ResultReservationStateMng();
@@ -909,7 +923,9 @@ public class ActorManagementObject extends ManagementObject implements IActorMan
 	/**
 	 * Retrieves the state of the specified reservation
 	 * 
-	 * @return
+	 * @param rids list of reservation id
+	 * @param caller caller auth token
+	 * @return reservation state
 	 */
 	public ResultReservationStateMng getReservationState(List<ReservationID> rids, AuthToken caller) {
 		ResultReservationStateMng result = new ResultReservationStateMng();

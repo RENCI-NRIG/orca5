@@ -69,7 +69,7 @@ public class ReservationStates
      *
      * @param joining pending state
      *
-     * @return
+     * @return String
      */
     public static String getJoiningName(int joining)
     {
@@ -85,7 +85,7 @@ public class ReservationStates
      *
      * @param pending pending state
      *
-     * @return
+     * @return String
      */
     public static String getPendingName(int pending)
     {
@@ -101,7 +101,7 @@ public class ReservationStates
      *
      * @param state state
      *
-     * @return
+     * @return String
      */
     public static String getStateName(int state)
     {

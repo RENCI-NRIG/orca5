@@ -67,8 +67,8 @@ public class KeyMasterClient {
     /**
      * Calls the registerAuthorityKey function (plays the KeyMaster protocol).
      * 
-     * @return
-     * @throws Exception
+     * @return int
+     * @throws Exception in case of error
      */
     public int callRegisterAuthorityKey() throws Exception {
         // load the Authority Key
@@ -170,8 +170,8 @@ public class KeyMasterClient {
     /**
      * Calls the getServiceKey function (used for recovery).
      * 
-     * @return
-     * @throws Exception
+     * @return int
+     * @throws Exception in case of error
      */
     public int callGetServiceKey() throws Exception {
         GetServiceKeyElement gske = new GetServiceKeyElement();
@@ -212,7 +212,7 @@ public class KeyMasterClient {
     /**
      * Creates the message to be sent to the KeyMaster.
      * 
-     * @return
+     * @return byte[]
      */
     private byte[] createKeyMasterMessage() {
         // create an xml document containing "nodeIP", "timestamp",
@@ -249,8 +249,8 @@ public class KeyMasterClient {
     /**
      * Creates a KeyMasterMessage object from the KeyMaster reply.
      * 
-     * @param decryptBytesDoc
-     * @return
+     * @param decryptBytesDoc decryptBytesDoc
+     * @return KeyMasterMessage
      */
     private KeyMasterMessage createKeyMasterReplyMessage(byte[] decryptBytesDoc) {
         KeyMasterMessage kmm = new KeyMasterMessage();
@@ -261,8 +261,8 @@ public class KeyMasterClient {
 
     /**
      * Prints a KeyMasterMessage represented in byte[].
-     * 
-     * @param messageByte
+     *  
+     * @param messageByte messageByte
      */
     private void printKeyMasterMessage(byte[] messageByte) {
         String str = new String(messageByte);
@@ -402,8 +402,8 @@ public class KeyMasterClient {
     /**
      * Helper function used to compute the hexadecimal representation of a digest.
      * 
-     * @param digest
-     * @return
+     * @param digest digest
+     * @return String
      */
     private String toHexString(byte[] digest) {
         char[] hexValues = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -427,8 +427,8 @@ public class KeyMasterClient {
     /**
      * Generates a certificate from byte encoding.
      * 
-     * @param certificateEncoding
-     * @return
+     * @param certificateEncoding certificateEncoding
+     * @return Certificate
      */
     private Certificate generateCertificate(byte[] certificateEncoding) {
         ByteArrayInputStream inStream = new ByteArrayInputStream(certificateEncoding);

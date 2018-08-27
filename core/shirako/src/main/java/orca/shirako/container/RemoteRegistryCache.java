@@ -157,7 +157,7 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/**
 	 * provide a list of guids known to the cache
-	 * @return
+	 * @return list of guids known to the cache
 	 */
 	public List<String> knownGuids() {
 		synchronized(cache) {
@@ -167,8 +167,8 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/**
 	 * manually add a local entry to cache
-	 * @param guid
-	 * @param entry
+	 * @param guid guid
+	 * @param entry entry
 	 */
 	public void addLocalCacheEntry(String guid, Map<String, String> entry) {
 		if ((guid == null) || (entry == null)) 
@@ -184,7 +184,7 @@ public class RemoteRegistryCache extends TimerTask {
 	/**
 	 * If the entry does not have location and cert, remove it -
 	 * we will have to ask the registry again
-	 * @param guid
+	 * @param guid guid
 	 */
 	public void checkToRemoveEntry(String guid) {
 		if (guid == null)
@@ -200,8 +200,8 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/**
 	 * Add a remote entry manually (e.g. based on vertex info)
-	 * @param guid
-	 * @param entry
+	 * @param guid guid
+	 * @param entry entry
 	 */
 	public void addPartialCacheEntry(String guid, Map<String, String> entry) {
 		if ((guid == null) || (entry == null)) 
@@ -213,7 +213,7 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/** 
 	 * Remove entry of an actor
-	 * @param guid
+	 * @param guid guid
 	 */
 	public void removeCacheEntry(String guid) {
 		synchronized(cache) {
@@ -223,8 +223,8 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/**
 	 * return an entry if it exists (safe copy)
-	 * @param guid
-	 * @return
+	 * @param guid guid
+	 * @return an entry if it exists (safe copy)
 	 */
 	public Map<String, String> getCacheEntryCopy(String guid) {
 		Map<String, String> ret = null;
@@ -238,6 +238,7 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/**
 	 * Perform a single query of the XMLRPC registry
+     * @return result list
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> singleQuery() {
@@ -321,12 +322,10 @@ public class RemoteRegistryCache extends TimerTask {
 
 	/**
 	 * Establish and edge between two actors (local-local, local-remote); skip if one exists already
-	 * @param from
-	 * @param fromGuid
-	 * @param to
-	 * @param toGuid
-	 * @return
-	 * @throws Exception
+	 * @param fromGuid fromGuid
+	 * @param toGuid toGuid
+	 * @return returns ClientMng 
+	 * @throws Exception in case of error
 	 */
 	public ClientMng establishEdge(ID fromGuid, ID toGuid)  throws Exception {
         if ((fromGuid == null) || (toGuid == null) ) 
@@ -353,6 +352,12 @@ public class RemoteRegistryCache extends TimerTask {
 	/*
      * Establish an edge between two actors. From and To are assumed to be well-configured and
      * conforming to the assumption that it is either broker->site or service->broker edge
+     * @param fromActor fromActor 
+     * @param fromGuid fromGuid
+     * @param toActor toActor
+     * @param toGuid toGuid
+     * @return ClientMng
+     * @throws Exception in case of error
      */
     private ClientMng establishEdgePrivate(IOrcaActor fromActor, ID fromGuid, IOrcaActor toActor, ID toGuid) throws Exception {
         ClientMng client = null;
@@ -498,6 +503,7 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/**
 	 * Perform a single query on the remote registry and process the results (i.e. add new edges)
+     * @param newGuids list of guids
 	 */
 	public synchronized void singleQueryProcess(List<String> newGuids) {
 		logger.debug("Processing XMLRPC registry response");
@@ -560,6 +566,8 @@ public class RemoteRegistryCache extends TimerTask {
 	
 	/**
 	 * Add new entry to cache by merging of values
+     * @param guid guid
+     * @param val val
 	 */
 	protected void nonMtCacheMerge(String guid, Map<String, String> val) {
 		Map<String, String> cur = cache.get(guid);
@@ -689,7 +697,7 @@ public class RemoteRegistryCache extends TimerTask {
 
     /**
      * Register an actor with the registry
-     * @param actor
+     * @param actor actor
      */
     public static void registerWithRegistry(IActor actor) {
         // External actor registry operations
@@ -817,6 +825,9 @@ public class RemoteRegistryCache extends TimerTask {
      * Register full and abstract rdfs to the registry
      * fullModel is the String representing the full rdf for the domain
      * abstractModel is the String representing the abstract rdf for the domain
+     * @param proxy proxy
+     * @param fullModel fullModel
+     * @param abstractModel abstractModel
      */
 
     public static void registerNDLToRegistry(IAuthorityProxy proxy, String fullModel, String abstractModel){

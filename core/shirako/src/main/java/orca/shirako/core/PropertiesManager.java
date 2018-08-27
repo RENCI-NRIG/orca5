@@ -45,8 +45,8 @@ public class PropertiesManager
     /**
      * Marks this resource set to indicate that the request that it represents
      * is elastic in size (can use less units than requested)
-     * @param set
-     * @param value
+     * @param set set
+     * @param value value
      */
     public static void setElasticSize(ResourceSet set, boolean value)
     {
@@ -55,8 +55,8 @@ public class PropertiesManager
 
     /**
      * Checks if the request represented by this resource set is elastic in size
-     * @param set
-     * @return
+     * @param set set
+     * @return true or false
      */
     public static boolean isElasticSize(ResourceSet set)
     {
@@ -77,8 +77,8 @@ public class PropertiesManager
     /**
      * Marks this resource set to indicate that the request that it represents
      * is elastic in size (can use less units than requested)
-     * @param set
-     * @param value
+     * @param set set
+     * @param value value
      */
     public static void setElasticTime(ResourceSet set, boolean value)
     {
@@ -87,8 +87,8 @@ public class PropertiesManager
 
     /**
      * Checks if the request represented by this resource set is elastic in size
-     * @param set
-     * @return
+     * @param set set
+     * @return true or false
      */
     public static boolean isElasticTime(ResourceSet set)
     {

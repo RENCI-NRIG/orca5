@@ -251,7 +251,7 @@ public class UnitsList
      *
      * @return list of conflict entries
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized List<AvailableUnits> release(final long start, final long end,
                                                      final long units) throws Exception
@@ -280,7 +280,7 @@ public class UnitsList
      *
      * @return list of conflict entries
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized List<AvailableUnits> releaseConditional(final long start, final long end,
                                                                 final long units)
@@ -315,7 +315,7 @@ public class UnitsList
      *
      * @return a list of conflict entries
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected List<AvailableUnits> reserve(final AvailableUnits units) throws Exception
     {
@@ -487,7 +487,7 @@ public class UnitsList
      *
      * @return list of conflict entries
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public synchronized List<AvailableUnits> reserve(final long start, final long end,
                                                      final long units) throws Exception

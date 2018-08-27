@@ -20,19 +20,19 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="logicalMachineMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="totalCPU" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="totalMemory" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="totalBandwidth" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="totalStorage" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="logicalMachineMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="totalCPU" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="totalMemory" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="totalBandwidth" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="totalStorage" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -80,7 +80,7 @@ public class LogicalMachineMng {
 
     /**
      * Gets the value of the totalCPU property.
-     * 
+     * @return value of the totalCPU property
      */
     public long getTotalCPU() {
         return totalCPU;
@@ -88,7 +88,7 @@ public class LogicalMachineMng {
 
     /**
      * Sets the value of the totalCPU property.
-     * 
+     * @param value value of the totalCPU property
      */
     public void setTotalCPU(long value) {
         this.totalCPU = value;
@@ -96,7 +96,7 @@ public class LogicalMachineMng {
 
     /**
      * Gets the value of the totalMemory property.
-     * 
+     * @return value of the totalMemory property
      */
     public long getTotalMemory() {
         return totalMemory;
@@ -104,7 +104,7 @@ public class LogicalMachineMng {
 
     /**
      * Sets the value of the totalMemory property.
-     * 
+     * @param value value of the totalMemory property
      */
     public void setTotalMemory(long value) {
         this.totalMemory = value;
@@ -112,7 +112,7 @@ public class LogicalMachineMng {
 
     /**
      * Gets the value of the totalBandwidth property.
-     * 
+     * @return value of the totalBandwidth property
      */
     public long getTotalBandwidth() {
         return totalBandwidth;
@@ -120,7 +120,7 @@ public class LogicalMachineMng {
 
     /**
      * Sets the value of the totalBandwidth property.
-     * 
+     * @param value value of the totalBandwidth property
      */
     public void setTotalBandwidth(long value) {
         this.totalBandwidth = value;
@@ -128,7 +128,7 @@ public class LogicalMachineMng {
 
     /**
      * Gets the value of the totalStorage property.
-     * 
+     * @return value of the totalStorage property
      */
     public long getTotalStorage() {
         return totalStorage;
@@ -136,7 +136,7 @@ public class LogicalMachineMng {
 
     /**
      * Sets the value of the totalStorage property.
-     * 
+     * @param value value of the totalStorage property
      */
     public void setTotalStorage(long value) {
         this.totalStorage = value;

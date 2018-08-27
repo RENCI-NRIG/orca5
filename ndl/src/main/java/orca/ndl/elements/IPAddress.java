@@ -126,8 +126,8 @@ public class IPAddress extends Label {
     /**
      * Validate IP dotted notation W.X.Y.Z
      * 
-     * @param ip
-     * @return
+     * @param ip ip
+     * @return true or false
      */
     public static boolean validateIP(String ip) {
         Matcher m = ipPattern.matcher(ip);
@@ -141,8 +141,8 @@ public class IPAddress extends Label {
     /**
      * Validate CIDR notation W.X.Y.Z/M
      * 
-     * @param ip
-     * @return
+     * @param ip ip
+     * @return true or false
      */
     public static boolean validateCIDR(String ip) {
         Matcher m = cidrPattern.matcher(ip);

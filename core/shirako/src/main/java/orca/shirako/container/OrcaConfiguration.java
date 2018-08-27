@@ -225,7 +225,7 @@ public class OrcaConfiguration implements IOrcaConfiguration
     /**
      * Returns the object stored under the given key.
      * @param key key
-     * @return
+     * @return object stored under the given key
      */
     public synchronized Object getObject(String key)
     {
@@ -241,7 +241,7 @@ public class OrcaConfiguration implements IOrcaConfiguration
     /**
      * Returns the value of the property with the given key.
      * @param key key
-     * @return
+     * @return value of the property with the given key
      */
     public synchronized String getProperty(String key)
     {
@@ -436,7 +436,7 @@ public class OrcaConfiguration implements IOrcaConfiguration
 
     /**
      * Returns the ticket factory class name.
-     * @return
+     * @return the ticket factory class name
      */
     public String getTicketFactoryClassName()
     {

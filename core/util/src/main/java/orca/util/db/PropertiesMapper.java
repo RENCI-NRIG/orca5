@@ -119,7 +119,7 @@ public abstract class PropertiesMapper
 
     /**
      * Creates the mapping.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected abstract void createMapping() throws Exception;
 
@@ -162,7 +162,7 @@ public abstract class PropertiesMapper
      * Returns the specified category map (from Java).
      * @param category category
      * @return category map
-     * @throws Exception
+     * @throws RuntimeException in case of error
      */
     protected MapEntry getFromJava(final String category) throws RuntimeException
     {
@@ -185,7 +185,7 @@ public abstract class PropertiesMapper
      * Returns the specified category map (to Java).
      * @param category category
      * @return category map
-     * @throws Exception
+     * @throws RuntimeException in case of error
      */
     protected MapEntry getToJava(final String category) throws RuntimeException
     {
@@ -206,7 +206,7 @@ public abstract class PropertiesMapper
 
     /**
      * Parses the map file and creates the mapping.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void initialize() throws Exception
     {

@@ -9,8 +9,9 @@ public interface INdlModifyModelListener extends INdlSimpleModelListener {
     /**
      * Identify the resource modify element
      * 
-     * @param i
-     * @param m
+     * @param i i
+     * @param name name 
+     * @param m m
      */
     public void ndlModifyReservation(Resource i, Literal name, OntModel m);
 
@@ -21,12 +22,12 @@ public interface INdlModifyModelListener extends INdlSimpleModelListener {
     /**
      * Identify modify elements and there types and subjects
      * 
-     * @param i
-     * @param subject
-     * @param t
-     * @param object
-     * @param modifyUnit
-     * @param m
+     * @param i i
+     * @param subject subject
+     * @param t t
+     * @param object object
+     * @param modifyUnit modifyUnit
+     * @param m m
      */
     public void ndlModifyElement(Resource i, Resource subject, ModifyType t, Resource object, int modifyUnit,
             OntModel m);

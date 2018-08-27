@@ -682,8 +682,8 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
      * final int ReservationStateActiveTicketed = 4; public static final int ReservationStateClosed = 5; public static
      * final int ReservationStateCloseWait = 6; public static final int ReservationStateFailed = 7;
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return GeniStates
      */
     public static GeniStates getSliverGeniState(ReservationMng r) {
         switch (r.getState()) {

@@ -20,16 +20,16 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="reservationStateMng">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="state" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="pending" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="reservationStateMng"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="state" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *         &lt;element name="pending" type="{http://www.w3.org/2001/XMLSchema}int"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -49,7 +49,7 @@ public class ReservationStateMng {
 
     /**
      * Gets the value of the state property.
-     * 
+     * @return value of the state property
      */
     public int getState() {
         return state;
@@ -57,7 +57,7 @@ public class ReservationStateMng {
 
     /**
      * Sets the value of the state property.
-     * 
+     * @param value value of the state property
      */
     public void setState(int value) {
         this.state = value;
@@ -65,7 +65,7 @@ public class ReservationStateMng {
 
     /**
      * Gets the value of the pending property.
-     * 
+     * @return value of the pending property
      */
     public int getPending() {
         return pending;
@@ -73,7 +73,7 @@ public class ReservationStateMng {
 
     /**
      * Sets the value of the pending property.
-     * 
+     * @param value value of the pending property
      */
     public void setPending(int value) {
         this.pending = value;

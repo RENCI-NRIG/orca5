@@ -51,10 +51,11 @@ public class PoolManager {
     
     /**
      * Create a new resource pool
+     * @param sliceID sliceID 
      * @param name Pool name
      * @param type Resource type
-     * @param p Resource properties
-     * @return
+     * @param rd Resource Data 
+     * @return returns CreatePoolResult
      */
     public synchronized CreatePoolResult createPool(SliceID sliceID, String name, ResourceType type, ResourceData rd) {
         CreatePoolResult result = new CreatePoolResult();

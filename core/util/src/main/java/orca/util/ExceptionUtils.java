@@ -5,6 +5,7 @@ public class ExceptionUtils
     /**
      * Converts the given stack trace into a string
      * @param trace Stack trace
+     * @return returns stack trace string
      */
     public static String getStackTraceString(StackTraceElement[] trace)
     {

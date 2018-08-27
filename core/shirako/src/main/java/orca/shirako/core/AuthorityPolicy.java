@@ -282,7 +282,7 @@ public class AuthorityPolicy extends Policy implements IAuthorityPolicy {
      * @param reservation
      *            reservation
      * 
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void finishCorrectDeficit(final ResourceSet rset,
             final IAuthorityReservation reservation) throws Exception {
@@ -322,10 +322,10 @@ public class AuthorityPolicy extends Policy implements IAuthorityPolicy {
     /**
      * Creates a new resource set using the source and the specified delegation.
      * 
-     * @param source
-     * @param delegation
-     * @return
-     * @throws TicketException
+     * @param source source
+     * @param delegation delegation
+     * @return created resource set
+     * @throws TicketException in case of error
      */
     protected ResourceSet extract(ResourceSet source, ResourceDelegation delegation)
             throws TicketException {

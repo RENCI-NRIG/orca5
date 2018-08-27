@@ -109,7 +109,7 @@ public class PackageManager {
 
     /**
      * Returns the location of the handlers folder.
-     * @return
+     * @return location of the handlers folder
      */
     public static String getHandlersFolder() {
         return Globals.HomeDirectory + HandlersRoot;
@@ -128,6 +128,7 @@ public class PackageManager {
     /**
      * Returns the absolute web folder for the specified package
      * @param id absolute web folder path
+     * @return returns the absolute wev folder
      */
     public static String getPackageWebRootFolder(PackageId id) {
         return Globals.HomeDirectory + PackagesWebRoot + "/" + id.toString();
@@ -175,8 +176,8 @@ public class PackageManager {
      * location
      * @param folder Temporary folder containing the expanded package
      * @param id Package identifier
-     * @return
-     * @throws Exception
+     * @return returns true for success; false otherwise
+     * @throws Exception in case of error
      */
     protected boolean copyTempDirectory(String folder, PackageId id) throws Exception {
         int code = 0;
@@ -221,6 +222,7 @@ public class PackageManager {
     /**
      * Ensures that the top level directories exist. Attempts to create any
      * missing directory. Throws an exception if a failure occurs.
+     * @throws Exception in case of error
      */
     protected synchronized void createDirs() throws Exception {
         File pack = new File(Globals.HomeDirectory + PackagesRootDir);
@@ -257,9 +259,9 @@ public class PackageManager {
 
     /**
      * Deletes (recursively) the specified directory
-     * @param folder
-     * @return
-     * @throws Exception
+     * @param folder folder to be deleted
+     * @return true for success; false otherwise
+     * @throws Exception in case of error
      */
     protected boolean deleteDirectory(String folder) throws Exception {
         boolean result = false;
@@ -289,10 +291,10 @@ public class PackageManager {
 
     /**
      * Expands the specified package to a temporary directory
-     * @param bytes
+     * @param bytes representing the package to be expanded
      * @return On success, the path to the directory where the package is
      *         installed.
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected String expandPackage(byte[] bytes) throws Exception {
         String result = null;
@@ -348,8 +350,8 @@ public class PackageManager {
     /**
      * Creates a java.util.Properties from data read from the package XML
      * descriptor
-     * @param mng
-     * @return
+     * @param mng data read from package XML descriptor
+     * @return returns properties created
      */
     protected Properties fill(orca.extensions.beans.Properties mng) {
         Properties p = null;
@@ -378,8 +380,8 @@ public class PackageManager {
     /**
      * Creates a manage.extensions.ExtensionPackage object from data read from
      * the package XML descriptor.
-     * @param pkg
-     * @return
+     * @param pkg xml package
+     * @return returns extension package
      */
     protected ExtensionPackage getPackage(orca.extensions.beans.ExtensionPackage pkg) {
         ExtensionPackage temp = new ExtensionPackage();
@@ -393,7 +395,7 @@ public class PackageManager {
     /**
      * Retrieves information for the specified package.
      * @param id Package identifier
-     * @return
+     * @return returns the package identified
      */
     public ExtensionPackage getPackage(PackageId id) {
         ExtensionPackage result = null;
@@ -416,7 +418,7 @@ public class PackageManager {
     /**
      * Retrieves information about installed packages suitable to be passed back
      * from the management interface
-     * @return
+     * @return returns the identified package      
      */
     public ExtensionPackage[] getPackages() {
         ExtensionPackage[] result = null;
@@ -443,9 +445,9 @@ public class PackageManager {
     /**
      * Creates a manage.extension.Plugin object from data read from the package
      * XML descriptor
-     * @param pkg
-     * @param p
-     * @return
+     * @param pkg package
+     * @param p plugin
+     * @return returns the created plugin
      */
     protected Plugin getPlugin(ExtensionPackage pkg, orca.extensions.beans.Plugin p) {
         Plugin plugin = new Plugin();
@@ -469,8 +471,8 @@ public class PackageManager {
      * Important: some parts of the maangement layer may not be initialized at
      * the time this method is invoked, e.g., when we create a fresh new Shirako
      * instance, which does not have a database attached to it in the beginning.
-     * @param database
-     * @throws Exception
+     * @param database ip database
+     * @throws Exception in case of error
      */
     public synchronized void initialize(IPackageDatabase database) throws Exception {
         if (database == null) {
@@ -491,7 +493,6 @@ public class PackageManager {
      * @param bytes package contents as a byte array
      * @param failIfExists true: if the package exists, fail the installation
      * @return result code
-     * @throws Exception
      */
     public int installPackage(byte[] bytes, boolean failIfExists) {
         int code = 0;
@@ -586,9 +587,9 @@ public class PackageManager {
     /**
      * Reads the package descriptor of the package expanded in the specified
      * folder
-     * @param folder
-     * @return
-     * @throws Exception
+     * @param folder location of expanded package
+     * @return returns the package
+     * @throws Exception in case of error
      */
     protected orca.extensions.beans.ExtensionPackage readPackageDescriptor(String folder) throws Exception {
         String file = folder + "/" + PackageDescriptorFile;
@@ -631,8 +632,8 @@ public class PackageManager {
      * Creates and registers a class loader for the specified package. The
      * created class loader provides access to all jar files inside the
      * package's lib directory.
-     * @param id
-     * @throws Exception
+     * @param id package id
+     * @throws Exception in case of error
      */
     protected void registerClassLoader(PackageId id) throws Exception {
         if (Globals.Log.isDebugEnabled()) {
@@ -684,8 +685,8 @@ public class PackageManager {
     /**
      * Adds the package to the database and registers all plugins defined in
      * this package with the plugin manager
-     * @param pkg
-     * @throws Exception
+     * @param pkg package
+     * @throws Exception in case of error
      */
     protected void registerPackage(orca.extensions.beans.ExtensionPackage pkg) throws Exception {
         /*
@@ -710,10 +711,10 @@ public class PackageManager {
 
     /**
      * Runs the package installation script (if present)
-     * @param folder
-     * @param id
-     * @return
-     * @throws Exception
+     * @param folder location
+     * @param id package id
+     * @return result code
+     * @throws Exception in case of error
      */
     protected int runInstallScript(String folder, PackageId id) throws Exception {
         int code = 0;
@@ -739,8 +740,8 @@ public class PackageManager {
     /**
      * Uninstalls the specified package
      * @param id Package identifier
-     * @return
-     * @throws Exception
+     * @return result code
+     * @throws Exception in case of error
      */
     public int uninstallPackage(PackageId id) throws Exception {
         int code = 0;
@@ -788,7 +789,7 @@ public class PackageManager {
 
     /**
      * Unregisters the class loader for the specified package
-     * @param id
+     * @param id package id
      */
     protected void unregisterClassLoader(PackageId id) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -799,8 +800,8 @@ public class PackageManager {
     /**
      * Removes the package from the database and unregisters all package
      * supplied plugins
-     * @param id
-     * @throws Exception
+     * @param id package id
+     * @throws Exception in case of error
      */
     protected void unregisterPackage(PackageId id) throws Exception {
         Globals.getContainer().getPluginManager().unregister(id);
@@ -811,8 +812,8 @@ public class PackageManager {
      * Upgrades the specified package.
      * @param id Package identifier
      * @param bytes Contents of the new package
-     * @return
-     * @throws Exception
+     * @return result code
+     * @throws Exception in case of error
      */
     public int upgradePackage(PackageId id, byte[] bytes) throws Exception {
         int code = 0;
@@ -885,6 +886,7 @@ public class PackageManager {
 
     /**
      * Installs packages during container bootstrap.
+     * @throws Exception in case of error
      */
     public void installPackages() throws Exception
     {

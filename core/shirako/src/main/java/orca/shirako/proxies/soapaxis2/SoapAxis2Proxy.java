@@ -101,7 +101,7 @@ public abstract class SoapAxis2Proxy extends Proxy implements ICallbackProxy {
 
     /**
      * Classifies the soap fault and maps it to an RPCError.
-     * @param qname soap fault
+     * @param e soap fault
      * @return orca rpc error type
      */
     protected RPCError getRPCError(AxisFault e) {        
@@ -259,6 +259,7 @@ public abstract class SoapAxis2Proxy extends Proxy implements ICallbackProxy {
      * Returns the service stub for the specified caller
      * @param caller caller using the stub
      * @return service stub
+     * @throws SoapAxis2StubException in case of error
      */
     protected Object getServiceStub(AuthToken caller) throws SoapAxis2StubException {
         Object stub = null;
@@ -280,7 +281,7 @@ public abstract class SoapAxis2Proxy extends Proxy implements ICallbackProxy {
     /**
      * SOAP-Encodes a properties list
      * @param properties Properties list
-     * @return
+     * @return properties list
      */
     public static Plist encodePropertiesSoap(Properties properties) {
         if ((properties == null) || (properties.size() == 0)) {
@@ -308,7 +309,7 @@ public abstract class SoapAxis2Proxy extends Proxy implements ICallbackProxy {
     /**
      * Decode a SOAP-encoded properties list.
      * @param list Soap-encoded list
-     * @return
+     * @return Properties
      */
     public static Properties decodePropertiesSoap(Plist list) {
         if (list == null) {
@@ -334,7 +335,7 @@ public abstract class SoapAxis2Proxy extends Proxy implements ICallbackProxy {
      * Indexes the elements of the list into a hash table<br>
      * The hashtable will contain only entries with non-null value
      * @param list List of name, value pairs
-     * @return
+     * @return hashtable 
      */
     public static Hashtable<String, Object> getTable(Plist list) {
         PlistNode[] nodes = list.getPlistNode();
@@ -360,7 +361,7 @@ public abstract class SoapAxis2Proxy extends Proxy implements ICallbackProxy {
 
     /**
      * Returns the service endpoint of the actor
-     * @return
+     * @return service endpoint of the actor
      */
     public String getServiceEndpoint() {
         return serviceEndpoint;

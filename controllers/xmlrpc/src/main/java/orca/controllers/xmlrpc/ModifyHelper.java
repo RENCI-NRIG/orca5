@@ -172,9 +172,9 @@ public class ModifyHelper {
     /**
      * Enqueue a modify operation on this reservation id and execute directly, if possible
      * 
-     * @param res
-     * @param modifySubcommand
-     * @param modifyProperties
+     * @param res res
+     * @param modifySubcommand modifySubcommand
+     * @param modifyProperties modifyProperties
      */
     public static void enqueueModify(String res, String modifySubcommand, Properties modifyProperties) {
 
@@ -209,9 +209,9 @@ public class ModifyHelper {
     /**
      * Enqueue a modify operation on this reservation id and execute directly, if possible
      * 
-     * @param res
-     * @param modifySubcommand
-     * @param modifyPropertiesList
+     * @param res res
+     * @param modifySubcommand modifySubcommand
+     * @param modifyPropertiesList modifyPropertiesList
      */
     public static void enqueueModify(String res, String modifySubcommand, List<Map<String, ?>> modifyPropertiesList) {
         try {
@@ -230,8 +230,8 @@ public class ModifyHelper {
     /**
      * Conversion between map of strings and properties object
      * 
-     * @param p
-     * @return
+     * @param m m
+     * @return properties
      */
     public static Properties fromMap(Map<String, String> m) {
         Properties p = new Properties();
@@ -245,8 +245,8 @@ public class ModifyHelper {
     /**
      * Conversion between map of strings and properties object
      * 
-     * @param p
-     * @return
+     * @param p p
+     * @return map of strings
      */
     public static Map<String, String> fromProperties(Properties p) {
         Map<String, String> m = new HashMap<String, String>();
@@ -260,9 +260,9 @@ public class ModifyHelper {
     /**
      * Conversion between properties and map of strings, remove keyPrefix from keynames before inserting into map
      * 
-     * @param p
-     * @param keyPrefix
-     * @return
+     * @param p p
+     * @param keyPrefix keyPrefix
+     * @return map of strings
      */
     public static Map<String, String> fromProperties(Properties p, String keyPrefix) {
         Map<String, String> m = new HashMap<String, String>();
@@ -277,8 +277,10 @@ public class ModifyHelper {
     /**
      * Converts list of maps to properties according to modify subcommand
      * 
-     * @param morifyPropertiesList
-     * @return
+     * @param morifyPropertiesList modifyPropertiesList
+     * @param modifySubcommand modifySubcommand
+     * @throws Exception in case of error
+     * @return Properties
      */
     @SuppressWarnings("unchecked")
     private static Properties convertListMapsToProperties(String modifySubcommand,
@@ -312,9 +314,9 @@ public class ModifyHelper {
     /**
      * Same as modifySliver, but acquires and releases it's own SM instance. Note that it is safer to call enqueueModify
      * 
-     * @param res
-     * @param modifySubcommand
-     * @param modifyPropertiesList
+     * @param res res
+     * @param modifySubcommand modifySubcommand
+     * @param modifyPropertiesList modifyPropertiesList
      * @return - index of modify operation
      */
     public static Integer modifySliver(ReservationID res, String modifySubcommand,
@@ -335,10 +337,10 @@ public class ModifyHelper {
     /**
      * Same as modifySliver, but acquires and releases it's own SM instance. It is safer to call enqueueModify
      * 
-     * @param res
-     * @param modifySubcommand
-     * @param modifyProperties
-     * @return
+     * @param res res
+     * @param modifySubcommand modifySubcommand
+     * @param modifyProperties modifyProperties
+     * @return integer
      */
     public static Integer modifySliver(ReservationID res, String modifySubcommand, Properties modifyProperties) {
         IOrcaServiceManager sm = null;
@@ -357,10 +359,10 @@ public class ModifyHelper {
     /**
      * Modify reservation based on reservation id (or null). Note that it is safer to call enqueueModify.
      * 
-     * @param sm
-     * @param res
-     * @param modifySubcommand
-     * @param modifyProperties
+     * @param sm sm
+     * @param res res
+     * @param modifySubcommand modifySubcommand
+     * @param modifyPropertiesList modifyProperties
      * @return 0 on failure or index of modify operation
      */
     public static Integer modifySliver(IOrcaServiceManager sm, ReservationID res, String modifySubcommand,
@@ -380,12 +382,12 @@ public class ModifyHelper {
 
     /**
      * Modify reservation based on reservation id (or null). Note that it is safer to call enqueueModify. Uses
-     * Properties instead of List<Map<String,?>>
+     * Properties instead of List&lt;Map&lt;String,?&gt;&gt;
      * 
-     * @param sm
-     * @param res
-     * @param modifySubcommand
-     * @param modifyProperties
+     * @param sm sm
+     * @param res res
+     * @param modifySubcommand modifySubcommand
+     * @param modifyProperties modifyProperties
      * @return 0 on failure or index of modify operation
      */
     public static Integer modifySliver(IOrcaServiceManager sm, ReservationID res, String modifySubcommand,

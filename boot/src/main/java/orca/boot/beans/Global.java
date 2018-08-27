@@ -19,21 +19,21 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="global">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="startTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="cycleMillis" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="firstTick" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="manualTicks" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="containerGuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="locations" type="{http://issg.cs.duke.edu/sharp/boot}locations" minOccurs="0"/>
- *         &lt;element name="database" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="global"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;all&gt;
+ *         &lt;element name="startTime" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="cycleMillis" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="firstTick" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="manualTicks" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
+ *         &lt;element name="containerGuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="locations" type="{http://issg.cs.duke.edu/sharp/boot}locations" minOccurs="0"/&gt;
+ *         &lt;element name="database" type="{http://issg.cs.duke.edu/sharp/boot}instance" minOccurs="0"/&gt;
+ *       &lt;/all&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
@@ -54,7 +54,7 @@ public class Global {
 
     /**
      * Gets the value of the startTime property.
-     * 
+     * @return value of the startTime property.
      */
     public long getStartTime() {
         return startTime;
@@ -62,7 +62,7 @@ public class Global {
 
     /**
      * Sets the value of the startTime property.
-     * 
+     * @param value value
      */
     public void setStartTime(long value) {
         this.startTime = value;
@@ -70,7 +70,7 @@ public class Global {
 
     /**
      * Gets the value of the cycleMillis property.
-     * 
+     * @return value of the cycleMillis property.
      */
     public long getCycleMillis() {
         return cycleMillis;
@@ -79,6 +79,7 @@ public class Global {
     /**
      * Sets the value of the cycleMillis property.
      * 
+     * @param value value
      */
     public void setCycleMillis(long value) {
         this.cycleMillis = value;
@@ -86,7 +87,7 @@ public class Global {
 
     /**
      * Gets the value of the firstTick property.
-     * 
+     * @return value of the firstTick property.
      */
     public long getFirstTick() {
         return firstTick;
@@ -95,6 +96,7 @@ public class Global {
     /**
      * Sets the value of the firstTick property.
      * 
+     * @param value value
      */
     public void setFirstTick(long value) {
         this.firstTick = value;
@@ -102,7 +104,7 @@ public class Global {
 
     /**
      * Gets the value of the manualTicks property.
-     * 
+     * @return value of the manualTicks property.
      */
     public boolean isManualTicks() {
         return manualTicks;
@@ -111,6 +113,7 @@ public class Global {
     /**
      * Sets the value of the manualTicks property.
      * 
+     * @param value value
      */
     public void setManualTicks(boolean value) {
         this.manualTicks = value;

@@ -11,8 +11,8 @@ public class G8264RouterDevice extends IBMRouterDevice {
     private static Long[] burstSizes = { 32L, 64L, 128L, 256L, 512L, 1024L, 2048L, 4096L };
 
     /**
-     * Create a vlan. Note that the IBM switches take QoS rate as <64-40000000> kilobits per second, a multiple of 64
-     * kbps. Burst size as <32-4096> kilobits, one of 8 values: 32 64 128 256 512 1024 2048 4096
+     * Create a vlan. Note that the IBM switches take QoS rate as 64-40000000 kilobits per second, a multiple of 64
+     * kbps. Burst size as 32-4096 kilobits, one of 8 values: 32 64 128 256 512 1024 2048 4096
      */
     @Override
     public void createVLAN(String vlanTag, String qosRate, String qosBurstSize) throws CommandException {

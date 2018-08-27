@@ -185,7 +185,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      *        requestType of <code>null</code> indicates that any requestType
      *        may be allocated.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void allocateExtending(final Iterator<IReservation> sources, final long startTime,
                                      final Vector<String> requestTypes) throws Exception
@@ -256,7 +256,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      *        requestTypes of <code>null</code> indicates that any requestType
      *        may be allocated.
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void allocateNewBids(Iterator<IReservation> newBids,
                                    Hashtable<ResourceType, IClientReservation> sourceHash,
@@ -431,7 +431,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      *
      * @return the newly extracted ticket
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected ResourceSet extractTicket(final IBrokerReservation reservation,
                                         final IClientReservation source, final Term approved,
@@ -508,6 +508,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      * @param reservation reservation being assigned to an allocation
      *
      * @return allocation cycle for this reservation
+     * @throws Exception in case of error 
      */
     protected long getAllocation(IBrokerReservation reservation) throws Exception
     {
@@ -533,7 +534,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
     /**
      * Determine the approved term of a reservation
      *
-     * @param reservation
+     * @param reservation reservation
      *
      * @return the approved term
      */
@@ -618,7 +619,6 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      *
      * @return non-null set of renewals
      *
-     * @throws Exception rare
      */
     protected ReservationSet processRenewing(ReservationSet renewing, ReservationSet pending)
     {
@@ -722,7 +722,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      * @param resourceShare number of resources being allocated to the request
      * @param startResTime when the ticket for the request starts
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void satisfyAllocation(final IBrokerReservation reservation,
                                      final IClientReservation source, final long resourceShare,
@@ -788,7 +788,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      * @param startTime start of the requested tickets
      * @param sourceHash all of the sources for this allocation sorted by type
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected void switchSource(final Iterator<IReservation> sources, final long startTime,
                                 final Hashtable<ResourceType, IClientReservation> sourceHash)
@@ -832,7 +832,7 @@ public class BrokerSimplePolicy extends BrokerCalendarPolicy
      * @return <code>true</code> if there are sufficient resources,
      *         <code>false</code> otherwise
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     protected boolean verifyWantedResources(final IBrokerReservation reservation,
                                             final IClientReservation source, final long startTime,

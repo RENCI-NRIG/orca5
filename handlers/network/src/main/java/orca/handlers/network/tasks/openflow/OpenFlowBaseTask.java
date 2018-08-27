@@ -50,7 +50,7 @@ public abstract class OpenFlowBaseTask extends NetworkBaseTask {
     /**
      * Only set dpid if non zero length (otherwise assume "all")
      * 
-     * @param dpid
+     * @param dpid dpid
      */
     public void setDpid(String dpid) {
         if (dpid.length() > 0)
@@ -60,7 +60,7 @@ public abstract class OpenFlowBaseTask extends NetworkBaseTask {
     /**
      * Only set priority if non zero length (otherwise assume "0")
      * 
-     * @param priority
+     * @param priority priority
      */
     public void setPriority(String priority) {
         if (priority.length() > 0)

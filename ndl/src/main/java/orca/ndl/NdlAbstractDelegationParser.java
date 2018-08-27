@@ -27,9 +27,9 @@ public class NdlAbstractDelegationParser extends NdlCommons {
     /**
      * Creates an in-memory model
      * 
-     * @param delegation
-     * @param l
-     * @throws NdlException
+     * @param delegation delegation
+     * @param l l
+     * @throws NdlException in case of error
      */
     public NdlAbstractDelegationParser(String delegation, INdlAbstractDelegationModelListener l) throws NdlException {
         if ((delegation == null) || (l == null)) {
@@ -106,7 +106,7 @@ public class NdlAbstractDelegationParser extends NdlCommons {
      * in the current (02/2012) delegation algorithm domains expose no internal structure, so there will be no nodes or
      * connections.
      * 
-     * @throws NdlException
+     * @throws NdlException in case of error
      */
     public synchronized void processDelegationModel() throws NdlException {
         if (delegationModel == null)

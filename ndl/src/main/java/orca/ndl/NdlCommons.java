@@ -358,8 +358,8 @@ public class NdlCommons {
     /**
      * Find all things connected to this network connection (typically in request)
      * 
-     * @param nc
-     * @return
+     * @param nc nc
+     * @return String
      */
     public static String createQueryConnectedToNetworkConnection(Resource nc) {
         String selectStr = "SELECT DISTINCT ?interface ";
@@ -375,8 +375,8 @@ public class NdlCommons {
     /**
      * Find the things sharing interface with this resource (usually connections)
      * 
-     * @param n
-     * @return
+     * @param n n
+     * @return String
      */
     public static String createQueryPeers(Resource n) {
         String selectStr = "SELECT DISTINCT ?peer ?interface";
@@ -388,8 +388,8 @@ public class NdlCommons {
     /**
      * return peers of this resource across a connection (that aren't itself)
      * 
-     * @param n
-     * @return
+     * @param n n
+     * @return String
      */
     public static String createQueryConnectionPeers(Resource n) {
         String selectStr = "SELECT DISTINCT ?peer ?interface ";
@@ -403,7 +403,7 @@ public class NdlCommons {
     /**
      * to support coloring extension, return a query that looks for colors attached to network elements
      * 
-     * @return
+     * @return String
      */
     public static String createQueryStringHasColor() {
         String selectStr = "SELECT DISTINCT ?netelement ?color ";
@@ -424,8 +424,8 @@ public class NdlCommons {
     /**
      * Get storage properties like fs_param, format, fs_type, mnt_point, capacity
      * 
-     * @param st
-     * @return
+     * @param st st
+     * @return String
      */
     public static String createQueryISCSIStorageProperties(Resource st) {
         String selectStr = "SELECT DISTINCT ?fsParam ?fsType ?format ?mntPoint ?capacity ";
@@ -440,7 +440,7 @@ public class NdlCommons {
     /**
      * Get the query for reservation and its term details
      * 
-     * @return
+     * @return String
      */
     public static String createQueryStringReservationTerm() {
         String selectStr = "SELECT DISTINCT ?reservation ?term ?beginning ?beginningTime ?end ?endTime ?duration ?years ?months ?weeks ?days ?hours ?minutes ?seconds ";
@@ -460,7 +460,7 @@ public class NdlCommons {
     /**
      * Query for modification details
      * 
-     * @return
+     * @return String
      */
     public static String createQueryStringModifyReservation() {
         String selectStr = "SELECT DISTINCT ?modifyReservation ?modifyName";
@@ -473,7 +473,7 @@ public class NdlCommons {
     /**
      * Query for domain location
      * 
-     * @return
+     * @return String
      */
     public static String createQueryStringDomainLocationDetails() {
         String selectStr = "SELECT ?domain ?popUri ?lat ?lon ";
@@ -521,8 +521,8 @@ public class NdlCommons {
     /**
      * get a query for an interface object on who hasInterface on it
      * 
-     * @param intf
-     * @return
+     * @param intf intf
+     * @return String
      */
     public static String createQueryStringWhoHasInterface(Resource intf) {
         // FIXME: we SHOULD check the type (10/03/2011 /ib), but manifest
@@ -725,9 +725,9 @@ public class NdlCommons {
     /**
      * Run a query on a model
      * 
-     * @param model
-     * @param queryString
-     * @return
+     * @param model model
+     * @param queryString queryString
+     * @return ResultSet
      */
     public static ResultSet rdfQuery(Model model, String queryString) {
 
@@ -751,8 +751,8 @@ public class NdlCommons {
     /**
      * Get a list of interfaces (similar to getInterfacesOf)
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return list of interfaces
      */
     public static List<Resource> getResourceInterfaces(Resource r) {
         assert (r != null);
@@ -785,8 +785,8 @@ public class NdlCommons {
     /**
      * Get storage capacity property of the resource
      * 
-     * @param c
-     * @return
+     * @param c c
+     * @return storage capacity
      */
     public static long getResourceStorageCapacity(Resource c) {
         assert (c != null);
@@ -800,8 +800,8 @@ public class NdlCommons {
     /**
      * Get hasFSParam property of the resource
      * 
-     * @param c
-     * @return
+     * @param c c
+     * @return String
      */
     public static String getResourceStorageFSParam(Resource c) {
         assert (c != null);
@@ -815,8 +815,8 @@ public class NdlCommons {
     /**
      * Get hasFSType property of the resource
      * 
-     * @param c
-     * @return
+     * @param c c
+     * @return String
      */
     public static String getResourceStorageFSType(Resource c) {
         assert (c != null);
@@ -830,8 +830,8 @@ public class NdlCommons {
     /**
      * Get hasMntPoint property of the resource
      * 
-     * @param c
-     * @return
+     * @param c c
+     * @return String
      */
     public static String getResourceStorageMntPoint(Resource c) {
         assert (c != null);
@@ -845,8 +845,8 @@ public class NdlCommons {
     /**
      * Get doFormat property of the resource
      * 
-     * @param c
-     * @return
+     * @param c c
+     * @return Boolean
      */
     public static Boolean getResourceStorageDoFormat(Resource c) {
         assert (c != null);
@@ -903,8 +903,8 @@ public class NdlCommons {
     /**
      * return owl:sameAs property resource, except when pointing to self
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return Resource
      */
     public static Resource getSameAsResource(Resource i) {
         Statement st = i.getProperty(OWL_sameAs);
@@ -926,8 +926,8 @@ public class NdlCommons {
     /**
      * Get a list of services node supports. Return a URI for the service e.g. ssh://user@hostname:port
      * 
-     * @param i
-     * @return
+     * @param node node 
+     * @return list of services
      */
     public static List<String> getNodeServices(Resource node) {
         assert (node != null);
@@ -975,8 +975,8 @@ public class NdlCommons {
     /**
      * Get only the logins of the node, don't add root
      * 
-     * @param node
-     * @return
+     * @param node node
+     * @return logins of the node
      */
     public static List<String> getNodeLogins(Resource node) {
         assert (node != null);
@@ -1022,8 +1022,8 @@ public class NdlCommons {
      * Get the list of ports proxied for this node. For each proxied port (field "proxiedPort") it can return, if
      * available the ip and port on the proxy ("mgtPort", "mgtIp")
      * 
-     * @param node
-     * @return
+     * @param node node
+     * @return list of ports
      */
     public static List<ProxyFields> getNodeProxiedPorts(Resource node) {
         List<ProxyFields> ret = new ArrayList<ProxyFields>();
@@ -1063,8 +1063,8 @@ public class NdlCommons {
     /**
      * Get diskImage of a resource; null otherwise
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return Resource
      */
     public static Resource getDiskImage(Resource i) {
         assert (i != null);
@@ -1077,8 +1077,8 @@ public class NdlCommons {
     /**
      * Get OF controller of most-likely a slice
      * 
-     * @param sl
-     * @return
+     * @param sl sl
+     * @return Resource
      */
     public static Resource getOfCtrl(Resource sl) {
         assert (sl != null);
@@ -1092,8 +1092,8 @@ public class NdlCommons {
     /**
      * Get the version of openflow (usually of a reservation). Null if none.
      * 
-     * @param res
-     * @return
+     * @param res res
+     * @return Resource
      */
     public static String getOpenFlowVersion(Resource res) {
         assert (res != null);
@@ -1119,8 +1119,8 @@ public class NdlCommons {
     /**
      * Assumes di is the DiskImage resource; null if unspecified
      * 
-     * @param di
-     * @return
+     * @param di di
+     * @return String
      */
     public static String getImageURL(Resource di) {
         return getURL(di);
@@ -1129,8 +1129,8 @@ public class NdlCommons {
     /**
      * Assumes di is a DiskImage resource. null if unspecified
      * 
-     * @param di
-     * @return
+     * @param di di
+     * @return String
      */
     public static String getImageHash(Resource di) {
         assert (di != null);
@@ -1144,8 +1144,8 @@ public class NdlCommons {
     /**
      * Assumes i is a node-like resource that hasDiskImage on disk image resource or null
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return String
      */
     public static String getIndividualsImageURL(Resource i) {
         assert (i != null);
@@ -1160,8 +1160,8 @@ public class NdlCommons {
     /**
      * Assumes i is a node-like resource that hasDiskImage on disk image resource or null
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return String
      */
     public static String getIndividualsImageHash(Resource i) {
         assert (i != null);
@@ -1176,8 +1176,8 @@ public class NdlCommons {
     /**
      * Get RDF_TYPE property of resource
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return Resource
      */
     public static Resource getResourceType(Resource r) {
         assert (r != null);
@@ -1193,9 +1193,9 @@ public class NdlCommons {
     /**
      * Check that this resource has this type
      * 
-     * @param r
-     * @param t
-     * @return
+     * @param r r
+     * @param t  t
+     * @return boolean
      */
     public static boolean hasResourceType(Resource r, Resource t) {
         return r.hasProperty(RDF_TYPE, t);
@@ -1204,8 +1204,8 @@ public class NdlCommons {
     /**
      * Get RDFS_Label property of resource
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return String
      */
     public static String getResourceLabel(Resource r) {
         return getStringProperty(r, RDFS_Label);
@@ -1214,8 +1214,8 @@ public class NdlCommons {
     /**
      * Get the value of the post boot script property
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return String
      */
     public static String getPostBootScript(Resource i) {
         return getStringProperty(i, requestPostBootScriptProperty);
@@ -1224,8 +1224,8 @@ public class NdlCommons {
     /**
      * Get the value of the groupName property
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return String
      */
     public static String getGroupName(Resource i) {
         assert (i != null);
@@ -1290,8 +1290,8 @@ public class NdlCommons {
     /**
      * Get domain inDomain property of Resource (reservation or node) or null
      * 
-     * @param res
-     * @return
+     * @param res res
+     * @return Resource
      */
     public static Resource getDomain(Resource res) {
         assert (res != null);
@@ -1303,10 +1303,10 @@ public class NdlCommons {
     }
 
     /**
-     * Do domain name (NDL -> short name) from domain resource
+     * Do domain name (NDL  to short name) from domain resource
      * 
-     * @param dom
-     * @return
+     * @param dom dom
+     * @return String 
      */
     public static String getDomainName(Resource dom) {
         if (dom == null)
@@ -1318,15 +1318,14 @@ public class NdlCommons {
         return domainName;
     }
 
+    public static final String UriSeparator = "#";
+    public static final String UriSuffix = "/Domain";
     /**
      * Really short name equal to the one used in config.xml
      * 
-     * @param dom
-     * @return
+     * @param domain_url domain_url
+     * @return String
      */
-    public static final String UriSeparator = "#";
-    public static final String UriSuffix = "/Domain";
-
     public static String getOrcaDomainName(String domain_url) {
         if (domain_url == null)
             return null;
@@ -1356,9 +1355,9 @@ public class NdlCommons {
      * Get possible ExoGENI virtualization types based on resource type ("VM", "VLAN" or ...) Returns empty list if none
      * are advertised.
      * 
-     * @param abstractModel
-     * @param rType
-     * @return
+     * @param abstractModel abstractModel
+     * @param rType rType
+     * @return list of resources
      */
     public static List<Resource> getXOVirtualizationType(OntModel abstractModel, String rType) {
         abstractModel.read(ORCA_NS + "exogeni.owl");
@@ -1421,8 +1420,8 @@ public class NdlCommons {
     /**
      * Is this resource splittable? (default false, if unspecified)
      * 
-     * @param res
-     * @return
+     * @param res res
+     * @return true or false
      */
     public static boolean isSplittable(Resource res) {
         assert (res != null);
@@ -1436,8 +1435,8 @@ public class NdlCommons {
     /**
      * Is this element a modified element? (default false, if unspecified)
      * 
-     * @param res
-     * @return
+     * @param res res
+     * @return true or false
      */
     public static boolean isModify(Resource res) {
         assert (res != null);
@@ -1451,8 +1450,8 @@ public class NdlCommons {
     /**
      * Return numCE property or 0
      * 
-     * @param res
-     * @return
+     * @param res res
+     * @return numCE property or 0
      */
     public static int getNumCE(Resource res) {
         assert (res != null);
@@ -1467,7 +1466,8 @@ public class NdlCommons {
     /**
      * get specificCE property of a resource
      * 
-     * @return
+     * @param res res
+     * @return specificCE property of a resource
      */
     public static Resource getSpecificCE(Resource res) {
         assert (res != null);
@@ -1507,7 +1507,7 @@ public class NdlCommons {
      *            - resource
      * @param element
      *            - network element
-     * @return
+     * @return hasResourceType property of resource
      */
     public static DomainResourceType getDomainResourceType(Resource r, NetworkElement element) {
         DomainResourceType type = getDomainResourceType(r);
@@ -1549,8 +1549,8 @@ public class NdlCommons {
      * is picked at random. If no hasResourceType statements are found, looks at atLayer properties instead, uses IP as
      * resource label.
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return hasResourceType
      */
     public static DomainResourceType getDomainResourceType(Resource r) {
         assert (r != null);
@@ -1595,8 +1595,8 @@ public class NdlCommons {
      * Answer all domain resource types for this resource (if multiples are specified). Unlike getDomainResourceType()
      * it does not look at atLayer property - only hasResourceType property
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return all domain resource types for this resource
      */
     public static List<DomainResourceType> getDomainResourceTypes(Resource r) {
         assert (r != null);
@@ -1643,8 +1643,8 @@ public class NdlCommons {
     /**
      * Convert the state into a string (s is state)
      * 
-     * @param s
-     * @return
+     * @param s s
+     * @return state string
      */
     public static String getStateAsString(Resource s) {
         assert (s != null);
@@ -1677,8 +1677,8 @@ public class NdlCommons {
      * Get the state of the resource as string (checks that it has state, otherwise returns null), s is resource
      * possessing state.
      * 
-     * @param s
-     * @return
+     * @param s s
+     * @return state of the resource as string
      */
     public static String getResourceStateAsString(Resource s) {
         assert (s != null);
@@ -1692,8 +1692,8 @@ public class NdlCommons {
     /**
      * get reservation notice of the resource
      * 
-     * @param s
-     * @return
+     * @param s s
+     * @return reservation notice
      */
     public static String getResourceReservationNotice(Resource s) {
         return getStringProperty(s, requestMessage);
@@ -1702,9 +1702,9 @@ public class NdlCommons {
     /**
      * Return resources that have this interface
      * 
-     * @param i
-     * @param m
-     * @return
+     * @param i i
+     * @param m m
+     * @return resources that have this interface
      */
     public static List<Resource> getWhoHasInterface(Resource i, Model m) {
         // FIXME: HACK - should be done via inference and inverse property;
@@ -1730,8 +1730,8 @@ public class NdlCommons {
     /**
      * One of the owners of this interface is compute node
      * 
-     * @param intface
-     * @return
+     * @param intface intface
+     * @return true or false
      */
     public static boolean attachedToCompute(Resource intface) {
         List<Resource> attachedList = NdlCommons.getWhoHasInterface(intface, intface.getModel());
@@ -1746,8 +1746,8 @@ public class NdlCommons {
     /**
      * One of the owners of this interface is compute node
      * 
-     * @param intface
-     * @return
+     * @param intface intface
+     * @return true or false
      */
     public static boolean attachedToStitchPort(Resource intface) {
         List<Resource> attachedList = NdlCommons.getWhoHasInterface(intface, intface.getModel());
@@ -1762,8 +1762,8 @@ public class NdlCommons {
     /**
      * Get all subjects connectedTo this one (or null)
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return all subjects connectedTo this one
      */
     public static List<Resource> getConnectedToInterfaces(Resource i) {
         List<Resource> ret = new ArrayList<Resource>();
@@ -1778,8 +1778,8 @@ public class NdlCommons {
     /**
      * If the resource hasUrn property, return its value, null otherwise
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return hasUrn property
      */
     public static String getUrn(Resource i) {
         return getStringProperty(i, hasURNProperty);
@@ -1812,9 +1812,9 @@ public class NdlCommons {
     /**
      * Get some string property of a resource
      * 
-     * @param r
-     * @param p
-     * @return
+     * @param r r
+     * @param p p
+     * @return string property of a resource
      */
     protected static String getStringProperty(Resource r, Property p) {
         assert (r != null);
@@ -1829,8 +1829,8 @@ public class NdlCommons {
     /**
      * get a size of something
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return size of something
      */
     public static int getSizeProperty(Resource i) {
         return getIntProperty(i, collectionSizeProperty);
@@ -1839,8 +1839,8 @@ public class NdlCommons {
     /**
      * Get a DN property of something
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return DN property of something
      */
     public static String getDNProperty(Resource i) {
         return getStringProperty(i, hasDNProperty);
@@ -1849,8 +1849,8 @@ public class NdlCommons {
     /**
      * Get hasURN property of something
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return hasURN property of something
      */
     public static String getHasURLProperty(Resource i) {
         return getStringProperty(i, topologyHasURL);
@@ -1859,8 +1859,8 @@ public class NdlCommons {
     /**
      * Nodes created from groups have this set to point to parent
      * 
-     * @param i
-     * @return
+     * @param i i
+     * @return RequestGroupURLProperty
      */
     public static String getRequestGroupURLProperty(Resource i) {
         return getStringProperty(i, hasRequestGroupURL);
@@ -1868,7 +1868,8 @@ public class NdlCommons {
 
     /**
      * get a Name property of something
-     * 
+     * @param i i
+     * @return Name property of something
      */
     public static String getNameProperty(Resource i) {
         return getStringProperty(i, topologyHasName);
@@ -1898,9 +1899,9 @@ public class NdlCommons {
     /**
      * Get an integer property or Integer.MIN_VALUE
      * 
-     * @param r
-     * @param p
-     * @return
+     * @param r r
+     * @param p p
+     * @return integer property or Integer.MIN_VALUE
      */
     protected static int getIntProperty(Resource r, Property p) {
         assert (r != null);
@@ -1915,9 +1916,9 @@ public class NdlCommons {
     /**
      * get a floating point property or Float.MIN_VALUE
      * 
-     * @param r
-     * @param p
-     * @return
+     * @param r r
+     * @param p p
+     * @return floating point property or Float.MIN_VALUE
      */
     protected static float getFloatProperty(Resource r, Property p) {
         assert (r != null);
@@ -1932,9 +1933,9 @@ public class NdlCommons {
     /**
      * get a literal property value
      * 
-     * @param r
-     * @param p
-     * @return
+     * @param r r
+     * @param p p
+     * @return literal property value
      */
     protected static String getLiteralProperty(Resource r, Property p) {
         assert (r != null);
@@ -1949,7 +1950,8 @@ public class NdlCommons {
      * Typically for the ads. If the resource is a domain and it has a aggregate manager, get the controller URLs as a
      * list of strings
      * 
-     * @param d
+     * @param d d
+     * @return list of urls
      */
     public static List<String> getDomainControllerUrls(Resource d) {
         // check type
@@ -1975,8 +1977,8 @@ public class NdlCommons {
     /**
      * Get the controller url for a manifest
      * 
-     * @param m
-     * @return
+     * @param m m
+     * @return controller url for a manifest
      */
     public static String getManifestControllerUrl(Resource m) {
 
@@ -1999,8 +2001,8 @@ public class NdlCommons {
     /**
      * get locations of a domain
      * 
-     * @param d
-     * @return
+     * @param d d
+     * @return locations of a domain
      */
     public static List<Resource> getDomainLocations(Resource d) {
 
@@ -2023,8 +2025,8 @@ public class NdlCommons {
     /**
      * get latitude of a location
      * 
-     * @param loc
-     * @return
+     * @param loc loc
+     * @return latitude of a location
      */
     public static float getLat(Resource loc) {
         return getFloatProperty(loc, locationLatProperty);
@@ -2033,8 +2035,8 @@ public class NdlCommons {
     /**
      * get longitude of a location
      * 
-     * @param loc
-     * @return
+     * @param loc loc
+     * @return longitude of a location
      */
     public static float getLon(Resource loc) {
         return getFloatProperty(loc, locationLongProperty);
@@ -2043,8 +2045,8 @@ public class NdlCommons {
     /**
      * Get linkTo resource of this resource
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return linkTo resource of this resource
      */
     public static Resource getLinkTo(Resource r) {
         if (r == null)
@@ -2059,8 +2061,8 @@ public class NdlCommons {
     /**
      * Read a file into a string
      * 
-     * @param aFile
-     * @return
+     * @param aFile aFile
+     * @return file into a string
      */
     public static String readFile(String aFile) {
         BufferedReader bin = null;
@@ -2088,8 +2090,8 @@ public class NdlCommons {
     /**
      * Get upper label of a resource
      * 
-     * @param ls
-     * @return
+     * @param lsr lsr
+     * @return upper label of a resource
      */
     public static Label getUpperLabel(Resource lsr) {
         Label l = null;
@@ -2104,8 +2106,8 @@ public class NdlCommons {
     /**
      * Get lower label of a resource
      * 
-     * @param ls
-     * @return
+     * @param lsr lsr
+     * @return lower label of a resource
      */
     public static Label getLowerLabel(Resource lsr) {
         Label l = null;
@@ -2121,8 +2123,8 @@ public class NdlCommons {
     /**
      * Get label_ID property attached to the resource
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return label_ID property attached to the resource
      */
     public static String getLabelID(Resource r) {
         String ret = null;
@@ -2136,8 +2138,8 @@ public class NdlCommons {
     /**
      * Get the literal behind resource layer:Label layer:label_ID literal
      * 
-     * @param r
-     * @return
+     * @param r r 
+     * @return literal behind resource layer:Label layer:label_ID literal
      */
     public static String getLayerLabelLiteral(Resource r) {
         String ret = null;
@@ -2153,8 +2155,8 @@ public class NdlCommons {
     /**
      * parse out a layer.owl#Label
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return out a layer.owl#Label
      */
     public static Label parseLayerLabel(Resource r) {
         Label l = null;
@@ -2174,8 +2176,8 @@ public class NdlCommons {
     /**
      * Parse out a label, but don't assume the type is specified
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return label
      */
     public static Label parseLayerLabel_1(Resource r) {
         Label l = null;
@@ -2191,8 +2193,8 @@ public class NdlCommons {
      * 
      * @param set
      *            URI
-     * @param ontModel
-     * @return
+     * @param ontModel ontModel
+     * @return ResultSet from collection:element query
      */
     public static ResultSet getLabelSet(String set, OntModel ontModel) {
         ResultSet results = null;
@@ -2216,8 +2218,8 @@ public class NdlCommons {
      *            URI
      * @param rType
      *            resource type
-     * @param ontModel
-     * @return
+     * @param ontModel ontModel
+     * @return list of labelsets from a set URI
      */
     public static LinkedList<LabelSet> getLabelSet(String set, String rType, OntModel ontModel) {
 
@@ -2280,8 +2282,8 @@ public class NdlCommons {
     /**
      * Get key/value attributes from a color node as a single map. Returns non-null (possibly empty) map
      * 
-     * @param color
-     * @return
+     * @param color color
+     * @return key/value attributes from a color node as a single map
      */
     public static Map<String, String> getColorKeys(Resource color) {
         assert (color != null);
@@ -2303,8 +2305,8 @@ public class NdlCommons {
     /**
      * get the text blob on color. Returns null or string
      * 
-     * @param color
-     * @return
+     * @param color color
+     * @return text blob on color
      */
     public static String getColorBlob(Resource color) {
         assert (color != null);
@@ -2318,8 +2320,9 @@ public class NdlCommons {
     /**
      * get the XML blob on color. Returns null or string
      * 
-     * @param color
-     * @return
+     * @param color color
+     * @param compressed compressed
+     * @return XML blob on color
      */
     public static String getColorBlobXML(Resource color, boolean compressed) {
         assert (color != null);
@@ -2345,8 +2348,8 @@ public class NdlCommons {
     /**
      * Is this a LinkConnection?
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return true or false
      */
     public static boolean isLinkConnection(Resource r) {
         return r.hasProperty(RDF_TYPE, topologyLinkConnectionClass);
@@ -2355,8 +2358,8 @@ public class NdlCommons {
     /**
      * Is this a baremetal or VM?
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return true or false
      */
     public static boolean isBareMetal(Resource r) {
         if (r.hasProperty(domainHasResourceTypeProperty)) {
@@ -2370,8 +2373,8 @@ public class NdlCommons {
     /**
      * Is this an *ISCSI* networkStorage node?
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return true or false
      */
     public static boolean isISCSINetworkStorage(Resource r) {
         if (!isNetworkStorage(r))
@@ -2396,9 +2399,9 @@ public class NdlCommons {
      * Get peers across the connection or their interfaces. Note that the number of interfaces returned and the number
      * of nodes may not be the same, as a node may have multiple interfaces to the link shared with st
      * 
-     * @param st
-     * @param peers
-     * @return
+     * @param st st
+     * @param peers peers
+     * @return peers across the connection or their interfaces
      */
     public static Set<Resource> getPeersOrInterfaces(Resource st, boolean peers) {
         String query = NdlCommons.createQueryConnectionPeers(st);
@@ -2421,6 +2424,7 @@ public class NdlCommons {
      * 
      * @param r
      *            - resource in question
+     * @return true or false
      */
     public static boolean isMulticastDevice(Resource r) {
         if (!r.hasProperty(RDF_TYPE, deviceOntClass))
@@ -2436,8 +2440,8 @@ public class NdlCommons {
     /**
      * Is this a stitching node?
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return true or false
      */
     public static boolean isStitchingNode(Resource r) {
         if (hasResourceType(r, deviceOntClass)) {
@@ -2453,9 +2457,9 @@ public class NdlCommons {
     /*
      * Is this a stitching node?
      * 
-     * @param r
+     * @param r r
      * 
-     * @return
+     * @return true or false
      */
     public static boolean isStitchingNodeInManifest(Resource r) {
         if (r == null)
@@ -2474,8 +2478,8 @@ public class NdlCommons {
     /**
      * Get the specific type of baremetal node for this resource
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return true or false
      */
     public static String getBareMetalType(Resource r) {
         if (!isBareMetal(r))
@@ -2492,8 +2496,8 @@ public class NdlCommons {
     /**
      * Get a string corresponding to VM size in EC2 nomenclature (so EucaM1Small and EC2M1Small will both be m1.small)
      * 
-     * @param r
-     * @return
+     * @param r r
+     * @return string corresponding to VM size in EC2 nomenclature
      */
     public static String getEC2VMSize(Resource r) {
 
@@ -2530,7 +2534,7 @@ public class NdlCommons {
     /**
      * Get a preconfigured Logger for all things NDL
      * 
-     * @return
+     * @return preconfigured Logger for all things NDL
      */
     public static Logger getNdlLogger() {
         return Logger.getLogger(NDL_LOGGER);
@@ -2539,7 +2543,7 @@ public class NdlCommons {
     /**
      * Define useful namespaces
      * 
-     * @param model
+     * @param model model
      */
     public static void setPrefix(OntModel model) {
 

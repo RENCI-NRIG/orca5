@@ -23,6 +23,7 @@ public class Vmm
     /**
      * Creates a new VMM record.
      * @param host VMM host
+     * @param capacity capacity
      */
     public Vmm(Unit host, int capacity)
     {

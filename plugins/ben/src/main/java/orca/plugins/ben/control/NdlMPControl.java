@@ -53,7 +53,9 @@ public class NdlMPControl extends BenNdlControl {
     }
 
     /**
-     * {@overide}
+     * @param r r
+     * @return ResourceSet ResourceSet
+     * @throws Exception in case of error
      */
     public ResourceSet assign(IAuthorityReservation r) throws Exception {
         logger.debug("NdlMpControl.assign() for " + r + " is called");

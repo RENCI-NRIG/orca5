@@ -23,7 +23,7 @@ public interface IBroker extends IClientActor, IServerActor
      * @param reservation reservation representing a request for a ticket
      *        extension
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void extendTicket(IBrokerReservation reservation) throws Exception;
 
@@ -32,7 +32,7 @@ public interface IBroker extends IClientActor, IServerActor
      *
      * @param reservation reservation representing a request for a new ticket
      *
-     * @throws Exception
+     * @throws Exception in case of error
      */
     public void ticket(IBrokerReservation reservation) throws Exception;
 }

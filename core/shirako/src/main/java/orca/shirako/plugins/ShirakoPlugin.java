@@ -274,8 +274,8 @@ public class ShirakoPlugin implements IShirakoPlugin {
      * Returns the status code contained in the properties list. To be use in
      * configuration handlers.
      * 
-     * @param properties
-     * @return
+     * @param properties properties
+     * @return the status code contained in the properties list
      */
     protected int getResultCode(Properties properties) {
         int result = 0;
@@ -302,8 +302,8 @@ public class ShirakoPlugin implements IShirakoPlugin {
     /**
      * Callback handler for a completing join request
      * 
-     * @param token
-     * @param properties
+     * @param token token
+     * @param properties properties
      */
     protected void processJoinComplete(Object token, Properties properties) {
     }
@@ -311,8 +311,8 @@ public class ShirakoPlugin implements IShirakoPlugin {
     /**
      * Callback handler for a completing leave request.
      * 
-     * @param token
-     * @param properties
+     * @param token token
+     * @param properties properties
      */
     protected void processLeaveComplete(Object token, Properties properties) {
     }
