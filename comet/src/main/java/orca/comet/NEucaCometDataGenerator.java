@@ -249,7 +249,7 @@ public class NEucaCometDataGenerator {
                 }
                 else {
                     System.out.println("NEucaCometDataGenerator::saveObject: Removing family: " + family);
-                    return comet_.remove(sliceId_, rId_, readToken_, writeToken_, family.toString() + familySuffix);
+                    return comet_.write(sliceId_, rId_, readToken_, writeToken_, family.toString() + familySuffix, "[]");
                 }
             }
             else {

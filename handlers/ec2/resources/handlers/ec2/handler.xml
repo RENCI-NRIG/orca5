@@ -1470,6 +1470,8 @@
                             <echo message="R_ID=${unit.rid}" />
                             <echo message="UNIT_READ_TOKEN=${shirako.save.unit.comet.readToken}" />
                             <echo message="UNIT_WRITE_TOKEN=${shirako.save.unit.comet.writeToken}" />
+							<echo message="SLICE_READ_TOKEN=${slice.comet.readToken}" />
+							<echo message="SLICE_WRITE_TOKEN=${slice.comet.writeToken}" />
                             <echo message="COMETHOST=${comethost}" />
                             <echo message="COMETCLIENTCERT=${comet.clientcert}" />
                             <echo message="COMETCLIENTKEY=${comet.clientkey}" />
@@ -1492,6 +1494,8 @@
                                 <env key="R_ID" value="${unit.rid}" />
                                 <env key="UNIT_READ_TOKEN" value="${shirako.save.unit.comet.readToken}" />
                                 <env key="UNIT_WRITE_TOKEN" value="${shirako.save.unit.comet.writeToken}" />
+								<env key="SLICE_READ_TOKEN" value="${slice.comet.readToken}" />
+								<env key="SLICE_WRITE_TOKEN" value="${slice.comet.writeToken}" />
                             </exec>
                             <echo>result code: ${code}</echo>
                             <echo>output: ${remove.scope.output}</echo>

@@ -1081,17 +1081,20 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                             OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) ||
                             (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
                                     OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true"))) {
-                        List<ReservationMng> modifyReservations = m_map.get(ModifyType.MODIFY.toString());
-                        for (ReservationMng rr : modifyReservations) {
+                        for (ReservationMng rr : allRes) {
                             String rType = rr.getResourceType();
                             if (rType.endsWith("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {
                                 Properties local = OrcaConverter.fill(rr.getLocalProperties());
                                 readToken = local.getProperty(UnitProperties.SliceCometReadToken);
-                                break;
+                                if(readToken != null) {
+                                    logger.debug("Using existing read token=" + readToken);
+                                    break;
+                                }
                             }
                         }
                         if(readToken == null) {
                             readToken = RandomStringUtils.random(10, true, true);
+                            logger.debug("New read token=" + readToken);
                         }
                     }
                     for (ReservationMng rr : a_r) {
