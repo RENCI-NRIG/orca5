@@ -1,0 +1,44 @@
+set ns [ new Simulator ]
+source tb_compat.tcl
+
+foreach i [ list 101 109 111 112 113 114 115 116 117 118 119 ] {
+    set n($i) [ $ns node ]
+    tb-set-hardware $n($i) pc3060
+    tb-set-node-os $n($i) fc4-click-xinl
+}
+foreach i [ list 0 1 2 3 4 9 11 12 13 14 15 16 17 18 19 ] {
+    set n($i) [ $ns node ]
+    tb-set-hardware $n($i) pc3060
+    tb-set-node-os $n($i) fc4-click-xinl
+}
+
+for { set i 11 } { $i <= 19 } { incr i } {
+    lappend links [ list $i 1$i 1000Mb 0ms ]
+    if { $i <= 13 } {
+        lappend links [ list 2 $i 1000Mb 0ms ]
+    } elseif { $i <= 16 } {
+        lappend links [ list 3 $i 1000Mb 0ms ]
+    } else {
+        lappend links [ list 4 $i 1000Mb 0ms ]
+    }
+}
+lappend links [ list 0 2 1000Mb 10ms ]
+lappend links [ list 0 3 1000Mb 10ms ]
+lappend links [ list 0 4 1000Mb 10ms ]
+lappend links [ list 0 9 1000Mb 10ms ]
+lappend links [ list 9 109 1000Mb 0ms ]
+lappend links [ list 1 101 1000Mb 0ms ]
+lappend links [ list 0 1 10Mb 10ms ]
+
+foreach i $links {
+    set h1 [ lindex $i 0 ]
+    set h2 [ lindex $i 1 ]
+    set bw [ lindex $i 2 ]
+    set delay [ lindex $i 3 ]
+    $ns duplex-link $n($h1) $n($h2) $bw $delay DropTail
+    tb-set-ip-interface $n($h1) $n($h2) 10.$h1.$h2.1
+    tb-set-ip-interface $n($h2) $n($h1) 10.$h1.$h2.2
+}
+
+$ns rtproto Static
+$ns run

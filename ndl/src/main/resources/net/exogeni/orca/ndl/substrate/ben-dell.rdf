@@ -1,0 +1,600 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
+    <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
+    <!ENTITY compute "http://geni-orca.renci.org/owl/compute.owl#" >
+    <!ENTITY UNC2 "http://geni-orca.renci.org/owl/ben.rdf#UNC/" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY ethernet "http://geni-orca.renci.org/owl/ethernet.owl#" >
+    <!ENTITY ndl "http://geni-orca.renci.org/owl/topology.owl#" >
+    <!ENTITY Duke "http://geni-orca.renci.org/owl/ben.rdf#Duke/" >
+    <!ENTITY Renci2 "http://geni-orca.renci.org/owl/ben.rdf#Renci/" >
+    <!ENTITY Dell "http://geni-orca.renci.org/owl/ben.rdf#UNC/Dell/" >
+    <!ENTITY UNC "http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/" >
+    <!ENTITY Dell3 "http://geni-orca.renci.org/owl/ben.rdf#NCSU/Dell/" >
+    <!ENTITY Dell2 "http://geni-orca.renci.org/owl/ben.rdf#Duke/Dell/" >
+    <!ENTITY Renci "http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/" >
+    <!ENTITY Dell4 "http://geni-orca.renci.org/owl/ben.rdf#Renci/Dell/" >
+    <!ENTITY VMSite3 "http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/VMSite/" >
+    <!ENTITY VMSite5 "http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/VMSite/" >
+    <!ENTITY VMSite "http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/VMSite/1/" >
+    <!ENTITY go-23 "http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-2/" >
+    <!ENTITY VMSite4 "http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/VMSite/1/" >
+    <!ENTITY go-13 "http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-1/" >
+    <!ENTITY go-2 "http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-2/" >
+    <!ENTITY VMSite2 "http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/VMSite/1/" >
+    <!ENTITY go-12 "http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-1/" >
+    <!ENTITY Cisco "http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/" >
+    <!ENTITY go-1 "http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-1/" >
+    <!ENTITY go-22 "http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-2/" >
+    <!ENTITY f14 "http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-1/f1/" >
+    <!ENTITY f16 "http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-2/f1/" >
+    <!ENTITY Cisco2 "http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/" >
+    <!ENTITY f15 "http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/Dell/go-2/f1/" >
+    <!ENTITY f1 "http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-2/f1/" >
+    <!ENTITY f17 "http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/Dell/go-1/f1/" >
+    <!ENTITY f12 "http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-1/f1/" >
+    <!ENTITY f13 "http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-2/f1/" >
+    <!ENTITY f18 "http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-1/f1/" >
+    <!ENTITY GigabitEthernet5 "http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/GigabitEthernet/1/3/" >
+    <!ENTITY GigabitEthernet6 "http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/GigabitEthernet/1/2/" >
+    <!ENTITY GigabitEthernet "http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/GigabitEthernet/1/2/" >
+    <!ENTITY gB2 "http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/GigabitEthernet/gB/1/" >
+    <!ENTITY GigabitEthernet2 "http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/GigabitEthernet/1/3/" >
+    <!ENTITY GigabitEthernet4 "http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/GigabitEthernet/1/3/" >
+    <!ENTITY GigabitEthernet3 "http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/GigabitEthernet/1/2/" >
+    <!ENTITY gB3 "http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/GigabitEthernet/gB/1/" >
+    <!ENTITY gB "http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/GigabitEthernet/gB/1/" >
+]>
+
+
+<rdf:RDF xmlns="http://geni-orca.renci.org/owl/ben-dell.rdf#"
+     xml:base="http://geni-orca.renci.org/owl/ben-dell.rdf"
+     xmlns:VMSite="&UNC;VMSite/1/"
+     xmlns:Cisco="http://geni-orca.renci.org/owl/ben-6509.rdf#UNC/Cisco/6509/"
+     xmlns:GigabitEthernet3="&Cisco2;GigabitEthernet/1/2/"
+     xmlns:GigabitEthernet2="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/GigabitEthernet/1/3/"
+     xmlns:GigabitEthernet5="&Cisco;GigabitEthernet/1/3/"
+     xmlns:GigabitEthernet4="&Cisco2;GigabitEthernet/1/3/"
+     xmlns:GigabitEthernet6="&Cisco;GigabitEthernet/1/2/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:Cisco2="http://geni-orca.renci.org/owl/ben-6509.rdf#Renci/Cisco/6509/"
+     xmlns:ndl="http://geni-orca.renci.org/owl/topology.owl#"
+     xmlns:Dell3="http://geni-orca.renci.org/owl/ben.rdf#NCSU/Dell/"
+     xmlns:Dell4="&Renci2;Dell/"
+     xmlns:Dell2="&Duke;Dell/"
+     xmlns:go-23="&UNC;Dell/go-2/"
+     xmlns:go-22="&Renci;Dell/go-2/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:GigabitEthernet="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/GigabitEthernet/1/2/"
+     xmlns:VMSite3="&UNC;VMSite/"
+     xmlns:VMSite2="&Renci;VMSite/1/"
+     xmlns:Dell="&UNC2;Dell/"
+     xmlns:VMSite5="http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/VMSite/"
+     xmlns:VMSite4="&VMSite5;1/"
+     xmlns:UNC="http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/"
+     xmlns:f12="&go-12;f1/"
+     xmlns:go-2="http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-2/"
+     xmlns:go-1="&Renci;Dell/go-1/"
+     xmlns:f16="&UNC;Dell/go-2/f1/"
+     xmlns:f15="http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/Dell/go-2/f1/"
+     xmlns:f14="&UNC;Dell/go-1/f1/"
+     xmlns:f13="&Renci;Dell/go-2/f1/"
+     xmlns:f18="&Renci;Dell/go-1/f1/"
+     xmlns:f17="http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/Dell/go-1/f1/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:go-12="http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-1/"
+     xmlns:go-13="&UNC;Dell/go-1/"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
+     xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
+     xmlns:Renci2="http://geni-orca.renci.org/owl/ben.rdf#Renci/"
+     xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
+     xmlns:f1="&go-2;f1/"
+     xmlns:UNC2="http://geni-orca.renci.org/owl/ben.rdf#UNC/"
+     xmlns:Duke="http://geni-orca.renci.org/owl/ben.rdf#Duke/"
+     xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
+     xmlns:gB="&Cisco2;GigabitEthernet/gB/1/"
+     xmlns:Renci="http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/"
+     xmlns:gB2="&Cisco;GigabitEthernet/gB/1/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:gB3="http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/GigabitEthernet/gB/1/">
+    <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/ben-dell.rdf">
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/compute.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#hasResourceType -->
+
+    <owl:ObjectProperty rdf:about="&domain;hasResourceType"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#switchingCapability -->
+
+    <owl:ObjectProperty rdf:about="&layer;switchingCapability"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#hasInterface -->
+
+    <owl:ObjectProperty rdf:about="&ndl;hasInterface"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#hasSwitchMatrix -->
+
+    <owl:ObjectProperty rdf:about="&ndl;hasSwitchMatrix"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#interfaceOf -->
+
+    <owl:ObjectProperty rdf:about="&ndl;interfaceOf"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#linkTo -->
+
+    <owl:ObjectProperty rdf:about="&ndl;linkTo"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#bandwidth -->
+
+    <owl:DatatypeProperty rdf:about="&layer;bandwidth"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#hostName -->
+
+    <owl:DatatypeProperty rdf:about="&ndl;hostName"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#managementIP -->
+
+    <owl:DatatypeProperty rdf:about="&ndl;managementIP"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/compute.owl#ServerCloud -->
+
+    <owl:Class rdf:about="&compute;ServerCloud"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement -->
+
+    <owl:Class rdf:about="&ethernet;EthernetNetworkElement"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix -->
+
+    <owl:Class rdf:about="&ethernet;EthernetSwitchingMatrix"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#Interface -->
+
+    <owl:Class rdf:about="&ndl;Interface"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-1/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&go-12;EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-1/f1/ethernet -->
+
+    <rdf:Description rdf:about="&go-12;f1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <rdfs:label>eth1</rdfs:label>
+        <ndl:linkTo rdf:resource="&GigabitEthernet;ethernet"/>
+        <ndl:interfaceOf rdf:resource="&Duke;Dell/go-1"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-2/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&go-2;EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/Dell/go-2/f1/ethernet -->
+
+    <rdf:Description rdf:about="&go-2;f1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <rdfs:label>eth1</rdfs:label>
+        <ndl:linkTo rdf:resource="&GigabitEthernet2;ethernet"/>
+        <ndl:interfaceOf rdf:resource="&Duke;Dell/go-2"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/VMSite/1/Ethernet -->
+
+    <rdf:Description rdf:about="&VMSite5;1/Ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <ndl:linkTo rdf:resource="&gB3;ethernet"/>
+        <ndl:interfaceOf rdf:resource="&Duke;VMSite"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Duke/VMSite/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&VMSite5;EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/Dell/go-1/f1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&f17;ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <ndl:interfaceOf rdf:resource="&Dell3;go-1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/Dell/go-2/f1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="&f15;ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <ndl:interfaceOf rdf:resource="&Dell3;go-2"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/VMSite/1/Etherent -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/VMSite/1/Etherent">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <ndl:linkTo rdf:resource="http://geni-orca.renci.org/owl/ben-6509.rdf#NCSU/Juniper/QFX3500/GigabitEthernet/0/0/1/ethernet"/>
+        <ndl:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ben.rdf#NCSU/VMSite"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/VMSite/EthernetSwitchingMatirx -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/VMSite/EthernetSwitchingMatirx">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-1/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&Renci;Dell/go-1/EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-1/f1/ethernet -->
+
+    <rdf:Description rdf:about="&Renci;Dell/go-1/f1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <rdfs:label>eth1</rdfs:label>
+        <ndl:linkTo rdf:resource="&Cisco2;GigabitEthernet/1/2/ethernet"/>
+        <ndl:interfaceOf rdf:resource="&Renci2;Dell/go-1"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-2/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&Renci;Dell/go-2/EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/Dell/go-2/f1/ethernet -->
+
+    <rdf:Description rdf:about="&Renci;Dell/go-2/f1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <rdfs:label>eth1</rdfs:label>
+        <ndl:linkTo rdf:resource="&Cisco2;GigabitEthernet/1/3/ethernet"/>
+        <ndl:interfaceOf rdf:resource="&Renci2;Dell/go-2"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/VMSite/1/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&Renci;VMSite/1/EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#Renci/VMSite/1/ethernet -->
+
+    <rdf:Description rdf:about="&Renci;VMSite/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <ndl:linkTo rdf:resource="&Cisco2;GigabitEthernet/gB/1/ethernet"/>
+        <ndl:interfaceOf rdf:resource="&Renci2;VMSite"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-1/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&UNC;Dell/go-1/EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-1/f1/ethernet -->
+
+    <rdf:Description rdf:about="&UNC;Dell/go-1/f1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <ndl:linkTo rdf:resource="&Cisco;GigabitEthernet/1/2/ethernet"/>
+        <ndl:interfaceOf rdf:resource="&UNC2;Dell/go-1"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-2/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&UNC;Dell/go-2/EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/Dell/go-2/f1/ethernet -->
+
+    <rdf:Description rdf:about="&UNC;Dell/go-2/f1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <ndl:linkTo rdf:resource="&Cisco;GigabitEthernet/1/3/ethernet"/>
+        <ndl:interfaceOf rdf:resource="&UNC2;Dell/go-2"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/VMSite/1/ethernet -->
+
+    <rdf:Description rdf:about="&UNC;VMSite/1/ethernet">
+        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
+        <rdf:type rdf:resource="&ndl;Interface"/>
+        <layer:bandwidth rdf:datatype="&xsd;long">1000000000</layer:bandwidth>
+        <ndl:linkTo rdf:resource="&Cisco;GigabitEthernet/gB/1/ethernet"/>
+        <ndl:interfaceOf rdf:resource="&UNC2;VMSite"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben-dell.rdf#UNC/VMSite/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="&UNC;VMSite/EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#Duke/Dell/go-1 -->
+
+    <rdf:Description rdf:about="&Duke;Dell/go-1">
+        <rdfs:label>Server</rdfs:label>
+        <ndl:hostName>go-1.duke.ben</ndl:hostName>
+        <ndl:managementIP>192.168.202.11</ndl:managementIP>
+        <ndl:hasSwitchMatrix rdf:resource="&go-12;EthernetSwitchingMatrix"/>
+        <ndl:hasInterface rdf:resource="&go-12;f1/ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#Duke/Dell/go-2 -->
+
+    <rdf:Description rdf:about="&Duke;Dell/go-2">
+        <rdfs:label>Server</rdfs:label>
+        <ndl:hostName>go-2.duke.ben</ndl:hostName>
+        <ndl:managementIP>192.168.202.12</ndl:managementIP>
+        <ndl:hasSwitchMatrix rdf:resource="&go-2;EthernetSwitchingMatrix"/>
+        <ndl:hasInterface rdf:resource="&go-2;f1/ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#Duke/VMSite -->
+
+    <rdf:Description rdf:about="&Duke;VMSite">
+        <rdf:type rdf:resource="&compute;ServerCloud"/>
+        <ndl:hasInterface rdf:resource="&VMSite5;1/Ethernet"/>
+        <ndl:hasSwitchMatrix rdf:resource="&VMSite5;EthernetSwitchingMatrix"/>
+        <domain:hasResourceType rdf:resource="&compute;VM"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#NCSU/Dell/go-1 -->
+
+    <rdf:Description rdf:about="&Dell3;go-1">
+        <ndl:managementIP>192.168.204.11</ndl:managementIP>
+        <ndl:hostName>go-1.ncsu.ben</ndl:hostName>
+        <ndl:hasInterface rdf:resource="&f17;ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#NCSU/Dell/go-2 -->
+
+    <rdf:Description rdf:about="&Dell3;go-2">
+        <ndl:hostName>go-2.ncsu.ben</ndl:hostName>
+        <ndl:managementIP>192.168.204.12</ndl:managementIP>
+        <ndl:hasInterface rdf:resource="&f15;ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#NCSU/VMSite -->
+
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/ben.rdf#NCSU/VMSite">
+        <rdf:type rdf:resource="&compute;ServerCloud"/>
+        <ndl:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/VMSite/1/Etherent"/>
+        <ndl:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ben-dell.rdf#NCSU/VMSite/EthernetSwitchingMatirx"/>
+        <domain:hasResourceType rdf:resource="&compute;VM"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#Renci/Dell/go-1 -->
+
+    <rdf:Description rdf:about="&Renci2;Dell/go-1">
+        <rdfs:label>Server</rdfs:label>
+        <ndl:managementIP>192.168.201.11</ndl:managementIP>
+        <ndl:hostName>go-1.renci.ben</ndl:hostName>
+        <ndl:hasSwitchMatrix rdf:resource="&Renci;Dell/go-1/EthernetSwitchingMatrix"/>
+        <ndl:hasInterface rdf:resource="&Renci;Dell/go-1/f1/ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#Renci/Dell/go-2 -->
+
+    <rdf:Description rdf:about="&Renci2;Dell/go-2">
+        <rdfs:label>Server</rdfs:label>
+        <ndl:hostName>go-2.renci.ben</ndl:hostName>
+        <ndl:managementIP>192.168.201.12</ndl:managementIP>
+        <ndl:hasSwitchMatrix rdf:resource="&Renci;Dell/go-2/EthernetSwitchingMatrix"/>
+        <ndl:hasInterface rdf:resource="&Renci;Dell/go-2/f1/ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#Renci/VMSite -->
+
+    <rdf:Description rdf:about="&Renci2;VMSite">
+        <rdf:type rdf:resource="&compute;ServerCloud"/>
+        <ndl:hasSwitchMatrix rdf:resource="&Renci;VMSite/1/EthernetSwitchingMatrix"/>
+        <ndl:hasInterface rdf:resource="&Renci;VMSite/1/ethernet"/>
+        <domain:hasResourceType rdf:resource="&compute;VM"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#UNC/Dell/go-1 -->
+
+    <rdf:Description rdf:about="&UNC2;Dell/go-1">
+        <ndl:hostName>go-1.unc.ben</ndl:hostName>
+        <ndl:managementIP>192.168.203.11</ndl:managementIP>
+        <ndl:hasSwitchMatrix rdf:resource="&UNC;Dell/go-1/EthernetSwitchingMatrix"/>
+        <ndl:hasInterface rdf:resource="&UNC;Dell/go-1/f1/ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#UNC/Dell/go-2 -->
+
+    <rdf:Description rdf:about="&UNC2;Dell/go-2">
+        <ndl:managementIP>192.168.203.12</ndl:managementIP>
+        <ndl:hostName>go-2.unc.ben</ndl:hostName>
+        <ndl:hasSwitchMatrix rdf:resource="&UNC;Dell/go-2/EthernetSwitchingMatrix"/>
+        <ndl:hasInterface rdf:resource="&UNC;Dell/go-2/f1/ethernet"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ben.rdf#UNC/VMSite -->
+
+    <rdf:Description rdf:about="&UNC2;VMSite">
+        <rdf:type rdf:resource="&compute;ServerCloud"/>
+        <ndl:hasInterface rdf:resource="&UNC;VMSite/1/ethernet"/>
+        <ndl:hasSwitchMatrix rdf:resource="&UNC;VMSite/EthernetSwitchingMatrix"/>
+        <domain:hasResourceType rdf:resource="&compute;VM"/>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

@@ -1,0 +1,18 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.nicl.duke.edu/orca/manage/services/broker"
+	xmlns="http://www.nicl.duke.edu/orca/manage/services/broker"
+	xmlns:beans="http://www.nicl.duke.edu/orca/manage/beans" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	jxb:version="1.0" elementFormDefault="qualified">
+
+	<xsd:import namespace="http://www.nicl.duke.edu/orca/manage/beans"
+		schemaLocation="orca.manage.beans.xsd" />
+
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jxb:schemaBindings>
+				<jxb:package name="orca.manage.proxies.soap.beans.broker" />
+			</jxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+</xsd:schema>

@@ -1,0 +1,11 @@
+<mapping xmlns="http://issg.cs.duke.edu/cod/plugins/beans">
+	<mysql>
+        <entry name="mysql">
+            <attributes>
+                <map from="act_name" to="net.exogeni.orca.shirako.core.Actor.PropertyName" />
+                <map from="act_guid" to="net.exogeni.orca.shirako.core.Actor.PropertyGuid" />
+		        <map from="act_type" to="net.exogeni.orca.shirako.core.Actor.PropertyType" />
+            </attributes>
+        </entry>
+	</mysql>
+</mapping>

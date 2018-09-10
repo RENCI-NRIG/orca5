@@ -1,0 +1,135 @@
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: #axisVersion# #today# -->
+
+<service name="ActorService">
+<messageReceivers>
+<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="net.exogeni.orca.shirako.proxies.soapaxis2.services.ActorServiceMessageReceiverInOut"/>
+</messageReceivers>
+<parameter locked="false" name="ServiceClass">net.exogeni.orca.shirako.proxies.soapaxis2.services.ActorServiceSkeleton</parameter>
+<operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateLease</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateLeaseResponse</outputActionMapping>
+
+<parameter name="InflowSecurity">
+   <action>
+     <items>Signature</items>
+     <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+     <signaturePropFile>PROPFILE</signaturePropFile>
+     <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+   </action>
+</parameter>
+
+<parameter name="OutflowSecurity">
+    <action>
+      <items>Signature</items>
+      <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+      <signaturePropFile>PROPFILE</signaturePropFile>
+      <items>Signature</items>
+      <user>actorKey</user>
+      <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+    </action>
+</parameter>
+
+</operation>
+<operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>updateTicket</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateTicketResponse</outputActionMapping>
+
+<parameter name="InflowSecurity">
+   <action>
+     <items>Signature</items>
+     <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+     <signaturePropFile>PROPFILE</signaturePropFile>
+     <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+   </action>
+</parameter>
+
+<parameter name="OutflowSecurity">
+    <action>
+      <items>Signature</items>
+      <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+      <signaturePropFile>PROPFILE</signaturePropFile>
+      <items>Signature</items>
+      <user>actorKey</user>
+      <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+    </action>
+</parameter>
+
+</operation>
+<operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>query</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResponse</outputActionMapping>
+
+<parameter name="InflowSecurity">
+   <action>
+     <items>Signature</items>
+     <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+     <signaturePropFile>PROPFILE</signaturePropFile>
+     <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+   </action>
+</parameter>
+
+<parameter name="OutflowSecurity">
+    <action>
+      <items>Signature</items>
+      <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+      <signaturePropFile>PROPFILE</signaturePropFile>
+      <items>Signature</items>
+      <user>actorKey</user>
+      <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+    </action>
+</parameter>
+
+</operation>
+<operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>failedRPC</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/failedRPCResponse</outputActionMapping>
+
+<parameter name="InflowSecurity">
+   <action>
+     <items>Signature</items>
+     <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+     <signaturePropFile>PROPFILE</signaturePropFile>
+     <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+   </action>
+</parameter>
+
+<parameter name="OutflowSecurity">
+    <action>
+      <items>Signature</items>
+      <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+      <signaturePropFile>PROPFILE</signaturePropFile>
+      <items>Signature</items>
+      <user>actorKey</user>
+      <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+    </action>
+</parameter>
+
+</operation>
+<operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
+<actionMapping>queryResult</actionMapping>
+<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResultResponse</outputActionMapping>
+
+<parameter name="InflowSecurity">
+   <action>
+     <items>Signature</items>
+     <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+     <signaturePropFile>PROPFILE</signaturePropFile>
+     <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+   </action>
+</parameter>
+
+<parameter name="OutflowSecurity">
+    <action>
+      <items>Signature</items>
+      <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+      <signaturePropFile>PROPFILE</signaturePropFile>
+      <items>Signature</items>
+      <user>actorKey</user>
+      <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
+    </action>
+</parameter>
+
+</operation>
+</service>
+

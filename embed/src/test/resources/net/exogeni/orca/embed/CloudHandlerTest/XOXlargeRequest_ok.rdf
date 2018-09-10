@@ -1,0 +1,85 @@
+<rdf:RDF
+        xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
+        xmlns:kansei="http://geni-orca.renci.org/owl/kansei.owl#"
+        xmlns:request="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#"
+        xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:modify-schema="http://geni-orca.renci.org/owl/modify.owl#"
+        xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
+        xmlns:planetlab="http://geni-orca.renci.org/owl/planetlab.owl#"
+        xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
+        xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
+        xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
+        xmlns:request-schema="http://geni-orca.renci.org/owl/request.owl#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
+        xmlns:ec2="http://geni-orca.renci.org/owl/ec2.owl#"
+        xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
+        xmlns:app-color="http://geni-orca.renci.org/owl/app-color.owl#"
+        xmlns:dtn="http://geni-orca.renci.org/owl/dtn.owl#"
+        xmlns:time="http://www.w3.org/2006/time#"
+        xmlns:exogeni="http://geni-orca.renci.org/owl/exogeni.owl#"
+        xmlns:orca="http://geni-orca.renci.org/owl/orca.rdf#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:eucalyptus="http://geni-orca.renci.org/owl/eucalyptus.owl#"
+        xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" >
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#PRUTH-Ubuntu-14.04-v0.4">
+        <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PRUTH-Ubuntu-14.04-v0.4</topology:hasName>
+        <topology:hasURL>http://geni-images.renci.org/images/pruth/standard/ubuntu/ubuntu-14.04-server.v0.4/ubuntu-14.04-server.v0.4.xml</topology:hasURL>
+        <topology:hasGUID>b36c9bc0b8f2f78bc5d9fad9e8286587fa188682</topology:hasGUID>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#DiskImage"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#TermDuration">
+        <time:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</time:days>
+        <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#Node1">
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1-Node1"/>
+        <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#node boot script</request-schema:postBootScript>
+        <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOXlarge"/>
+        <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#PRUTH-Ubuntu-14.04-v0.4"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+        <topology:hasGUID>d3f12119-0444-441c-bc04-65d94c96680f</topology:hasGUID>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#Node0">
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1-Node0"/>
+        <request-schema:postBootScript rdf:datatype="http://www.w3.org/2001/XMLSchema#string">#node boot script</request-schema:postBootScript>
+        <compute:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOXlarge"/>
+        <compute:diskImage rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#PRUTH-Ubuntu-14.04-v0.4"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+        <topology:hasGUID>3e6cc4f7-57ba-46e3-a53c-be63961dca0b</topology:hasGUID>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1">
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1-Node1"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1-Node0"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10000000</layer:bandwidth>
+        <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <topology:hasGUID>5bd0bfdd-251f-4e97-a5a6-46c958dd4801</topology:hasGUID>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#BroadcastConnection"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1-Node0">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#">
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#Node1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#Node0"/>
+        <request-schema:hasTerm rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#Term"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/request.owl#Reservation"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#net1-Node1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#TermDuration">
+        <time:days rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1</time:days>
+        <rdf:type rdf:resource="http://www.w3.org/2006/time#DurationDescription"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#Term">
+        <time:hasDurationDescription rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#TermDuration"/>
+        <time:hasBeginning rdf:resource="http://geni-orca.renci.org/owl/fb9d559d-6790-44a6-bd31-d3ca8a855bdb#TermBeginning"/>
+        <rdf:type rdf:resource="http://www.w3.org/2006/time#Interval"/>
+    </rdf:Description>
+</rdf:RDF>
