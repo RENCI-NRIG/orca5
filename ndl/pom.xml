@@ -5,10 +5,10 @@
     </modelVersion> 
     <parent> 
         <artifactId>
-             orca 
+             orca
         </artifactId> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <version>5.4.4-SNAPSHOT</version> 
     </parent> 
@@ -16,7 +16,7 @@
          Orca NDL Processing 
     </name> 
     <groupId>
-         orca 
+        net.exogeni.orca
     </groupId> 
     <artifactId>
          ndl 
@@ -130,7 +130,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  util 
@@ -148,7 +148,7 @@
                     <archive> 
                         <manifest> 
                             <mainClass>
-                                 orca.ndl.NdlTDBLeakTest 
+                                net.exogeni.orca.ndl.NdlTDBLeakTest
                             </mainClass> 
                         </manifest> 
                     </archive> 

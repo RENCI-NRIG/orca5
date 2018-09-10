@@ -4,7 +4,7 @@
 	<!ENTITY tests SYSTEM "tests.xml">
 	<!ENTITY util SYSTEM "util.xml">
 ]>
-<project name="orca.nodeagent" default="help" basedir="." xmlns:artifact="urn:maven-artifact-ant">
+<project name="net.exogeni.orca.nodeagent" default="help" basedir="." xmlns:artifact="urn:maven-artifact-ant">
 
 	&deps;
 	&drivers;
@@ -14,7 +14,7 @@
 	<target name="help">
 		<echo>
 			copy.local - copies template configuration files locally
-			service - creates orca-nodeagent service aar
+			service - creates net.exogeni.orca-nodeagent service aar
 		</echo>
 	</target>
 
@@ -79,8 +79,8 @@
 			<!--
 			  <fileset dir="${maven.project.build.directory}">
 				  <include name="*.jar" />
-					  <exclude name="orca.nodeagent.tests-${maven.project.verion}.jar" />
-						  <exclude name="orca.nodeagent.client-${maven.project.verion}.jar" />
+					  <exclude name="net.exogeni.orca.nodeagent.tests-${maven.project.verion}.jar" />
+						  <exclude name="net.exogeni.orca.nodeagent.client-${maven.project.verion}.jar" />
 						  </fileset>
 					  -->
 		</copy>
@@ -99,18 +99,18 @@
 
 		<unjar dest="${maven.project.build.outputDirectory}">
 			<fileset dir="${tmp.dir}">
-				<include name="orca/drivers/core/**/*.jar" />
+                <include name="net/exogeni/orca/drivers/core/**/*.jar" />
 			</fileset>
 		</unjar>
 		<!--    <delete dir="${tmp.dir}" /> -->
 
-		<jar jarfile="${maven.project.build.directory}/orca.nodeagent-${maven.project.version}.aar">
+		<jar jarfile="${maven.project.build.directory}/net.exogeni.orca.nodeagent-${maven.project.version}.aar">
 			<fileset dir="${maven.project.build.outputDirectory}">
-				<exclude name="orca/axis2/tools/**/*" />
-				<exclude name="orca/nodeagent/Server.class" />
-				<exclude name="orca/nodeagent/tests/**/*.class" />
-				<exclude name="orca/nodeagent/AllTests.class" />
-				<exclude name="orca/nodeagent/client/*" />
+                <exclude name="net/exogeni/orca/axis2/tools/**/*" />
+                <exclude name="net/exogeni/orca/nodeagent/Server.class" />
+                <exclude name="net/exogeni/orca/nodeagent/tests/**/*.class" />
+                <exclude name="net/exogeni/orca/nodeagent/AllTests.class" />
+                <exclude name="net/exogeni/orca/nodeagent/client/*" />
 			</fileset>
 		</jar>
 

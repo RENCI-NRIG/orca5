@@ -12,7 +12,7 @@
                  9b12d036-23e7-11df-b3a3-000c29b1c193 
             </guid> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          duke.vm 
                     </type> 
@@ -83,7 +83,7 @@
                         <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/dukevmsite.rdf" /> 
                     </properties> 
                 </pool> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          duke.GEPort 
                     </type> 
@@ -121,7 +121,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -131,8 +131,8 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
-                <control type="duke.GEPort" class="orca.controllers.ben.control.PortNDLControl" /> 
+                <control type="duke.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
+                <control type="duke.GEPort" class="net.exogeni.orca.controllers.ben.control.PortNDLControl" />
             </controls> 
         </actor> 
         <!-- NOT TO BE USED FOR THE DEMO --> 
@@ -147,7 +147,7 @@
                  993c8fb0-8867-11df-ac05-000c29b1c193 
             </guid> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          unc.vm 
                     </type> 
@@ -220,7 +220,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="unc.vm" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="unc.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -234,7 +234,7 @@
                  19f1b53b-f081-4544-81fa-b0467bff73c1 
             </guid> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          renci.vm 
                     </type> 
@@ -304,7 +304,7 @@
                         <property name="substrate.file" value="/home/orca/orca-trunk/tools/cmdline/ndl/rencivmsite.rdf" /> 
                     </properties> 
                 </pool> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          renci.GEPort 
                     </type> 
@@ -342,7 +342,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -352,8 +352,8 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
-                <control type="renci.GEPort" class="orca.controllers.ben.control.PortNDLControl" /> 
+                <control type="renci.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
+                <control type="renci.GEPort" class="net.exogeni.orca.controllers.ben.control.PortNDLControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -367,7 +367,7 @@
                  9df4de98-23e7-11df-b49f-000c29b1c193 
             </guid> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          vise.testbed 
                     </type> 
@@ -404,7 +404,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="vise.testbed" class="orca.policy.core.UnitsControl" /> 
+                <control type="vise.testbed" class="net.exogeni.orca.policy.core.UnitsControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -421,7 +421,7 @@
                  DUKE NET site authority 
             </description> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          duke.vlan 
                     </type> 
@@ -459,7 +459,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -471,7 +471,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="duke.vlan" class="orca.policy.core.VlanControl" /> 
+                <control type="duke.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
             </controls> 
         </actor> 
         <!-- NOT TO BE USED FOR THE DEMO --> 
@@ -489,7 +489,7 @@
                  UNC NET site authority 
             </description> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          unc.vlan 
                     </type> 
@@ -527,7 +527,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -539,7 +539,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="unc.vlan" class="orca.policy.core.VlanControl" /> 
+                <control type="unc.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -556,7 +556,7 @@
                  RENCI NET site authority 
             </description> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          renci.vlan 
                     </type> 
@@ -594,7 +594,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -606,7 +606,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="renci.vlan" class="orca.policy.core.VlanControl" /> 
+                <control type="renci.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -623,7 +623,7 @@
                  BEN site authority 
             </description> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          ben.vlan 
                     </type> 
@@ -661,7 +661,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -671,7 +671,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="ben.vlan" class="orca.controllers.ben.control.BenNdlControl" /> 
+                <control type="ben.vlan" class="net.exogeni.orca.controllers.ben.control.BenNdlControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -688,7 +688,7 @@
                  a6bac0d8-23e7-11df-8b63-000c29b1c193 
             </guid> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          nlr.vlan 
                     </type> 
@@ -731,7 +731,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -741,7 +741,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="nlr.vlan" class="orca.policy.core.UnitsControl" /> 
+                <control type="nlr.vlan" class="net.exogeni.orca.policy.core.UnitsControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -758,7 +758,7 @@
                  a9c9cd6e-23e7-11df-af97-000c29b1c193 
             </guid> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          starlight.vlan 
                     </type> 
@@ -796,7 +796,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 orca.controllers.ben.broker.NDLVlanInventory 
+                                 net.exogeni.orca.controllers.ben.broker.NDLVlanInventory
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -806,7 +806,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="starlight.vlan" class="orca.policy.core.UnitsControl" /> 
+                <control type="starlight.vlan" class="net.exogeni.orca.policy.core.UnitsControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -819,7 +819,7 @@
             <guid>
                  acaa0b8e-23e7-11df-b278-000c29b1c193 
             </guid> 
-            <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
+            <policy class="net.exogeni.orca.policy.core.BrokerSimplerUnitsPolicy">
                 <properties> 
                     <property name="queue.type" value="fifo" /> 
                 </properties> 

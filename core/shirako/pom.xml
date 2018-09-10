@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>orca.core</groupId>
+	<groupId>net.exogeni.orca.core</groupId>
 	<artifactId>shirako</artifactId>
 	<packaging>jar</packaging>
 	<name>Orca Shirako Leasing Core</name>
 	<parent>
-		<groupId>orca</groupId>
+		<groupId>net.exogeni.orca</groupId>
 		<artifactId>core</artifactId>
 		<version>5.4.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<properties>
-		<client.jar>${project.build.directory}/orca.core.client-${project.version}.jar</client.jar>
+		<client.jar>${project.build.directory}/net.exogeni.orca.core.client-${project.version}.jar</client.jar>
 	</properties>
 
 	<dependencies>
@@ -27,9 +27,10 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>orca.tomcat</groupId>
+            <groupId>orca.tomcat</groupId>
 			<artifactId>common</artifactId>
-		</dependency>
+        </dependency>
+
 		<dependency>
 			<groupId>commons-discovery</groupId>
 			<artifactId>commons-discovery</artifactId>
@@ -131,12 +132,12 @@
 								<!-- build the client library -->
 								<jar jarfile="${client.jar}">
 									<fileset dir="${project.build.outputDirectory}">
-										<include name="orca/extensions/*.class" />
-										<include name="orca/extensions/beans/*.class" />
-										<include name="orca/manage/*.class" />
-										<include name="orca/manage/beans/*.class" />
-										<include name="orca/manage/proxies/**/*.class" />
-										<include name="orca/shirako/common/**/*" />
+                                        <include name="net/exogeni/orca/extensions/*.class" />
+                                        <include name="net/exogeni/orca/extensions/beans/*.class" />
+                                        <include name="net/exogeni/orca/manage/*.class" />
+                                        <include name="net/exogeni/orca/manage/beans/*.class" />
+                                        <include name="net/exogeni/orca/manage/proxies/**/*.class" />
+                                        <include name="net/exogeni/orca/shirako/common/**/*" />
 									</fileset>
 								</jar>
 								<attachArtifact file="${client.jar}" classifier="client" type="jar" />
@@ -156,7 +157,7 @@
 					<filesets>
 						<fileset>
 							<!-- the modelState directory can get huge. -->
-							<directory>orca/modelState</directory>
+                            <directory>net/exogeni/orca/modelState</directory>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
 					</filesets>

@@ -3,7 +3,7 @@
     <publishDate format="dd MMM yyyy" position="right" /> 
     <skin> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              site-skin 

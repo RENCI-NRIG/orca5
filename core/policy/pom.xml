@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>orca.core</groupId>
+	<groupId>net.exogeni.orca.core</groupId>
 	<artifactId>policy</artifactId>
 	<name>Orca Core Policies</name>
 	<packaging>jar</packaging>
 	<parent>
-		<groupId>orca</groupId>
+		<groupId>net.exogeni.orca</groupId>
 		<artifactId>core</artifactId>
 		<version>5.4.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -24,7 +24,7 @@
 			<scope>test</scope>
 		</dependency>
         <dependency>
-            <groupId>orca</groupId>
+            <groupId>net.exogeni.orca</groupId>
             <artifactId>ndl</artifactId>
             <version>${project.version}</version>
         </dependency>

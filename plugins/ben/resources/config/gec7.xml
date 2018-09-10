@@ -73,7 +73,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="duke.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -170,8 +170,8 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
-                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="duke.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
+                <control type="renci.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -206,7 +206,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="vise.testbed" class="orca.policy.core.UnitsControl" /> 
+                <control type="vise.testbed" class="net.exogeni.orca.policy.core.UnitsControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -248,7 +248,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="duke.vlan" class="orca.policy.core.VlanControl" /> 
+                <control type="duke.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -290,7 +290,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="renci.vlan" class="orca.policy.core.VlanControl" /> 
+                <control type="renci.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -334,7 +334,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="ben.vlan" class="orca.controllers.ben.control.BenNdlControl" /> 
+                <control type="ben.vlan" class="net.exogeni.orca.controllers.ben.control.BenNdlControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -377,7 +377,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="nlr.vlan" class="orca.policy.core.UnitsControl" /> 
+                <control type="nlr.vlan" class="net.exogeni.orca.policy.core.UnitsControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -418,7 +418,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="starlight.vlan" class="orca.policy.core.UnitsControl" /> 
+                <control type="starlight.vlan" class="net.exogeni.orca.policy.core.UnitsControl" />
             </controls> 
         </actor> 
         <actor> 
@@ -431,7 +431,7 @@
             <guid>
                  acaa0b8e-23e7-11df-b278-000c29b1c193 
             </guid> 
-            <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
+            <policy class="net.exogeni.orca.policy.core.BrokerSimplerUnitsPolicy">
                 <properties> 
                     <property name="queue.type" value="fifo" /> 
                 </properties> 

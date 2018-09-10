@@ -1,0 +1,3 @@
+nodeagent2.join=JoinTask
+nodeagent2.leave=LeaveTask
+nodeagent2.modify=ModifyTask

@@ -4,7 +4,7 @@
 <!ENTITY packages SYSTEM "ant/packages.xml">
 <!ENTITY tests SYSTEM "ant/tests.xml">
 ]>
-<project name="orca.run"
+<project name="net.exogeni.orca.run"
 	default="help"
 	basedir="."
 	xmlns:artifact="urn:maven-artifact-ant">

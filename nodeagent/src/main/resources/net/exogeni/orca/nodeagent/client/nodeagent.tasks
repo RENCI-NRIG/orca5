@@ -1,0 +1,8 @@
+nodeagent.register.authority=net.exogeni.orca.nodeagent.client.RegisterAuthorityKeyTask
+nodeagent.register.key=net.exogeni.orca.nodeagent.client.RegisterKeyTask
+nodeagent.get.key=net.exogeni.orca.nodeagent.client.GetServiceKeyTask
+nodeagent.add.key=net.exogeni.orca.nodeagent.client.InstallServiceKeyTask
+
+nodeagent.install.driver=net.exogeni.orca.nodeagent.drivers.InstallDriverTask
+nodeagent.upgrade.driver=net.exogeni.orca.nodeagent.drivers.UpgradeDriverTask
+nodeagent.uninstall.driver=net.exogeni.orca.nodeagent.drivers.UninstallDriverTask

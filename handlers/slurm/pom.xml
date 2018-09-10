@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.handlers 
+        net.exogeni.orca.handlers
     </groupId> 
     <artifactId>
          slurm 
@@ -18,7 +18,7 @@
     </name> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              handlers 
@@ -31,7 +31,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  shirako 
@@ -74,7 +74,7 @@
                                 <property name="path" refid="maven.plugin.classpath" /> 
                                 <echo message="path is: ${path}" /> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
-                                <property name="name.prefix" value="orca.handlers.slurm" /> 
+                                <property name="name.prefix" value="net.exogeni.orca.handlers.slurm" /> 
                                 <property name="run.classpath" refid="maven.runtime.classpath" /> 
                                 <echo message="${run.classpath}" /> 
                                 <delete dir="target/package" /> 

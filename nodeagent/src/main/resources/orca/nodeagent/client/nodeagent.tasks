@@ -1,8 +1,0 @@
-nodeagent.register.authority=orca.nodeagent.client.RegisterAuthorityKeyTask
-nodeagent.register.key=orca.nodeagent.client.RegisterKeyTask
-nodeagent.get.key=orca.nodeagent.client.GetServiceKeyTask
-nodeagent.add.key=orca.nodeagent.client.InstallServiceKeyTask
-
-nodeagent.install.driver=orca.nodeagent.drivers.InstallDriverTask
-nodeagent.upgrade.driver=orca.nodeagent.drivers.UpgradeDriverTask
-nodeagent.uninstall.driver=orca.nodeagent.drivers.UninstallDriverTask

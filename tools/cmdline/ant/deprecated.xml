@@ -6,7 +6,7 @@
             <delete dir="logs" /> 
             <delete dir="log" /> 
             <echo message="Running reset inventory test..." /> 
-            <java classname="orca.tests.core.ResetInventoryTest" Fork="Yes" failonerror="true"> 
+            <java classname="net.exogeni.orca.tests.core.ResetInventoryTest" Fork="Yes" failonerror="true"> 
                 <classpath refid="run.classpath" /> 
                 <arg value="${config}" /> 
             </java> 
@@ -33,7 +33,7 @@
     <echo message="configuration file: ${my.test.unit.reservation.emulation.config}" /> 
     <echo message="lease length: ${test.unit.reservation.emulation.leaseLength}" /> 
     <echo message="units:${test.unit.reservation.emulation.units}" /> 
-    <java classname="orca.tests.unit.main.ReservationTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.ReservationTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${my.test.unit.reservation.emulation.config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -58,7 +58,7 @@
     <echo message="configuration file: ${my.test.unit.reservation.real.config}" /> 
     <echo message="lease length: ${test.unit.reservation.real.leaseLength}" /> 
     <echo message="units: ${test.unit.reservation.real.units}" /> 
-    <java classname="orca.tests.unit.main.ReservationTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.ReservationTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${my.test.unit.reservation.real.config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -84,7 +84,7 @@
     <echo message="configuration file: ${my.test.unit.recovery.emulation.config}" /> 
     <echo message="lease length: ${test.unit.recovery.emulation.leaseLength}" /> 
     <echo message="units:${test.unit.recovery.emulation.units}" /> 
-    <java classname="orca.tests.unit.recovery.RecoveryTest" Fork="Yes"> 
+    <java classname="net.exogeni.orca.tests.unit.recovery.RecoveryTest" Fork="Yes"> 
         <classpath refid="run.classpath" /> 
         <arg value="${my.test.unit.recovery.emulation.config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -109,7 +109,7 @@
     <echo message="configuration file: ${my.test.unit.vlan.emulation.config}" /> 
     <echo message="lease length: ${test.unit.vlan.emulation.leaseLength}" /> 
     <echo message="units:${test.unit.vlan.emulation.units}" /> 
-    <java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${my.test.unit.vlan.emulation.config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -152,7 +152,7 @@
     <echo message="configuration file: ${my.config}" /> 
     <echo message="lease length: ${my.leaseLength}" /> 
     <echo message="units:${my.units}" /> 
-    <java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${my.config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -186,7 +186,7 @@
     <delete dir="logs" /> 
     <echo message="running ben controller test..." /> 
     <echo message="configuration file: ${myconfig}" /> 
-    <java classname="orca.controllers.ben.nlr.BenNlrControllerTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.controllers.ben.nlr.BenNlrControllerTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${myconfig}" /> 
         <arg value="do.not.recover=true" /> 

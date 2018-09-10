@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.plugins 
+         net.exogeni.orca.plugins
     </groupId> 
     <artifactId>
          ben 
@@ -18,7 +18,7 @@
     </name> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              plugins 
@@ -57,7 +57,7 @@
                         </phase> 
                         <configuration> 
                             <tasks> 
-                                <echo message="${maven.dependency.orca.embed.jar.path}" /> 
+                                <echo message="${maven.dependency.net.exogeni.orca.embed.jar.path}" /> 
                                 <property name="orca.embed.version" value="${project.version}" /> 
                                 <delete dir="target/package" /> 
                                 <mkdir dir="target/package" /> 
@@ -70,7 +70,7 @@
                                         <exclude name="*-sources.jar" /> 
                                     </fileset> 
                                 </copy> 
-                                <copy file="${maven.dependency.orca.embed.jar.path}" todir="target/package/lib" flatten="true" /> 
+                                <copy file="${maven.dependency.net.exogeni.orca.embed.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <copy file="${maven.dependency.org.apache.jena.jena-core.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <copy file="${maven.dependency.org.apache.jena.jena-arq.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <copy file="${maven.dependency.org.apache.jena.jena-iri.jar.path}" todir="target/package/lib" flatten="true" /> 
@@ -108,12 +108,12 @@
                                 <!-- add the package descriptor --> 
                                 <copy file="resources/package.xml" todir="target/package" /> 
                                 <!-- prepare the package --> 
-                                <tar tarfile="target/orca.plugins.ben.tar" basedir="target/package" /> 
-                                <gzip zipfile="target/orca.plugins.ben.tar.gz" src="target/orca.plugins.ben.tar" /> 
-                                <delete file="target/orca.plugins.ben.tar" /> 
+                                <tar tarfile="target/net.exogeni.orca.plugins.ben.tar" basedir="target/package" /> 
+                                <gzip zipfile="target/net.exogeni.orca.plugins.ben.tar.gz" src="target/net.exogeni.orca.plugins.ben.tar" /> 
+                                <delete file="target/net.exogeni.orca.plugins.ben.tar" /> 
                                 <delete dir="tmp" /> 
                                 <!-- attach the package as an artifact --> 
-                                <attachArtifact file="target/orca.plugins.ben.tar.gz" classifier="package" type="tar.gz" /> 
+                                <attachArtifact file="target/net.exogeni.orca.plugins.ben.tar.gz" classifier="package" type="tar.gz" /> 
                             </tasks> 
                         </configuration> 
                         <goals> 
@@ -129,7 +129,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  policy 
@@ -143,7 +143,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  shirako 
@@ -157,7 +157,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca 
+                net.exogeni.orca
             </groupId> 
             <artifactId>
                  embed 
@@ -168,7 +168,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  shirako 
@@ -185,7 +185,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  policy 

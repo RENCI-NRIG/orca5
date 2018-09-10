@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.controllers 
+        net.exogeni.orca.controllers
     </groupId> 
     <artifactId>
          openflow 
@@ -20,7 +20,7 @@
     </name> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              controllers 
@@ -61,8 +61,8 @@
                         </phase> 
                         <configuration> 
                             <tasks> 
-                                <echo message="${maven.dependency.orca.embed.jar.path}" /> 
-                                <property name="orca.embed.version" value="${project.version}" /> 
+                                <echo message="${maven.dependency.net.exogeni.orca.embed.jar.path}" /> 
+                                <property name="net.exogeni.orca.embed.version" value="${project.version}" /> 
                                 <delete dir="target/package" /> 
                                 <mkdir dir="target/package" /> 
                                 <mkdir dir="target/package/lib" /> 
@@ -73,7 +73,7 @@
                                         <exclude name="*-sources.jar" /> 
                                     </fileset> 
                                 </copy> 
-                                <copy file="${maven.dependency.orca.embed.jar.path}" todir="target/package/lib" flatten="true" /> 
+                                <copy file="${maven.dependency.net.exogeni.orca.embed.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <copy file="${maven.dependency.com.hp.hpl.jena.jena.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <copy file="${maven.dependency.com.hp.hpl.jena.arq.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <copy file="${maven.dependency.com.hp.hpl.jena.arq-extra.jar.path}" todir="target/package/lib" flatten="true" /> 
@@ -106,12 +106,12 @@
                                 <!-- add the package descriptor --> 
                                 <copy file="resources/package.xml" todir="target/package" /> 
                                 <!-- prepare the package --> 
-                                <tar tarfile="target/orca.controllers.openflow.tar" basedir="target/package" /> 
-                                <gzip zipfile="target/orca.controllers.openflow.tar.gz" src="target/orca.controllers.openflow.tar" /> 
-                                <delete file="target/orca.controllers.openflow.tar" /> 
+                                <tar tarfile="target/net.exogeni.orca.controllers.openflow.tar" basedir="target/package" /> 
+                                <gzip zipfile="target/net.exogeni.orca.controllers.openflow.tar.gz" src="target/net.exogeni.orca.controllers.openflow.tar" /> 
+                                <delete file="target/net.exogeni.orca.controllers.openflow.tar" /> 
                                 <delete dir="tmp" /> 
                                 <!-- attach the package as an artifact --> 
-                                <attachArtifact file="target/orca.controllers.openflow.tar.gz" classifier="package" type="tar.gz" /> 
+                                <attachArtifact file="target/net.exogeni.orca.controllers.openflow.tar.gz" classifier="package" type="tar.gz" /> 
                             </tasks> 
                         </configuration> 
                         <goals> 
@@ -127,7 +127,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                 orca.manage.extensions 
+                 net.exogeni.orca.manage.extensions 
             </groupId> 
             <artifactId>
                  standard 
@@ -138,7 +138,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.tests 
+                 net.exogeni.orca.tests 
             </groupId> 
             <artifactId>
                  core 
@@ -149,7 +149,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.handlers 
+                 net.exogeni.orca.handlers 
             </groupId> 
             <artifactId>
                  network 
@@ -172,7 +172,7 @@
         <!-- Those are necessary but only for execution --> 
         <dependency> 
             <groupId>
-                 orca.core 
+                 net.exogeni.orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -189,7 +189,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  policy 
