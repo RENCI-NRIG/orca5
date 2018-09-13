@@ -84,7 +84,7 @@ public class DomainResourceType implements LayerConstant, Comparable<DomainResou
 
     // reverve above function
     // @param: domain[/type]
-    // @return: domain url, e.g. http://geni-net.exogeni.orca.renci.org/rencivmsite.rdf/Domain[/vm], that would appear in the
+    // @return: domain url, e.g. http://geni-orca.renci.org/rencivmsite.rdf/Domain[/vm], that would appear in the
     // abstract domain model.
     public static String generateDomainResourceName(String domainName) {
         if (domainName == null)

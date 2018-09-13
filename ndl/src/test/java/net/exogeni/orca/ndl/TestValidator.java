@@ -47,13 +47,13 @@ public class TestValidator {
         NdlCommons.init();
         OntDocumentManager dm = OntDocumentManager.getInstance();
         dm.getFileManager().addLocator(new NdlModel.LocatorJarURL());
-        PrintUtil.registerPrefix("dom", "http://geni-net.exogeni.orca.renci.org/owl/domain.owl#");
-        PrintUtil.registerPrefix("comp", "http://geni-net.exogeni.orca.renci.org/owl/compute.owl#");
-        PrintUtil.registerPrefix("req", "http://geni-net.exogeni.orca.renci.org/owl/request.owl#");
-        PrintUtil.registerPrefix("net.exogeni.orca", "http://geni-net.exogeni.orca.renci.org/owl/net.exogeni.orca.owl#");
-        PrintUtil.registerPrefix("storage", "http://geni-net.exogeni.orca.renci.org/owl/storage.owl#");
-        PrintUtil.registerPrefix("col", "http://geni-net.exogeni.orca.renci.org/owl/collections.owl#");
-        PrintUtil.registerPrefix("topo", "http://geni-net.exogeni.orca.renci.org/owl/topology.owl#");
+        PrintUtil.registerPrefix("dom", "http://geni-orca.renci.org/owl/domain.owl#");
+        PrintUtil.registerPrefix("comp", "http://geni-orca.renci.org/owl/compute.owl#");
+        PrintUtil.registerPrefix("req", "http://geni-orca.renci.org/owl/request.owl#");
+        PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.owl#");
+        PrintUtil.registerPrefix("storage", "http://geni-orca.renci.org/owl/storage.owl#");
+        PrintUtil.registerPrefix("col", "http://geni-orca.renci.org/owl/collections.owl#");
+        PrintUtil.registerPrefix("topo", "http://geni-orca.renci.org/owl/topology.owl#");
     }
 
     /**
@@ -92,7 +92,7 @@ public class TestValidator {
         Model allSchemas = ModelFactory.createOntologyModel();
         for (String mode : inferenceModels) {
             System.out.println("Validating against " + mode);
-            URL schemaowl = cl.getResource("net.exogeni.orca/ndl/schema/" + mode);
+            URL schemaowl = cl.getResource("net/exogeni/orca/ndl/schema/" + mode);
             System.out.println("Trying to load " + schemaowl.toString());
             Model schema1 = FileManager.get().loadModel(schemaowl.toString());
             Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
@@ -160,7 +160,7 @@ public class TestValidator {
     public void validateModelWithRules(String fName) {
         System.out.println("Using rule file " + fName);
         ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
-        URL url = cl.getResource("net.exogeni.orca/ndl/rules/" + fName);
+        URL url = cl.getResource("net/exogeni/orca/ndl/rules/" + fName);
 
         List<Rule> rules = Rule.rulesFromURL(url.toString());
 

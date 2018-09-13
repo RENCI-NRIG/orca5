@@ -101,7 +101,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         LinkedList<Device> domainList = null;
         SystemNativeError error = null;
 
-        // String fileName = "/home/geni-net.exogeni.orca/workspace-net.exogeni.orca5/net.exogeni.orca5/stitch" + "-subrequest.rdf";
+        // String fileName = "/home/geni-orca/workspace-orca5/orca5/stitch" + "-subrequest.rdf";
         // OutputStream fsw = new FileOutputStream(fileName);
         // requestModel.write(fsw);
 
@@ -293,7 +293,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             return false;
         Resource domain_rs = stitchingNode.getProperty(NdlCommons.inDomainProperty).getResource();
         if (domain_rs.equals(NdlCommons.stitchingDomain)) {
-            String domain_url = NdlCommons.ORCA_NS + "net.exogeni.orca.rdf#" + UUID.randomUUID().toString() + "/"
+            String domain_url = NdlCommons.ORCA_NS + "orca.rdf#" + UUID.randomUUID().toString() + "/"
                     + NdlCommons.stitching_domain_str;
             domain_rs = requestModel.createResource(domain_url, NdlCommons.deviceOntClass);
         }

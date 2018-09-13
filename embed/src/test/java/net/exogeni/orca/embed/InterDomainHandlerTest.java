@@ -52,34 +52,34 @@ public class InterDomainHandlerTest extends MappingHandlerTest {
 
     protected void setUp() throws Exception {
         super.setUp();
-        requestFile20Duke = "orca/ndl/request/mp-request-20-duke.rdf"; // Renci/Euca - Umass
-        requestFile5 = "src/main/resources/orca/ndl/request/idRequest-rencivm-umass.rdf"; // Renci/Euca - Umass
-        requestFile4 = "src/main/resources/orca/ndl/request/idRequest4.rdf"; // UNC/Euca - Umass
-        requestFile3 = "orca/ndl/request/idRequest3.rdf"; // Duke/Port/6509/GE-Renci/Port/6509/GE, 2
-        requestFile2 = "src/main/resources/orca/ndl/request/idRequest2.rdf"; // Duke/Euca - Umass
-        requestFileRenciNersc = "src/main/resources/orca/ndl/request/idRequest-renciEuca-nerscEuca.rdf"; // Nersc/Euca -
+        requestFile20Duke = "net/exogeni/orca/ndl/request/mp-request-20-duke.rdf"; // Renci/Euca - Umass
+        requestFile5 = "src/main/resources/net/exogeni/orca/ndl/request/idRequest-rencivm-umass.rdf"; // Renci/Euca - Umass
+        requestFile4 = "src/main/resources/net/exogeni/orca/ndl/request/idRequest4.rdf"; // UNC/Euca - Umass
+        requestFile3 = "net/exogeni/orca/ndl/request/idRequest3.rdf"; // Duke/Port/6509/GE-Renci/Port/6509/GE, 2
+        requestFile2 = "src/main/resources/net/exogeni/orca/ndl/request/idRequest2.rdf"; // Duke/Euca - Umass
+        requestFileRenciNersc = "src/main/resources/net/exogeni/orca/ndl/request/idRequest-renciEuca-nerscEuca.rdf"; // Nersc/Euca -
                                                                                                          // Renci/Euca
-        requestFileDukeRenci = "src/main/resources/orca/ndl/request/idRequest-dukeEuca-renciEuca.rdf"; // Duke/Euca -
+        requestFileDukeRenci = "src/main/resources/net/exogeni/orca/ndl/request/idRequest-dukeEuca-renciEuca.rdf"; // Duke/Euca -
                                                                                                        // Renci/Euca
 
-        // requestFileRenciUNC = "src/test/resources/orca/embed/TS3/TS3-3.rdf"; //UNC/Euca - Renci/Euca
-        requestFileRenciUNC = ORCA_SRC_HOME + "embed/src/test/resources/orca/embed/TS3/TS3-3.rdf"; // UNC/Euca -
+        // requestFileRenciUNC = "src/test/resources/net/exogeni/orca/embed/TS3/TS3-3.rdf"; //UNC/Euca - Renci/Euca
+        requestFileRenciUNC = ORCA_SRC_HOME + "embed/src/test/resources/net/exogeni/orca/embed/TS3/TS3-3.rdf"; // UNC/Euca -
                                                                                                    // Renci/Euca
-        // requestFileRenciUNC = "src/main/resources/orca/ndl/request/paul-unc-renci-request.rdf"; //UNC/Euca -
+        // requestFileRenciUNC = "src/main/resources/net/exogeni/orca/ndl/request/paul-unc-renci-request.rdf"; //UNC/Euca -
         // Renci/Euca
 
         handler = new InterDomainHandler();
 
-        substrateFileName = "orca/ndl/substrate/ben-6509.rdf";
-        nlrsubstrateFileName = "orca/ndl/substrate/nlr.rdf";
+        substrateFileName = "net/exogeni/orca/ndl/substrate/ben-6509.rdf";
+        nlrsubstrateFileName = "net/exogeni/orca/ndl/substrate/nlr.rdf";
 
         benhandler = new NetworkHandler(substrateFileName);
 
         mphandler = new MultiPointNetworkHandler(nlrsubstrateFileName);
 
-        rencivmsubstrateFileName = "orca/ndl/substrate/rencivmsite.rdf";
-        dukevmsubstrateFileName = "orca/ndl/substrate/dukevmsite.rdf";
-        uncvmsubstrateFileName = "orca/ndl/substrate/uncvmsite.rdf";
+        rencivmsubstrateFileName = "net/exogeni/orca/ndl/substrate/rencivmsite.rdf";
+        dukevmsubstrateFileName = "net/exogeni/orca/ndl/substrate/dukevmsite.rdf";
+        uncvmsubstrateFileName = "net/exogeni/orca/ndl/substrate/uncvmsite.rdf";
 
         portHandler1 = new PortHandler(rencivmsubstrateFileName);
         portHandler2 = new PortHandler(dukevmsubstrateFileName);

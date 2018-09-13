@@ -156,7 +156,7 @@ protocols.soapaxis2.url=http://localhost:8080/orca
 # This section specifies the database to be used by this Orca container.
 
 # The class implementing the container database
-admin.container.database.class=orca.shirako.container.db.MySqlShirakoContainerDatabase
+admin.container.database.class=net.exogeni.orca.shirako.container.db.MySqlShirakoContainerDatabase
 # server hosting the database server
 admin.container.database.mysql.server=localhost
 # port number (default is 3306)
@@ -390,13 +390,13 @@ time.manual=false
 #############################################
 
 # IContainerManager implementation to use
-container.manager.class=orca.manage.container.Manager
+container.manager.class=net.exogeni.orca.manage.container.Manager
 # IConfigurationLoader implementation to use
 admin.configuration.loader.class=ConfigurationLoader
 # Implementation of IManagementDefaultsInstaller to use
-admin.management.defaults.installer.class=orca.manage.extensions.standard.StandardManagementDefaultsInstaller
+admin.management.defaults.installer.class=net.exogeni.orca.manage.extensions.standard.StandardManagementDefaultsInstaller
 # Implementation for the container manager object
-admin.container.manager.object.class=orca.manage.extensions.standard.container.CodContainerManagerObject
+admin.container.manager.object.class=net.exogeni.orca.manage.extensions.standard.container.CodContainerManagerObject
 +---
 
 

@@ -25,7 +25,7 @@ import com.hp.hpl.jena.util.ResourceUtils;
  */
 public class NdlModifyParser extends NdlParserHelper {
     public static final String USER_MODIFY_RULES_FILE_PROPERTY = "NDL_MODIFY_RULE_FILE";
-    private static final String RULES_FILE = "net.exogeni.orca/ndl/rules/modifyRules.rules";
+    private static final String RULES_FILE = "net/exogeni/orca/ndl/rules/modifyRules.rules";
     INdlModifyModelListener listener;
     OntModel modifyModel;
     boolean rewritten = false;

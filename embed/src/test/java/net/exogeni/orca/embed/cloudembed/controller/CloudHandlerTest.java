@@ -33,69 +33,69 @@ public class CloudHandlerTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(
-                new Object[][] { { "src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", true, 3 },
+                new Object[][] { { "src/test/resources/net/exogeni/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", true, 3 },
                         { "../controllers/xmlrpc/src/test/resources/20_create_with_netmask.rdf", true, 3 },
                         // run the regression test suite
-                        { "src/test/resources/orca/embed/TS1/TS1-1.rdf", true, 1 },
-                        { "src/test/resources/orca/embed/TS1/TS1-2.rdf", true, 1 },
-                        { "src/test/resources/orca/embed/TS1/TS1-3.rdf", true, 1 },
-                        { "src/test/resources/orca/embed/TS1/TS1-4.rdf", true, 4 },
-                        { "src/test/resources/orca/embed/TS1/TS1-5.rdf", true, 4 },
-                        { "src/test/resources/orca/embed/TS1/TS1-6.rdf", true, 4 },
-                        { "src/test/resources/orca/embed/TS1/TS1-7.rdf", true, 8 },
-                        { "src/test/resources/orca/embed/TS1/TS1-8.rdf", true, 8 },
-                        { "src/test/resources/orca/embed/TS1/TS1-9.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-1.rdf", true, 1 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-2.rdf", true, 1 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-3.rdf", true, 1 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-4.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-5.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-6.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-7.rdf", true, 8 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-8.rdf", true, 8 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS1/TS1-9.rdf", true, 4 },
                         // not sure if TS2+ can be tested correctly here. should it be run by a different handler?
-                        { "src/test/resources/orca/embed/TS2/TS2-1.rdf", true, 13 },
-                        { "src/test/resources/orca/embed/TS2/TS2-2.rdf", true, 13 },
-                        { "src/test/resources/orca/embed/TS2/TS2-3.rdf", true, 5 },
-                        { "src/test/resources/orca/embed/TS2/TS2-4.rdf", true, 13 },
-                        { "src/test/resources/orca/embed/TS2/TS2-6.rdf", true, 11 },
-                        { "src/test/resources/orca/embed/TS2/TS2-7.rdf", true, 12 },
-                        { "src/test/resources/orca/embed/TS2/TS2-8.rdf", true, 4 },
-                        { "src/test/resources/orca/embed/TS2/TS2-9.rdf", true, 3 },
-                        { "src/test/resources/orca/embed/TS2/TS2-10.rdf", true, 4 },
-                        { "src/test/resources/orca/embed/TS2/TS2-11.rdf", true, 3 },
-                        { "src/test/resources/orca/embed/TS2/TS2-12.rdf", true, 45 },
-                        { "src/test/resources/orca/embed/TS3/TS3-1.rdf", true, 4 },
-                        { "src/test/resources/orca/embed/TS3/TS3-2.rdf", true, 4 },
-                        { "src/test/resources/orca/embed/TS3/TS3-3.rdf", true, 13 },
-                        { "src/test/resources/orca/embed/TS3/TS3-4.rdf", true, 13 },
-                        { "src/test/resources/orca/embed/TS3/TS3-5.rdf", true, 9 },
-                        { "src/test/resources/orca/embed/TS3/TS3-6.rdf", true, 13 },
-                        { "src/test/resources/orca/embed/TS3/TS3-7.rdf", true, 8 },
-                        { "src/test/resources/orca/embed/TS3/TS3-8.rdf", true, 5 },
-                        { "src/test/resources/orca/embed/TS3/TS3-9.rdf", true, 20 },
-                        { "src/test/resources/orca/embed/TS3/TS3-10.rdf", true, 56 },
-                        { "src/test/resources/orca/embed/TS3/TS3-11.rdf", true, 42 },
-                        { "src/test/resources/orca/embed/TS3/TS3-12.rdf", true, 10 },
-                        { "src/test/resources/orca/embed/TS3/TS3-13.rdf", true, 10 },
-                        { "src/test/resources/orca/embed/TS3/TS3-14.rdf", true, 99 + 3 },
-                        { "src/test/resources/orca/embed/TS4/TS4-1.rdf", true, 5 },
-                        { "src/test/resources/orca/embed/TS4/TS4-2.rdf", true, 5 },
-                        { "src/test/resources/orca/embed/TS4/TS4-3.rdf", true, 10 },
-                        { "src/test/resources/orca/embed/TS5/TS5-1.rdf", true, 6 },
-                        { "src/test/resources/orca/embed/TS7/TS7-1.rdf", true, 14 }
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-1.rdf", true, 13 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-2.rdf", true, 13 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-3.rdf", true, 5 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-4.rdf", true, 13 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-6.rdf", true, 11 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-7.rdf", true, 12 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-8.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-9.rdf", true, 3 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-10.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-11.rdf", true, 3 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS2/TS2-12.rdf", true, 45 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-1.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-2.rdf", true, 4 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-3.rdf", true, 13 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-4.rdf", true, 13 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-5.rdf", true, 9 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-6.rdf", true, 13 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-7.rdf", true, 8 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-8.rdf", true, 5 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-9.rdf", true, 20 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-10.rdf", true, 56 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-11.rdf", true, 42 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-12.rdf", true, 10 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-13.rdf", true, 10 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS3/TS3-14.rdf", true, 99 + 3 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS4/TS4-1.rdf", true, 5 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS4/TS4-2.rdf", true, 5 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS4/TS4-3.rdf", true, 10 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS5/TS5-1.rdf", true, 6 },
+                        { "src/test/resources/net/exogeni/orca/embed/TS7/TS7-1.rdf", true, 14 }
                 // TS8 really only tests Post-boot Scripts. Not useful in Unit tests
                 /*
-                 * { "src/test/resources/orca/embed/TS8/TS8-1.rdf", true, 12}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-2.rdf", true, 1}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-3.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-4.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-5.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-6.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-7.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-8.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-9.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-10.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-11.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-12.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-13.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-14.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-15.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-16.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-17.rdf", true, 6}, {
-                 * "src/test/resources/orca/embed/TS8/TS8-18.rdf", true, 6}
+                 * { "src/test/resources/net/exogeni/orca/embed/TS8/TS8-1.rdf", true, 12}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-2.rdf", true, 1}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-3.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-4.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-5.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-6.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-7.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-8.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-9.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-10.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-11.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-12.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-13.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-14.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-15.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-16.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-17.rdf", true, 6}, {
+                 * "src/test/resources/net/exogeni/orca/embed/TS8/TS8-18.rdf", true, 6}
                  */
                 });
     }
@@ -115,8 +115,8 @@ public class CloudHandlerTest {
         Domain domain;
 
         try {
-            // domain = new Domain("orca/ndl/substrate/mass.rdf");
-            domain = new Domain("orca/ndl/substrate/rcivmsite.rdf");
+            // domain = new Domain("net/exogeni/orca/ndl/substrate/mass.rdf");
+            domain = new Domain("net/exogeni/orca/ndl/substrate/rcivmsite.rdf");
 
             HashMap<String, Integer> resource = new HashMap<>();
             resource.put("site.vm", 132);
@@ -158,7 +158,7 @@ public class CloudHandlerTest {
 
         // setup request
         String reqStr = NdlCommons.readFile(requestFilename);
-        // String reqStr = NdlCommons.readFile("src/test/resources/orca/embed/TS1/TS1-9.rdf");
+        // String reqStr = NdlCommons.readFile("src/test/resources/net/exogeni/orca/embed/TS1/TS1-9.rdf");
         RequestParserListener parserListener = new RequestParserListener();
         // run the parser (to create Java objects)
         NdlRequestParser nrp = new NdlRequestParser(reqStr, parserListener);

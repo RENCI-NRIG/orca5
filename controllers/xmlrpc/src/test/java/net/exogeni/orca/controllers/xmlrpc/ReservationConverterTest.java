@@ -32,15 +32,15 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 public class ReservationConverterTest extends RequestWorkflowTest {
 
     // String manifestRecoverFile =
-    // "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/orca/embed/ng-1-manifest.rdf";
+    // "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/net/exogeni/orca/embed/ng-1-manifest.rdf";
     String manifestRecoverFile = "../../ndl/src/test/resources/shared-vlan.rdf";
 
     @Before
     public void setUp() throws Exception {
         ORCA_SRC_HOME = "../../"; // calling tests outside this package
         super.setUp();
-        // requestFileGush = "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/orca/embed/SFDemo_RLS.rdf";
-        requestFileGush = "../../embed/src/test/resources/orca/embed/TS2/TS2-8.rdf";
+        // requestFileGush = "/Users/yxin/ORCA/controller-recovery/embed/src/test/resources/net/exogeni/orca/embed/SFDemo_RLS.rdf";
+        requestFileGush = "../../embed/src/test/resources/net/exogeni/orca/embed/TS2/TS2-8.rdf";
     }
 
     @After

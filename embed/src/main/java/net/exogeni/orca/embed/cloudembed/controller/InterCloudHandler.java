@@ -168,7 +168,7 @@ public class InterCloudHandler extends ModifyHandler {
         ArrayList<DomainResourceType> setOfTransitSite = new ArrayList<DomainResourceType>();
 
         OntModel cloudModel = ModelFactory.createOntologyModel();
-        Model schemaModel = FileManager.get().loadModel("http://geni-net.exogeni.orca.renci.org/owl/domain.owl");
+        Model schemaModel = FileManager.get().loadModel("http://geni-orca.renci.org/owl/domain.owl");
 
         OntModel cloudModelBase = ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM_RULES_INF);
         Reasoner cloudModelReasoner = cloudModelBase.getReasoner();
@@ -198,7 +198,7 @@ public class InterCloudHandler extends ModifyHandler {
         long pathMinBW = 0;
         Resource source_rs, destination_rs;
         Resource source_intf_rs, destination_intf_rs;
-        String rType = "http://geni-net.exogeni.orca.renci.org/owl/domain.owl#VLAN";
+        String rType = "http://geni-orca.renci.org/owl/domain.owl#VLAN";
         ArrayList<ArrayList<OntResource>> path = null;
         for (i = 0; i < size; i++) {
             sourceDomain = setOfCloudSite.get(i).getDomainURL();

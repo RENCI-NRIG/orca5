@@ -52,7 +52,7 @@ public class RequestWorkflow {
     /**
      * This interface is used to pass in objects that need things set upon recovery
      * 
-     * @author geni-net.exogeni.orca
+     * @author geni-orca
      *
      */
     public static interface WorkflowRecoverySetter {
@@ -155,7 +155,7 @@ public class RequestWorkflow {
                 .equals(request.getDomainRequestReservation().keySet().iterator().next())) {
             err = new SystemNativeError();
             err.setMessage(
-                    "True MultiPoint requests cannot contain unbound elements. See https://github.com/RENCI-NRIG/net.exogeni.orca5/issues/158");
+                    "True MultiPoint requests cannot contain unbound elements. See https://github.com/RENCI-NRIG/orca5/issues/158");
             err.setAdditional("Please bound all elements in your request");
             err.setErrno(1);
             return err;

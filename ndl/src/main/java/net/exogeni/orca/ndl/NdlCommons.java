@@ -57,12 +57,12 @@ import com.hp.hpl.jena.sparql.core.ResultBinding;
  *
  */
 public class NdlCommons {
-    public static final String ORCA_NDL_SCHEMA = "net.exogeni.orca/ndl/schema/";
-    public static final String ORCA_NDL_SUBSTRATE = "net.exogeni.orca/ndl/substrate/";
+    public static final String ORCA_NDL_SCHEMA = "net/exogeni/orca/ndl/schema/";
+    public static final String ORCA_NDL_SUBSTRATE = "net/exogeni/orca/ndl/substrate/";
 
     private static final String NDL_LOGGER = "ndl.logger";
 
-    public static final String ORCA_NS = "http://geni-net.exogeni.orca.renci.org/owl/";
+    public static final String ORCA_NS = "http://geni-orca.renci.org/owl/";
     public static final String W3_NS = "http://www.w3.org/";
 
     public static final long Default_Bandwidth = 10000000;
@@ -78,27 +78,27 @@ public class NdlCommons {
             + "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>"
             + "PREFIX geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>"
             + "PREFIX fn:<http://www.w3.org/2005/xpath-functions#>"
-            + "PREFIX wdm:<http://geni-net.exogeni.orca.renci.org/owl/dtn.owl#>"
-            + "PREFIX ethernet:<http://geni-net.exogeni.orca.renci.org/owl/ethernet.owl#>"
+            + "PREFIX wdm:<http://geni-orca.renci.org/owl/dtn.owl#>"
+            + "PREFIX ethernet:<http://geni-orca.renci.org/owl/ethernet.owl#>"
             + "PREFIX owl2xml:<http://www.w3.org/2006/12/owl2-xml#>" + "PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>"
-            + "PREFIX time:<http://www.w3.org/2006/time#>" + "PREFIX ndl:<http://geni-net.exogeni.orca.renci.org/owl/topology.owl#>"
-            + "PREFIX location:<http://geni-net.exogeni.orca.renci.org/owl/location.owl#>"
-            + "PREFIX layer:<http://geni-net.exogeni.orca.renci.org/owl/layer.owl#>"
-            + "PREFIX topology:<http://geni-net.exogeni.orca.renci.org/owl/topology.owl#>"
-            + "PREFIX collections:<http://geni-net.exogeni.orca.renci.org/owl/collections.owl#>"
-            + "PREFIX request:<http://geni-net.exogeni.orca.renci.org/owl/request.owl#>"
-            + "PREFIX dtn:<http://geni-net.exogeni.orca.renci.org/owl/dtn.owl#>"
-            + "PREFIX ethernet:<http://geni-net.exogeni.orca.renci.org/owl/ethernet.owl#>"
-            + "PREFIX compute:<http://geni-net.exogeni.orca.renci.org/owl/compute.owl#>"
-            + "PREFIX storage:<http://geni-net.exogeni.orca.renci.org/owl/storage.owl#>"
-            + "PREFIX exogeni:<http://geni-net.exogeni.orca.renci.org/owl/exogeni.owl#>"
-            + "PREFIX net.exogeni.orca:<http://geni-net.exogeni.orca.renci.org/owl/net.exogeni.orca.rdf#>"
-            + "PREFIX domain:<http://geni-net.exogeni.orca.renci.org/owl/domain.owl#>"
-            + "PREFIX ip4:<http://geni-net.exogeni.orca.renci.org/owl/ip4.owl#>"
-            + "PREFIX geni:<http://geni-net.exogeni.orca.renci.org/owl/geni.owl#>"
-            + "PREFIX modify:<http://geni-net.exogeni.orca.renci.org/owl/modify.owl#>"
-            + "PREFIX manifest:<http://geni-net.exogeni.orca.renci.org/owl/manifest.owl#>"
-            + "PREFIX app-color:<http://geni-net.exogeni.orca.renci.org/owl/app-color.owl#>";
+            + "PREFIX time:<http://www.w3.org/2006/time#>" + "PREFIX ndl:<http://geni-orca.renci.org/owl/topology.owl#>"
+            + "PREFIX location:<http://geni-orca.renci.org/owl/location.owl#>"
+            + "PREFIX layer:<http://geni-orca.renci.org/owl/layer.owl#>"
+            + "PREFIX topology:<http://geni-orca.renci.org/owl/topology.owl#>"
+            + "PREFIX collections:<http://geni-orca.renci.org/owl/collections.owl#>"
+            + "PREFIX request:<http://geni-orca.renci.org/owl/request.owl#>"
+            + "PREFIX dtn:<http://geni-orca.renci.org/owl/dtn.owl#>"
+            + "PREFIX ethernet:<http://geni-orca.renci.org/owl/ethernet.owl#>"
+            + "PREFIX compute:<http://geni-orca.renci.org/owl/compute.owl#>"
+            + "PREFIX storage:<http://geni-orca.renci.org/owl/storage.owl#>"
+            + "PREFIX exogeni:<http://geni-orca.renci.org/owl/exogeni.owl#>"
+            + "PREFIX orca:<http://geni-orca.renci.org/owl/orca.rdf#>"
+            + "PREFIX domain:<http://geni-orca.renci.org/owl/domain.owl#>"
+            + "PREFIX ip4:<http://geni-orca.renci.org/owl/ip4.owl#>"
+            + "PREFIX geni:<http://geni-orca.renci.org/owl/geni.owl#>"
+            + "PREFIX modify:<http://geni-orca.renci.org/owl/modify.owl#>"
+            + "PREFIX manifest:<http://geni-orca.renci.org/owl/manifest.owl#>"
+            + "PREFIX app-color:<http://geni-orca.renci.org/owl/app-color.owl#>";
 
     public static final Property collectionElementProperty, collectionItemProperty, collectionSizeProperty, RDF_TYPE,
             RDFS_Label, RDFS_SeeAlso, OWL_sameAs, numCEProperty, requestGroupNameProperty, hasEmailProperty,
@@ -342,7 +342,7 @@ public class NdlCommons {
         bitRate1G = new ResourceImpl(ORCA_NS + "layer.owl#1G");
         bitRate10G = new ResourceImpl(ORCA_NS + "layer.owl#10G");
 
-        stitchingDomain = new ResourceImpl(ORCA_NS + "net.exogeni.orca.rdf#Stitching/Domain");
+        stitchingDomain = new ResourceImpl(ORCA_NS + "orca.rdf#Stitching/Domain");
 
         diskImageClass = new ResourceImpl(ORCA_NS + "exogeni.owl#DiskImage");
 
@@ -478,8 +478,8 @@ public class NdlCommons {
     public static String createQueryStringDomainLocationDetails() {
         String selectStr = "SELECT ?domain ?popUri ?lat ?lon ";
         String fromStr = "";
-        String whereStr = "WHERE {" + "?domain <http://geni-net.exogeni.orca.renci.org/owl/collections.owl#element> ?popUri . "
-                + "?popUri <http://geni-net.exogeni.orca.renci.org/owl/location.owl#locatedAt> ?loc . "
+        String whereStr = "WHERE {" + "?domain <http://geni-orca.renci.org/owl/collections.owl#element> ?popUri . "
+                + "?popUri <http://geni-orca.renci.org/owl/location.owl#locatedAt> ?loc . "
                 + "?loc <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat . "
                 + "?loc <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?lon .  " + " }";
         return createQueryString(selectStr, fromStr, whereStr);
@@ -2557,7 +2557,7 @@ public class NdlCommons {
         model.setNsPrefix("ip4", ORCA_NS + "ip4.owl#");
         model.setNsPrefix("compute", ORCA_NS + "compute.owl#");
         model.setNsPrefix("exogeni", ORCA_NS + "exogeni.owl#");
-        model.setNsPrefix("net.exogeni.orca", ORCA_NS + "net.exogeni.orca.rdf#");
+        model.setNsPrefix("orca", ORCA_NS + "orca.rdf#");
         model.setNsPrefix("domain", ORCA_NS + "domain.owl#");
         model.setNsPrefix("eucalyptus", ORCA_NS + "eucalyptus.owl#");
         model.setNsPrefix("ec2", ORCA_NS + "ec2.owl#");

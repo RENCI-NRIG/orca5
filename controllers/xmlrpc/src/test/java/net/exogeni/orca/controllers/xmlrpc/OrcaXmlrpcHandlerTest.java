@@ -70,7 +70,7 @@ public class OrcaXmlrpcHandlerTest extends TestHelper {
         controller.start();
 
         doTestCreateSlice(controller,
-                "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
+                "../../embed/src/test/resources/net/exogeni/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf",
                 "createSlice_test_" + controller.getClass().getSimpleName(), true,
                 EXPECTED_RESERVATION_COUNT_FOR_CREATE);
 
@@ -119,7 +119,7 @@ public class OrcaXmlrpcHandlerTest extends TestHelper {
         reservationPropertyCountMap.put("Node3", 13);
 
         XmlrpcControllerSlice slice = doTestMultipleModifySlice("modifySlice_test",
-                "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", modifyRequests);
+                "../../embed/src/test/resources/net/exogeni/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf", modifyRequests);
 
         List<TicketReservationMng> computedReservations = slice.getComputedReservations();
 
@@ -1052,7 +1052,7 @@ public class OrcaXmlrpcHandlerTest extends TestHelper {
      */
     protected Map<String, Object> doTestRenewSlice(String newTermEnd) throws Exception {
         Map<ReservationID, TicketReservationMng> reservationMap = new HashMap<>();
-        String requestFile = "../../embed/src/test/resources/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf";
+        String requestFile = "../../embed/src/test/resources/net/exogeni/orca/embed/CloudHandlerTest/XOXlargeRequest_ok.rdf";
         String resReq = NdlCommons.readFile(requestFile);
         String slice_urn = "testRenewSlice";
 

@@ -25,7 +25,7 @@ import com.hp.hpl.jena.sparql.core.ResultBinding;
  */
 public class NdlRequestParser extends NdlParserHelper {
     public static final String USER_REQUEST_RULES_FILE_PROPERTY = "NDL_REQUEST_RULE_FILE";
-    private static final String RULES_FILE = "net.exogeni.orca/ndl/rules/requestRules.rules";
+    private static final String RULES_FILE = "net/exogeni/orca/ndl/rules/requestRules.rules";
     INdlRequestModelListener listener;
     INdlColorRequestListener colorListener = null;
     OntModel requestModel;

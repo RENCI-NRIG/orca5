@@ -11,9 +11,9 @@ import org.junit.Rule;
 import org.junit.rules.TestName;
 
 public abstract class OrcaTestCaseBase extends TestCase {
-    public static final String MySqlDatabaseName = "net.exogeni.orca_test";
+    public static final String MySqlDatabaseName = "orca_test";
     public static final String MySqlDatabaseHost = "localhost";
-    public static final String MySqlDatabaseUser = "net.exogeni.orca_test";
+    public static final String MySqlDatabaseUser = "orca_test";
 
     static {
         //System.out.println(System.getProperty("user.dir"));

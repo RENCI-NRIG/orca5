@@ -42,7 +42,7 @@ public class NdlGenerator {
     private static final String MODIFY_NS = "modify";
     private static final String REQUEST_NS = "request";
     private static final String XML_SCHEMA_INTEGER = "http://www.w3.org/2001/XMLSchema#integer";
-    private static final String STITCHING_DOMAIN_URL = "http://geni-net.exogeni.orca.renci.org/owl/net.exogeni.orca.rdf#Stitching/Domain";
+    private static final String STITCHING_DOMAIN_URL = "http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain";
     private Logger l;
     public static final Set<String> externalSchemas = NdlModel.externalSchemas.keySet();
     protected OntModel blank;
@@ -1636,7 +1636,7 @@ public class NdlGenerator {
 
     /**
      * declare a domain site (appends /Domain to name as per convention; declares it in the general
-     * http://geni-net.exogeni.orca.renci.org/owl prefix, not request prefix)
+     * http://geni-orca.renci.org/owl prefix, not request prefix)
      * 
      * @param name name 
      * @throws NdlException in case of error
