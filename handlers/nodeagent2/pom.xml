@@ -10,7 +10,7 @@
         <artifactId>
              handlers 
         </artifactId> 
-        <version>5.4.4</version> 
+        <version>5.4.5-SNAPSHOT</version> 
     </parent> 
     <groupId>
         net.exogeni.orca.handlers
