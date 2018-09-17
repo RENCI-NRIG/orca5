@@ -148,24 +148,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-    <!--
-    <distributionManagement>
-        <snapshotRepository>
-            <id>${orca.snap.repository.id}</id>
-            <name>Orca Project Maven Snapshot Repository</name>
-            <url>${orca.snap.repository.url}</url>
-        </snapshotRepository>
-        <repository>
-            <id>${orca.rel.repository.id}</id>
-            <name>Orca Project Maven Release Repository</name>
-            <url>${orca.rel.repository.url}</url>
-        </repository>
-        <site>
-            <id>${orca.website.id}</id>
-            <url>${orca.website.url}</url>
-        </site>
-    </distributionManagement>
-    -->
 
     <scm>
         <developerConnection>scm:git:git@github.com:RENCI-NRIG/orca5.git</developerConnection>
