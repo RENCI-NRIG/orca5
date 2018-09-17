@@ -3,10 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.exogeni.orca</groupId>
     <artifactId>orca</artifactId>
-    <version>5.4.5-SNAPSHOT</version>
+    <version>5.4.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Orca</name>
+    <description>ORCA Framework</description>
     <url>https://geni-orca.renci.org/orca-doc</url>
+    <developers>
+    <developer>
+      <name>RENCI</name>
+      <email>software@renci.org</email>
+    </developer>
+    </developers>
 
     <modules>
         <module>tools</module>
@@ -722,6 +729,20 @@
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
+                    <plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
                     <!-- Attach javadocs -->
                     <!-- Reference: https://github.com/RENCI-NRIG/orca5/issues/204 -->
                     
