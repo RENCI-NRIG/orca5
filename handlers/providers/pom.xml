@@ -11,7 +11,7 @@
     <name>
          Orca Network Provider handlers 
     </name> 
-    <version>5.4.4</version> 
+    <version>5.4.5-SNAPSHOT</version> 
     <parent> 
         <groupId>
             net.exogeni.orca
@@ -19,7 +19,7 @@
         <artifactId>
              handlers 
         </artifactId> 
-        <version>5.4.4</version> 
+        <version>5.4.5-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
