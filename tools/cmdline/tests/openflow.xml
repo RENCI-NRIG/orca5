@@ -64,7 +64,7 @@
                  19f1b53b-f081-4544-81fa-b0467bff73c1 
             </guid> 
             <pools> 
-                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
+                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
                     <type>
                          renci.vm 
                     </type> 

@@ -1,7 +1,7 @@
 <!DOCTYPE project [
 	<!ENTITY deps SYSTEM "ant/deps.xml">
 ]>
-<project name="orca.controllers.ben"
+<project name="net.exogeni.orca.controllers.ben"
 		default="help"
 		basedir="."
 		xmlns:artifact="urn:maven-artifact-ant">
@@ -23,7 +23,7 @@
 				<delete dir="${cmdline.home}/log" />
 				<echo message="running ben unit test (real mode)..." />
 				<echo message="configuration file: ${config}" />
-				<java classname="orca.controllers.ben.BenTest" Fork="Yes" failonerror="true" dir="../../run">
+				<java classname="net.exogeni.orca.controllers.ben.BenTest" Fork="Yes" failonerror="true" dir="../../run">
 					<classpath refid="run.classpath" />
 					<arg value="${config}" />
 					<arg value="do.not.recover=true" />

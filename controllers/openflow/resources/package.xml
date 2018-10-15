@@ -15,7 +15,7 @@
                  OpenFlow Controller 
             </description> 
             <className>
-                 orca.controllers.openflow.OpenFlowControllerFactory 
+                 net.exogeni.orca.controllers.openflow.OpenFlowControllerFactory 
             </className> 
         </plugin> 
         <!-- Site authority handlers --> 

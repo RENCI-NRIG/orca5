@@ -2,7 +2,7 @@
 <project name="Common Handlers">
     <publishDate format="dd MMM yyyy" position="right" />
     <skin>
-        <groupId>orca</groupId>
+        <groupId>net.exogeni.orca</groupId>
         <artifactId>site-skin</artifactId>
         <version>1.0</version>
     </skin>

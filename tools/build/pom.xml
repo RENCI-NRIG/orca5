@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.tools 
+        net.exogeni..tools
     </groupId> 
     <artifactId>
          build 
@@ -13,12 +13,12 @@
     </packaging> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              tools 
         </artifactId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.6-SNAPSHOT</version> 
     </parent> 
     <name>
          Orca Build Tools 

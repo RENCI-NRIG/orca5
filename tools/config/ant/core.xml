@@ -34,7 +34,7 @@
     </copy> 
 </target> 
 <target name="guid" description="generates a new guid"> 
-    <java classname="orca.util.GuidGenerator" Fork="Yes"> 
+    <java classname="net.exogeni.orca.util.GuidGenerator" Fork="Yes"> 
         <classpath refid="run.classpath" /> 
     </java> 
 </target>

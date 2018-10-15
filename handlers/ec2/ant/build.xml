@@ -1,7 +1,7 @@
 <!DOCTYPE project [
 	<!ENTITY deps SYSTEM "deps.xml">
 ]>
-<project name="orca.shirako"
+<project name="net.exogeni.orca.shirako"
 		default="help"
 		basedir="."
 	xmlns:artifact="antlib:org.apache.maven.artifact.ant">
@@ -10,8 +10,8 @@
 
 	<target name="help">
 		<echo>
-			proxies.soap.axis2.beans - generates orca.shirako.proxies.soapaxis2.beans (Axis 2.x)
-			proxies.soap.axis2.services - generates orca.shirako.proxies.soapaxis2.services (Axis 2.x)
+			proxies.soap.axis2.beans - generates net.exogeni.orca.shirako.proxies.soapaxis2.beans (Axis 2.x)
+			proxies.soap.axis2.services - generates net.exogeni.orca.shirako.proxies.soapaxis2.services (Axis 2.x)
 			manage.extensions.beans
 		    manage.extensions.api.beans
 		</echo>
@@ -42,7 +42,7 @@
 			<arg value="-p" />
 			<arg value="${pkg.name}" />
 			<arg value="-ns2p" />
-			<arg value="http://imageproxy.orca=orca.handlers.ec2.tasks.imgproxy" />		    
+			<arg value="http://imageproxy.orca=net.exogeni.orca.handlers.ec2.tasks.imgproxy" />		    
 		</java>
 	</target>
 
@@ -60,12 +60,12 @@
 			<param name="wsdl.file"
 					value="src/main/axis2/imageproxy.wsdl" />
 			<param name="pkg.name"
-					value="orca.handlers.ec2.tasks.imgproxy" />
+					value="net.exogeni.orca.handlers.ec2.tasks.imgproxy" />
 		</antcall>
 
 		<!-- Put all code files at the right place -->
-		<copy todir="src/main/java/orca/handlers/ec2/tasks/imgproxy" overwrite="true">
-			<fileset dir="${tmp.dir}/src/orca/handlers/ec2/tasks/imgproxy"
+        <copy todir="src/main/java/net/exogeni/orca/handlers/ec2/tasks/imgproxy" overwrite="true">
+            <fileset dir="${tmp.dir}/src/net/exogeni/orca/handlers/ec2/tasks/imgproxy"
 					includes="**/*.java" 
 				/>
 		</copy>

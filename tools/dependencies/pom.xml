@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca 
+        net.exogeni.orca
     </groupId> 
     <artifactId>
          dependencies 
@@ -13,12 +13,12 @@
     </packaging> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              orca 
         </artifactId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.6-SNAPSHOT</version> 
         <relativePath>
              ../../pom.xml 
         </relativePath> 

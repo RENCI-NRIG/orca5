@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>orca</groupId>
+    <groupId>net.exogeni.orca</groupId>
     <artifactId>orca</artifactId>
-    <version>5.4.4-SNAPSHOT</version>
+    <version>5.4.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Orca</name>
+    <description>ORCA Framework</description>
     <url>https://geni-orca.renci.org/orca-doc</url>
+    <developers>
+    <developer>
+      <name>RENCI</name>
+      <email>software@renci.org</email>
+    </developer>
+    </developers>
 
     <modules>
         <module>tools</module>
@@ -48,13 +55,7 @@
     <properties>
         <orca.tools.build.version>${project.version}</orca.tools.build.version>
         <orca.repository.id>geni-orca-libs</orca.repository.id>
-        <orca.snap.repository.id>geni-orca-snapshot</orca.snap.repository.id>
-        <orca.rel.repository.id>geni-orca-release</orca.rel.repository.id>
         <orca.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs</orca.repository.url>
-        <orca.snap.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-snapshot/
-        </orca.snap.repository.url>
-        <orca.rel.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-release/
-        </orca.rel.repository.url>
         <orca.website.id>orca.website</orca.website.id>
         <orca.website.url>dav:https://geni-orca.renci.org/orca-doc/current</orca.website.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,23 +70,6 @@
             <id>${orca.repository.id}</id>
             <name>Orca Project Maven Repository</name>
             <url>${orca.repository.url}</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <!-- ORCA snapshots -->
-        <repository>
-            <id>${orca.snap.repository.id}</id>
-            <url>${orca.snap.repository.url}</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-        <!-- ORCA releases -->
-        <repository>
-            <id>${orca.rel.repository.id}</id>
-            <url>${orca.rel.repository.url}</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -117,11 +101,6 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>${orca.repository.id}</id>
-            <name>Orca Project Maven Repository</name>
-            <url>${orca.repository.url}</url>
-        </pluginRepository>
-        <pluginRepository>
             <id>apache-snapshots</id>
             <name>Apache snapshots repository</name>
             <url>http://repository.apache.org/snapshots/</url>
@@ -133,26 +112,20 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>${orca.snap.repository.id}</id>
-            <name>Orca Project Maven Snapshot Repository</name>
-            <url>${orca.snap.repository.url}</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>${orca.rel.repository.id}</id>
-            <name>Orca Project Maven Release Repository</name>
-            <url>${orca.rel.repository.url}</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <site>
-            <id>${orca.website.id}</id>
-            <url>${orca.website.url}</url>
-        </site>
     </distributionManagement>
 
     <scm>
         <developerConnection>scm:git:git@github.com:RENCI-NRIG/orca5.git</developerConnection>
         <connection>scm:git:git@github.com:RENCI-NRIG/orca5.git</connection>
         <url>https://github.com/RENCI-NRIG/orca5</url>
-        <tag>HEAD</tag>
+        <tag>orca-5.4.5-SNAPSHOT</tag>
     </scm>
 
     <issueManagement>
@@ -691,6 +664,39 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
                     <!-- Attach javadocs -->
                     <!-- Reference: https://github.com/RENCI-NRIG/orca5/issues/204 -->
                     

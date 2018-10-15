@@ -19,13 +19,13 @@ sed '
 /)$/ {
 # Found one - now read in the next line
 	N
-# delete the "#" and the new line character, 
-	s/)\n[\t ]*throws java.rmi.RemoteException/, orca.security.AuthToken authToken) throws java.rmi.RemoteException/
+# delete the "#" and the new line character,
+	s/)\n[\t ]*throws java.rmi.RemoteException/, net.exogeni.orca.security.AuthToken authToken) throws java.rmi.RemoteException/
 }' $OUT > $OUT2
 
 
 sed '
 /_messageContext.setEnvelope(env);/ a\
-orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext, authToken);' $OUT2 > $OUT
+net.exogeni.orca.shirako.proxies.soapaxis2.util.ContextTools.setMyAuthToken(_messageContext, authToken);' $OUT2 > $OUT
 
 mv $OUT $1

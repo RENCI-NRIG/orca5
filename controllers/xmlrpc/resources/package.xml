@@ -14,7 +14,7 @@
                  XML-RPC Controller 
             </description> 
             <className>
-                 orca.controllers.xmlrpc.XmlrpcControllerFactory 
+                 net.exogeni.orca.controllers.xmlrpc.XmlrpcControllerFactory 
             </className> 
         </plugin> 
     </plugins> 

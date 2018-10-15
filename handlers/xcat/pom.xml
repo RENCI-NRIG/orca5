@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.handlers 
+        net.exogeni.orca.handlers
     </groupId> 
     <artifactId>
          xcat 
@@ -12,18 +12,18 @@
     <packaging>
          jar 
     </packaging> 
-    <version>5.4.4-SNAPSHOT</version> 
+    <version>5.4.6-SNAPSHOT</version> 
     <name>
          Orca xCAT Handler Library 
     </name> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              handlers 
         </artifactId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.6-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
@@ -31,7 +31,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  shirako 
@@ -74,7 +74,7 @@
                                 <property name="path" refid="maven.plugin.classpath" /> 
                                 <echo message="path is: ${path}" /> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
-                                <property name="name.prefix" value="orca.handlers.xcat" /> 
+                                <property name="name.prefix" value="net.exogeni.orca.handlers.xcat" /> 
                                 <property name="run.classpath" refid="maven.runtime.classpath" /> 
                                 <echo message="${run.classpath}" /> 
                                 <delete dir="target/package" /> 

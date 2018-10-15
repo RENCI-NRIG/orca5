@@ -1,7 +1,7 @@
 <macrodef name="security.create" description="creates the security configuration for a given actor"> 
     <attribute name="actor" description="actor identifier" /> 
     <sequential> 
-        <java classname="orca.tools.axis2.SecurityConfigurationTool" fork="true" failonerror="true"> 
+        <java classname="net.exogeni.orca.tools.axis2.SecurityConfigurationTool" fork="true" failonerror="true">
             <classpath refid="run.classpath" /> 
             <arg line="create ${root.dir} @{actor}" /> 
         </java> 
@@ -65,7 +65,7 @@
     <attribute name="actor" description="actor identifier" /> 
     <attribute name="store.password" description="keystore password" /> 
     <sequential> 
-        <java classname="orca.util.KeystoreManager" fork="true" failonerror="true"> 
+        <java classname="net.exogeni.orca.util.KeystoreManager" fork="true" failonerror="true"> 
             <classpath refid="run.classpath" /> 
             <arg line="-export64 ${keystores.dir}/@{actor}.jks  @{store.password}" /> 
         </java> 

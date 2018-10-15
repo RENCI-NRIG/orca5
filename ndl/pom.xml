@@ -5,23 +5,23 @@
     </modelVersion> 
     <parent> 
         <artifactId>
-             orca 
+             orca
         </artifactId> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.6-SNAPSHOT</version> 
     </parent> 
     <name>
          Orca NDL Processing 
     </name> 
     <groupId>
-         orca 
+        net.exogeni.orca
     </groupId> 
     <artifactId>
          ndl 
     </artifactId> 
-    <version>5.4.4-SNAPSHOT</version> 
+    <version>5.4.6-SNAPSHOT</version> 
     <url>
          http://maven.apache.org 
     </url> 
@@ -130,12 +130,12 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  util 
             </artifactId> 
-            <version>5.4.4-SNAPSHOT</version> 
+            <version>5.4.6-SNAPSHOT</version> 
         </dependency> 
     </dependencies> 
     <build> 
@@ -148,7 +148,7 @@
                     <archive> 
                         <manifest> 
                             <mainClass>
-                                 orca.ndl.NdlTDBLeakTest 
+                                net.exogeni.orca.ndl.NdlTDBLeakTest
                             </mainClass> 
                         </manifest> 
                     </archive> 

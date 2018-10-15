@@ -34,7 +34,7 @@ cat > $OUTFILE <<EOF
             <items>Signature</items>
             <user>$KEYALIAS</user>
             <!--alias of the key used to sign-->
-            <passwordCallbackClass>orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+            <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
             <signaturePropFile>$PROPFILE</signaturePropFile>
             <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
         </action>
@@ -44,7 +44,7 @@ cat > $OUTFILE <<EOF
     <parameter name="InflowSecurity">
         <action>
             <items>Signature</items>
-            <passwordCallbackClass>orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
+            <passwordCallbackClass>net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient</passwordCallbackClass>
             <signaturePropFile>$PROPFILE</signaturePropFile>
         </action>
     </parameter>

@@ -3,23 +3,23 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.handlers 
+        net.exogeni.orca.handlers
     </groupId> 
     <artifactId>
          network 
     </artifactId> 
-    <version>5.4.4-SNAPSHOT</version> 
+    <version>5.4.6-SNAPSHOT</version> 
     <name>
          Orca Network Handlers 
     </name> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              handlers 
         </artifactId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.6-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
@@ -27,7 +27,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  shirako 
@@ -139,7 +139,7 @@
                         </phase> 
                         <configuration> 
                             <tasks> 
-                                <property name="name.prefix" value="orca.handlers.network" /> 
+                                <property name="name.prefix" value="net.exogeni.orca.handlers.network" /> 
                                 <delete dir="target/package" /> 
                                 <mkdir dir="target/package" /> 
                                 <mkdir dir="target/package/lib" /> 
@@ -160,7 +160,7 @@
                                 <copy file="${maven.dependency.ch.ethz.ganymed.ganymed-ssh2.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <mkdir dir="target/package/handlers" /> 
                                 <copy todir="target/package/handlers"> 
-                                    <fileset dir="src/main/resources/orca/handlers" /> 
+                                    <fileset dir="src/main/resources/net/exogeni/orca/handlers" /> 
                                 </copy> 
                                 <copy file="resources/scripts/install.sh" todir="target/package" /> 
                                 <mkdir dir="target/package/web" /> 

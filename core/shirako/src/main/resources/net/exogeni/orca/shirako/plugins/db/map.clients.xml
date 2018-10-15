@@ -1,0 +1,59 @@
+<!--
+	shirakoTop:
+		- required: 
+		- may: 
+-->
+<mapping xmlns="http://issg.cs.duke.edu/cod/plugins/beans">
+	<ldap>
+		<entry name="slice">
+			<objectClasses>
+				<objectClass name="codCluster" />
+				<objectClass name="shirakoTop" />
+			</objectClasses>
+			<attributes>
+                <map from="ou" to="net.exogeni.orca.slices.Slice.PropertyGuid" />
+                <map from="cn" to="net.exogeni.orca.slices.Slice.PropertyGuid" />
+				<map from="description" to="net.exogeni.orca.slices.Slice.PropertyDescription" />
+                <map from="shirakoSliceType" to="net.exogeni.orca.slices.Slice.PropertyType" />
+			</attributes>
+		</entry>
+		<entry name="reservation">
+			<objectClasses>
+				<objectClass name="organizationalUnit" />
+				<objectClass name="shirakoReservation" />
+			</objectClasses>
+			<attributes>
+				<map from="ou" to="net.exogeni.orca.slices.Reservation.PropertyID" />
+				<map from="cn" to="net.exogeni.orca.slices.Reservation.PropertyID" />
+				<map from="shirakoReservationID" to="net.exogeni.orca.slices.Reservation.PropertyID" />
+				<map from="shirakoTermBegin" to="net.exogeni.orca.slices.Term.PropertyStartTime" />
+				<map from="shirakoTermEnd" to="net.exogeni.orca.slices.Term.PropertyEndTime" />
+				<map from="shirakoTermRenew" to="net.exogeni.orca.slices.Term.PropertyRenewTime" ignore="true" />
+			</attributes>
+		</entry>
+		<entry name="broker">
+			<objectClasses>
+				<objectClass name="shirakoProperty" />
+			</objectClasses>
+			<attributes>
+				<map from="ou" to="net.exogeni.orca.slices.proxies.Proxy.PropertyProxyActorName" />
+			</attributes>
+		</entry>
+		<entry name="client">
+			<objectClasses>
+				<objectClass name="shirakoProperty" />
+			</objectClasses>
+			<attributes>
+				<map from="ou" to="net.exogeni.orca.shirako.common.Client.PropertyName" />
+			</attributes>
+		</entry>
+       <entry name="configmapping">
+            <objectClasses>
+                <objectClass name="shirakoProperty" />
+            </objectClasses>
+            <attributes>
+                <map from="ou" to="net.exogeni.orca.slices.plugins.config.ConfigurationMapping.PropertyType" />
+            </attributes>
+        </entry>
+	</ldap>
+</mapping>

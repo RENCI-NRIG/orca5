@@ -50,15 +50,15 @@
         <javac srcdir="${src}" destdir="${classes.dir}" deprecation="false" failonerror="true" debug="true"> 
             <classpath refid="compile.classpath" /> 
         </javac> 
-        <jar jarfile="${dist.dir}/shirako.tomcat.server-${project.version}.jar"> 
+        <jar jarfile="${dist.dir}/shirako.tomcat.server-${project.version}.jar">
             <fileset dir="${classes.dir}"> 
-                <include name="shirako/util/tomcat/ShirakoWebappClassLoader*" /> 
+                <include name="shirako/util/tomcat/ShirakoWebappClassLoader*" />
             </fileset> 
         </jar> 
-        <jar jarfile="${dist.dir}/shirako.tomcat.common-${project.version}.jar"> 
+        <jar jarfile="${dist.dir}/shirako/tomcat.common-${project.version}.jar">
             <fileset dir="${classes.dir}"> 
-                <include name="shirako/util/tomcat/IShirakoWebappClassLoader*" /> 
-                <include name="shirako/util/tomcat/ShirakoURLClassLoader*" /> 
+                <include name="shirako/util/tomcat/IShirakoWebappClassLoader*" />
+                <include name="shirako/util/tomcat/ShirakoURLClassLoader*" />
             </fileset> 
         </jar> 
     </target> 

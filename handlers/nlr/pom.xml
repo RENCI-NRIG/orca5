@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.handlers.network 
+        net.exogeni.orca.handlers.network
     </groupId> 
     <artifactId>
          nlr 
@@ -16,7 +16,7 @@
     </version> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              handlers 
@@ -85,7 +85,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  shirako 
@@ -114,7 +114,7 @@
                         </phase> 
                         <configuration> 
                             <tasks> 
-                                <property name="name.prefix" value="orca.handlers.nlr" /> 
+                                <property name="name.prefix" value="net.exogeni.orca.handlers.nlr" /> 
                                 <delete dir="target/package" /> 
                                 <mkdir dir="target/package" /> 
                                 <mkdir dir="target/package/lib" /> 

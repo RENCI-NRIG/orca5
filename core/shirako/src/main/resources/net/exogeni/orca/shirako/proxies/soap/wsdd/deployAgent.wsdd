@@ -1,0 +1,129 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from AgentService WSDL service -->
+
+  <service name="AgentService" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://issg.cs.duke.edu/sharp/wsdl"/>
+      <parameter name="wsdlServiceElement" value="AgentService"/>
+      <parameter name="wsdlServicePort" value="AgentService"/>
+      <parameter name="className" value="net.exogeni.orca.shirako.proxies.soap.services.AgentServiceImpl"/>
+      <parameter name="wsdlPortType" value="AgentServicePortType"/>
+      <operation name="ticket" qname="operNS:ticket" xmlns:operNS="http://issg.cs.duke.edu/sharp/wsdl" soapAction="" >
+        <parameter qname="reservation" type="tns:reservation" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans"/>
+        <parameter qname="callbackURL" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="extendTicket" qname="operNS:extendTicket" xmlns:operNS="http://issg.cs.duke.edu/sharp/wsdl" soapAction="" >
+        <parameter qname="reservation" type="tns:reservation" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans"/>
+      </operation>
+      <operation name="claim" qname="operNS:claim" xmlns:operNS="http://issg.cs.duke.edu/sharp/wsdl" soapAction="" >
+        <parameter qname="reservation" type="tns:reservation" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans"/>
+        <parameter qname="callbackURL" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="updateLease" qname="operNS:updateLease" xmlns:operNS="http://issg.cs.duke.edu/sharp/wsdl" soapAction="" >
+        <parameter qname="reservation" type="tns:reservation" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans"/>
+        <parameter qname="updateData" type="tns:updateData" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans"/>
+      </operation>
+      <operation name="updateTicket" qname="operNS:updateTicket" xmlns:operNS="http://issg.cs.duke.edu/sharp/wsdl" soapAction="" >
+        <parameter qname="reservation" type="tns:reservation" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans"/>
+        <parameter qname="updateData" type="tns:updateData" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans"/>
+      </operation>
+      <operation name="tick" qname="operNS:tick" xmlns:operNS="http://issg.cs.duke.edu/sharp/wsdl" soapAction="" >
+        <parameter qname="cycle" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="query" qname="operNS:query" xmlns:operNS="http://issg.cs.duke.edu/sharp/wsdl" soapAction="" >
+        <parameter qname="properties" type="tns:properties" xmlns:tns="http://issg.cs.duke.edu/sharp/soap/beans" mode="INOUT"/>
+      </operation>
+      <parameter name="allowedMethods" value="ticket tick updateLease query claim updateTicket extendTicket"/>
+
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:properties"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.Properties"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:resourceSet"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.ResourceSet"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:plistNode"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.PlistNode"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:updateData"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.UpdateData"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:reservation"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.Reservation"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:term"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.Term"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:resourceData"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.ResourceData"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:slice"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.Slice"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:property"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.Property"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://issg.cs.duke.edu/sharp/soap/beans"
+        qname="ns:plist"
+        type="java:net.exogeni.orca.shirako.proxies.soap.beans.Plist"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  <requestFlow><handler type="RequestSecurityFilter"/></requestFlow><responseFlow><handler type="ResponseSecurityFilter"/></responseFlow></service>
+</deployment>

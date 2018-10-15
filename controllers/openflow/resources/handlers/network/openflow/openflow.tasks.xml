@@ -2,8 +2,8 @@
 This file contains definitions of tasks used by the openflow package
 --> 
 <target name="openflow.load.tasks" depends="load.tasks"> 
-    <taskdef resource="orca/handlers/network/network.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
-    <property resource="orca/handlers/network/network.properties" classpathref="run.classpath" /> 
+    <taskdef resource="net/exogeni/orca/handlers/network/network.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
+    <property resource="net/exogeni/orca/handlers/network/network.properties" classpathref="run.classpath" /> 
 </target> 
 <macrodef name="create.slice" description="create an OpenFlow slice"> 
     <attribute name="user" description="FlowVisor user" /> 

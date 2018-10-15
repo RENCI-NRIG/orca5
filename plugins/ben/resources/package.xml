@@ -15,7 +15,7 @@
                  BEN Controller 
             </description> 
             <className>
-                 orca.controllers.ben.simple.BenSimpleControllerFactory 
+                 net.exogeni.orca.controllers.ben.simple.BenSimpleControllerFactory 
             </className> 
         </plugin> 
         <plugin id="2" type="6" factory="true" actorType="1"> 
@@ -26,7 +26,7 @@
                  BEN NLR Controller 
             </description> 
             <className>
-                 orca.controllers.ben.nlr.BenNlrControllerFactory 
+                 net.exogeni.orca.controllers.ben.nlr.BenNlrControllerFactory 
             </className> 
         </plugin> 
         <!-- Site authority handlers --> 
@@ -114,7 +114,7 @@
                  Interdomain Controller 
             </description> 
             <className>
-                 orca.controllers.ben.interdomain.InterDomainControllerFactory 
+                 net.exogeni.orca.controllers.ben.interdomain.InterDomainControllerFactory 
             </className> 
         </plugin> 
         <plugin id="8" type="10" actorType="3"> 

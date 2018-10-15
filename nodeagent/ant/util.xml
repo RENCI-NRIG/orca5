@@ -14,7 +14,7 @@
         <arg value="-o" /> 
         <arg file="${tmp.dir}" /> 
         <arg value="-p" /> 
-        <arg value="orca.nodeagent" /> 
+        <arg value="net.exogeni.orca.nodeagent" /> 
     </java> 
     <!-- Move the resources folder to src/resources --> 
     <move todir="src/resources"> 
@@ -23,8 +23,8 @@
         </fileset> 
     </move> 
     <!-- Move the stub and supporting files --> 
-    <move todir="${maven.project.build.sourceDirectory}/orca/nodeagent"> 
-        <fileset dir="${tmp.dir}/src/orca/nodeagent"> 
+    <move todir="${maven.project.build.sourceDirectory}/net/exogeni/orca/nodeagent"> 
+        <fileset dir="${tmp.dir}/src/net/exogeni/orca/nodeagent"> 
             <include name="**/*" /> 
             <exclude name="*Skeleton.java" /> 
         </fileset> 
@@ -32,10 +32,10 @@
     <!-- Set infinite timeout for the client stub --> 
     <exec executable="perl"> 
         <arg value="tools/patch.stub.pl" /> 
-        <arg value="${maven.project.build.sourceDirectory}/orca/nodeagent/NodeAgentServiceStub.java" /> 
-        <arg value="${maven.project.build.sourceDirectory}/orca/nodeagent/NodeAgentServiceStub.java.fixed" /> 
+        <arg value="${maven.project.build.sourceDirectory}/net/exogeni/orca/nodeagent/NodeAgentServiceStub.java" /> 
+        <arg value="${maven.project.build.sourceDirectory}/net/exogeni/orca/nodeagent/NodeAgentServiceStub.java.fixed" /> 
     </exec> 
-    <move file="${maven.project.build.sourceDirectory}/orca/nodeagent/NodeAgentServiceStub.java.fixed" tofile="${maven.project.build.sourceDirectory}/orca/nodeagent/NodeAgentServiceStub.java" /> 
+    <move file="${maven.project.build.sourceDirectory}/net/exogeni/orca/nodeagent/NodeAgentServiceStub.java.fixed" tofile="${maven.project.build.sourceDirectory}/net/exogeni/orca/nodeagent/NodeAgentServiceStub.java" /> 
     <!-- Add security settings to services.xml --> 
     <if> 
         <equals arg1="true" arg2="${secure.nodeagent}" /> 

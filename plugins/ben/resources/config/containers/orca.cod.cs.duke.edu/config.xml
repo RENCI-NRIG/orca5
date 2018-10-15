@@ -68,7 +68,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="duke.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
             </controls> 
         </actor> 
     </actors> 

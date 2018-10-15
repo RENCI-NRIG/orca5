@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca 
+        net.exogeni.orca
     </groupId> 
     <artifactId>
          nodeagent 
@@ -11,34 +11,34 @@
     <packaging>
          jar 
     </packaging> 
-    <version>5.4.4-SNAPSHOT</version> 
+    <version>5.4.6-SNAPSHOT</version> 
     <name>
          Orca Node Agent 
     </name> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              orca 
         </artifactId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.6-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
     </parent> 
     <properties> 
         <client.jar>
-             ${project.build.directory}/orca.nodeagent.client-${project.version}.jar 
+             ${project.build.directory}/net.exogeni.orca.nodeagent.client-${project.version}.jar 
         </client.jar> 
         <service.aar>
-             ${project.build.directory}/orca.nodeagent-${project.version}.aar 
+             ${project.build.directory}/net.exogeni.orca.nodeagent-${project.version}.aar 
         </service.aar> 
     </properties> 
     <dependencies> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  drivers 
@@ -49,7 +49,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  tools-axis2 
@@ -60,7 +60,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 orca.core 
+                net.exogeni.orca.core
             </groupId> 
             <artifactId>
                  util 
@@ -144,8 +144,8 @@
                             <tasks> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
                                 <!-- build the client library --> 
-                                <copy todir="${project.build.outputDirectory}/orca/nodeagent/client"> 
-                                    <fileset dir="${project.build.sourceDirectory}/orca/nodeagent/client"> 
+                                <copy todir="${project.build.outputDirectory}/net/exogeni/orca/nodeagent/client">
+                                    <fileset dir="${project.build.sourceDirectory}/net/exogeni/orca/nodeagent/client">
                                         <include name="nodeagent.tasks" /> 
                                         <include name="nodeagent.properties" /> 
                                         <include name="nodeagent.xml" /> 
@@ -153,37 +153,37 @@
                                 </copy> 
                                 <jar jarfile="${client.jar}"> 
                                     <fileset dir="${project.build.outputDirectory}"> 
-                                        <include name="orca/nodeagent/documents/*" /> 
-                                        <include name="orca/nodeagent/tests/**/*" /> 
-                                        <include name="orca/nodeagent/drivers/**/*" /> 
-                                        <include name="orca/nodeagent/KeyMasterMessage*" /> 
-                                        <include name="orca/nodeagent/NodeAgentConstants*" /> 
-                                        <include name="orca/nodeagent/NodeAgentServiceCallbackHandler*" /> 
-                                        <include name="orca/nodeagent/NodeAgentServiceMessageReceiverInOut*" /> 
-                                        <include name="orca/nodeagent/NodeAgentServiceStub*" /> 
-                                        <include name="orca/nodeagent/util/Serializer*" /> 
-                                        <include name="orca/nodeagent/tools/*" /> 
-                                        <include name="orca/nodeagent/client/**/*" /> 
-                                        <include name="orca/axis2/tools/KeyMasterMessage*" /> 
+                                        <include name="net/exogeni/orca/nodeagent/documents/*" />
+                                        <include name="net/exogeni/orca/nodeagent/tests/**/*" />
+                                        <include name="net/exogeni/orca/nodeagent/drivers/**/*" />
+                                        <include name="net/exogeni/orca/nodeagent/KeyMasterMessage*" />
+                                        <include name="net/exogeni/orca/nodeagent/NodeAgentConstants*" />
+                                        <include name="net/exogeni/orca/nodeagent/NodeAgentServiceCallbackHandler*" />
+                                        <include name="net/exogeni/orca/nodeagent/NodeAgentServiceMessageReceiverInOut*" />
+                                        <include name="net/exogeni/orca/nodeagent/NodeAgentServiceStub*" />
+                                        <include name="net/exogeni/orca/nodeagent/util/Serializer*" />
+                                        <include name="net/exogeni/orca/nodeagent/tools/*" />
+                                        <include name="net/exogeni/orca/nodeagent/client/**/*" />
+                                        <include name="net/exogeni/orca/axis2/tools/KeyMasterMessage*" />
                                     </fileset> 
                                 </jar> 
                                 <attachArtifact file="${client.jar}" classifier="client" type="jar" /> 
                                 <!-- build and organize testjar --> 
-                                <copy todir="${project.build.testOutputDirectory}/orca/nodeagent/tests/security/known"> 
-                                    <fileset dir="${project.build.testSourceDirectory}/orca/nodeagent/tests/security/known"> 
+                                <copy todir="${project.build.testOutputDirectory}/net/exogeni/orca/nodeagent/tests/security/known">
+                                    <fileset dir="${project.build.testSourceDirectory}/net/exogeni/orca/nodeagent/tests/security/known">
                                         <include name="client.jks" /> 
                                     </fileset> 
                                 </copy> 
-                                <copy todir="${project.build.testOutputDirectory}/orca/nodeagent/tests/security/unknown"> 
-                                    <fileset dir="${project.build.testSourceDirectory}/orca/nodeagent/tests/security/unknown"> 
+                                <copy todir="${project.build.testOutputDirectory}/net/exogeni/orca/nodeagent/tests/security/unknown">
+                                    <fileset dir="${project.build.testSourceDirectory}/net/exogeni/orca/nodeagent/tests/security/unknown">
                                         <include name="trudy.jks" /> 
                                     </fileset> 
                                 </copy> 
-                                <jar destfile="${project.build.directory}/orca-nodeagent-tests-${project.version}.jar" basedir="${project.build.testOutputDirectory}" includes="**/*" /> 
+                                <jar destfile="${project.build.directory}/net.exogeni.orca-nodeagent-tests-${project.version}.jar" basedir="${project.build.testOutputDirectory}" includes="**/*" />
                                 <!-- test driver --> 
                                 <jar jarfile="${project.build.directory}/testdriver.jar"> 
                                     <fileset dir="${project.build.testOutputDirectory}"> 
-                                        <include name="orca/nodeagent/tests/drivers/TestDriver*" /> 
+                                        <include name="net/exogeni/orca/nodeagent/tests/drivers/TestDriver*" />
                                     </fileset> 
                                 </jar> 
                                 <delete dir="package" /> 
@@ -241,16 +241,16 @@
                                 <!-- We expand out dependencies instead of including the jars. We 
 									do this because the nodeagenthost (unlike Tomcat) has problems resolving 
 									paths. --> 
-                                <unjar src="${maven.dependency.orca.core.drivers.jar.path}" dest="${project.build.outputDirectory}" /> 
-                                <unjar src="${maven.dependency.orca.core.tools-axis2.jar.path}" dest="${project.build.outputDirectory}" /> 
-                                <unjar src="${maven.dependency.orca.core.util.jar.path}" dest="${project.build.outputDirectory}" /> 
+                                <unjar src="${maven.dependency.net.exogeni.orca.core.drivers.jar.path}" dest="${project.build.outputDirectory}" /> 
+                                <unjar src="${maven.dependency.net.exogeni.orca.core.tools-axis2.jar.path}" dest="${project.build.outputDirectory}" /> 
+                                <unjar src="${maven.dependency.net.exogeni.orca.core.util.jar.path}" dest="${project.build.outputDirectory}" /> 
                                 <jar jarfile="${service.aar}"> 
                                     <fileset dir="${project.build.outputDirectory}"> 
-                                        <exclude name="orca/axis2/tools/**/*" /> 
-                                        <exclude name="orca/nodeagent/Server.class" /> 
-                                        <exclude name="orca/nodeagent/tests/**/*.class" /> 
-                                        <exclude name="orca/nodeagent/AllTests.class" /> 
-                                        <exclude name="orca/nodeagent/client/*" /> 
+                                        <exclude name="net/exogeni/orca/axis2/tools/**/*" />
+                                        <exclude name="net/exogeni/orca/nodeagent/Server.class" />
+                                        <exclude name="net/exogeni/orca/nodeagent/tests/**/*.class" />
+                                        <exclude name="net/exogeni/orca/nodeagent/AllTests.class" />
+                                        <exclude name="net/exogeni/orca/nodeagent/client/*" />
                                     </fileset> 
                                 </jar> 
                                 <attachArtifact file="${service.aar}" classifier="package" type="aar" /> 

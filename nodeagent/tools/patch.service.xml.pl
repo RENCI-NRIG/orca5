@@ -16,7 +16,7 @@ $replace2 ="
 <parameter name=\"InflowSecurity\">
    <action>
      <items>Signature</items>
-     <passwordCallbackClass>orca.nodeagent.PWCallbackHandlerServer</passwordCallbackClass>
+     <passwordCallbackClass>net.exogeni.orca.nodeagent.PWCallbackHandlerServer</passwordCallbackClass>
      <signaturePropFile>service.properties</signaturePropFile>
    </action>
 </parameter>
@@ -25,7 +25,7 @@ $replace2 ="
     <action>
       <items>Signature</items>
        <user>serverkey</user>
-       <passwordCallbackClass>orca.nodeagent.PWCallbackHandlerServer</passwordCallbackClass>
+       <passwordCallbackClass>net.exogeni.orca.nodeagent.PWCallbackHandlerServer</passwordCallbackClass>
        <signaturePropFile>service.properties</signaturePropFile>
        <signatureKeyIdentifier>DirectReference</signatureKeyIdentifier>
     </action>

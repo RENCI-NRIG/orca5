@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-         orca.tests 
+        net.exogeni.orca.tests
     </groupId> 
     <artifactId>
          unit 
@@ -19,7 +19,7 @@
     </name> 
     <parent> 
         <groupId>
-             orca 
+            net.exogeni.orca
         </groupId> 
         <artifactId>
              tests 

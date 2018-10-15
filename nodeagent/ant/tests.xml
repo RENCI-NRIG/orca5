@@ -3,8 +3,8 @@
 --> 
 <path id="clientrun.classpath"> 
     <pathelement path="${runtime_classpath}" /> 
-    <pathelement location="${maven.project.build.testSourceDirectory}/orca/nodeagent/tests/security/known" /> 
-    <pathelement location="${maven.project.build.testSourceDirectory}/orca/nodeagent/tests/security/unknown" /> 
+    <pathelement location="${maven.project.build.testSourceDirectory}/net/exogeni/orca/nodeagent/tests/security/known" /> 
+    <pathelement location="${maven.project.build.testSourceDirectory}/net/exogeni/orca/nodeagent/tests/security/unknown" /> 
     <fileset dir="${maven.project.build.directory}"> 
         <include name="*.jar" /> 
     </fileset> 
@@ -13,10 +13,10 @@
         <include name="axis2.xml" /> 
         <include name="2axis2.xml" /> 
     </fileset> 
-    <fileset dir="${maven.project.build.testSourceDirectory}/orca/nodeagent/tests/security/known"> 
+    <fileset dir="${maven.project.build.testSourceDirectory}/net/exogeni/orca/nodeagent/tests/security/known"> 
         <include name="client.properties" /> 
     </fileset> 
-    <fileset dir="${maven.project.build.testSourceDirectory}/orca/nodeagent/tests/security/unknown"> 
+    <fileset dir="${maven.project.build.testSourceDirectory}/net/exogeni/orca/nodeagent/tests/security/unknown"> 
         <include name="2client.properties" /> 
     </fileset> 
 </path> 
@@ -25,40 +25,40 @@
     <echo message="classpath: ${cp}" /> 
 </target> 
 <target name="tests.security.known"> 
-    <java classname="orca.nodeagent.tests.security.known.TestAuthorizedClient" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.security.known.TestAuthorizedClient" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
         <arg value="${service.location}" /> 
     </java> 
 </target> 
 <target name="tests.security.known.add"> 
-    <java classname="orca.nodeagent.tests.security.known.TestRegisterKey" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.security.known.TestRegisterKey" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
         <arg value="${service.location}" /> 
     </java> 
 </target> 
 <target name="tests.security.known.remove"> 
-    <java classname="orca.nodeagent.tests.security.known.TestUnregisterKey" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.security.known.TestUnregisterKey" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
         <arg value="${service.location}" /> 
     </java> 
 </target> 
 <target name="tests.security.unknown"> 
-    <java classname="orca.nodeagent.tests.security.unknown.TestUnauthorizedClient" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.security.unknown.TestUnauthorizedClient" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
     </java> 
 </target> 
 <target name="tests.nosecurity"> 
-    <java classname="orca.nodeagent.tests.nosecurity.TestSecurityNotEnabled" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.nosecurity.TestSecurityNotEnabled" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
     </java> 
 </target> 
 <target name="tests.nosecurity.add"> 
-    <java classname="orca.nodeagent.tests.nosecurity.TestAddAuthorityKey" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.nosecurity.TestAddAuthorityKey" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
     </java> 
 </target> 
 <target name="tests.nosecurity.getservicekey"> 
-    <java classname="orca.nodeagent.tests.nosecurity.TestGetServiceKey" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.nosecurity.TestGetServiceKey" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
     </java> 
 </target> 
@@ -69,37 +69,37 @@
 </target> 
 <!-- Unit tests --> 
 <target name="tests.unit.client"> 
-    <java classname="orca.nodeagent.client.AllTests" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.client.AllTests" fork="true"> 
         <classpath refid="run.classpath" /> 
         <env key="na.location" value="${service.location}" /> 
     </java> 
 </target> 
 <target name="tests.unit.drivers"> 
-    <java classname="orca.nodeagent.tests.drivers.AllTests" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.drivers.AllTests" fork="true"> 
         <classpath refid="run.classpath" /> 
         <env key="na.location" value="${service.location}" /> 
     </java> 
 </target> 
 <target name="tests.suite.nosecurity"> 
-    <java classname="orca.nodeagent.tests.nosecurity.AllTests" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.nosecurity.AllTests" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
         <env key="na.location" value="${service.location}" /> 
         <env key="na.repository" value="../lib/external" /> 
-        <env key="na.config" value="test/orca/nodeagent/tests/nosecurity/client.axis2.nosign.xml" /> 
-        <env key="na.keystorelocation" value="test/orca/nodeagent/tests/security/known/client.jks" /> 
+        <env key="na.config" value="test/net/exogeni/orca/nodeagent/tests/nosecurity/client.axis2.nosign.xml" /> 
+        <env key="na.keystorelocation" value="test/net/exogeni/orca/nodeagent/tests/security/known/client.jks" /> 
         <env key="na.keystorepass" value="clientstorepass" /> 
         <env key="na.keypass" value="clientkeypass" /> 
         <env key="na.authorityip" value="NA" /> 
     </java> 
 </target> 
 <target name="tests.suite.security"> 
-    <java classname="orca.nodeagent.tests.security.AllTests" fork="true"> 
+    <java classname="net.exogeni.orca.nodeagent.tests.security.AllTests" fork="true"> 
         <classpath refid="clientrun.classpath" /> 
         <env key="na.location" value="${service.location}" /> 
         <env key="na.repository" value="../lib/external" /> 
-        <env key="na.config.authorized" value="test/orca/nodeagent/tests/security/known/client.axis2.xml" /> 
-        <env key="na.config.unauthorized" value="test/orca/nodeagent/tests/security/unknown/2client.axis2.xml" /> 
-        <env key="na.trudykeystorelocation" value="test/orca/nodeagent/tests/security/unknown/trudy.jks" /> 
+        <env key="na.config.authorized" value="test/net/exogeni/orca/nodeagent/tests/security/known/client.axis2.xml" /> 
+        <env key="na.config.unauthorized" value="test/net/exogeni/orca/nodeagent/tests/security/unknown/2client.axis2.xml" /> 
+        <env key="na.trudykeystorelocation" value="test/net/exogeni/orca/nodeagent/tests/security/unknown/trudy.jks" /> 
         <env key="na.trudykeystorepass" value="trudystorepass" /> 
     </java> 
 </target>

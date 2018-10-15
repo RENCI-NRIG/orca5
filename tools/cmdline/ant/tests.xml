@@ -36,7 +36,7 @@
             <delete file="super.properties" /> 
             <delete dir="logs" /> 
             <echo message="Running configuration test..." /> 
-            <java classname="orca.tests.core.LoadConfigurationTest" Fork="Yes" failonerror="true"> 
+            <java classname="net.exogeni.orca.tests.core.LoadConfigurationTest" Fork="Yes" failonerror="true"> 
                 <classpath refid="run.classpath" /> 
                 <arg value="${config}" /> 
             </java> 
@@ -77,7 +77,7 @@
     <echo message="configuration file: ${config}" /> 
     <echo message="lease length: ${leaseLength}" /> 
     <echo message="units: ${units}" /> 
-    <java classname="orca.tests.unit.main.VMTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.VMTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -106,7 +106,7 @@
     <echo message="running queue test..." /> 
     <echo message="configuration file: ${config}" /> 
     <echo message="lease length: ${leaseLength}" /> 
-    <java classname="orca.tests.unit.main.VMQueueTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.VMQueueTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -134,7 +134,7 @@
     <echo message="running vlan test..." /> 
     <echo message="configuration file: ${config}" /> 
     <echo message="lease length: ${leaseLength}" /> 
-    <java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -171,7 +171,7 @@
     <echo message="configuration file: ${config}" /> 
     <echo message="lease length: ${leaseLength}" /> 
     <echo message="units: ${units}" /> 
-    <java classname="orca.tests.unit.main.RedeemPredecessorTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.RedeemPredecessorTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -198,7 +198,7 @@
             <echo message="running vlan test..." /> 
             <echo message="configuration file: ${config}" /> 
             <echo message="lease length: ${leaseLength}" /> 
-            <java classname="orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
+            <java classname="net.exogeni.orca.tests.unit.main.VlanTest" Fork="Yes" failonerror="true"> 
                 <classpath refid="run.classpath" /> 
                 <arg value="${config}" /> 
                 <arg value="do.not.recover=true" /> 
@@ -237,7 +237,7 @@
     <echo message="configuration file: ${config}" /> 
     <echo message="lease length: ${leaseLength}" /> 
     <echo message="units: ${units}" /> 
-    <java classname="orca.tests.unit.main.EucaTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.EucaTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -266,7 +266,7 @@
     <delete dir="logs" /> 
     <echo message="running ben interdomain controller test..." /> 
     <echo message="configuration file: ${config}" /> 
-    <java classname="orca.controllers.ben.interdomain.InterDomainControllerTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.controllers.ben.interdomain.InterDomainControllerTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -285,7 +285,7 @@
     <delete dir="logs" /> 
     <echo message="running OpenFlow controller test..." /> 
     <echo message="configuration file: ${config}" /> 
-    <java classname="orca.controllers.openflow.OpenFlowControllerTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.controllers.openflow.OpenFlowControllerTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 
@@ -299,7 +299,7 @@
     <echo message="running OpenFlow Policy test..." /> 
     <echo message="configuration file: ${config}" /> 
     <echo message="lease length: ${leaseLength}" /> 
-    <java classname="orca.tests.unit.main.OpenFlowTest" Fork="Yes" failonerror="true"> 
+    <java classname="net.exogeni.orca.tests.unit.main.OpenFlowTest" Fork="Yes" failonerror="true"> 
         <classpath refid="run.classpath" /> 
         <arg value="${config}" /> 
         <arg value="do.not.recover=true" /> 

@@ -11,17 +11,17 @@
     </name> 
     <parent> 
         <groupId>
-             orca 
+             net.exogeni.orca 
         </groupId> 
         <artifactId>
              docker-orca 
         </artifactId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.6-SNAPSHOT</version> 
     </parent> 
     <dependencies> 
         <dependency> 
             <groupId>
-                 orca 
+                 net.exogeni.orca 
             </groupId> 
             <artifactId>
                  orca-base 
