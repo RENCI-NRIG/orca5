@@ -641,12 +641,19 @@ public class ReservationConverter implements LayerConstant {
                     if (parent.getValue() == null) {
                         logger.error("ReservationConverter::setDependency():Edge interface name is unknown!" + parent.getValue().getURI());
                     } else {
-                        // @kthare10 10/31/2018 commented this code and guid is set at creation of interface
-                        //String element_guid = UUID.randomUUID().toString();
-                        //logger.debug("ReservationConverter::setDependency(): set element_guid=" + element_guid +
-                        //             " for element=" + parent.getValue().getName());
-                        //parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
-                        String element_guid = parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getLiteral().toString();
+                        // @kthare10 10/31/2018 added handling for GUID for Interface which is now being set in CloudHandler::createInterface
+                        String element_guid = UUID.randomUUID().toString();
+                        if(parent.getValue().getProperty(NdlCommons.hasGUIDProperty) != null) {
+                            logger.debug("ReservationConverter::setDependency(): reusing already allocated element_guid=" + element_guid +
+                                    " for element=" + parent.getValue().getName());
+                            element_guid = parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getLiteral().toString();
+                        }
+                        else {
+                            logger.debug("ReservationConverter::setDependency(): set element_guid=" + element_guid +
+                                         " for element=" + parent.getValue().getName());
+                            parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
+                        }
+
                         // depending on storage
                         if (pr != null) {
                             if (pr.isLUN) {// now do it latter when all reservations are collected
