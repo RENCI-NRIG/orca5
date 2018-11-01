@@ -197,7 +197,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
         boolean removed = false;
         if (labelRange_rs == null)
             return false;
-        logger.info("Num of Sub models:" + ontModel.countSubModels() + "\n");
+        logger.info("OntProcessor::removeFromImport():Num of Sub models:" + ontModel.countSubModels() + "\n");
         ExtendedIterator<OntModel> subList = ontModel.listSubModels(true);
         OntModel subModel = null;
         OntResource set_ont = null;
@@ -225,7 +225,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
         Resource pick = null;
         if ((labelRange_rs == null) || (availableSet_rs == null))
             return null;
-        logger.info("labelRange_rs:" + labelRange_rs.getURI() + ":" + ontModel.isInBaseModel(availableSet_rs));
+        logger.info("OntProcessor::ontLabelUpdate():labelRange_rs:" + labelRange_rs.getURI() + ":" + ontModel.isInBaseModel(availableSet_rs));
         // if low == upper, i.e. the range shrinked to one label
         // or it is a single label
         if (availableSet_rs != null) {
@@ -241,7 +241,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
                     // }
                 }
                 pick = lowerLabel;
-                logger.debug("Label removed:" + availableSet_rs + ":" + NdlCommons.collectionElementProperty + ":"
+                logger.debug("OntProcessor::ontLabelUpdate():Label removed:" + availableSet_rs + ":" + NdlCommons.collectionElementProperty + ":"
                         + labelRange_rs + "\n"
                         + availableSet_rs.hasProperty(NdlCommons.collectionElementProperty, labelRange_rs));
             } else { // for the range case
@@ -360,7 +360,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
         // else{*/
         // removeFromImport(labelRange_rs,NdlCommons.lowerBound,labelRange_rs.getProperty(NdlCommons.lowerBound).getResource());
         // }
-        logger.info("Lower bound removed:" + labelRange_rs + ":" + NdlCommons.lowerBound + ":"
+        logger.info("OntProcessor::changeAvailableLabelSetLowerBound():Lower bound removed:" + labelRange_rs + ":" + NdlCommons.lowerBound + ":"
                 + labelRange_rs.hasProperty(NdlCommons.lowerBound, lb));
 
         String rangeLabel = null;
@@ -381,7 +381,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
             usedLabel_rs.addProperty(NdlCommons.RDFS_Label, usedLabelStr);
 
         labelRange_rs.addProperty(NdlCommons.lowerBound, rs_lower);
-        logger.info("------New LabelSet----" + labelRange_rs + ":"
+        logger.info("OntProcessor::changeAvailableLabelSetLowerBound():------New LabelSet----" + labelRange_rs + ":"
                 + labelRange_rs.getProperty(NdlCommons.lowerBound).getResource() + ":" + labelStr + ":"
                 + labelRange_rs.getProperty(NdlCommons.upperBound).getResource());
     }
@@ -413,7 +413,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
 
         if (label != null)
             usedSet_rs.addProperty(NdlCommons.collectionElementProperty, label);
-        logger.info("---Used label added:" + rsURI + ":" + usedLabelSet + ":"
+        logger.info("OntProcessor::setUsedLabelSet():---Used label added:" + rsURI + ":" + usedLabelSet + ":"
                 + usedSet_rs.hasProperty(NdlCommons.collectionElementProperty, label) + ":" + label);
     }
 
@@ -760,7 +760,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
         }
 
         if (neighborQueue.isEmpty()) {
-            logger.warn("Neighbor queue is empty for resource: " + start);
+            logger.warn("OntProcessor::findShortestPath():Neighbor queue is empty for resource: " + start);
         }
 
         ArrayList<Resource> candidate, expand;
@@ -773,13 +773,13 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
                 solution = validPath(start, candidate, bw, rType1_str, rType2_str, nc_of_version);
 
                 if (solution != null) {
-                    logger.info("Found the path.\n");
+                    logger.info("OntProcessor::findShortestPath():Found the path.\n");
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Shortest path solution: " + Arrays.toString(solution.toArray()));
+                        logger.debug("OntProcessor::findShortestPath():Shortest path solution: " + Arrays.toString(solution.toArray()));
                     }
                     break;
                 } else {
-                    logger.info("The path is not valid.\n");
+                    logger.info("OntProcessor::findShortestPath():The path is not valid.\n");
                 }
 
             } else {
@@ -793,7 +793,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
 
                     if (!seen.contains(rs.getURI())) {
                         expand = new ArrayList<Resource>(candidate);
-                        // logger.debug("Is it in the queue?"+rs.getURI());
+                        // logger.debug("OntProcessor::findShortestPath():Is it in the queue?"+rs.getURI());
                         expand.add(rs);
                         neighborQueue.add(expand);
                     }
@@ -863,7 +863,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
                 }
 
                 if ((bw != 0) && (!valid)) {
-                    logger.error("Not enough bandwidth:" + intf_ont);
+                    logger.error("OntProcessor::validPath():Not enough bandwidth:" + intf_ont);
                     break;
                 }
 
@@ -1063,7 +1063,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
                         pair.add(in2_ont);
                         intf_List.add(pair);
 
-                        logger.debug("findInterface:" + rs0.getURI() + ":" + in0_ont.getURI() + "---" + rs1.getURI()
+                        logger.debug("OntProcessor::findInterface():" + rs0.getURI() + ":" + in0_ont.getURI() + "---" + rs1.getURI()
                                 + ":" + in2_ont.getURI());
 
                         break;
@@ -1078,7 +1078,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
                         pair.add(rs0_ont);
                         pair.add(in0_ont);
                         intf_List.add(0, pair);
-                        logger.debug("findInterface:" + rs0.getURI() + ":" + in0_ont.getURI() + "---");
+                        logger.debug("OntProcessor::findInterface():" + rs0.getURI() + ":" + in0_ont.getURI() + "---");
                     }
                 }
                 if (in2_ont.hasProperty(NdlCommons.topologyInterfaceOfProperty, rs1)) {
@@ -1089,7 +1089,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
                         pair.add(rs1_ont);
                         pair.add(in2_ont);
                         intf_List.add(pair);
-                        logger.debug("findInterface:" + rs1.getURI() + ":" + in2_ont.getURI());
+                        logger.debug("OntProcessor::findInterface():" + rs1.getURI() + ":" + in2_ont.getURI());
                     }
                 }
             }
@@ -1151,7 +1151,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
         }
 
         if (type != null)
-            logger.info("Intf resource type:" + type.toString());
+            logger.info("OntProcessor::resourceType():Intf resource type:" + type.toString());
         return type;
     }
 
@@ -1234,7 +1234,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
 
         while (tempList != null && !tempList.isEmpty()) {
             rs = tempList.removeLast();
-            logger.debug("removeInConnectionProperty:" + rs.getURI() + ":" + ps);
+            logger.debug("OntProcessor::removeInConnectionProperty():" + rs.getURI() + ":" + ps);
             rs.removeAll(p);
         }
 

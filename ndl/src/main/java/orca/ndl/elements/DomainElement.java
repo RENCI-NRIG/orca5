@@ -118,7 +118,7 @@ public class DomainElement extends Device {
         for (int i = 0; i < size; i++) {
             action = (SwitchingAction) action_list.get(i);
             if (action == null)
-                logger.info("No Action");
+                logger.info("DomainElement:domainRequest():No Action");
             else {
                 castType = action.getCastType();
                 if ((castType != null) && (castType.equalsIgnoreCase(NdlCommons.multicast)))
@@ -142,9 +142,10 @@ public class DomainElement extends Device {
         if ((castType != null) && (castType.equalsIgnoreCase(NdlCommons.multicast))) {
             connection_rs = domainRequestModel.createIndividual(reservation.getURI() + "/conn",
                     NdlCommons.topologyBroadcastConnectionClass);
-        } else
+        } else {
             connection_rs = domainRequestModel.createIndividual(reservation.getURI() + "/conn",
                     NdlCommons.topologyNetworkConnectionClass);
+        }
         domainRequestModel.add(reservation, NdlCommons.collectionElementProperty, connection_rs);
 
         long bw = 0;
@@ -213,7 +214,7 @@ public class DomainElement extends Device {
                                 XSDDatatype.XSDfloat);
                         domainRequestModel.add(intf_rs, NdlCommons.layerLabel, label_ont);
                     }
-                    logger.info("The multicast domain:precedent=" + parent_de.getURI() + ":"
+                    logger.info("DomainElement:domainRequest()The multicast domain:precedent=" + parent_de.getURI() + ":"
                             + parent_de.getStaticLabel() + ":" + intf_rs.getURI() + ":" + intf_link_rs.getURI());
                 }
             }
@@ -261,7 +262,7 @@ public class DomainElement extends Device {
                                 XSDDatatype.XSDfloat);
                         domainRequestModel.add(intf_rs, NdlCommons.layerLabel, label_ont);
                     }
-                    logger.info("The multicast domain:child=" + parent_de.getURI() + ":" + parent_de.getStaticLabel()
+                    logger.info("DomainElement:domainRequest()The multicast domain:child=" + parent_de.getURI() + ":" + parent_de.getStaticLabel()
                             + ":" + intf_ont.getURI() + ":" + intf_link_rs.getURI());
                 }
             }
@@ -350,18 +351,18 @@ public class DomainElement extends Device {
                         .getResource();
                 isStitching = (neighbour_device_rs.getURI().contains(NdlCommons.stitching_domain_str)
                         || neighbor_intf_rs.getURI().contains(NdlCommons.stitching_domain_str));
-                logger.debug("neighbour_device_rs=" + neighbour_device_rs.getURI());
+                logger.debug("DomainElement:setNeighborDevice():neighbour_device_rs=" + neighbour_device_rs.getURI());
             }
-            logger.debug("neighbor_intf_rs=" + neighbor_intf_rs.getURI() + ";isStitching=" + isStitching);
+            logger.debug("DomainElement:setNeighborDevice():neighbor_intf_rs=" + neighbor_intf_rs.getURI() + ";isStitching=" + isStitching);
 
             if (local.hasProperty(NdlCommons.topologyInterfaceOfProperty)) {
                 neighbour_device_rs = local.getProperty(NdlCommons.topologyInterfaceOfProperty).getResource();
                 if (!isStitching)
                     isStitching = (neighbour_device_rs.getURI().contains(NdlCommons.stitching_domain_str)
                             || local.getURI().contains(NdlCommons.stitching_domain_str));
-                logger.debug("neighbour_device_rs=" + neighbour_device_rs.getURI());
+                logger.debug("DomainElement:setNeighborDevice():neighbour_device_rs=" + neighbour_device_rs.getURI());
             }
-            logger.debug("local=" + local.getURI() + ";isStitching=" + isStitching);
+            logger.debug("DomainElement:setNeighborDevice():local=" + local.getURI() + ";isStitching=" + isStitching);
 
             if (isStitching) {
                 while (true) {
@@ -415,7 +416,7 @@ public class DomainElement extends Device {
                     }
                     parent_de.removeFollowedByElement(child_de);
                 } else
-                    logger.error("Missed follower:" + parent_de.getName());
+                    logger.error("DomainElement:copyDependency():Missed follower:" + parent_de.getName());
             }
         }
 
@@ -438,7 +439,7 @@ public class DomainElement extends Device {
                     }
                     parent_de.removePrecededByElement(child_de);
                 } else
-                    logger.error("Missed follower:" + parent_de.getName());
+                    logger.error("DomainElement:copyDependency():Missed follower:" + parent_de.getName());
             }
         }
 

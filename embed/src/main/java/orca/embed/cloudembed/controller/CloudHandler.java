@@ -158,6 +158,7 @@ public class CloudHandler extends MappingHandler {
     // dType = domainname.type
     public SystemNativeError runEmbedding(String domainName, RequestReservation request,
             DomainResourcePools domainResourcePools) {
+        logger.debug("CloudHandler::runEmbedding() IN");
         Collection<NetworkElement> elements = request.getElements();
         OntModel requestModel = request.getModel();
         SystemNativeError error = null;
@@ -182,38 +183,40 @@ public class CloudHandler extends MappingHandler {
                 error.setErrno(1);
                 error.setMessage("No available resources in domain: " + domain + ":" + pureType + "; Requested: "
                         + pureType + ":" + count);
-                logger.error(error.toString());
+                logger.error("CloudHandler:runEmbedding():" + error.toString());
                 return error;
             }
             resourceCount = domainResourcePools.getDomainResourceType(domain).getCount();
-            logger.info(pureType + ":" + count + ":" + domain + ":" + resourceCount);
+            logger.info("CloudHandler:runEmbedding():" + pureType + ":" + count + ":" + domain + ":" + resourceCount);
             if (resourceCount < count) {
                 error = new SystemNativeError();
                 error.setErrno(2);
                 error.setMessage("Not enough resources in domain: " + domain + ":" + pureType + "; Requested:" + count
                         + ";resource pool=" + resourceCount);
-                logger.error(error.toString());
+                logger.error("CloudHandler:runEmbedding():" +error.toString());
                 return error;
             }
         }
-        logger.info("There are " + typeCount + " types of resource in the request!!!");
+        logger.info("CloudHandler:runEmbedding():There are " + typeCount + " types of resource in the request!!!");
         if (typeCount == 0) { // possible modifying
             if ((domainName.endsWith("vm")) || (!domainName.endsWith("baremetalce")) || (!domainName.endsWith("lun"))) {
                 domain = domainName;
                 int last_index = domainName.lastIndexOf("/");
                 pureType = domainName.substring(last_index, domainName.length());
                 domainName = domainName.substring(0, last_index);
-                logger.info("But possible modifying element:domainName=" + domainName + ";type=" + pureType);
+                logger.info("CloudHandler:runEmbedding():But possible modifying element:domainName=" + domainName + ";type=" + pureType);
             }
         }
         // go form the reservation domainElement
         DomainElement link_device = null;
         for (NetworkElement element : elements) {
-            logger.debug("element:" + element.getName() + ";isModify=" + element.isModify());
+            logger.debug("CloudHandler:runEmbedding():element:" + element.getName() + ";isModify=" + element.isModify() + 
+                         ";modify version=" + element.getModifyVersion() + ";this.modify version=" + this.modifyVersion);
             if (element instanceof NetworkConnection) {
                 NetworkConnection nc = (NetworkConnection) element;
-                if (!element.isModify())
+                if (!element.isModify()) {
                     link_device = createLinkDevice(nc, domainName, deviceList, domainResourcePools);
+                }
                 else {
                     for (NetworkElement existing_ce : deviceList) {
                         if (existing_ce.getName().equalsIgnoreCase(element.getName())) {
@@ -242,12 +245,14 @@ public class CloudHandler extends MappingHandler {
                     e.printStackTrace();
                 }
                 if (nc.getNe1() != null) {
+                    logger.debug("CloudHandler:runEmbedding():NE1 not null, create edge device");
                     error = createEdgeDevice(nc.getNe1(), link_device, domainName, request.getNumNetworkConnection(),
                             requestModel, deviceList, domainResourcePools);
                     if (error != null)
                         return error;
                 }
                 if (nc.getNe2() != null) {
+                    logger.debug("CloudHandler:runEmbedding():NE2 not null, create edge device");
                     error = createEdgeDevice(nc.getNe2(), link_device, domainName, request.getNumNetworkConnection(),
                             requestModel, deviceList, domainResourcePools);
                     if (error != null)
@@ -268,6 +273,7 @@ public class CloudHandler extends MappingHandler {
                     ComputeElement ce = (ComputeElement) element;
                     for (Object de : ce.getDependencies().toArray()) {// From InterDomain request
                         if (de instanceof NetworkConnection) {
+                            logger.debug("CloudHandler:runEmbedding():creating edge device for compute dependencies");
                             NetworkConnection ne = (NetworkConnection) de;
                             link_device = (DomainElement) ne.getFirstConnectionElement();
                             error = createEdgeDevice(element, link_device, domainName,
@@ -280,6 +286,7 @@ public class CloudHandler extends MappingHandler {
                 }
                 // 2. not edge of a request connection in the intra-site case, or
                 if (((ComputeElement) element).getInterfaces() == null) {
+                    logger.debug("CloudHandler:runEmbedding():creating edge device for compute intra-site case");
                     error = createEdgeDevice(element, null, domainName, request.getNumNetworkConnection(), requestModel,
                             deviceList, domainResourcePools);
                     if (error != null)
@@ -289,16 +296,19 @@ public class CloudHandler extends MappingHandler {
         }
         if (domainConnectionList.containsKey(domainName)) {
             if (logger.isDebugEnabled()) {
-                logger.debug("domainName=" + domainName + ":newDomainList.size="
+                logger.debug("CloudHandler:runEmbedding():domainName=" + domainName + ":newDomainList.size="
                         + domainConnectionList.get(domainName).size());
             }
+            logger.debug("CloudHandler:runEmbedding():node grp dependency");
             nodeGroupDependency(domainConnectionList.get(domainName));
         }
 
+        logger.debug("CloudHandler::runEmbedding() OUT");
         return error;
     }
 
     private void setControllerIPLabelSet(DomainElement link_device) {
+        logger.debug("CloudHandler::setControllerIPLabelSet() IN");
         // only set this controller's bitSet
         String d_name = link_device.getInDomain();
         IPAddressRange ip_range = link_device.getIp_range();
@@ -322,9 +332,11 @@ public class CloudHandler extends MappingHandler {
                 this.controllerAssignedLabel.put(d_name, f_bSet);
             }
         }
+        logger.debug("CloudHandler::setControllerIPLabelSet() OUT");
     }
 
     private IPAddressRange siteIPAddress(DomainElement link_device) throws UnknownHostException, InetNetworkException {
+        logger.debug("CloudHandler::siteIPAddress() IN");
         if (link_device == null)
             return null;
 
@@ -338,11 +350,11 @@ public class CloudHandler extends MappingHandler {
         String ip_addr = null, ip_netmask = null;
 
         String domainName = link_device.getInDomain();
-        logger.info("CloudHandler.IPAddressRange: domain name=" + domainName);
+        logger.info("CloudHandler:siteIPAddress(): domain name=" + domainName);
         // BitSet bSet = this.controllerAssignedLabel.get(domainName);
         BitSet bSet = getAvailableBitSet(domainName);
         if (debugOn)
-        	System.out.println("CloudHandler domain="+domainName+";bSet="+bSet);
+            System.out.println("CloudHandler domain="+domainName+";bSet="+bSet);
         IPAddressRange ip_range = null;
         for (Interface action_intf : intf_list) {
             action_intf_ont = action_intf.getResource();
@@ -371,11 +383,11 @@ public class CloudHandler extends MappingHandler {
                             ip_range = new IPAddressRange(ip_addr, ip_netmask, ip_addr_ont);
                             ip_range.setbSet(bSet);
                             if (debugOn)
-                            	System.out.println("2. CloudHandler controller label bSet="+this.controllerAssignedLabel.get(domainName));
+                                System.out.println("2. CloudHandler controller label bSet="+this.controllerAssignedLabel.get(domainName));
                         } else {
                             ip_range.modify(ip_addr, ip_netmask, ip_addr_ont);
                             if (debugOn) 
-                            	System.out.println("3. CloudHandler controller label bSet="+this.controllerAssignedLabel.get(domainName));
+                                System.out.println("3. CloudHandler controller label bSet="+this.controllerAssignedLabel.get(domainName));
                         }
                     }
                 }
@@ -383,12 +395,12 @@ public class CloudHandler extends MappingHandler {
         }
         if (ip_range != null) {
             // possible recovered IP address;
-            logger.debug("Recovered shared IP, domain=" + domainName);
+            logger.debug("CloudHandler:siteIPAddress():Recovered shared IP, domain=" + domainName);
             if (shared_IP_set != null) {
                 for (Entry<String, LinkedList<String>> entry : shared_IP_set.entrySet()) {
-                    logger.debug("cloudHandler recover:domain=" + entry.getKey());
+                    logger.debug("CloudHandler:siteIPAddress():recover:domain=" + entry.getKey());
                     for (String shared_ip_str : entry.getValue()) {
-                        logger.debug("cloudHandler recover:ip=" + shared_ip_str);
+                        logger.debug("CloudHandler:siteIPAddress():recover:ip=" + shared_ip_str);
                     }
                 }
             }
@@ -397,7 +409,7 @@ public class CloudHandler extends MappingHandler {
                 LinkedList<String> str_list = this.shared_IP_set.get(domainName);
                 if (str_list != null) {
                     for (String shared_ip_str : str_list) {
-                        logger.debug("ip=" + shared_ip_str + ";netmask=" + ip_netmask);
+                        logger.debug("CloudHandler:siteIPAddress():ip=" + shared_ip_str + ";netmask=" + ip_netmask);
                         int index = shared_ip_str.indexOf("/");
                         String ip_str = index > 0 ? shared_ip_str.split("\\/")[0] : shared_ip_str;
                         ip_range.modify(ip_str, ip_netmask, null);
@@ -413,10 +425,12 @@ public class CloudHandler extends MappingHandler {
             base_ip_addr_rs.addProperty(NdlCommons.ip4NetmaskProperty, base_ip_addr.netmask);
             link_device.setIp_range(ip_range);
         }
+        logger.debug("CloudHandler::siteIPAddress() OUT");
         return ip_range;
     }
 
     private BitSet getAvailableBitSet(String domainName) {
+        logger.debug("CloudHandler::getAvailableBitSet() IN");
         BitSet startBitSet = null, controllerStartBitSet = null;
         if (this.globalControllerAssignedLabel != null) {
             startBitSet = this.globalControllerAssignedLabel.get(domainName);
@@ -430,12 +444,14 @@ public class CloudHandler extends MappingHandler {
         if (controllerStartBitSet != null)
             sBitSet.or(controllerStartBitSet);
 
+        logger.debug("CloudHandler::getAvailableBitSet() OUT");
         return sBitSet;
     }
 
     private SystemNativeError createEdgeDevice(NetworkElement element, DomainElement link_device, String domainName,
             int maxNumNetworkConnection, OntModel requestModel, LinkedList<NetworkElement> deviceList,
             DomainResourcePools domainResourcePools) {
+        logger.debug("CloudHandler::createEdgeDevice() IN");
         SystemNativeError error = null;
         int num = element.getNumUnits();
 
@@ -451,11 +467,13 @@ public class CloudHandler extends MappingHandler {
                 error = createEdgeDeviceCG(cg_element, link_device, domainName, requestModel, domainResourcePools, num);
             }
         }
+        logger.debug("CloudHandler::createEdgeDevice() OUT");
         return error;
     }
 
     private SystemNativeError createEdgeDeviceCG(NetworkElement element, DomainElement link_device, String domainName,
             OntModel requestModel, DomainResourcePools domainResourcePools, int num) {
+        logger.debug("CloudHandler:createEdgeDeviceCG(): IN");
         SystemNativeError error = null;
         DomainElement device = null;
         boolean mpDevice = false;
@@ -469,8 +487,8 @@ public class CloudHandler extends MappingHandler {
             if (device.getCastType() != null && device.getCastType().equalsIgnoreCase(NdlCommons.multicast)) {
                 mpDevice = true;
             }
-            logger.debug("createEdgeDeviceCG: device:" + device.getName() + ";numInterface=" + device.getNumInterface()
-                    + ";isModify=" + device.isModify() + ";modify version=" + this.modifyVersion);
+            logger.debug("CloudHandler:createEdgeDeviceCG(): device:" + device.getName() + ";numInterface=" + device.getNumInterface()
+                    + ";isModify=" + device.isModify() + ";modify version=" + element.getModifyVersion() + ";this.modify version=" + this.modifyVersion);
             setModifyFlag(device);
 
             // this should only happen if not a modify ?
@@ -484,7 +502,7 @@ public class CloudHandler extends MappingHandler {
                         error.setErrno(1);
                         error.setMessage(
                                 "No available resources in domain: " + domainName + ":resorceCount=" + resourceCount);
-                        logger.error(error.toString());
+                        logger.error("CloudHandler:createEdgeDeviceCG():" +error.toString());
                         return error;
                     }
                 }
@@ -497,6 +515,7 @@ public class CloudHandler extends MappingHandler {
                 domainDevices.add(device);
             }
         }
+        logger.debug("CloudHandler:createEdgeDeviceCG(): OUT");
         return error;
     }
 
@@ -505,8 +524,9 @@ public class CloudHandler extends MappingHandler {
      */
     private DomainElement createNewNode(NetworkElement element, int i, DomainElement link_device, String domainName,
             OntModel requestModel, LinkedList<NetworkElement> deviceList, int num) {
-
-        logger.info("Creating new node:hole=" + i + ";domainName=" + domainName);
+         
+        logger.info("CloudHandler:createNewNode(): IN");
+        logger.info("CloudHandler:createNewNode():Creating new node:hole=" + i + ";domainName=" + domainName);
         if (link_device != null)
             logger.debug(";link_device=" + link_device.getName());
 
@@ -530,8 +550,9 @@ public class CloudHandler extends MappingHandler {
             element.getResource().addProperty(NdlCommons.hasGUIDProperty, device_guid);
         }
         OntModel device_model = element.getModel();
-        if (this.manifestModel != null)
+        if (this.manifestModel != null){
             device_model = this.manifestModel;
+        }
         if (device_model.getOntResource(element.getName()) == null) {
             device_model.createIndividual(element.getName(), element.getResource().getRDFType(true));
             device_model.getOntResource(element.getName()).addProperty(NdlCommons.hasGUIDProperty, device_guid);
@@ -542,20 +563,20 @@ public class CloudHandler extends MappingHandler {
         ce.setPostBootScript(ce_element.getPostBootScript());
         HashMap<String, DomainResource> map = ce_element.getResourcesMap();
         if (map == null)
-            logger.debug("CloudHandler: no constraint 1!");
+            logger.debug("CloudHandler:createNewNode(): no constraint 1!");
         ce.setResourcesMap(map);
 
         // create a new DomainElement, or get one from the deviceList
         DomainElement edge_device = new DomainElement(device_model, url, name);
-        final int listIndex = deviceList.indexOf(edge_device);
+        int listIndex = deviceList.indexOf(edge_device);
         if (-1 != listIndex) {
             edge_device = (DomainElement) deviceList.get(listIndex);
             if (logger.isDebugEnabled()) {
-                logger.debug("Using existing device: " + edge_device.getName());
+                logger.debug("CloudHandler:createNewNode():Using existing device: " + listIndex  + " " + edge_device.getName());
             }
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("Device is new: " + edge_device.getName());
+                logger.debug("CloudHandler:createNewNode():Device is new: " + edge_device.getName());
             }
             edge_device.setResourceType(dType);
             edge_device.setGUID(device_guid);
@@ -575,7 +596,7 @@ public class CloudHandler extends MappingHandler {
             edge_device.setResourcesMap(map);
         }
         if (null == edge_device.getCe().getResourcesMap()) {
-            logger.info("updating edge_device: " + edge_device.getName() + "with new CE.");
+            logger.info("CloudHandler:createNewNode():updating edge_device: " + edge_device.getName() + "with new CE.");
             edge_device.setCe(ce);
         }
 
@@ -584,9 +605,9 @@ public class CloudHandler extends MappingHandler {
         try {
             if (logger.isDebugEnabled()) {
                 if (ce.getGroup() == null) {
-                    logger.debug("Adding a single node");
+                    logger.debug("CloudHandler:createNewNode():Adding a single node");
                 } else {
-                    logger.debug("Adding node to group");
+                    logger.debug("CloudHandler:createNewNode():Adding node to group");
                 }
             }
 
@@ -600,8 +621,9 @@ public class CloudHandler extends MappingHandler {
         }
 
         if (logger.isTraceEnabled()) {
-            logger.trace("Created edge_device " + edge_device);
+            logger.trace("CloudHandler:createNewNode():Created edge_device " + edge_device);
         }
+        logger.info("CloudHandler:createNewNode(): OUT");
         return edge_device;
     }
 
@@ -641,14 +663,16 @@ public class CloudHandler extends MappingHandler {
                 }
             }
 
-            if (rs_ont.hasProperty(NdlCommons.hasGUIDProperty))
+            if (rs_ont.hasProperty(NdlCommons.hasGUIDProperty)){
                 rs1_ind.addProperty(NdlCommons.hasGUIDProperty,
                         rs_ont.getProperty(NdlCommons.hasGUIDProperty).getString());
+            }
         }
         return rs1_ind;
     }
 
     public boolean isInterdomain(ComputeElement ce_element, ComputeElement ce, DomainElement link_device) {
+        logger.debug("CloudHandler::isInterdomain() IN");
         boolean isInter = false;
         if (link_device == null)
             return isInter;
@@ -660,10 +684,10 @@ public class CloudHandler extends MappingHandler {
         for (Interface intf : interfaces) {
             ncByInterface = ce_element.getConnectionByInterfaceName(intf);
             if (ncByInterface == null) {
-                logger.warn("No connection associated with this interface" + intf.getName());
+                logger.warn("CloudHandler:isInterdomain():No connection associated with this interface" + intf.getName());
                 continue;
             }
-            logger.debug("isInterdomain:ncByInterface=" + ncByInterface.getName() + "intf=" + intf.getName()
+            logger.debug("CloudHandler:isInterdomain()::ncByInterface=" + ncByInterface.getName() + "intf=" + intf.getName()
                     + "ce_intf=" + ce.getInterfaceByName(ncByInterface.getName()));
             if (link_device != null)
                 logger.debug(";link_device=" + link_device.getName());
@@ -671,37 +695,38 @@ public class CloudHandler extends MappingHandler {
                                                                           // connection
                 ce_intf = ce.getInterfaceByName(ncByInterface.getName());
                 if (ce_intf != null)
-                    logger.debug("ce_intf=" + ce_intf.getName());
-                logger.debug("intf=" + intf.getName());
+                    logger.debug("CloudHandler:isInterdomain():ce_intf=" + ce_intf.getName());
+                logger.debug("CloudHandler:isInterdomain():intf=" + intf.getName());
                 if (ce_intf != null && ce_intf == intf) {
                     isInter = true;
                     break;
                 }
             }
         }
+        logger.debug("CloudHandler::isInterdomain() OUT");
         return isInter;
     }
 
     public void createInterface(ComputeElement element, DomainElement edge_device, int hole, DomainElement link_device)
             throws InetNetworkException, UnknownHostException {
+        logger.debug("CloudHandler::createInterface(): IN");
         if (link_device == null)
             return;
 
         ComputeElement ce = edge_device.getCe();
         if (ce == null) {
-            logger.info("ce is null!");
+            logger.info("CloudHandler:createInterface():ce is null!");
             return;
         }
 
         LinkedList<Interface> interfaces = element.getClientInterface();
         NetworkConnection ncByInterface = null;
         Interface current_intf = null;
-        logger.debug("createInterface:" + interfaces);
         if (interfaces != null) {
             for (Interface intf : interfaces) {
                 ncByInterface = element.getConnectionByInterfaceName(intf);
                 if (ncByInterface == null) {
-                    logger.warn("No connection associated with this interface" + intf.getName());
+                    logger.warn("CloudHandler:createInterface():No connection associated with this interface" + intf.getName());
                     continue;
                 }
                 if (ncByInterface.getName().equals(link_device.getName())) { // inter-site topology request: link !=
@@ -713,7 +738,7 @@ public class CloudHandler extends MappingHandler {
                 for (Object de : ce.getDependencies().toArray()) {
                     if (de instanceof NetworkConnection) {
                         NetworkConnection ne = (NetworkConnection) de;
-                        logger.info("ncByInterface=" + ncByInterface.getName() + ";ne=" + ne.getName());
+                        logger.info("CloudHandler:createInterface():ncByInterface=" + ncByInterface.getName() + ";ne=" + ne.getName());
                         if ((ncByInterface.getName().equals(ne.getName())) && ne.hasConnection(link_device)) {
                             current_intf = intf;
                             outer_break = true;
@@ -736,8 +761,9 @@ public class CloudHandler extends MappingHandler {
         }
 
         OntModel device_model = element.getModel();
-        if (this.manifestModel != null)
+        if (this.manifestModel != null){
             device_model = this.manifestModel;
+        }
 
         IPAddressRange ip_range = link_device.getIp_range();
 
@@ -745,7 +771,7 @@ public class CloudHandler extends MappingHandler {
         IPAddress new_ip = null, base_ip = null;
         if (ip_range != null) {
             if (ip_range.getBase_IP() == null) {
-                logger.error("cloudHandler: No base IP address with site defined IP range!");
+                logger.error("CloudHandler:createInterface():: No base IP address with site defined IP range!");
                 return;
             } else {
                 network_str = ip_range.getBase_IP().getNetwork();
@@ -755,7 +781,7 @@ public class CloudHandler extends MappingHandler {
         } else if (current_intf != null) {
             base_ip = (IPAddress) current_intf.getLabel();
             if (base_ip == null) {
-                logger.error("cloudHandler: No base IP address in theinterface:" + current_intf.getName());
+                logger.error("CloudHandler:createInterface():: No base IP address in theinterface:" + current_intf.getName());
                 return;
             }
             InetNetwork ip_str_IP = new InetNetwork(base_ip.address, base_ip.netmask);
@@ -778,44 +804,59 @@ public class CloudHandler extends MappingHandler {
             }
 
             if (logger.isTraceEnabled()) {
-                logger.trace("new_ip " + new_ip + " using netmask " + netmask);
+                logger.trace("CloudHandler:createInterface():new_ip " + new_ip + " using netmask " + netmask);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         Interface new_intf = new Interface(device_model, url, url);
         OntResource new_intfResource = new_intf.getResource();
+
         new_intfResource.addProperty(NdlCommons.ip4LocalIPAddressProperty, new_ip.getResource(device_model));
+
         if (intf_ont.getProperty(NdlCommons.hostInterfaceName) != null) {
+
             String site_host_interface = intf_ont.getProperty(NdlCommons.hostInterfaceName).getString();
             new_intf.getResource().addProperty(NdlCommons.hostInterfaceName, site_host_interface);
         }
-        if (new_ip.cidr != null)
+        if (new_ip.cidr != null){
             new_intfResource.addProperty(NdlCommons.layerLabelIdProperty, new_ip.cidr);
+        }
         new_intfResource.addProperty(NdlCommons.ip4NetmaskProperty, netmask);
         new_intf.setLabel(new_ip);
+
         ce.addClientInterface(new_intf);
         edge_device.addClientInterface(new_intf);
+
         new_intfResource.addProperty(NdlCommons.OWL_sameAs, intf_ont);
-        logger.debug("CreateInterface:new_ip=" + new_ip.getURI() + ";url=" + url + ";new_intf=" + new_intf.getURI());
+
+        String element_guid = UUID.randomUUID().toString();
+        new_intfResource.addProperty(NdlCommons.hasGUIDProperty, element_guid);
+
+        logger.debug("CloudHandler:createInterface():new_ip=" + new_ip.getURI() + ";url=" + url + 
+        ";new_intf=" + new_intf.getURI() + " new_guid=" + element_guid);
+
         ncByInterface = element.getConnectionByInterfaceName(current_intf);
+
         ce.setInterfaceName(ncByInterface, new_intf);
 
         if (debugOn) {
-        	System.out.println("SETTING NEIGHBORHOOD" );
-        	System.out.println("  Edge Device " + edge_device.getName());
-        	System.out.println("  Link Device " + link_device.getName());
-        	System.out.println("  New Intf " + new_intf.getName());
-        	System.out.println("  ncByInterface " + ncByInterface.getName());
+            System.out.println("SETTING NEIGHBORHOOD" );
+            System.out.println("  Edge Device " + edge_device.getName());
+            System.out.println("  Link Device " + link_device.getName());
+            System.out.println("  New Intf " + new_intf.getName());
+            System.out.println("  ncByInterface " + ncByInterface.getName());
         }
         setEdgeNeighbourhood(edge_device, link_device, new_intf, ncByInterface);
+        logger.debug("CloudHandler::createInterface(): OUT");
     }
 
     protected void setEdgeNeighbourhood(DomainElement edge_device, DomainElement link_device, Interface new_intf,
             NetworkConnection ncByInterface) {
+        logger.debug("CloudHandler::setEdgeNeighbourhood() IN");
         ComputeElement ce = edge_device.getCe();
         if (ce == null) {
-            logger.info("ce is null!");
+            logger.info("CloudHandler:setEdgeNeighbourhood():ce is null!");
             return;
         }
         ce.setInterfaceName(ncByInterface, new_intf);
@@ -823,7 +864,7 @@ public class CloudHandler extends MappingHandler {
             if (ncByInterface != null) {
                 if (ncByInterface.getName().equals(link_device.getName())) { // intra-site topology request: link = connection
                     if (new_intf.getResource() == null) {
-                        logger.error("setEdgeNeighborhood new_intf.getResource() is null - this will cause errors");
+                        logger.error("CloudHandler:setEdgeNeighbourhood():new_intf.getResource() is null - this will cause errors");
                     }
                     link_device.setFollowedBy(edge_device, new_intf.getResource());
                     edge_device.setPrecededBy(link_device, new_intf.getResource());
@@ -850,18 +891,19 @@ public class CloudHandler extends MappingHandler {
                 link_device.setFollowedBy(edge_device, new_intf.getResource());
                 edge_device.setPrecededBy(link_device, new_intf.getResource());
             }
-            logger.info("dependency: " + (link_device != null ? link_device.getName() : "null") + "; ncByInterface="
+            logger.info("CloudHandler:setEdgeNeighbourhood():dependency: " + (link_device != null ? link_device.getName() : "null") + "; ncByInterface="
                     + (ncByInterface != null ? ncByInterface.getName() : "null") + "; interface="
                     + ((new_intf != null) && (new_intf.getResource() != null) ? new_intf.getResource().getURI()
                             : "null")
                     + ";id=" + ((new_intf != null) && (new_intf.getResource() != null)
                             ? new_intf.getResource().getProperty(NdlCommons.layerLabelIdProperty) : "null"));
         }
-
+        logger.debug("CloudHandler::setEdgeNeighbourhood() OUT");
     }
 
     private DomainElement createLinkDevice(NetworkConnection element, String domainName,
             LinkedList<NetworkElement> deviceList, DomainResourcePools domainResourcePools) {
+        logger.debug("CloudHandler::createLinkDevice() IN");
         DomainResourceType dType = element.getResourceType();
         String domain_name = domainName + "/" + dType.getResourceType();
 
@@ -870,21 +912,22 @@ public class CloudHandler extends MappingHandler {
         if (this.manifestModel != null)
             device_model = this.manifestModel;
         DomainElement link_device = new DomainElement(device_model, element.getName(), element.getName());
-        if (device_model.getOntResource(element.getName()) == null)
+        if (device_model.getOntResource(element.getName()) == null){
             device_model.createIndividual(element.getName(), element.getResource().getRDFType(true));
+        }
         link_device.setResourceType(dType);
-        logger.info("CloudHandler:" + domainName + " link_device: url=" + link_device.getURI() + ":name="
+        logger.info("CloudHandler:createLinkDevice():" + domainName + " link_device: url=" + link_device.getURI() + ":name="
                 + link_device.getName() + " BW=" + element.getBandwidth());
 
         LinkedList<String> edge_type = new LinkedList<String>();
         if (element.getNe1() != null) {
             String eType = element.getNe1().getType();
-            logger.debug("ne1 type=" + eType);
+            logger.debug("CloudHandler:createLinkDevice():ne1 type=" + eType);
             edge_type.add(eType);
             if (element.getNe2() != null) {
                 eType = element.getNe2().getType();
                 edge_type.add(eType);
-                logger.debug("ne2 type=" + eType);
+                logger.debug("CloudHandler:createLinkDevice():ne2 type=" + eType);
             }
         } else { // broadcast link
             Iterator<? extends NetworkElement> it = element.getConnection().iterator();
@@ -899,7 +942,7 @@ public class CloudHandler extends MappingHandler {
         Interface intf = null;
         LinkedList<OntResource> edge_intf_list = getEdgeInterface(domainName, edge_type, element);
         if (edge_intf_list == null) {
-            logger.error("No edge interface found in domain:" + domainName + ":" + edge_type);
+            logger.error("CloudHandler:createLinkDevice():No edge interface found in domain:" + domainName + ":" + edge_type);
             return null;
         }
         for (OntResource edge_intf : edge_intf_list) {
@@ -914,11 +957,11 @@ public class CloudHandler extends MappingHandler {
                 if (site_label_rs.hasProperty(NdlCommons.layerLabelIdProperty))
                     site_label_id = site_label_rs.getProperty(NdlCommons.layerLabelIdProperty).getFloat();
                 if (site_label_id != 0) {
-                    logger.info("This is a tagged link in the site:" + site_label_id);
+                    logger.info("CloudHandler:createLinkDevice():This is a tagged link in the site:" + site_label_id);
                     link_device.setUpNeighbour(edge_intf);
                     if (label_id != 0) {
                         if (label_id != site_label_id) {
-                            logger.error("Requested user specified tag doesn't match the tagged interface!");
+                            logger.error("CloudHandler:createLinkDevice():Requested user specified tag doesn't match the tagged interface!");
                             return null; // requested user specified tag doesn't match the tagged interface
                         }
                     } else
@@ -933,7 +976,7 @@ public class CloudHandler extends MappingHandler {
         if (action_layer != null) {
             if ((label_id != 0) && (site_label_id == 0)) {
                 if (validLabelID(link_device.getInDomain(), label_id) == false) {
-                    logger.error("User specified label id is not valid in this substrate!" + label_id);
+                    logger.error("CloudHandler:createLinkDevice():User specified label id is not valid in this substrate!" + label_id);
                     return null;
                 }
             }
@@ -971,6 +1014,7 @@ public class CloudHandler extends MappingHandler {
             domainDevices.add(link_device);
         }
 
+        logger.debug("CloudHandler::createLinkDevice() OUT");
         return link_device;
     }
 
@@ -980,14 +1024,15 @@ public class CloudHandler extends MappingHandler {
     }
 
     public int resourceCount(DomainElement de, DomainResourceType dType) {
+        logger.debug("CloudHandler::resourceCount() IN");
         if (dType == null) {
-            logger.error("No available resource:dType=" + de.toString());
+            logger.error("CloudHandler:resourceCount():No available resource:dType=" + de.toString());
             return -1;
         }
         int resourceCount = dType.getCount();
         String domainName = de.getInDomain();
         int requestResourceCount = de.getResourceType().getCount();
-        logger.debug("domainName=" + domainName + ";resourceCount=" + resourceCount + ";requestResourceCount="
+        logger.debug("CloudHandler:resourceCount():domainName=" + domainName + ";resourceCount=" + resourceCount + ";requestResourceCount="
                 + requestResourceCount);
 
         if (resourceCount - requestResourceCount < 0)
@@ -995,15 +1040,17 @@ public class CloudHandler extends MappingHandler {
 
         dType.setCount(resourceCount - requestResourceCount);
 
+        logger.debug("CloudHandler::resourceCount() OUT");
         return dType.getCount();
     }
 
     protected boolean validLabelID(String domain_url, float id) {
-        logger.info("Validating the user specified label. domain_url=" + domain_url + ";id=" + id);
+        logger.debug("CloudHandler::validLabelID() IN");
+        logger.info("CloudHandler:validLabelID():Validating the user specified label. domain_url=" + domain_url + ";id=" + id);
 
         OntModel domainOnt = domainModel.get(domain_url);
         if (domainOnt == null) {
-            logger.error("No this site model:" + domain_url);
+            logger.error("CloudHandler:validLabelID():No this site model:" + domain_url);
             return false;
         }
         Resource domain = null;
@@ -1042,14 +1089,14 @@ public class CloudHandler extends MappingHandler {
                             if (labelStm != null)
                                 ub_id = labelStm.getFloat();
                         }
-                        logger.info("lb=" + lb_id + ":ub=" + ub_id);
+                        logger.info("CloudHandler:validLabelID():lb=" + lb_id + ":ub=" + ub_id);
                         if ((id >= lb_id) && (id <= ub_id))
                             valid = true;
                         // single label
                         if ((lbStm == null) && (ubStm == null)) {
                             setStm = label_set.getProperty(NdlCommons.layerLabelIdProperty);
                             if (setStm != null) {
-                                logger.info("element=" + setStm.getFloat());
+                                logger.info("CloudHandler:validLabelID():element=" + setStm.getFloat());
                                 if (id == setStm.getFloat())
                                     valid = true;
                             }
@@ -1062,12 +1109,14 @@ public class CloudHandler extends MappingHandler {
             if (valid)
                 break;
         }
+        logger.debug("CloudHandler::validLabelID() OUT");
         return valid;
     }
 
     // Dependencies between compute elements
     // If there are multiple elements in the parent nodegroup, the children will only follow the first master node.
     private void nodeGroupDependency(LinkedList<Device> deviceList) {
+        logger.debug("CloudHandler::nodeGroupDependency() IN");
         DomainElement de, parent_de;
         ComputeElement child, parent;
         Set<NetworkElement> nodeDependency = null;
@@ -1091,7 +1140,7 @@ public class CloudHandler extends MappingHandler {
                             parent_name = parent.getName();
 
                         if (parent_name.equals(parent_ne.getName())) {
-                            logger.info("Added master-slave!" + child.getResource() + ":" + parent_name + ":"
+                            logger.info("CloudHandler:nodeGroupDependency():Added master-slave!" + child.getResource() + ":" + parent_name + ":"
                                     + parent_ne.getName());
                             if (child.getDefaultClientInterfaceIPAddressRS() != null)
                                 parent_de.setFollowedBy(de, child.getDefaultClientInterfaceIPAddressRS());
@@ -1111,10 +1160,12 @@ public class CloudHandler extends MappingHandler {
                 }
             }
         }
+        logger.debug("CloudHandler::nodeGroupDependency() OUT");
     }
 
     public LinkedList<OntResource> getEdgeInterface(String domainName, LinkedList<String> edge_type,
             NetworkConnection nc) {
+        logger.debug("CloudHandler::getEdgeInterface() IN");
         LinkedList<OntResource> edge_intf_ont_list = new LinkedList<OntResource>();
         String link_device_edge = null;
         for (String type : edge_type) {
@@ -1123,19 +1174,20 @@ public class CloudHandler extends MappingHandler {
             if (edge_intf_ont != null)
                 edge_intf_ont_list.add(edge_intf_ont);
         }
+        logger.debug("CloudHandler::getEdgeInterface() OUT");
         return edge_intf_ont_list;
     }
 
     public OntResource getEdgeInterface(String domain_url, NetworkConnection nc) {
-
+        logger.debug("CloudHandler::getEdgeInterface() IN");
         OntResource domain_rs = this.idm.getOntResource(domain_url);
         OntResource edge_intf_rs = null;
         if (domain_rs == null) {
-            logger.error("Domain doesn't exist:" + domain_url + "\n");
+            logger.error("CloudHandler:getEdgeInterface():Domain doesn't exist:" + domain_url + "\n");
             return null;
         }
         if (domain_rs.getProperty(NdlCommons.topologyHasInterfaceProperty) == null) {
-            logger.error("Domain doesn't have interface:" + domain_rs + "\n");
+            logger.error("CloudHandler:getEdgeInterface():Domain doesn't have interface:" + domain_rs + "\n");
             return null;
         } else {
             Resource intf_rs = null;
@@ -1161,15 +1213,17 @@ public class CloudHandler extends MappingHandler {
                 }
             }
             if (edge_intf_rs == null)
-                logger.error("No edge interface found!! Domain=" + domain_url);
+                logger.error("CloudHandler:getEdgeInterface():No edge interface found!! Domain=" + domain_url);
             else
-                logger.info("Domain:" + domain_url + "border interface:" + edge_intf_rs.getURI());
+                logger.info("CloudHandler:getEdgeInterface():Domain:" + domain_url + "border interface:" + edge_intf_rs.getURI());
             logger.info("OF:nc_of=" + nc_of + ";intf_of" + intf_of);
+            logger.debug("CloudHandler::getEdgeInterface() OUT");
             return edge_intf_rs;
         }
     }
 
     public OntModel createManifest(OntModel manifestModel, OntResource manifest, LinkedList<Device> domainList) {
+        logger.debug("CloudHandler::createManifest() IN");
         Device next_Hop = null;
         String link_url, link_name, domain_name;
         OntResource link_ont = null;
@@ -1179,7 +1233,7 @@ public class CloudHandler extends MappingHandler {
             link_url = next_Hop.getURI();
             link_name = next_Hop.getName();
 
-            logger.debug("CloudHandler createManifest:" + i + "." + link_name + ":" + next_Hop.getType());
+            logger.debug("CloudHandler:createManifest():" + i + "." + link_name + ":" + next_Hop.getType());
 
             DomainElement d = (DomainElement) next_Hop;
             ComputeElement ce = d.getCe();
@@ -1240,18 +1294,20 @@ public class CloudHandler extends MappingHandler {
                 link_ont.addProperty(NdlCommons.domainHasResourceTypeProperty,
                         next_Hop.getResourceType().getTypeResource());
             manifest.addProperty(NdlCommons.collectionElementProperty, link_ont);
-            logger.debug("Add to domainInConnectionList:" + domainInConnectionList.size() + "link_ont:"
+            logger.debug("CloudHandler:createManifest():Add to domainInConnectionList:" + domainInConnectionList.size() + "link_ont:"
                     + link_ont.getURI() + "in?" + domainInConnectionList.contains(link_ont));
             if (!domainInConnectionList.contains(link_ont))
                 domainInConnectionList.add(link_ont);
 
-            logger.debug(i + ":created individual url:" + next_Hop.getURI() + " :Name=" + next_Hop.getName()
+            logger.debug("CloudHandler:createManifest(): " + i + ":created individual url:" + next_Hop.getURI() + " :Name=" + next_Hop.getName()
                     + " :Individual=" + link_ont);
         }
+        logger.debug("CloudHandler::createManifest() OUT");
         return null;
     }
 
     public void addDomainProperty(Resource d_ont, OntModel manifest) {
+        logger.debug("CloudHandler::addDomainProperty() IN");
         if (idm.isClosed()) // closed when modifying
             return;
         OntResource domain_ont = idm.getOntResource(d_ont.getURI());
@@ -1270,9 +1326,11 @@ public class CloudHandler extends MappingHandler {
                 }
             }
         }
+        logger.debug("CloudHandler::addDomainProperty() OUT");
     }
 
     public OntModel addSubstrateModel(List<String> modelStr) {
+        logger.debug("CloudHandler::addSubstrateModel() IN");
         assert (modelStr != null);
 
         domainModel = new HashMap<String, OntModel>();
@@ -1282,22 +1340,24 @@ public class CloudHandler extends MappingHandler {
             try {
                 domain = new Domain(modelStream);
             } catch (IOException e) {
-                logger.error("IO Exception while adding substrate model: " + e);
+                logger.error("CloudHandler:addSubstrateModel():IO Exception while adding substrate model: " + e);
                 e.printStackTrace();
             } catch (NdlException e) {
-                logger.error("NDL Exception while adding substrate model: " + e);
+                logger.error("CloudHandler:addSubstrateModel():NDL Exception while adding substrate model: " + e);
                 e.printStackTrace();
             }
             DomainElement domainElement = domain.getDomainElement();
             domainModel.put(domainElement.getURI(), domainElement.getModel());
-            logger.info("Added Domain:" + domainElement.getURI());
+            logger.info("CloudHandler:addSubstrateModel():Added Domain:" + domainElement.getURI());
             idm.add(domainElement.getModel());
         }
         TDB.sync(idm);
+        logger.debug("CloudHandler::addSubstrateModel() OUT");
         return idm;
     }
 
     public int findCommonLabel(DomainElement start, DomainElement next) {
+        logger.debug("CloudHandler::findCommonLabel() IN");
         BitSet startBitSet = null, controllerStartBitSet = null;
         BitSet nextBitSet = null, controllerNextBitSet = null;
         LinkedList<LabelSet> sSetList = null, nSetList = null;
@@ -1329,15 +1389,15 @@ public class CloudHandler extends MappingHandler {
                 sBitSet.set(0, max_vlan_tag);
             }
             sBitSet.andNot(sSet.getUsedBitSet());
-            logger.debug("min-max-used:" + min + ":" + max + ":" + sSet.getUsedBitSet());
+            logger.debug("CloudHandler:findCommonLabel():min-max-used:" + min + ":" + max + ":" + sSet.getUsedBitSet());
         }
-        logger.debug("findConmmonLabel----initial Start labelSet:" + sBitSet);
+        logger.debug("CloudHandler:findCommonLabel():----initial Start labelSet:" + sBitSet);
         if (startBitSet != null)
             sBitSet.andNot(startBitSet);
-        logger.debug("After globalAssignedLabel + Start labelSet:" + sBitSet);
+        logger.debug("CloudHandler:findCommonLabel():After globalAssignedLabel + Start labelSet:" + sBitSet);
         if (controllerStartBitSet != null)
             sBitSet.andNot(controllerStartBitSet);
-        logger.debug("Final Start labelSet:" + sBitSet);
+        logger.debug("CloudHandler:findCommonLabel():Final Start labelSet:" + sBitSet);
         BitSet nBitSet = new BitSet(max_vlan_tag);
         if (nSetList != null) {
             for (LabelSet nSet : nSetList) {
@@ -1353,16 +1413,16 @@ public class CloudHandler extends MappingHandler {
                     nBitSet.set(0, max_vlan_tag);
                 }
                 nBitSet.andNot(nSet.getUsedBitSet());
-                logger.debug("min-max-used:" + min + ":" + max + ":" + nSet.getUsedBitSet());
+                logger.debug("CloudHandler:findCommonLabel():min-max-used:" + min + ":" + max + ":" + nSet.getUsedBitSet());
             }
-            logger.debug("initial next labelSet:" + nBitSet);
+            logger.debug("CloudHandler:findCommonLabel():initial next labelSet:" + nBitSet);
             if (nextBitSet != null)
                 nBitSet.andNot(nextBitSet);
-            logger.debug("After globalAssignedLabel + next labelSet:" + nBitSet);
+            logger.debug("CloudHandler:findCommonLabel():After globalAssignedLabel + next labelSet:" + nBitSet);
             if (controllerNextBitSet != null)
                 nBitSet.andNot(controllerNextBitSet);
         }
-        logger.debug("final next labelSet:" + nBitSet);
+        logger.debug("CloudHandler:findCommonLabel():final next labelSet:" + nBitSet);
         sBitSet.and(nBitSet);
 
         int commonLabel = -1;
@@ -1386,6 +1446,7 @@ public class CloudHandler extends MappingHandler {
         start.setAvailableLabelSet(sBitSet);
         if (next != null)
             next.setAvailableLabelSet(sBitSet);
+        logger.debug("CloudHandler::findCommonLabel() OUT");
         return commonLabel;
     }
 
