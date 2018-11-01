@@ -8,7 +8,8 @@ export PATH=/opt/jdev/maven/bin:$PATH
 
 # Define top-level build directory
 export ORCA_BLD="${HOME}/orca-build"
-
+#cleanup
+rm -rf "${ORCA_BLD}"
 # need to start in source directory to get VERSION from git
 cd "$( dirname "$0" )"
 
