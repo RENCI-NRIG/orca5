@@ -645,12 +645,12 @@ public class ReservationConverter implements LayerConstant {
                         String element_guid = UUID.randomUUID().toString();
                         if(parent.getValue().getProperty(NdlCommons.hasGUIDProperty) != null) {
                             logger.debug("ReservationConverter::setDependency(): reusing already allocated element_guid=" + element_guid +
-                                    " for element=" + parent.getValue().getName());
+                                    " for element=" + parent.getValue().getURI());
                             element_guid = parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getLiteral().toString();
                         }
                         else {
                             logger.debug("ReservationConverter::setDependency(): set element_guid=" + element_guid +
-                                         " for element=" + parent.getValue().getName());
+                                         " for element=" + parent.getValue().getURI());
                             parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
                         }
 
