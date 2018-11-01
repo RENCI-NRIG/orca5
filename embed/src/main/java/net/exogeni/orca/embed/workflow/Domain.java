@@ -99,7 +99,7 @@ public class Domain implements IDomainAbstractor {
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             logger.error(
-                    "updateAbstractModel(): Jena threw an ArrayIndexOutOfBoundsException, returning empty set of resources.");
+                    "Domain::updateAbstractModel(): Jena threw an ArrayIndexOutOfBoundsException, returning empty set of resources.");
             return null;
         }
 
@@ -121,7 +121,7 @@ public class Domain implements IDomainAbstractor {
             units = set.getProperty(NdlCommons.collectionSizeProperty).getInt();
             type = set.getProperty(NdlCommons.domainHasResourceTypeProperty).getResource().getLocalName();
             if (type == null) {
-                logger.error("Unable to find resource name in RDF Resource "
+                logger.error("Domain::updateAbstractModel():Unable to find resource name in RDF Resource "
                         + set.getProperty(NdlCommons.domainHasResourceTypeProperty).getResource()
                         + ", continuing. Check your configuration.");
                 continue;
@@ -143,7 +143,7 @@ public class Domain implements IDomainAbstractor {
                 res.addResourceType(type, units);
 
             if (units > total) {
-                logger.warn("Delegated less units:" + total + ";units=" + units);
+                logger.warn("Domain::updateAbstractModel():Delegated less units:" + total + ";units=" + units);
                 units = total;
             }
             total_units = total_units + units;
@@ -152,7 +152,7 @@ public class Domain implements IDomainAbstractor {
 
         if (total_units >= total) {
             logger.warn(
-                    "Modifying the abstract model with different delegated units from the config.xml or the available units from broker when updating in controller");
+                    "Domain::updateAbstractModel():Modifying the abstract model with different delegated units from the config.xml or the available units from broker when updating in controller");
             for (Resource change_set : unit_change_list) {
                 Statement state = change_set.getProperty(NdlCommons.collectionSizeProperty);
                 if (total > 0) {
@@ -168,12 +168,12 @@ public class Domain implements IDomainAbstractor {
                     else
                         state.changeObject(bSet_str);
                 }
-                logger.warn("Modifying set:" + change_set.getURI() + ";New units="
+                logger.warn("Domain::updateAbstractModel():Modifying set:" + change_set.getURI() + ";New units="
                         + change_set.getProperty(NdlCommons.collectionSizeProperty) + ";usedLabels="
                         + change_set.getProperty(NdlCommons.layerUsedLabels));
             }
         } else {
-            logger.error(domain + ":" + type + ":Too many delegated units from the config.xml, total=" + total
+            logger.error("Domain::updateAbstractModel():" + domain + ":" + type + ":Too many delegated units from the config.xml, total=" + total
                     + ", than specified in the site RDF units=" + total_units
                     + ", please modify and restart the actor!\n");
             throw new RuntimeException(domain + ":" + type + ";Too many delegated units from the config.xml, total="
@@ -216,7 +216,7 @@ public class Domain implements IDomainAbstractor {
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             logger.error(
-                    "getDomainResources(): Jena threw an ArrayIndexOutOfBoundsException, returning empty set of resources.");
+                    "Domain::getDomainResources(): Jena threw an ArrayIndexOutOfBoundsException, returning empty set of resources.");
             return new DomainResources();
         }
 
@@ -238,14 +238,14 @@ public class Domain implements IDomainAbstractor {
             units = set.getProperty(NdlCommons.collectionSizeProperty).getInt();
             type = set.getProperty(NdlCommons.domainHasResourceTypeProperty).getResource().getLocalName();
             if (type == null) {
-                logger.error("Unable to find resource name in RDF Resource "
+                logger.error("Domain::getDomainResources():Unable to find resource name in RDF Resource "
                         + set.getProperty(NdlCommons.domainHasResourceTypeProperty).getResource()
                         + ", continuing. Check your configuration.");
                 continue;
             }
 
             if (units > total) {
-                logger.warn("Delegated less units:" + total + ";units=" + units);
+                logger.warn("Domain::getDomainResources():Delegated less units:" + total + ";units=" + units);
                 // change number of units to be allocated in the DomainResourceType
                 units = total;
             }
@@ -265,7 +265,7 @@ public class Domain implements IDomainAbstractor {
             } else
                 res.addResourceType(type, units);
 
-            logger.info("Resource pool:" + domain + ":" + type + ":" + units + ":" + resourceTypeRank + "\n");
+            logger.info("Domain::getDomainResources():Resource pool:" + domain + ":" + type + ":" + units + ":" + resourceTypeRank + "\n");
 
             // if it is vm or baremetal, set up constraints: #cores, memory, storage for a site
             if (type.endsWith("VM") || type.endsWith("BareMetalCE")) {
@@ -284,7 +284,7 @@ public class Domain implements IDomainAbstractor {
                                     DomainResource constraint = new DomainResource(key);
                                     constraint.setBandwidth(value * units);
                                     res.addResource(constraint);
-                                    logger.debug("vm constraint:" + key + ";value=" + value);
+                                    logger.debug("Domain::getDomainResources():vm constraint:" + key + ";value=" + value);
                                 }
                         }
                     }
@@ -297,7 +297,7 @@ public class Domain implements IDomainAbstractor {
                     int capacity = set.getProperty(NdlCommons.storageCapacity).getInt();
                     DomainResource constraint = new DomainResource(key);
                     constraint.setBandwidth(capacity);
-                    logger.debug("Lun constraint:" + key + ";value=" + capacity);
+                    logger.debug("Domain::getDomainResources():Lun constraint:" + key + ";value=" + capacity);
                     res.addResource(constraint);
                 }
             }
@@ -307,7 +307,7 @@ public class Domain implements IDomainAbstractor {
 
         if (total_units >= total) {
             logger.warn(
-                    "Modifying the abstract model with different delegated units from the config.xml or the available units from broker when updating in controller");
+                    "Domain::getDomainResources():Modifying the abstract model with different delegated units from the config.xml or the available units from broker when updating in controller");
             for (Resource change_set : unit_change_list) {
                 Statement state = change_set.getProperty(NdlCommons.collectionSizeProperty);
                 if (total > 0) {
@@ -315,11 +315,11 @@ public class Domain implements IDomainAbstractor {
                     total = 0;
                 } else
                     state.changeLiteralObject(0);
-                logger.warn("Modifying set:" + change_set.getURI() + ";New units="
+                logger.warn("Domain::getDomainResources():Modifying set:" + change_set.getURI() + ";New units="
                         + change_set.getProperty(NdlCommons.collectionSizeProperty));
             }
         } else {
-            logger.error(domain + ":" + type + ":Too many delegated units from the config.xml, total=" + total
+            logger.error("Domain::getDomainResources():" + domain + ":" + type + ":Too many delegated units from the config.xml, total=" + total
                     + ", than specified in the site RDF units=" + total_units
                     + ", please modify and restart the actor!\n");
             throw new RuntimeException(domain + ":" + type + ";Too many delegated units from the config.xml, total="
@@ -376,7 +376,7 @@ public class Domain implements IDomainAbstractor {
                 blong = Long.parseLong(bw.getValue().toString());
             r.setBandwidth(blong);
             res.addResource(r);
-            logger.info("Current Interface constraints:" + r.toString() + "\n");
+            logger.info("Domain::getDomainResources():Current Interface constraints:" + r.toString() + "\n");
         }
 
         // Since it's modified by the actual exported units, to be read by the broker policy
@@ -414,7 +414,7 @@ public class Domain implements IDomainAbstractor {
             else
                 rType = resourceType;
         } else {
-            logger.error("Domain Delegation Error:Required type is NULL!");
+            logger.error("Domain::delegateDomainModel():Error:Required type is NULL!");
             return null;
         }
 
@@ -509,12 +509,12 @@ public class Domain implements IDomainAbstractor {
         try {
             abstractModel = NdlModel.createModel(OntModelSpec.OWL_MEM_MICRO_RULE_INF, true);
         } catch (NdlException e1) {
-            logger.error("abstractDomain(): unable to create abstract model: " + e1);
+            logger.error("Domain::abstractDomain(): unable to create abstract model: " + e1);
             e1.printStackTrace();
         }
 
         if (abstractModel == null) {
-            logger.error("abstractDomain(): abstract model is null!");
+            logger.error("Domain::abstractDomain(): abstract model is null!");
         }
 
         ArrayList<OntResource> borderInterfaceList = intfList;
@@ -577,7 +577,7 @@ public class Domain implements IDomainAbstractor {
         }
 
         device_rs.setLabel(domainName, "en");
-        logger.info("Domain=" + domainName + " :rType=" + rType);
+        logger.info("Domain::abstractDomain():Domain=" + domainName + " :rType=" + rType);
         for (Iterator<OntResource> i = borderInterfaceList.iterator(); i.hasNext();) {
             intf = i.next();
             // System.out.println("Interface="+intf.getURI());
@@ -827,7 +827,7 @@ public class Domain implements IDomainAbstractor {
                 if (!name.split("\\.rdf")[0].split("\\-\\w*$")[0]
                         .equals(rs2.getURI().split("\\#")[0].split("\\.rdf")[0].split("\\-\\w*$")[0])) {
                     intfList.add(model.getOntResource(rs1));
-                    // logger.info("Border Interface:"+rs1);
+                    // logger.info("Domain::Border Interface:"+rs1);
                 }
             }
         }

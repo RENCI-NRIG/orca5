@@ -108,7 +108,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
             rs1 = domain_rs1;
             rs2 = domain_rs2;
         }
-        logger.info("Starting path computation....");
+        logger.info("RequestMapping::createConnection():Starting path computation....");
         // long start = System.nanoTime();
         ArrayList<ArrayList<OntResource>> solution = findShortestPath(ontModel, rs1, rs2, bw, rType1_str, rType2_str,
                 nc_of_version);
@@ -213,7 +213,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     next_device_ont = next_hop.get(0);
                     next_intf_ont = next_hop.get(1);
 
-                    logger.info("Link " + i + ": Creat Link Connection:" + device_ont + ":" + intf_ont + "\n");
+                    logger.info("RequestMapping::toConnection():Link " + i + ": Creat Link Connection:" + device_ont + ":" + intf_ont + "\n");
                     logger.info(" : ----- :" + next_device_ont + ":" + next_intf_ont + "\n");
 
                     if (i == 0) {// first device
@@ -315,7 +315,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     if (!cc) {
                         intf_ont.addProperty(NdlCommons.connectedTo, next_intf_ont);
                         next_intf_ont.addProperty(NdlCommons.connectedTo, intf_ont);
-                        logger.debug("Wired via existed crossconnect" + intf_ont + ":" + next_intf_ont);
+                        logger.debug("RequestMapping::toConnection():Wired via existed crossconnect" + intf_ont + ":" + next_intf_ont);
                     }
                 }
                 // transfer the requested resource to the path connection object
@@ -346,7 +346,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
 
         action.addClientInterface(intf);
         logger.debug(
-                "add a new interface to the action:" + intf.getURI() + ":" + action.getClientInterface().size() + "\n");
+                "RequestMapping::processAction():add a new interface to the action:" + intf.getURI() + ":" + action.getClientInterface().size() + "\n");
 
         int matrix_rank;
         int max_rank = 0;
@@ -414,7 +414,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
             if (!found)
                 rDomain = null;
         }
-        logger.info("End Point Domain:" + rDomain + " OF " + rs);
+        logger.info("RequestMapping::toDomain():End Point Domain:" + rDomain + " OF " + rs);
 
         return rDomain;
     }
@@ -426,7 +426,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
     @SuppressWarnings("unchecked")
     public SystemNativeError processDeviceConnection(NetworkConnection deviceConnection) {
         SystemNativeError error = null;
-        logger.info("Step 2: Process connection.\n");
+        logger.info("RequestMapping::processDeviceConnection():Step 2: Process connection.\n");
         Label static_label = null;
         LinkedList<Device> deviceList = null;
         Iterator<Device> it;
@@ -450,7 +450,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 count++;
                 d = it.next();
                 if (static_label != null) {
-                    logger.info("Num of actions:" + d.getActionCount() + ";" + d.getActionList().size()
+                    logger.info("RequestMapping::processDeviceConnection():Num of actions:" + d.getActionCount() + ";" + d.getActionList().size()
                             + ";static label=" + static_label.toString());
 
                     d.getDefaultSwitchingAction().setLabel(static_label);
@@ -479,7 +479,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
     // (2) Label processing
     // (3) change for the uni switching interface (eg, Polatis)
     public void processInterface(Device device) throws RequestMappingException {
-        logger.debug("----processing Interface-----" + device.getURI());
+        logger.debug("RequestMapping::processInterface():----processing Interface-----" + device.getURI());
 
         SwitchMatrix matrix = null;
         LinkedList<SwitchMatrix> matrixList = device.getSwitchingMatrix();
@@ -489,12 +489,12 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
             for (int i = 0; i < size; i++) {
                 matrix = (SwitchMatrix) matrixList.get(i);
                 if (matrix == null)
-                    logger.error("No Switching Matrix at this position, error!");
+                    logger.error("RequestMapping::processInterface():No Switching Matrix at this position, error!");
                 else {
-                    logger.debug(i + ":SwitchingMatrix layer:" + matrix.getAtLayer() + ":size=" + size);
+                    logger.debug("RequestMapping::processInterface():" + i + ":SwitchingMatrix layer:" + matrix.getAtLayer() + ":size=" + size);
                     if (matrix.getAtLayer() != null) {
                         if (matrix.getDirection().equals(Direction.UNIDirectional.toString())) {
-                            logger.debug("----------Unidirectional-------");
+                            logger.debug("RequestMapping::processInterface():----------Unidirectional-------");
                             device.processUNIInterface(matrix.getAtLayer());
                         }
                         // processing adaptation, Labels...
@@ -503,7 +503,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 }
             }
         } else {
-            logger.error("No Switching Matrix at this position, error!");
+            logger.error("RequestMapping::processInterface():No Switching Matrix at this position, error!");
             throw new RequestMappingException("No Switching Matrix at this position, error!");
         }
         device.getResource().removeAll(inConnection);
@@ -529,12 +529,12 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         int actionCount = actionList == null ? 0 : actionList.size();
         for (int j = 0; j < actionCount; j++) {
             action = (SwitchingAction) actionList.get(j);
-            logger.info("---------Adaptation Client --------" + device.getURI() + ":" + actionCount + ":" + currentLayer
+            logger.info("RequestMapping::processAdaptation():---------Adaptation Client --------" + device.getURI() + ":" + actionCount + ":" + currentLayer
                     + ":" + action.getAtLayer());
             if (action.getAtLayer().equals(currentLayer)) {
 
                 labelFromStack = checkLabelStack(currentLayer);
-                logger.info("Label from the stack:" + labelFromStack);
+                logger.info("RequestMapping::processAdaptation():Label from the stack:" + labelFromStack);
 
                 LinkedList<Interface> interfaceList = action.getClientInterface();
                 size = interfaceList.size();
@@ -546,17 +546,17 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     layer = intf.getAtLayer();
 
                     markOccupy(intf);
-                    logger.info(intf.getURI() + ";" + layer + ":" + currentLayer + ":" + currentLayer_rank + ";" + i);
+                    logger.info("RequestMapping::processAdaptation():" + intf.getURI() + ";" + layer + ":" + currentLayer + ":" + currentLayer_rank + ";" + i);
                     // layer_rank=getLayerRank(layer);
                     layer_rank = Layer.valueOf(layer).rank();
-                    logger.info(intf.getURI() + ";" + layer + ":" + layer_rank + ";" + currentLayer + ":"
+                    logger.info("RequestMapping::processAdaptation():" + intf.getURI() + ";" + layer + ":" + layer_rank + ";" + currentLayer + ":"
                             + currentLayer_rank + ";" + i);
                     if (!layer.equals(currentLayer)) {
                         if (layer_rank < currentLayer_rank) {
                             intf_client = getAdaptationClientInterface(intf, currentLayer, currentLabel,
                                     labelFromStack);
                         } else {
-                            logger.error("Upper layer comes in earlier, error!");
+                            logger.error("RequestMapping::processAdaptation():Upper layer comes in earlier, error!");
                         }
                     } else {
                         intf_client = processClientInterface(intf, currentLabel, labelFromStack);
@@ -572,9 +572,9 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                                 action.setLabel(intf_client.getLabel());
                             }
                         }
-                        logger.debug("Current action:" + intf_client.getURI() + ":" + action.getLabel_ID());
+                        logger.debug("RequestMapping::processAdaptation():Current action:" + intf_client.getURI() + ":" + action.getLabel_ID());
                     } else {
-                        logger.error("Client interface not defined, probably due to lack of available label");
+                        logger.error("RequestMapping::processAdaptation():Client interface not defined, probably due to lack of available label");
                     }
                 }
                 // pass the right para to the interface not assigning label.
@@ -611,7 +611,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     tmp.getResource().addProperty(usedLabelSet, tmp_set);
                 }
                 if (action.getLabel() != null) {
-                    logger.debug("Label to the stack?:" + action.getLabel().toString());
+                    logger.debug("RequestMapping::processAdaptation():Label to the stack?:" + action.getLabel().toString());
                     if (action.getLabel().label > 0) // the edge device may not have a label ID
                         labelStack.add(action.getLabel());
                 }
@@ -628,7 +628,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     rs = intf.getResource();
                     for (int k = i; k < size; k++) {
                         rs_next = interfaceList.get(k).getResource();
-                        logger.info("---SwitchedTo:" + rs + "----" + rs_next);
+                        logger.info("RequestMapping::processAdaptation():---SwitchedTo:" + rs + "----" + rs_next);
                         rs.addProperty(NdlCommons.switchedTo, rs_next);
                         rs_next.addProperty(NdlCommons.switchedTo, rs);
                         String labelP = NdlCommons.ORCA_NS + Layer.valueOf(layer).getPrefix() + ".owl#"
@@ -642,7 +642,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                             if (label_rs != null)
                                 rs.addProperty(label_p, intf.getLabel().getResource(intf.getModel()));
                             else
-                                logger.error("label_rs is null: label=" + intf.getLabel().getURI());
+                                logger.error("RequestMapping::processAdaptation():label_rs is null: label=" + intf.getLabel().getURI());
                         }
                         Label k_label = interfaceList.get(k).getLabel();
                         if (k_label != null) {
@@ -653,7 +653,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                                 rs_next.addProperty(label_p,
                                         interfaceList.get(k).getLabel().getResource(interfaceList.get(k).getModel()));
                             else
-                                logger.error("label_rs is null: label=" + k_label.getURI());
+                                logger.error("RequestMapping::processAdaptation():label_rs is null: label=" + k_label.getURI());
                         }
                     }
                 }
@@ -674,7 +674,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         int labelID = -1;
 
         Resource label_rs = null;
-        logger.info("Client:" + parent.getURI() + ":" + parent.getAtLayer() + ";" + currentLayer + "\n");
+        logger.info("RequestMapping::getAdaptationClientInterface():Client:" + parent.getURI() + ":" + parent.getAtLayer() + ";" + currentLayer + "\n");
         if (clientList == null) {
             if (currentLayer.equals(Layer.LambdaNetworkElement.toString())) {
                 if (parent.getAtLayer().equals(Layer.OCGNetworkElement.toString())) {
@@ -683,7 +683,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     if (label_rs != null)
                         labelID = label_rs.getProperty(NdlCommons.layerLabelIdProperty).getInt();
                     else {
-                        logger.error("No more available label form this OCG group!");
+                        logger.error("RequestMapping::getAdaptationClientInterface():No more available label form this OCG group!");
                         return null;
                     }
                     Integer ID = new Integer(labelID);
@@ -699,7 +699,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     rs_client.addRDFType(NdlCommons.interfaceOntClass);
                     rs_client.setLabel(name, null);
                     intf.setResource(rs_client);
-                    logger.info("Interface setLabel:" + url + "--" + label_rs.getURI());
+                    logger.info("RequestMapping::getAdaptationClientInterface():Interface setLabel:" + url + "--" + label_rs.getURI());
                     setLabel(intf, ontModel.getOntResource(label_rs));
                     intf.addServerInterface(parent);
                     parent.addClientInterface(ontModel, intf, AdaptationProperty.WDM.toString());
@@ -755,7 +755,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 vlanInterface.addServerInterface(intf);
                 intf.addClientInterface(ontModel, vlanInterface, AdaptationProperty.TaggedEthernet.toString());
             } else {
-                logger.error("label_rs is null");
+                logger.error("RequestMapping::getAdaptationClientInterface():label_rs is null");
             }
 
         } else if (intf.getAtLayer().equals(Layer.LambdaNetworkElement.toString())) {
@@ -764,7 +764,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 setLabel(intf, ontModel.getOntResource(label_rs));
             vlanInterface = intf;
         }
-        logger.info("Obtained Label ID:" + label_rs + ":" + intf.getURI());
+        logger.info("RequestMapping::getAdaptationClientInterface():Obtained Label ID:" + label_rs + ":" + intf.getURI());
         return vlanInterface;
     }
 
@@ -788,7 +788,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         HashMap<String, String> swappingPerLayer = new HashMap<String, String>();
         BitSet currentLableSet = null, lableSet;
         int static_label = 0, p_tag = 0;
-        logger.debug("------Find Common Label range-----\n");
+        logger.debug("RequestMapping::findCommonLabel():------Find Common Label range-----\n");
         Resource static_label_rs = null;
         Label label = null;
 
@@ -806,7 +806,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
             device = it.next();
             static_layer = device.getAtLayer();
             d_swapping = swappingPerLayer.get(static_layer);
-            logger.debug("Find Common Label range:" + device.getURI() + ":" + count + "\n");
+            logger.debug("RequestMapping::findCommonLabel():Find Common Label range:" + device.getURI() + ":" + count + "\n");
             if ((d_swapping == null) && ((count == 1) || (count == numDevice))) { // the first and last devices are the
                                                                                   // servers that may carry labels
                 SwitchingAction action = device.getDefaultSwitchingAction();
@@ -819,7 +819,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                         if (intf.getResource().hasProperty(NdlCommons.linkTo)) {
                             p_intf_rs = intf.getResource().getProperty(NdlCommons.linkTo).getResource();
                             p_intf_ont = this.ontModel.getOntResource(p_intf_rs);
-                            logger.info("intf=" + intf.getResource().getURI() + ";p_intf=" + p_intf_rs.getURI());
+                            logger.info("RequestMapping::findCommonLabel():intf=" + intf.getResource().getURI() + ";p_intf=" + p_intf_rs.getURI());
                         }
 
                         if (intf.getResource().hasProperty(NdlCommons.layerLabel)) {
@@ -835,11 +835,11 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                                 } else
                                     static_label_rs_list.add(static_label_rs);
                             }
-                            logger.info("static_label_rs_list=" + static_label_rs_list.size());
+                            logger.info("RequestMapping::findCommonLabel():static_label_rs_list=" + static_label_rs_list.size());
                             for (Resource static_rs : static_label_rs_list) {
                                 if (static_rs.hasProperty(NdlCommons.layerLabelIdProperty)) {
                                     static_label = static_rs.getProperty(NdlCommons.layerLabelIdProperty).getInt();
-                                    logger.info("static_rs=" + static_rs.getURI() + ";static_label=" + static_label);
+                                    logger.info("RequestMapping::findCommonLabel():static_rs=" + static_rs.getURI() + ";static_label=" + static_label);
                                     // always using the tag from parent reservation first.
                                     p_tag = get_pdomain_tag(p_intf_rs.getURI(), static_label);
                                     // if((p_tag==static_label) || (p_tag==0)){
@@ -847,7 +847,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                                         static_rs.addProperty(NdlCommons.visited, "true", XSDDatatype.XSDboolean);
                                         static_label_rs = static_rs;
                                         intf.getResource().removeProperty(NdlCommons.layerLabel, static_rs);
-                                        logger.info("Passed label:intf=" + p_intf_rs.getURI() + ";static Label="
+                                        logger.info("RequestMapping::findCommonLabel():Passed label:intf=" + p_intf_rs.getURI() + ";static Label="
                                                 + static_label_rs.getURI() + ";p_tag=" + p_tag + ";static_layer="
                                                 + static_layer);
                                         break;
@@ -862,7 +862,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                                                 NdlCommons.labelOntClass);
                                         static_label_rs.addProperty(NdlCommons.layerLabelIdProperty,
                                                 String.valueOf(p_tag), XSDDatatype.XSDint);
-                                        logger.error("Passed in static label is not in the available labelset:static="
+                                        logger.error("RequestMapping::findCommonLabel():Passed in static label is not in the available labelset:static="
                                                 + static_label + ";set=");
                                         throw new Exception(
                                                 "Passed in static label is not in the available labelset:static="
@@ -888,7 +888,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                                  * action.setLabel_ID(p_tag); p_intf_rs.addProperty(NdlCommons.layerLabel,
                                  * static_label_rs);
                                  */
-                                logger.info("Passed label from domain reservation:intf=" + p_intf_rs.getURI() + ";tag="
+                                logger.info("RequestMapping::findCommonLabel():Passed label from domain reservation:intf=" + p_intf_rs.getURI() + ";tag="
                                         + static_label + ";static_layer=" + static_layer);
                             }
                         }
@@ -903,16 +903,16 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 int size = matrixList.size();
                 for (int i = 0; i < size; i++) {
                     matrix = (SwitchMatrix) matrixList.get(i);
-                    logger.debug("Device:" + device.getResource().getLocalName() + ":" + i + ":SwitchingMatrix layer:"
+                    logger.debug("RequestMapping::findCommonLabel():Device:" + device.getResource().getLocalName() + ":" + i + ":SwitchingMatrix layer:"
                             + matrix.getAtLayer() + ":size=" + size);
                     currentLayer = matrix.getAtLayer();
                     if (matrix.getAtLayer() != null) {
                         if (Layer.valueOf(currentLayer).rank() > 1) { // OCG Layer above for now
                             currentLableSet = findAvailableLabel(device, matrix.getAtLayer());
-                            logger.debug("currentLabelSet=" + currentLableSet);
+                            logger.debug("RequestMapping::findCommonLabel():currentLabelSet=" + currentLableSet);
                             if (lableSetPerLayer.containsKey(currentLayer)) {
                                 lableSet = lableSetPerLayer.get(currentLayer);
-                                logger.debug("labelSetFromLayer=" + lableSet);
+                                logger.debug("RequestMapping::findCommonLabel():labelSetFromLayer=" + lableSet);
                                 if (currentLableSet != null)
                                     lableSet.and(currentLableSet);
                             } else {
@@ -926,38 +926,38 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 try {
                     throw new RequestMappingException("No Switching Matrix at:" + device.getName() + ", error!");
                 } catch (RequestMappingException e) {
-                    logger.error("No Switching Matrix at:" + device.getName() + ", error!");
+                    logger.error("RequestMapping::findCommonLabel():No Switching Matrix at:" + device.getName() + ", error!");
                 }
             }
         }
         d_swapping = swappingPerLayer.get(currentLayer);
-        logger.debug("findCommonLabel:static_label=" + static_label + ";d_swapping=" + d_swapping + "currentLayer="
+        logger.debug("RequestMapping::findCommonLabel():static_label=" + static_label + ";d_swapping=" + d_swapping + "currentLayer="
                 + currentLayer);
         if (this.usedLabelSetPerLayer != null)
-            logger.debug("findCommonLabel:used_label_set=" + this.usedLabelSetPerLayer.get(currentLayer));
+            logger.debug("RequestMapping::findCommonLabel():used_label_set=" + this.usedLabelSetPerLayer.get(currentLayer));
         BitSet staticLabelSet = null;
         if (lableSetPerLayer != null)
             staticLabelSet = lableSetPerLayer.get(currentLayer);
-        logger.debug("Original staticLabelSet:" + staticLabelSet);
+        logger.debug("RequestMapping::findCommonLabel():Original staticLabelSet:" + staticLabelSet);
         if (staticLabelSet != null) {
             if (this.usedLabelSetPerLayer != null && this.usedLabelSetPerLayer.get(currentLayer) != null) {
                 staticLabelSet.andNot(this.usedLabelSetPerLayer.get(currentLayer));
-                logger.debug("staticLabelSet+usedLabelSet:" + staticLabelSet);
+                logger.debug("RequestMapping::findCommonLabel():staticLabelSet+usedLabelSet:" + staticLabelSet);
             }
         }
 
-        logger.debug("findCommonLabel:Final label_set=" + staticLabelSet);
+        logger.debug("RequestMapping::findCommonLabel():Final label_set=" + staticLabelSet);
         int current_static_label = 0;
         if (static_label > 0 && d_swapping == null) {
             if (staticLabelSet == null) {
-                logger.error("No avaialbel label set: current layer=" + static_layer);
+                logger.error("RequestMapping::findCommonLabel():No avaialbel label set: current layer=" + static_layer);
                 throw new Exception("No avaialbel label set: current layer=" + static_layer);
             } else {
-                logger.debug("findCommonLabel:check match:" + current_static_label + ";static_label=" + static_label);
+                logger.debug("RequestMapping::findCommonLabel():check match:" + current_static_label + ";static_label=" + static_label);
 
                 if (!staticLabelSet.get((int) static_label)) {
                     current_static_label = staticLabelSet.nextSetBit(0);
-                    logger.error("Passed in static label is not in the available labelset:static=" + static_label
+                    logger.error("RequestMapping::findCommonLabel():Passed in static label is not in the available labelset:static=" + static_label
                             + ";set=" + staticLabelSet);
                     throw new Exception("Passed in static label is not in the available labelset:static=" + static_label
                             + ";set=" + staticLabelSet);
@@ -997,14 +997,14 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         String[] tag_str_list = null;
         int tag = 0, num_tag = 0;
         boolean flag = false;
-        logger.info("get_pdomain_tag,intf_url=" + intf_url + ";static_label=" + static_label);
+        logger.info("RequestMapping::get_pdomain_tag():,intf_url=" + intf_url + ";static_label=" + static_label);
         if (pdomain_properties == null) {
-            logger.warn("No pdomain_property!");
+            logger.warn("RequestMapping::get_pdomain_tag():No pdomain_property!");
             return 0;
         }
-        logger.info("pdomain_properties:" + pdomain_properties);
+        logger.info("RequestMapping::get_pdomain_tag():pdomain_properties:" + pdomain_properties);
         for (Entry entry : pdomain_properties.entrySet()) {
-            logger.info("tag:" + entry.getKey() + ";intf=" + entry.getValue());
+            logger.info("RequestMapping::get_pdomain_tag():tag:" + entry.getKey() + ";intf=" + entry.getValue());
             if (intf_url.equalsIgnoreCase((String) entry.getValue())) {
                 tag_str = (String) entry.getKey();
                 tag_str_list = tag_str.split(",");
@@ -1036,7 +1036,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     tag_str_new = tag_str_new.concat("," + tag_s);
             }
         }
-        logger.info("tag=" + tag + ";tag_str_new:" + tag_str_new);
+        logger.info("RequestMapping::get_pdomain_tag():tag=" + tag + ";tag_str_new:" + tag_str_new);
         pdomain_properties.remove(tag_str);
         if (tag_str_new != null)
             pdomain_properties.put(tag_str_new, intf_url);
@@ -1067,7 +1067,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         int currentLayer_rank = Layer.valueOf(currentLayer).rank();
         for (int j = 0; j < actionCount; j++) {
             action = (SwitchingAction) actionList.get(j);
-            logger.info("--Find Available Label:" + device.getURI() + ":" + actionCount + ":" + currentLayer + ":"
+            logger.info("RequestMapping::findAvailableLabel():--Find Available Label:" + device.getURI() + ":" + actionCount + ":" + currentLayer + ":"
                     + action.getAtLayer());
             if (action.getAtLayer().equals(currentLayer)) {
                 LinkedList<Interface> interfaceList = action.getClientInterface();
@@ -1076,7 +1076,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     intf = interfaceList.get(i);
                     layer = intf.getAtLayer();
                     layer_rank = Layer.valueOf(layer).rank();
-                    logger.debug("Interface Layer:" + intf.getURI() + ";" + layer + ":" + layer_rank + ";"
+                    logger.debug("RequestMapping::findAvailableLabel():Interface Layer:" + intf.getURI() + ";" + layer + ":" + layer_rank + ";"
                             + currentLayer + ":" + currentLayer_rank + ";" + i);
                     if (!layer.equals(currentLayer)) {
                         if (layer_rank < currentLayer_rank) {
@@ -1103,9 +1103,9 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         int labelID = -1;
 
         Resource label_rs = null;
-        logger.debug("Client:" + parent.getURI() + ":" + parent.getAtLayer() + ";" + currentLayer + "\n");
+        logger.debug("RequestMapping::getAdaptationClient():Client:" + parent.getURI() + ":" + parent.getAtLayer() + ";" + currentLayer + "\n");
         if (clientList == null) {
-            logger.debug(currentLayer + ";" + parent.getResource());
+            logger.debug("RequestMapping::getAdaptationClient():" + currentLayer + ";" + parent.getResource());
             if (currentLayer.equals(Layer.LambdaNetworkElement.toString())) {
                 if (parent.getAtLayer().equals(Layer.OCGNetworkElement.toString())) {
                     return parent;
@@ -1156,7 +1156,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         QuerySolution solution = null;
 
         if (!results.hasNext()) {
-            logger.error("No available label!\n");
+            logger.error("RequestMapping::getAvailableLabelRange():No available label!\n");
             return null;
         }
 
@@ -1171,7 +1171,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 lowerLabel = solution.getResource(l);
                 upperLabel = solution.getResource(u);
                 if (upper < lower) {
-                    logger.error("Wrong range: lower=" + lower + ":upper=" + upper);
+                    logger.error("RequestMapping::getAvailableLabelRange():Wrong range: lower=" + lower + ":upper=" + upper);
                     continue;
                 }
                 lableBitSet.set(lower, upper + 1);
@@ -1184,7 +1184,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     upperLabel = null;
                 }
             }
-            logger.info("\n getAvailableLabelRange:-------:" + intf.getURI() + ":" + availableSet_rs + "----:" + lower
+            logger.info("\nRequestMapping::getAvailableLabelRange()::-------:" + intf.getURI() + ":" + availableSet_rs + "----:" + lower
                     + ":" + upper + ":" + lowerLabel + ":" + upperLabel + "\n");
         }
 
@@ -1227,7 +1227,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
 
         int label = getLayerLabel(currentLayer);
 
-        logger.info("From available label range:" + rsURI + ":" + currentLayer + ":" + label + "\n");
+        logger.info("RequestMapping::processLabel():From available label range:" + rsURI + ":" + currentLayer + ":" + label + "\n");
 
         Float stackLabel = 0f, localLabel = 0f;
         int lower = 0, upper = 0, lowest = 0, lowestUpper = 0;
@@ -1239,7 +1239,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
 
         if (stackLabel != 0) {
             if (label == 0) {
-                logger.error("The passed label from the stack is not within the available label range!:" + stackLabel);
+                logger.error("RequestMapping::processLabel():The passed label from the stack is not within the available label range!:" + stackLabel);
                 return null; // depends on the label continuity requirement
             }
         } else {// no stack label, pick label locally
@@ -1272,7 +1272,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
             availableSet = (String) results.getResultVars().get(5);
 
             if (!results.hasNext()) {
-                logger.error("No available label!\n");
+                logger.error("RequestMapping::processLabel():No available label!\n");
                 return null;
             }
             int i = 0;
@@ -1320,7 +1320,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                     lowestUpperLabel = upperLabel;
                     lowestLabelRange_rs = labelRange_rs;
                 }
-                logger.info("\nProcessLabel -- Label Range:" + availableSet_rs + "-" + lowestLabelRange_rs + "----:"
+                logger.info("\nRequestMapping::processLabel():-- Label Range:" + availableSet_rs + "-" + lowestLabelRange_rs + "----:"
                         + lower + ":lowestUpper=" + lowestUpper + ":" + lowerLabel + ":" + lowestUpperLabel
                         + ":StackLabel=" + stackLabel + ":Label=" + label + ":currentLabel" + currentLabel);
                 i++;
@@ -1336,7 +1336,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
             solution = results.nextSolution();
             usedSet_rs = solution.getResource(usedSet);
             if (label == solution.getResource(used).getProperty(NdlCommons.layerLabelIdProperty).getInt()) {
-                logger.error("Existing Used Label:" + solution.getResource(used) + "\n");
+                logger.error("RequestMapping::processLabel():Existing Used Label:" + solution.getResource(used) + "\n");
             }
         }
         Resource picked_label_rs = ontLabelUpdate(availableSet_rs, lowestLabelRange_rs, lowest, lowestUpper,
@@ -1368,7 +1368,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
             // System.out.println(labelP);
             intf_rs.addProperty(label_p, label_rs);
         } else {
-            logger.info("Label is bad:" + label_rs);
+            logger.info("RequestMapping::setLabel():Label is bad:" + label_rs);
             label.label = -1f;
         }
 
@@ -1388,7 +1388,7 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
         if (labelStack.empty())
             return null;
         Label exist = labelStack.peek();
-        logger.debug(exist.toString() + ":" + currentLayer);
+        logger.debug("RequestMapping::checkLabelStack():" + exist.toString() + ":" + currentLayer);
         if (exist.type.equals(currentLayer)) {
             exist = labelStack.pop();
         } else {
@@ -1447,6 +1447,6 @@ public class RequestMapping extends OntProcessor implements IConnectionManager {
                 this.usedLabelSetPerLayer.get(layer).or(usedLabelSet);
             }
         }
-        logger.info("Used label in mapper:" + this.usedLabelSetPerLayer.get(layer));
+        logger.info("RequestMapping::setUsedLabelSetPerLayer():Used label in mapper:" + this.usedLabelSetPerLayer.get(layer));
     }
 }

@@ -107,17 +107,17 @@ public class ModifyHandler extends UnboundRequestHandler {
             err = new SystemNativeError();
             err.setErrno(8);
             err.setMessage("modifyElements is empty!");
-            logger.error(err.toString());
+            logger.error("ModifyHandler::modifySlice():" + err.toString());
             return err;
         }
-        logger.debug("ModifyHandler.modifySlice() starts....");
+        logger.debug("ModifyHandler::modifySlice(): starts....");
         RequestReservation addedRequest = null;
         LinkedList<ModifyElement> addList = new LinkedList<ModifyElement>();
         try {
             Iterator<ModifyElement> mei = modifyElements.iterator();
             while (mei.hasNext()) {
                 ModifyElement me = mei.next();
-                logger.debug("ModifyHandler.modifySlice():" + me.getModType());
+                logger.debug("ModifyHandler::modifySlice():" + me.getModType());
                 if (me.getModType().equals(INdlModifyModelListener.ModifyType.REMOVE)) {
                     err = removeElement(me, manifestOnt, nodeGroupMap, firstGroupElement, deviceList);
                 }
@@ -132,7 +132,7 @@ public class ModifyHandler extends UnboundRequestHandler {
                             deviceList);
                 }
                 if (err != null) {
-                    logger.error(err.getMessage());
+                    logger.error("ModifyHandler::modifySlice():" + err.getMessage());
                     break; // TODO: should return error? otherwise addElement will still get called below?
                 }
             }
@@ -141,7 +141,7 @@ public class ModifyHandler extends UnboundRequestHandler {
             // e.printStackTrace();
             err = new SystemNativeError();
             err.setMessage("Exception generated: " + e.getClass().getSimpleName() + ", " + e.getMessage());
-            logger.error(e.getMessage(), e);
+            logger.error("ModifyHandler::modifySlice():" + e.getMessage(), e);
         }
 
         if (err != null)
@@ -163,7 +163,7 @@ public class ModifyHandler extends UnboundRequestHandler {
                                                                                                    // interdomain link
                         nodeGroupAddedDevices.add(device);
         }
-        logger.debug("nodeGroupAddedDevices:" + nodeGroupAddedDevices.size());
+        logger.debug("ModifyHandler::modifySlice():nodeGroupAddedDevices:" + nodeGroupAddedDevices.size());
         createManifest(manifestOnt, manifest, nodeGroupAddedDevices); // out of increasing nodeGroudp
 
         return err;
@@ -173,10 +173,10 @@ public class ModifyHandler extends UnboundRequestHandler {
         List<ReservationMng> a_r = m_map.get(ModifyType.ADD.toString());
         List<ReservationMng> m_r = m_map.get(ModifyType.MODIFY.toString());
         if (a_r == null || m_r == null) {
-            logger.debug("No added or modified r");
+            logger.debug("ModifyHandler::modifySlice():No added or modified r");
             return null;
         }
-        logger.debug("Start modifying storage:a_r.size=" + a_r.size() + ";m_r size=" + m_r.size());
+        logger.debug("ModifyHandler::modifySlice():Start modifying storage:a_r.size=" + a_r.size() + ";m_r size=" + m_r.size());
         List<ReservationMng> extra_ar = new ArrayList<ReservationMng>();
         Properties config_ar = null, config_mr = null, local_ar = null, local_mr = null;
         for (ReservationMng ar : a_r) {
@@ -185,7 +185,7 @@ public class ModifyHandler extends UnboundRequestHandler {
             String url_ar = config_ar.getProperty(UnitProperties.UnitHostNameUrl);
 
             if (url_ar == null) {
-                logger.error("ar reservation no url property:" + ar.getReservationID());
+                logger.error("ModifyHandler::modifySlice():ar reservation no url property:" + ar.getReservationID());
                 continue;
             }
             for (ReservationMng mr : m_r) {
@@ -194,14 +194,14 @@ public class ModifyHandler extends UnboundRequestHandler {
                 String url_mr = config_mr.getProperty(UnitProperties.UnitHostNameUrl);
 
                 if (url_mr == null) {
-                    logger.error("mr reservation no url property:" + mr.getReservationID());
+                    logger.error("ModifyHandler::modifySlice():mr reservation no url property:" + mr.getReservationID());
                     continue;
                 }
 
                 if (url_ar.equals(url_mr)) {
-                    logger.debug("Modifying via adding storage url_al=" + url_ar + ";" + ";url_ml=" + url_mr);
-                    logger.debug("config:" + config_ar.toString());
-                    logger.debug("local:" + local_ar.toString());
+                    logger.debug("ModifyHandler::modifySlice():Modifying via adding storage url_al=" + url_ar + ";" + ";url_ml=" + url_mr);
+                    logger.debug("ModifyHandler::modifySlice():config:" + config_ar.toString());
+                    logger.debug("ModifyHandler::modifySlice():local:" + local_ar.toString());
                     mr.setConfigurationProperties(OrcaConverter.merge(config_ar, mr.getConfigurationProperties()));
                     mr.setLocalProperties(OrcaConverter.merge(local_ar, mr.getLocalProperties()));
                     extra_ar.add(ar);
@@ -211,7 +211,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 
         a_r.removeAll(extra_ar);
 
-        logger.debug("After modifying storage:a_r.size=" + a_r.size() + ";m_r size=" + m_r.size());
+        logger.debug("ModifyHandler::modifySlice():After modifying storage:a_r.size=" + a_r.size() + ";m_r size=" + m_r.size());
         return extra_ar;
     }
 
@@ -226,7 +226,7 @@ public class ModifyHandler extends UnboundRequestHandler {
             d_s.setModify(false);
 
         for (LinkedList<Device> list : this.domainConnectionList.values())
-            logger.debug("Modify complete, list size=" + list.size() + ";deviceList size=" + deviceList.size());
+            logger.debug("ModifyHandler::modifySlice():Modify complete, list size=" + list.size() + ";deviceList size=" + deviceList.size());
 
         this.modifiedDevices.clear();
         this.isModify = false;
@@ -247,7 +247,7 @@ public class ModifyHandler extends UnboundRequestHandler {
             OntResource connection_rs = modifyRequestModel.createIndividual(me.getURI(),
                     NdlCommons.getResourceType(me));
             modifyRequestModel.add(reservation, NdlCommons.collectionElementProperty, connection_rs);
-            logger.debug("me=" + mee.getObj().getURI() + ";isModify=" + NdlCommons.isModify(me));
+            logger.debug("ModifyHandler::addElement():me=" + mee.getObj().getURI() + ";isModify=" + NdlCommons.isModify(me));
             copyProperty(modifyRequestModel, me);
             // add inDomain property from the manifest model
             if (!me.hasProperty(NdlCommons.inDomainProperty)) {
@@ -261,12 +261,12 @@ public class ModifyHandler extends UnboundRequestHandler {
                         String inDomain_str = inDomain_rs.getURI();
                         rType = rType.toLowerCase();
                         logger.debug(
-                                "modify domain:" + inDomain_str + ";" + inDomain_rs.getLocalName() + ";rType" + rType);
+                                "ModifyHandler::addElement():modify domain:" + inDomain_str + ";" + inDomain_rs.getLocalName() + ";rType" + rType);
                         if (inDomain_rs.getLocalName().equalsIgnoreCase(rType)) {
                             inDomain_str = inDomain_str.split("/" + rType)[0];
                             inDomain_rs = inDomain_rs.getModel().createResource(inDomain_str);
                         }
-                        logger.debug("modify domain:" + inDomain_rs.getURI());
+                        logger.debug("ModifyHandler::addElement():modify domain:" + inDomain_rs.getURI());
                         connection_rs.addProperty(NdlCommons.inDomainProperty, inDomain_rs);
                         connection_rs.addProperty(NdlCommons.domainHasResourceTypeProperty, rType_rs);
                     }
@@ -295,7 +295,7 @@ public class ModifyHandler extends UnboundRequestHandler {
         Collection<NetworkElement> requestElements = request.getElements();
         err = request.getError();
         if (err != null) {
-            logger.error("Ndl request parser unable to parse request:" + err.toString());
+            logger.error("ModifyHandler::addElement():Ndl request parser unable to parse request:" + err.toString());
             return null;
         }
         // TODO: check if the request is already fully bound in one domain, preparing for topology splitting
@@ -309,13 +309,13 @@ public class ModifyHandler extends UnboundRequestHandler {
         }
 
         if (err != null) {
-            logger.error("Modify failed:" + err.toString());
+            logger.error("ModifyHandler::addElement():Modify failed:" + err.toString());
             return null;
         }
 
         for (NetworkElement device : this.getDeviceList()) {
             DomainElement dd = (DomainElement) device;
-            logger.debug("ModifyHandler:dd=" + dd.getName() + ";isModify=" + dd.isModify() + ";dd.modifyversion="
+            logger.debug("ModifyHandler::addElement():dd=" + dd.getName() + ";isModify=" + dd.isModify() + ";dd.modifyversion="
                     + dd.getModifyVersion() + ";this.modifyversion=" + this.modifyVersion);
 
             if (dd.getModifyVersion() == this.modifyVersion) {
@@ -330,7 +330,7 @@ public class ModifyHandler extends UnboundRequestHandler {
                             for (Entry<DomainElement, OntResource> parent : dd.getPrecededBySet()) {
                                 DomainElement p_de = parent.getKey();
                                 if (p_de.getResourceType().getResourceType().endsWith("lun")) {
-                                    logger.debug("ModifyHandler: parent storage=");
+                                    logger.debug("ModifyHandler::addElement():parent storage=");
                                     modifies.addAddedElement(device.getResource());
                                     // added by the add operation
                                     addedDevices.add(dd);
@@ -402,8 +402,8 @@ public class ModifyHandler extends UnboundRequestHandler {
         String n = me.getSub().getURI();
         int i = n.lastIndexOf("#");
         String group = i >= 0 ? n.substring(i + 1) : n;
-        logger.info("addNodeGroupElements() starts, units=" + units);
-        logger.debug("nodeGroupMap size=" + nodeGroupMap.size());
+        logger.info("ModifyHandler::addNodeGroupElements(): starts, units=" + units);
+        logger.debug("ModifyHandler::addNodeGroupElements():nodeGroupMap size=" + nodeGroupMap.size());
         Collection<DomainElement> cde = nodeGroupMap.get(group);
         if ((cde == null) || (cde.isEmpty())) {
             error = new SystemNativeError();
@@ -416,14 +416,14 @@ public class ModifyHandler extends UnboundRequestHandler {
 
         DomainElement firstElement = firstGroupElement.get(group);
         if (firstElement == null) {
-            logger.error("Original element in the gorup is missed! group=" + group);
+            logger.error("ModifyHandler::addNodeGroupElements():Original element in the gorup is missed! group=" + group);
             Iterator<DomainElement> cde_it = cde.iterator();
             while (cde_it.hasNext()) {
                 firstElement = cde_it.next();
                 break;
             }
         } else {
-            logger.info("First element:" + firstElement.getURI() + ";cde size=" + cde.size());
+            logger.info("ModifyHandler::addNodeGroupElements():First element:" + firstElement.getURI() + ";cde size=" + cde.size());
         }
 
         HashMap<String, IPAddressRange> group_base_ip = null;
@@ -432,10 +432,10 @@ public class ModifyHandler extends UnboundRequestHandler {
             if (group_base_ip == null) {
                 // We may still create a node (and interface), even without an IP
                 // don't throw an exception, just log a message
-                logger.warn("group_base_ip is null!");
+                logger.warn("ModifyHandler::addNodeGroupElements():group_base_ip is null!");
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("ModifyHandler::addNodeGroupElements():" + e.getMessage());
         }
 
         int hole = -1;
@@ -443,14 +443,14 @@ public class ModifyHandler extends UnboundRequestHandler {
         String domainName = firstElement.getResourceType().getDomainURL();
 
         for (i = 0; i < units; i++) {
-            logger.info("create new node from firstElement:i=" + i);
+            logger.info("ModifyHandler::addNodeGroupElements():create new node from firstElement:i=" + i);
 
             DomainElement link_device = null;
             if (firstElement.getPrecededBy() != null && !firstElement.getPrecededBy().isEmpty()) {
                 parentMap = new HashMap<DomainElement, Integer>();
                 for (Entry<DomainElement, OntResource> parent : firstElement.getPrecededBySet()) {
                     link_device = parent.getKey();
-                    logger.debug("parent link_device=" + link_device.getName());
+                    logger.debug("ModifyHandler::addNodeGroupElements():parent link_device=" + link_device.getName());
                     if (link_device.getCe() != null) // node dependency
                         continue;
                     String ip_addr = null;
@@ -459,7 +459,7 @@ public class ModifyHandler extends UnboundRequestHandler {
                         hole = findIPRangeHole(group_base_ip, ip_addr);
                     } else {
                         // IP Addresses not assigned, but still need to create Node and Interface
-                        logger.info("No IP Address assigned, Node and Interface will still be created.");
+                        logger.info("ModifyHandler::addNodeGroupElements():No IP Address assigned, Node and Interface will still be created.");
                     }
                     parentMap.put(link_device, hole);
 
@@ -475,7 +475,7 @@ public class ModifyHandler extends UnboundRequestHandler {
                     createInterface(firstElement.getCe(), edge_device, hole, link_device);
                 }
             } else {
-                logger.debug("firstElement has no parent! No interface will be created.");
+                logger.debug("ModifyHandler::addNodeGroupElements():firstElement has no parent! No interface will be created.");
                 createNewNodeGroupNode(firstElement, -1, null, domainName, manifestOntModel, requestModel, deviceList);
             }
         }
@@ -484,7 +484,7 @@ public class ModifyHandler extends UnboundRequestHandler {
             NetworkElement ne = addedDevices.get(i);
             // ne.setModifyVersion(this.modifyVersion);
             cde.add((DomainElement) ne);
-            logger.debug("ModifyHandler:added:" + i + ":" + ne.getURI() + ":" + ne.getName());
+            logger.debug("ModifyHandler::addNodeGroupElements():added:" + i + ":" + ne.getURI() + ":" + ne.getName());
         }
 
         return error;
@@ -496,7 +496,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 
         ComputeElement ce = null, element_ce = null;
 
-        logger.info("Creating new node:hole=" + hole + "domainName=" + domainName);
+        logger.info("ModifyHandler::createNewNodeGroupNode():Creating new node:hole=" + hole + "domainName=" + domainName);
         DomainResourceType dType = new DomainResourceType(element.getResourceType().getResourceType(),
                 element.getResourceType().getCount());
         dType.setDomainURL(domainName);
@@ -528,7 +528,7 @@ public class ModifyHandler extends UnboundRequestHandler {
         addedDevices.add(edge_device);
 
         if (logger.isTraceEnabled()) {
-            logger.trace("Created edge_device " + edge_device);
+            logger.trace("ModifyHandler::createNewNodeGroupNode():Created edge_device " + edge_device);
         }
 
         return edge_device;
@@ -544,7 +544,7 @@ public class ModifyHandler extends UnboundRequestHandler {
         while (bei.hasNext()) {
             device = (NetworkElement) bei.next();
             if (device.getURI().equals(me.getObj().getURI()) || device.getName().equals(me.getObj().getURI())) {
-                logger.info("Remove Device name=" + device.getName() + ";url=" + device.getURI() + ";obj url="
+                logger.info("ModifyHandler::removeElement():Remove Device name=" + device.getName() + ";url=" + device.getURI() + ";obj url="
                         + me.getObj().getURI());
                 remove = true;
                 break;
@@ -555,7 +555,7 @@ public class ModifyHandler extends UnboundRequestHandler {
             // error = new SystemNativeError();
             // error.setErrno(7);
             // error.setMessage("Removed element doesn't exist: name: "+device.getName()+";url=" + device.getURI());
-            logger.error("Removed element doesn't exist: name: " + device.getName() + ";url=" + device.getURI());
+            logger.error("ModifyHandler::removeElement():Removed element doesn't exist: name: " + device.getName() + ";url=" + device.getURI());
             return error;
         }
 
@@ -616,19 +616,19 @@ public class ModifyHandler extends UnboundRequestHandler {
         device_ont = manifestOntModel.getOntResource(name);
         boolean inDomainList = false;
         if (device_ont != null) {
-            logger.debug("Modify remove: device_ont:" + device_ont.getURI() + ";device domain="
+            logger.debug("ModifyHandler::removeElement():Modify remove: device_ont:" + device_ont.getURI() + ";device domain="
                     + device_ont.getProperty(NdlCommons.hasURLProperty));
             inDomainList = this.domainInConnectionList.remove(device_ont);
         } else
-            logger.error("Modify remove:Not in the domainInConnectionList:" + name);
+            logger.error("ModifyHandler::removeElement():Modify remove:Not in the domainInConnectionList:" + name);
         boolean inDeviceList = deviceList.remove(device);
         if (!inDeviceList) {
             // error = new SystemNativeError();
             // error.setErrno(7);
             // error.setMessage("Removed element doesn't exist: name: "+device_s.getName()+";url=" + device_s.getURI());
-            logger.error("Removed device doesn't exist: name: " + device.getName() + ";url=" + device.getURI());
+            logger.error("ModifyHandler::removeElement():Removed device doesn't exist: name: " + device.getName() + ";url=" + device.getURI());
         } else {
-            logger.debug("to be removed ont:" + device_ont.getURI());
+            logger.debug("ModifyHandler::removeElement():to be removed ont:" + device_ont.getURI());
             modifies.addRemovedElement(device_ont);
         }
         // remove from
@@ -642,13 +642,13 @@ public class ModifyHandler extends UnboundRequestHandler {
                 inDomainConnectionList = list.remove(device);
             }
         }
-        logger.debug("Modify remove:" + domainName + ":inDomainConnectionList=" + inDomainConnectionList);
+        logger.debug("ModifyHandler::removeElement():Modify remove:" + domainName + ":inDomainConnectionList=" + inDomainConnectionList);
         if (!inDomainConnectionList) {
             // error = new SystemNativeError();
             // error.setErrno(7);
             // error.setMessage("Removed device doesn't exist in domainConnectionList: name:
             // "+device_s.getName()+";url=" + device_s.getURI());
-            logger.error("Removed device doesn't exist in domainConnectionList: name: " + device.getName() + ";url="
+            logger.error("ModifyHandler::removeElement():Removed device doesn't exist in domainConnectionList: name: " + device.getName() + ";url="
                     + device.getURI());
         }
         // close reservation and modify manifest will be done in ReservationConverter in the controller.
@@ -669,14 +669,14 @@ public class ModifyHandler extends UnboundRequestHandler {
 
     public OntModel createManifest(Collection<NetworkElement> boundElements, RequestReservation request, String userDN,
             String controller_url, String sliceId) {
-        logger.info("Creating manifest model");
+        logger.info("ModifyHandler::createManifest(): Creating manifest model");
 
         /*
          * OntModelSpec s = NdlModel.getOntModelSpec(OntModelSpec.OWL_MEM, true); //OntModel manifestModel =
          * ModelFactory.createOntologyModel(s); OntModel manifestModel = null; try { manifestModel =
          * NdlModel.createModel(s, true, NdlModel.ModelType.TdbPersistent, Globals.TdbPersistentDirectory +
          * Globals.PathSep + "controller" + Globals.PathSep + "manifest-" + sliceId); } catch (NdlException e1) {
-         * logger.error("ModifyHandler.createManifest(): Unable to create a persistent model of manifest"); }
+         * logger.error("ModifyHandler::ModifyHandler.createManifest(): Unable to create a persistent model of manifest"); }
          * 
          * manifestModel.add(request.getModel().getBaseModel());
          */
@@ -711,7 +711,7 @@ public class ModifyHandler extends UnboundRequestHandler {
         Collection<NetworkElement> elements;
         NetworkElement element;
         if (dRR == null) {
-            logger.error("No RequestReservation:");
+            logger.error("ModifyHandler::createManifest():No RequestReservation:");
             return null;
         }
         LinkedList<Device> domainList = null;
@@ -726,7 +726,7 @@ public class ModifyHandler extends UnboundRequestHandler {
                 Entry<String, LinkedList<Device>> domainEntry = domainConnectionListIt.next();
                 connectionName = domainEntry.getKey();
                 domainList = domainEntry.getValue();
-                logger.info("Modify CreateManifest:connectionName=" + connectionName + " ;num hops=" + domainList.size()
+                logger.info("ModifyHandler::createManifest():connectionName=" + connectionName + " ;num hops=" + domainList.size()
                         + ";request Domain:" + domain);
 
                 if (domain.equals(RequestReservation.Interdomain_Domain)
@@ -738,16 +738,16 @@ public class ModifyHandler extends UnboundRequestHandler {
                         // #162 make sure the element has not been Closed before trying to add it to the manifest
                         if (!element.getModel().isClosed() && (element.getName().equals(connectionName)
                                 || element.getURI().equals(connectionName))) {
-                            logger.info("Modify CreateManifest InterDomain:element url =" + element.getURI()
+                            logger.info("ModifyHandler::createManifest():InterDomain:element url =" + element.getURI()
                                     + ";isModify=" + element.isModify());
-                            createManifest(element, manifestModel, manifest, domainList);
+                            createManifest(element, manifestModel, manifest, domainList, request.getElements());
                         }
                     }
 
                 } else if (domain.equals(RequestReservation.Unbound_Domain)) {
                     if (rr.getReservationDomain() != null) {
                         if (rr.getReservationDomain().contains(connectionName)) {
-                            logger.info("Modify CreateManifest unbound cloud name =" + connectionName);
+                            logger.info("ModifyHandler::createManifest():unbound cloud name =" + connectionName);
                             createManifest(manifestModel, manifest, domainList);
                         } else {
                             Iterator<NetworkElement> elementIt = elements.iterator();
@@ -755,9 +755,9 @@ public class ModifyHandler extends UnboundRequestHandler {
                                 element = elementIt.next();
 
                                 if (element.getName().equals(connectionName)) {
-                                    logger.debug("Modify Create manifest unbound: element name=" + element.getName()
+                                    logger.debug("ModifyHandler::createManifest():unbound: element name=" + element.getName()
                                             + ":connectionName=" + connectionName);
-                                    createManifest(element, manifestModel, manifest, domainList);
+                                    createManifest(element, manifestModel, manifest, domainList, request.getElements());
                                 }
                             }
                         }
@@ -765,7 +765,7 @@ public class ModifyHandler extends UnboundRequestHandler {
 
                 } else { // @cloud
                     if (domain.equals(connectionName)) {
-                        logger.info("Modify CreateManifest cloud name =" + connectionName);
+                        logger.info("ModifyHandler::createManifest():cloud name =" + connectionName);
                         createManifest(manifestModel, manifest, domainList);
                     }
                 }

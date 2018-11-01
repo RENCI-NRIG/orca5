@@ -159,7 +159,7 @@ public class RequestReservation {
         for (Iterator<NetworkElement> j = requestElements.iterator(); j.hasNext();) {
             element = j.next();
             String elementDomain = element.getInDomain();
-            logger.debug("generateGraph: element=" + element.getURI() + ";inDomain=" + elementDomain);
+            logger.debug("RequestReservation::generateGraph(): element=" + element.getURI() + ";inDomain=" + elementDomain);
             // System.out.println("Doamin--element:"+element.getName()+":inDomain="+element.getInDomain()+";reservation
             // domain="+reservationDomain);
             if (!(element instanceof NetworkConnection)) {
@@ -279,7 +279,7 @@ public class RequestReservation {
                     element.setInDomain(ne_domain);
                 }
             }
-            logger.debug("Doamin--element:" + element.getInDomain() + ";ne1 domain=" + ne1_domain + ";ne2 domain="
+            logger.debug("RequestReservation::generateGraph():Doamin--element:" + element.getInDomain() + ";ne1 domain=" + ne1_domain + ";ne2 domain="
                     + ne2_domain + ";reservation domain=" + reservationDomain);
             setDomainRequestReservation(element, domainRequestReservation);
         }

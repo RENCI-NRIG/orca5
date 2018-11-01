@@ -74,13 +74,13 @@ public class ConnectionManager extends RequestMapping {
                         rs_peer = device_peer.getResource();
                         type_peer = device_peer.getType();
 
-                        logger.info("Device pair:" + device.getURI() + ":" + type + ";" + device_peer.getURI() + ":"
+                        logger.info("ConnectionManager::createVirtualConnection():Device pair:" + device.getURI() + ":" + type + ";" + device_peer.getURI() + ":"
                                 + type_peer + "\n");
 
                         if (type_peer != null) {
                             if ((!isServer) && (!type_peer.equals("vm"))) {
                                 if (peerLayer(device, device_peer)) {
-                                    logger.info("Device peer:" + device.getURI() + ":" + type + ";"
+                                    logger.info("ConnectionManager::createVirtualConnection():Device peer:" + device.getURI() + ":" + type + ";"
                                             + device_peer.getURI() + ":" + type_peer + "\n");
                                     if (i < size - 1) {
                                         device_peer_next = deviceList.get(i + 1);
@@ -108,7 +108,7 @@ public class ConnectionManager extends RequestMapping {
                                                         st = stit.nextStatement();
                                                         item_rs = st.getResource();
                                                         item_ont = ontModel.getOntResource(item_rs);
-                                                        logger.info("Virtual NetworkConnection item:" + item_ont);
+                                                        logger.info("ConnectionManager::createVirtualConnection():Virtual NetworkConnection item:" + item_ont);
                                                         if (item_ont.hasRDFType(
                                                                 NdlCommons.topologyNetworkConnectionClass)) { // subconnection
                                                                                                               // or link
@@ -124,7 +124,7 @@ public class ConnectionManager extends RequestMapping {
                                     }
                                 }
                             } else if ((isServer) & (type_peer.equals("vm"))) {
-                                logger.info("----No virtual connection between Servers-----" + rs.getURI() + ":"
+                                logger.info("ConnectionManager::createVirtualConnection():----No virtual connection between Servers-----" + rs.getURI() + ":"
                                         + rs_peer.getURI());
                             }
                         }
@@ -138,7 +138,7 @@ public class ConnectionManager extends RequestMapping {
                 for (OntResource top : top_connection_ont) {
                     // logger.debug("RequestMapping: carryReservation: " + top.getURI() + ";this.reservation: " +
                     // this.reservation);
-                    logger.info("RequestMapping: carryReservation: " + top.getURI() + ";random.reservation: "
+                    logger.info("ConnectionManager::createVirtualConnection(): carryReservation: " + top.getURI() + ";random.reservation: "
                             + random_reservation.getURI());
 
                     top.addProperty(NdlCommons.carryReservation, random_reservation);
@@ -173,7 +173,7 @@ public class ConnectionManager extends RequestMapping {
             device_ont = ontModel
                     .getOntResource(intf_peer.getProperty(NdlCommons.topologyInterfaceOfProperty).getResource());
             neighbor_device = getDevice(device_ont, deviceList);
-            logger.debug("This VC end point 2:" + intf_peer.getURI() + ":" + neighbor_device.getURI() + ":"
+            logger.debug("ConnectionManager::createPeerConnection():This VC end point 2:" + intf_peer.getURI() + ":" + neighbor_device.getURI() + ":"
                     + neighbor_device.getDownNeighbour(neighbor_device.getModel()).getURI());
             intf_peer = neighbor_device.getDownNeighbour(neighbor_device.getModel());
         }
@@ -190,20 +190,20 @@ public class ConnectionManager extends RequestMapping {
 
         if (intf != null) {
             if (intf.getProperty(NdlCommons.visited) != null) {
-                logger.warn("Interface was used in existing VC:" + intf);
+                logger.warn("ConnectionManager::createPeerConnection():Interface was used in existing VC:" + intf);
                 return null;
             }
             intf.addProperty(NdlCommons.visited, "true", XSDDatatype.XSDboolean);
         }
         if (intf_peer != null) {
             if (intf_peer.getProperty(NdlCommons.visited) != null) {
-                logger.warn("Interface was used in existing VC:" + intf_peer);
+                logger.warn("ConnectionManager::createPeerConnection():Interface was used in existing VC:" + intf_peer);
                 return null;
             }
             intf_peer.addProperty(NdlCommons.visited, "true", XSDDatatype.XSDboolean);
         }
 
-        logger.info("----creating virtual connection-----" + device.getResource() + ":" + device_peer.getResource());
+        logger.info("ConnectionManager::createPeerConnection():----creating virtual connection-----" + device.getResource() + ":" + device_peer.getResource());
 
         if ((intf != null) && (intf_peer != null)) {
             if (intf.getProperty(NdlCommons.connectedTo) == null) {
@@ -235,7 +235,7 @@ public class ConnectionManager extends RequestMapping {
     public OntResource toNetworkConnection(Resource intf0_rs, Resource intf1_rs, Device device0, Device device1) {
         // Form a network connection and Find the links
 
-        logger.info("Generating connections:" + intf0_rs + ":" + intf1_rs);
+        logger.info("ConnectionManager::toNetworkConnection():Generating connections:" + intf0_rs + ":" + intf1_rs);
 
         ResultSet results = getConnectionSubGraphSwitchedTo(intf0_rs.getURI(), intf1_rs.getURI());
         // this.outputQueryResult(results);
@@ -261,7 +261,7 @@ public class ConnectionManager extends RequestMapping {
             connection_ont = ontModel.createIndividual(url, NdlCommons.topologyNetworkConnectionClass);
             connection_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, intf0_rs);
             connection_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, intf1_rs);
-            logger.info("Virtual connection:" + connection_ont + ":" + intf0_rs + ":" + intf1_rs + "\n");
+            logger.info("ConnectionManager::toNetworkConnection():Virtual connection:" + connection_ont + ":" + intf0_rs + ":" + intf1_rs + "\n");
         }
 
         HashMap<String, Resource[]> linkList = new HashMap<String, Resource[]>();
@@ -307,7 +307,7 @@ public class ConnectionManager extends RequestMapping {
                     link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, link.getValue()[1]);
                     link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, link.getValue()[2]);
                     connection_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);
-                    logger.debug("Link hop:" + link.getKey() + "|" + link.getValue()[0] + "|" + link.getValue()[1] + "|"
+                    logger.debug("ConnectionManager::toNetworkConnection():Link hop:" + link.getKey() + "|" + link.getValue()[0] + "|" + link.getValue()[1] + "|"
                             + link.getValue()[2]);
                 }
             }
@@ -352,7 +352,7 @@ public class ConnectionManager extends RequestMapping {
         releaseNetworkConnection = new NetworkConnection();
         LinkedList<Device> releaseDeviceList = (LinkedList<Device>) releaseNetworkConnection.getConnection();
 
-        logger.info("---1. Finding Releasing CRS/Device/VC-----:" + connection.getName());
+        logger.info("ConnectionManager::releaseConnection():---1. Finding Releasing CRS/Device/VC-----:" + connection.getName());
 
         BitSet releasedLayerBitSet = null;
         String connectionLayer = connection.getAtLayer();
@@ -367,28 +367,28 @@ public class ConnectionManager extends RequestMapping {
         while (it.hasNext()) {
             device = (Device) it.next();
             if (device.getType() == null) {
-                logger.warn("Device has no type:" + device.getName());
+                logger.warn("ConnectionManager::releaseConnection():Device has no type:" + device.getName());
                 continue;
             }
 
             if ((device.getResource() == null) || (device.getResource().getProperty(visited) != null)) {// underneath
                                                                                                         // the occupied
                                                                                                         // connection
-                logger.debug("Device visited in release:" + device.getName());
+                logger.debug("ConnectionManager::releaseConnection():Device visited in release:" + device.getName());
                 continue;
             }
 
             if (device.getType().equalsIgnoreCase("vm")) {
-                logger.debug("Device is edge:" + device.getName());
+                logger.debug("ConnectionManager::releaseConnection():Device is edge:" + device.getName());
             } else {
                 releaseCRS(device, false, requestURI);
             }
-            logger.info("releaseConnection-- device=" + device.getName() + ";device.atLayer=" + device.getAtLayer()
+            logger.info("ConnectionManager::releaseConnection():-- device=" + device.getName() + ";device.atLayer=" + device.getAtLayer()
                     + ":connection.atLayer=" + connection.getAtLayer());
             // in the sorted device list, the first two are always the two end points of the device
             if (device.getAtLayer().equals(connection.getAtLayer())) {
                 if (!device.getType().equalsIgnoreCase("vm")) {
-                    logger.info("Releasing Device Added:" + device.getURI());
+                    logger.info("ConnectionManager::releaseConnection():Releasing Device Added:" + device.getURI());
                     releaseDeviceList.add(device);
                 }
                 LinkedList<SwitchingAction> actions = device.getActionList();
@@ -398,13 +398,13 @@ public class ConnectionManager extends RequestMapping {
 
                 for (int i = 0; i < actions.size(); i++) {
                     SwitchingAction a = actions.get(i);
-                    logger.debug("Releasing Action=" + a.getDefaultAction() + ";" + a.getAtLayer());
+                    logger.debug("ConnectionManager::releaseConnection():Releasing Action=" + a.getDefaultAction() + ";" + a.getAtLayer());
                     if (Objects.equals(a.getDefaultAction(), Action.Temporary.toString())) {
                         continue;
                     }
                     if (a.getAtLayer().equalsIgnoreCase(connectionLayer)) {
                         releasedLayerBitSet.set((int) a.getLabel_ID());
-                        logger.debug("release vlan=" + (int) a.getLabel_ID());
+                        logger.debug("ConnectionManager::releaseConnection():release vlan=" + (int) a.getLabel_ID());
                     }
                 }
             }
@@ -414,7 +414,7 @@ public class ConnectionManager extends RequestMapping {
         if (usedLayerBitSet != null)
             usedLayerBitSet.andNot(releasedLayerBitSet);
         else
-            logger.error("ERROR:No local used bitset");
+            logger.error("ConnectionManager::releaseConnection():ERROR:No local used bitset");
 
         removeInConnectionProperty("ndl:visited", visited);
         return releaseNetworkConnection;
@@ -427,7 +427,7 @@ public class ConnectionManager extends RequestMapping {
         SwitchingAction action = null;
         LinkedList<SwitchingAction> actionList = device.getActionList();
         if (actionList == null) {
-            logger.error("No switching action:" + device.getResource());
+            logger.error("ConnectionManager::releaseConnection():No switching action:" + device.getResource());
             return valid;
         }
         Iterator<SwitchingAction> it_action = actionList.iterator();
@@ -437,7 +437,7 @@ public class ConnectionManager extends RequestMapping {
             String current_layer = action.getAtLayer();
 
             valid = switchingActionInModel(action, current_layer, releaseFlag, requestURI);
-            logger.info("end of releasing crs in model:" + device.getResource() + ":" + releaseFlag);
+            logger.info("ConnectionManager::releaseConnection():end of releasing crs in model:" + device.getResource() + ":" + releaseFlag);
         }
         return valid;
     }
@@ -494,7 +494,7 @@ public class ConnectionManager extends RequestMapping {
         Resource connection_rs = null;
         String var0 = null;
 
-        logger.info("Virtual Connection removal:" + rs_ont + ":" + rs_next_ont);
+        logger.info("ConnectionManager::removeVirtualConnection():Virtual Connection removal:" + rs_ont + ":" + rs_next_ont);
         // find the virtual connections using this or its adapted interface.
         ResultSet results = interfaceOfNetworkConnection(rs_ont.getURI());
         if (results != null) {
@@ -538,7 +538,7 @@ public class ConnectionManager extends RequestMapping {
             }
             for (Resource d_rs : markDeviceList) {
                 d_rs.addProperty(visited, "true", XSDDatatype.XSDboolean);
-                logger.debug("Visted:" + d_rs.getURI());
+                logger.debug("ConnectionManager::removeVirtualConnection():Visted:" + d_rs.getURI());
             }
         }
         return done;
@@ -583,7 +583,7 @@ public class ConnectionManager extends RequestMapping {
 
         LinkedList<Device> releaseDeviceList = (LinkedList<Device>) releaseNetworkConnection.getConnection();
 
-        logger.info("NetworkConnection release recursively:" + nc_rs);
+        logger.info("ConnectionManager::releaseNetworkConnection():NetworkConnection release recursively:" + nc_rs);
         markDeviceList.add(nc_rs);
 
         Statement st = null;
@@ -595,7 +595,7 @@ public class ConnectionManager extends RequestMapping {
                 st = stit.nextStatement();
                 rs = st.getResource();
                 rs_ont = ontModel.getOntResource(rs);
-                logger.info("releaseNetworkConnection item:" + rs_ont);
+                logger.info("ConnectionManager::releaseNetworkConnection():item:" + rs_ont);
                 if (rs_ont.hasRDFType(NdlCommons.topologyNetworkConnectionClass)) { // subconnection or link segment
                     releaseNetworkConnection(rs, carryOtherReservation(rs, requestURI), requestURI);
                 }
@@ -604,7 +604,7 @@ public class ConnectionManager extends RequestMapping {
                     if (device != null) {
                         markDeviceList.add(device.getResource());
                         if (!markFlag) {
-                            logger.info("Release CrossConnect:" + rs_ont + ":" + device.getName());
+                            logger.info("ConnectionManager::releaseNetworkConnection():Release CrossConnect:" + rs_ont + ":" + device.getName());
                             releaseDeviceList.add(device);
                         }
                     }
@@ -627,7 +627,7 @@ public class ConnectionManager extends RequestMapping {
         // results=getCRSDevice(crs_rs.getURI());
 
         if (!results.hasNext()) {
-            logger.error("Orphon CRS:" + crs_rs.getURI());
+            logger.error("ConnectionManager::getReleaseDevice():Orphon CRS:" + crs_rs.getURI());
             return null;
         }
         // assume 2 interfaces per CRS
@@ -667,15 +667,15 @@ public class ConnectionManager extends RequestMapping {
                             + Layer.valueOf(layer).getLabelP();
                     ObjectProperty label_p = ontModel.getObjectProperty(labelP);
                     Resource label_rs = null;
-                    logger.info("getReleaseDevice intf:" + intf.getResource().getURI() + "-" + intf_next.getResource()
+                    logger.info("ConnectionManager::getReleaseDevice():intf:" + intf.getResource().getURI() + "-" + intf_next.getResource()
                             + ":" + label_p);
                     if (intf.getResource().getProperty(label_p) != null) {
                         label_rs = intf.getResource().getProperty(label_p).getResource();
-                        logger.info("getReleaseDevice label_rs 1:" + label_rs.getURI());
+                        logger.info("ConnectionManager::getReleaseDevice():label_rs 1:" + label_rs.getURI());
                     }
                     if (intf_next.getResource().getProperty(label_p) != null) {
                         label_rs = intf_next.getResource().getProperty(label_p).getResource();
-                        logger.info("getReleaseDevice label_rs 2:" + label_rs.getURI());
+                        logger.info("ConnectionManager::getReleaseDevice():label_rs 2:" + label_rs.getURI());
                     }
                     if (label_rs != null) {
                         Label label = new Label();
@@ -705,7 +705,7 @@ public class ConnectionManager extends RequestMapping {
         }
         rs_nc = ontModel.getOntResource(vc);
         nc_intf_list.put(rs_nc, nc_intf);
-        logger.debug("Connection interfaces to be removed put in the waiting list:" + nc_intf[0] + ":" + nc_intf[1]);
+        logger.debug("ConnectionManager::getConnectionInterfaces():Connection interfaces to be removed put in the waiting list:" + nc_intf[0] + ":" + nc_intf[1]);
     }
 
     // Real release in the RDF model
@@ -714,13 +714,13 @@ public class ConnectionManager extends RequestMapping {
         LinkedList<Device> deviceList = null;
         Iterator<Device> it;
         Device device = null;
-        logger.info("----2. Releasing CrossConnect in the ontology model: (Real Release)-----" + connection.getURI());
+        logger.info("ConnectionManager::releaseInModel():----2. Releasing CrossConnect in the ontology model: (Real Release)-----" + connection.getURI());
         if (connection != null) {
             deviceList = (LinkedList<Device>) releaseNetworkConnection.getConnection();
             it = deviceList.iterator();
             while (it.hasNext()) {
                 device = (Device) it.next();
-                logger.info("Releasing device in model: " + device.getURI());
+                logger.info("ConnectionManager::releaseInModel():Releasing device in model: " + device.getURI());
                 releaseCRS(device, true, requestURI);
             }
         }
@@ -731,7 +731,7 @@ public class ConnectionManager extends RequestMapping {
                 intf_pair.getValue()[0].removeProperty(NdlCommons.connectedTo, intf_pair.getValue()[1]);
                 intf_pair.getValue()[1].removeProperty(NdlCommons.connectedTo, intf_pair.getValue()[0]);
 
-                logger.info("Releasing the virtual connection:" + intf_pair.getValue()[0] + ":"
+                logger.info("ConnectionManager::releaseInModel():Releasing the virtual connection:" + intf_pair.getValue()[0] + ":"
                         + intf_pair.getValue()[1] + "\n");
 
             }
@@ -739,7 +739,7 @@ public class ConnectionManager extends RequestMapping {
 
         removeInConnectionProperty("ndl:portOccupied", portOccupied);
 
-        logger.info("Release is Done!\n");
+        logger.info("ConnectionManager::releaseInModel():Release is Done!\n");
 
         return connection;
     }
@@ -753,7 +753,7 @@ public class ConnectionManager extends RequestMapping {
         Resource connection_rs = null;
         String var0 = null;
 
-        logger.info("Virtual Connection reservation removal:" + rs_ont + ":" + rs_next_ont);
+        logger.info("ConnectionManager::removeReservation():Virtual Connection reservation removal:" + rs_ont + ":" + rs_next_ont);
         // find the virtual connections using this or its adapted interface.
         ResultSet results = interfaceOfNetworkConnection(rs_ont.getURI());
         if (results != null) {
@@ -775,7 +775,7 @@ public class ConnectionManager extends RequestMapping {
         if (connection_rs_list.size() < 1)
             return;
 
-        logger.info("Reservation in Connection removal:" + requestURI + ":" + rs_ont + ":" + rs_next_ont);
+        logger.info("ConnectionManager::removeReservation():Reservation in Connection removal:" + requestURI + ":" + rs_ont + ":" + rs_next_ont);
 
         OntResource connection_rs_ont = null;
         LinkedList<OntResource> connectionReservationList = new LinkedList<OntResource>();
@@ -790,7 +790,7 @@ public class ConnectionManager extends RequestMapping {
 
         for (OntResource or : connectionReservationList) {
             or.removeProperty(carryReservation, ontModel.getResource(requestURI));
-            logger.info("Carried Reservation removed:" + ontModel.getResource(requestURI) + ":" + connection_rs + "\n");
+            logger.info("ConnectionManager::removeReservation():Carried Reservation removed:" + ontModel.getResource(requestURI) + ":" + connection_rs + "\n");
         }
     }
 
@@ -811,7 +811,7 @@ public class ConnectionManager extends RequestMapping {
                 rs = st.getResource();
                 rs_ont = ontModel.getOntResource(rs);
                 if (rs_ont.hasRDFType(NdlCommons.topologyNetworkConnectionClass)) { // subconnection or link segment
-                    logger.info("clientNetworkConnection item:" + rs_ont);
+                    logger.info("ConnectionManager::getClientNetworkConnections():item:" + rs_ont);
                     connectionReservationList.add(rs_ont);
                     clientConnectionReservationList = getClientNetworkConnections(rs);
                     if (clientConnectionReservationList.size() < 1)
@@ -840,7 +840,7 @@ public class ConnectionManager extends RequestMapping {
 
         if (results.hasNext()) {
             crs_rs = results.nextSolution().getResource(var0);
-            logger.info("Tear down CRS:" + crs_rs);
+            logger.info("ConnectionManager::releaseCrossConnect():Tear down CRS:" + crs_rs);
             crs_rs.removeProperties();
         }
     }
@@ -880,7 +880,7 @@ public class ConnectionManager extends RequestMapping {
 
             rs1_parent = intf1.getResource().getProperty(adaptationPropertyOf).getResource();
             if (label1_rs != null) { // Only consider aSet and uSet for interface with assigned label
-                logger.info("This labeled interface:" + layer + ":" + aSet_p + ":" + rs1_parent + ":"
+                logger.info("ConnectionManager::returnLabel():This labeled interface:" + layer + ":" + aSet_p + ":" + rs1_parent + ":"
                         + rs1_parent_availableSet + "--" + label1_rs.getURI() + "\n");
                 try {
                     layer = findLayer(ontModel, rs1_parent);
@@ -895,13 +895,13 @@ public class ConnectionManager extends RequestMapping {
                     uSet = NdlCommons.ORCA_NS + prefix + ".owl#" + Layer.valueOf(layer).getUSet();
                     uSet_p = ontModel.createObjectProperty(uSet);
                 } catch (Exception e) {
-                    logger.error("Exception:" + e.getLocalizedMessage() + ":" + rs1_parent.getURI() + ":" + layer + ":"
+                    logger.error("ConnectionManager::returnLabel():Exception:" + e.getLocalizedMessage() + ":" + rs1_parent.getURI() + ":" + layer + ":"
                             + label1_rs.getURI());
                 }
             }
         }
         if (rs1_parent_availableSet != null) {
-            logger.info("Returning used label:" + uSet_p + ":" + rs1_parent + ":" + rs1_parent.getProperty(uSet_p));
+            logger.info("ConnectionManager::returnLabel():used label:" + uSet_p + ":" + rs1_parent + ":" + rs1_parent.getProperty(uSet_p));
             if (rs1_parent.getProperty(uSet_p) != null) {
                 rs1_parent_usedSet = ontModel.getOntResource(rs1_parent.getProperty(uSet_p).getResource());
                 if (rs1_parent_availableSet != null && rs1_parent_usedSet != null
@@ -909,12 +909,12 @@ public class ConnectionManager extends RequestMapping {
                         && (label1_rs != null)) {
                     rs1_parent_usedSet.removeProperty(NdlCommons.collectionElementProperty, label1_rs);
                     rs1_parent_availableSet.addProperty(NdlCommons.collectionElementProperty, label1_rs);
-                    logger.info("Returned used label:" + label1_rs + ":"
+                    logger.info("ConnectionManager::returnLabel():used label:" + label1_rs + ":"
                             + rs1_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty, label1_rs) + ":"
                             + rs1_parent_usedSet + ":"
                             + rs1_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label1_rs) + "\n");
                 } else
-                    logger.warn("No Returned used label:label1_rs=" + label1_rs);
+                    logger.warn("ConnectionManager::returnLabel():No Returned used label:label1_rs=" + label1_rs);
             }
         }
 
@@ -930,7 +930,7 @@ public class ConnectionManager extends RequestMapping {
             }
             rs2_parent = intf2.getResource().getProperty(adaptationPropertyOf).getResource();
             if (label2_rs != null) {
-                logger.info("This labeled interface:" + layer + ":" + aSet_p + ":" + rs2_parent + ":"
+                logger.info("ConnectionManager::returnLabel():This labeled interface:" + layer + ":" + aSet_p + ":" + rs2_parent + ":"
                         + rs2_parent_availableSet + "--" + label2_rs.getURI() + "\n");
                 try {
                     layer = findLayer(ontModel, rs2_parent);
@@ -944,7 +944,7 @@ public class ConnectionManager extends RequestMapping {
                     uSet = NdlCommons.ORCA_NS + prefix + ".owl#" + Layer.valueOf(layer).getUSet();
                     uSet_p = ontModel.createObjectProperty(uSet);
                 } catch (Exception e) {
-                    logger.error("Exception:" + e.getLocalizedMessage() + ":" + rs2_parent.getURI() + ":" + layer + ":"
+                    logger.error("ConnectionManager::returnLabel():Exception:" + e.getLocalizedMessage() + ":" + rs2_parent.getURI() + ":" + layer + ":"
                             + label2_rs.getURI());
                 }
             }
@@ -953,7 +953,7 @@ public class ConnectionManager extends RequestMapping {
         if ((rs1_parent_availableSet == null) && (rs2_parent_availableSet == null))
             return null;
         if (rs2_parent.getProperty(uSet_p) != null) {
-            logger.info("Returning used label:" + uSet_p + ":" + rs2_parent + ":" + rs2_parent.getProperty(uSet_p));
+            logger.info("ConnectionManager::returnLabel():Returning used label:" + uSet_p + ":" + rs2_parent + ":" + rs2_parent.getProperty(uSet_p));
             rs2_parent_usedSet = ontModel.getOntResource(rs2_parent.getProperty(uSet_p).getResource());
             if (rs2_parent_usedSet != null && rs2_parent_usedSet != rs1_parent_usedSet) {
                 if (rs2_parent_availableSet != null
@@ -961,12 +961,12 @@ public class ConnectionManager extends RequestMapping {
                         && (label2_rs != null)) {
                     rs2_parent_usedSet.removeProperty(NdlCommons.collectionElementProperty, label2_rs);
                     rs2_parent_availableSet.addProperty(NdlCommons.collectionElementProperty, label2_rs);
-                    logger.info("Returned used label:" + label2_rs + ":"
+                    logger.info("ConnectionManager::returnLabel():Returned used label:" + label2_rs + ":"
                             + rs2_parent_availableSet.hasProperty(NdlCommons.collectionElementProperty, label2_rs) + ":"
                             + rs2_parent_usedSet + ":"
                             + rs2_parent_usedSet.hasProperty(NdlCommons.collectionElementProperty, label2_rs) + "\n");
                 } else
-                    logger.warn("No Returned used label:label2_rs=" + label2_rs);
+                    logger.warn("ConnectionManager::returnLabel():No Returned used label:label2_rs=" + label2_rs);
             }
         }
         return label_rs;
@@ -984,7 +984,7 @@ public class ConnectionManager extends RequestMapping {
             while (stit.hasNext()) {
                 st = stit.nextStatement();
                 rs = st.getResource();
-                logger.info("Carried Reservation:" + nc_rs.getURI() + ":" + requestURI + ":carried reservation:"
+                logger.info("ConnectionManager::carryOtherReservation():Carried Reservation:" + nc_rs.getURI() + ":" + requestURI + ":carried reservation:"
                         + rs.getLocalName());
                 if (!rs.getURI().equals(requestURI)) {
                     carry = true;
@@ -992,7 +992,7 @@ public class ConnectionManager extends RequestMapping {
                 }
             }
         }
-        logger.info("Carried other reservation:" + carry);
+        logger.info("ConnectionManager::carryOtherReservation():Carried other reservation:" + carry);
         return carry;
     }
 

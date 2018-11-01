@@ -110,7 +110,7 @@ public class InterCloudHandler extends ModifyHandler {
         for (Entry<String, RequestReservation> entry : dRR_list) {
             domain = entry.getKey();
             rr = entry.getValue();
-            logger.info("Request element:" + domain);
+            logger.info("InterCloudHandler::runEmbedding():Request element:" + domain);
             if (domain.equals(RequestReservation.Unbound_Domain)) { // unbound request, may need splitting
                 this.multipointRequest = false;
                 error = runEmbedding(rr, domainResourcePools, bound);
@@ -156,7 +156,7 @@ public class InterCloudHandler extends ModifyHandler {
                 request.setDomainRequestReservation(ne, s_rr);
             }
         } else {
-            logger.error("Null request::old_mpRequest=" + old_mpRequest + ";mpRequest=" + mpRequest);
+            logger.error("InterCloudHandler::runEmbedding():Null request::old_mpRequest=" + old_mpRequest + ";mpRequest=" + mpRequest);
         }
 
         return error;
@@ -228,7 +228,7 @@ public class InterCloudHandler extends ModifyHandler {
                 destination_intf_rs.addProperty(NdlCommons.connectedTo, source_intf_rs);
                 // System.out.println("Meshed
                 // link:"+path.get(0).get(0)+":"+path.get(path_len-1).get(0)+":"+path_len+"\n");
-                logger.debug("Cloud:" + c_s_rs + ":" + c_d_rs + ":"
+                logger.debug("InterCloudHandler::buildCloudOntModel():Cloud:" + c_s_rs + ":" + c_d_rs + ":"
                         + source_intf_rs.getProperty(this.mapper.numHop).getInt() + ":"
                         + destination_intf_rs.getProperty(NdlCommons.layerBandwidthProperty).getLong() + "\n");
             }

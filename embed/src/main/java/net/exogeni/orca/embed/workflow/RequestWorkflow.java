@@ -145,7 +145,7 @@ public class RequestWorkflow {
         Collection<NetworkElement> requestElements = request.getElements();
         err = request.getError();
         if (err != null) {
-            logger.error("Ndl request parser unable to parse request:" + err.toString());
+            logger.error("RequestWorkflow::run():Ndl request parser unable to parse request:" + err.toString());
             return err;
         }
         // TODO: check if the request is already fully bound in one domain, preparing for topology splitting
@@ -244,7 +244,7 @@ public class RequestWorkflow {
                 for (DomainElement fde : free_elements) {
                     for (DomainElement sde : static_elements) {
                         fde.setPrecededBy(sde, null);
-                        logger.debug("RequestWorkflow: adding static tag dependency for network reservations: domain="
+                        logger.debug("RequestWorkflow::run():adding static tag dependency for network reservations: domain="
                                 + entry.getKey() + ":" + sde.getStaticLabel());
                     }
                 }
@@ -256,7 +256,7 @@ public class RequestWorkflow {
     public synchronized void modify(DomainResourcePools domainResourcePools, String modReq, String sliceId,
             HashMap<String, Collection<DomainElement>> nodeGroupMap, HashMap<String, DomainElement> firstGroupElement)
             throws NdlException, UnknownHostException, InetNetworkException {
-        logger.info("workflow:modify(); starts...");
+        logger.info("RequestWorkflow::modify(); starts...");
         ModifyParserListener pl = new ModifyParserListener();
         NdlModifyParser nmp = new NdlModifyParser(modReq, pl);
         // nmp.rewriteModifyRequest();
@@ -333,7 +333,7 @@ public class RequestWorkflow {
 
     protected void modifyGlobalControllerAssignedLabel() {
         if (globalControllerAssignedLabel == null) {
-            logger.error("modifyGlobalControllerAssignedLabel: the map variable not set");
+            logger.error("RequestWorkflow::modifyGlobalControllerAssignedLabel(): the map variable not set");
             return;
         }
         String domain = null;
@@ -350,7 +350,7 @@ public class RequestWorkflow {
                 globalBitSet.or(bitSet);
                 globalControllerAssignedLabel.put(domain, globalBitSet);
             }
-            logger.debug("modifyGlobalLabel:" + domain + ":assignedLabel=" + globalControllerAssignedLabel.get(domain)
+            logger.debug("RequestWorkflow::modifyGlobalControllerAssignedLabel():" + domain + ":assignedLabel=" + globalControllerAssignedLabel.get(domain)
                     + ":controllerLabel=" + controllerAssignedLabel.get(domain));
         }
     }
@@ -361,11 +361,11 @@ public class RequestWorkflow {
         for (Entry<String, BitSet> entry : controllerAssignedLabel.entrySet()) {
             domain = entry.getKey();
             bitSet = entry.getValue();
-            logger.debug("ClearGlobalLabel:" + domain + ";controller bitset=" + bitSet);
+            logger.debug("RequestWorkflow::modifyGlobalControllerAssignedLabel():ClearGlobalLabel:" + domain + ";controller bitset=" + bitSet);
             if (globalControllerAssignedLabel.containsKey(domain)) {
                 globalBitSet = globalControllerAssignedLabel.get(domain);
                 globalBitSet.andNot(bitSet);
-                logger.debug("ClearGlobalLabel:assignedLabel=" + globalControllerAssignedLabel.get(domain)
+                logger.debug("RequestWorkflow::modifyGlobalControllerAssignedLabel():ClearGlobalLabel:assignedLabel=" + globalControllerAssignedLabel.get(domain)
                         + ":removed controllerLabel=" + controllerAssignedLabel.get(domain));
             }
         }
@@ -423,16 +423,16 @@ public class RequestWorkflow {
     public void recover(Logger logger, HashMap<String, BitSet> globalAssignedLabels, WorkflowRecoverySetter slice) {
         // open the models
 
-        logger.info("Restoring request workflow for slice " + slice.getId());
+        logger.info("RequestWorkflow::recover():Restoring request workflow for slice " + slice.getId());
         try {
-            logger.info("Opening the request model " + Globals.TdbPersistentDirectory + Globals.PathSep + "controller"
+            logger.info("RequestWorkflow::recover():Opening the request model " + Globals.TdbPersistentDirectory + Globals.PathSep + "controller"
                     + Globals.PathSep + "request-" + slice.getId());
             requestModel = NdlModel
                     .getModelFromTDB(
                             Globals.TdbPersistentDirectory + Globals.PathSep + "controller" + Globals.PathSep
                                     + "request-" + slice.getId(),
                             NdlModel.getOntModelSpec(OntModelSpec.OWL_MEM_RDFS_INF, true));
-            logger.info("Opening the manifest model " + Globals.TdbPersistentDirectory + Globals.PathSep + "controller"
+            logger.info("RequestWorkflow::recover():Opening the manifest model " + Globals.TdbPersistentDirectory + Globals.PathSep + "controller"
                     + Globals.PathSep + "manifest-" + slice.getId());
             manifestModel = NdlModel
                     .getModelFromTDB(
@@ -443,7 +443,7 @@ public class RequestWorkflow {
             setGlobalControllerAssignedLabel(globalAssignedLabels);
             recover(logger, slice, requestModel, manifestModel);
         } catch (NdlException ne) {
-            logger.error("Unable to reopen TDB model due to: " + ne.getMessage());
+            logger.error("RequestWorkflow::recover():Unable to reopen TDB model due to: " + ne.getMessage());
             ne.printStackTrace();
         }
     }
@@ -472,7 +472,7 @@ public class RequestWorkflow {
             for (NetworkElement ne : boundElements) {
                 sb.append(ne.toString() + "***********");
             }
-            logger.debug("Slice bound elements are " + sb);
+            logger.debug("RequestWorkflow::recover():Slice bound elements are " + sb);
 
             ((CloudHandler) embedderAlgorithm).setDeviceList(boundElements);
             ((CloudHandler) embedderAlgorithm).setManifestModel(manifestModel);
@@ -481,15 +481,15 @@ public class RequestWorkflow {
             term = new OrcaReservationTerm();
             term.setStart(parserListener.getCreationTime());
             term.modifyTerm(parserListener.getExpirationTime());
-            logger.debug("Slice start date " + parserListener.getCreationTime() + " and end date "
+            logger.debug("RequestWorkflow::recover():Slice start date " + parserListener.getCreationTime() + " and end date "
                     + parserListener.getExpirationTime());
 
             domainInConnectionList = recoverDomainInConnectionList();
             ((CloudHandler) embedderAlgorithm).setDomainInConnectionList(domainInConnectionList);
 
-            logger.debug("Recovered the following domains for the slice:");
+            logger.debug("RequestWorkflow::recover():Recovered the following domains for the slice:");
             for (OntResource orr : domainInConnectionList) {
-                logger.debug("--- " + orr.getLocalName() + " " + orr);
+                logger.debug("RequestWorkflow::recover():--- " + orr.getLocalName() + " " + orr);
             }
 
             // recover OF properties
@@ -507,9 +507,9 @@ public class RequestWorkflow {
             if (IP_set != null) {
                 controller_shared_IP_set = new HashMap<String, LinkedList<String>>();
                 for (Entry<String, LinkedList<String>> entry : IP_set.entrySet()) {
-                    logger.debug("workflow recover:domain=" + entry.getKey());
+                    logger.debug("RequestWorkflow::recover()::domain=" + entry.getKey());
                     for (String shared_ip_str : entry.getValue()) {
-                        logger.debug("workflow recover:ip=" + shared_ip_str);
+                        logger.debug("RequestWorkflow::recover()::ip=" + shared_ip_str);
                     }
                     controller_shared_IP_set.put(entry.getKey(), entry.getValue());
                     if (shared_IP_set.get(entry.getKey()) != null) {
@@ -521,7 +521,7 @@ public class RequestWorkflow {
             }
 
         } catch (NdlException ne) {
-            logger.error("Unable to reopen TDB model due to: " + ne);
+            logger.error("RequestWorkflow::recover():Unable to reopen TDB model due to: " + ne);
             ne.printStackTrace();
         } finally {
             if (reqModel != null)
@@ -535,20 +535,20 @@ public class RequestWorkflow {
     public LinkedList<OntResource> recoverDomainInConnectionList() {
         LinkedList<OntResource> domainList = new LinkedList<OntResource>();
         OntResource ne_ont = null, domain_ont = null;
-        logger.info("Start to recover domainInConnectionList...");
+        logger.info("RequestWorkflow::recoverDomain():Start to recover domainInConnectionList...");
         for (NetworkElement ne : boundElements) {
             ne_ont = ne.getResource();
             if (ne_ont == null) {
-                logger.error("No ontResource, ne=" + ne.getName());
+                logger.error("RequestWorkflow::recoverDomain():No ontResource, ne=" + ne.getName());
                 continue;
             }
             domainList.add(ne_ont);
-            logger.debug("domain:" + ne_ont.getURI() + ";");
+            logger.debug("RequestWorkflow::recoverDomain():domain:" + ne_ont.getURI() + ";");
             /*
              * if(ne_ont.hasProperty(NdlCommons.inDomainProperty)){ domain_ont
              * =manifestModel.getOntResource(ne_ont.getProperty(NdlCommons.inDomainProperty).getResource());
-             * domainList.add(domain_ont); logger.debug("domain:"+domain_ont.getURI()+";"); }else{
-             * logger.error("No inDomain property:ne="+ne_ont.getURI()); }
+             * domainList.add(domain_ont); logger.debug("RequestWorkflow::domain:"+domain_ont.getURI()+";"); }else{
+             * logger.error("RequestWorkflow::No inDomain property:ne="+ne_ont.getURI()); }
              */
         }
         return domainList;
@@ -561,7 +561,7 @@ public class RequestWorkflow {
      * @param label label
      */
     public void setControllerLabel(String domain, int label) {
-        logger.debug("Setting RequestWorkflow.controllerAssignedLabel " + label + " for domain " + domain);
+        logger.debug("RequestWorkflow::setControllerLabel():controllerAssignedLabel " + label + " for domain " + domain);
         setBitsetLabel(controllerAssignedLabel, domain, label);
     }
 
