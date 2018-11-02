@@ -40,13 +40,13 @@ public class NdlResourcePoolFactory extends ResourcePoolFactory {
     protected static final HashMap<String, String> hmControlToNDLExtractor = new HashMap<String, String>() {
         {
             // Controls for which we are extracting properties
-            put("orca.plugins.ben.control.NdlVLANControl",
-                    "orca.embed.policyhelpers.VlanPolicyNDLPoolPropertyExtractor");
-            put("orca.plugins.ben.control.NdlInterfaceVLANControl",
-                    "orca.embed.policyhelpers.VlanPolicyNDLPoolPropertyExtractor");
-            put("orca.policy.core.SimpleVMControl", "orca.embed.policyhelpers.VMPolicyNDLPoolPropertyExtractor");
-            put("orca.policy.core.VlanControl", "orca.embed.policyhelpers.VlanPolicyNDLPoolPropertyExtractor");
-            put("orca.policy.core.LUNControl", "orca.embed.policyhelpers.LUNPolicyNDLPoolPropertyExtractor");
+            put("net.exogeni.orca.plugins.ben.control.NdlVLANControl",
+                    "net.exogeni.orca.embed.policyhelpers.VlanPolicyNDLPoolPropertyExtractor");
+            put("net.exogeni.orca.plugins.ben.control.NdlInterfaceVLANControl",
+                    "net.exogeni.orca.embed.policyhelpers.VlanPolicyNDLPoolPropertyExtractor");
+            put("net.exogeni.orca.policy.core.SimpleVMControl", "net.exogeni.orca.embed.policyhelpers.VMPolicyNDLPoolPropertyExtractor");
+            put("net.exogeni.orca.policy.core.VlanControl", "net.exogeni.orca.embed.policyhelpers.VlanPolicyNDLPoolPropertyExtractor");
+            put("net.exogeni.orca.policy.core.LUNControl", "net.exogeni.orca.embed.policyhelpers.LUNPolicyNDLPoolPropertyExtractor");
         }
     };
 

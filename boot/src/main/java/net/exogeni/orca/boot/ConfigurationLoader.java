@@ -109,7 +109,7 @@ public class ConfigurationLoader implements IConfigurationLoader {
     private Configuration readConfiguration(byte[] configBytes) throws JAXBException {
         logger.info("Reading configuration. Source: bytearray");
         InputStream is = new ByteArrayInputStream(configBytes);
-        JAXBContext context = JAXBContext.newInstance("orca.boot.beans");
+        JAXBContext context = JAXBContext.newInstance("net.exogeni.orca.boot.beans");
         Unmarshaller um = context.createUnmarshaller();
         return (Configuration) um.unmarshal(is);
     }
@@ -121,7 +121,7 @@ public class ConfigurationLoader implements IConfigurationLoader {
      */
     private Configuration readConfiguration(InputStream is) throws JAXBException {
         logger.info("Reading configuration: Source: stream");
-        JAXBContext context = JAXBContext.newInstance("orca.boot.beans");
+        JAXBContext context = JAXBContext.newInstance("net.exogeni.orca.boot.beans");
         Unmarshaller um = context.createUnmarshaller();
         return (Configuration) um.unmarshal(is);
     }
@@ -134,7 +134,7 @@ public class ConfigurationLoader implements IConfigurationLoader {
     private Configuration readConfiguration(String configFile) throws JAXBException, FileNotFoundException {
         logger.info("Reading configuration: file = " + configFile);
         InputStream is = new FileInputStream(configFile);
-        JAXBContext context = JAXBContext.newInstance("orca.boot.beans");
+        JAXBContext context = JAXBContext.newInstance("net.exogeni.orca.boot.beans");
         Unmarshaller um = context.createUnmarshaller();
         return (Configuration) um.unmarshal(is);
     }
