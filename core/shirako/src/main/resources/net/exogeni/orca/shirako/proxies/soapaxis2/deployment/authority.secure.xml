@@ -8,7 +8,7 @@
 <parameter locked="false" name="ServiceClass">net.exogeni.orca.shirako.proxies.soapaxis2.services.AuthorityServiceSkeleton</parameter>
 <operation name="modifyLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>modifyLease</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/modifyLeaseResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/modifyLeaseResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -33,7 +33,7 @@
 </operation>
 <operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>updateLease</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateLeaseResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateLeaseResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -58,7 +58,7 @@
 </operation>
 <operation name="extendLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>extendLease</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendLeaseResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendLeaseResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -83,7 +83,7 @@
 </operation>
 <operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>updateTicket</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateTicketResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/updateTicketResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -108,7 +108,7 @@
 </operation>
 <operation name="ticket" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>ticket</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/ticketResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/ticketResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -133,7 +133,7 @@
 </operation>
 <operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>query</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -158,7 +158,7 @@
 </operation>
 <operation name="relinquish" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>relinquish</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/relinquishResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/relinquishResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -183,7 +183,7 @@
 </operation>
 <operation name="redeem" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>redeem</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/redeemResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/redeemResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -208,7 +208,7 @@
 </operation>
 <operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>failedRPC</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/failedRPCResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/failedRPCResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -233,7 +233,7 @@
 </operation>
 <operation name="claim" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>claim</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/claimResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/claimResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -258,7 +258,7 @@
 </operation>
 <operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>queryResult</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResultResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/queryResultResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -283,7 +283,7 @@
 </operation>
 <operation name="extendTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>extendTicket</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendTicketResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/extendTicketResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -308,7 +308,7 @@
 </operation>
 <operation name="close" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>close</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/closeResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/AuthorityServicePortType/closeResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>

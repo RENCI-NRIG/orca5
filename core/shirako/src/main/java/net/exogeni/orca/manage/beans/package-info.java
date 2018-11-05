@@ -5,5 +5,5 @@
 // Generated on: 2015.04.06 at 05:09:56 PM EDT 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.nicl.duke.edu/orca/manage/beans", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.nicl.duke.edu/net/exogeni/orca/manage/beans", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package net.exogeni.orca.manage.beans;

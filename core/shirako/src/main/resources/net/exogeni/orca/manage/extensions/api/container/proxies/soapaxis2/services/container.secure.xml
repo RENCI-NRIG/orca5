@@ -15,7 +15,7 @@
       <actionMapping>getManagerObject</actionMapping>
 
       <outputActionMapping>
-      http://www.nicl.duke.edu/orca/manage/extensions/api/services/container/ContainerServicePortType/getManagerObjectResponse</outputActionMapping>
+      http://www.nicl.duke.edu/net/exogeni/orca/manage/extensions/api/services/container/ContainerServicePortType/getManagerObjectResponse</outputActionMapping>
     
 <parameter name="InflowSecurity">
    <action>
@@ -44,7 +44,7 @@
       <actionMapping>getPortalPlugin</actionMapping>
 
       <outputActionMapping>
-      http://www.nicl.duke.edu/orca/manage/extensions/api/services/container/ContainerServicePortType/getPortalPluginResponse</outputActionMapping>
+      http://www.nicl.duke.edu/net/exogeni/orca/manage/extensions/api/services/container/ContainerServicePortType/getPortalPluginResponse</outputActionMapping>
     
 <parameter name="InflowSecurity">
    <action>
@@ -73,7 +73,7 @@
       <actionMapping>logout</actionMapping>
 
       <outputActionMapping>
-      http://www.nicl.duke.edu/orca/manage/extensions/api/services/container/ContainerServicePortType/logoutResponse</outputActionMapping>
+      http://www.nicl.duke.edu/net/exogeni/orca/manage/extensions/api/services/container/ContainerServicePortType/logoutResponse</outputActionMapping>
     
 <parameter name="InflowSecurity">
    <action>

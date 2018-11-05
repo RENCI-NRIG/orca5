@@ -13,7 +13,7 @@
                  uninstallDriver 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/uninstallDriverResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/uninstallDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -53,7 +53,7 @@
                  executeScript 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/executeScriptResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/executeScriptResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -93,7 +93,7 @@
                  testFunc 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/testFuncResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/testFuncResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -133,7 +133,7 @@
                  executeObjectDriver 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/executeObjectDriverResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/executeObjectDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -173,7 +173,7 @@
                  unregisterKey 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/unregisterKeyResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/unregisterKeyResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -213,7 +213,7 @@
                  executeDriver 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/executeDriverResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/executeDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -253,7 +253,7 @@
                  upgradeDriver 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/upgradeDriverResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/upgradeDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -293,7 +293,7 @@
                  registerAuthorityKey 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/registerFirstKeyResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/registerFirstKeyResponse 
             </outputActionMapping> 
         </operation> 
         <operation name="getServiceKey" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
@@ -301,7 +301,7 @@
                  getServiceKey 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/getServiceKeyResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/getServiceKeyResponse 
             </outputActionMapping> 
         </operation> 
         <operation name="registerKey" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
@@ -309,7 +309,7 @@
                  registerKey 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/registerKeyResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/registerKeyResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 
@@ -349,7 +349,7 @@
                  installDriver 
             </actionMapping> 
             <outputActionMapping>
-                 http://orca/nodeagent/NodeAgentPortType/installDriverResponse 
+                 http://net/exogeni/orca/nodeagent/NodeAgentPortType/installDriverResponse 
             </outputActionMapping> 
             <parameter name="InflowSecurity"> 
                 <action> 

@@ -5,5 +5,5 @@
 // Generated on: 2015.04.06 at 05:12:19 PM EDT 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.nicl.duke.edu/orca/manage/services/actor", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.nicl.duke.edu/net/exogeni/orca/manage/services/actor", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package net.exogeni.orca.manage.proxies.soap.beans.actor;

@@ -1,14 +1,14 @@
 <definitions
     name="NodeAgentService"
-    targetNamespace="http://orca/nodeagent"
-    xmlns:tns="http://orca/nodeagent"
+    targetNamespace="http://net/exogeni/orca/nodeagent"
+    xmlns:tns="http://net/exogeni/orca/nodeagent"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:types="http://orca/nodeagent/documents">
+    xmlns:types="http://net/exogeni/orca/nodeagent/documents">
 
-  <import namespace="http://orca/nodeagent/documents" location="types.xsd" />    
+  <import namespace="http://net/exogeni/orca/nodeagent/documents" location="types.xsd" />    
 
   <!-- Executing a script -->
   <message name="executeScriptRequest">

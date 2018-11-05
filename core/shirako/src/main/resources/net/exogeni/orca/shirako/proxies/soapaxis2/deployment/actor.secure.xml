@@ -8,7 +8,7 @@
 <parameter locked="false" name="ServiceClass">net.exogeni.orca.shirako.proxies.soapaxis2.services.ActorServiceSkeleton</parameter>
 <operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>updateLease</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateLeaseResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateLeaseResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -33,7 +33,7 @@
 </operation>
 <operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>updateTicket</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateTicketResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ActorServicePortType/updateTicketResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -58,7 +58,7 @@
 </operation>
 <operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>query</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -83,7 +83,7 @@
 </operation>
 <operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>failedRPC</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/failedRPCResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ActorServicePortType/failedRPCResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>
@@ -108,7 +108,7 @@
 </operation>
 <operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>queryResult</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResultResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ActorServicePortType/queryResultResponse</outputActionMapping>
 
 <parameter name="InflowSecurity">
    <action>

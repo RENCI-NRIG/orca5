@@ -61,7 +61,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 @Endpoint
 public class SoapContainerService extends SoapService {
-	public static final String CONTAINER_NS = "http://www.nicl.duke.edu/orca/manage/services/container";
+	public static final String CONTAINER_NS = "http://www.nicl.duke.edu/net/exogeni/orca/manage/services/container";
 
 	protected final ContainerManagementObject mo;
 

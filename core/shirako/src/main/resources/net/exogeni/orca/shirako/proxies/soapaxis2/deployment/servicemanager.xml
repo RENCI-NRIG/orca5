@@ -8,23 +8,23 @@
 <parameter locked="false" name="ServiceClass">net.exogeni.orca.shirako.proxies.soapaxis2.services.ServiceManagerServiceSkeleton</parameter>
 <operation name="updateLease" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>updateLease</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateLeaseResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateLeaseResponse</outputActionMapping>
 </operation>
 <operation name="updateTicket" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>updateTicket</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateTicketResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/updateTicketResponse</outputActionMapping>
 </operation>
 <operation name="query" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>query</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResponse</outputActionMapping>
 </operation>
 <operation name="failedRPC" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>failedRPC</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/failedRPCResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/failedRPCResponse</outputActionMapping>
 </operation>
 <operation name="queryResult" mep="http://www.w3.org/2004/08/wsdl/in-out">
 <actionMapping>queryResult</actionMapping>
-<outputActionMapping>http://orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResultResponse</outputActionMapping>
+<outputActionMapping>http://net/exogeni/orca/shirako/proxies/soapaxis2/services/ServiceManagerServicePortType/queryResultResponse</outputActionMapping>
 </operation>
 </service>
 

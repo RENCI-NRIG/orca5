@@ -5,5 +5,5 @@
 // Generated on: 2011.08.17 at 10:10:57 PM EDT 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://orca/drivers", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://net/exogeni/orca/drivers", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package net.exogeni.orca.drivers.beans;

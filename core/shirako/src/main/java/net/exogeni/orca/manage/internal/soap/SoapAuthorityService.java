@@ -31,7 +31,7 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 public class SoapAuthorityService extends SoapService {
-	public static final String AUTHORITY_NS = "http://www.nicl.duke.edu/orca/manage/services/authority";
+	public static final String AUTHORITY_NS = "http://www.nicl.duke.edu/net/exogeni/orca/manage/services/authority";
 
 	public SoapAuthorityService(){
 	}

@@ -1,7 +1,7 @@
 <xsd:schema 
         xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-        targetNamespace="http://orca/nodeagent/documents"
-        xmlns="http://orca/nodeagent/documents"
+        targetNamespace="http://net/exogeni/orca/nodeagent/documents"
+        xmlns="http://net/exogeni/orca/nodeagent/documents"
         elementFormDefault="unqualified" attributeFormDefault="unqualified"
         >
       

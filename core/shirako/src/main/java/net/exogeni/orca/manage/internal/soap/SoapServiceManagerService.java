@@ -28,7 +28,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 
 public class SoapServiceManagerService extends SoapService {
-	public static final String SERVICE_MANAGER_NS = "http://www.nicl.duke.edu/orca/manage/services/servicemanager";
+	public static final String SERVICE_MANAGER_NS = "http://www.nicl.duke.edu/net/exogeni/orca/manage/services/servicemanager";
 
 	public SoapServiceManagerService(){
 	}

@@ -1,13 +1,13 @@
-<definitions targetNamespace="http://orca/shirako/proxies/soapaxis2/services"
-             xmlns:tns="http://orca/shirako/proxies/soapaxis2/services"
+<definitions targetNamespace="http://net/exogeni/orca/shirako/proxies/soapaxis2/services"
+             xmlns:tns="http://net/exogeni/orca/shirako/proxies/soapaxis2/services"
              xmlns="http://schemas.xmlsoap.org/wsdl/"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:types="http://orca/shirako/proxies/soapaxis2/beans">
+             xmlns:types="http://net/exogeni/orca/shirako/proxies/soapaxis2/beans">
 
 	<!-- Import the type definitions -->
-	<import namespace="http://orca/shirako/proxies/soapaxis2/beans"
+	<import namespace="http://net/exogeni/orca/shirako/proxies/soapaxis2/beans"
 	        location="types.xsd" />
 	<!-- Define the messages -->
 

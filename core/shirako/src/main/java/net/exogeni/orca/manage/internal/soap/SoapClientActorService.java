@@ -44,7 +44,7 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 public class SoapClientActorService extends SoapService {
-	public static final String CLIENT_ACTOR_NS = "http://www.nicl.duke.edu/orca/manage/services/clientactor";
+	public static final String CLIENT_ACTOR_NS = "http://www.nicl.duke.edu/net/exogeni/orca/manage/services/clientactor";
 
 	public SoapClientActorService() {
 	}
