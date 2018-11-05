@@ -61,7 +61,7 @@ Container Properties File
   URL should look something like this: http://[ip or
   hostname]:port/webapp-prefix. For example, if Orca would be running on a host
   foor.bar.com or port 8080 under the default webapp context (orca), the url would
-  be: http://foor.bar.com:8080/orca.
+  be: http://foor.bar.com:8080/net/exogeni/orca.
 
   <<Note:>> If this property is not specified interactor SOAP-based
   communication will be disabled.
@@ -87,7 +87,7 @@ container.guid=114824fa-b3ad-11de-8875-000c29b1c193
 # Please replace localhost with the IP or DNS name of your machine.
 # The port number depends on the settings of your web server. The
 # default Orca installation uses: 8080.
-protocols.soapaxis2.url=http://localhost:8080/orca 
+protocols.soapaxis2.url=http://localhost:8080/net/exogeni/orca 
 +---
  
 * {Database settings}

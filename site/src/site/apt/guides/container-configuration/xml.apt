@@ -326,11 +326,11 @@ Actors XML File
  the protocol attribute must be set to <soapaxis2>. The URL for an actor is
  contructed by combining the url of the container, a prefix, and the name of the
  actor. For example, if base URL of an Orca container is
- http://www.example.com:8080/orca, the URL for an actor with the name <broker0>
+ http://www.example.com:8080/net/exogeni/orca, the URL for an actor with the name <broker0>
  would be: 
 
 +---
-http://www.example.com:8080/orca/services/broker0
+http://www.example.com:8080/net/exogeni/orca/services/broker0
 +---
  
  The base URL for an Orca container is defined in container.properties. Please
@@ -371,7 +371,7 @@ hWd29o+kB8O+J808PbFwT4J+OiECMW4tx5EOYlmHhL8LjzsXXWpx3skHLSaOxDTxfK4=
 
 +---
 <to name="broker" type="agent" guid="ba45089a-328c-1235-a3d2-b7fac0b4fbe1">
-  <location protocol="soapaxis2" url="http://host2.example.com:8080/orca/services/broker" />
+  <location protocol="soapaxis2" url="http://host2.example.com:8080/net/exogeni/orca/services/broker" />
 <certificate>
 MIICaDCCAdECBEocghEwDQYJKoZIhvcNAQEEBQAwezELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAk5D
 MQ8wDQYDVQQHEwZEdXJoYW0xDTALBgNVBAoTBG9yY2ExEDAOBgNVBAsTB3NoaXJha28xLTArBgNV

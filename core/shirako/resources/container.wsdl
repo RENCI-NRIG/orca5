@@ -1,14 +1,14 @@
-<definitions targetNamespace="http://www.nicl.duke.edu/orca/manage/extensions/api/services/container"
+<definitions targetNamespace="http://www.nicl.duke.edu/net/exogeni/orca/manage/extensions/api/services/container"
              xmlns="http://schemas.xmlsoap.org/wsdl/"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-             xmlns:tns="http://www.nicl.duke.edu/orca/manage/extensions/api/services/container"
+             xmlns:tns="http://www.nicl.duke.edu/net/exogeni/orca/manage/extensions/api/services/container"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:types="http://www.nicl.duke.edu/orca/manage/extensions/api/beans">
+             xmlns:types="http://www.nicl.duke.edu/net/exogeni/orca/manage/extensions/api/beans">
 
 	<!-- Import the type definitions -->
 
-	<import namespace="http://www.nicl.duke.edu/orca/manage/extensions/api/beans"
+	<import namespace="http://www.nicl.duke.edu/net/exogeni/orca/manage/extensions/api/beans"
 	        location="types.xsd" />
 
 	<!-- getManagerObject -->
