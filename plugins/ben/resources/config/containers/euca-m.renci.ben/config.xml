@@ -68,7 +68,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="renci.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
+                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
             </controls> 
         </actor> 
     </actors> 

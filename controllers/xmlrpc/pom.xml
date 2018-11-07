@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.controllers
+         orca.controllers 
     </groupId> 
     <artifactId>
          xmlrpc 
@@ -18,7 +18,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              controllers 
@@ -81,7 +81,7 @@
                             <programs> 
                                 <program> 
                                     <mainClass>
-                                        net.exogeni.orca.controllers.xmlrpc.XmlRpcController
+                                         orca.controllers.xmlrpc.XmlRpcController 
                                     </mainClass> 
                                     <name>
                                          xmlrpc 
@@ -113,7 +113,7 @@
                                         </extraArguments> 
                                     </jvmSettings> 
                                     <mainClass>
-                                        net.exogeni.orca.controllers.xmlrpc.XmlRpcController
+                                         orca.controllers.xmlrpc.XmlRpcController 
                                     </mainClass> 
                                     <generatorConfigurations> 
                                         <generatorConfiguration> 
@@ -235,11 +235,11 @@
                                     </fileset> 
                                 </copy> 
                                 <copy file="resources/package.xml" todir="target/package" /> 
-                                <tar tarfile="target/net.exogeni.orca.controllers.xmlrpc.tar" basedir="target/package" /> 
-                                <gzip zipfile="target/net.exogeni.orca.controllers.xmlrpc.tar.gz" src="target/net.exogeni.orca.controllers.xmlrpc.tar" /> 
-                                <delete file="target/net.exogeni.orca.controllers.xmlrpc.tar" /> 
-                                <copy file="target/net.exogeni.orca.controllers.xmlrpc.tar.gz" todir="../../tools/cmdline/startup" /> 
-                                <attachArtifact file="target/net.exogeni.orca.controllers.xmlrpc.tar.gz" classifier="package" type="tar.gz" /> 
+                                <tar tarfile="target/orca.controllers.xmlrpc.tar" basedir="target/package" /> 
+                                <gzip zipfile="target/orca.controllers.xmlrpc.tar.gz" src="target/orca.controllers.xmlrpc.tar" /> 
+                                <delete file="target/orca.controllers.xmlrpc.tar" /> 
+                                <copy file="target/orca.controllers.xmlrpc.tar.gz" todir="../../tools/cmdline/startup" /> 
+                                <attachArtifact file="target/orca.controllers.xmlrpc.tar.gz" classifier="package" type="tar.gz" /> 
                             </tasks> 
                         </configuration> 
                         <goals> 
@@ -291,7 +291,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -305,7 +305,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  embed 
@@ -316,7 +316,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  embed 

@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.handlers
+         orca.handlers 
     </groupId> 
     <artifactId>
          network 
@@ -14,7 +14,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              handlers 
@@ -27,7 +27,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -139,7 +139,7 @@
                         </phase> 
                         <configuration> 
                             <tasks> 
-                                <property name="name.prefix" value="net.exogeni.orca.handlers.network" /> 
+                                <property name="name.prefix" value="orca.handlers.network" /> 
                                 <delete dir="target/package" /> 
                                 <mkdir dir="target/package" /> 
                                 <mkdir dir="target/package/lib" /> 
@@ -160,7 +160,7 @@
                                 <copy file="${maven.dependency.ch.ethz.ganymed.ganymed-ssh2.jar.path}" todir="target/package/lib" flatten="true" /> 
                                 <mkdir dir="target/package/handlers" /> 
                                 <copy todir="target/package/handlers"> 
-                                    <fileset dir="src/main/resources/net/exogeni/orca/handlers" /> 
+                                    <fileset dir="src/main/resources/orca/handlers" /> 
                                 </copy> 
                                 <copy file="resources/scripts/install.sh" todir="target/package" /> 
                                 <mkdir dir="target/package/web" /> 

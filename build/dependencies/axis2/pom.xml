@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.dependencies
+         orca.dependencies 
     </groupId> 
     <version>
          1.0 
@@ -20,7 +20,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              dependencies 
@@ -54,7 +54,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
                  axiom 
@@ -292,7 +292,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
                  jaxb 

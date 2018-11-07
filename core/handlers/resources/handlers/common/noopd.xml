@@ -11,7 +11,7 @@
 	&drivertasks;
 	
     <taskdef name="setargs"
-             classname="net.exogeni.orca.shirako.plugins.config.SetArgumentsTask" />
+             classname="orca.shirako.plugins.config.SetArgumentsTask" />
     <target name="merge.properties">
         <setargs outputProperty="unit.all" />
     </target>

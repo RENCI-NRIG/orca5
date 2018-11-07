@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca
+         orca 
     </groupId> 
     <artifactId>
          embed 
@@ -20,7 +20,7 @@
     </url> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              orca 
@@ -59,7 +59,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  policy 
@@ -70,7 +70,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  ndl 

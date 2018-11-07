@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.tools
+         orca.tools 
     </groupId> 
     <artifactId>
          config 
@@ -15,7 +15,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              tools 
@@ -28,7 +28,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
                  ant 
@@ -42,7 +42,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  tools-axis2 

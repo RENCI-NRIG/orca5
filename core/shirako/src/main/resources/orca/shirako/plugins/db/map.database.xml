@@ -1,0 +1,46 @@
+<mapping xmlns="http://issg.cs.duke.edu/cod/plugins/beans">
+	<ldap>
+		<entry name="slice">
+			<objectClasses>
+				<objectClass name="codCluster" />
+				<objectClass name="shirakoTop" />
+			</objectClasses>
+			<attributes>
+				<map from="ou" to="orca.slices.Slice.PropertyGuid" />
+				<map from="cn" to="orca.slices.Slice.PropertyGuid" />
+                <map from="description" to="orca.slices.Slice.PropertyDescription" />
+                <map from="shirakoSliceType" to="orca.slices.Slice.PropertyType" />
+			</attributes>
+		</entry>
+		<entry name="reservation">
+			<objectClasses>
+				<objectClass name="organizationalUnit" />
+				<objectClass name="shirakoReservation" />
+			</objectClasses>
+			<attributes>
+				<map from="ou" to="orca.slices.Reservation.PropertyID" />
+				<map from="cn" to="orca.slices.Reservation.PropertyID" />
+				<map from="shirakoReservationID" to="orca.slices.Reservation.PropertyID" />
+				<map from="shirakoTermBegin" to="orca.slices.Term.PropertyStartTime" />
+				<map from="shirakoTermEnd" to="orca.slices.Term.PropertyEndTime" />
+				<map from="shirakoTermRenew" to="orca.slices.Term.PropertyRenewTime" ignore="true" />
+			</attributes>
+		</entry>
+		<entry name="broker">
+			<objectClasses>
+				<objectClass name="shirakoProperty" />
+			</objectClasses>
+			<attributes>
+				<map from="ou" to="orca.slices.proxies.Proxy.PropertyProxyActorName" />
+			</attributes>
+		</entry>
+        <entry name="configmapping">
+            <objectClasses>
+                <objectClass name="shirakoProperty" />
+            </objectClasses>
+            <attributes>
+                <map from="ou" to="orca.slices.plugins.config.ConfigurationMapping.PropertyType" />
+            </attributes>
+        </entry>
+	</ldap>
+</mapping>

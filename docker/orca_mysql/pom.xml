@@ -11,7 +11,7 @@
     </name> 
     <parent> 
         <groupId>
-             net.exogeni.orca 
+             orca 
         </groupId> 
         <artifactId>
              docker-orca 
@@ -20,7 +20,7 @@
     </parent> 
     <!-- <dependencies>
 		<dependency>
-			<groupId>net.exogeni.orca</groupId>
+			<groupId>orca</groupId>
 			<artifactId>core</artifactId>
 			<version>${project.version}</version>
 		</dependency>

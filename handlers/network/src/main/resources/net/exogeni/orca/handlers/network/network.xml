@@ -1,3 +1,0 @@
-<antlib> 
-    <taskdef resource="orca/handlers/network/network.tasks" />
-</antlib>

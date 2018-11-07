@@ -1,0 +1,72 @@
+# Storage must be bound
+[validateBoundStorage: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Storage must be bound to a site', 'Storage must be bound to a site', ?S))
+		<- (?S rdf:type storage:ISCSI), noValue(?S, req:inDomain) ] ]
+		
+# Storage must be bound to same domain as node
+[validateBoundStorage: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Storage must be bound to same domain as the node', 'Storage must be bound to same domain as the node', ?S))
+		<- (?S rdf:type storage:ISCSI), (?S topo:hasInterface ?Y), (?S req:inDomain ?D1), 
+		(?C topo:hasInterface ?Y), (?N topo:hasInterface ?Z), (?C topo:hasInterface ?Z),
+		(?N req:inDomain ?D2), notEqual(?N, ?S), notEqual(?D1, ?D2) ] ]  
+		
+# Storage must not be attached to broadcast connection
+[validateBoundStorage: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Storage must not attach to broadcast connection', 'Storage must not attach to broadcast connection', ?S))
+	<- (?S rdf:type storage:ISCSI), (?S topo:hasInterface ?Y), (?C topo:hasInterface ?Y), (?C rdf:type topo:BroadcastConnection) ] ]
+		
+# global MP link cannot be subject of modify
+[validateModifyMP: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Modifying global multi-point vlans is not implemented', 'Modifying global multipoint vlans is not implemented', ?MP))
+		<- (?ME rdf:type modify:ModifyElement), (?ME modify:modifySubject http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan), 
+		(?ME modify:modifyElement http://geni-orca.renci.org/owl/nlr.rdf#nlr/Domain/vlan) ] ]
+
+# Stitchport interface can't have IP address
+[validateStitchPort1: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Stitchport cannot have an IP address assigned', 'Stitchport cannot have an IP address assigned', ?X))
+		<- (?X req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), 
+		(?X topo:hasInterface ?Y), (?Y ip4:localIPAddress ?Z) ] ]
+		
+# interface sanity - interface must be between
+# link-like and node-like things
+[saneInterface1: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 1', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type topo:Link), (?B rdf:type topo:Link), notEqual(?A, ?B), 
+		(?C topo:hasInterface ?X), notEqual(?C, ?A), notEqual(?C, ?B), 
+		noValue(?C, req:inDomain, http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain) ] ]
+		
+[saneInterface2: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 2', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type topo:Device), (?B rdf:type topo:Device), notEqual(?A, ?B),
+		noValue(?C, req:inDomain, http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain) ] ]
+		
+[saneInterface3: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 3', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type comp:ComputeElement), (?B rdf:type comp:ComputeElement), notEqual(?A, ?B) ] ]
+		
+[saneInterface4: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Interface Validation 4', 'Interface must be between node and link', ?X))
+		<- (?X rdf:type topo:Interface), (?A topo:hasInterface ?X), (?B topo:hasInterface ?X), 
+		(?A rdf:type comp:ComputeElement), (?B rdf:type topo:Device), notEqual(?A, ?B) ] ]
+		
+
+# can't have link by itself/must have incident interfaces
+[validateLink: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Link Validation', 'A link must have one or more interfaces', ?X))
+		<- (?X rdf:type topo:Link), noValue(?X, topo:hasInterface) ] ]
+
+# no loops
+[selfLink: (?v rb:validation on()) ->
+	[ (?Z rb:violation error('Connection Validation', 'Connection cannot loop on itself', ?Y))
+	 <- (?X rdf:type comp:ComputeElement), (?X  topo:hasInterface ?I1), (?X topo:hasInterface ?I2), 
+	 (?Y rdf:type  topo:NetworkConnection), (?Y topo:hasInterface ?I1), (?Y topo:hasInterface ?I2), notEqual(?I1, ?I2) ] ]
+	 
+# node validation - VMs must provide an image
+[validateNode: (?v rb:validation on()) -> 
+	[ (?Z rb:violation error('Node Validation', 'Node must have an image', ?X)) 
+		<- (?R rdf:type req:Reservation), (?R col:element ?X), 
+		(?X rdf:type comp:ComputeElement),  (?X dom:hasResourceType comp:VM), 
+		noValue(?X, comp:diskImage) ] ] 

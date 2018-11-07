@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.dependencies
+         orca.dependencies 
     </groupId> 
     <artifactId>
          handler-dependencies 
@@ -19,7 +19,7 @@
     </description> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              dependencies 
@@ -29,7 +29,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  handlers 
@@ -43,7 +43,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
                  ec2 
@@ -57,7 +57,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
                  xcat 
@@ -71,7 +71,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
                  nodeagent2 
@@ -85,7 +85,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
                  ibm_ds 
@@ -99,7 +99,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
                  slurm 
@@ -113,7 +113,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
                  storage_service 
@@ -127,7 +127,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers.network
+                 orca.handlers.network 
             </groupId> 
             <artifactId>
                  nsi 
@@ -141,7 +141,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers.network
+                 orca.handlers.network 
             </groupId> 
             <artifactId>
                  oscars 
@@ -155,7 +155,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers.network
+                 orca.handlers.network 
             </groupId> 
             <artifactId>
                  oess 
@@ -169,7 +169,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers.network
+                 orca.handlers.network 
             </groupId> 
             <artifactId>
                  providers 

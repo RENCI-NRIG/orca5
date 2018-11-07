@@ -11,7 +11,7 @@
     </name> 
     <parent> 
         <groupId>
-             net.exogeni.orca 
+             orca 
         </groupId> 
         <artifactId>
              docker-orca 

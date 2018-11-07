@@ -51,7 +51,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="ben.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
+                <control type="ben.vlan" class="orca.policy.core.VlanControl" /> 
             </controls> 
         </actor> 
         <actor> 

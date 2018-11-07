@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.dependencies
+         orca.dependencies 
     </groupId> 
     <artifactId>
          ant-contrib 
@@ -16,7 +16,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              dependencies 

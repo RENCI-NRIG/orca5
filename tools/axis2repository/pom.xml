@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.tools
+         orca.tools 
     </groupId> 
     <artifactId>
          axis2repository 
@@ -17,7 +17,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              tools 

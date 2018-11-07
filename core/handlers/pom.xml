@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.exogeni.orca.core</groupId>
+	<groupId>orca.core</groupId>
 	<artifactId>handlers</artifactId>
 	<packaging>pom</packaging>
 	<name>Orca Common Handlers Library</name>
 	<parent>
-		<groupId>net.exogeni.orca</groupId>
+		<groupId>orca</groupId>
 		<artifactId>core</artifactId>
 		<version>5.4.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -46,12 +46,12 @@
 
 								<copy file="resources/package.xml" todir="target/package" />
 
-								<tar tarfile="target/net.exogeni.orca.handlers.common.tar" basedir="target/package" />
-								<gzip zipfile="target/net.exogeni.orca.handlers.common.tar.gz" src="target/net.exogeni.orca.handlers.common.tar" />
-								<delete file="target/net.exogeni.orca.handlers.common.tar" />
+								<tar tarfile="target/orca.handlers.common.tar" basedir="target/package" />
+								<gzip zipfile="target/orca.handlers.common.tar.gz" src="target/orca.handlers.common.tar" />
+								<delete file="target/orca.handlers.common.tar" />
 								<delete dir="tmp" />
 								<!-- attach the tar.gz file to the artifacts set -->
-								<attachArtifact file="target/net.exogeni.orca.handlers.common.tar.gz" classifier="package" type="tar.gz" />
+								<attachArtifact file="target/orca.handlers.common.tar.gz" classifier="package" type="tar.gz" />
 							</tasks>
 						</configuration>
 						<goals>

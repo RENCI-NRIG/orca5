@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca
+         orca 
     </groupId> 
     <artifactId>
          server 
@@ -18,7 +18,7 @@
     <version>5.4.4-SNAPSHOT</version> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              orca 
@@ -31,7 +31,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  core 
@@ -45,7 +45,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  nodeagent 
@@ -59,7 +59,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  boot 
@@ -149,7 +149,7 @@
                             <programs> 
                                 <program> 
                                     <mainClass>
-                                        net.exogeni.orca.server.OrcaServer
+                                         orca.server.OrcaServer 
                                     </mainClass> 
                                     <name>
                                          orca 
@@ -181,7 +181,7 @@
                                          orcad 
                                     </id> 
                                     <mainClass>
-                                        net.exogeni.orca.server.OrcaServer
+                                         orca.server.OrcaServer 
                                     </mainClass> 
                                     <generatorConfigurations> 
                                         <generatorConfiguration> 
@@ -309,19 +309,19 @@
                                         <include name="*tar.gz" /> 
                                     </fileset> 
                                 </delete> 
-                                <resolveArtifact groupId="net.exogeni.orca.core" artifactId="handlers" classifier="package" type="tar.gz" version="${project.version}" tofile="orca/startup/package-handlers-core.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers" artifactId="ec2" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.ec2.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers" artifactId="xcat" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.xcat.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers.network" artifactId="oess" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.oess.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers.network" artifactId="oscars" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.oscars.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers.network" artifactId="nsi" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.nsi.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers.network" artifactId="providers" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.providers.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers" artifactId="network" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.plugins" artifactId="ben" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.plugins.ben.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers" artifactId="ibm_ds" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.ibm_ds.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers" artifactId="storage_service" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.storage_service.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers" artifactId="nodeagent2" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.nodeagent2.tar.gz" />
-                                <resolveArtifact groupId="net.exogeni.orca.handlers" artifactId="slurm" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.slurm.tar.gz" />
+                                <resolveArtifact groupId="orca.core" artifactId="handlers" classifier="package" type="tar.gz" version="${project.version}" tofile="orca/startup/package-handlers-core.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers" artifactId="ec2" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.ec2.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers" artifactId="xcat" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.xcat.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers.network" artifactId="oess" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.oess.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers.network" artifactId="oscars" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.oscars.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers.network" artifactId="nsi" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.nsi.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers.network" artifactId="providers" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.providers.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers" artifactId="network" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.network.tar.gz" /> 
+                                <resolveArtifact groupId="orca.plugins" artifactId="ben" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.plugins.ben.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers" artifactId="ibm_ds" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.ibm_ds.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers" artifactId="storage_service" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.storage_service.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers" artifactId="nodeagent2" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.nodeagent2.tar.gz" /> 
+                                <resolveArtifact groupId="orca.handlers" artifactId="slurm" version="${project.version}" classifier="package" type="tar.gz" tofile="orca/startup/package-orca.handlers.slurm.tar.gz" /> 
                             </tasks> 
                         </configuration> 
                         <goals> 

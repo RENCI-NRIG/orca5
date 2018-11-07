@@ -10,7 +10,7 @@
     </packaging> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              tools 

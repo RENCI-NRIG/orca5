@@ -1,7 +1,7 @@
  How to update management beans:
 
-1.Edit the net.exogeni.orca.manage.beans.xsd
+1.Edit the orca.manage.beans.xsd
 
-2. Run xjc net.exogeni.orca.manage.beans.xsd
+2. Run xjc orca.manage.beans.xsd
 
-3. Copy updated files from ./net/exogeni/orca/manage/beans/*.java to ../../src/main/java/net/exogeni/orca/manage/beans/
+3. Copy updated files from ./orca/manage/beans/*.java to ../../src/main/java/orca/manage/beans/

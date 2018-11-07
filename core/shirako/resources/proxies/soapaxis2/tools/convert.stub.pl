@@ -16,10 +16,10 @@ open FILE or die "couldn't open $FILE\n";
 # The current heuristic is that these methods
 $what = "\\)";
 #                    throws java.rmi.RemoteException
-$replace = ", net.exogeni.orca.security.AuthToken authToken) throws java.rmi.RemoteException";
+$replace = ", orca.security.AuthToken authToken) throws java.rmi.RemoteException";
 
 #$what1 = "\\_messageContext\\.setEnvelope\\(env\\);";
-#$replace1 = "_messageContext.setEnvelope(env);net.exogeni.orca.shirako.proxies.soap.util.ContextTools.setMyAuthToken(_call, authToken);";
+#$replace1 = "_messageContext.setEnvelope(env);orca.shirako.proxies.soap.util.ContextTools.setMyAuthToken(_call, authToken);";
 while(<FILE>) {
 #    printf OUT $_;
     $_ =~ s/$what/$replace/;

@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY geni "http://geni-orca.renci.org/owl/geni.owl#" >
+    <!ENTITY modify "http://geni-orca.renci.org/owl/modify.owl#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY request "http://geni-orca.renci.org/owl/request.owl#" >
+    <!ENTITY topology "http://geni-orca.renci.org/owl/topology.owl#" >
+    <!ENTITY collections "http://geni-orca.renci.org/owl/collections.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://geni-orca.renci.org/owl/modify.owl#"
+     xml:base="http://geni-orca.renci.org/owl/modify.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:request="http://geni-orca.renci.org/owl/request.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:modify="http://geni-orca.renci.org/owl/modify.owl#"
+     xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
+     xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
+     xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#">
+    <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/modify.owl">
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/request.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/collections.owl#element -->
+
+    <owl:ObjectProperty rdf:about="&collections;element"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#addElement -->
+
+    <owl:ObjectProperty rdf:about="&modify;addElement">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyObjectAction"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#modifyElement -->
+
+    <owl:ObjectProperty rdf:about="&modify;modifyElement">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyObjectAction"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#modifyObjectAction -->
+
+    <owl:ObjectProperty rdf:about="&modify;modifyObjectAction">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="&modify;ModifyElement"/>
+        <rdfs:range rdf:resource="&topology;NetworkElement"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#modifySubject -->
+
+    <owl:ObjectProperty rdf:about="&modify;modifySubject">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="&modify;ModifyElement"/>
+        <rdfs:range rdf:resource="&topology;NetworkElement"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#removeElement -->
+
+    <owl:ObjectProperty rdf:about="&modify;removeElement">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyObjectAction"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#decreaseBy -->
+
+    <owl:DatatypeProperty rdf:about="&modify;decreaseBy">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyDataAction"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#increaseBy -->
+
+    <owl:DatatypeProperty rdf:about="&modify;increaseBy">
+        <rdfs:subPropertyOf rdf:resource="&modify;modifyDataAction"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#isModify -->
+
+    <owl:DatatypeProperty rdf:about="&modify;isModify"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#modifyDataAction -->
+
+    <owl:DatatypeProperty rdf:about="&modify;modifyDataAction">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="&modify;ModifyElement"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/request.owl#startingTime -->
+
+    <owl:DatatypeProperty rdf:about="&request;startingTime"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#hasName -->
+
+    <owl:DatatypeProperty rdf:about="&topology;hasName"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/collections.owl#Set -->
+
+    <owl:Class rdf:about="&collections;Set"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#ModifyElement -->
+
+    <owl:Class rdf:about="&modify;ModifyElement">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&modify;modifySubject"/>
+                <owl:someValuesFrom rdf:resource="&topology;NetworkElement"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/modify.owl#ModifyReservation -->
+
+    <owl:Class rdf:about="&modify;ModifyReservation">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&collections;element"/>
+                <owl:someValuesFrom rdf:resource="&modify;ModifyElement"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&request;startingTime"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;dateTime"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&topology;hasName"/>
+                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="&rdf;XMLLiteral"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="&collections;Set"/>
+    </owl:Class>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/topology.owl#NetworkElement -->
+
+    <owl:Class rdf:about="&topology;NetworkElement"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

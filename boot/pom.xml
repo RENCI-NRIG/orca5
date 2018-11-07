@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca
+         orca 
     </groupId> 
     <artifactId>
          boot 
@@ -18,7 +18,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              orca 
@@ -31,7 +31,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -42,7 +42,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  policy 
@@ -53,7 +53,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  embed 
@@ -64,7 +64,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
                  xmlrpc-client 
@@ -72,7 +72,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
                  xmlrpc-server 
@@ -80,7 +80,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 org.apache.xmlrpc
+                 org.apache.xmlrpc 
             </groupId> 
             <artifactId>
                  xmlrpc-common 

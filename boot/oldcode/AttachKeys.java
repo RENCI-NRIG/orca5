@@ -8,6 +8,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.Marshaller;
 
+import orca.boot.beans.*;
+
 import java.security.*;
 
 /**

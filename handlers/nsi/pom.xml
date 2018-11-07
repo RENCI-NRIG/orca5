@@ -7,12 +7,12 @@
              handlers 
         </artifactId> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <version>5.4.4-SNAPSHOT</version> 
     </parent> 
     <groupId>
-        net.exogeni.orca.handlers.network
+         orca.handlers.network 
     </groupId> 
     <artifactId>
          nsi 
@@ -27,7 +27,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -70,7 +70,7 @@
                                 <property name="path" refid="maven.plugin.classpath" /> 
                                 <echo message="path is: ${path}" /> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
-                                <property name="name.prefix" value="net.exogeni.orca.handlers.nsi" /> 
+                                <property name="name.prefix" value="orca.handlers.nsi" /> 
                                 <property name="run.classpath" refid="maven.runtime.classpath" /> 
                                 <echo message="${run.classpath}" /> 
                                 <delete dir="target/package" /> 

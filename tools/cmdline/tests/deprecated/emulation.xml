@@ -10,18 +10,18 @@
             </description> 
             <instance> 
                 <className>
-                     net.exogeni.orca.shirako.core.Authority
+                     orca.shirako.core.Authority 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                     net.exogeni.orca.policy.core.AuthorityCalendarPolicy
+                     orca.policy.core.AuthorityCalendarPolicy 
                 </className> 
                 <parameters> 
-                    <parameter base="net.exogeni.orca.policy.core.IResourceControl" name="ResourceControl" type="instance">
+                    <parameter base="orca.policy.core.IResourceControl" name="ResourceControl" type="instance"> 
                         <instance> 
                             <className>
-                                 net.exogeni.orca.cod.control.IdControlChange
+                                 orca.cod.control.IdControlChange 
                             </className> 
                             <properties> 
                                 <property name="resource.type" value="1" /> 
@@ -32,7 +32,7 @@
             </mapper> 
             <plugin> 
                 <className>
-                     net.exogeni.orca.cod.plugins.Site
+                     orca.cod.plugins.Site 
                 </className> 
                 <properties> 
                     <!-- Storage servers to be transferred to this site --> 
@@ -59,16 +59,16 @@
                     <property name="resource.pool.handler.properties.0" value="server.name=demo-zfs-server,server.guid=583c10bfdbd326ba:-6692ff28:1168c1874d3:-8000,server.ip=10.10.10.2,server.base=sata/images/shirako/,server.control=10.10.0.1" /> 
                 </properties> 
                 <parameters> 
-                    <parameter base="net.exogeni.orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance">
+                    <parameter base="orca.cod.plugins.NetworkConfigurationManager" name="NetworkManager" type="instance"> 
                         <instance> 
                             <className>
-                                 net.exogeni.orca.cod.plugins.NetworkConfigurationManager
+                                 orca.cod.plugins.NetworkConfigurationManager 
                             </className> 
                             <parameters> 
-                                <parameter base="net.exogeni.orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance">
+                                <parameter base="orca.cod.plugins.NetworkConfiguration" name="NetworkConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                             net.exogeni.orca.cod.plugins.NetworkConfiguration
+                                             orca.cod.plugins.NetworkConfiguration 
                                         </className> 
                                         <properties> 
                                             <!--
@@ -84,25 +84,25 @@
                                         </properties> 
                                     </instance> 
                                 </parameter> 
-                                <parameter base="net.exogeni.orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance">
+                                <parameter base="orca.cod.plugins.DnsConfiguration" name="DnsConfiguration" type="instance"> 
                                     <instance> 
                                         <className>
-                                             net.exogeni.orca.cod.plugins.DnsConfiguration
+                                             orca.cod.plugins.DnsConfiguration 
                                         </className> 
                                         <properties> 
                                             <property name="dns.prefix" value="default" /> 
-                                            <property name="dns.zone" value="demo.net.exogeni.orca.org" />
-                                            <property name="dns.mx" value="10 demo.net.exogeni.orca.org" />
+                                            <property name="dns.zone" value="demo.orca.org" /> 
+                                            <property name="dns.mx" value="10 demo.orca.org" /> 
                                         </properties> 
                                     </instance> 
                                 </parameter> 
                             </parameters> 
                         </instance> 
                     </parameter> 
-                    <parameter base="net.exogeni.orca.shirako.api.IDatabase" name="Database" type="instance">
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                 net.exogeni.orca.cod.plugins.db.MySqlAuthorityCodDatabase
+                                 orca.cod.plugins.db.MySqlAuthorityCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -112,10 +112,10 @@
                             </properties> 
                         </instance> 
                     </parameter> 
-                    <parameter base="net.exogeni.orca.shirako.plugins.config.Config" name="Config" type="instance">
+                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                 net.exogeni.orca.cod.plugins.config.CodAntConfig
+                                 orca.cod.plugins.config.CodAntConfig 
                             </className> 
                         </instance> 
                     </parameter> 
@@ -131,23 +131,23 @@
             </description> 
             <instance> 
                 <className>
-                     net.exogeni.orca.shirako.core.Broker
+                     orca.shirako.core.Broker 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                     net.exogeni.orca.policy.core.BrokerWorstFitPolicy
+                     orca.policy.core.BrokerWorstFitPolicy 
                 </className> 
             </mapper> 
             <plugin> 
                 <className>
-                     net.exogeni.orca.shirako.plugins.ShirakoPlugin
+                     orca.shirako.plugins.ShirakoPlugin 
                 </className> 
                 <parameters> 
-                    <parameter base="net.exogeni.orca.shirako.api.IDatabase" name="Database" type="instance">
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                 net.exogeni.orca.shirako.plugins.db.MySqlClientDatabase
+                                 orca.shirako.plugins.db.MySqlClientDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -169,23 +169,23 @@
             </description> 
             <instance> 
                 <className>
-                     net.exogeni.orca.shirako.core.ServiceManager
+                     orca.shirako.core.ServiceManager 
                 </className> 
             </instance> 
             <mapper> 
                 <className>
-                     net.exogeni.orca.policy.core.ServiceManagerSimplePolicy
+                     orca.policy.core.ServiceManagerSimplePolicy 
                 </className> 
             </mapper> 
             <plugin> 
                 <className>
-                     net.exogeni.orca.cod.plugins.ServiceManagerCodPlugin
+                     orca.cod.plugins.ServiceManagerCodPlugin 
                 </className> 
                 <parameters> 
-                    <parameter base="net.exogeni.orca.shirako.api.IDatabase" name="Database" type="instance">
+                    <parameter base="orca.shirako.api.IDatabase" name="Database" type="instance"> 
                         <instance> 
                             <className>
-                                 net.exogeni.orca.cod.plugins.db.MySqlCodDatabase
+                                 orca.cod.plugins.db.MySqlCodDatabase 
                             </className> 
                             <properties> 
                                 <property name="db.mysql.server" value="localhost" /> 
@@ -195,10 +195,10 @@
                             </properties> 
                         </instance> 
                     </parameter> 
-                    <parameter base="net.exogeni.orca.shirako.plugins.config.Config" name="Config" type="instance">
+                    <parameter base="orca.shirako.plugins.config.Config" name="Config" type="instance"> 
                         <instance> 
                             <className>
-                                 net.exogeni.orca.shirako.plugins.config.AntConfig
+                                 orca.shirako.plugins.config.AntConfig 
                             </className> 
                             <properties> 
                                 <property name="config.count" value="1" /> 

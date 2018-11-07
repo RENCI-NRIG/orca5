@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.handlers.network
+         orca.handlers.network 
     </groupId> 
     <artifactId>
          providers 
@@ -14,7 +14,7 @@
     <version>5.4.4-SNAPSHOT</version> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              handlers 
@@ -27,7 +27,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.handlers
+                 orca.handlers 
             </groupId> 
             <artifactId>
                  network 
@@ -38,7 +38,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -67,7 +67,7 @@
                         </phase> 
                         <configuration> 
                             <tasks> 
-                                <property name="name.prefix" value="net.exogeni.orca.handlers.network.providers" /> 
+                                <property name="name.prefix" value="orca.handlers.network.providers" /> 
                                 <delete dir="target/package" /> 
                                 <mkdir dir="target/package" /> 
                                 <mkdir dir="target/package/handlers" /> 

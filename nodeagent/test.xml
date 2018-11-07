@@ -25,7 +25,7 @@
         </fileset> 
     </path> 
     <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
-    <taskdef resource="net/exogeni/orca/nodeagent/client/nodeagent.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
+    <taskdef resource="orca/nodeagent/client/nodeagent.xml" classpathref="run.classpath" loaderref="run.classpath.loader" /> 
     <target name="add.authority.key"> 
         <!-- this tag is defined in nodeagent.tasks and is mapped to orca.nodeagent.client.RegisterAuthorityKeyTask --> 
         <nodeagent.register.authority location="${service.location}" keyStore="${client.keystore.location}" storePassword="${client.storepassword}" authorityIP="${authority.ip}" key="${client.key}" keyPassword="${client.keypassword}" exitCodeProperty="exitCode" /> 
