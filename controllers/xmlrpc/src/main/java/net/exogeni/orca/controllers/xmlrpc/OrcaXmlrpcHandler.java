@@ -673,7 +673,6 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                             sm.removeReservation(r_id);
                         }
                     }
-                    workflow.updateLabels(ih.getModifies());
                     ih.modifyComplete(); // clear the modify data.
                 }
 

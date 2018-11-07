@@ -364,44 +364,7 @@ public class RequestWorkflow {
         }
     }
 
-    public static String getDomainName(String domain_url) {
-        if (domain_url == null)
-            return null;
-        int index = domain_url.indexOf("#");
-        if (index >= 0) {
-            int index2 = domain_url.indexOf("/Domain", index);
-            if (index2 >= 0) {
-                return domain_url.substring(index + 1, index2);
-            } else {
-                return domain_url.substring(index + 1, domain_url.length());
-            }
-        }
-        return null;
-    }
-
-    public void updateLabels(ModifyReservations modifies) {
-        LinkedList<OntResource> reservations = modifies.getRemovedElements();
-        if(reservations != null){
-            Iterator<OntResource> ont_it = reservations.iterator();
-            String domain = null, domain_ont_url = null, domain_ont_name, type, rDomain, rType;
-            OntResource domain_ont = null;
-            while (ont_it.hasNext()) {
-                domain_ont = ont_it.next();
-                if (domain_ont.hasProperty(NdlCommons.hasURLProperty))
-                    domain_ont_url = domain_ont.getProperty(NdlCommons.hasURLProperty).getString();
-                else
-                    domain_ont_url = domain_ont.getURI();
-                domain = getDomainName(domain_ont_url); // e.g., ben/vlan
-                if(controllerAssignedLabel.containsKey(domain)) {
-                    controllerAssignedLabel.remove(domain);
-                }
-                if(globalControllerAssignedLabel.containsKey(domain)) {
-                    globalControllerAssignedLabel.remove(domain);
-                }
-            }
-        }
-    }
-    public void clearSharedIPSet() {
+     public void clearSharedIPSet() {
         if (controller_shared_IP_set == null || shared_IP_set == null)
             return;
         for (Entry<String, LinkedList<String>> entry : controller_shared_IP_set.entrySet()) {

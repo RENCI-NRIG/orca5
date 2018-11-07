@@ -9,14 +9,7 @@ import org.springframework.ws.server.endpoint.mapping.PayloadRootAnnotationMetho
 public class DynamicPayloadRootAnnotationMethodEndpointMapping extends PayloadRootAnnotationMethodEndpointMapping {
 	@Override 
 	protected synchronized void registerEndpoint(QName key, MethodEndpoint endpoint) throws BeansException {
-		try {
 			super.registerEndpoint(key, endpoint);
-		}
-		catch (Exception e){
-			e.printStackTrace();
-			throw e;
-		}
-
 	}
 	
 	@Override

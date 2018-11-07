@@ -2083,7 +2083,6 @@ public class ReservationConverter implements LayerConstant {
     }
 
     public void removeManifest(OntResource e_ont, OntModel manifestOntModel) {
-        logger.debug("ReservationConverter::removeManifest(): KOMAL removing r=" + e_ont);
         LinkedList<OntResource> removed_rs = new LinkedList<OntResource>();
         ResIterator r_it = manifestOntModel.listResourcesWithProperty(NdlCommons.collectionElementProperty);
         Resource p_rs = null, o_rs = null;
@@ -2109,11 +2108,9 @@ public class ReservationConverter implements LayerConstant {
         for (OntResource pp_ont : removed_rs) {
             if (pp_ont.hasProperty(NdlCommons.collectionElementProperty, e_ont)) {
                 pp_ont.removeProperty(NdlCommons.collectionElementProperty, e_ont);
-                logger.info("ReservationConverter::removeManifest():remove element from \nr=" + pp_ont.getURI() + ";\ne=" + e_ont.getURI());
             }
             if (pp_ont.hasProperty(NdlCommons.collectionItemProperty, e_ont)) {
                 pp_ont.removeProperty(NdlCommons.collectionItemProperty, e_ont);
-                logger.info("ReservationConverter::removeManifest():remove item from \nr=" + pp_ont.getURI() + ";\ni=" + e_ont.getURI());
             }
         }
 
@@ -2135,7 +2132,6 @@ public class ReservationConverter implements LayerConstant {
             }
         }
         manifestOntModel.remove(r_stmts);
-        logger.info("ReservationConverter::removeManifest():remove r_stmts=" + r_stmts.toString());
     }
 
     public void updateState(OntModel manifestModel, OntResource v_ont, Property p, String new_str) {
