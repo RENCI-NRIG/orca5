@@ -9,7 +9,7 @@
         <groupId>
             net.exogeni.orca
         </groupId> 
-        <version>5.4.5</version> 
+        <version>5.4.5-SNAPSHOT</version> 
     </parent> 
     <groupId>
         net.exogeni.orca.handlers.network

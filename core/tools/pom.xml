@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>net.exogeni.orca</groupId>
 		<artifactId>core</artifactId>
-		<version>5.4.5</version>
+		<version>5.4.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<modules>

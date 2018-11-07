@@ -18,7 +18,7 @@
         <artifactId>
              orca 
         </artifactId> 
-        <version>5.4.5</version> 
+        <version>5.4.5-SNAPSHOT</version> 
     </parent> 
     <name>
          Orca Tools 
