@@ -1,3 +1,0 @@
-<antlib> 
-    <taskdef resource="orca/handlers/xcat/xcat.tasks" /> 
-</antlib>

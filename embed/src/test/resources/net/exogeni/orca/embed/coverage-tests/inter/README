@@ -1,9 +1,0 @@
-This directory contains requests that exercise various features in inter-domain embedding. 
-
-NOTE: Before submitting these requests, please change the domains of node, nodegroups, storage etc. to the domains of the racks you are testing with.
-
-dumb-bell.rdf : Tests simple point to point dumb-bell between two sites			
-
-mp-bandwidth.rdf : Tests multi-point embedding with one node and two nodegroups. Each of the three needs to be in separate domains. Can use this to test modify.
-
-mp-stitchport-storage.rdf : Tests multi-point with stitchport and storage. To change to a different stitchport, use properties of new stitchport described at https://wiki.exogeni.net/doku.php?id=public:experimenters:resource_types:start . The nodegroup attached to storage has only one node by design, so that mounting of storage works. This nodegroup can be changed to a single node.
