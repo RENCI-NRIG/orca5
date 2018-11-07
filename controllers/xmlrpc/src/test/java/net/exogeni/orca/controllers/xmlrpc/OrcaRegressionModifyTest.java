@@ -77,19 +77,19 @@ public class OrcaRegressionModifyTest {
             { "src/test/resources/137_one_nodegroups_of_size_three_autoip_request.rdf",
                     Arrays.asList("src/test/resources/137_nodegroups_delete_one_modify_request.rdf"), Arrays.asList(3) },
             // add storage modify
-            { "../../embed/src/test/resources/net/exogeni/orca/embed/TS1/TS1-2.rdf",
+            { "../../embed/src/test/resources/orca/embed/TS1/TS1-2.rdf",
                     Arrays.asList("src/test/resources/146_modify_add_storage_request.rdf"), Arrays.asList(2) },
             // Interdomain modify
-            { "../../embed/src/test/resources/net/exogeni/orca/embed/161_interdomain_A1_B1_request.rdf",
-                    Arrays.asList("../../embed/src/test/resources/net/exogeni/orca/embed/161_interdomain_simplified_A1_B1_B2_modify_request.rdf"),
+            { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+                    Arrays.asList("../../embed/src/test/resources/orca/embed/161_interdomain_simplified_A1_B1_B2_modify_request.rdf"),
                     Arrays.asList(13) },
             // Interdomain modify
-            { "../../embed/src/test/resources/net/exogeni/orca/embed/161_interdomain_A1_B1_request.rdf",
-                    Arrays.asList("../../embed/src/test/resources/net/exogeni/orca/embed/161_interdomain_A1_B1_B2_C1_modify_request.rdf"),
+            { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+                    Arrays.asList("../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_B2_C1_modify_request.rdf"),
                     Arrays.asList(17) },
             // Interdomain modify
-            { "../../embed/src/test/resources/net/exogeni/orca/embed/161_interdomain_A1_B1_request.rdf",
-                    Arrays.asList("../../embed/src/test/resources/net/exogeni/orca/embed/161_interdomain_A1_B1_to_B2_modify_request.rdf"),
+            { "../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_request.rdf",
+                    Arrays.asList("../../embed/src/test/resources/orca/embed/161_interdomain_A1_B1_to_B2_modify_request.rdf"),
                     Arrays.asList(9) },
             // Multiple modify to add interface
             { "src/test/resources/208_create_slice_request.rdf",

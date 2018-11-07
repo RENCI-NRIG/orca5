@@ -87,7 +87,7 @@ public class OntProcessor extends NdlCommons implements LayerConstant {
 
         model_base.setDynamicImports(true);
         /*
-         * List rules = Rule.rulesFromURL("file:net/exogeni/orca/network/schema/ben.rule"); Reasoner reasoner = new
+         * List rules = Rule.rulesFromURL("file:net.exogeni.orca/network/schema/ben.rule"); Reasoner reasoner = new
          * GenericRuleReasoner(rules); reasoner.setDerivationLogging(true); InfModel infModel =
          * ModelFactory.createInfModel(reasoner,model_base);
          * 

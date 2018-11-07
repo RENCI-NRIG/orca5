@@ -94,7 +94,7 @@ public class NetworkElement implements LayerConstant, Comparable, Persistable {
      * the Modify process.
      *
      * Not sure why this was previously removed:
-     * https://github.com/RENCI-NRIG/orca5/commit/e43e81c81ebbed0bfdcd81a5b3e74aac45c8a4ad
+     * https://github.com/RENCI-NRIG/net.exogeni.orca5/commit/e43e81c81ebbed0bfdcd81a5b3e74aac45c8a4ad
      */
     public boolean equals(Object o) {
         if ((o instanceof NetworkElement) && (name != null)) {

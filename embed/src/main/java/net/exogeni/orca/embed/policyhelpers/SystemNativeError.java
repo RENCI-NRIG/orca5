@@ -31,7 +31,7 @@ public class SystemNativeError {
 
     public void setMessage(String message) {
         this.message = message
-                + ".\n Please see https://geni-orca.renci.org/trac/wiki/orca-errors for possible solutions.";
+                + ".\n Please see https://geni-net.exogeni.orca.renci.org/trac/wiki/net.exogeni.orca-errors for possible solutions.";
     }
 
     public final String toString() {

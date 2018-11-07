@@ -33,7 +33,7 @@ import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 public class NdlToRSpecHelper {
     private static final String UNKNOWN = "unknown";
     public static String CM_URN_PATTERN = "urn:publicid:IDN+exogeni.net:@+authority+am";
-    public static String CONTROLLER_URL_PATTERN = "https://@-hn.exogeni.net:11443/orca/xmlrpc";
+    public static String CONTROLLER_URL_PATTERN = "https://@-hn.exogeni.net:11443/net.exogeni.orca/xmlrpc";
     // public static String SLIVER_URN_PATTERN = "urn:publicid:IDN+exogeni.net+sliver+%";
     // public static String SLIVER_URN_EXT_PATTERN = "urn:publicid:IDN+exogeni.net:@+sliver+%";
     public static String COMPONENT_URN_PATTERN = "urn:publicid:IDN+exogeni.net:@+^+%";
@@ -44,16 +44,16 @@ public class NdlToRSpecHelper {
     public static String UNKNOWN_SLIVER_URN = "urn:publicid:IDN+exogeni.net+sliver+unknown";
     private static Pattern pattern = Pattern.compile("http://.+/([\\w-]+).rdf#\\1/.+"),
             pattern1 = Pattern.compile("http://.+/([\\w-]+).rdf#.+"),
-            urlPattern = Pattern.compile("https://([\\w]+)-hn.exogeni.net:[\\d]+/orca/xmlrpc");
+            urlPattern = Pattern.compile("https://([\\w]+)-hn.exogeni.net:[\\d]+/net.exogeni.orca/xmlrpc");
 
     // for exceptions from the rule
     private static final Map<String, String> mapUrlToCm;
 
     static {
         Map<String, String> tmpM = new HashMap<String, String>();
-        tmpM.put("https://geni-test.renci.org:11443/orca/xmlrpc", "exogeni.net:testvmsite");
-        tmpM.put("https://geni.renci.org:11443/orca/xmlrpc", "exogeni.net");
-        tmpM.put("https://uva-nl-hn.exogeni.net:11443/orca/xmlrpc", "exogeni.net:uvanlvmsite");
+        tmpM.put("https://geni-test.renci.org:11443/net.exogeni.orca/xmlrpc", "exogeni.net:testvmsite");
+        tmpM.put("https://geni.renci.org:11443/net.exogeni.orca/xmlrpc", "exogeni.net");
+        tmpM.put("https://uva-nl-hn.exogeni.net:11443/net.exogeni.orca/xmlrpc", "exogeni.net:uvanlvmsite");
 
         mapUrlToCm = Collections.unmodifiableMap(tmpM);
     }
@@ -116,7 +116,7 @@ public class NdlToRSpecHelper {
 
     /**
      * Get a urn for CM from a domain URL like so: domainUrl =
-     * http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain cmUrn = urn:publicid:IDN+rcivmsite+authority+cm
+     * http://geni-net.exogeni.orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain cmUrn = urn:publicid:IDN+rcivmsite+authority+cm
      * 
      * @param domainUrl domainUrl
      * @return String
@@ -471,7 +471,7 @@ public class NdlToRSpecHelper {
     }
 
     /**
-     * sometimes getLocalName is not good enough so we strip off orca name space and call it a day
+     * sometimes getLocalName is not good enough so we strip off net.exogeni.orca name space and call it a day
      * @param r r
      * @return String
      */
@@ -593,10 +593,10 @@ public class NdlToRSpecHelper {
 
     public static void main(String[] args) {
 
-        String dom = "http://geni-orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain";
+        String dom = "http://geni-net.exogeni.orca.renci.org/owl/rcivmsite.rdf#rcivmsite/Domain";
         System.out.println("1. Result for " + dom + ": " + cmFromDomain(dom));
 
-        String url = "http://geni-orca.renci.org/owl/40b1a531-ebda-4bf5-a595-d5873bab78f6#VLAN0-Node1";
+        String url = "http://geni-net.exogeni.orca.renci.org/owl/40b1a531-ebda-4bf5-a595-d5873bab78f6#VLAN0-Node1";
         System.out.println("2. Original URL: " + url);
         // String urn = sliverUrnFromURL(url, dom);
         // System.out.println("3. Result for URL to URN: " + urn);
@@ -605,17 +605,17 @@ public class NdlToRSpecHelper {
         // urn = sliverUrnFromURL(url, "rcivmsite");
         // System.out.println("5. Result for URL to URN: " + urn);
 
-        String link = "http://geni-orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet";
+        String link = "http://geni-net.exogeni.orca.renci.org/owl/bbnNet.rdf#BbnNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet";
 
         System.out.println("6. Result for link url " + link + ": " + cidUrnFromUrl(link, UrnType.Link, "some-link"));
 
         System.out.println("7. " + cidUrnFromUrl(
-                "http://geni-orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/TenGigabitEthernet/gB/1/ethernet",
+                "http://geni-net.exogeni.orca.renci.org/owl/ben-6509.rdf#Duke/Cisco/6509/TenGigabitEthernet/gB/1/ethernet",
                 UrnType.Interface, "ben-6509.rdf#Duke/Cisco/6509/TenGigabitEthernet/gB/1/ethernet"));
 
         System.out.println("Sliver ID: " + sliverUrnFromRack("mySliver", "exogeni.net:rcivmsite"));
 
-        String controller = "https://ncsu2-hn.exogeni.net:11443/orca/xmlrpc";
+        String controller = "https://ncsu2-hn.exogeni.net:11443/net.exogeni.orca/xmlrpc";
         System.out.println("Site acronym from URL: " + controller + " is " + getControllerForUrl(controller));
 
         System.out.println("Massaging 54d52439-8040-47d9-823d-1fae50689981#StitchNode0 "

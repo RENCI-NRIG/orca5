@@ -33,12 +33,12 @@ public class NetworkHandlerTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        requestFileRenciNCSU = "net/exogeni/orca/ndl/request/request-renci-ncsu.rdf"; // UNC - RENCI
-        requestFileUNCRenci = "net/exogeni/orca/ndl/request/request-6509.rdf"; // UNC - RENCI
-        requestFileDukeNCSU = "net/exogeni/orca/ndl/request/request-6509-1.rdf"; // Duke - NCSU
-        requestFileRenciDuke = "net/exogeni/orca/ndl/request/request-6509-2.rdf"; // RENCI-Duke
-        requestFileDukeUNC = "net/exogeni/orca/ndl/request/request-6509-3.rdf"; // Duke - UNC
-        substrateFileName = "net/exogeni/orca/ndl/substrate/ben-dell.rdf";
+        requestFileRenciNCSU = "orca/ndl/request/request-renci-ncsu.rdf"; // UNC - RENCI
+        requestFileUNCRenci = "orca/ndl/request/request-6509.rdf"; // UNC - RENCI
+        requestFileDukeNCSU = "orca/ndl/request/request-6509-1.rdf"; // Duke - NCSU
+        requestFileRenciDuke = "orca/ndl/request/request-6509-2.rdf"; // RENCI-Duke
+        requestFileDukeUNC = "orca/ndl/request/request-6509-3.rdf"; // Duke - UNC
+        substrateFileName = "orca/ndl/substrate/ben-dell.rdf";
     }
 
     protected void tearDown() throws Exception {

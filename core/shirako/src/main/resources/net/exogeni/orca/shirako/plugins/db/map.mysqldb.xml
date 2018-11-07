@@ -6,7 +6,7 @@
         <map from="slc_name" to="net.exogeni.orca.shirako.api.ISlice.PropertyName" />
         <map from="slc_type" to="net.exogeni.orca.shirako.api.ISlice.PropertyType" />
         <map from="slc_resource_type" to="net.exogeni.orca.shirako.api.ISlice.PropertyResourceType" />
-        <map from="rsv_resid" to="net.exogeni.orca.shirako.api.IReservation.PropertyID" />
+        <map from="rsv_resid" to="orca.shirako.api.IReservation.PropertyID" />
         <map from="rsv_category" to="net.exogeni.orca.shirako.api.IReservation.PropertyCategory" />
         <map from="rsv_state"    to="net.exogeni.orca.shirako.api.IReservation.PropertyState" />
         <map from="rsv_pending"  to="net.exogeni.orca.shirako.api.IReservation.PropertyPending" />

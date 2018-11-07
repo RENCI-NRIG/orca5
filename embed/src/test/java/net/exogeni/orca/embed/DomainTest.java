@@ -24,16 +24,16 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class DomainTest extends TestCase {
     String inputFileNameTest;
     Domain domainTest;
-    String[] inputFileName = { "net/exogeni/orca/ndl/substrate/rcivmsite.rdf", "net/exogeni/orca/ndl/substrate/bbnvmsite.rdf",
-            "net/exogeni/orca/ndl/substrate/uncvmsite.rdf", "net/exogeni/orca/ndl/substrate/mass.rdf", "net/exogeni/orca/ndl/substrate/ben-6509.rdf",
-            "net/exogeni/orca/ndl/substrate/nlr.rdf", "net/exogeni/orca/ndl/substrate/starlight.rdf", "net/exogeni/orca/ndl/substrate/ion.rdf",
-            "net/exogeni/orca/ndl/substrate/rciNet.rdf", "net/exogeni/orca/ndl/substrate/bbnNet.rdf", "net/exogeni/orca/ndl/substrate/uncNet.rdf" };
+    String[] inputFileName = { "orca/ndl/substrate/rcivmsite.rdf", "orca/ndl/substrate/bbnvmsite.rdf",
+            "orca/ndl/substrate/uncvmsite.rdf", "orca/ndl/substrate/mass.rdf", "orca/ndl/substrate/ben-6509.rdf",
+            "orca/ndl/substrate/nlr.rdf", "orca/ndl/substrate/starlight.rdf", "orca/ndl/substrate/ion.rdf",
+            "orca/ndl/substrate/rciNet.rdf", "orca/ndl/substrate/bbnNet.rdf", "orca/ndl/substrate/uncNet.rdf" };
 
     // String [] inputFileName={"orca/network/rencivmsite.rdf"};
 
     protected void setUp() throws Exception {
         super.setUp();
-        inputFileNameTest = "net/exogeni/orca/ndl/substrate/cienavmsite.rdf";
+        inputFileNameTest = "orca/ndl/substrate/cienavmsite.rdf";
         domainTest = new Domain(inputFileNameTest);
     }
 

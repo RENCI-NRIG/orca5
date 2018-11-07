@@ -689,7 +689,7 @@ public class ModifyHandler extends UnboundRequestHandler {
             // needed to randomize the name of the controller individual not to collide with nodes or links named
             // 'controller' /ib 10/18/16
             Individual controller = manifestModel.createIndividual(
-                    reservation_rs.getNameSpace() + UUID.randomUUID().toString() + "-orca-controller",
+                    reservation_rs.getNameSpace() + UUID.randomUUID().toString() + "-net.exogeni.orca-controller",
                     NdlCommons.domainControllerClass);
             controller.addProperty(NdlCommons.hasURLProperty, controller_url);
             manifest.addProperty(NdlCommons.domainHasController, controller);

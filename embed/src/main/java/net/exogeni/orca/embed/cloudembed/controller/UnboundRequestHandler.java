@@ -230,7 +230,7 @@ public class UnboundRequestHandler extends MultiPointHandler {
         connection.setBandwidth(NdlCommons.Default_Bandwidth);
         connection.setResourceType(cType);
         // default connection type is VLAN
-        // connection.setType("http://geni-orca.renci.org/owl/domain.owl#VLAN");
+        // connection.setType("http://geni-net.exogeni.orca.renci.org/owl/domain.owl#VLAN");
         connection.setResourceType(cType);
 
         String master_str = reservation + "/MasterGroup";

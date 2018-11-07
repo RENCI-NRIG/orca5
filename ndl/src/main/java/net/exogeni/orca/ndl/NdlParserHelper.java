@@ -33,21 +33,21 @@ public class NdlParserHelper extends NdlCommons {
     protected void validateRequest(String staticRuleFile, String ruleFilePropertyName, OntModel modelToCheck)
             throws NdlException {
 
-        PrintUtil.registerPrefix("topo", "http://geni-orca.renci.org/owl/topology.owl#");
-        PrintUtil.registerPrefix("comp", "http://geni-orca.renci.org/owl/compute.owl#");
-        PrintUtil.registerPrefix("xo", "http://geni-orca.renci.org/owl/exogeni.owl#");
-        PrintUtil.registerPrefix("exogeni", "http://geni-orca.renci.org/owl/exogeni.owl#");
-        PrintUtil.registerPrefix("storage", "http://geni-orca.renci.org/owl/storage.owl#");
-        PrintUtil.registerPrefix("geni", "http://geni-orca.renci.org/owl/geni.owl#");
-        PrintUtil.registerPrefix("dom", "http://geni-orca.renci.org/owl/domain.owl#");
-        PrintUtil.registerPrefix("req", "http://geni-orca.renci.org/owl/request.owl#");
-        PrintUtil.registerPrefix("orca", "http://geni-orca.renci.org/owl/orca.rdf#");
-        PrintUtil.registerPrefix("euca", "http://geni-orca.renci.org/owl/eucalyptus.owl#");
-        PrintUtil.registerPrefix("pl", "http://geni-orca.renci.org/owl/planetlab.owl#");
-        PrintUtil.registerPrefix("col", "http://geni-orca.renci.org/owl/collections.owl#");
-        PrintUtil.registerPrefix("color", "http://geni-orca.renci.org/owl/app-color.owl#");
-        PrintUtil.registerPrefix("ip4", "http://geni-orca.renci.org/owl/ip4.owl#");
-        PrintUtil.registerPrefix("modify", "http://geni-orca.renci.org/owl/modify.owl#");
+        PrintUtil.registerPrefix("topo", "http://geni-net.exogeni.orca.renci.org/owl/topology.owl#");
+        PrintUtil.registerPrefix("comp", "http://geni-net.exogeni.orca.renci.org/owl/compute.owl#");
+        PrintUtil.registerPrefix("xo", "http://geni-net.exogeni.orca.renci.org/owl/exogeni.owl#");
+        PrintUtil.registerPrefix("exogeni", "http://geni-net.exogeni.orca.renci.org/owl/exogeni.owl#");
+        PrintUtil.registerPrefix("storage", "http://geni-net.exogeni.orca.renci.org/owl/storage.owl#");
+        PrintUtil.registerPrefix("geni", "http://geni-net.exogeni.orca.renci.org/owl/geni.owl#");
+        PrintUtil.registerPrefix("dom", "http://geni-net.exogeni.orca.renci.org/owl/domain.owl#");
+        PrintUtil.registerPrefix("req", "http://geni-net.exogeni.orca.renci.org/owl/request.owl#");
+        PrintUtil.registerPrefix("net.exogeni.orca", "http://geni-net.exogeni.orca.renci.org/owl/net.exogeni.orca.rdf#");
+        PrintUtil.registerPrefix("euca", "http://geni-net.exogeni.orca.renci.org/owl/eucalyptus.owl#");
+        PrintUtil.registerPrefix("pl", "http://geni-net.exogeni.orca.renci.org/owl/planetlab.owl#");
+        PrintUtil.registerPrefix("col", "http://geni-net.exogeni.orca.renci.org/owl/collections.owl#");
+        PrintUtil.registerPrefix("color", "http://geni-net.exogeni.orca.renci.org/owl/app-color.owl#");
+        PrintUtil.registerPrefix("ip4", "http://geni-net.exogeni.orca.renci.org/owl/ip4.owl#");
+        PrintUtil.registerPrefix("modify", "http://geni-net.exogeni.orca.renci.org/owl/modify.owl#");
 
         ClassLoader cl = NdlCommons.class.getProtectionDomain().getClassLoader();
 
@@ -57,7 +57,7 @@ public class NdlParserHelper extends NdlCommons {
         // and validate against them
         /**
          * int mc = 3; for (String model: inferenceModels) { if (mc-- == 0) break; URL schemaowl =
-         * cl.getResource("net/exogeni/orca/ndl/schema/" + model); FileManager fm = new FileManager(); fm.addLocator(new
+         * cl.getResource("net.exogeni.orca/ndl/schema/" + model); FileManager fm = new FileManager(); fm.addLocator(new
          * NdlCommons.LocatorJarURL()); Model schema1 = fm.loadModel(schemaowl.toString());
          * 
          * owlReasoner = owlReasoner.bindSchema(schema1);

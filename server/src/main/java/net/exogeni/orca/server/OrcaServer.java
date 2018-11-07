@@ -188,7 +188,7 @@ public class OrcaServer {
         // the handler
         ServletContextHandler servletHandler = new ServletContextHandler(
                 ServletContextHandler.SECURITY | ServletContextHandler.SECURITY);
-        servletHandler.setContextPath("/net/exogeni/orca");
+        servletHandler.setContextPath("/net.exogeni.orca");
         // initialize the spring application context
         XmlWebApplicationContext wctx = new XmlWebApplicationContext();
         wctx.setConfigLocation("");
@@ -199,7 +199,7 @@ public class OrcaServer {
                 wctx);
         // add the spring-ws servlet
         MessageDispatcherServlet springws = new MessageDispatcherServlet();
-        springws.setContextConfigLocation("classpath:/net/exogeni/orca/shirako/orca-ws-context.xml");
+        springws.setContextConfigLocation("classpath:/net.exogeni.orca/shirako/net.exogeni.orca-ws-context.xml");
         ServletHolder springwsHolder = new ServletHolder(springws);
         springwsHolder.setName("spring-ws");
         servletHandler.addServlet(springwsHolder, "/spring-services/*");

@@ -17,17 +17,17 @@ import net.exogeni.orca.shirako.common.meta.ResourceProperties;
 import net.exogeni.orca.util.ResourceType;
 
 public class MappingHandlerTest extends TestCase {
-    String[] inputFileName = { "net/exogeni/orca/ndl/substrate/slvmsite.rdf", "net/exogeni/orca/ndl/substrate/mass.rdf",
-            "net/exogeni/orca/ndl/substrate/nictavmsite.rdf", "net/exogeni/orca/ndl/substrate/rcivmsite.rdf",
-            "net/exogeni/orca/ndl/substrate/bbnvmsite.rdf", "net/exogeni/orca/ndl/substrate/fiuvmsite.rdf", "net/exogeni/orca/ndl/substrate/uhvmsite.rdf",
-            "net/exogeni/orca/ndl/substrate/uflvmsite.rdf", "net/exogeni/orca/ndl/substrate/osfvmsite.rdf",
-            "net/exogeni/orca/ndl/substrate/cienavmsite.rdf", "net/exogeni/orca/ndl/substrate/uvanlvmsite.rdf",
-            "net/exogeni/orca/ndl/substrate/ben-6509.rdf", "net/exogeni/orca/ndl/substrate/nlr.rdf", "net/exogeni/orca/ndl/substrate/starlight.rdf",
-            "net/exogeni/orca/ndl/substrate/ion.rdf", "net/exogeni/orca/ndl/substrate/uvanlNet.rdf", "net/exogeni/orca/ndl/substrate/uflNet.rdf",
-            "net/exogeni/orca/ndl/substrate/uncNet.rdf", "net/exogeni/orca/ndl/substrate/osfNet.rdf", "net/exogeni/orca/ndl/substrate/slNet.rdf",
-            "net/exogeni/orca/ndl/substrate/rciNet.rdf", "net/exogeni/orca/ndl/substrate/bbnNet.rdf", "net/exogeni/orca/ndl/substrate/fiuNet.rdf",
-            "net/exogeni/orca/ndl/substrate/cienaNet.rdf", "net/exogeni/orca/ndl/substrate/uhNet.rdf", "net/exogeni/orca/ndl/substrate/learnNet.rdf",
-            "net/exogeni/orca/ndl/substrate/learn.rdf", "net/exogeni/orca/ndl/substrate/nictaNet.rdf" };
+    String[] inputFileName = { "orca/ndl/substrate/slvmsite.rdf", "orca/ndl/substrate/mass.rdf",
+            "orca/ndl/substrate/nictavmsite.rdf", "orca/ndl/substrate/rcivmsite.rdf",
+            "orca/ndl/substrate/bbnvmsite.rdf", "orca/ndl/substrate/fiuvmsite.rdf", "orca/ndl/substrate/uhvmsite.rdf",
+            "orca/ndl/substrate/uflvmsite.rdf", "orca/ndl/substrate/osfvmsite.rdf",
+            "orca/ndl/substrate/cienavmsite.rdf", "orca/ndl/substrate/uvanlvmsite.rdf",
+            "orca/ndl/substrate/ben-6509.rdf", "orca/ndl/substrate/nlr.rdf", "orca/ndl/substrate/starlight.rdf",
+            "orca/ndl/substrate/ion.rdf", "orca/ndl/substrate/uvanlNet.rdf", "orca/ndl/substrate/uflNet.rdf",
+            "orca/ndl/substrate/uncNet.rdf", "orca/ndl/substrate/osfNet.rdf", "orca/ndl/substrate/slNet.rdf",
+            "orca/ndl/substrate/rciNet.rdf", "orca/ndl/substrate/bbnNet.rdf", "orca/ndl/substrate/fiuNet.rdf",
+            "orca/ndl/substrate/cienaNet.rdf", "orca/ndl/substrate/uhNet.rdf", "orca/ndl/substrate/learnNet.rdf",
+            "orca/ndl/substrate/learn.rdf", "orca/ndl/substrate/nictaNet.rdf" };
 
     String requestFile, requestFileDuke, requestFile33, requestFileVMSDuke, requestFileUNC, requestFileRenci,
             requestFileDukeUnc;
