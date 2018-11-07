@@ -169,26 +169,26 @@ With OMNI
 
 Test with two-node-unc.rspec [ Assuming testing at unc (else change rspec by substituting 'uncvmsite' with the site you are testing with) ]
 
-cd /home/orca/omni/gcf-2.2
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc createslice omniSlice-anirban
+cd /home/net/exogeni/orca/omni/gcf-2.2
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc createslice omniSlice-anirban
 
 vi two-node-unc.rspec <== set expiry date 
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc createsliver omniSlice-anirban two-node-unc.rspec
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc createsliver omniSlice-anirban two-node-unc.rspec
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc sliverStatus omniSlice-anirban <== check creation, expiry times, geni slice state, sliver states; should match with what you see in flukes for this slice and should match with pequod reservation states
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc sliverStatus omniSlice-anirban <== check creation, expiry times, geni slice state, sliver states; should match with what you see in flukes for this slice and should match with pequod reservation states
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc listresources omniSlice-anirban <== check creation, expiry times, geni slice state, sliver states; should match with what you see in flukes for this slice and should match with pequod reservation states
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc listresources omniSlice-anirban <== check creation, expiry times, geni slice state, sliver states; should match with what you see in flukes for this slice and should match with pequod reservation states
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130517T20:00:00Z <== check creation, expiry times, geni slice state, sliver states etc.
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc renewsliver omniSlice-anirban 20130517T20:00:00Z <== check creation, expiry times, geni slice state, sliver states etc.
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130517T19:58:00Z <== do this after slice is active and before expiry; should fail
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc renewsliver omniSlice-anirban 20130517T19:58:00Z <== do this after slice is active and before expiry; should fail
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130519T20:00:00Z <== provide date beyond slice expiration; should fail
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc renewsliver omniSlice-anirban 20130519T20:00:00Z <== provide date beyond slice expiration; should fail
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc renewsliver omniSlice-anirban 20130514T20:10:00Z <== provide date in the past; OMNI sends wrong date to ORCA and might renew to an arbitrary time; test using orca python scripts
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc renewsliver omniSlice-anirban 20130514T20:10:00Z <== provide date in the past; OMNI sends wrong date to ORCA and might renew to an arbitrary time; test using orca python scripts
 
-python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/orca/xmlrpc deletesliver omniSlice-anirban
+python26 src/omni.py -c omni_config -a https://unc-hn.unc.ben:11443/net/exogeni/orca/xmlrpc deletesliver omniSlice-anirban
 
 
 Test without expiry: remove "expires=..." from two-node-unc.rspec . Assuming testing at unc (else change rspec by substituting 'uncvmsite' with the site you are testing with) 

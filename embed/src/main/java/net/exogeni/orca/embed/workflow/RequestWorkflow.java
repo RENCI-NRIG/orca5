@@ -2,15 +2,10 @@ package net.exogeni.orca.embed.workflow;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
+import net.exogeni.orca.ndl.*;
 import net.jwhoisserver.utils.InetNetworkException;
 import net.exogeni.orca.embed.cloudembed.MappingHandler;
 import net.exogeni.orca.embed.cloudembed.controller.CloudHandler;
@@ -19,13 +14,7 @@ import net.exogeni.orca.embed.policyhelpers.DomainResourcePools;
 import net.exogeni.orca.embed.policyhelpers.ModifyElement;
 import net.exogeni.orca.embed.policyhelpers.RequestReservation;
 import net.exogeni.orca.embed.policyhelpers.SystemNativeError;
-import net.exogeni.orca.ndl.NdlCommons;
-import net.exogeni.orca.ndl.NdlException;
-import net.exogeni.orca.ndl.NdlModel;
 import net.exogeni.orca.ndl.NdlModel.ModelType;
-import net.exogeni.orca.ndl.NdlModifyParser;
-import net.exogeni.orca.ndl.NdlRequestParser;
-import net.exogeni.orca.ndl.OntProcessor;
 import net.exogeni.orca.ndl.elements.DomainElement;
 import net.exogeni.orca.ndl.elements.NetworkElement;
 import net.exogeni.orca.ndl.elements.OrcaReservationTerm;
@@ -355,6 +344,10 @@ public class RequestWorkflow {
         }
     }
 
+    public void clearControllerAssignedLabel() {
+        controllerAssignedLabel.clear();
+    }
+
     public void clearGlobalControllerAssignedLabel() {
         String domain = null;
         BitSet bitSet = null, globalBitSet = null;
@@ -371,6 +364,43 @@ public class RequestWorkflow {
         }
     }
 
+    public static String getDomainName(String domain_url) {
+        if (domain_url == null)
+            return null;
+        int index = domain_url.indexOf("#");
+        if (index >= 0) {
+            int index2 = domain_url.indexOf("/Domain", index);
+            if (index2 >= 0) {
+                return domain_url.substring(index + 1, index2);
+            } else {
+                return domain_url.substring(index + 1, domain_url.length());
+            }
+        }
+        return null;
+    }
+
+    public void updateLabels(ModifyReservations modifies) {
+        LinkedList<OntResource> reservations = modifies.getRemovedElements();
+        if(reservations != null){
+            Iterator<OntResource> ont_it = reservations.iterator();
+            String domain = null, domain_ont_url = null, domain_ont_name, type, rDomain, rType;
+            OntResource domain_ont = null;
+            while (ont_it.hasNext()) {
+                domain_ont = ont_it.next();
+                if (domain_ont.hasProperty(NdlCommons.hasURLProperty))
+                    domain_ont_url = domain_ont.getProperty(NdlCommons.hasURLProperty).getString();
+                else
+                    domain_ont_url = domain_ont.getURI();
+                domain = getDomainName(domain_ont_url); // e.g., ben/vlan
+                if(controllerAssignedLabel.containsKey(domain)) {
+                    controllerAssignedLabel.remove(domain);
+                }
+                if(globalControllerAssignedLabel.containsKey(domain)) {
+                    globalControllerAssignedLabel.remove(domain);
+                }
+            }
+        }
+    }
     public void clearSharedIPSet() {
         if (controller_shared_IP_set == null || shared_IP_set == null)
             return;
@@ -564,6 +594,7 @@ public class RequestWorkflow {
         logger.debug("RequestWorkflow::setControllerLabel():controllerAssignedLabel " + label + " for domain " + domain);
         setBitsetLabel(controllerAssignedLabel, domain, label);
     }
+
 
     /**
      * This static function adds label to a map of bitsets (any map)

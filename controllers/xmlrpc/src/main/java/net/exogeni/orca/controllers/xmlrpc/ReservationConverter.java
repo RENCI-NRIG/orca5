@@ -2037,7 +2037,7 @@ public class ReservationConverter implements LayerConstant {
             LinkedList<OntResource> removedReservations, boolean isModify) throws Exception {
         // Remove reservations
         if (removedReservations == null) {
-            logger.warn("ReservationConverter::addReservations():remove collection is null!");
+            logger.warn("ReservationConverter::removeReservations():remove collection is null!");
             return null;
         }
 
@@ -2067,7 +2067,7 @@ public class ReservationConverter implements LayerConstant {
                 if ((domain.equalsIgnoreCase(rDomain)) && (domain_ont_url.endsWith(rType))
                         && (domain_ont_name.equals(unit_url))) {
                     if (!remove_reservations.contains(r)) {
-                        logger.debug("ReservationConverter::addReservations():Add reservation to be removed:" + domain_ont_url);
+                        logger.debug("ReservationConverter::removeReservations():Add reservation to be removed:" + domain_ont_url);
                         remove_reservations.add((ReservationMng) r);
                     }
                 }
@@ -2083,13 +2083,14 @@ public class ReservationConverter implements LayerConstant {
     }
 
     public void removeManifest(OntResource e_ont, OntModel manifestOntModel) {
+        logger.debug("ReservationConverter::removeManifest(): KOMAL removing r=" + e_ont);
         LinkedList<OntResource> removed_rs = new LinkedList<OntResource>();
         ResIterator r_it = manifestOntModel.listResourcesWithProperty(NdlCommons.collectionElementProperty);
         Resource p_rs = null, o_rs = null;
         OntResource p_ont = null;
         while (r_it.hasNext()) {
             p_rs = r_it.next();
-            logger.info("ReservationConverter::removeManifest():p_rs=" + p_rs.getURI() + ";e_ont=" + e_ont.getURI());
+            //logger.info("ReservationConverter::removeManifest():remove element from p_rs=" + p_rs.getURI() + ";\ne_ont=" + e_ont.getURI());
             if (p_rs.hasProperty(NdlCommons.collectionElementProperty, e_ont)) {
                 p_ont = manifestOntModel.getOntResource(p_rs);
                 removed_rs.add(p_ont);
@@ -2099,17 +2100,21 @@ public class ReservationConverter implements LayerConstant {
         r_it = manifestOntModel.listResourcesWithProperty(NdlCommons.collectionItemProperty);
         while (r_it.hasNext()) {
             p_rs = r_it.next();
-            logger.info("ReservationConverter::removeManifest():remove item from p_rs=" + p_rs.getURI() + ";e_ont=" + e_ont.getURI());
+            //logger.info("ReservationConverter::removeManifest():remove item from p_rs=" + p_rs.getURI() + ";\ne_ont=" + e_ont.getURI());
             if (p_rs.hasProperty(NdlCommons.collectionItemProperty, e_ont)) {
                 p_ont = manifestOntModel.getOntResource(p_rs);
                 removed_rs.add(p_ont);
             }
         }
         for (OntResource pp_ont : removed_rs) {
-            if (pp_ont.hasProperty(NdlCommons.collectionElementProperty, e_ont))
+            if (pp_ont.hasProperty(NdlCommons.collectionElementProperty, e_ont)) {
                 pp_ont.removeProperty(NdlCommons.collectionElementProperty, e_ont);
-            if (pp_ont.hasProperty(NdlCommons.collectionItemProperty, e_ont))
+                logger.info("ReservationConverter::removeManifest():remove element from \nr=" + pp_ont.getURI() + ";\ne=" + e_ont.getURI());
+            }
+            if (pp_ont.hasProperty(NdlCommons.collectionItemProperty, e_ont)) {
                 pp_ont.removeProperty(NdlCommons.collectionItemProperty, e_ont);
+                logger.info("ReservationConverter::removeManifest():remove item from \nr=" + pp_ont.getURI() + ";\ni=" + e_ont.getURI());
+            }
         }
 
         // removed properties of e_ont
@@ -2130,6 +2135,7 @@ public class ReservationConverter implements LayerConstant {
             }
         }
         manifestOntModel.remove(r_stmts);
+        logger.info("ReservationConverter::removeManifest():remove r_stmts=" + r_stmts.toString());
     }
 
     public void updateState(OntModel manifestModel, OntResource v_ont, Property p, String new_str) {

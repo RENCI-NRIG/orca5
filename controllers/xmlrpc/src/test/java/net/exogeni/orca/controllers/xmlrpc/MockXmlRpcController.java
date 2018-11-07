@@ -108,7 +108,7 @@ public class MockXmlRpcController extends XmlRpcController {
         OrcaXmlrpcServlet xmlrpc = new OrcaXmlrpcServlet();
         ServletHolder xmlrpcHolder = new ServletHolder(xmlrpc);
         xmlrpcHolder.setName("orca-xmlrpc");
-        servletHandler.addServlet(xmlrpcHolder, "/orca/xmlrpc");
+        servletHandler.addServlet(xmlrpcHolder, "/net/exogeni/orca/xmlrpc");
 
         ControllerContextListener l = new MockControllerContextListener();
         servletHandler.addEventListener(l);

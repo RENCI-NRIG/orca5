@@ -40,6 +40,7 @@ import net.exogeni.orca.shirako.common.SliceID;
 import net.exogeni.orca.shirako.common.meta.UnitProperties;
 import net.exogeni.orca.shirako.container.Globals;
 
+import net.exogeni.orca.shirako.proxies.soapaxis2.beans.Reservation;
 import org.apache.log4j.Logger;
 
 public final class XmlrpcOrcaState implements Serializable {
@@ -629,6 +630,14 @@ public final class XmlrpcOrcaState implements Serializable {
             // don't need to clear slice-local label set - it is only used to remove from the global
             // set on slice close
             controllerAssignedLabel.clear();
+            Set<String> sliceIds = new HashSet<String>();
+            for(ReservationMng a: actives){
+                sliceIds.add(a.getSliceID());
+            }
+            for(String sId: sliceIds){
+                XmlrpcControllerSlice s = getSlice(new SliceID(sId));
+                s.getWorkflow().clearControllerAssignedLabel();
+            }
 
             // build a list of slices we need to restore
             logger.debug("Searching for recoverable slices among " + actives.size() + " active/ticketed reservations");

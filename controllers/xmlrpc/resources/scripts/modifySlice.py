@@ -7,29 +7,29 @@ parser = OptionParser()
 parser.add_option("-r", "--request", dest="request",
                   help="NDL request fielname", metavar="FILE")
 parser.add_option("-s", "--server", dest="server",
-                  help="XMLRPC server URL", metavar="URL", default="http://localhost:11080/orca/xmlrpc")
+                  help="XMLRPC server URL", metavar="URL", default="http://localhost:11080/net/exogeni/orca/xmlrpc")
 parser.add_option("-i", "--slice-id", dest="sliceID",
                   help="Slice id, unique string")
-parser.add_option("-c", "--cert", dest="cert", 
+parser.add_option("-c", "--cert", dest="cert",
                   help="PEM file with cert")
-parser.add_option("-p", "--private-key", dest="privateKey", 
+parser.add_option("-p", "--private-key", dest="privateKey",
                   help="Private key file (or a PEM file if contains both private key and cert)")
 (options, args) = parser.parse_args()
 
-class SafeTransportWithCert(xmlrpclib.SafeTransport): 
+class SafeTransportWithCert(xmlrpclib.SafeTransport):
      __cert_file = ""
      __key_file = ""
      _use_datetime = False
      def __init__(self, certFile, keyFile):
          self.__cert_file = certFile
          self.__key_file = keyFile
-         
-     def make_connection(self,host): 
-         host_with_cert = (host, { 
-                       'key_file'  :  self.__key_file, 
-                       'cert_file' :  self.__cert_file 
-             } ) 
-         return  xmlrpclib.SafeTransport.make_connection(self,host_with_cert) 
+
+     def make_connection(self,host):
+         host_with_cert = (host, {
+                       'key_file'  :  self.__key_file,
+                       'cert_file' :  self.__cert_file
+             } )
+         return  xmlrpclib.SafeTransport.make_connection(self,host_with_cert)
 
 mandatories = ['request', 'sliceID']
 

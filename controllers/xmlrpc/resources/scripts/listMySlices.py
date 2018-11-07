@@ -5,7 +5,7 @@ from optparse import OptionParser
 
 parser = OptionParser()
 parser.add_option("-s", "--server", dest="server",
-                  help="XMLRPC server URL", metavar="URL", default="http://localhost:11080/orca/xmlrpc")
+                  help="XMLRPC server URL", metavar="URL", default="http://localhost:11080/net/exogeni/orca/xmlrpc")
 parser.add_option("-c", "--cert", dest="cert",
                   help="PEM file with cert")
 parser.add_option("-p", "--private-key", dest="privateKey",

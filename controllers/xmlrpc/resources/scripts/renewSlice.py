@@ -10,26 +10,26 @@ parser.add_option("-s", "--server", dest="server",
                   help="XMLRPC server URL", metavar="URL", default='https://localhost:9443/xmlrpc')
 parser.add_option("-d", "--new-end-date", dest="newEndDate",
 		  help="New end date", metavar="DATE")
-parser.add_option("-c", "--cert", dest="cert", 
+parser.add_option("-c", "--cert", dest="cert",
                   help="PEM file with cert")
-parser.add_option("-p", "--private-key", dest="privateKey", 
+parser.add_option("-p", "--private-key", dest="privateKey",
                   help="Private key file (or a PEM file if contains both private key and cert)")
 (options, args) = parser.parse_args()
 
-class SafeTransportWithCert(xmlrpclib.SafeTransport): 
+class SafeTransportWithCert(xmlrpclib.SafeTransport):
      __cert_file = ""
      __key_file = ""
      _use_datetime = False
      def __init__(self, certFile, keyFile):
          self.__cert_file = certFile
          self.__key_file = keyFile
-         
-     def make_connection(self,host): 
-         host_with_cert = (host, { 
-                       'key_file'  :  self.__key_file, 
-                       'cert_file' :  self.__cert_file 
-             } ) 
-         return  xmlrpclib.SafeTransport.make_connection(self,host_with_cert) 
+
+     def make_connection(self,host):
+         host_with_cert = (host, {
+                       'key_file'  :  self.__key_file,
+                       'cert_file' :  self.__cert_file
+             } )
+         return  xmlrpclib.SafeTransport.make_connection(self,host_with_cert)
 
 mandatories = ['newEndDate', 'sliceID']
 

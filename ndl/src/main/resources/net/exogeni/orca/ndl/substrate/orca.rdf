@@ -104,7 +104,7 @@
 
     <owl:NamedIndividual rdf:about="&orca;BbnRackController">
         <rdf:type rdf:resource="&domain;AggregateManager"/>
-        <topology:hasURL rdf:datatype="&xsd;string">https://bbn-hn.exogeni.net:11443/orca/xmlrpc</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">https://bbn-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc</topology:hasURL>
     </owl:NamedIndividual>
     
 
@@ -114,7 +114,7 @@
     <owl:NamedIndividual rdf:about="&orca;ExoGENIBroker">
         <rdf:type rdf:resource="&domain;Broker"/>
         <topology:hasGUID rdf:datatype="&xsd;string">25bc9111-9b41-46ab-a96b-3c87f574cfde</topology:hasGUID>
-        <topology:hasURL rdf:datatype="&xsd;string">http://geni-net.renci.org:12080/orca/</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">http://geni-net.renci.org:12080/net/exogeni/orca/</topology:hasURL>
         <topology:hasName rdf:datatype="&xsd;string">ndl-broker</topology:hasName>
     </owl:NamedIndividual>
     
@@ -124,7 +124,7 @@
 
     <owl:NamedIndividual rdf:about="&orca;ExoGENIController">
         <rdf:type rdf:resource="&domain;AggregateManager"/>
-        <topology:hasURL rdf:datatype="&xsd;string">https://geni.renci.org:11443/orca/xmlrpc</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">https://geni.renci.org:11443/net/exogeni/orca/xmlrpc</topology:hasURL>
     </owl:NamedIndividual>
     
 
@@ -133,7 +133,7 @@
 
     <owl:NamedIndividual rdf:about="&orca;FiuRackController">
         <rdf:type rdf:resource="&domain;AggregateManager"/>
-        <topology:hasURL rdf:datatype="&xsd;string">https://fiu-hn.exogeni.net:11443/orca/xmlrpc</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">https://fiu-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc</topology:hasURL>
     </owl:NamedIndividual>
     
 
@@ -142,7 +142,7 @@
 
     <owl:NamedIndividual rdf:about="&orca;NictaRackController">
         <rdf:type rdf:resource="&domain;AggregateManager"/>
-        <topology:hasURL rdf:datatype="&xsd;string">https://nicta-hn.exogeni.net:11443/orca/xmlrpc</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">https://nicta-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc</topology:hasURL>
     </owl:NamedIndividual>
     
 
@@ -151,7 +151,7 @@
 
     <owl:NamedIndividual rdf:about="&orca;RciRackController">
         <rdf:type rdf:resource="&domain;AggregateManager"/>
-        <topology:hasURL rdf:datatype="&xsd;string">https://rci-hn.exogeni.net:11443/orca/xmlrpc</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">https://rci-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc</topology:hasURL>
     </owl:NamedIndividual>
     
 
@@ -169,7 +169,7 @@
 
     <owl:NamedIndividual rdf:about="&orca;UhRackController">
         <rdf:type rdf:resource="&domain;AggregateManager"/>
-        <topology:hasURL rdf:datatype="&xsd;string">https://uh-hn.exogeni.net:11443/orca/xmlrpc</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">https://uh-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc</topology:hasURL>
     </owl:NamedIndividual>
     
 
@@ -178,7 +178,7 @@
 
     <owl:NamedIndividual rdf:about="&orca;Uva-nlRackController">
         <rdf:type rdf:resource="&domain;AggregateManager"/>
-        <topology:hasURL rdf:datatype="&xsd;string">https://uva-nl-hn.exogeni.net:11443/orca/xmlrpc</topology:hasURL>
+        <topology:hasURL rdf:datatype="&xsd;string">https://uva-nl-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc</topology:hasURL>
     </owl:NamedIndividual>
 </rdf:RDF>
 

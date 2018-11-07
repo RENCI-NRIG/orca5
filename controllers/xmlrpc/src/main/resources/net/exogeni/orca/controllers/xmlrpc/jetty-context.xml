@@ -27,7 +27,7 @@
                 </property> 
                 <property name="servletMappings"> 
                     <list> 
-                        <bean class="org.mortbay.jetty.servlet.ServletMapping" p:servletName="orca-xmlrpc" p:pathSpec="/xmlrpc" /> 
+                        <bean class="org.mortbay.jetty.servlet.ServletMapping" p:servletName="orca-xmlrpc" p:pathSpec="/net/exogeni/orca/xmlrpc" />
                     </list> 
                 </property> 
             </bean> 

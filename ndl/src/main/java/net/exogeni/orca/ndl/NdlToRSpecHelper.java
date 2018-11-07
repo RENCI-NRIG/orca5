@@ -33,7 +33,7 @@ import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 public class NdlToRSpecHelper {
     private static final String UNKNOWN = "unknown";
     public static String CM_URN_PATTERN = "urn:publicid:IDN+exogeni.net:@+authority+am";
-    public static String CONTROLLER_URL_PATTERN = "https://@-hn.exogeni.net:11443/orca/xmlrpc";
+    public static String CONTROLLER_URL_PATTERN = "https://@-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc";
     // public static String SLIVER_URN_PATTERN = "urn:publicid:IDN+exogeni.net+sliver+%";
     // public static String SLIVER_URN_EXT_PATTERN = "urn:publicid:IDN+exogeni.net:@+sliver+%";
     public static String COMPONENT_URN_PATTERN = "urn:publicid:IDN+exogeni.net:@+^+%";
@@ -44,16 +44,16 @@ public class NdlToRSpecHelper {
     public static String UNKNOWN_SLIVER_URN = "urn:publicid:IDN+exogeni.net+sliver+unknown";
     private static Pattern pattern = Pattern.compile("http://.+/([\\w-]+).rdf#\\1/.+"),
             pattern1 = Pattern.compile("http://.+/([\\w-]+).rdf#.+"),
-            urlPattern = Pattern.compile("https://([\\w]+)-hn.exogeni.net:[\\d]+/orca/xmlrpc");
+            urlPattern = Pattern.compile("https://([\\w]+)-hn.exogeni.net:[\\d]+/net/exogeni/orca/xmlrpc");
 
     // for exceptions from the rule
     private static final Map<String, String> mapUrlToCm;
 
     static {
         Map<String, String> tmpM = new HashMap<String, String>();
-        tmpM.put("https://geni-test.renci.org:11443/orca/xmlrpc", "exogeni.net:testvmsite");
-        tmpM.put("https://geni.renci.org:11443/orca/xmlrpc", "exogeni.net");
-        tmpM.put("https://uva-nl-hn.exogeni.net:11443/orca/xmlrpc", "exogeni.net:uvanlvmsite");
+        tmpM.put("https://geni-test.renci.org:11443/net/exogeni/orca/xmlrpc", "exogeni.net:testvmsite");
+        tmpM.put("https://geni.renci.org:11443/net/exogeni/orca/xmlrpc", "exogeni.net");
+        tmpM.put("https://uva-nl-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc", "exogeni.net:uvanlvmsite");
 
         mapUrlToCm = Collections.unmodifiableMap(tmpM);
     }
@@ -615,7 +615,7 @@ public class NdlToRSpecHelper {
 
         System.out.println("Sliver ID: " + sliverUrnFromRack("mySliver", "exogeni.net:rcivmsite"));
 
-        String controller = "https://ncsu2-hn.exogeni.net:11443/orca/xmlrpc";
+        String controller = "https://ncsu2-hn.exogeni.net:11443/net/exogeni/orca/xmlrpc";
         System.out.println("Site acronym from URL: " + controller + " is " + getControllerForUrl(controller));
 
         System.out.println("Massaging 54d52439-8040-47d9-823d-1fae50689981#StitchNode0 "

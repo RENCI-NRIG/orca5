@@ -10,7 +10,7 @@ parser.add_option("-i", "--slice-id", dest="sliceID",
 parser.add_option("-r", "--reservation", dest="reservation",
                   help="Reservation GUID")
 parser.add_option("-s", "--server", dest="server",
-                  help="XMLRPC server URL", metavar="URL", default="http://localhost:11443/orca/xmlrpc")
+                  help="XMLRPC server URL", metavar="URL", default="http://localhost:11443/net/exogeni/orca/xmlrpc")
 parser.add_option("-c", "--cert", dest="cert",
                   help="PEM file with cert")
 parser.add_option("-p", "--private-key", dest="privateKey",

@@ -87,8 +87,8 @@ public class XmlRpcController extends OrcaController {
 
     protected void setupXmlRpcHandlers() throws ConfigurationException {
         try {
-            Log.info("Adding XMLRPC Orca handler to global list (namespace 'orca')");
-            OrcaXmlrpcServlet.addXmlrpcHandler("orca", OrcaXmlrpcHandler.class, false);
+            Log.info("Adding XMLRPC Orca handler to global list (namespace 'net.exogeni.orca')");
+            OrcaXmlrpcServlet.addXmlrpcHandler("net.exogeni.orca", OrcaXmlrpcHandler.class, false);
             Log.info("Adding XMLRPC GENI AM v1 handler to global list");
             OrcaXmlrpcServlet.addXmlrpcHandler(GeniAmV1Handler.XMLRPC_SUFFIX, GeniAmV1Handler.class, false);
             Log.info("Adding XMLRPC GENI AM v2 handler to global list (default namespace 'geni')");
@@ -155,7 +155,7 @@ public class XmlRpcController extends OrcaController {
         OrcaXmlrpcServlet xmlrpc = new OrcaXmlrpcServlet();
         ServletHolder xmlrpcHolder = new ServletHolder(xmlrpc);
         xmlrpcHolder.setName("orca-xmlrpc");
-        servletHandler.addServlet(xmlrpcHolder, "/orca/xmlrpc");
+        servletHandler.addServlet(xmlrpcHolder, "/net/exogeni/orca/xmlrpc");
         // add the Jolokia servlet
         ServletHolder jolokiaHolder = new ServletHolder(new AgentServlet());
         String jmxAccessPolicyFile = "file://" + HomeDirectory + "config/jolokia-access.xml";

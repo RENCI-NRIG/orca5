@@ -46,7 +46,7 @@ import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Interface {
     private static final String GENI_URN_FIELD = "urn";
     private static final String GENI_KEYS_FIELD = "keys";
-    private static final String DEFAULT_EXOSM_URL = "https://geni.renci.org:11443/orca/xmlrpc";
+    private static final String DEFAULT_EXOSM_URL = "https://geni.renci.org:11443/net/exogeni/orca/xmlrpc";
     public static final String ORCA_XMLRPC_SUFFIX = "xmlrpc";
     public static final String XMLRPC_SUFFIX = "geni";
 
