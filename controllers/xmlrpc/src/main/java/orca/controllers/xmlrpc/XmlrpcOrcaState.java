@@ -628,6 +628,17 @@ public final class XmlrpcOrcaState implements Serializable {
             // set on slice close
             controllerAssignedLabel.clear();
 
+            // @kthare10 It is required to clear slice-local label set as it is also used to
+            // determine if a tag is available for use or not; comment mentioned above is incorrect
+            Set<String> sliceIds = new HashSet<String>();
+            for(ReservationMng a: actives){
+                sliceIds.add(a.getSliceID());
+            }
+            for(String sId: sliceIds){
+                XmlrpcControllerSlice s = getSlice(new SliceID(sId));
+                s.getWorkflow().clearControllerAssignedLabel();
+            }
+
             // build a list of slices we need to restore
             logger.debug("Searching for recoverable slices among " + actives.size() + " active/ticketed reservations");
             for (ReservationMng a : actives) {

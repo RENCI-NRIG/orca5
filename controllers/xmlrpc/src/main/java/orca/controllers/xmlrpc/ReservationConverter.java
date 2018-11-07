@@ -16,6 +16,7 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -640,11 +641,16 @@ public class ReservationConverter implements LayerConstant {
                         logger.error("ReservationConverter::setDependency():Edge interface name is unknown!" + parent.getValue().getURI());
                     } else {
                         // @kthare10 10/31/2018 commented this code and guid is set at creation of interface
-                        //String element_guid = UUID.randomUUID().toString();
-                        //logger.debug("ReservationConverter::setDependency(): set element_guid=" + element_guid +
-                        //             " for element=" + parent.getValue().getName());
-                        //parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
-                        String element_guid = parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getLiteral().toString();
+                        String element_guid = UUID.randomUUID().toString();
+                        if(parent.getValue().getProperty(NdlCommons.hasGUIDProperty) !=null) {
+                            element_guid = parent.getValue().getProperty(NdlCommons.hasGUIDProperty).getLiteral().toString();
+                        }
+                        else
+                        {
+                            logger.debug("ReservationConverter::setDependency(): set element_guid=" + element_guid +
+                                         " for element=" + parent.getValue().getURI());
+                            parent.getValue().addProperty(NdlCommons.hasGUIDProperty, element_guid);
+                        }
                         // depending on storage
                         if (pr != null) {
                             if (pr.isLUN) {// now do it latter when all reservations are collected
@@ -2049,7 +2055,7 @@ public class ReservationConverter implements LayerConstant {
                 domain_ont_url = domain_ont.getURI();
             domain = getDomainName(domain_ont_url); // e.g., ben/vlan
             domain_ont_name = domain_ont.getURI();
-            // logger.debug("ReservationConverter::removeReservations()::domain_ont_url="+domain_ont_url+";domain="+domain+";domain_ont_name="+domain_ont_name);
+            //logger.debug("ReservationConverter::removeReservations()::url="+domain_ont_url+";domain="+domain+";name="+domain_ont_name);
             if (domain == null)
                 continue;
             for (ReservationMng r : allRes) {
@@ -2061,7 +2067,6 @@ public class ReservationConverter implements LayerConstant {
                 if ((domain.equalsIgnoreCase(rDomain)) && (domain_ont_url.endsWith(rType))
                         && (domain_ont_name.equals(unit_url))) {
                     if (!remove_reservations.contains(r)) {
-                        logger.debug("ReservationConverter::removeReservations():Add reservation to be removed:" + domain_ont_url);
                         remove_reservations.add((ReservationMng) r);
                     }
                 }
@@ -2083,7 +2088,6 @@ public class ReservationConverter implements LayerConstant {
         OntResource p_ont = null;
         while (r_it.hasNext()) {
             p_rs = r_it.next();
-            logger.info("ReservationConverter::removeManifest():p_rs=" + p_rs.getURI() + ";e_ont=" + e_ont.getURI());
             if (p_rs.hasProperty(NdlCommons.collectionElementProperty, e_ont)) {
                 p_ont = manifestOntModel.getOntResource(p_rs);
                 removed_rs.add(p_ont);
@@ -2093,37 +2097,39 @@ public class ReservationConverter implements LayerConstant {
         r_it = manifestOntModel.listResourcesWithProperty(NdlCommons.collectionItemProperty);
         while (r_it.hasNext()) {
             p_rs = r_it.next();
-            logger.info("ReservationConverter::removeManifest():remove item from p_rs=" + p_rs.getURI() + ";e_ont=" + e_ont.getURI());
             if (p_rs.hasProperty(NdlCommons.collectionItemProperty, e_ont)) {
                 p_ont = manifestOntModel.getOntResource(p_rs);
                 removed_rs.add(p_ont);
             }
         }
         for (OntResource pp_ont : removed_rs) {
-            if (pp_ont.hasProperty(NdlCommons.collectionElementProperty, e_ont))
+            if (pp_ont.hasProperty(NdlCommons.collectionElementProperty, e_ont)){
                 pp_ont.removeProperty(NdlCommons.collectionElementProperty, e_ont);
-            if (pp_ont.hasProperty(NdlCommons.collectionItemProperty, e_ont))
+            }
+            if (pp_ont.hasProperty(NdlCommons.collectionItemProperty, e_ont)) {
                 pp_ont.removeProperty(NdlCommons.collectionItemProperty, e_ont);
+            }
         }
 
         // removed properties of e_ont
         // TODO:reduce numCE by 1 in the nodegroup in request
-        List<Statement> r_stmts = new LinkedList<Statement>();
+        Set<Statement> r_stmts = new HashSet<Statement>();
         for (StmtIterator j = e_ont.listProperties(); j.hasNext();) {
+            for (StmtIterator x = e_ont.listProperties(NdlCommons.topologyHasInterfaceProperty); x.hasNext();) {
+                o_rs = x.next().getResource();
+                if (o_rs.listProperties().hasNext())
+                    r_stmts.addAll(o_rs.listProperties().toList());
+            }
+            for (StmtIterator x = e_ont.listProperties(NdlCommons.domainHasServiceProperty); x.hasNext();) {
+                o_rs = x.next().getResource();
+                if (o_rs.listProperties().hasNext())
+                    r_stmts.addAll(o_rs.listProperties().toList());
+            }
             r_stmts.add(j.next());
-            // p_rs=j.next().getResource();
-            if (e_ont.hasProperty(NdlCommons.topologyHasInterfaceProperty)) {
-                o_rs = e_ont.getProperty(NdlCommons.topologyHasInterfaceProperty).getResource();
-                if (o_rs.listProperties().hasNext())
-                    r_stmts.addAll(o_rs.listProperties().toList());
-            }
-            if (e_ont.hasProperty(NdlCommons.domainHasServiceProperty)) {
-                o_rs = e_ont.getProperty(NdlCommons.domainHasServiceProperty).getResource();
-                if (o_rs.listProperties().hasNext())
-                    r_stmts.addAll(o_rs.listProperties().toList());
-            }
         }
-        manifestOntModel.remove(r_stmts);
+        for(Statement s: r_stmts) {
+            manifestOntModel.remove(s);
+        }
     }
 
     public void updateState(OntModel manifestModel, OntResource v_ont, Property p, String new_str) {

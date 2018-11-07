@@ -238,11 +238,11 @@ public class ModifyHandler extends UnboundRequestHandler {
 
     public RequestReservation addElement(DomainResourcePools domainResourcePools, LinkedList<ModifyElement> meList,
             OntModel manifestOntModel, String sliceId, OntModel modifyRequestModel) throws NdlException, IOException {
-        logger.debug("ModifyHandler::addElement(): IN");
 
         // generating new reservation in the format of a request RDF model
-        if (meList.isEmpty())
+        if (meList.isEmpty()){
             return null;
+        }
 
         Resource me = meList.element().getObj();
         String ns_str = me.getNameSpace();
@@ -357,7 +357,6 @@ public class ModifyHandler extends UnboundRequestHandler {
                 }
             }
         }
-        logger.debug("ModifyHandler.addElement(): OUT");
 
         return request;
     }
@@ -681,7 +680,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 
     public OntModel createManifest(Collection<NetworkElement> boundElements, RequestReservation request, String userDN,
             String controller_url, String sliceId) {
-        logger.info("ModifyHandler::createManifest(b):Creating manifest model IN");
 
         /*
          * OntModelSpec s = NdlModel.getOntModelSpec(OntModelSpec.OWL_MEM, true); //OntModel manifestModel =
@@ -711,14 +709,13 @@ public class ModifyHandler extends UnboundRequestHandler {
             manifest.addProperty(NdlCommons.hasDNProperty, userDN, XSDDatatype.XSDstring);
 
         manifestModel = createManifest(request, manifestModel, manifest);
-        logger.info("ModifyHandler::createManifest(b):Creating manifest OUT");
         return manifestModel;
     }
 
     public OntModel createManifest(RequestReservation request, OntModel manifestModel, OntResource manifest) {
-        logger.info("ModifyHandler::createManifest(r):Creating manifest model IN");
-        if (request == null)
+        if (request == null){
             return null;
+        }
         String domain, connectionName;
         RequestReservation rr;
         HashMap<String, RequestReservation> dRR = request.getDomainRequestReservation();
@@ -785,7 +782,6 @@ public class ModifyHandler extends UnboundRequestHandler {
 
             }
         }
-        logger.info("ModifyHandler::createManifest(r):Creating manifest model OUT");
 
         // TDB.sync(manifestModel);
         return manifestModel;

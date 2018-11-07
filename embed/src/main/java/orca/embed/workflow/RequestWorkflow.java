@@ -2,6 +2,7 @@ package orca.embed.workflow;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.*;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Date;
@@ -333,6 +334,10 @@ public class RequestWorkflow {
         // NdlModel.closeModel(model);
     }
 
+    public void clearControllerAssignedLabel() {
+        controllerAssignedLabel.clear();
+    }
+
     protected void modifyGlobalControllerAssignedLabel() {
         if (globalControllerAssignedLabel == null) {
             logger.error("RequestWorkflow::modifyGlobalControllerAssignedLabel(): the map variable not set");
@@ -352,8 +357,9 @@ public class RequestWorkflow {
                 globalBitSet.or(bitSet);
                 globalControllerAssignedLabel.put(domain, globalBitSet);
             }
-            logger.debug("RequestWorkflow::modifyGlobalControllerAssignedLabel():" + domain + ":assignedLabel=" + globalControllerAssignedLabel.get(domain)
-                    + ":controllerLabel=" + controllerAssignedLabel.get(domain));
+            logger.debug("RequestWorkflow::modifyGlobalControllerAssignedLabel():" + domain 
+                         + ":assignedLabel=" + globalControllerAssignedLabel.get(domain)
+                         + ":controllerLabel=" + controllerAssignedLabel.get(domain));
         }
     }
 
