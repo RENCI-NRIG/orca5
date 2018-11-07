@@ -9,7 +9,7 @@
         <groupId>
             net.exogeni.orca
         </groupId> 
-        <version>5.4.4</version> 
+        <version>5.4.4-SNAPSHOT</version> 
     </parent> 
     <groupId>
         net.exogeni.orca.handlers.network
@@ -17,7 +17,7 @@
     <artifactId>
          nsi 
     </artifactId> 
-    <version>5.4.4</version> 
+    <version>5.4.4-SNAPSHOT</version> 
     <packaging>
          jar 
     </packaging> 
