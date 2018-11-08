@@ -1,6 +1,7 @@
 
 package orca.embed.cloudembed.controller;
-
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.Collection;
@@ -107,7 +108,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
 
         // check all elements, modifying the request for any that are stitching
         stitching = checkStitching(rr.getElements(), requestModel);
-        logger.debug("is stitching=" + stitching + ";isModify=" + isModify);
+        logger.debug("InterDomainHandler::runEmbedding:is stitching=" + stitching + ";isModify=" + isModify);
 
         // add the requestModel only once
         if (stitching) {
@@ -125,17 +126,19 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
 
             NetworkConnection networkConnection = (NetworkConnection) element;
 
-            logger.debug("Interdomain connection:" + networkConnection.getName() + ";"
+            logger.debug("InterDomainHandler::runEmbedding: connection:" + networkConnection.getName() + ";"
                     + networkConnection.getNe1().getName() + ":" + networkConnection.getNe1().getInDomain() + ":"
                     + networkConnection.getNe2().getName() + ":" + networkConnection.getNe2().getInDomain());
             if ((networkConnection.getNe1() == null) || (networkConnection.getNe2() == null)) {
-                logger.error("This request connection misses the end point(s):nc=" + networkConnection.getName()
+                logger.error("InterDomainHandler::runEmbedding: This request connection misses the end point(s):nc=" 
+                        + networkConnection.getName()
                         + ":ne1=" + networkConnection.getNe1() + ";ne2=" + networkConnection.getNe2());
                 continue;
             }
             if ((networkConnection.getNe1().getInDomain() == null)
                     || (networkConnection.getNe2().getInDomain() == null)) {
-                logger.error("This request connection misses the end point(s):nc=" + networkConnection.getName()
+                logger.error("InterDomainHandler::runEmbedding: This request connection misses the end point(s):nc=" 
+                        + networkConnection.getName()
                         + ":ne1=" + networkConnection.getNe1().getInDomain() + ";ne2="
                         + networkConnection.getNe2().getInDomain());
                 continue;
@@ -165,8 +168,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 dType = domainResourcePools.getDomainResourceType(domainName);
                 isStitchingDomain = NdlCommons.isStitchingNodeInManifest(de.getResource());
 
-                if (isStitchingDomain)
+                if (isStitchingDomain){
                     resourceCount = 1;
+                }
                 else if (de.getCe() == null) { // edge resources counted in cloudHandler
                     resourceCount = resourceCount(de, dType);
                 }
@@ -300,7 +304,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         stitchingNode.removeAll(NdlCommons.inDomainProperty);
         stitchingNode.addProperty(NdlCommons.inDomainProperty, domain_rs);
         if (stitchingNode.hasProperty(NdlCommons.inDomainProperty)) {
-            logger.info("stitching node:" + stitchingNode.getProperty(NdlCommons.inDomainProperty));
+            logger.info("InterDomainHandler::modifyRequestModel:stitching node:" 
+                        + stitchingNode.getProperty(NdlCommons.inDomainProperty));
         }
         domain_rs.addProperty(NdlCommons.inDomainProperty, domain_rs);
         node.setInDomain(domain_rs.getURI());
@@ -311,7 +316,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         if (layer == null)
             layer = NdlCommons.ethernetNetworkElementClass;
         shadow_intf_rs.addProperty(NdlCommons.atLayer, layer);
-        requestModel.remove(stitchingNode.getProperty(NdlCommons.topologyHasInterfaceProperty));
+        // @kthar10 10/31/2018; commenting this  statement as it is needed later so that interfaces can be copied to
+        // StitchPort object in the manifest construction in case of modify
+        // Needed for a fix for Issue# 223
+        //requestModel.remove(stitchingNode.getProperty(NdlCommons.topologyHasInterfaceProperty));
         Statement statement = null;
         HashSet<Statement> p_set = (HashSet<Statement>) intf_rs.listProperties().toSet();
         for (Iterator<Statement> j = p_set.iterator(); j.hasNext();) {
@@ -340,14 +348,15 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 String stitching_domain_name = idm_intf_rs.getProperty(NdlCommons.topologyHasName).getString();
                 domain_rs.addProperty(NdlCommons.topologyHasName, stitching_domain_name);
             } else {
-                logger.error(
-                        "Stitching interface doesn't specify the neighboring domain name, may fail the tag mapping!"
+                logger.error("InterDomainHandler::modifyRequestModel:Stitching interface doesn't specify the " + 
+                             "neighboring domain name, may fail the tag mapping!"
                                 + idm_intf_rs.getURI());
             }
             if (idm_intf_rs.getProperty(NdlCommons.RDFS_Label) != null) {
                 stitching_intf_label = idm_intf_rs.getProperty(NdlCommons.RDFS_Label).getString();
             } else {
-                logger.error("Stitching interface doesn't specify the label!" + idm_intf_rs.getURI());
+                logger.error("InterDomainHandler::modifyRequestModel:Stitching interface doesn't specify the label!" 
+                            + idm_intf_rs.getURI());
             }
         }
         domain_rs.addProperty(NdlCommons.topologyHasInterfaceProperty, shadow_intf_rs);
@@ -428,7 +437,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             }
         }
         int path_len = domainList.size();
-        logger.info("Beginning of Dependency:" + path_len);
+        logger.info("InterDomainHandler::domainDepend(dl):Beginning of Dependency:" + path_len);
         for (int i = 1; i < domainList.size(); i++) {
             next_Hop = (DomainElement) domainList.get(i);
             domainNoDepend(next_Hop);
@@ -483,8 +492,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 start.setDegree(degree + 1);
             }
         }
-        logger.info("End of Dependency Computation! dependList size:" + dependList.size() + " ;domainList size:"
-                + domainList.size());
+        logger.info("InterDomainHandler::domainDepend(dl):End of Dependency Computation! dependList size:" + 
+                    dependList.size() + " ;domainList size:"
+                    + domainList.size());
         return error;
     }
 
@@ -500,9 +510,11 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             sRank = sRType.getRank();
         if (nRType != null)
             nRank = nRType.getRank();
-        logger.info(start.getURI() + ":" + start.getLayerLabelPrimary() + ":" + start.isLabelProducer() + ":" + sRType
+        logger.info("InterDomainHandler::domainDepend(de): " + start.getURI() + ":" + start.getLayerLabelPrimary() 
+                + ":" + start.isLabelProducer() + ":" + sRType
                 + ":" + sRank + ":" + start.getSwappingCapability());
-        logger.info(next.getURI() + ":" + next.getLayerLabelPrimary() + ":" + next.isLabelProducer() + ":" + nRType
+        logger.info("InterDomainHandler::domainDepend(de): " + next.getURI() + ":" + next.getLayerLabelPrimary() 
+                + ":" + next.isLabelProducer() + ":" + nRType
                 + ":" + nRank + ":" + next.getSwappingCapability() + "\n");
         if (start.getLayerLabelPrimary() || next.getLayerLabelPrimary()) {
             primaryDomain = true;
@@ -518,7 +530,8 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                             flag = true;
                         } else {
                             flag = false;
-                            logger.info("TunnelingCapability:" + start.getTunnelingCapability() + ":"
+                            logger.info("InterDomainHandler::domainDepend(de): TunnelingCapability:" 
+                                    + start.getTunnelingCapability() + ":"
                                     + next.getTunnelingCapability() + ":" + hop + ":" + path_len);
                             // find the common label for start and next+1
                             if (hop <= path_len - 3) {
@@ -526,13 +539,14 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                                         .getConnection().get(hop + 1);
                                 int commonLabel = findCommonLabel(start, next_next);
                                 if (commonLabel < 0) {
-                                    logger.error(
-                                            "No common label between domains:" + start.getURI() + ":" + next.getURI());
+                                    logger.error("InterDomainHandler::domainDepend(de): No common label between domains:" 
+                                                 + start.getURI() + ":" + next.getURI());
                                     return null;
                                 }
                                 start.setStaticLabel(commonLabel);
                                 next_next.setStaticLabel(commonLabel);
-                                logger.info(start.getURI() + ":" + next.getURI() + ":" + next_next.getURI()
+                                logger.info("InterDomainHandler::domainDepend(de): " + start.getURI() + ":" 
+                                        + next.getURI() + ":" + next_next.getURI()
                                         + "----Next Next Common Label:" + commonLabel);
                             }
                         }
@@ -548,11 +562,13 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                                         && castType.equalsIgnoreCase(NdlCommons.multicast)) {
                                     int commonLabel = findCommonLabel(start, next);
                                     if (commonLabel < 0) {
-                                        logger.error("No common label between domains:" + start.getURI() + ":"
-                                                + next.getURI());
+                                        logger.error("InterDomainHandler::domainDepend(de): No common label between domains:" 
+                                                    + start.getURI() + ":"
+                                                    + next.getURI());
                                         return null;
                                     }
-                                    logger.info("Found common label:" + commonLabel + " between domains:"
+                                    logger.info("InterDomainHandler::domainDepend(de): Found common label:" 
+                                            + commonLabel + " between domains:"
                                             + start.getURI() + ":" + next.getURI());
                                     start.setStaticLabel(commonLabel);
                                     next.setStaticLabel(commonLabel);
@@ -568,10 +584,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                                 int commonLabel = findCommonLabel(start, next);
                                 if (commonLabel < 0) {
                                     logger.error(
-                                            "No common label between domains:" + start.getURI() + ":" + next.getURI());
+                                            "InterDomainHandler::domainDepend(de): No common label between domains:" + start.getURI() + ":" + next.getURI());
                                     return null;
                                 }
-                                logger.info("Found common label:" + commonLabel + " between domains:" + start.getURI()
+                                logger.info("InterDomainHandler::domainDepend(de): Found common label:" + commonLabel + " between domains:" + start.getURI()
                                         + ":" + next.getURI());
                                 next.setStaticLabel(commonLabel);
                                 start.setStaticLabel(commonLabel);
@@ -589,7 +605,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                                 nSetSize = nSetSize + nSet.getLabelRangeSize();
                             }
 
-                            logger.info("LabelSet Size:" + start.getName() + ":" + sSetSize + "****" + next.getName()
+                            logger.info("InterDomainHandler::domainDepend(de): LabelSet Size:" + start.getName() + ":" + sSetSize + "****" + next.getName()
                                     + ":" + nSetSize);
                             if (sSetSize == 0) {
                                 if (nSetSize > 0) {
@@ -606,10 +622,10 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                                 int commonLabel = findCommonLabel(start, next);
                                 if (commonLabel < 0) {
                                     logger.error(
-                                            "No common label between domains:" + start.getURI() + ":" + next.getURI());
+                                            "InterDomainHandler::domainDepend(de): No common label between domains:" + start.getURI() + ":" + next.getURI());
                                     return null;
                                 }
-                                logger.info("Found common label:" + commonLabel);
+                                logger.info("InterDomainHandler::domainDepend(de): Found common label:" + commonLabel);
                                 start.setStaticLabel(commonLabel);
                                 next.setStaticLabel(commonLabel);
                                 if (sSetSize > nSetSize)
@@ -648,7 +664,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         }
         if (isStitchingDomain) {
             stitching_tag = stitchingTag(start, next, flag);
-            logger.info("Stitching tag=" + stitching_tag);
+            logger.info("InterDomainHandler::domainDepend(de): Stitching tag=" + stitching_tag);
             if (stitching_tag <= 0)
                 return null;
             else {
@@ -684,7 +700,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 setModifyFlag(start);
                 dependList.add(start);
 
-                logger.debug("modified device, new start:" + start.getName());
+                logger.debug("InterDomainHandler::domainDepend(de): modified device, new start:" + start.getName());
             }
         }
 
@@ -706,7 +722,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         } else {
             setModifyFlag(next);
             dependList.add(next);
-            logger.debug("modified device, new next:" + next.getName());
+            logger.debug("InterDomainHandler::domainDepend(de): modified device, new next:" + next.getName());
         }
         if (flag) {// start depends on next
             if ((hop == 1) && (rs1_ont != null)) { // First device should be the VM and check if IP is given from the
@@ -717,7 +733,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 start.setPrecededBy(next, nextUpNeighbour);
                 next.setFollowedBy(start, startDownNeighbour);
                 if (next.isNeedFollowerInterface() == true) {
-                    logger.info("Next's follower interface:" + nextUpNeighbour.getURI() + ":" + nextUpLocal.getURI()
+                    logger.info("InterDomainHandler::domainDepend(de): Next's follower interface:" + nextUpNeighbour.getURI() + ":" + nextUpLocal.getURI()
                             + ":" + startDownNeighbour.getURI() + ":" + startDownLocal.getURI());
 
                     next.setFollowerInterface(nextUpLocal);
@@ -733,7 +749,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 next.setPrecededBy(start, startDownNeighbour);
                 start.setFollowedBy(next, nextUpNeighbour);
                 if (start.isNeedFollowerInterface() == true) {
-                    logger.info("start's follower interface:" + nextUpNeighbour.getURI() + ":" + nextUpLocal.getURI()
+                    logger.info("InterDomainHandler::domainDepend(de): start's follower interface:" + nextUpNeighbour.getURI() + ":" + nextUpLocal.getURI()
                             + ":" + startDownNeighbour.getURI() + ":" + startDownLocal.getURI());
                     start.setFollowerInterface(startDownLocal);
                 }
@@ -745,9 +761,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             setAssignedLabel(next);
         }
 
-        logger.info("start:" + start.getURI() + ":" + start.getStaticLabel() + ";" + start.getSwappingCapability() + ";"
+        logger.info("InterDomainHandler::domainDepend(de): start:" + start.getURI() + ":" + start.getStaticLabel() + ";" + start.getSwappingCapability() + ";"
                 + start.getName() + ":" + rs1_ont + ":flag=" + flag + "\n");
-        logger.info("next:" + next.getURI() + ":" + ":" + start.getStaticLabel() + ";" + next.getSwappingCapability()
+        logger.info("InterDomainHandler::domainDepend(de): next:" + next.getURI() + ":" + ":" + start.getStaticLabel() + ";" + next.getSwappingCapability()
                 + ";" + next.getName() + ":" + rs2_ont + "\n");
 
         // System.out.println("flag:"+flag+"\n");
@@ -775,13 +791,13 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                     child_de.setStaticLabel(label_id);
                     stitching = true;
                 } else {
-                    logger.error("Stitching tag " + label_id + " is not available in domain:" + child_de.getURI());
+                    logger.error("InterDomainHandler::stitchingTag: Stitching tag " + label_id + " is not available in domain:" + child_de.getURI());
                     label_id = 0;
                 }
             } else { // need to check if the upstream stitching tag has been used in this stitching port
                 if (!isTagAvailable(parent_de, label_id)) {
                     logger.error(
-                            "Stitching tag " + label_id + " is not available anymore in domain:" + child_de.getURI());
+                            "InterDomainHandler::stitchingTag: Stitching tag " + label_id + " is not available anymore in domain:" + child_de.getURI());
                     label_id = 0;
                 }
 
@@ -799,7 +815,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             labelSet = controllerAssignedLabel.get(domain);
             if (label > 0)
                 labelSet.set(label);
-            logger.debug("InterDomainHandler existing domain=" + domain + ";label=" + label + ";labelSet=" + labelSet);
+            logger.debug("InterDomainHandler::setAssignedLabel:existing domain=" + domain + ";label=" + label + ";labelSet=" + labelSet);
         } else {
             if (label > 0) {
                 labelSet = new BitSet(max_vlan_tag);
@@ -811,7 +827,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 }
                 controllerAssignedLabel.put(domain, labelSet);
             }
-            logger.debug("InterDomainHandler empty domain=" + domain + ";labelSet=" + labelSet);
+            logger.debug("InterDomainHandler::setAssignedLabel:empty domain=" + domain + ";labelSet=" + labelSet);
         }
     }
 
@@ -853,11 +869,11 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         if (this.globalControllerAssignedLabel != null) {
             startBitSet = this.globalControllerAssignedLabel.get(domain_str);
         }
-        logger.debug("getAvailableBitSet(): globalAssignedLabel(" + domain_str + ")=" + startBitSet);
+        logger.debug("InterDomainHandler::getAvailableBitSet(): globalAssignedLabel(" + domain_str + ")=" + startBitSet);
         if (this.controllerAssignedLabel != null) {
             controllerStartBitSet = this.controllerAssignedLabel.get(domain_str);
         }
-        logger.debug("controllerAssignedLabel=" + controllerStartBitSet);
+        logger.debug("InterDomainHandler::getAvailableBitSet():controllerAssignedLabel=" + controllerStartBitSet);
 
         BitSet sBitSet = new BitSet(max_vlan_tag);
         if (!isStitchingDomain) {
@@ -876,17 +892,17 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                     sBitSet.set(0, max_vlan_tag);
                 }
                 sBitSet.andNot(sSet.getUsedBitSet());
-                logger.debug("min-max-used:" + min + ":" + max + ":" + sSet.getUsedBitSet());
+                logger.debug("InterDomainHandler::getAvailableBitSet():min-max-used:" + min + ":" + max + ":" + sSet.getUsedBitSet());
             }
         } else {
             sBitSet.set(0, max_vlan_tag);
         }
-        logger.debug("findLabelSet----domain=" + domain_str + ";initial Start labelSet:" + sBitSet);
+        logger.debug("InterDomainHandler::getAvailableBitSet():findLabelSet----domain=" + domain_str + ";initial Start labelSet:" + sBitSet);
         if (startBitSet != null)
             sBitSet.andNot(startBitSet);
         if (controllerStartBitSet != null)
             sBitSet.andNot(controllerStartBitSet);
-        logger.debug("Final labelSet:" + sBitSet);
+        logger.debug("InterDomainHandler::getAvailableBitSet():Final labelSet:" + sBitSet);
         return sBitSet;
     }
 
@@ -941,13 +957,17 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
 
     // add to the manifestModel
     public void createManifest(NetworkElement requestElement, OntModel manifestModel, OntResource manifest,
-            LinkedList<Device> domainList) {
+            LinkedList<Device> domainList, Collection<NetworkElement> elements) {
+        logger.debug("InterDomainHandler::createManifest() IN");
         OntResource rc_ont = requestElement.getResource();
+
         if (requestElement.isModify()) {
-            if (rc_ont == null)
+            if (rc_ont == null){
                 rc_ont = manifestModel.getOntResource(requestElement.getURI());
-            else
+            }
+            else {
                 rc_ont = manifestModel.getOntResource(rc_ont.getURI());
+            }
             if (requestElement.getCastType().equalsIgnoreCase("multicast")) { // go one level above
                 for (StmtIterator j = manifest.listProperties(NdlCommons.collectionElementProperty); j.hasNext();) {
                     Resource nc = j.next().getResource();
@@ -955,17 +975,47 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                         Resource md = i.next().getResource();
                         if (md.getURI().equalsIgnoreCase(rc_ont.getURI())) {
                             rc_ont = manifestModel.getOntResource(nc);
+                            logger.debug("InterDomainHandler::createManifest(): modify; fetch3 multicast " + rc_ont);
                             break;
                         }
 
                     }
                 }
             }
+            logger.debug("InterDomainHandler::createManifest(): modifying Resource=" + rc_ont);
         } else {
-            // if(this.isModify && requestElement.getCastType()!=null &&
-            // requestElement.getCastType().equalsIgnoreCase("multicast"))
-            // return;
+
+            logger.debug("InterDomainHandler::createManifest(): added Resource=" + rc_ont);
             rc_ont = manifestModel.createIndividual(rc_ont.getURI(), NdlCommons.topologyNetworkConnectionClass);
+
+            // This happens only for modify request
+            // Fix for Issue#223
+            logger.debug("InterDomainHandler::createManifest(): checking if Resource was copied from request Resource=" + requestElement.getURI());
+            if(rc_ont.getProperty(NdlCommons.hasGUIDProperty) == null) {
+                logger.debug("InterfaceDomainHandler::createManifest(): copying resource from request"); 
+                OntResource r = requestElement.getResource();
+                for (StmtIterator itr = r.listProperties(NdlCommons.topologyHasInterfaceProperty); itr.hasNext();) {
+                    Statement s = itr.next();
+                    logger.debug("InterfaceDomainHandler::createManifest(): hasInterface " + s.getObject());
+                    rc_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, s.getObject());
+                }
+                for (StmtIterator itr = r.listProperties(NdlCommons.atLayer); itr.hasNext();) {
+                    Statement s = itr.next();
+                    logger.debug("InterfaceDomainHandler::createManifest(): atLayer " + s.getObject());
+                    rc_ont.addProperty(NdlCommons.atLayer, s.getObject());
+                }
+                for (StmtIterator itr = r.listProperties(NdlCommons.layerBandwidthProperty); itr.hasNext();) {
+                    Statement s = itr.next();
+                    logger.debug("InterfaceDomainHandler::createManifest(): bandwidth " + s.getObject());
+                    rc_ont.addProperty(NdlCommons.layerBandwidthProperty, s.getObject());
+                }
+                for (StmtIterator itr = r.listProperties(NdlCommons.hasGUIDProperty); itr.hasNext();) {
+                    Statement s = itr.next();
+                    logger.debug("InterfaceDomainHandler::createManifest(): hasGUID " + s.getObject());
+                    rc_ont.addProperty(NdlCommons.hasGUIDProperty, s.getObject());
+                }
+            }
+
             manifest.addProperty(NdlCommons.collectionElementProperty, rc_ont);
         }
         Device start = domainList.get(0), next_Hop, next_next_Hop = null;
@@ -977,12 +1027,12 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             next_Hop = domainList.get(i);
             intf_start = start.getDownNeighbour(start.getModel());
             intf_next = next_Hop.getUpNeighbour(next_Hop.getModel());
-            logger.info("link connections..." + i + ":" + domainList.size() + ":start url:" + start.getURI()
+            logger.info("InterDomainHandler::createManifest():link connections..." + i + ":" + domainList.size() + ":start url:" + start.getURI()
                     + ";next_hop:" + next_Hop.getURI());
 
             // source domain
             if (i == 1) {
-                addEdgeDeviceToTopology(manifestModel, rc_ont, start, intf_next);
+                addEdgeDeviceToTopology(manifestModel, rc_ont, start, intf_next, elements);
             }
 
             // Link connection
@@ -994,7 +1044,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             intf_start.addProperty(NdlCommons.RDF_TYPE, NdlCommons.interfaceOntClass);
             intf_next.addProperty(NdlCommons.RDF_TYPE, NdlCommons.interfaceOntClass);
             rc_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);
-            logger.debug("Link hop:" + link_ont.getURI() + "|");
+            logger.debug("InterDomainHandler::createManifest():Link hop:" + link_ont.getURI() + "|");
 
             // crossconnect connection
             if (i < domainList.size() - 1) {
@@ -1020,18 +1070,18 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
 
                 domainInConnectionList.add(link_ont);
 
-                logger.info("Manifest:Link Crossconnect url=:" + link_ont.getURI() + ";d.name= " + next_Hop.getName()
+                logger.info("InterDomainHandler::createManifest():Link Crossconnect url=:" + link_ont.getURI() + ";d.name= " + next_Hop.getName()
                         + ";d.inDomain=" + link_ont.getProperty(NdlCommons.inDomainProperty));
             }
 
             // destination domain
             if (i == domainList.size() - 1) {
-                addEdgeDeviceToTopology(manifestModel, rc_ont, next_Hop, intf_start);
+                addEdgeDeviceToTopology(manifestModel, rc_ont, next_Hop, intf_start, elements);
             }
 
             start = next_Hop;
         }
-
+        logger.debug("InterDomainHandler::createManifest() OUT");
         // if(stitching)
         // this.idm.remove(requestModel);
     }
@@ -1044,7 +1094,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
      * @param edgeInterface edgeInterface
      */
     protected void addEdgeDeviceToTopology(OntModel manifestModel, OntResource topologyOnt, Device edgeDevice,
-            OntResource edgeInterface) {
+            OntResource edgeInterface, Collection<NetworkElement> elements) {
+        logger.debug("InterDomainHandler::addEdgeDeviceToTopology IN");
+
         String link_url;
         OntResource link_ont;
         String domain_name;
@@ -1052,7 +1104,23 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         boolean isStitchingDomain = NdlCommons.isStitchingNodeInManifest(edgeDevice.getResource());
 
         if (isStitchingDomain) {
+            logger.debug("InterDomainHandler::addEdgeDeviceToTopology:adding stitchport to manifest: " + edgeDevice.getName());
             link_url = edgeDevice.getName();
+            OntResource t = manifestModel.getOntResource(link_url);
+            
+            // Modify scenario
+            boolean copyStitchPortPropertiesFromRequest = false;
+            if(t == null) {
+                logger.debug("InterDomainHandler::addEdgeDeviceToTopology:stitchport added via modify: " + edgeDevice.getName());
+                for(NetworkElement e: elements) {
+                    logger.debug("InterDomainHandler::addEdgeDeviceToTopology: e=" +e.getName() + " d=" + edgeDevice.getName());
+                    if(e.getName() == edgeDevice.getName()) {
+                        t = e.getResource();
+                        copyStitchPortPropertiesFromRequest = true;
+                        break;
+                    }
+                }
+            }
             link_ont = manifestModel.createIndividual(link_url, NdlCommons.deviceOntClass);
             OntResource this_intf = idm.getOntResource(edgeInterface);
             for (StmtIterator i_s = this_intf.listProperties(NdlCommons.linkTo); i_s.hasNext();) {
@@ -1063,6 +1131,19 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                         Literal stitch_urn = stitch_intf.getProperty(NdlCommons.hasURNProperty).getLiteral();
                         manifestModel.add(edgeInterface, NdlCommons.hasURNProperty, stitch_urn);
                     }
+                }
+            }
+            if(t!=null && copyStitchPortPropertiesFromRequest){
+                logger.debug("InterDomainHandler::addEdgeDeviceToTopology():copy stitchport properties from request r=" + t);
+                for (StmtIterator itr = t.listProperties(NdlCommons.topologyHasInterfaceProperty); itr.hasNext();) {
+                    Statement s = itr.next();
+                    logger.debug("InterfaceDomainHandler::addEdgeDeviceToTopology(): hasInterface " + s.getObject());
+                    link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, s.getObject());
+                }
+                for (StmtIterator itr = t.listProperties(NdlCommons.hasGUIDProperty); itr.hasNext();) {
+                    Statement s = itr.next();
+                    logger.debug("InterfaceDomainHandler::addEdgeDeviceToTopology(): hasGuid " + s.getObject());
+                    link_ont.addProperty(NdlCommons.hasGUIDProperty, s.getObject());
                 }
             }
         } else if (edgeDevice.getCastType() != null
@@ -1085,8 +1166,9 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
             domain_name = domain_rs.getURI();
             link_ont.removeProperty(NdlCommons.inDomainProperty, domain_rs);
         }
-        if (isStitchingDomain)
+        if (isStitchingDomain){
             link_ont.addProperty(NdlCommons.inDomainProperty, edgeDevice.getResource());
+        }
         else {
             domain_rs = manifestModel.createResource(domain_name);
             link_ont.addProperty(NdlCommons.inDomainProperty, domain_rs);
@@ -1098,13 +1180,15 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
         link_ont.addProperty(NdlCommons.inRequestNetworkConnection, topologyOnt);
         edgeInterface.addProperty(NdlCommons.RDF_TYPE, NdlCommons.interfaceOntClass);
 
-        if (isStitchingDomain)
+        if (isStitchingDomain){
             topologyOnt.addProperty(NdlCommons.collectionItemProperty, link_ont);
+        }
         if (!domainInConnectionList.contains(link_ont))
             domainInConnectionList.add(link_ont);
 
-        logger.debug("Added domain:url=" + link_ont.getURI() + ";d.name= " + edgeDevice.getName() + ";domainName="
+        logger.debug("InterDomainHandler::addEdgeDeviceToTopology:Added domain:url=" + link_ont.getURI() + ";d.name= " + edgeDevice.getName() + ";domainName="
                 + domain_name + ";rc_ont=" + topologyOnt.getURI());
+        logger.debug("InterDomainHandler::addEdgeDeviceToTopology OUT");
     }
 
     public RequestMapping getMapper() {

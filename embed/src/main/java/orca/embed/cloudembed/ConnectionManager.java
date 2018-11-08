@@ -307,7 +307,7 @@ public class ConnectionManager extends RequestMapping {
                     link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, link.getValue()[1]);
                     link_ont.addProperty(NdlCommons.topologyHasInterfaceProperty, link.getValue()[2]);
                     connection_ont.addProperty(NdlCommons.collectionItemProperty, link_ont);
-                    logger.debug("Link hop:" + link.getKey() + "|" + link.getValue()[0] + "|" + link.getValue()[1] + "|"
+                    logger.debug("ConnectionManager::toNetworkConnection():Link hop:" + link.getKey() + "|" + link.getValue()[0] + "|" + link.getValue()[1] + "|"
                             + link.getValue()[2]);
                 }
             }

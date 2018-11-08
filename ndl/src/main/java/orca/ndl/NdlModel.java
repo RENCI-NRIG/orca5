@@ -175,7 +175,7 @@ public class NdlModel {
      */
     public static OntModel getModelFromStream(InputStream modelStream, OntModelSpec spec, boolean uniqueDM, ModelType t,
             String folderName) throws NdlException {
-        NdlCommons.getNdlLogger().info("getModelFromStream(): Creating " + t + " model in " + folderName);
+        NdlCommons.getNdlLogger().info("NdlModel::getModelFromStream(): Creating " + t + " model in " + folderName);
         assert (modelStream != null);
         if (spec == null)
             spec = OntModelSpec.OWL_MEM;
@@ -288,7 +288,7 @@ public class NdlModel {
      */
     public static OntModel getModelFromFile(String aFile, OntModelSpec spec, boolean uniqueDM, ModelType t,
             String folderName) throws NdlException {
-        NdlCommons.getNdlLogger().info("getModelFromFile(): Creating model from " + aFile);
+        NdlCommons.getNdlLogger().info("NdlModel::getModelFromFile(): Creating model from " + aFile);
         InputStream in = FileManager.get().openNoMap(aFile);
         if (in == null) {
             throw new IllegalArgumentException("File: " + aFile + " not found");
@@ -316,7 +316,7 @@ public class NdlModel {
      */
     public static OntModel getRequestModelFromStream(InputStream modelStream, OntModelSpec spec, boolean uniqueDM,
             ModelType t, String folderName) throws NdlException {
-        NdlCommons.getNdlLogger().info("getRequestModelFromStream(): creating " + t + " model in " + folderName);
+        NdlCommons.getNdlLogger().info("NdlModel::getRequestModelFromStream(): creating " + t + " model in " + folderName);
         assert (modelStream != null);
         FileManager fm = new FileManager();
         // deep copy standard location mapper
@@ -435,7 +435,7 @@ public class NdlModel {
      */
     public static OntModel createModel(OntModelSpec spec, boolean uniqueDM, ModelType t, String folderName)
             throws NdlException {
-        NdlCommons.getNdlLogger().info("createModel(): creating blank " + t + " model in " + folderName);
+        NdlCommons.getNdlLogger().info("NdlModel::createModel(): creating blank " + t + " model in " + folderName);
         if (spec == null)
             spec = OntModelSpec.OWL_MEM;
 
