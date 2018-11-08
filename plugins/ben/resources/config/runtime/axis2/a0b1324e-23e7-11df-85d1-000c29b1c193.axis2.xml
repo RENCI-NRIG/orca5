@@ -13,7 +13,7 @@
             </user> 
             <!--alias of the key used to sign--> 
             <passwordCallbackClass>
-                 net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient
+                 orca.nodeagent.client.PWCallbackHandlerClient 
             </passwordCallbackClass> 
             <signaturePropFile>
                  ./runtime/axis2/a0b1324e-23e7-11df-85d1-000c29b1c193.client.properties 
@@ -29,7 +29,7 @@
                  Signature 
             </items> 
             <passwordCallbackClass>
-                 net.exogeni.orca.nodeagent.client.PWCallbackHandlerClient
+                 orca.nodeagent.client.PWCallbackHandlerClient 
             </passwordCallbackClass> 
             <signaturePropFile>
                  ./runtime/axis2/a0b1324e-23e7-11df-85d1-000c29b1c193.client.properties 

@@ -1,3 +1,0 @@
-xcat.generate.bash.file=XCatGenerateBashFileTask
-xcat.generate.bash.mod.addiface.file=XCatGenerateBashFileAddIfaceTask
-xcat.generate.bash.mod.remiface.file=XCatGenerateBashFileRemIfaceTask

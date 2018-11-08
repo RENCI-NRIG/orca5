@@ -1,5 +1,5 @@
 <project name="noop" basedir=".">
-  <taskdef name="setargs" classname="net.exogeni.orca.shirako.plugins.config.SetArgumentsTask" />
+  <taskdef name="setargs" classname="orca.shirako.plugins.config.SetArgumentsTask" />
   <target name="merge.properties">
     <setargs outputProperty="unit.all" />
     <echo message="${unit.all}" />

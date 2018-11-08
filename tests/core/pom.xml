@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.tests
+         orca.tests 
     </groupId> 
     <artifactId>
          core 
@@ -19,7 +19,7 @@
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              tests 
@@ -34,7 +34,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.manage.extensions
+                 orca.manage.extensions 
             </groupId> 
             <artifactId>
                  standard 
@@ -45,7 +45,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca
+                 orca 
             </groupId> 
             <artifactId>
                  boot 

@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca
+         orca 
     </groupId> 
     <artifactId>
          dependencies 
@@ -23,7 +23,7 @@
     </description> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              orca 

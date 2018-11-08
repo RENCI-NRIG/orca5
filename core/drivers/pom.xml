@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.exogeni.orca.core</groupId>
+	<groupId>orca.core</groupId>
 	<artifactId>drivers</artifactId>
 	<packaging>jar</packaging>
 	<name>Orca Drivers Core</name>
 	<parent>
-		<groupId>net.exogeni.orca</groupId>
+		<groupId>orca</groupId>
 		<artifactId>core</artifactId>
-		<version>5.4.6-SNAPSHOT</version>
+		<version>5.4.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<profiles>
@@ -33,10 +33,10 @@
 										<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" />
 										<delete dir="target/tmp" />
 										<mkdir dir="target/tmp" />
-										<xjc schema="src/main/java/net/exogeni/orca/drivers/drivers.xsd" destdir="target/tmp" package="net.exogeni.orca.drivers.beans" />
+										<xjc schema="src/main/java/orca/drivers/drivers.xsd" destdir="target/tmp" package="orca.drivers.beans" />
 										<!-- copy the generated beans to shirako/drivers/beans -->
-										<copy todir="src/main/java/net/exogeni/orca/drivers/beans" overwrite="true">
-											<fileset dir="target/tmp/net/exogeni/orca/drivers/beans" includes="**/*" />
+										<copy todir="src/main/java/orca/drivers/beans" overwrite="true">
+											<fileset dir="target/tmp/orca/drivers/beans" includes="**/*" />
 										</copy>
 										<delete dir="target/tmp" />
 									</tasks>

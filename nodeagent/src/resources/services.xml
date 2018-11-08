@@ -3,10 +3,10 @@
 <serviceGroup> 
     <service name="NodeAgentService"> 
         <messageReceivers> 
-            <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="net.exogeni.orca.nodeagent.NodeAgentServiceMessageReceiverInOut" />
+            <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="orca.nodeagent.NodeAgentServiceMessageReceiverInOut" /> 
         </messageReceivers> 
         <parameter locked="false" name="ServiceClass">
-             net.exogeni.orca.nodeagent.NodeAgentServiceSkeleton
+             orca.nodeagent.NodeAgentServiceSkeleton 
         </parameter> 
         <operation name="uninstallDriver" mep="http://www.w3.org/2004/08/wsdl/in-out"> 
             <actionMapping>
@@ -21,7 +21,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -37,7 +37,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -61,7 +61,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -77,7 +77,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -101,7 +101,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -117,7 +117,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -141,7 +141,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -157,7 +157,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -181,7 +181,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -197,7 +197,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -221,7 +221,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -237,7 +237,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -261,7 +261,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -277,7 +277,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -317,7 +317,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -333,7 +333,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -357,7 +357,7 @@
                          Signature 
                     </items> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 
@@ -373,7 +373,7 @@
                          serverkey 
                     </user> 
                     <passwordCallbackClass>
-                         net.exogeni.orca.nodeagent.PWCallbackHandlerServer
+                         orca.nodeagent.PWCallbackHandlerServer 
                     </passwordCallbackClass> 
                     <signaturePropFile>
                          service.properties 

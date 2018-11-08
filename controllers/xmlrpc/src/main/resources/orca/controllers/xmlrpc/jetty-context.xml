@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd"> 
+    <context:property-placeholder location="orca/controllers/xmlrpc/server.properties" /> 
+    <!-- Manually start server after setting parent context. (init-method="start") --> 
+    <bean id="controllerContext" class="org.mortbay.jetty.servlet.Context" p:contextPath="/${server.context.path}"> 
+        <property name="sessionHandler"> 
+            <bean class="org.mortbay.jetty.servlet.SessionHandler" /> 
+        </property> 
+        <property name="servletHandler"> 
+            <bean class="org.mortbay.jetty.servlet.ServletHandler"> 
+                <property name="servlets"> 
+                    <list> 
+                        <bean class="org.mortbay.jetty.servlet.ServletHolder" p:name="orca-xmlrpc"> 
+                            <property name="servlet"> 
+                                <bean class="orca.controllers.OrcaXmlrpcServlet" /> 
+                            </property> 
+                            <property name="initParameters"> 
+                                <map> 
+                                    <entry key="enabledForExtensions" value="true" /> 
+                                </map> 
+                            </property> 
+                        </bean> 
+                    </list> 
+                </property> 
+                <property name="servletMappings"> 
+                    <list> 
+                        <bean class="org.mortbay.jetty.servlet.ServletMapping" p:servletName="orca-xmlrpc" p:pathSpec="/xmlrpc" /> 
+                    </list> 
+                </property> 
+            </bean> 
+        </property> 
+    </bean> 
+    <bean id="jettyServer" class="org.mortbay.jetty.Server" destroy-method="stop"> 
+        <property name="connectors"> 
+            <list> 
+                <bean id="Connector" class="org.mortbay.jetty.nio.SelectChannelConnector" p:port="${server.port}" p:maxIdleTime="30000" p:acceptors="2" p:confidentialPort="${server.securePort}" /> 
+            </list> 
+        </property> 
+        <property name="handlers"> 
+            <list> 
+                <ref bean="controllerContext" /> 
+                <bean class="org.mortbay.jetty.handler.DefaultHandler" /> 
+                <bean class="org.mortbay.jetty.handler.RequestLogHandler" /> 
+            </list> 
+        </property> 
+    </bean> 
+</beans>

@@ -19,7 +19,7 @@ given the full NDL substrate definition. Do not use this file for anything else!
                  Test site authority 
             </description> 
             <pools> 
-                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
                          test.vlan 
                     </type> 

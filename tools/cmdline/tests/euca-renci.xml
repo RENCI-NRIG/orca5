@@ -75,7 +75,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="vm" class="net.exogeni.orca.policy.core.SimpleVMControl" /> 
+                <control type="vm" class="orca.policy.core.SimpleVMControl" /> 
             </controls> 
         </actor> 
         <actor> 

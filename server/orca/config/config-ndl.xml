@@ -28,7 +28,7 @@
             <description>
                  NDL enabled broker hosted at RENCI 
             </description> 
-            <policy class="net.exogeni.orca.policy.core.BrokerSimplerUnitsPolicy">
+            <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
                 <properties> 
                     <property name="queue.type" value="fifo" /> 
                 </properties> 
@@ -48,7 +48,7 @@
                  BBN OS site authority 
             </description> 
             <pools> 
-                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
                          bbnvmsite.baremetalce 
                     </type> 
@@ -75,7 +75,7 @@
                         <property name="substrate.file" value="/opt/orca/ndl/bbnvmsite.rdf" /> 
                     </properties> 
                 </pool> 
-                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
                          bbnvmsite.vm 
                     </type> 
@@ -103,7 +103,7 @@
                         <property name="substrate.file" value="/opt/orca/ndl/bbnvmsite.rdf" /> 
                     </properties> 
                 </pool> 
-                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
                          bbnvmsite.vlan 
                     </type> 
@@ -135,7 +135,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -146,9 +146,9 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="bbnvmsite.baremetalce" class="net.exogeni.orca.policy.core.SimpleVMControl" />
-                <control type="bbnvmsite.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" />
-                <control type="bbnvmsite.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
+                <control type="bbnvmsite.baremetalce" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="bbnvmsite.vm" class="orca.policy.core.SimpleVMControl" /> 
+                <control type="bbnvmsite.vlan" class="orca.policy.core.VlanControl" /> 
             </controls> 
         </actor> 
         <actor> 
@@ -165,7 +165,7 @@
                  BBN NET authority 
             </description> 
             <pools> 
-                <pool factory="net.exogeni.orca.boot.inventory.NdlResourcePoolFactory">
+                <pool factory="orca.boot.inventory.NdlResourcePoolFactory"> 
                     <type>
                          bbnNet.vlan 
                     </type> 
@@ -197,7 +197,7 @@
                                  Class 
                             </type> 
                             <value>
-                                 NDLVlanInventory
+                                 orca.plugins.ben.broker.NDLVlanInventory 
                             </value> 
                         </attribute> 
                     </attributes> 
@@ -208,7 +208,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="bbnNet.vlan" class="net.exogeni.orca.policy.core.VlanControl" />
+                <control type="bbnNet.vlan" class="orca.policy.core.VlanControl" /> 
             </controls> 
         </actor> 
     </actors> 

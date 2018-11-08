@@ -4,7 +4,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.handlers
+         orca.handlers 
     </groupId> 
     <artifactId>
          ibm_ds 
@@ -12,18 +12,18 @@
     <packaging>
          jar 
     </packaging> 
-    <version>5.4.6-SNAPSHOT</version> 
+    <version>5.4.4-SNAPSHOT</version> 
     <name>
          Orca IBM_DS Handlers Library 
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              handlers 
         </artifactId> 
-        <version>5.4.6-SNAPSHOT</version> 
+        <version>5.4.4-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
@@ -31,7 +31,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -74,7 +74,7 @@
                                 <property name="path" refid="maven.plugin.classpath" /> 
                                 <echo message="path is: ${path}" /> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
-                                <property name="name.prefix" value="net.exogeni.orca.handlers.ibm_ds" /> 
+                                <property name="name.prefix" value="orca.handlers.ibm_ds" /> 
                                 <property name="run.classpath" refid="maven.runtime.classpath" /> 
                                 <echo message="${run.classpath}" /> 
                                 <delete dir="target/package" /> 

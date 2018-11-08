@@ -4,23 +4,23 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca.tools
+         orca.tools 
     </groupId> 
     <artifactId>
          config 
     </artifactId> 
-    <version>5.4.6-SNAPSHOT</version> 
+    <version>5.4.4-SNAPSHOT</version> 
     <name>
          Orca Configuration Tools 
     </name> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              tools 
         </artifactId> 
-        <version>5.4.6-SNAPSHOT</version> 
+        <version>5.4.4-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 
@@ -28,7 +28,7 @@
     <dependencies> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.dependencies
+                 orca.dependencies 
             </groupId> 
             <artifactId>
                  ant 
@@ -42,7 +42,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  tools-axis2 

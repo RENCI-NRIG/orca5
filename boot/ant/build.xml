@@ -1,7 +1,7 @@
 <!DOCTYPE project [
 <!ENTITY deps SYSTEM "deps.xml">
 ]>
-<project name="net.exogeni.orca.util"
+<project name="orca.util"
 	default="help"
 	basedir="."
 	xmlns:artifact="urn:maven-artifact-ant">
@@ -11,7 +11,7 @@
 	<target name="help">
 		<echo>
 			copy.local - copies template configuration files locally
-			net.exogeni.orca.boot.beans - generates net.exogeni.orca.boot.beans
+			orca.boot.beans - generates orca.boot.beans
 		</echo>
 	</target>
 
@@ -25,16 +25,16 @@
 		</copy>
 	</target>
 
-	<target name="net.exogeni.orca.boot.beans" description="generates net.exogeni.orca.boot.beans">
+	<target name="orca.boot.beans" description="generates orca.boot.beans">
 		<!-- prepare the output directory -->
 		<delete dir="${tmp.dir}" />
 		<mkdir dir="${tmp.dir}" />
-		<xjc schema="resources/net.exogeni.orca.boot.beans.schema.xsd"
+		<xjc schema="resources/orca.boot.beans.schema.xsd"
 			target="${tmp.dir}"
-			package="net.exogeni.orca.boot.beans" />
+			package="orca.boot.beans" />
 		<!-- copy the generated beans to their destination -->
-		<copy todir="src/main/java/net/exogeni/orca/boot/beans" overwrite="true">
-			<fileset dir="${tmp.dir}/net/exogeni/orca/boot/beans">
+		<copy todir="src/main/java/orca/boot/beans" overwrite="true">
+			<fileset dir="${tmp.dir}/orca/boot/beans">
 				<include name="**/*" />
 			</fileset>
 		</copy>

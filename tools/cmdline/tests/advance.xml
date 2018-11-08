@@ -70,7 +70,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="vm" class="net.exogeni.orca.policy.core.VMControl" /> 
+                <control type="vm" class="orca.policy.core.VMControl" /> 
             </controls> 
         </actor> 
         <actor> 
@@ -80,7 +80,7 @@
             <name>
                  broker 
             </name> 
-            <policy class="net.exogeni.orca.policy.core.BrokerSimplerUnitsPolicy"> 
+            <policy class="orca.policy.core.BrokerSimplerUnitsPolicy"> 
                 <properties> 
                     <property name="allocation.horizon" value="86400" /> 
                 </properties> 

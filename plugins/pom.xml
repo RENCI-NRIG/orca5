@@ -3,7 +3,7 @@
          4.0.0 
     </modelVersion> 
     <groupId>
-        net.exogeni.orca
+         orca 
     </groupId> 
     <artifactId>
          plugins 
@@ -11,15 +11,15 @@
     <packaging>
          pom 
     </packaging> 
-    <version>5.4.6-SNAPSHOT</version> 
+    <version>5.4.4-SNAPSHOT</version> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              orca 
         </artifactId> 
-        <version>5.4.6-SNAPSHOT</version> 
+        <version>5.4.4-SNAPSHOT</version> 
         <relativePath>
              ../pom.xml 
         </relativePath> 

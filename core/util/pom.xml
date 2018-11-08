@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.exogeni.orca.core</groupId>
+	<groupId>orca.core</groupId>
 	<artifactId>util</artifactId>
 	<packaging>jar</packaging>
 	<name>Orca Core Utilities Library</name>
 
 	<parent>
-		<groupId>net.exogeni.orca</groupId>
+		<groupId>orca</groupId>
 		<artifactId>core</artifactId>
-		<version>5.4.6-SNAPSHOT</version>
+		<version>5.4.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -35,10 +35,10 @@
 										<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" />
 										<delete dir="target/tmp" />
 										<mkdir dir="target/tmp" />
-										<xjc schema="src/main/xsd/util.db.schema.xsd" destdir="target/tmp" package="net.exogeni.orca.util.db.beans" />
+										<xjc schema="src/main/xsd/util.db.schema.xsd" destdir="target/tmp" package="orca.util.db.beans" />
 										<!-- copy the generated beans to their destination -->
-                                        <copy todir="src/main/java/net/exogeni/orca/util/db/beans" overwrite="true">
-                                            <fileset dir="target/tmp/net/exogeni/orca/util/db/beans" includes="**/*" />
+										<copy todir="src/main/java/orca/util/db/beans" overwrite="true">
+											<fileset dir="target/tmp/orca/util/db/beans" includes="**/*" />
 										</copy>
 										<delete dir="target/tmp" />
 									</tasks>

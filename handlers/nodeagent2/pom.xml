@@ -5,15 +5,15 @@
     </modelVersion> 
     <parent> 
         <groupId>
-            net.exogeni.orca
+             orca 
         </groupId> 
         <artifactId>
              handlers 
         </artifactId> 
-        <version>5.4.6-SNAPSHOT</version> 
+        <version>5.4.4-SNAPSHOT</version> 
     </parent> 
     <groupId>
-        net.exogeni.orca.handlers
+         orca.handlers 
     </groupId> 
     <artifactId>
          nodeagent2 
@@ -40,7 +40,7 @@
         </dependency> 
         <dependency> 
             <groupId>
-                net.exogeni.orca.core
+                 orca.core 
             </groupId> 
             <artifactId>
                  shirako 
@@ -99,7 +99,7 @@
                         </phase> 
                         <configuration> 
                             <tasks> 
-                                <property name="name.prefix" value="net.exogeni.orca.handlers.nodeagent2" /> 
+                                <property name="name.prefix" value="orca.handlers.nodeagent2" /> 
                                 <delete dir="target/package" /> 
                                 <mkdir dir="target/package" /> 
                                 <mkdir dir="target/package/lib" /> 

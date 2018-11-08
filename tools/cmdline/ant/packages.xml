@@ -51,17 +51,17 @@
 <!-- this target has been obsoleted. now mvn clean package does this /ib 05/27/2014 --> 
 <!--
 <target name="prepare.packages" depends="get.axis2repository">
-	<resolve.file groupId="net.exogeni.orca.core" artifactId="handlers" version="${orca.version}" classifier="package" type="tar.gz" />
-	<resolve.file groupId="net.exogeni.orca.handlers" artifactId="ec2" version="${orca.version}" classifier="package" type="tar.gz" />
-	<resolve.file groupId="net.exogeni.orca.handlers" artifactId="network" version="${orca.version}" classifier="package" type="tar.gz" />
-	<resolve.file groupId="net.exogeni.orca.handlers.network" artifactId="nlr" version="${orca.version}" classifier="package" type="tar.gz" />
-	<resolve.file groupId="net.exogeni.orca.handlers.network" artifactId="oscars" version="${orca.version}" classifier="package" type="tar.gz" />
-	<resolve.file groupId="net.exogeni.orca.handlers.network" artifactId="oess" version="${orca.version}" classifier="package" type="tar.gz" />
-	<resolve.file groupId="net.exogeni.orca.handlers.network" artifactId="providers" version="${orca.version}" classifier="package" type="tar.gz" />
-        <resolve.file groupId="net.exogeni.orca.handlers" artifactId="ibm_ds" version="${orca.version}" classifier="package" type="tar.gz" />
-        <resolve.file groupId="net.exogeni.orca.handlers" artifactId="storage_service" version="${orca.version}" classifier="package" type="tar.gz" />
-        <resolve.file groupId="net.exogeni.orca.handlers" artifactId="nodeagent2" version="${orca.version}" classifier="package" type="tar.gz" />
-	<resolve.file groupId="net.exogeni.orca.controllers" artifactId="xmlrpc" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.core" artifactId="handlers" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers" artifactId="ec2" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers" artifactId="network" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers.network" artifactId="nlr" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers.network" artifactId="oscars" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers.network" artifactId="oess" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.handlers.network" artifactId="providers" version="${orca.version}" classifier="package" type="tar.gz" />
+        <resolve.file groupId="orca.handlers" artifactId="ibm_ds" version="${orca.version}" classifier="package" type="tar.gz" />
+        <resolve.file groupId="orca.handlers" artifactId="storage_service" version="${orca.version}" classifier="package" type="tar.gz" />
+        <resolve.file groupId="orca.handlers" artifactId="nodeagent2" version="${orca.version}" classifier="package" type="tar.gz" />
+	<resolve.file groupId="orca.controllers" artifactId="xmlrpc" version="${orca.version}" classifier="package" type="tar.gz" />
 </target>	
 --> 
 <!-- simply run the unpacker application. axis or mysql aren't needed --> 
@@ -74,7 +74,7 @@
     <exec executable="${unpacker-full-path}" /> 
 </target> 
 <artifact:dependencies pathID="axis2repository.classpath" filesetID="axis2repository.fileset" versionsId="axis2repository.versions"> 
-    <dependency groupId="net.exogeni.orca.tools" artifactId="axis2repository" version="${axis2repository.version}" type="tar.gz" /> 
+    <dependency groupId="orca.tools" artifactId="axis2repository" version="${axis2repository.version}" type="tar.gz" /> 
     <remoteRepository refid="orca" /> 
 </artifact:dependencies> 
 <target name="get.axis2repository" description="retrieves the axis2 repository package"> 

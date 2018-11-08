@@ -37,7 +37,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="ben.vlan" class="net.exogeni.orca.policy.core.VlanControl" /> 
+                <control type="ben.vlan" class="orca.policy.core.VlanControl" /> 
             </controls> 
         </actor> 
         <actor> 
@@ -120,7 +120,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="renci.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" /> 
+                <control type="renci.vm" class="orca.policy.core.SimpleVMControl" /> 
             </controls> 
         </actor> 
         <actor> 
@@ -192,7 +192,7 @@
                 </pool> 
             </pools> 
             <controls> 
-                <control type="duke.vm" class="net.exogeni.orca.policy.core.SimpleVMControl" /> 
+                <control type="duke.vm" class="orca.policy.core.SimpleVMControl" /> 
             </controls> 
         </actor> 
         <actor> 

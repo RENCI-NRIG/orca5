@@ -1,5 +1,5 @@
-<project name="net.exogeni.orca.tools.axis2repository" basedir="."> 
-    <property name="file.prefix" value="net.exogeni.orca.tools.axis2repository" /> 
+<project name="orca.tools.axis2repository" basedir="."> 
+    <property name="file.prefix" value="orca.tools.axis2repository" /> 
     <target name="package"> 
         <copy todir="target"> 
             <fileset dir="src"> 
