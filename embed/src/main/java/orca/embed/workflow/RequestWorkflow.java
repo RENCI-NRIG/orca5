@@ -335,7 +335,9 @@ public class RequestWorkflow {
     }
 
     public void clearControllerAssignedLabel() {
-        controllerAssignedLabel.clear();
+        if(controllerAssignedLabel !=  null) {
+            controllerAssignedLabel.clear();
+        }
     }
 
     protected void modifyGlobalControllerAssignedLabel() {

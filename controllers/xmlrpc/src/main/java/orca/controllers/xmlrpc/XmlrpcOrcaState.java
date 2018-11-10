@@ -636,7 +636,12 @@ public final class XmlrpcOrcaState implements Serializable {
             }
             for(String sId: sliceIds){
                 XmlrpcControllerSlice s = getSlice(new SliceID(sId));
-                s.getWorkflow().clearControllerAssignedLabel();
+                if(s != null) {
+                    RequestWorkflow workflow =  s.getWorkflow();
+                    if(workflow != null) {
+                        workflow.clearControllerAssignedLabel();
+                    }
+                }
             }
 
             // build a list of slices we need to restore
