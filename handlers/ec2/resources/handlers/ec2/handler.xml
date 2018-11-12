@@ -7,7 +7,7 @@
 
   &paths;
   &core;
-  &drivertasks;	
+  &drivertasks;    
   
   <!--<property file="test.properties" />-->
 
@@ -53,29 +53,29 @@
     </sequential>
     </macrodef>
 
-	<target name="join" depends="resolve.configuration">
-		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
-		</tstamp>
-		<echo message="EC2 HANDLER: JOIN on ${start.TIME}" />
-		<!-- see ec2.site.sample.properties and wiki for description
-	 of static properties that can be specified in ec2.site.properties
-	-->
-		<if>
-			<isset property="ec2.site.properties" />
-			<then>
-				<property file="${ec2.site.properties}" />
-			</then>
-		</if>
+    <target name="join" depends="resolve.configuration">
+        <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+        <tstamp prefix="start">
+            <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
+        </tstamp>
+        <echo message="EC2 HANDLER: JOIN on ${start.TIME}" />
+        <!-- see ec2.site.sample.properties and wiki for description
+     of static properties that can be specified in ec2.site.properties
+    -->
+        <if>
+            <isset property="ec2.site.properties" />
+            <then>
+                <property file="${ec2.site.properties}" />
+            </then>
+        </if>
 
-		<var name="code" unset="true" />
-		<var name="message" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
 
-		<echo message="Cloud Type: ${cloud.type} " />
-		<if>
-			<equals arg1="${emulation}" arg2="true" />
-			<then>
+        <echo message="Cloud Type: ${cloud.type} " />
+        <if>
+            <equals arg1="${emulation}" arg2="true" />
+            <then>
                 <trycatch property="failmsg">
                 <try>
                     <!-- create the NEUCA INI file -->
@@ -147,432 +147,432 @@
                         <fail message="${failmsg}" />
                     </catch>
                 </trycatch>
-			</then>
-			<else>
-				<var name="code" unset="true" />
-				<var name="message" unset="true" />
-				<!-- set the euca group -->
-				<if>
-					<not>
-						<isset property="euca.group" />
-					</not>
-					<then>
-						<property name="euca.group" value="default" />
-					</then>
-				</if>
+            </then>
+            <else>
+                <var name="code" unset="true" />
+                <var name="message" unset="true" />
+                <!-- set the euca group -->
+                <if>
+                    <not>
+                        <isset property="euca.group" />
+                    </not>
+                    <then>
+                        <property name="euca.group" value="default" />
+                    </then>
+                </if>
 
-				<if>
-					<equals arg1="${ec2.debug}" arg2="true" />
-					<then>
-						<echo message="********************************* ec2 join (ALL PROPERTIES) *********************************" />
-						<echoproperties/>
-						<echo message="**********************************************************************************" />
-					</then>
-				</if>
+                <if>
+                    <equals arg1="${ec2.debug}" arg2="true" />
+                    <then>
+                        <echo message="********************************* ec2 join (ALL PROPERTIES) *********************************" />
+                        <echoproperties/>
+                        <echo message="**********************************************************************************" />
+                    </then>
+                </if>
 
 
-				<!-- image proxy (optional) -->
-				<if>
-					<!-- statically specified in ec2.site.properties -->
-					<equals arg1="${ec2.img.proxy.use}" arg2="true" />
-					<then>
-						<!-- be sure config.image.url and config.image.guid are passed by controller -->
-						<!-- else use default emi in ec2.ami.name -->
-						<if>
-							<and>
-								<isset property="config.image.url" />
-								<isset property="config.image.guid" />
-							</and>
-							<then>
-								<var name="code" unset="true" />
-								<var name="message" unset="true" />
-								<var name="ec2.ami.name" unset="true" />
-								<var name="ec2.aki.name" unset="true" />
-								<var name="ec2.ari.name" unset="true" />
-								<echo message="invoking image proxy ${ec2.img.proxy.url} to download and install image ${config.image.url}... (may take some time)" />
-								<!-- config.image.url and config.image.guid are externally specified -->
-								<ec2.image.proxy.register url="${config.image.url}" signature="${config.image.guid}" axisTimeout="${ec2.img.proxy.timeout}" imgproxyServiceUrl="${ec2.img.proxy.url}" statusPropertyName="img.proxy.status" emiPropertyName="img.proxy.emi" ekiPropertyName="img.proxy.eki" eriPropertyName="img.proxy.eri" />
-								<echo message="Status from image proxy is ${img.proxy.status}" />
-								<if>
-									<not>
-										<equals arg1="${img.proxy.status}" arg2="SUCCESS" />
-									</not>
-									<then>
-										<property name="code" value="-1" />
-										<property name="message" value="${img.proxy.status}" />
-									</then>
-									<else>
-										<echo message="New EMI from image proxy is ${img.proxy.emi}" />
-										<property name="ec2.ami.name" value="${img.proxy.emi}" />
-										<property name="code" value="0" />
-										<if>
-											<isset property="img.proxy.eki" />
-											<then>
-												<echo message="New EKI from image proxy is ${img.proxy.eki}" />
-												<property name="ec2.aki.name" value="${img.proxy.eki}" />
-											</then>
-										</if>
-										<if>
-											<isset property="img.proxy.eri" />
-											<then>
-												<echo message="New ERI from image proxy is ${img.proxy.eri}" />
-												<property name="ec2.ari.name" value="${img.proxy.eri}" />
-											</then>
-										</if>
-									</else>
-								</if>
-							</then>
-							<else>
-								<property name="message" value="Controller did not pass image proxy properties ${config.image.url} or ${config.image.guid}, using default emi ${ec2.ami.name}" />
-								<echo message="${message}" />
-								<var name="code" unset="true" />
-								<property name="code" value="1" />
-							</else>
-						</if>
-					</then>
-					<else>
-						<echo message="Skipping image proxy, using emi ${ec2.ami.name} " />
-					</else>
-				</if>
+                <!-- image proxy (optional) -->
+                <if>
+                    <!-- statically specified in ec2.site.properties -->
+                    <equals arg1="${ec2.img.proxy.use}" arg2="true" />
+                    <then>
+                        <!-- be sure config.image.url and config.image.guid are passed by controller -->
+                        <!-- else use default emi in ec2.ami.name -->
+                        <if>
+                            <and>
+                                <isset property="config.image.url" />
+                                <isset property="config.image.guid" />
+                            </and>
+                            <then>
+                                <var name="code" unset="true" />
+                                <var name="message" unset="true" />
+                                <var name="ec2.ami.name" unset="true" />
+                                <var name="ec2.aki.name" unset="true" />
+                                <var name="ec2.ari.name" unset="true" />
+                                <echo message="invoking image proxy ${ec2.img.proxy.url} to download and install image ${config.image.url}... (may take some time)" />
+                                <!-- config.image.url and config.image.guid are externally specified -->
+                                <ec2.image.proxy.register url="${config.image.url}" signature="${config.image.guid}" axisTimeout="${ec2.img.proxy.timeout}" imgproxyServiceUrl="${ec2.img.proxy.url}" statusPropertyName="img.proxy.status" emiPropertyName="img.proxy.emi" ekiPropertyName="img.proxy.eki" eriPropertyName="img.proxy.eri" />
+                                <echo message="Status from image proxy is ${img.proxy.status}" />
+                                <if>
+                                    <not>
+                                        <equals arg1="${img.proxy.status}" arg2="SUCCESS" />
+                                    </not>
+                                    <then>
+                                        <property name="code" value="-1" />
+                                        <property name="message" value="${img.proxy.status}" />
+                                    </then>
+                                    <else>
+                                        <echo message="New EMI from image proxy is ${img.proxy.emi}" />
+                                        <property name="ec2.ami.name" value="${img.proxy.emi}" />
+                                        <property name="code" value="0" />
+                                        <if>
+                                            <isset property="img.proxy.eki" />
+                                            <then>
+                                                <echo message="New EKI from image proxy is ${img.proxy.eki}" />
+                                                <property name="ec2.aki.name" value="${img.proxy.eki}" />
+                                            </then>
+                                        </if>
+                                        <if>
+                                            <isset property="img.proxy.eri" />
+                                            <then>
+                                                <echo message="New ERI from image proxy is ${img.proxy.eri}" />
+                                                <property name="ec2.ari.name" value="${img.proxy.eri}" />
+                                            </then>
+                                        </if>
+                                    </else>
+                                </if>
+                            </then>
+                            <else>
+                                <property name="message" value="Controller did not pass image proxy properties ${config.image.url} or ${config.image.guid}, using default emi ${ec2.ami.name}" />
+                                <echo message="${message}" />
+                                <var name="code" unset="true" />
+                                <property name="code" value="1" />
+                            </else>
+                        </if>
+                    </then>
+                    <else>
+                        <echo message="Skipping image proxy, using emi ${ec2.ami.name} " />
+                    </else>
+                </if>
 
-				<if>
-					<not>
-						<equals arg1="${code}" arg2="0" />
-					</not>
-					<then>
-						<echo message="Error encountered by image proxy, exiting ..." />
-	
-					</then>
-					<else>
-						<!-- see if the controller specified instance type or use site default -->
-						<if>
-							<isset property="unit.ec2.instance.type" />
-							<then>
-								<echo message="User supplied instance type is ${unit.ec2.instance.type}" />
-								<var name="ec2.instance.type" unset="true" />
-								<property name="ec2.instance.type" value="${unit.ec2.instance.type}" />
-							</then>
-							<else>
-								<echo message="User did not specify instance type, using default ${ec2.instance.type}" />
-							</else>
-						</if>
-					   <echo message="creating Euca instance ${unit.hostname.url} using emi ${ec2.ami.name} ...(may take some time)" />
-						<var name="create.instance.output" unset="true" />
-						<var name="code" unset="true" />
-						<var name="message" unset="true" />
-						<echo message="${ec2.scripts}/${cloud.type}-start " />
-						<echo message="UNIT_HOSTNAME_URL=${unit.hostname.url}" />
-						<echo message="EC2_HOME=${ec2.home}" />
-						<echo message="EUCA_KEY_DIR=${ec2.keys}" />
-						<echo message="EC2_LOG_DIR=${ec2.log.dir}" />
-						<echo message="EC2_LOG_FILE=${ec2.log.file}" />
-						<echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
-						<echo message="EUCA_GROUP=${euca.group}" />
-						<echo message="NEUCA_INI=${neuca.ini.file}" />
-						<echo message="AMI_NAME=${ec2.ami.name}" />
-						<echo message="AKI_NAME=${ec2.aki.name}" />
-						<echo message="ARI_NAME=${ec2.ari.name}" />
-						<echo message="EC2_INSTANCE_TYPE=${ec2.instance.type}" />
-						<echo message="EC2_SSH_KEY=${ec2.ssh.key}" />
-						<echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
-						<echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
-						<echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
-						<echo message="EC2_SSH_TIMEOUT=${ec2.ssh.timeout}" />
-						<echo message="EC2_STARTUP_RETRIES=${ec2.startup.retries}" />
-						<echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
-						<echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
-						<echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
-						<echo message="before create instance" />
-						<exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
-							<env key="EMULATION" value="${emulation}" />
-							<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-							<env key="EC2_HOME" value="${ec2.home}" />
-							<env key="EC2_DIR" value="${ec2.dir}" />
-							<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-							<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-							<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-							<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-							<env key="EUCA_GROUP" value="${euca.group}" />
-							<env key="NEUCA_INI" value="${neuca.ini.file}" />
-							<env key="AMI_NAME" value="${ec2.ami.name}" />
-							<env key="AKI_NAME" value="${ec2.aki.name}" />
-							<env key="ARI_NAME" value="${ec2.ari.name}" />
-							<env key="EC2_INSTANCE_TYPE" value="${ec2.instance.type}" />
-							<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-							<env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
-							<env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
-							<env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
-							<env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
-							<env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
-							<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
-							<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
-						</exec>
-						<echo message="after create instance: exit code ${code}, ${create.instance.output}" />
+                <if>
+                    <not>
+                        <equals arg1="${code}" arg2="0" />
+                    </not>
+                    <then>
+                        <echo message="Error encountered by image proxy, exiting ..." />
+    
+                    </then>
+                    <else>
+                        <!-- see if the controller specified instance type or use site default -->
+                        <if>
+                            <isset property="unit.ec2.instance.type" />
+                            <then>
+                                <echo message="User supplied instance type is ${unit.ec2.instance.type}" />
+                                <var name="ec2.instance.type" unset="true" />
+                                <property name="ec2.instance.type" value="${unit.ec2.instance.type}" />
+                            </then>
+                            <else>
+                                <echo message="User did not specify instance type, using default ${ec2.instance.type}" />
+                            </else>
+                        </if>
+                       <echo message="creating Euca instance ${unit.hostname.url} using emi ${ec2.ami.name} ...(may take some time)" />
+                        <var name="create.instance.output" unset="true" />
+                        <var name="code" unset="true" />
+                        <var name="message" unset="true" />
+                        <echo message="${ec2.scripts}/${cloud.type}-start " />
+                        <echo message="UNIT_HOSTNAME_URL=${unit.hostname.url}" />
+                        <echo message="EC2_HOME=${ec2.home}" />
+                        <echo message="EUCA_KEY_DIR=${ec2.keys}" />
+                        <echo message="EC2_LOG_DIR=${ec2.log.dir}" />
+                        <echo message="EC2_LOG_FILE=${ec2.log.file}" />
+                        <echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
+                        <echo message="EUCA_GROUP=${euca.group}" />
+                        <echo message="NEUCA_INI=${neuca.ini.file}" />
+                        <echo message="AMI_NAME=${ec2.ami.name}" />
+                        <echo message="AKI_NAME=${ec2.aki.name}" />
+                        <echo message="ARI_NAME=${ec2.ari.name}" />
+                        <echo message="EC2_INSTANCE_TYPE=${ec2.instance.type}" />
+                        <echo message="EC2_SSH_KEY=${ec2.ssh.key}" />
+                        <echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
+                        <echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
+                        <echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
+                        <echo message="EC2_SSH_TIMEOUT=${ec2.ssh.timeout}" />
+                        <echo message="EC2_STARTUP_RETRIES=${ec2.startup.retries}" />
+                        <echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
+                        <echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
+                        <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
+                        <echo message="before create instance" />
+                        <exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
+                            <env key="EMULATION" value="${emulation}" />
+                            <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                            <env key="EC2_HOME" value="${ec2.home}" />
+                            <env key="EC2_DIR" value="${ec2.dir}" />
+                            <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                            <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                            <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                            <env key="EUCA_GROUP" value="${euca.group}" />
+                            <env key="NEUCA_INI" value="${neuca.ini.file}" />
+                            <env key="AMI_NAME" value="${ec2.ami.name}" />
+                            <env key="AKI_NAME" value="${ec2.aki.name}" />
+                            <env key="ARI_NAME" value="${ec2.ari.name}" />
+                            <env key="EC2_INSTANCE_TYPE" value="${ec2.instance.type}" />
+                            <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+                            <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
+                            <env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
+                            <env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
+                            <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
+                            <env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
+                            <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
+                            <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                        </exec>
+                        <echo message="after create instance: exit code ${code}, ${create.instance.output}" />
 
-						<if>
-							<not>
-								<equals arg1="${code}" arg2="0" />
-							</not>
-							<then>
-								<echo message="unable to create instance: exit code ${code}, ${create.instance.output}" />
-								<property name="shirako.save.unit.ec2.consolelog" value="${create.instance.output}" />
-								<property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
-								<echo message="console-log: ${shirako.save.unit.ec2.consolelog} "/>
-							</then>
-							<else>
-								<var name="shirako.save.unit.ec2.instance" unset="true" />
-								<property name="shirako.save.unit.ec2.instance" value="${create.instance.output}" />
+                        <if>
+                            <not>
+                                <equals arg1="${code}" arg2="0" />
+                            </not>
+                            <then>
+                                <echo message="unable to create instance: exit code ${code}, ${create.instance.output}" />
+                                <property name="shirako.save.unit.ec2.consolelog" value="${create.instance.output}" />
+                                <property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
+                                <echo message="console-log: ${shirako.save.unit.ec2.consolelog} "/>
+                            </then>
+                            <else>
+                                <var name="shirako.save.unit.ec2.instance" unset="true" />
+                                <property name="shirako.save.unit.ec2.instance" value="${create.instance.output}" />
 
-								<!-- hairpin the hostname property so the user sees it too -->
-								<var name="shirako.save.unit.hostname.url" unset="true" />
-								<property name="shirako.save.unit.hostname.url" value="${unit.hostname.url}" />
-								<echo message="create-instance exit code: ${code} instance=${shirako.save.unit.ec2.instance}" />
+                                <!-- hairpin the hostname property so the user sees it too -->
+                                <var name="shirako.save.unit.hostname.url" unset="true" />
+                                <property name="shirako.save.unit.hostname.url" value="${unit.hostname.url}" />
+                                <echo message="create-instance exit code: ${code} instance=${shirako.save.unit.ec2.instance}" />
 
-								<!-- obtain worker node information (if available) -->
-								<var name="shirako.save.unit.ec2.host" unset="true" />
-								<var name="code" unset="true" />
-								<var name="message" unset="true" />
-								<exec executable="${ec2.scripts}/${cloud.type}-get-host" resultproperty="code" outputproperty="shirako.save.unit.ec2.host">
-									<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-									<env key="EC2_HOME" value="${ec2.home}" />
-									<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-									<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-									<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-									<env key="EC2_DIR" value="${ec2.dir}" />
-									<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-									<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
-									<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
-									<arg value="${shirako.save.unit.ec2.instance}" />
-								</exec>
-								<echo message="get-host exit code: ${code} host=${shirako.save.unit.ec2.host}" />
+                                <!-- obtain worker node information (if available) -->
+                                <var name="shirako.save.unit.ec2.host" unset="true" />
+                                <var name="code" unset="true" />
+                                <var name="message" unset="true" />
+                                <exec executable="${ec2.scripts}/${cloud.type}-get-host" resultproperty="code" outputproperty="shirako.save.unit.ec2.host">
+                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                                    <env key="EC2_HOME" value="${ec2.home}" />
+                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                    <env key="EC2_DIR" value="${ec2.dir}" />
+                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                    <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
+                                    <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                                    <arg value="${shirako.save.unit.ec2.instance}" />
+                                </exec>
+                                <echo message="get-host exit code: ${code} host=${shirako.save.unit.ec2.host}" />
 
-								<!-- obtain console-log (if available) -->
-								<var name="shirako.save.unit.ec2.consolelog" unset="true" />
-								<var name="code" unset="true" />
-								<var name="message" unset="true" />	
-								<exec executable="${ec2.scripts}/${cloud.type}-get-console-log" resultproperty="code" outputproperty="shirako.save.unit.ec2.consolelog">
-									<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-									<env key="EC2_HOME" value="${ec2.home}" />
-									<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-									<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-									<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-									<env key="EC2_DIR" value="${ec2.dir}" />
-									<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-									<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
-									<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
-									<arg value="${shirako.save.unit.ec2.instance}" />
-								</exec>
-								<!-- <echo message="get-console-log exit code: ${code} consolelog=${shirako.save.unit.ec2.consolelog}" /> -->
+                                <!-- obtain console-log (if available) -->
+                                <var name="shirako.save.unit.ec2.consolelog" unset="true" />
+                                <var name="code" unset="true" />
+                                <var name="message" unset="true" />    
+                                <exec executable="${ec2.scripts}/${cloud.type}-get-console-log" resultproperty="code" outputproperty="shirako.save.unit.ec2.consolelog">
+                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                                    <env key="EC2_HOME" value="${ec2.home}" />
+                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                    <env key="EC2_DIR" value="${ec2.dir}" />
+                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                    <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
+                                    <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                                    <arg value="${shirako.save.unit.ec2.instance}" />
+                                </exec>
+                                <!-- <echo message="get-console-log exit code: ${code} consolelog=${shirako.save.unit.ec2.consolelog}" /> -->
 
-	
-								<!-- obtain management IP address -->
-								<echo message="obtaining ip address for instance ${shirako.save.unit.ec2.instance}" />
-								<var name="code" unset="true" />
-								<var name="message" unset="true" />
-								<exec executable="${ec2.scripts}/${cloud.type}-get-ip" resultproperty="code" outputproperty="shirako.save.unit.manage.ip">
-									<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-									<env key="EC2_HOME" value="${ec2.home}" />
-									<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-									<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-									<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-									<env key="EC2_DIR" value="${ec2.dir}" />
-									<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-									<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
-									<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
-									<arg value="${shirako.save.unit.ec2.instance}" />
-								</exec>
-								<echo message="get-ip exit code: ${code} ip=${shirako.save.unit.manage.ip}" />
+    
+                                <!-- obtain management IP address -->
+                                <echo message="obtaining ip address for instance ${shirako.save.unit.ec2.instance}" />
+                                <var name="code" unset="true" />
+                                <var name="message" unset="true" />
+                                <exec executable="${ec2.scripts}/${cloud.type}-get-ip" resultproperty="code" outputproperty="shirako.save.unit.manage.ip">
+                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                                    <env key="EC2_HOME" value="${ec2.home}" />
+                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                    <env key="EC2_DIR" value="${ec2.dir}" />
+                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                    <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
+                                    <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                                    <arg value="${shirako.save.unit.ec2.instance}" />
+                                </exec>
+                                <echo message="get-ip exit code: ${code} ip=${shirako.save.unit.manage.ip}" />
 
-								<!-- set the user's private key, if needed -->
-								<if>
-									<and>
-										<isset property="shirako.save.unit.manage.ip" />
-										<equals arg1="${code}" arg2="0" />
-									</and>
-									<then>
-										<!-- entering here ${code} should be 0 and will stay this way unless there is an error below -->
-										<echo message="installing ${config.ssh.numlogins} user keys and accounts in the instance" />
-										<var name="message" unset="true" />
-										<for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
-											<sequential>
-												<var name="icode" unset="true" />
+                                <!-- set the user's private key, if needed -->
+                                <if>
+                                    <and>
+                                        <isset property="shirako.save.unit.manage.ip" />
+                                        <equals arg1="${code}" arg2="0" />
+                                    </and>
+                                    <then>
+                                        <!-- entering here ${code} should be 0 and will stay this way unless there is an error below -->
+                                        <echo message="installing ${config.ssh.numlogins} user keys and accounts in the instance" />
+                                        <var name="message" unset="true" />
+                                        <for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+                                            <sequential>
+                                                <var name="icode" unset="true" />
 
-												<var name="loginProperty" unset="true" />
-												<var name="keysProperty" unset="true" />
-												<var name="sudoProperty" unset="true" />
+                                                <var name="loginProperty" unset="true" />
+                                                <var name="keysProperty" unset="true" />
+                                                <var name="sudoProperty" unset="true" />
 
-												<property name="loginProperty" value="${config.ssh.user@{iter}.login}" />
-												<property name="keysProperty" value="${config.ssh.user@{iter}.keys}" />
-												<property name="sudoProperty" value="${config.ssh.user@{iter}.sudo}" />
+                                                <property name="loginProperty" value="${config.ssh.user@{iter}.login}" />
+                                                <property name="keysProperty" value="${config.ssh.user@{iter}.keys}" />
+                                                <property name="sudoProperty" value="${config.ssh.user@{iter}.sudo}" />
 
-												<echo message="Creating account on ${shirako.save.unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-												<exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
-													<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-													<env key="EC2_HOME" value="${ec2.home}" />
-													<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-													<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-													<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-													<env key="EC2_DIR" value="${ec2.dir}" />
-													<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-													<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-													<env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
-													<env key="AMI_NAME" value="${ec2.ami.name}" />
-													<env key="AKI_NAME" value="${ec2.aki.name}" />
-													<env key="ARI_NAME" value="${ec2.ari.name}" />
-													<arg value="${shirako.save.unit.manage.ip}" />
-													<arg value="${loginProperty}" />
-													<arg value="${keysProperty}" />
-													<arg value="${sudoProperty}" />
-												</exec>
-												<echo message="Exit code for login ${loginProperty} is ${icode}" />
-												<if>
-													<not>
-														<equals arg1="${icode}" arg2="0" />
-													</not>
-													<then>
-														<if>
-															<and>
-																<!-- code 2 reserved for 'soft key insertion failures' -->
-																<equals arg1="${icode}" arg2="2" />
-																<isset property="ssh.key.insertion.soft.failure"/> 
-															</and>
-															<then>
-																<echo message="Unable to create account ${loginProperty}, logging soft failure" />
-															</then>
-															<else>
-																<fail message="Unable to create account ${loginProperty}, failing" />
-															</else>
-														</if>
-													</then>
-												</if>
-											</sequential>
-										</for>
+                                                <echo message="Creating account on ${shirako.save.unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+                                                <exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
+                                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                                                    <env key="EC2_HOME" value="${ec2.home}" />
+                                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                                    <env key="EC2_DIR" value="${ec2.dir}" />
+                                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                                    <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+                                                    <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
+                                                    <env key="AMI_NAME" value="${ec2.ami.name}" />
+                                                    <env key="AKI_NAME" value="${ec2.aki.name}" />
+                                                    <env key="ARI_NAME" value="${ec2.ari.name}" />
+                                                    <arg value="${shirako.save.unit.manage.ip}" />
+                                                    <arg value="${loginProperty}" />
+                                                    <arg value="${keysProperty}" />
+                                                    <arg value="${sudoProperty}" />
+                                                </exec>
+                                                <echo message="Exit code for login ${loginProperty} is ${icode}" />
+                                                <if>
+                                                    <not>
+                                                        <equals arg1="${icode}" arg2="0" />
+                                                    </not>
+                                                    <then>
+                                                        <if>
+                                                            <and>
+                                                                <!-- code 2 reserved for 'soft key insertion failures' -->
+                                                                <equals arg1="${icode}" arg2="2" />
+                                                                <isset property="ssh.key.insertion.soft.failure"/> 
+                                                            </and>
+                                                            <then>
+                                                                <echo message="Unable to create account ${loginProperty}, logging soft failure" />
+                                                            </then>
+                                                            <else>
+                                                                <fail message="Unable to create account ${loginProperty}, failing" />
+                                                            </else>
+                                                        </if>
+                                                    </then>
+                                                </if>
+                                            </sequential>
+                                        </for>
 
-										<!-- default port is SSH -->
-										<property name="shirako.save.unit.manage.port" value="22" />
-										<!-- optionally open shorewall dnat proxy to this host -->
-										<if>
-											<!-- statically specified in ec2.site.properties -->
-											<and>
-												<equals arg1="${ec2.use.proxy}" arg2="true" />
-												<equals arg1="${code}" arg2="0" />
-											</and>
-											<then>
-												<!-- all properties passed to proxy script should be statically specified in ec2.site.properties.
-				 									See wiki notes on proxies for meaning of these properties.
-												-->
-												<echo message="configuring ${proxy.type} SSH proxy for ${shirako.save.unit.manage.ip} via host ${proxy.proxy.ip}" />
-												<var name="code" unset="true" />
-												<var name="message" unset="true" />
-												<exec executable="${ec2.scripts}/start-proxy" resultproperty="code" outputproperty="proxy.script.output">
-													<env key="PROXY_TYPE" value="${proxy.type}" />
-													<env key="PROXY_PROXY_IP" value="${proxy.proxy.ip}" />
-													<env key="PROXY_INSTANCE_IP" value="${shirako.save.unit.manage.ip}" />
-													<env key="PROXY_USER" value="${proxy.user}" />
-													<env key="PROXY_SSH_KEY" value="${proxy.ssh.key}" />
-													<env key="PROXY_SCRIPT_PATH" value="${proxy.script.path}" />
-												</exec>
-												<if>
-													<equals arg1="${code}" arg2="0" />
-													<then>
-														<var name="shirako.save.unit.manage.ip" unset="true" />
-														<var name="shirako.save.unit.manage.port" unset="true" />
-														<propertyregex property="shirako.save.unit.manage.ip" input="${proxy.script.output}" regexp="([^:]+):([0123456789]+)" select="\1" casesensitive="false" />
-														<propertyregex property="shirako.save.unit.manage.port" input="${proxy.script.output}" regexp="([^:]+):([0123456789]+)" select="\2" casesensitive="false" />
-														<echo message="proxy configuration created on ${shirako.save.unit.manage.ip}:${shirako.save.unit.manage.port}" />
-													</then>
-													<else>
-														<echo message="start-proxy failed with exit code: ${code} ${proxy.script.output}" />
-														<property name="message" value="start-proxy failed with exit code: ${code} ${proxy.script.output}" />
-														<echo message="terminating instance: ${shirako.save.unit.ec2.instance}" />
-														<!-- be sure not to save exit code (renamed nocode), since we don't care here if stop exits successfully -->
-														<exec executable="${ec2.scripts}/${cloud.type}-stop" resultproperty="nocode" outputproperty="terminate.instance.output">
-															<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-															<env key="EC2_HOME" value="${ec2.home}" />
-															<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-															<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-															<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-															<env key="EC2_DIR" value="${ec2.dir}" />
-															<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-															<env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
-															<env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
-															<arg value="${shirako.save.unit.ec2.instance}" />
-														</exec>
-													</else>
-												</if>
-											</then>
-										</if>
-									</then>
-								</if>
+                                        <!-- default port is SSH -->
+                                        <property name="shirako.save.unit.manage.port" value="22" />
+                                        <!-- optionally open shorewall dnat proxy to this host -->
+                                        <if>
+                                            <!-- statically specified in ec2.site.properties -->
+                                            <and>
+                                                <equals arg1="${ec2.use.proxy}" arg2="true" />
+                                                <equals arg1="${code}" arg2="0" />
+                                            </and>
+                                            <then>
+                                                <!-- all properties passed to proxy script should be statically specified in ec2.site.properties.
+                                                     See wiki notes on proxies for meaning of these properties.
+                                                -->
+                                                <echo message="configuring ${proxy.type} SSH proxy for ${shirako.save.unit.manage.ip} via host ${proxy.proxy.ip}" />
+                                                <var name="code" unset="true" />
+                                                <var name="message" unset="true" />
+                                                <exec executable="${ec2.scripts}/start-proxy" resultproperty="code" outputproperty="proxy.script.output">
+                                                    <env key="PROXY_TYPE" value="${proxy.type}" />
+                                                    <env key="PROXY_PROXY_IP" value="${proxy.proxy.ip}" />
+                                                    <env key="PROXY_INSTANCE_IP" value="${shirako.save.unit.manage.ip}" />
+                                                    <env key="PROXY_USER" value="${proxy.user}" />
+                                                    <env key="PROXY_SSH_KEY" value="${proxy.ssh.key}" />
+                                                    <env key="PROXY_SCRIPT_PATH" value="${proxy.script.path}" />
+                                                </exec>
+                                                <if>
+                                                    <equals arg1="${code}" arg2="0" />
+                                                    <then>
+                                                        <var name="shirako.save.unit.manage.ip" unset="true" />
+                                                        <var name="shirako.save.unit.manage.port" unset="true" />
+                                                        <propertyregex property="shirako.save.unit.manage.ip" input="${proxy.script.output}" regexp="([^:]+):([0123456789]+)" select="\1" casesensitive="false" />
+                                                        <propertyregex property="shirako.save.unit.manage.port" input="${proxy.script.output}" regexp="([^:]+):([0123456789]+)" select="\2" casesensitive="false" />
+                                                        <echo message="proxy configuration created on ${shirako.save.unit.manage.ip}:${shirako.save.unit.manage.port}" />
+                                                    </then>
+                                                    <else>
+                                                        <echo message="start-proxy failed with exit code: ${code} ${proxy.script.output}" />
+                                                        <property name="message" value="start-proxy failed with exit code: ${code} ${proxy.script.output}" />
+                                                        <echo message="terminating instance: ${shirako.save.unit.ec2.instance}" />
+                                                        <!-- be sure not to save exit code (renamed nocode), since we don't care here if stop exits successfully -->
+                                                        <exec executable="${ec2.scripts}/${cloud.type}-stop" resultproperty="nocode" outputproperty="terminate.instance.output">
+                                                            <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                                                            <env key="EC2_HOME" value="${ec2.home}" />
+                                                            <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                                            <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                                            <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                                            <env key="EC2_DIR" value="${ec2.dir}" />
+                                                            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                                            <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
+                                                            <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                                                            <arg value="${shirako.save.unit.ec2.instance}" />
+                                                        </exec>
+                                                    </else>
+                                                </if>
+                                            </then>
+                                        </if>
+                                    </then>
+                                </if>
 
-								<!-- create the NEUCA INI file -->
-								<trycatch property="failmsg">
-									<try>
-										<tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
-										<echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
-										<ec2.generate.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" outputproperty="iface.list" />
-										<echo message="iface.list = ${iface.list}" />
-										<loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-										<echo message="neuca.ini: ${neuca.ini}" />
-									</try>
-									<catch>
+                                <!-- create the NEUCA INI file -->
+                                <trycatch property="failmsg">
+                                    <try>
+                                        <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
+                                        <echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
+                                        <ec2.generate.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" outputproperty="iface.list" />
+                                        <echo message="iface.list = ${iface.list}" />
+                                        <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
+                                        <echo message="neuca.ini: ${neuca.ini}" />
+                                    </try>
+                                    <catch>
                                         <delete.instance/>
                                         <fail message="${failmsg}" />
-									</catch>
-								</trycatch>
+                                    </catch>
+                                </trycatch>
 
-								<!-- if neuca-quantum, add interfaces -->
-								<if>
-									<equals arg1="${cloud.type}" arg2="nova-essex" />
-									<then>
-										<echo message="iface list: ${iface.list}" />
-										<var name="instance.quantum.ifaces" unset="true" />
-										<for list="${iface.list}" param="iface" delimiter=" " parallel="false">
-											<sequential>
-												<var name="iface.net.name" unset="true" />
-												<var name="iface.net.vlan" unset="true" />
-												<var name="iface.mac" unset="true" />
-												<echo>iface @{iface}</echo>
-												<propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
+                                <!-- if neuca-quantum, add interfaces -->
+                                <if>
+                                    <equals arg1="${cloud.type}" arg2="nova-essex" />
+                                    <then>
+                                        <echo message="iface list: ${iface.list}" />
+                                        <var name="instance.quantum.ifaces" unset="true" />
+                                        <for list="${iface.list}" param="iface" delimiter=" " parallel="false">
+                                            <sequential>
+                                                <var name="iface.net.name" unset="true" />
+                                                <var name="iface.net.vlan" unset="true" />
+                                                <var name="iface.mac" unset="true" />
+                                                <echo>iface @{iface}</echo>
+                                                <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
 
-												<propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
+                                                <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
 
-												<propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
-												<echo>quantum.tenant.id ${quantum.tenant.id}</echo>
-												<echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
-												<echo>iface.mac ${iface.mac}</echo>
-												<echo>iface.net.vlan ${iface.net.vlan}</echo>
-												<echo>iface.net.name ${iface.net.name}</echo>
+                                                <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
+                                                <echo>quantum.tenant.id ${quantum.tenant.id}</echo>
+                                                <echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
+                                                <echo>iface.mac ${iface.mac}</echo>
+                                                <echo>iface.net.vlan ${iface.net.vlan}</echo>
+                                                <echo>iface.net.name ${iface.net.name}</echo>
 
-												<var name="code" unset="true" />
-												<var name="add.iface.output" unset="true" />
-												<echo message="EC2_HOME ${ec2.home}" />
-												<echo message="EC2_DIR ${ec2.dir}" />
-												<echo message="EUCA_KEY_DIR=${ec2.keys}" />
-												<echo message="EC2_LOG_DIR ${ec2.log.dir}" />
-												<echo message="EC2_LOG_FILE ${ec2.log.file}" />
-												<echo message="EC2_LOG_LEVEL ${ec2.log.level}" />
-												<echo message="QUANTUM_TENANT_ID ${quantum.tenant.id}" />
-												<echo message="QUANTUM_NET_INSTANCE_NAME ${shirako.save.unit.ec2.instance}" />
-												<echo message="QUANTUM_NET_IFACE_MAC ${iface.mac}" />
-												<echo message="QUANTUM_NET_NETWORK ${iface.net.name}" />
-												<echo message="QUANTUM_NET_VLAN ${iface.net.vlan}" />
+                                                <var name="code" unset="true" />
+                                                <var name="add.iface.output" unset="true" />
+                                                <echo message="EC2_HOME ${ec2.home}" />
+                                                <echo message="EC2_DIR ${ec2.dir}" />
+                                                <echo message="EUCA_KEY_DIR=${ec2.keys}" />
+                                                <echo message="EC2_LOG_DIR ${ec2.log.dir}" />
+                                                <echo message="EC2_LOG_FILE ${ec2.log.file}" />
+                                                <echo message="EC2_LOG_LEVEL ${ec2.log.level}" />
+                                                <echo message="QUANTUM_TENANT_ID ${quantum.tenant.id}" />
+                                                <echo message="QUANTUM_NET_INSTANCE_NAME ${shirako.save.unit.ec2.instance}" />
+                                                <echo message="QUANTUM_NET_IFACE_MAC ${iface.mac}" />
+                                                <echo message="QUANTUM_NET_NETWORK ${iface.net.name}" />
+                                                <echo message="QUANTUM_NET_VLAN ${iface.net.vlan}" />
 
-												<exec executable="${ec2.scripts}/neuca-quantum-add-iface" resultproperty="code" outputproperty="add.iface.output">
-													<env key="EC2_HOME" value="${ec2.home}" />
-													<env key="EC2_DIR" value="${ec2.dir}" />
-													<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-													<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-													<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-													<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-													<env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
-													<env key="QUANTUM_NET_INSTANCE_NAME" value="${shirako.save.unit.ec2.instance}" />
-													<env key="QUANTUM_NET_IFACE_MAC" value="${iface.mac}" />
-													<env key="QUANTUM_NET_NETWORK" value="${iface.net.name}" />
-													<env key="QUANTUM_NET_VLAN" value="${iface.net.vlan}" />
-												</exec>
-												<echo>result code: ${code}</echo>
-												<echo>output: ${add.iface.output}</echo>
+                                                <exec executable="${ec2.scripts}/neuca-quantum-add-iface" resultproperty="code" outputproperty="add.iface.output">
+                                                    <env key="EC2_HOME" value="${ec2.home}" />
+                                                    <env key="EC2_DIR" value="${ec2.dir}" />
+                                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                                    <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
+                                                    <env key="QUANTUM_NET_INSTANCE_NAME" value="${shirako.save.unit.ec2.instance}" />
+                                                    <env key="QUANTUM_NET_IFACE_MAC" value="${iface.mac}" />
+                                                    <env key="QUANTUM_NET_NETWORK" value="${iface.net.name}" />
+                                                    <env key="QUANTUM_NET_VLAN" value="${iface.net.vlan}" />
+                                                </exec>
+                                                <echo>result code: ${code}</echo>
+                                                <echo>output: ${add.iface.output}</echo>
                                                 <if>
                                                     <not>
                                                         <equals arg1="${code}" arg2="0"/>
@@ -583,27 +583,27 @@
                                                         <fail message="${add.iface.output}" />
                                                     </then>
                                                 </if>
-												<if>
-													<isset property="instance.quantum.ifaces" />
-													<then>
-														<var name="instance.quantum.ifaces.tmp" unset="true" />
-														<property name="instance.quantum.ifaces.tmp" value="${instance.quantum.ifaces}" />
-														<var name="instance.quantum.ifaces" unset="true" />
-														<property name="instance.quantum.ifaces" value="${instance.quantum.ifaces.tmp},${add.iface.output}" />
-													</then>
-													<else>
-														<property name="instance.quantum.ifaces" value="${add.iface.output}" />
-													</else>
-												</if>
-											</sequential>
-										</for>
-										<property name="shirako.save.unit.quantum.ifaces" value="${instance.quantum.ifaces}" />
-										<echo>shirako.save.unit.quantum.ifaces: ${shirako.save.unit.quantum.ifaces}</echo>
-									</then>
-								</if>
-	
-	
-								<!-- update the userdata file  -->
+                                                <if>
+                                                    <isset property="instance.quantum.ifaces" />
+                                                    <then>
+                                                        <var name="instance.quantum.ifaces.tmp" unset="true" />
+                                                        <property name="instance.quantum.ifaces.tmp" value="${instance.quantum.ifaces}" />
+                                                        <var name="instance.quantum.ifaces" unset="true" />
+                                                        <property name="instance.quantum.ifaces" value="${instance.quantum.ifaces.tmp},${add.iface.output}" />
+                                                    </then>
+                                                    <else>
+                                                        <property name="instance.quantum.ifaces" value="${add.iface.output}" />
+                                                    </else>
+                                                </if>
+                                            </sequential>
+                                        </for>
+                                        <property name="shirako.save.unit.quantum.ifaces" value="${instance.quantum.ifaces}" />
+                                        <echo>shirako.save.unit.quantum.ifaces: ${shirako.save.unit.quantum.ifaces}</echo>
+                                    </then>
+                                </if>
+    
+    
+                                <!-- update the userdata file  -->
                                 <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
                                 <echo message="update userdata instance: ${shirako.save.unit.ec2.instance}" />
                                 <var name="code" unset="true" />
@@ -620,142 +620,142 @@
                                     <env key="INSTANCE_ID" value="${shirako.save.unit.ec2.instance}" />
                                 </exec>
                                 <echo message="after update userdata: exit code ${code}, ${update.userdata.output}" />
-								<delete file="${neuca.ini.file}" />
-							</else>
-						</if>
-					</else>
-				</if>
-				</else>
-			</if>
-				<property name="shirako.target.code" value="${code}" />
-				<if>
-					<isset property="message" />
-					<then>
-						<property name="shirako.target.code.message" value="${message}" />
-					</then>
-					<else>
-						<property name="shirako.target.code.message" value="none" />
-					</else>
-				</if>
-		<echo message="join exit code: ${shirako.target.code}" />
-	</target>
+                                <delete file="${neuca.ini.file}" />
+                            </else>
+                        </if>
+                    </else>
+                </if>
+                </else>
+            </if>
+                <property name="shirako.target.code" value="${code}" />
+                <if>
+                    <isset property="message" />
+                    <then>
+                        <property name="shirako.target.code.message" value="${message}" />
+                    </then>
+                    <else>
+                        <property name="shirako.target.code.message" value="none" />
+                    </else>
+                </if>
+        <echo message="join exit code: ${shirako.target.code}" />
+    </target>
 
-	<!-- Various Modify Operations -->
-	
-	<!-- Useful macros -->
-	<macrodef name="modify.ssh" description="install new SSH keys via modify">
-		<attribute name="seqnum" description="sequence number"/>
-		<sequential>
-			<if>
-				<equals arg1="${emulation}" arg2="true" />
-				<then>
-					<for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
-						<sequential>
-							<var name="loginProperty" unset="true" />
-							<var name="keysProperty" unset="true" />
-							<var name="sudoProperty" unset="true" />
-						
-							<property name="loginProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
-							<property name="keysProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
-							<property name="sudoProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
-						
-							<echo message="About to create account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-						</sequential>
-					</for>
-					<echo message="Running under emulation...exiting" />
-					<property name="shirako.target.code" value="0" />
-				</then>
-				<else>
-					<echo message="installing ${modify.@{seqnum}.config.ssh.numlogins} user keys and accounts in the instance" />
-					<var name="message" unset="true" />
+    <!-- Various Modify Operations -->
+    
+    <!-- Useful macros -->
+    <macrodef name="modify.ssh" description="install new SSH keys via modify">
+        <attribute name="seqnum" description="sequence number"/>
+        <sequential>
+            <if>
+                <equals arg1="${emulation}" arg2="true" />
+                <then>
+                    <for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+                        <sequential>
+                            <var name="loginProperty" unset="true" />
+                            <var name="keysProperty" unset="true" />
+                            <var name="sudoProperty" unset="true" />
+                        
+                            <property name="loginProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
+                            <property name="keysProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
+                            <property name="sudoProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
+                        
+                            <echo message="About to create account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+                        </sequential>
+                    </for>
+                    <echo message="Running under emulation...exiting" />
+                    <property name="shirako.target.code" value="0" />
+                </then>
+                <else>
+                    <echo message="installing ${modify.@{seqnum}.config.ssh.numlogins} user keys and accounts in the instance" />
+                    <var name="message" unset="true" />
 
-					<trycatch property="failmsg">
-					<try>
-						<!-- re-create the NEUCA INI file -->
-						<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-											<echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
-											<echo message="LoginProperty : ${loginProperty}" />
-											<echo message="KeysProperty : ${keysProperty}" />
-											<echo message="SudoProperty : ${sudoProperty}" />
-											<exec executable="${ec2.scripts}/${cloud.type}-get-userdata" resultproperty="icode" outputproperty="userdata.old" >
-												  <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-												  <env key="EC2_HOME" value="${ec2.home}" />
-												  <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-												  <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-												  <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-												  <env key="EC2_DIR" value="${ec2.dir}" />
-												  <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-												  <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-												  <arg value="${unit.ec2.instance}" />
-											</exec>
-											<echo message="Exit code for get-userdata is ${icode}" />
-							<echo message="Old userdata : ${userdata.old}" />
+                    <trycatch property="failmsg">
+                    <try>
+                        <!-- re-create the NEUCA INI file -->
+                        <echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+                                            <echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
+                                            <echo message="LoginProperty : ${loginProperty}" />
+                                            <echo message="KeysProperty : ${keysProperty}" />
+                                            <echo message="SudoProperty : ${sudoProperty}" />
+                                            <exec executable="${ec2.scripts}/${cloud.type}-get-userdata" resultproperty="icode" outputproperty="userdata.old" >
+                                                  <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                                                  <env key="EC2_HOME" value="${ec2.home}" />
+                                                  <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                                  <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                                  <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                                  <env key="EC2_DIR" value="${ec2.dir}" />
+                                                  <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                                  <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+                                                  <arg value="${unit.ec2.instance}" />
+                                            </exec>
+                                            <echo message="Exit code for get-userdata is ${icode}" />
+                            <echo message="Old userdata : ${userdata.old}" />
 
-						<!-- setup userdata:  set userdataold the userdata string in order to parse and copy to ${neuca.ini.file} -->
-						<tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
-											<echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
-											<ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${userdata.old}" />
-											<loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-											<echo message="neuca.ini: ${neuca.ini}" />
+                        <!-- setup userdata:  set userdataold the userdata string in order to parse and copy to ${neuca.ini.file} -->
+                        <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
+                                            <echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
+                                            <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${userdata.old}" />
+                                            <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
+                                            <echo message="neuca.ini: ${neuca.ini}" />
 
-						<!-- add keys -->
-						<echo message="Modify.ssh, numlogins : ${modify.@{seqnum}.config.ssh.numlogins} " />
-						<for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+                        <!-- add keys -->
+                        <echo message="Modify.ssh, numlogins : ${modify.@{seqnum}.config.ssh.numlogins} " />
+                        <for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
 
-							<sequential>
+                            <sequential>
                                 <var name="icode" unset="true" />
-								<var name="loginProperty" unset="true" />
-								<var name="keysProperty" unset="true" />
-								<var name="sudoProperty" unset="true" />
+                                <var name="loginProperty" unset="true" />
+                                <var name="keysProperty" unset="true" />
+                                <var name="sudoProperty" unset="true" />
 
-								<property name="loginProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
-								<property name="keysProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
-								<property name="sudoProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
+                                <property name="loginProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.login}" />
+                                <property name="keysProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.keys}" />
+                                <property name="sudoProperty" value="${modify.@{seqnum}.config.ssh.user@{iter}.sudo}" />
 
-								<echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-								<echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
-								<echo message="LoginProperty : ${loginProperty}" />
-								<echo message="KeysProperty : ${keysProperty}" />
-								<echo message="SudoProperty : ${sudoProperty}" />
+                                <echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
+                                <echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
+                                <echo message="LoginProperty : ${loginProperty}" />
+                                <echo message="KeysProperty : ${keysProperty}" />
+                                <echo message="SudoProperty : ${sudoProperty}" />
 
-								<!-- add key to userdata:  setuserdataold to ${neuca.ini.file} to read from file -->
+                                <!-- add key to userdata:  setuserdataold to ${neuca.ini.file} to read from file -->
                                 <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="users" key="${loginProperty}" value="${keysProperty}" />
                                 <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
                                 <echo message="neuca.ini: ${neuca.ini}" />
 
-								<!-- add key to VM -->
-								<exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
-									<env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-									<env key="EC2_HOME" value="${ec2.home}" />
-									<env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-									<env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-									<env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-									<env key="EC2_DIR" value="${ec2.dir}" />
-									<env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-									<env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-									<env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
-									<env key="AMI_NAME" value="${ec2.ami.name}" />
-									<env key="AKI_NAME" value="${ec2.aki.name}" />
-									<env key="ARI_NAME" value="${ec2.ari.name}" />
-									<arg value="${unit.manage.ip}" />
-									<arg value="${loginProperty}" />
-									<arg value="${keysProperty}" />
-									<arg value="${sudoProperty}" />
-								</exec>
-								<echo message="Exit code for login ${loginProperty} is ${icode}" />
-								<if>
-									<not>
-										<equals arg1="${icode}" arg2="0" />
-									</not>
-									<then>
-										<fail message="Unable to create account ${loginProperty}, failing" />
-									</then>
-								</if>
-							</sequential>
-						</for>
+                                <!-- add key to VM -->
+                                <exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
+                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
+                                    <env key="EC2_HOME" value="${ec2.home}" />
+                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                                    <env key="EC2_DIR" value="${ec2.dir}" />
+                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                                    <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
+                                    <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
+                                    <env key="AMI_NAME" value="${ec2.ami.name}" />
+                                    <env key="AKI_NAME" value="${ec2.aki.name}" />
+                                    <env key="ARI_NAME" value="${ec2.ari.name}" />
+                                    <arg value="${unit.manage.ip}" />
+                                    <arg value="${loginProperty}" />
+                                    <arg value="${keysProperty}" />
+                                    <arg value="${sudoProperty}" />
+                                </exec>
+                                <echo message="Exit code for login ${loginProperty} is ${icode}" />
+                                <if>
+                                    <not>
+                                        <equals arg1="${icode}" arg2="0" />
+                                    </not>
+                                    <then>
+                                        <fail message="Unable to create account ${loginProperty}, failing" />
+                                    </then>
+                                </if>
+                            </sequential>
+                        </for>
 
-						<!-- update the userdata file  -->
-						<echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
+                        <!-- update the userdata file  -->
+                        <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
                         <echo message="update userdata instance: ${shirako.save.unit.ec2.instance}" />
                         <var name="code" unset="true" />
                         <var name="update.userdata.output" unset="true" />
@@ -773,76 +773,76 @@
                         <echo message="after update userdata: exit code ${code}, ${update.userdata.output}" />
 
                         <delete file="${neuca.ini.file}" />
-					</try>
-					<catch>
-						<echo message="Exception occured while updating users information: ${failmsg}" />
+                    </try>
+                    <catch>
+                        <echo message="Exception occured while updating users information: ${failmsg}" />
                     </catch>
-					</trycatch>
+                    </trycatch>
 
-				</else>
-			</if>
-		</sequential>
-	</macrodef>
-	
-	<!-- add logins -->
-	<target name="modify.ssh"  depends="resolve.configuration">
-		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-		<echo message="ec2.site.properties path is ${ec2.site.properties}" />
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+    
+    <!-- add logins -->
+    <target name="modify.ssh"  depends="resolve.configuration">
+        <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+        <echo message="ec2.site.properties path is ${ec2.site.properties}" />
 
-				<if>
-						<isset property="ec2.site.properties" />
-						<then>
-							<echo message="Setting ec2.site.properites from ${ec2.site.properties}" /> 
-							<property file="${ec2.site.properties}" />
-						</then>
-				</if>
+                <if>
+                        <isset property="ec2.site.properties" />
+                        <then>
+                            <echo message="Setting ec2.site.properites from ${ec2.site.properties}" /> 
+                            <property file="${ec2.site.properties}" />
+                        </then>
+                </if>
 
-		<var name="code" unset="true" />
-				<var name="message" unset="true" />
+        <var name="code" unset="true" />
+                <var name="message" unset="true" />
 
-	
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-		</tstamp>
-	
-		<echo message="EC2 HANDLER: MODIFY.SSH on ${start.TIME}" />
-		<echo message="modify.ssh: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
-		
-		<modify.ssh seqnum="${shirako.save.unit.modify.sequencenum}"/> 
-		
-		<property name="shirako.target.code" value="0" />
-		<echo message="modify.ssh exit code: ${shirako.target.code}" />
-	</target>
+    
+        <tstamp prefix="start">
+            <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
+    
+        <echo message="EC2 HANDLER: MODIFY.SSH on ${start.TIME}" />
+        <echo message="modify.ssh: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
+        
+        <modify.ssh seqnum="${shirako.save.unit.modify.sequencenum}"/> 
+        
+        <property name="shirako.target.code" value="0" />
+        <echo message="modify.ssh exit code: ${shirako.target.code}" />
+    </target>
 
-	<!-- add iface macro -->
-	<macrodef name="modify.addiface" description="add a new network iface via modify">
-		<attribute name="seqnum" description="sequence number"/>
+    <!-- add iface macro -->
+    <macrodef name="modify.addiface" description="add a new network iface via modify">
+        <attribute name="seqnum" description="sequence number"/>
 
-		<sequential>
-			<if>
-				<equals arg1="${emulation}" arg2="true" />
-				<then>
+        <sequential>
+            <if>
+                <equals arg1="${emulation}" arg2="true" />
+                <then>
                     <var name="iface.net.name" unset="true" />
-					<var name="iface.net.vlan" unset="true" />
-					<var name="iface.mac" unset="true" />
-					<echo>iface @{iface}</echo>
-					<propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
-					<propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
-					<propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
-					<echo>quantum.tenant.id ${quantum.tenant.id}</echo>
-										<echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
-					<echo>iface.mac ${iface.mac}</echo>
-					<echo>iface.net.vlan ${iface.net.vlan}</echo>
-					<echo>iface.net.name ${iface.net.name}</echo>
-					<echo>unit.ec2.instance ${unit.ec2.instance}</echo>
-						
-					<echo message="Running under emulation...exiting" />
-					<property name="shirako.target.code" value="0" />
-				</then>
-				<else>  
-					<!-- Actually do it... no emulation -->
-					<echo message="adding interfaces to instance" />
-					<var name="message" unset="true" />
+                    <var name="iface.net.vlan" unset="true" />
+                    <var name="iface.mac" unset="true" />
+                    <echo>iface @{iface}</echo>
+                    <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
+                    <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
+                    <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
+                    <echo>quantum.tenant.id ${quantum.tenant.id}</echo>
+                                        <echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
+                    <echo>iface.mac ${iface.mac}</echo>
+                    <echo>iface.net.vlan ${iface.net.vlan}</echo>
+                    <echo>iface.net.name ${iface.net.name}</echo>
+                    <echo>unit.ec2.instance ${unit.ec2.instance}</echo>
+                        
+                    <echo message="Running under emulation...exiting" />
+                    <property name="shirako.target.code" value="0" />
+                </then>
+                <else>  
+                    <!-- Actually do it... no emulation -->
+                    <echo message="adding interfaces to instance" />
+                    <var name="message" unset="true" />
 
                     <echo message="vlan.tag = ${modify.@{seqnum}.vlan.tag}" />
                     <echo message="ip = ${modify.@{seqnum}.ip}" />
@@ -929,15 +929,14 @@
                     </exec>
                     <echo>result code: ${code}</echo>
                     <echo>output: ${add.iface.output}</echo>
-					<if>
-						<not>
-							<equals arg1="${code}" arg2="0"/>
-						</not>
-						<then>
+                    <if>
+                        <not>
+                            <equals arg1="${code}" arg2="0"/>
+                        </not>
+                        <then>
                             <echo message="neuca-quantum-add-iface: failed to add interface" />
-                            <fail message="${add.iface.output}" />
-						</then>
-					</if>
+                        </then>
+                    </if>
 
                     <!-- add properties to userdata file -->
                     <echo message="About to update userdata file: "/>
@@ -1111,81 +1110,81 @@
                     </exec>
                     <echo message="after update userdata: exit code ${code}, ${update.userdata.output}" />
                     <delete file="${neuca.ini.file}" />
-				</else>
-			</if>
-		</sequential>
-	</macrodef>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
 
 
-	<!-- add network interface -->
-	<target name="modify.addiface"  depends="resolve.configuration">
-		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+    <!-- add network interface -->
+    <target name="modify.addiface"  depends="resolve.configuration">
+        <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
 
-		<echo message="ec2.site.properties path is ${ec2.site.properties}" />
+        <echo message="ec2.site.properties path is ${ec2.site.properties}" />
 
-		<if>
-			<isset property="ec2.site.properties" />
-			<then>
-				<echo message="Setting ec2.site.properites from ${ec2.site.properties}" />
-				<property file="${ec2.site.properties}" />
-			</then>
-		</if>
+        <if>
+            <isset property="ec2.site.properties" />
+            <then>
+                <echo message="Setting ec2.site.properites from ${ec2.site.properties}" />
+                <property file="${ec2.site.properties}" />
+            </then>
+        </if>
 
-		<var name="code" unset="true" />
-		<var name="message" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
 
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-		</tstamp>
+        <tstamp prefix="start">
+            <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
 
-		<echo message="EC2 HANDLER: MODIFY.ADDIFACE on ${start.TIME}" />
-		<echo message="modify.addiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
+        <echo message="EC2 HANDLER: MODIFY.ADDIFACE on ${start.TIME}" />
+        <echo message="modify.addiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
 
-		<if>
-			<equals arg1="${ec2.debug}" arg2="true" />
-			<then>
-				<echo message="********************************* modify.addiface (ALL PROPERTIES) *********************************" />
-				<echoproperties/>
-				<echo message="**********************************************************************************" />
-			</then>
-		</if>
+        <if>
+            <equals arg1="${ec2.debug}" arg2="true" />
+            <then>
+                <echo message="********************************* modify.addiface (ALL PROPERTIES) *********************************" />
+                <echoproperties/>
+                <echo message="**********************************************************************************" />
+            </then>
+        </if>
 
-		<modify.addiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
+        <modify.addiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
 
-		<property name="shirako.target.code" value="0" />
-		<echo message="modify.addiface exit code: ${shirako.target.code}" />
-	</target>
+        <property name="shirako.target.code" value="0" />
+        <echo message="modify.addiface exit code: ${shirako.target.code}" />
+    </target>
 
 
-	<!-- remove iface macro -->
-	<macrodef name="modify.removeiface" description="remvoe a network iface via modify">
-		<attribute name="seqnum" description="sequence number"/>
+    <!-- remove iface macro -->
+    <macrodef name="modify.removeiface" description="remvoe a network iface via modify">
+        <attribute name="seqnum" description="sequence number"/>
 
-		<sequential>
-			<if>
-				<equals arg1="${emulation}" arg2="true" />
-				<then>
-						<var name="iface.net.name" unset="true" />
-					<var name="iface.net.vlan" unset="true" />
-					<var name="iface.mac" unset="true" />
-					<echo>iface @{iface}</echo>
-					<propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
-					<propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
-					<propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
-					<echo>quantum.tenant.id ${quantum.tenant.id}</echo>
-					<echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
-					<echo>iface.mac ${iface.mac}</echo>
-					<echo>iface.net.vlan ${iface.net.vlan}</echo>
-					<echo>iface.net.name ${iface.net.name}</echo>
-					<echo>unit.ec2.instance ${unit.ec2.instance}</echo>
-						
-					<echo message="Running under emulation...exiting" />
-					<property name="shirako.target.code" value="0" />
-				</then>
-				<else>  
-					<!-- Actually do it... no emulation -->
-					<echo message="adding interfaces to instance" />
-					<var name="message" unset="true" />
+        <sequential>
+            <if>
+                <equals arg1="${emulation}" arg2="true" />
+                <then>
+                        <var name="iface.net.name" unset="true" />
+                    <var name="iface.net.vlan" unset="true" />
+                    <var name="iface.mac" unset="true" />
+                    <echo>iface @{iface}</echo>
+                    <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
+                    <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
+                    <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
+                    <echo>quantum.tenant.id ${quantum.tenant.id}</echo>
+                    <echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
+                    <echo>iface.mac ${iface.mac}</echo>
+                    <echo>iface.net.vlan ${iface.net.vlan}</echo>
+                    <echo>iface.net.name ${iface.net.name}</echo>
+                    <echo>unit.ec2.instance ${unit.ec2.instance}</echo>
+                        
+                    <echo message="Running under emulation...exiting" />
+                    <property name="shirako.target.code" value="0" />
+                </then>
+                <else>  
+                    <!-- Actually do it... no emulation -->
+                    <echo message="adding interfaces to instance" />
+                    <var name="message" unset="true" />
 
                     <echo message="vlan.tag = ${modify.@{seqnum}.vlan.tag}" />
                     <echo message="ip = ${modify.@{seqnum}.ip}" />
@@ -1270,53 +1269,53 @@
 
                     <delete file="${neuca.ini.file}" />
 
-				</else>
-			</if>
-		</sequential>
-	</macrodef>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
 
 
-	<!-- remove network interface -->
-	<target name="modify.removeiface"  depends="resolve.configuration">
-		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-		<echo message="ec2.site.properties path is ${ec2.site.properties}" />
+    <!-- remove network interface -->
+    <target name="modify.removeiface"  depends="resolve.configuration">
+        <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+        <echo message="ec2.site.properties path is ${ec2.site.properties}" />
 
-		<if>
-			<isset property="ec2.site.properties" />
-			<then>
-				<echo message="Setting ec2.site.properites from ${ec2.site.properties}" />
-				<property file="${ec2.site.properties}" />
-			</then>
-		</if>
+        <if>
+            <isset property="ec2.site.properties" />
+            <then>
+                <echo message="Setting ec2.site.properites from ${ec2.site.properties}" />
+                <property file="${ec2.site.properties}" />
+            </then>
+        </if>
 
-		<var name="code" unset="true" />
-		<var name="message" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
 
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-		</tstamp>
+        <tstamp prefix="start">
+            <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
 
-		<echo message="EC2 HANDLER: MODIFY.REMOVEIFACE on ${start.TIME}" />
-		<echo message="modify.removeiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
+        <echo message="EC2 HANDLER: MODIFY.REMOVEIFACE on ${start.TIME}" />
+        <echo message="modify.removeiface: ec2 instance=${unit.ec2.instance}, modify sequence number ${shirako.save.unit.modify.sequencenum}" />
 
-		<modify.removeiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
+        <modify.removeiface seqnum="${shirako.save.unit.modify.sequencenum}"/>
 
-		<property name="shirako.target.code" value="0" />
-		<echo message="modify.removeiface exit code: ${shirako.target.code}" />
-	</target>
+        <property name="shirako.target.code" value="0" />
+        <echo message="modify.removeiface exit code: ${shirako.target.code}" />
+    </target>
 
-	<!-- leave target -->
-	<target name="leave" depends="resolve.configuration">
-		<taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
-		<tstamp prefix="start">
-			<format property="TIME" pattern="MM/dd/yyyy hh:mm" />
-		</tstamp>
+    <!-- leave target -->
+    <target name="leave" depends="resolve.configuration">
+        <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+        <tstamp prefix="start">
+            <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
+        </tstamp>
 
-		<echo message="EC2 HANDLER: LEAVE on ${start.TIME}" />
-		<echo message="leave: ec2 instance=${unit.ec2.instance}" />
-		<!-- set site-specific properties like the VLAN or PHYS mode
-			 and the interface to operate on
-		-->
+        <echo message="EC2 HANDLER: LEAVE on ${start.TIME}" />
+        <echo message="leave: ec2 instance=${unit.ec2.instance}" />
+        <!-- set site-specific properties like the VLAN or PHYS mode
+             and the interface to operate on
+        -->
         <trycatch property="failmsg">
         <try>
             <if>
@@ -1509,7 +1508,7 @@
             <echo message="Ignoring the failure: ${failmsg}"/>
         </catch>
         </trycatch>
-		<echo message="leave exit code: ${shirako.target.code}" />
-	</target>
+        <echo message="leave exit code: ${shirako.target.code}" />
+    </target>
 </project>
 

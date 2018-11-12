@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>orca</groupId>
     <artifactId>orca</artifactId>
-    <version>5.4.4-SNAPSHOT</version>
+    <version>5.4.8-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Orca</name>
     <url>https://geni-orca.renci.org/orca-doc</url>

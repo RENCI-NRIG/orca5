@@ -80,6 +80,7 @@ public class InterCloudHandler extends ModifyHandler {
 
     public SystemNativeError runEmbedding(boolean bound, RequestReservation request,
             DomainResourcePools domainResourcePools) {
+        logger.debug("InterCloudHandler::runEmbedding() IN");
 
         // OntModel requestModel = request.getModel();
         HashMap<String, RequestReservation> dRR = request.getDomainRequestReservation();
@@ -107,27 +108,36 @@ public class InterCloudHandler extends ModifyHandler {
             else
                 dRR_list.addLast(entry);
         }
+        logger.info("InterCloudHandler::runEmbedding():dRR_list.size=" + dRR_list.size());
         for (Entry<String, RequestReservation> entry : dRR_list) {
             domain = entry.getKey();
             rr = entry.getValue();
-            logger.info("Request element:" + domain);
+            logger.info("InterCloudHandler::runEmbedding():Request element:" + domain);
             if (domain.equals(RequestReservation.Unbound_Domain)) { // unbound request, may need splitting
                 this.multipointRequest = false;
+                logger.info("InterCloudHandler::runEmbedding():unbound request start========================");
                 error = runEmbedding(rr, domainResourcePools, bound);
+                logger.info("InterCloudHandler::runEmbedding():unbound request end==========================");
             } else if (domain.equals(RequestReservation.Interdomain_Domain)) { // call @ InterDomainHandler
                 try {
                     this.multipointRequest = false;
+                    logger.info("InterCloudHandler::runEmbedding():interdomain request start========================");
                     error = runEmbedding(request.getDomainRequestReservation(domain), domainResourcePools);
+                    logger.info("InterCloudHandler::runEmbedding():interdomain request end========================");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if (domain.equals(RequestReservation.MultiPoint_Domain)) { // call MultiPointHandler
                 this.multipointRequest = true;
+                logger.info("InterCloudHandler::runEmbedding():multipoint request start========================");
                 old_mpRequest = request.getDomainRequestReservation(domain);
                 error = runEmbedding(old_mpRequest, domainResourcePools, bound, 0);
+                logger.info("InterCloudHandler::runEmbedding():multipoint request end========================");
             } else { // call @ CloudHandler
                 this.multipointRequest = false;
+                logger.info("InterCloudHandler::runEmbedding():cloudhandler request start========================");
                 error = runEmbedding(domain, request.getDomainRequestReservation(domain), domainResourcePools);
+                logger.info("InterCloudHandler::runEmbedding():cloudhandler request end ========================");
             }
 
             // when multiple domains are being used, we need to fail if any individual domain has an error.
@@ -156,14 +166,17 @@ public class InterCloudHandler extends ModifyHandler {
                 request.setDomainRequestReservation(ne, s_rr);
             }
         } else {
-            logger.error("Null request::old_mpRequest=" + old_mpRequest + ";mpRequest=" + mpRequest);
+            logger.error("InterCloudHandler::runEmbedding():Null request::old_mpRequest=" + old_mpRequest 
+                         + ";mpRequest=" + mpRequest);
         }
+        logger.debug("InterCloudHandler::runEmbedding() OUT");
 
         return error;
     }
 
     // Build the ontmodel graph of edge cloud sites interconnected by interdomain paths
     protected InfModel buildCloudOntModel(HashMap<String, DomainResourceType> domainResourcePools) {
+        logger.debug("InterCloudHandler::buildCloudOntModel() IN");
         ArrayList<DomainResourceType> setOfCloudSite = new ArrayList<DomainResourceType>();
         ArrayList<DomainResourceType> setOfTransitSite = new ArrayList<DomainResourceType>();
 
@@ -182,6 +195,7 @@ public class InterCloudHandler extends ModifyHandler {
         for (Entry<String, DomainResourceType> entry : domainResourcePools.entrySet()) {
             domainURL = entry.getKey();
             // System.out.println("Substrate site:"+entry.getKey()+":"+domainURL+"\n");
+            logger.debug("InterCloudHandler::buildCloudOntModel(): Substrate site:"+entry.getKey()+":"+domainURL+"\n");
             if (entry.getValue().getResourceType().endsWith("VM")) {
                 domainURL = domainURL + "/vm";
                 entry.getValue().setDomainURL(domainURL);
@@ -212,6 +226,7 @@ public class InterCloudHandler extends ModifyHandler {
                 int path_len = path.size();
                 c_s_rs = cloudInf.createResource(path.get(0).get(0).getURI());
                 source_intf_rs = cloudInf.createResource(path.get(0).get(1).getURI());
+
                 c_s_rs.addProperty(NdlCommons.topologyHasInterfaceProperty, source_intf_rs);
                 source_intf_rs.addProperty(NdlCommons.topologyInterfaceOfProperty, c_s_rs);
                 source_intf_rs.addLiteral(NdlCommons.layerBandwidthProperty, pathMinBW);
@@ -228,12 +243,13 @@ public class InterCloudHandler extends ModifyHandler {
                 destination_intf_rs.addProperty(NdlCommons.connectedTo, source_intf_rs);
                 // System.out.println("Meshed
                 // link:"+path.get(0).get(0)+":"+path.get(path_len-1).get(0)+":"+path_len+"\n");
-                logger.debug("Cloud:" + c_s_rs + ":" + c_d_rs + ":"
+                logger.debug("InterCloudHandler::buildCloudOntModel():Cloud:" + c_s_rs + ":" + c_d_rs + ":"
                         + source_intf_rs.getProperty(this.mapper.numHop).getInt() + ":"
                         + destination_intf_rs.getProperty(NdlCommons.layerBandwidthProperty).getLong() + "\n");
             }
         }
         // cloudInf.write(System.out);
+        logger.debug("InterCloudHandler::buildCloudOntModel() OUT");
         return cloudInf;
     }
 }
