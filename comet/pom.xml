@@ -4,12 +4,12 @@
     <groupId>orca</groupId> 
     <artifactId>comet </artifactId> 
     <packaging>jar</packaging> 
-    <version>5.4.4-SNAPSHOT</version> 
+    <version>5.4.8-SNAPSHOT</version> 
     <name>Orca Comet Client Interface Library</name>
     <parent>
         <groupId>orca</groupId> 
         <artifactId>orca</artifactId> 
-        <version>5.4.4-SNAPSHOT</version> 
+        <version>5.4.8-SNAPSHOT</version> 
         <relativePath>../pom.xml</relativePath> 
     </parent>
     <dependencies> 
