@@ -97,7 +97,12 @@ public interface UnitProperties {
      */
     public static final String UnitCometReadToken = "unit.comet.readToken";
     public static final String UnitCometWriteToken = "unit.comet.writeToken";
-
+    public static final String SliceCometReadToken = "slice.comet.readToken";
+    public static final String SliceCometWriteToken = "slice.comet.writeToken";
+    public static final String UnitCometHostsGroupToRead = "unit.comet.hosts.group.read";
+    public static final String UnitCometPubKeysGroupToRead = "unit.comet.pubkeys.group.read";
+    public static final String UnitCometHostsGroupToWrite = "unit.comet.hosts.group.write";
+    public static final String UnitCometPubKeysGroupToWrite = "unit.comet.pubkeys.group.write";
     /* 
      * xCAT
      */
@@ -232,4 +237,5 @@ public interface UnitProperties {
 	public static final String SliceStitchPerformed = "performed";
 	public static final String SliceStitchUndone = "undone";
 	public static final String SliceStitchDN = "stitch.dn";
+
 }

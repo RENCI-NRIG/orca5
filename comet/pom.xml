@@ -1,61 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
-    <modelVersion>
-         4.0.0 
-    </modelVersion> 
-    <groupId>
-         orca.handlers 
-    </groupId> 
-    <artifactId>
-         ec2 
-    </artifactId> 
-    <packaging>
-         jar 
-    </packaging> 
-    <version>5.4.8-SNAPSHOT</version> 
-    <name>
-         Orca EC2 Handlers Library 
-    </name>
-    <parent> 
-        <groupId>
-             orca 
-        </groupId> 
-        <artifactId>
-             handlers 
-        </artifactId> 
-        <version>5.4.8-SNAPSHOT</version> 
-        <relativePath>
-             ../pom.xml 
-        </relativePath> 
+    <modelVersion>4.0.0</modelVersion> 
+    <groupId>orca</groupId> 
+    <artifactId>comet </artifactId> 
+    <packaging>jar</packaging> 
+    <version>5.4.4-SNAPSHOT</version> 
+    <name>Orca Comet Client Interface Library</name>
+    <parent>
+        <groupId>orca</groupId> 
+        <artifactId>orca</artifactId> 
+        <version>5.4.4-SNAPSHOT</version> 
+        <relativePath>../pom.xml</relativePath> 
     </parent>
     <dependencies> 
-        <dependency> 
-            <groupId>
-                 orca.core 
-            </groupId> 
-            <artifactId>
-                 shirako 
-            </artifactId> 
-            <version>
-                 ${project.version} 
-            </version> 
-        </dependency>
-        <dependency> 
-            <groupId>
-                 org.ini4j 
-            </groupId> 
-            <artifactId>
-                 ini4j 
-            </artifactId> 
-            <version>
-                 0.5.4 
-            </version> 
-        </dependency>
-        <dependency>
-            <groupId>orca</groupId>
-            <artifactId>comet</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
@@ -135,7 +92,7 @@
                                 <property name="path" refid="maven.plugin.classpath" /> 
                                 <echo message="path is: ${path}" /> 
                                 <taskdef resource="net/sf/antcontrib/antlib.xml" /> 
-                                <property name="name.prefix" value="orca.handlers.ec2" /> 
+                                <property name="name.prefix" value="orca.comet" /> 
                                 <property name="run.classpath" refid="maven.runtime.classpath" /> 
                                 <echo message="${run.classpath}" /> 
                                 <delete dir="target/package" /> 
@@ -148,36 +105,6 @@
                                         <exclude name="*-sources.jar" /> 
                                     </fileset> 
                                 </copy>
-                                <mkdir dir="target/package/tools" />
-                                <copy todir="target/package/tools"> 
-                                    <fileset dir="resources/tools" /> 
-                                </copy> 
-                                <mkdir dir="target/package/scripts" /> 
-                                <copy todir="target/package/scripts"> 
-                                    <fileset dir="resources/scripts"> 
-                                        <exclude name="install.sh" /> 
-                                    </fileset> 
-                                </copy> 
-                                <mkdir dir="target/package/handlers" /> 
-                                <copy todir="target/package/handlers"> 
-                                    <fileset dir="resources/handlers" /> 
-                                </copy> 
-                                <mkdir dir="target/package/web" /> 
-                                <copy todir="target/package/web"> 
-                                    <fileset dir="resources/web"> 
-                                        <include name="**/*" /> 
-                                    </fileset> 
-                                </copy>
-                                <copy file="${maven.dependency.org.renci.io.swagger.swagger-java-comet-client.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.io.swagger.swagger-annotations.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.squareup.okhttp.okhttp.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.squareup.okhttp.logging-interceptor.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.google.code.gson.gson.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.org.threeten.threetenbp.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.com.squareup.okio.okio.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.org.apache.commons.commons-lang3.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="${maven.dependency.orca.comet.jar.path}" todir="target/package/lib" flatten="true" />
-                                <copy file="resources/scripts/install.sh" todir="target/package" /> 
                                 <copy file="resources/package.xml" todir="target/package" /> 
                                 <tar tarfile="target/${name.prefix}.tar" basedir="target/package" /> 
                                 <gzip zipfile="target/${name.prefix}.tar.gz" src="target/${name.prefix}.tar" /> 

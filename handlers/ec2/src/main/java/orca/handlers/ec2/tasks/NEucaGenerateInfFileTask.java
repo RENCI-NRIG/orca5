@@ -19,6 +19,7 @@ import orca.shirako.plugins.config.OrcaAntTask;
 import org.apache.tools.ant.BuildException;
 import org.apache.commons.lang3.RandomStringUtils;
 import java.security.SecureRandom;
+import orca.comet.*;
 
 abstract class NEucaInfFileGenerator {
     org.apache.tools.ant.Project project;
@@ -349,6 +350,30 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
             out.println("comethost=" + temp);
             out.println("cometreadtoken=" + readToken);
+            temp = getProject().getProperty(UnitProperties.SliceCometReadToken);
+            if (temp != null) {
+                out.println("slicecometreadtoken=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.SliceCometWriteToken);
+            if (temp != null) {
+                out.println("slicecometwritetoken=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.UnitCometHostsGroupToRead);
+            if (temp != null) {
+                out.println("comethostsgroupread=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.UnitCometHostsGroupToWrite);
+            if (temp != null) {
+                out.println("comethostsgroupwrite=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.UnitCometPubKeysGroupToRead);
+            if (temp != null) {
+                out.println("cometpubkeysgroupread=" + temp);
+            }
+            temp = getProject().getProperty(UnitProperties.UnitCometPubKeysGroupToWrite);
+            if (temp != null) {
+                out.println("cometpubkeysgroupwrite=" + temp);
+            }
 
             // Save the readToken and writeToken in the properties
             getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometReadToken, readToken);
@@ -358,6 +383,12 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
                     clientCertKeyStore + " clientCertKeyStorePwd=" + clientCertKeyStorePwd);
             out.println(";comethost= Not Specified");
             out.println(";cometreadtoken= Not Specified");
+            out.println("slicecometreadtoken= Not Specified");
+            out.println("slicecometwritetoken= Not Specified");
+            out.println("comethostsgroupread= Not Specified");
+            out.println("comethostsgroupwrite= Not Specified");
+            out.println("cometpubkeysgroupread= Not Specified");
+            out.println("cometpubkeysgroupwrite= Not Specified");
         }
     }
 
@@ -390,7 +421,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
         }
         // Save meta data to comet if comet is enabled
         if(cometDataGenerator != null) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users, "")) {
                 throw new NEucaCometException("Failed to save users in Comet");
             }
         }
@@ -531,7 +562,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         // Save meta data to comet if comet is enabled
         if(cometDataGenerator != null && eths.length > 0) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces, "")) {
                 throw new NEucaCometException("Failed to save interfaces in Comet");
             }
         }
@@ -664,7 +695,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         // Save meta data to comet if comet is enabled
         if(cometDataGenerator != null && stores.length > 0) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage, "")) {
                 throw new NEucaCometException("Failed to save storage in Comet");
             }
         }
@@ -730,7 +761,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         // Save meta data to comet if comet is enabled
         if(cometDataGenerator != null && routes.length > 0) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes, "")) {
                 throw new NEucaCometException("Failed to save routes in Comet");
             }
         }
@@ -807,7 +838,7 @@ class NEucaInfFileGenerator_v1 extends NEucaInfFileGenerator {
 
         // Save meta data to comet if comet is enabled
         if(cometDataGenerator != null && (config != null || scripts.length > 0)) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts, "")) {
                 throw new NEucaCometException("Failed to save scripts in Comet");
             }
         }

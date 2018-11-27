@@ -30,6 +30,7 @@ import java.io.FileReader;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import orca.shirako.plugins.config.Config;
+import orca.comet.*;
 
 
 public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
@@ -86,9 +87,6 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     userdataNew = userdataOld_;
                 }
                 else {
-                    StringBuilder sb = new StringBuilder();
-                    String line = userdataSource.readLine();
-
                     // Update Comet if configured
                     String cometHost = getProject().getProperty(OrcaConfiguration.CometHost);
                     String caCert = getProject().getProperty(OrcaConfiguration.CometCaCert);
@@ -121,53 +119,62 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                         }
                     }
 
+                    StringBuilder sb = new StringBuilder();
+                    String line = userdataSource.readLine();
+
                     boolean processedKey = false;
                     while (line != null) {
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: line = " + line);
+                        if(cometDataGenerator == null) {
+                            System.out.println("NEucaAddPropertyInfFileTask::execute: line = " + line);
 
-                        // if there is nothing to add, just copy lines
-                        if (section_ == null || key_ == null || value_ == null) {
-                            sb.append(line);
-                            sb.append(System.lineSeparator());
-                            line = userdataSource.readLine();
-                            processedKey = true;
-                            continue;
-                        }
+                            // if there is nothing to add, just copy lines
+                            if (section_ == null || key_ == null || value_ == null) {
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                                line = userdataSource.readLine();
+                                processedKey = true;
+                                continue;
+                            }
 
-                        // Look up which section to process; section could be any of [global, users, interfaces, storage, routes, scripts]
-                        Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
-                        Matcher matcher = pattern.matcher(line);
-                        if (matcher.find()) {
-                            prev_section = section;
-                            section = matcher.group(1);
-                            System.out.println("NEucaAddPropertyInfFileTask::execute: found section " + section);
-                        }
+                            // Look up which section to process; section could be any of [global, users, interfaces, storage, routes, scripts]
+                            Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
+                            Matcher matcher = pattern.matcher(line);
+                            if (matcher.find()) {
+                                prev_section = section;
+                                section = matcher.group(1);
+                                System.out.println("NEucaAddPropertyInfFileTask::execute: found section " + section);
+                            }
 
-                        // check to see if we checked all the existing interfaces. if so, add the new one.
-                        if (!processedKey && prev_section.equals(section_)) {
-                            System.out.println(
-                                    "NEucaAddPropertyInfFileTask::execute: Adding new key to " + prev_section + " section of userdata: " + key_.trim());
-                            sb.append(key_.trim() + "=" + value_.trim() + "\n");
-                            processedKey = true;
-                        }
-
-                        key = line.split("=")[0].trim();
-                        System.out.println("NEucaAddPropertyInfFileTask::execute: processing key: " + key);
-                        // find key
-                        if (section.equals("interfaces")) {
-                            if (!processedKey && key.equals(key_)) {
-                                // modify an existing interface
-                                System.out.println("NEucaAddPropertyInfFileTask::execute: Modifying interface ing userdata: " + key);
+                            // check to see if we checked all the existing interfaces. if so, add the new one.
+                            if (!processedKey && prev_section.equals(section_)) {
+                                System.out.println(
+                                        "NEucaAddPropertyInfFileTask::execute: Adding new key to " + prev_section + " section of userdata: " + key_.trim());
                                 sb.append(key_.trim() + "=" + value_.trim() + "\n");
+                                processedKey = true;
+                            }
+
+                            key = line.split("=")[0].trim();
+                            System.out.println("NEucaAddPropertyInfFileTask::execute: processing key: " + key);
+                            // find key
+                            if (section.equals("interfaces")) {
+                                if (!processedKey && key.equals(key_)) {
+                                    // modify an existing interface
+                                    System.out.println("NEucaAddPropertyInfFileTask::execute: Modifying interface ing userdata: " + key);
+                                    sb.append(key_.trim() + "=" + value_.trim() + "\n");
+                                } else {
+                                    System.out.println("NEucaAddPropertyInfFileTask::execute: Ignoring interface in userdata: " + key);
+                                    sb.append(line);
+                                }
                             } else {
-                                System.out.println("NEucaAddPropertyInfFileTask::execute: Ignoring interface in userdata: " + key);
                                 sb.append(line);
                             }
-                        } else {
+                        }
+                        else {
                             sb.append(line);
                         }
-
-                        sb.append(System.lineSeparator());
+                        if(!line.isEmpty()) {
+                            sb.append(System.lineSeparator());
+                        }
                         line = userdataSource.readLine();
                     }
 
@@ -177,7 +184,6 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                         sb.append(key_.trim() + " = " + value_.trim() + "\n");
                         processedKey = true;
                     }
-
                     userdataNew = sb.toString();
                 }
             } finally {
@@ -211,7 +217,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyUsers(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyUsers: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_);
         String [] arrOfStr = value_.split(":");
         if(arrOfStr.length < 2) {
@@ -219,7 +225,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Incorrect number of parameters");
         }
         if(cometDataGenerator.addUser(key_, arrOfStr[0], arrOfStr[1])) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users, "")) {
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyUsers: Unable to store users in comet");
             }
         }
@@ -239,7 +245,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyInterfaces(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyInterfaces: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_);
         String [] arrOfStr = value_.split(":");
         System.out.println("val: " + value_);
@@ -256,7 +262,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             save = cometDataGenerator.addInterface(key_, arrOfStr[0], arrOfStr[1], arrOfStr[2], null, null);
         }
         if(save) {
-            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces);
+            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces, "");
         }
         if(!save) {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyInterfaces: Unable to store interfaces in comet");
@@ -274,7 +280,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyStorage(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyStorage: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.storage, key_);
         String[] arrOfStr = value_.split(":");
         if (arrOfStr.length < 3) {
@@ -320,7 +326,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
                     arrOfStr[10]);
         }
         if (save) {
-            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage);
+            save = cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage, "");
         }
         if(!save) {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyStorage: Unable to store storage in comet");
@@ -338,7 +344,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyRoutes(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyRoutes: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_);
         String [] arrOfStr = value_.split(":");
         if(arrOfStr.length < 1) {
@@ -346,7 +352,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyRoutes: Incorrect number of parameters");
         }
         if(cometDataGenerator.addRoute(key_, arrOfStr[0], null, null)) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes)) {
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes, "")) {
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyRoutes: Unable to store routes in comet");
             }
         }
@@ -366,7 +372,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
      */
     private void modifyScripts(NEucaCometDataGenerator cometDataGenerator) throws NEucaCometException{
         System.out.println("NEucaAddPropertyInfFileTask::modifyScripts: IN");
-        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts);
+        cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts, "");
         cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_);
         String[] arrOfStr = value_.split(":");
         if (arrOfStr.length < 1) {
@@ -374,7 +380,7 @@ public class NEucaAddPropertyInfFileTask extends OrcaAntTask {
             throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyScripts: Incorrect number of parameters");
         }
         if (cometDataGenerator.addScript(key_, arrOfStr[0])) {
-            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts)){
+            if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts, "")){
                 throw new NEucaCometException("NEucaAddPropertyInfFileTask::modifyScripts: Unable to store scripts in comet");
             }
         }

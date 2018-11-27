@@ -29,6 +29,7 @@ import java.io.FileReader;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import orca.shirako.plugins.config.Config;
+import orca.comet.*;
 
 public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
     protected String file_;
@@ -87,6 +88,7 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                     String caCert = getProject().getProperty(OrcaConfiguration.CometCaCert);
                     String clientCertKeyStore = getProject().getProperty(OrcaConfiguration.CometClientKeyStore);
                     String clientCertKeyStorePwd = getProject().getProperty(OrcaConfiguration.CometClientKeyStorePwd);
+                    NEucaCometDataGenerator cometDataGenerator = null;
 
                     if( cometHost != null && caCert != null && clientCertKeyStore != null && clientCertKeyStorePwd != null) {
                         String rId = getProject().getProperty(UnitProperties.UnitReservationID);
@@ -95,15 +97,15 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                         String writeToken = getProject().getProperty(Config.PropertySavePrefix + UnitProperties.UnitCometWriteToken);
 
                         // Instantiate comet data generator
-                        NEucaCometDataGenerator cometDataGenerator = new NEucaCometDataGenerator(cometHost, caCert, clientCertKeyStore,
+                        cometDataGenerator = new NEucaCometDataGenerator(cometHost, caCert, clientCertKeyStore,
                                 clientCertKeyStorePwd, rId, sliceId, readToken, writeToken);
 
                         // Update users
                         if (NEucaCometDataGenerator.Family.users.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing users in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.users, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.users, key_)) {
-                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users)){
+                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.users, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store users in comet");
                                 }
                             }
@@ -114,9 +116,9 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                            //Update interfaces
                         } else if (NEucaCometDataGenerator.Family.interfaces.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing interfaces in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.interfaces, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.interfaces, key_)) {
-                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces)){
+                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.interfaces, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store interfaces in comet");
                                 }
                             }
@@ -127,9 +129,9 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                             // Update Storage
                         } else if (NEucaCometDataGenerator.Family.storage.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing storage in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.storage, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.storage, key_)) {
-                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage)){
+                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.storage, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store storage in comet");
                                 }
                             }
@@ -140,9 +142,9 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                             // Update routes
                         } else if (NEucaCometDataGenerator.Family.routes.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing routes in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.routes, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.routes, key_)) {
-                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes)){
+                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.routes, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store routes in comet");
                                 }
                             }
@@ -153,9 +155,9 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
                             // Update scripts
                         } else if (NEucaCometDataGenerator.Family.scripts.toString().equals(section_)) {
                             System.out.println("NEucaRemovePropertyInfFileTask::execute: removing scripts in");
-                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts) &&
+                            if (cometDataGenerator.loadObject(NEucaCometDataGenerator.Family.scripts, "") &&
                                     cometDataGenerator.remove(NEucaCometDataGenerator.Family.scripts, key_)) {
-                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts)){
+                                if(!cometDataGenerator.saveObject(NEucaCometDataGenerator.Family.scripts, "")){
                                     throw new NEucaCometException("NEucaRemovePropertyInfFileTask::execute: Unable to store scripts in comet");
                                 }
                             }
@@ -168,42 +170,50 @@ public class NEucaRemovePropertyInfFileTask extends OrcaAntTask {
 
                     boolean processedKey = false;
                     while (line != null) {
-                        System.out.println("NEucaRemovePropertyInfFileTask::execute: line = " + line);
+                        if(cometDataGenerator == null) {
+                            System.out.println("NEucaRemovePropertyInfFileTask::execute: line = " + line);
 
-                        // if there is nothing to remove, just copy lines
-                        if (section_ == null || key_ == null) {
-                            sb.append(line);
-                            sb.append(System.lineSeparator());
-                            line = userdataSource.readLine();
-                            processedKey = true;
-                            continue;
+                            // if there is nothing to remove, just copy lines
+                            if (section_ == null || key_ == null) {
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                                line = userdataSource.readLine();
+                                processedKey = true;
+                                continue;
+                            }
+
+                            Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
+                            Matcher matcher = pattern.matcher(line);
+                            if (matcher.find()) {
+                                prev_section = section;
+                                section = matcher.group(1);
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                                System.out.println("found section " + section);
+                                line = userdataSource.readLine();
+                                continue;
+                            }
+
+                            // check to see if we checked all the existing interfaces. if so, add the new one.
+                            String key = line.split("=")[0].trim();
+                            System.out.println("NEucaRemovePropertyInfFileTask::execute: processing line:  key: " + key + ", section: " + section);
+
+                            // skip if we find a match... remember we are removing the key/value
+                            if (!(section.equals(section_) && key.equals(key_))) {
+                                System.out.println("NEucaRemovePropertyInfFileTask::execute: Keeping line: " + line);
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                            } else {
+                                System.out.println("NEucaRemovePropertyInfFileTask::execute: Deleting line: " + line);
+                            }
                         }
-
-                        Pattern pattern = Pattern.compile("^\\[(.*?)\\]");
-                        Matcher matcher = pattern.matcher(line);
-                        if (matcher.find()) {
-                            prev_section = section;
-                            section = matcher.group(1);
+                        else
+                        {
                             sb.append(line);
-                            sb.append(System.lineSeparator());
-                            System.out.println("found section " + section);
-                            line = userdataSource.readLine();
-                            continue;
+                            if(!line.isEmpty()) {
+                                sb.append(System.lineSeparator());
+                            }
                         }
-
-                        // check to see if we checked all the existing interfaces. if so, add the new one.
-                        String key = line.split("=")[0].trim();
-                        System.out.println("NEucaRemovePropertyInfFileTask::execute: processing line:  key: " + key + ", section: " + section);
-
-                        // skip if we find a match... remember we are removing the key/value
-                        if (!(section.equals(section_) && key.equals(key_))) {
-                            System.out.println("NEucaRemovePropertyInfFileTask::execute: Keeping line: " + line);
-                            sb.append(line);
-                            sb.append(System.lineSeparator());
-                        } else {
-                            System.out.println("NEucaRemovePropertyInfFileTask::execute: Deleting line: " + line);
-                        }
-
                         line = userdataSource.readLine();
                     }
 

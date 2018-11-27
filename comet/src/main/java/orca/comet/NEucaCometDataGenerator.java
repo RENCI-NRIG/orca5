@@ -7,7 +7,7 @@
  *
  *
  */
-package orca.handlers.ec2.tasks;
+package orca.comet;
 
 import org.json.simple.*;
 
@@ -50,13 +50,23 @@ public class NEucaCometDataGenerator {
     public final static String JsonKeyScriptName = "scriptName";
     public final static String JsonKeyScriptBody = "scriptBody";
 
+    // Hostname fields
+    public final static String JsonKeyHostName = "hostName";
+    public final static String JsonKeyIp = "ip";
+
+    // Key fields
+    public final static String JsonKeyPublicKey = "publicKey";
+    public final static String JsonKeyPrivateKey = "privateKey";
+
     // Types
     public enum Family {
         users,
         interfaces,
         storage,
         routes,
-        scripts
+        scripts,
+        hosts,
+        pubkeys
     };
 
     // DATA
@@ -65,6 +75,8 @@ public class NEucaCometDataGenerator {
     private JSONArray storage_;
     private JSONArray routes_;
     private JSONArray scripts_;
+    private JSONArray hosts_;
+    private JSONArray keys_;
     private String rId_;
     private String sliceId_;
     private String readToken_;
@@ -123,10 +135,10 @@ public class NEucaCometDataGenerator {
      *
      */
 
-    public boolean loadObject(Family family) {
+    public boolean loadObject(Family family, String familySuffix) {
         try {
             if (rId_ != null && sliceId_ != null) {
-                JSONArray value = comet_.read(sliceId_, rId_, readToken_, family.toString());
+                JSONArray value = comet_.read(sliceId_, rId_, readToken_, family.toString() + familySuffix);
                 if (value != null) {
                     switch (family) {
                         case users:
@@ -143,6 +155,12 @@ public class NEucaCometDataGenerator {
                             break;
                         case scripts:
                             scripts_ = value;
+                            break;
+                        case hosts:
+                            hosts_ = value;
+                            break;
+                        case pubkeys:
+                            keys_ = value;
                             break;
                     }
                     return true;
@@ -192,6 +210,16 @@ public class NEucaCometDataGenerator {
                         return scripts_.toString();
                     }
                     break;
+                case hosts:
+                    if (hosts_ != null && hosts_.size() > 0) {
+                        return hosts_.toString();
+                    }
+                    break;
+                case pubkeys:
+                    if (keys_ != null && keys_.size() > 0) {
+                        return keys_.toString();
+                    }
+                    break;
             }
         }
         catch (Exception e) {
@@ -205,23 +233,27 @@ public class NEucaCometDataGenerator {
      * @brief function saves the constructed json meta data in comet by invoke writeScope API
      *
      * @param family - Specifies category of the metadata to be saved to comet
+     * @param familySuffix - Specifies suffix to be added to the family in the metadata to be saved to comet
      *
      * @return true for success; otherwise false
      *
      */
-    public boolean saveObject(Family family) {
+    public boolean saveObject(Family family, String familySuffix) {
         try {
-            if (rId_ != null && sliceId_ != null) {
+            if (rId_ != null && sliceId_ != null && familySuffix != null) {
                 // Send Rest Request to get
                 String value = getObject(family);
                 if(value != null && !value.isEmpty()) {
-                    System.out.println("NEucaCometDataGenerator::saveObject: Saving family: " + family + " value: " + value);
-                    return comet_.write(sliceId_, rId_, readToken_, writeToken_, family.toString(), value);
+                    System.out.println("NEucaCometDataGenerator::saveObject: Saving family: " + family+familySuffix + " value: " + value);
+                    return comet_.write(sliceId_, rId_, readToken_, writeToken_, family.toString() + familySuffix, value);
                 }
                 else {
                     System.out.println("NEucaCometDataGenerator::saveObject: Removing family: " + family);
-                    return comet_.remove(sliceId_, rId_, readToken_, writeToken_, family.toString());
+                    return comet_.write(sliceId_, rId_, readToken_, writeToken_, family.toString() + familySuffix, "[]");
                 }
+            }
+            else {
+                System.out.println("NEucaCometDataGenerator::saveObject: rId or sliceId or familySuffix is null");
             }
         }
         catch (Exception e) {
@@ -446,6 +478,68 @@ public class NEucaCometDataGenerator {
     }
 
     /*
+     * @brief function adds Host to the HostName JSON object
+     *
+     * @param hostName - hostName
+     * @param ip - ip
+     *
+     * @return true for success; otherwise false
+     *
+     */
+    public boolean addHost(String hostName, String ip) {
+        boolean retVal = false;
+        try {
+            if (hostName == null || ip == null) {
+                System.out.println("NEucaCometDataGenerator::addHost: Missing mandatory host parameters!");
+                return retVal;
+            }
+            if (hosts_ == null) {
+                hosts_ = new JSONArray();
+            }
+
+            JSONObject host = new JSONObject();
+            host.put(JsonKeyHostName, hostName);
+            host.put(JsonKeyIp, ip);
+            retVal = hosts_.add(host);
+        }
+        catch (Exception e) {
+            System.out.println("NEucaCometDataGenerator::addHost: Exception occurred while addHost: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    /*
+     * @brief function adds key to the Keys JSON object
+     *
+     * @param publicKey - publicKey
+     *
+     * @return true for success; otherwise false
+     *
+     */
+    public boolean addKey(String publicKey) {
+        boolean retVal = false;
+        try {
+            if (publicKey == null) {
+                System.out.println("NEucaCometDataGenerator::addKey: Missing mandatory key parameters!");
+                return retVal;
+            }
+            if (keys_ == null) {
+                keys_ = new JSONArray();
+            }
+
+            JSONObject key = new JSONObject();
+            key.put(JsonKeyPublicKey, publicKey);
+            retVal = keys_.add(key);
+        }
+        catch (Exception e) {
+            System.out.println("NEucaCometDataGenerator::addKey: Exception occurred while addKey: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    /*
      * @brief function removes specific element from specific category of JSON representing meta data
      *
      * @param family - Specifies category of the metadata
@@ -477,6 +571,12 @@ public class NEucaCometDataGenerator {
                     break;
                 case scripts:
                     familyToBeUpdated = scripts_;
+                    break;
+                case hosts:
+                    familyToBeUpdated = hosts_;
+                    break;
+                case pubkeys:
+                    familyToBeUpdated = keys_;
                     break;
             }
             if (familyToBeUpdated == null) {

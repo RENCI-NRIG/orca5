@@ -6,7 +6,7 @@
  *
  *
  */
-package orca.handlers.ec2.tasks;
+package orca.comet;
 
 public class NEucaCometException extends Exception {
 
