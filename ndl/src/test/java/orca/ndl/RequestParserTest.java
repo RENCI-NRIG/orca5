@@ -140,8 +140,8 @@ public class RequestParserTest implements INdlRequestModelListener {
     }
 
     private static String[] validRequests = { "/test-color-extension.rdf", "/large-osg-request.rdf",
-            "/group-storage.rdf", "/node-storage.rdf" };
-    private static String[] invalidRequests = { "/broadcast-storage-invalid.rdf", "/node-storage-bound-invalid.rdf" };
+            "/group-storage.rdf", "/node-storage.rdf", "/stitchPortAttachedToBoundVm.rdf" };
+    private static String[] invalidRequests = { "/broadcast-storage-invalid.rdf", "/node-storage-bound-invalid.rdf", "/stitchPortAttachedToUnboundVm.rdf" };
 
     @Test
     public void run() throws NdlException, IOException {
