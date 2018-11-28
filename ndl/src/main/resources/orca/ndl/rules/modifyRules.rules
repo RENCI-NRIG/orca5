@@ -26,7 +26,14 @@
 	[ (?Z rb:violation error('Stitchport cannot have an IP address assigned', 'Stitchport cannot have an IP address assigned', ?X))
 		<- (?X req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), 
 		(?X topo:hasInterface ?Y), (?Y ip4:localIPAddress ?Z) ] ]
-		
+
+# Stitchport cannot be attached to an unbound Node
+[validateStitchPort2: (?v rb:validation on()) ->
+    [ (?Z rb:violation error('Stitchport cannot be attached to an unbound Node', 'Stitchport cannot be attached to an unbound Node', ?X))
+        <- (?X req:inDomain http://geni-orca.renci.org/owl/orca.rdf#Stitching/Domain), (?X topo:hasInterface ?I1),
+        (?C topo:hasInterface ?I1), (?C rdf:type topo:Link), (?C topo:hasInterface ?I2), (?N topo:hasInterface ?I2), (?N rdf:type comp:ComputeElement),
+        noValue(?N req:inDomain ) ] ]
+
 # interface sanity - interface must be between
 # link-like and node-like things
 [saneInterface1: (?v rb:validation on()) ->
@@ -69,4 +76,4 @@
 	[ (?Z rb:violation error('Node Validation', 'Node must have an image', ?X)) 
 		<- (?R rdf:type req:Reservation), (?R col:element ?X), 
 		(?X rdf:type comp:ComputeElement),  (?X dom:hasResourceType comp:VM), 
-		noValue(?X, comp:diskImage) ] ] 
+		noValue(?X, comp:diskImage) ] ]
