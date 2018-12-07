@@ -60,6 +60,7 @@ try:
               'QUANTUM_NET_IFACE_MAC' + os.environ['QUANTUM_NET_IFACE_MAC'])
 
     NEuca_Quantum_Network.remove_iface(os.environ['QUANTUM_TENANT_ID'],
+                                       os.environ['QUANTUM_NET_INSTANCE_NAME'],
                                        str(VM.get_instance_name_by_ID(
                                            os.environ['QUANTUM_NET_INSTANCE_NAME'])) + "." + str(
                                            os.environ['QUANTUM_NET_IFACE_MAC']))

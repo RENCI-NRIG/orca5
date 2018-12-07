@@ -1,4 +1,3 @@
-ec2.generate.neuca.inf=orca.handlers.ec2.tasks.NEucaGenerateInfFileTask
-ec2.addproperty.neuca.inf=orca.handlers.ec2.tasks.NEucaAddPropertyInfFileTask
-ec2.removeproperty.neuca.inf=orca.handlers.ec2.tasks.NEucaRemovePropertyInfFileTask
+ec2.generate.global.user.data=orca.handlers.ec2.tasks.NEucaGenerateGlobalUserDataTask
+ec2.comet.data=orca.handlers.ec2.tasks.NEucaCometDataTask
 ec2.image.proxy.register=orca.handlers.ec2.tasks.imgproxy.ImgProxyRegisterTask

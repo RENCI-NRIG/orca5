@@ -9,10 +9,11 @@ import org.apache.axis2.AxisFault;
 import org.apache.tools.ant.BuildException;
 
 public class ImgProxyRegisterTask extends OrcaAntTask {
-    String url, signature, emiPropertyName, ekiPropertyName, eriPropertyName, statusPropertyName, imgProxyServiceUrl;
+    String url, signature, emiPropertyName, qcow2PropertyName, ekiPropertyName, eriPropertyName, statusPropertyName, imgProxyServiceUrl;
     int axisTimeout = 3600;
 
     public static final String FILE_SYSTEM_IMAGE_KEY = "FILESYSTEM";
+    public static final String QCOW2_SYSTEM_IMAGE_KEY = "QCOW2";
     public static final String KERNEL_IMAGE_KEY = "KERNEL";
     public static final String RAMDISK_IMAGE_KEY = "RAMDISK";
     public static final String ERROR_CODE = "ERROR";
@@ -40,7 +41,12 @@ public class ImgProxyRegisterTask extends OrcaAntTask {
                 imageIds.load(stream);
 
                 // set the indicated property to actual value or empty string
-                getProject().setNewProperty(emiPropertyName, imageIds.getProperty(FILE_SYSTEM_IMAGE_KEY));
+                if (imageIds.getProperty(FILE_SYSTEM_IMAGE_KEY) != null) {
+                    getProject().setNewProperty(emiPropertyName, imageIds.getProperty(FILE_SYSTEM_IMAGE_KEY));
+                }
+                if (imageIds.getProperty(QCOW2_SYSTEM_IMAGE_KEY) != null) {
+                    getProject().setNewProperty(qcow2PropertyName, imageIds.getProperty(QCOW2_SYSTEM_IMAGE_KEY));
+                }
                 if (imageIds.getProperty(KERNEL_IMAGE_KEY) != null) {
                     getProject().setNewProperty(ekiPropertyName, imageIds.getProperty(KERNEL_IMAGE_KEY));
                 } else
@@ -70,8 +76,12 @@ public class ImgProxyRegisterTask extends OrcaAntTask {
         this.signature = signature;
     }
 
-    public void setEmiPropertyName(String ekiPropertyName) {
-        emiPropertyName = ekiPropertyName;
+    public void setEmiPropertyName(String emiPropertyName) {
+        this.emiPropertyName = emiPropertyName;
+    }
+
+    public void setQcow2PropertyName(String qcow2PropertyName) {
+        this.qcow2PropertyName = qcow2PropertyName;
     }
 
     public void setEkiPropertyName(String ekiPropertyName) {

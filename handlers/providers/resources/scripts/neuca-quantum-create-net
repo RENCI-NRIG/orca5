@@ -65,6 +65,8 @@ try:
                                                         os.environ['QUANTUM_NET_TYPE'],
                                                         os.environ['QUANTUM_NET_NETWORK'],
                                                         os.environ['QUANTUM_NET_VLAN'],
+                                                        os.environ['QUANTUM_DATAPLANE_NETWORK'],
+                                                        os.environ['QUANTUM_OPENFLOW_NETWORK'],
                                                         max_rate,
                                                         burst_rate)    
     print network_uuid

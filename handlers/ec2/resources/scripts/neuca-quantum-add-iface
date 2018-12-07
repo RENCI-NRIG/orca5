@@ -11,12 +11,13 @@ try:
     sys.path.append(os.environ['EC2_DIR'] + "/scripts")
     from neuca_quantum_common import *
     from nova_essex_common import *
-except:
+except Exception as e:
     print 'Error in neuca-quantum-add-iface: cannot import neuca_quantum_common.py'
+    print str(e) 
     sys.exit(1)
 
 try:
-    # OPEN THE LOG
+    # OPEN THE LOG KOMAL
     LOG.basicConfig(level=LOG.DEBUG, filename='/dev/null')
 
     if not os.path.exists(os.environ['EC2_LOG_DIR']):
@@ -58,7 +59,8 @@ try:
 
     network_uuid = NEuca_Quantum_Network.get_network_uuid(os.environ['QUANTUM_TENANT_ID'],
                                                           os.environ['QUANTUM_NET_VLAN'],
-                                                          os.environ['QUANTUM_NET_NETWORK'])
+                                                          os.environ['QUANTUM_NET_NETWORK'],
+                                                          os.environ['QUANTUM_NET_TYPE'])
     if network_uuid == None:
         LOG.error("neuca-quantum-add-iface: no quantum network found for vlan: " + os.environ[
             'QUANTUM_NET_VLAN'] + ", network: " + os.environ['QUANTUM_NET_NETWORK'])
@@ -66,8 +68,8 @@ try:
 
     iface_uuid = NEuca_Quantum_Network.add_iface_to_network(os.environ['QUANTUM_TENANT_ID'],
                                                             network_uuid,
-                                                            VM.get_instance_name_by_ID(
-                                                                os.environ['QUANTUM_NET_INSTANCE_NAME']),
+                                                            os.environ['QUANTUM_NET_INSTANCE_NAME'],
+                                                            VM.get_instance_name_by_ID(os.environ['QUANTUM_NET_INSTANCE_NAME']),
                                                             os.environ['QUANTUM_NET_IFACE_MAC'])
 
     print iface_uuid

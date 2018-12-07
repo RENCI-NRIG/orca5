@@ -116,7 +116,7 @@ public class NEucaCometInterface {
         CometResponse response = null;
         Collections.shuffle(cometHosts_);
         for (String host : cometHosts_) {
-            System.out.println("NEucaCometInterface::writeScopePost: Using cometHost=" + host);
+            System.out.println("NEucaCometInterface::readScopeGet: Using cometHost=" + host);
             apiClient.setBasePath(host);
             try {
                 response = null;
@@ -126,14 +126,17 @@ public class NEucaCometInterface {
             catch (ApiException e) {
                 System.out.println("NEucaCometInterface::readScopeGet: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
                 e.printStackTrace();
+                response = null;
                 continue;
             }
             catch (Exception e) {
                 System.out.println("NEucaCometInterface::readScopeGet: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
                 e.printStackTrace();
+                response = null;
                 continue;
             }
         }
+        System.out.println("NEucaCometInterface::readScopeGet: response=" + response); 
         return response;
     }
 
@@ -165,14 +168,17 @@ public class NEucaCometInterface {
             catch (ApiException e) {
                 System.out.println("NEucaCometInterface::writeScopePost: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
                 e.printStackTrace();
+                response = null;
                 continue;
             }
             catch (Exception e) {
                 System.out.println("NEucaCometInterface::writeScopePost: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
                 e.printStackTrace();
+                response = null;
                 continue;
             }
         }
+        System.out.println("NEucaCometInterface::writeScopePost: response=" + response); 
         return response;
     }
 
@@ -203,14 +209,17 @@ public class NEucaCometInterface {
             catch (ApiException e) {
                 System.out.println("NEucaCometInterface::deleteScopeDelete: ApiException occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage() + " " + e.getResponseBody());
                 e.printStackTrace();
+                response = null;
                 continue;
             }
             catch (Exception e) {
                 System.out.println("NEucaCometInterface::deleteScopeDelete: Exception occurred while read: cometHost=" + apiClient.getBasePath() + " " + e.getMessage());
                 e.printStackTrace();
+                response = null;
                 continue;
             }
         }
+        System.out.println("NEucaCometInterface::deleteScopeDelete: response=" + response); 
         return response;
     }
 

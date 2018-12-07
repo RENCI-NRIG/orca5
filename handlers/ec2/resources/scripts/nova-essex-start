@@ -56,6 +56,7 @@ try:
     # DO THE WORK
     instance_uuid = VM.start(os.environ['EC2_INSTANCE_TYPE'],
                              os.environ['AMI_NAME'],
+                             os.environ['QCOW2_NAME'],
                              os.environ['AKI_NAME'],
                              os.environ['ARI_NAME'],
                              os.environ['EC2_SSH_KEY'],
@@ -63,7 +64,11 @@ try:
                              int(os.environ['EC2_PING_RETRIES']),
                              int(os.environ['EC2_SSH_RETRIES']),
                              os.environ['NEUCA_INI'],  # userdata
-                             os.environ['UNIT_HOSTNAME_URL'])
+                             os.environ['UNIT_HOSTNAME_URL'],
+                             os.environ['EC2_MGMT_NETWORK'],
+                             os.environ['EC2_SEC_GROUP'],
+                             os.environ['QUANTUM_TENANT_ID'],
+                             os.environ['EC2_PUBLIC_NETWORK'])
 
     LOG.info("Started instance: " + str(instance_uuid))
     print instance_uuid
