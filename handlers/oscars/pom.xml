@@ -9,7 +9,7 @@
         <groupId>
              orca 
         </groupId> 
-        <version>5.4.8-SNAPSHOT</version> 
+        <version>5.4.8</version> 
     </parent> 
     <groupId>
          orca.handlers.network 
