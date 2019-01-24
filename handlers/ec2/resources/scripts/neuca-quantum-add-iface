@@ -17,7 +17,7 @@ except Exception as e:
     sys.exit(1)
 
 try:
-    # OPEN THE LOG KOMAL
+    # OPEN THE LOG 
     LOG.basicConfig(level=LOG.DEBUG, filename='/dev/null')
 
     if not os.path.exists(os.environ['EC2_LOG_DIR']):
