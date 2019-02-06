@@ -10,6 +10,7 @@ ec2.management.network=mgmt-network
 ec2.slice.user.email=slice_owner@geni.net
 ec2.slice.user.role=geni_slice_owner
 ec2.slice.admin.user=admin
+ec2.openstack.horizon.url=http://152.54.14.211/dashboard/identity/
 ```
 ### Nova changes
 - nova_essex_common updated to use openstack commands instead of nova commands
@@ -81,6 +82,7 @@ quantum.openflow.network=openflow
 ec2.slice.user.email=slice_owner@geni.net
 ec2.slice.user.role=geni_slice_owner
 ec2.slice.admin.user=admin
+ec2.openstack.horizon.url=http://152.54.14.211/dashboard/identity/
 ```
 
 - Following additional configuration parameters required in **handlers/providers/quantum/build.properties**
