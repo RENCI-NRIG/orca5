@@ -150,6 +150,7 @@ openstack network create --provider-network-type vlan --provider-physical-networ
 openstack subnet create --subnet-range 10.103.0.0/24 --dhcp --allocation-pool start=10.103.0.101,end=10.103.0.200 --dns-nameserver 8.8.8.8 --gateway 10.103.0.1 --network mgmt-network subnet-mgmt-network
 openstack router create router-mgmt-network
 openstack router add subnet router-mgmt-network subnet-mgmt-network
+openstack router set --external-gateway public router-mgmt-network
 ```
 - Create Project per slice
 - Create User per slice
