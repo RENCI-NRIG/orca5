@@ -147,7 +147,7 @@ To avoid the duplicate network and security group, we have chosen to take an alt
 - Create management network shared across all tenants. This network will be used for management interface by all the slices
 ```
 openstack network create --provider-network-type vlan --provider-physical-network physnet1 --enable --share mgmt-network
-openstack subnet create --subnet-range 10.103.0.0/24 --dhcp --allocation-pool start=10.103.0.101,end=10.103.0.200 --gateway 10.103.0.1 --network mgmt-network subnet-mgmt-network
+openstack subnet create --subnet-range 10.103.0.0/24 --dhcp --allocation-pool start=10.103.0.101,end=10.103.0.200 --dns-nameserver 8.8.8.8 --gateway 10.103.0.1 --network mgmt-network subnet-mgmt-network
 openstack router create router-mgmt-network
 openstack router add subnet router-mgmt-network subnet-mgmt-network
 ```
