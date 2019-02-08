@@ -154,26 +154,32 @@ class NEucaGenerateGlobalUserData {
             temp = getProject().getProperty(UnitProperties.SliceCometReadToken);
             if (temp != null) {
                 out.println("slicecometreadtoken=" + temp);
+                getProject().setProperty(Config.PropertySavePrefix + UnitProperties.SliceCometReadToken, temp);
             }
             temp = getProject().getProperty(UnitProperties.SliceCometWriteToken);
             if (temp != null) {
                 out.println("slicecometwritetoken=" + temp);
+                getProject().setProperty(Config.PropertySavePrefix + UnitProperties.SliceCometWriteToken, temp);
             }
             temp = getProject().getProperty(UnitProperties.UnitCometHostsGroupToRead);
             if (temp != null) {
                 out.println("comethostsgroupread=" + temp);
+                getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometHostsGroupToRead, temp);
             }
             temp = getProject().getProperty(UnitProperties.UnitCometHostsGroupToWrite);
             if (temp != null) {
                 out.println("comethostsgroupwrite=" + temp);
+                getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometHostsGroupToWrite, temp);
             }
             temp = getProject().getProperty(UnitProperties.UnitCometPubKeysGroupToRead);
             if (temp != null) {
                 out.println("cometpubkeysgroupread=" + temp);
+                getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometPubKeysGroupToRead, temp);
             }
             temp = getProject().getProperty(UnitProperties.UnitCometPubKeysGroupToWrite);
             if (temp != null) {
                 out.println("cometpubkeysgroupwrite=" + temp);
+                getProject().setProperty(Config.PropertySavePrefix + UnitProperties.UnitCometPubKeysGroupToWrite, temp);
             }
 
             // Save the readToken and writeToken in the properties

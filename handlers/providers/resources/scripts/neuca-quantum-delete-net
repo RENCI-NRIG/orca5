@@ -8,10 +8,12 @@ import traceback
 sys.path.append(os.environ['PROVIDER_DIR'] + "/scripts")
 
 from neuca_quantum_common import *
+from nova_essex_common import *
 
 try:
     sys.path.append(os.environ['PROVIDER_DIR'] + "/scripts")
     from neuca_quantum_common import *
+    from nova_essex_common import *
 except:
     print 'Error in neuca-quantum-delete-net: cannot import neuca_quantum_common.py'
     sys.exit(1)
@@ -62,13 +64,15 @@ try:
         max_rate = None
         burst_rate = None
 
-    NEuca_Quantum_Network.delete_network(os.environ['QUANTUM_TENANT_ID'],
-                                         os.environ['QUANTUM_NET_UUID'])
+    NEuca_Quantum_Network.delete_network(os.environ['QUANTUM_NET_UUID'])
  
     print 'OK'
 
+    Project.cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
+
 except Exception as e:
     LOG.error("neuca-quantum-delete-net: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    Project.cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     sys.exit(1)
 
 sys.exit(0)

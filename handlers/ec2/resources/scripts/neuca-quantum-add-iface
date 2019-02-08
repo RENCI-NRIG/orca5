@@ -57,20 +57,19 @@ try:
     # DO THE WORK
     LOG.debug("neuca-quantum-add-iface: " + str(sys.argv))
 
-    network_uuid = NEuca_Quantum_Network.get_network_uuid(os.environ['QUANTUM_TENANT_ID'],
-                                                          os.environ['QUANTUM_NET_VLAN'],
+    network_uuid = NEuca_Quantum_Network.get_network_uuid(os.environ['QUANTUM_NET_VLAN'],
                                                           os.environ['QUANTUM_NET_NETWORK'],
-                                                          os.environ['QUANTUM_NET_TYPE'])
+                                                          os.environ['QUANTUM_NET_TYPE'],
+                                                          os.environ['PROJECT_NAME'])
     if network_uuid == None:
         LOG.error("neuca-quantum-add-iface: no quantum network found for vlan: " + os.environ[
             'QUANTUM_NET_VLAN'] + ", network: " + os.environ['QUANTUM_NET_NETWORK'])
         sys.exit(1)
 
-    iface_uuid = NEuca_Quantum_Network.add_iface_to_network(os.environ['QUANTUM_TENANT_ID'],
-                                                            network_uuid,
+    iface_uuid = NEuca_Quantum_Network.add_iface_to_network(network_uuid,
                                                             os.environ['QUANTUM_NET_INSTANCE_NAME'],
                                                             VM.get_instance_name_by_ID(os.environ['QUANTUM_NET_INSTANCE_NAME']),
-                                                            os.environ['QUANTUM_NET_IFACE_MAC'])
+                                                            os.environ['QUANTUM_NET_IFACE_MAC'], os.environ['PROJECT_NAME'])
 
     print iface_uuid
 

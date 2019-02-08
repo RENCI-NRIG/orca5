@@ -48,6 +48,8 @@
             <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
             <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
             <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
             <arg value="${shirako.save.unit.ec2.instance}" />
         </exec>
     </sequential>
@@ -71,8 +73,14 @@
 
         <var name="code" unset="true" />
         <var name="message" unset="true" />
+        <var name="sshkey" unset="true" />
 
         <echo message="Cloud Type: ${cloud.type} " />
+        <for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+            <sequential>
+                <property name="sshkey" value="${config.ssh.user@{iter}.keys}" />
+            </sequential>
+        </for>
         <if>
             <equals arg1="${emulation}" arg2="true" />
             <then>
@@ -103,12 +111,14 @@
                     <echo message="AKI_NAME=${ec2.aki.name}" />
                     <echo message="ARI_NAME=${ec2.ari.name}" />
                     <echo message="EC2_INSTANCE_TYPE=${ec2.instance.type}" />
-                    <echo message="EC2_SSH_KEY=${ec2.ssh.key}" />
-                    <echo message="QUANTUM_TENANT_ID=${quantum.tenant.id}" />
                     <echo message="EC2_PUBLIC_NETWORK=${ec2.public.network}" />
                     <echo message="EC2_MGMT_NETWORK=${ec2.management.network}" />
-                    <echo message="EC2_SEC_GROUP=${ec2.security.group}" />
-                    <echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
+                    <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
+                    <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
+                    <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
+                    <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
+                    <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+                    <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
                     <echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
                     <echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
                     <echo message="EC2_SSH_TIMEOUT=${ec2.ssh.timeout}" />
@@ -116,6 +126,7 @@
                     <echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
                     <echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
                     <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
+                    <echo message="SSH_KEY=${sshkey}" />
                     <echo message="before create instance" />
                     <exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
                         <env key="EMULATION" value="${emulation}" />
@@ -133,18 +144,21 @@
                         <env key="AKI_NAME" value="${ec2.aki.name}" />
                         <env key="ARI_NAME" value="${ec2.ari.name}" />
                         <env key="EC2_INSTANCE_TYPE" value="${ec2.instance.type}" />
-                        <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                        <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                         <env key="EC2_PUBLIC_NETWORK" value="${ec2.public.network}" />
                         <env key="EC2_MGMT_NETWORK" value="${ec2.management.network}" />
-                        <env key="EC2_SEC_GROUP" value="${ec2.security.group}" />
-                        <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
+                        <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
+                        <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
+                        <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
+                        <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+                        <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                        <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                         <env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
                         <env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
                         <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
                         <env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
                         <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                         <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                        <env key="SSH_KEY" value="${sshkey}" />
                     </exec>
 
                     <echo message="Handler running under emulation: exit code ${code}, ${create.instance.output}" />
@@ -320,12 +334,14 @@
                         <echo message="AKI_NAME=${ec2.aki.name}" />
                         <echo message="ARI_NAME=${ec2.ari.name}" />
                         <echo message="EC2_INSTANCE_TYPE=${ec2.instance.type}" />
-                        <echo message="EC2_SSH_KEY=${ec2.ssh.key}" />
-                        <echo message="QUANTUM_TENANT_ID=${quantum.tenant.id}" />
                         <echo message="EC2_PUBLIC_NETWORK=${ec2.public.network}" />
                         <echo message="EC2_MGMT_NETWORK=${ec2.management.network}" />
-                        <echo message="EC2_SEC_GROUP=${ec2.security.group}" />
-                        <echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
+                        <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
+                        <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
+                        <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
+                        <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
+                        <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+                        <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
                         <echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
                         <echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
                         <echo message="EC2_SSH_TIMEOUT=${ec2.ssh.timeout}" />
@@ -333,6 +349,7 @@
                         <echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
                         <echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
                         <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
+                        <echo message="SSH_KEY=${sshkey}" />
                         <echo message="before create instance" />
                         <exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
                             <env key="EMULATION" value="${emulation}" />
@@ -350,18 +367,21 @@
                             <env key="AKI_NAME" value="${ec2.aki.name}" />
                             <env key="ARI_NAME" value="${ec2.ari.name}" />
                             <env key="EC2_INSTANCE_TYPE" value="${ec2.instance.type}" />
-                            <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
                             <env key="EC2_MGMT_NETWORK" value="${ec2.management.network}" />
-                            <env key="EC2_SEC_GROUP" value="${ec2.security.group}" />
-                            <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
+                            <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
+                            <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
+                            <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
+                            <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+                            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                             <env key="EC2_PUBLIC_NETWORK" value="${ec2.public.network}" />
-                            <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
                             <env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
                             <env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
                             <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
                             <env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
                             <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                             <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                            <env key="SSH_KEY" value="${sshkey}" />
                         </exec>
                         <echo message="after create instance: exit code ${code}, ${create.instance.output}" />
 
@@ -378,6 +398,10 @@
                             <else>
                                 <var name="shirako.save.unit.ec2.instance" unset="true" />
                                 <property name="shirako.save.unit.ec2.instance" value="${create.instance.output}" />
+                                <property name="shirako.save.unit.ec2.slice.user.pwd" value="${unit.ec2.slice.user.pwd}" />
+                                <property name="shirako.save.unit.ec2.slice.user.name" value="${unit.ec2.slice.user.name}" />
+                                <property name="shirako.save.unit.ec2.slice.project.name" value="${unit.ec2.slice.project.name}" />
+                                <property name="shirako.save.unit.ec2.openstack.horizon.url" value="${ec2.openstack.horizon.url}" />
 
                                 <!-- hairpin the hostname property so the user sees it too -->
                                 <var name="shirako.save.unit.hostname.url" unset="true" />
@@ -494,6 +518,8 @@
                                                             <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
                                                             <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                                                             <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                                                            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                                                            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                                                             <arg value="${shirako.save.unit.ec2.instance}" />
                                                         </exec>
                                                     </else>
@@ -548,7 +574,6 @@
                                                 <echo message="EC2_LOG_DIR ${ec2.log.dir}" />
                                                 <echo message="EC2_LOG_FILE ${ec2.log.file}" />
                                                 <echo message="EC2_LOG_LEVEL ${ec2.log.level}" />
-                                                <echo message="QUANTUM_TENANT_ID ${quantum.tenant.id}" />
                                                 <echo message="QUANTUM_NET_INSTANCE_NAME ${shirako.save.unit.ec2.instance}" />
                                                 <echo message="QUANTUM_NET_IFACE_MAC ${iface.mac}" />
                                                 <echo message="QUANTUM_NET_NETWORK ${iface.net.name}" />
@@ -562,12 +587,13 @@
                                                     <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                                                     <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                                                     <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                                    <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                                                     <env key="QUANTUM_NET_INSTANCE_NAME" value="${shirako.save.unit.ec2.instance}" />
                                                     <env key="QUANTUM_NET_IFACE_MAC" value="${iface.mac}" />
                                                     <env key="QUANTUM_NET_NETWORK" value="${iface.net.name}" />
                                                     <env key="QUANTUM_NET_VLAN" value="${iface.net.vlan}" />
                                                     <env key="QUANTUM_NET_TYPE" value="${iface.net.type}" />
+                                                    <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                                                    <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                                                 </exec>
                                                 <echo>result code: ${code}</echo>
                                                 <echo>output: ${add.iface.output}</echo>
@@ -796,12 +822,13 @@
                         <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                         <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                         <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                        <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                         <env key="QUANTUM_NET_INSTANCE_NAME" value="${unit.ec2.instance}" />
                         <env key="QUANTUM_NET_IFACE_MAC" value="${modify.@{seqnum}.mac}" />
                         <env key="QUANTUM_NET_NETWORK" value="${modify.@{seqnum}.hosteth}" />
                         <env key="QUANTUM_NET_VLAN" value="${modify.@{seqnum}.vlan.tag}" />
                         <env key="QUANTUM_NET_TYPE" value="${ipversion}" />
+                        <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                        <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                     </exec>
                     <echo>result code: ${code}</echo>
                     <echo>output: ${add.iface.output}</echo>
@@ -812,6 +839,39 @@
                         <then>
                             <echo message="neuca-quantum-add-iface: failed to add interface" />
                         </then>
+                        <else>
+                            <var name="instance.quantum.ifaces" unset="true" />
+                            <if>
+                                <isset property="unit.quantum.ifaces" />
+                            <then>
+                                <property name="instance.quantum.ifaces" value="${unit.quantum.ifaces}" />
+                            </then>
+                            </if>
+                            <if>
+                               <isset property="instance.quantum.ifaces" />
+                            <then>
+                                <if>
+                                    <not>
+                                        <contains string="${instance.quantum.ifaces}" substring="${add.iface.output}"/>
+                                    </not>
+                                    <then>
+                                        <var name="instance.quantum.ifaces.tmp" unset="true" />
+                                        <property name="instance.quantum.ifaces.tmp" value="${instance.quantum.ifaces}" />
+                                        <var name="instance.quantum.ifaces" unset="true" />
+                                        <property name="instance.quantum.ifaces" value="${instance.quantum.ifaces.tmp},${add.iface.output}" />
+                                        <echo>Add to iface to existing value ifaces = ${instance.quantum.ifaces}</echo>
+                                    </then>
+                                </if>
+                            </then>
+                            <else>
+                                <echo>Set new value ifaces = ${add.iface.output}</echo>
+                                <property name="instance.quantum.ifaces" value="${add.iface.output}" />
+                            </else>
+                            </if>
+                            <var name="shirako.save.unit.quantum.ifaces" unset="true" />
+                            <property name="shirako.save.unit.quantum.ifaces" value="${instance.quantum.ifaces}" />
+                            <echo>shirako.save.unit.quantum.ifaces: ${shirako.save.unit.quantum.ifaces}</echo>
+                        </else>
                     </if>
 
                     <!-- add properties to userdata file -->
@@ -1058,7 +1118,6 @@
                       <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                       <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                       <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                      <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                       <env key="QUANTUM_NET_INSTANCE_NAME" value="${unit.ec2.instance}" />
                       <env key="QUANTUM_NET_IFACE_MAC" value="${modify.@{seqnum}.mac}" />
                       <env key="QUANTUM_NET_NETWORK" value="${modify.@{seqnum}.hosteth}" />
@@ -1199,7 +1258,6 @@
                                 <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
                                 <env key="EC2_DIR" value="${ec2.dir}" />
                                 <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                                <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
                                 <arg value="${unit.ec2.instance}" />
                             </exec>
                             <echo message="get-ip exit code: ${code} ip=${real.ip}" />
@@ -1239,7 +1297,6 @@
                                 <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                                 <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                                 <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                                 <env key="UNIT_EC2_INSTANCE" value="${unit.ec2.instance}" />
                                 <env key="UNIT_QUANTUM_IFACES" value="${unit.quantum.ifaces}" />
                             </exec>
@@ -1262,6 +1319,8 @@
                         <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                         <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
                         <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
+                        <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                        <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                         <arg value="${unit.ec2.instance}" />
                     </exec>
                     <echo message="terminate-instance exit code: ${code}; ${terminate.instance.output}" />

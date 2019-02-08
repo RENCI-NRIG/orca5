@@ -66,8 +66,7 @@ try:
 
     LOG.debug("neuca-quantum-remove-vm-ifaces: iface_uuids = " + str(iface_uuids))
 
-    NEuca_Quantum_Network.remove_all_vm_ifaces(os.environ['QUANTUM_TENANT_ID'],
-                                               iface_uuids)
+    NEuca_Quantum_Network.remove_all_vm_ifaces(iface_uuids)
 
     print 'OK'
 

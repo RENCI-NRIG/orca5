@@ -8,10 +8,12 @@ import traceback
 sys.path.append(os.environ['PROVIDER_DIR'] + "/scripts")
 
 from neuca_quantum_common import *
+from nova_essex_common import *
 
 try:
     sys.path.append(os.environ['PROVIDER_DIR'] + "/scripts")
     from neuca_quantum_common import *
+    from nova_essex_common import *
 except:
     print 'Error in neuca-quantum-create-net: cannot import neuca_quantum_common.py'
     sys.exit(1)
@@ -61,18 +63,26 @@ try:
         max_rate = None
         burst_rate = None
 
-    network_uuid = NEuca_Quantum_Network.create_network(os.environ['QUANTUM_TENANT_ID'],
-                                                        os.environ['QUANTUM_NET_TYPE'],
+    Project.setup_project(os.environ['PROJECT_NAME'], 
+                  os.environ['USER_NAME'],
+                  os.environ['EC2_SLICE_USER_EMAIL'], 
+                  os.environ['EC2_SLICE_USER_PWD'], 
+                  os.environ['EC2_SLICE_USER_ROLE'], 
+                  os.environ['EC2_SLICE_ADMIN_USER'])
+
+    network_uuid = NEuca_Quantum_Network.create_network(os.environ['QUANTUM_NET_TYPE'],
                                                         os.environ['QUANTUM_NET_NETWORK'],
                                                         os.environ['QUANTUM_NET_VLAN'],
                                                         os.environ['QUANTUM_DATAPLANE_NETWORK'],
                                                         os.environ['QUANTUM_OPENFLOW_NETWORK'],
+                                                        os.environ['PROJECT_NAME'],
                                                         max_rate,
                                                         burst_rate)    
     print network_uuid
     
 except Exception as e:
     LOG.error("neuca-quantum-create-net: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    Project.cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     sys.exit(1)
 
 sys.exit(0)
