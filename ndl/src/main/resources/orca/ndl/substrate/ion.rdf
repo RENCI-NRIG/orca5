@@ -1788,6 +1788,7 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/unfNet/PoP">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/unfNet/Cisco/6509"/>
     </owl:NamedIndividual>
     
 
