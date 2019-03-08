@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>orca</groupId>
     <artifactId>orca</artifactId>
-    <version>5.4.9-SNAPSHOT</version>
+    <version>5.4.9</version>
     <packaging>pom</packaging>
     <name>Orca</name>
     <url>https://geni-orca.renci.org/orca-doc</url>
@@ -153,7 +153,7 @@
         <developerConnection>scm:git:git@github.com:RENCI-NRIG/orca5.git</developerConnection>
         <connection>scm:git:git@github.com:RENCI-NRIG/orca5.git</connection>
         <url>https://github.com/RENCI-NRIG/orca5</url>
-        <tag>HEAD</tag>
+        <tag>orca-5.4.9</tag>
     </scm>
 
     <issueManagement>
