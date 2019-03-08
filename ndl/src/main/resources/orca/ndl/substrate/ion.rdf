@@ -2401,6 +2401,7 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/LATNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/NetworkService/1/availableVLANSet"/>
         <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/LATNet/Cisco/6509"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#LATNet/IBM/G8052/TenGigabitEthernet/1/0/ethernet"/>
@@ -2802,6 +2803,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Cenic/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/DD/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/ESNET/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/LAT/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Nicta/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/UFL/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Uva-nlNet/PoP"/>
