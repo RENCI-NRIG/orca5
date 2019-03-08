@@ -252,7 +252,11 @@ public class RequestReservation {
             }
 
             if ((ne1_domain != null) && (ne2_domain != null)) {
-                if (ne1_domain.equals(ne2_domain)) {
+                // kthare10 - this is done to enable StitchPort - StitchPort connections
+                // This fix only enables StitchPort - StitchPort connections where StitchPort is not connected
+                // to any compute resources
+                //if (ne1_domain.equals(ne2_domain)) {
+                if (!ne1_domain.contains(NdlCommons.stitching_domain_str) && ne1_domain.equals(ne2_domain)) {
                     if (intraSite)
                         this.reservationDomain = ne1_domain;
                     element.setInDomain(ne1_domain);
