@@ -168,6 +168,7 @@ public class InterDomainHandler extends CloudHandler implements LayerConstant {
                 dType = domainResourcePools.getDomainResourceType(domainName);
                 isStitchingDomain = NdlCommons.isStitchingNodeInManifest(de.getResource());
 
+                logger.debug("domainName = " + domainName + " dType= " + dType + " isStitchingDomain=" + isStitchingDomain);
                 if (isStitchingDomain){
                     resourceCount = 1;
                 }
