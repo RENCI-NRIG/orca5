@@ -445,7 +445,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/LATNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100000000000</layer:bandwidth>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">253</rdfs:label>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">253</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -461,7 +461,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/lat/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SDN</topology:hasName>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">253</rdfs:label>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">253</rdfs:label>
     </owl:NamedIndividual>
     
 
