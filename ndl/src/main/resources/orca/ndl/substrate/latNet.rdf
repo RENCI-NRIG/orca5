@@ -429,7 +429,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/3"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">100</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</collections:size>
         <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
     </owl:NamedIndividual>
     
@@ -575,7 +575,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/3"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">50</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
     </owl:NamedIndividual>
     
 
@@ -586,7 +586,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">50</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
     </owl:NamedIndividual>
     
 
