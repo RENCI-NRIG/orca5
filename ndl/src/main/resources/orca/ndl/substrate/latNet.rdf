@@ -343,7 +343,7 @@
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/lat/Cisco/6509/TenGigabitEthernet/0/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/lat/Cisco/6509/TenGigabitEthernet/0/1/ethernet">
-        <topology:hasURN>urn:publicid:IDN+wall2.ilabt.iminds.be+interface+c300b:0.12:uva</topology:hasURN>
+        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.bato.net.internet2.edu:port=et-8/0/0</topology:hasURN>
     </owl:NamedIndividual>
     
 
@@ -524,15 +524,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/100 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/100">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/1009 -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/1009">
@@ -542,29 +533,38 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/149 -->
+    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3959 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/149">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3959">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">149.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3959.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/150 -->
+    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3968 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/150">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3968">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">150.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3968.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/199 -->
+    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3969 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/199">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3969">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">199.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3969.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3978 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3978">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3978.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -595,8 +595,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/3">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/150"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/199"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3959"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3968"/>
     </owl:NamedIndividual>
     
 
@@ -605,8 +605,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/4">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/100"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/149"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3969"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/VLANLabel/3978"/>
     </owl:NamedIndividual>
     
 
