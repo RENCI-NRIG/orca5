@@ -538,6 +538,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/TenGigabitEthernet/BareMetal/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">of-data</topology:hostInterfaceName>
+        <rdfs:label>20-31</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -552,6 +553,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/TenGigabitEthernet/BareMetal/2/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vlan-data</topology:hostInterfaceName>
+        <rdfs:label>20-31</rdfs:label>
     </owl:NamedIndividual>
     
 
