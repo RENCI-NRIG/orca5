@@ -477,7 +477,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/latvmsite.rdf#lat/ExoGeni/TenGigabitEthernet/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <rdfs:label>137-144,177,181</rdfs:label>
+        <rdfs:label>137-144</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -492,7 +492,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/latvmsite.rdf#lat/ExoGeni/TenGigabitEthernet/2/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
-        <rdfs:label>129-136,169,173</rdfs:label>
+        <rdfs:label>129-136</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -535,7 +535,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/latvmsite.rdf#lat/BareMetal/TenGigabitEthernet/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">of-data</topology:hostInterfaceName>
-        <rdfs:label>20-31</rdfs:label>
+        <rdfs:label>177,181</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -550,7 +550,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/latvmsite.rdf#lat/BareMetal/TenGigabitEthernet/2/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vlan-data</topology:hostInterfaceName>
-        <rdfs:label>20-31</rdfs:label>
+        <rdfs:label>169,173</rdfs:label>
     </owl:NamedIndividual>
     
 
