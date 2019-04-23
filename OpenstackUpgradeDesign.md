@@ -11,6 +11,7 @@ ec2.slice.user.email=slice_owner@geni.net
 ec2.slice.user.role=geni_slice_owner
 ec2.slice.admin.user=admin
 ec2.openstack.horizon.url=http://152.54.14.211/dashboard/identity/
+ec2.auth.url=http://10.100.0.10:5000/v3
 ```
 ### Nova changes
 - nova_essex_common updated to use openstack commands instead of nova commands
@@ -83,6 +84,7 @@ ec2.slice.user.email=slice_owner@geni.net
 ec2.slice.user.role=geni_slice_owner
 ec2.slice.admin.user=admin
 ec2.openstack.horizon.url=http://152.54.14.211/dashboard/identity/
+ec2.auth.url=http://10.100.0.10:5000/v3
 ```
 
 - Following additional configuration parameters required in **handlers/providers/quantum/build.properties**
