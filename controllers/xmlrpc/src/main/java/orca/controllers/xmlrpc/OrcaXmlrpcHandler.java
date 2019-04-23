@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.BitSet;
-//import com.ibm.icu.util.Calendar;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -393,6 +392,15 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
         }
     }
 
+    private void setSliceOpenstackProperties(TicketReservationMng currRes, String projectName, String userName, String sliceUserPwd) {
+        Properties local = OrcaConverter.fill(currRes.getLocalProperties());
+        local.setProperty(UnitProperties.UnitEC2SliceProjectName, projectName);
+        local.setProperty(UnitProperties.UnitEC2SliceUserName, userName);
+        local.setProperty(UnitProperties.UnitEC2SliceUserPwd, sliceUserPwd);
+        currRes.setLocalProperties(OrcaConverter.merge(local, currRes.getLocalProperties()));
+        logger.debug("setSliceOpenstackProperties(): projectName=" + projectName + " userName=" + userName + " sliceUserPwd=" + sliceUserPwd); 
+    }
+
     private void createSliceCometContext(XmlrpcControllerSlice s) throws NEucaCometException {
         if (s == null) {
             logger.error("createSliceCometContext(): createSliceCometContext was given a null slice");
@@ -406,7 +414,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
         Iterator<TicketReservationMng> it = compRes.iterator();
 
         String readToken = RandomStringUtils.random(10, true, true);
-
+        String sliceUserPwd = RandomStringUtils.random(10, true, true);
+        String suffix = RandomStringUtils.random(10, true, true);
+        String projectName = "tenant-" + s.getSliceUrn() + "-" + suffix;
+        String userName = "owner-" + s.getSliceUrn() + "-" + suffix;
 
         while (it.hasNext()) {
             TicketReservationMng currRes = it.next();
@@ -420,6 +431,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                     createSliceCometContext(currRes, readToken, writeToken);
                 }
             }
+            setSliceOpenstackProperties(currRes, projectName, userName, sliceUserPwd);
         }
     }
 
@@ -1076,15 +1088,24 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                             + " sliceId = " + ndlSlice.getSliceID());
 
                     // Find the slice readToken and writeToken from an existing VM otherwise generate tokens
-                    String readToken = null;
+                    String readToken = null, sliceUserPwd = null, projectName = null, userName= null;
                     if ((OrcaController.getProperty(OrcaController.CometPubKeysEnabled) != null &&
                             OrcaController.getProperty(OrcaController.CometPubKeysEnabled).equals("true")) ||
                             (OrcaController.getProperty(OrcaController.CometHostNamesEnabled) != null &&
                                     OrcaController.getProperty(OrcaController.CometHostNamesEnabled).equals("true"))) {
                         for (ReservationMng rr : allRes) {
                             String rType = rr.getResourceType();
+                            Properties local = OrcaConverter.fill(rr.getLocalProperties());
+                            if(local.getProperty(UnitProperties.UnitEC2SliceUserPwd) != null) {
+                                sliceUserPwd = local.getProperty(UnitProperties.UnitEC2SliceUserPwd);
+                            }
+                            if(local.getProperty(UnitProperties.UnitEC2SliceProjectName) != null) {
+                                projectName = local.getProperty(UnitProperties.UnitEC2SliceProjectName);
+                            }
+                            if(local.getProperty(UnitProperties.UnitEC2SliceUserName) != null) {
+                                userName = local.getProperty(UnitProperties.UnitEC2SliceUserName);
+                            }
                             if (rType.endsWith("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {
-                                Properties local = OrcaConverter.fill(rr.getLocalProperties());
                                 readToken = local.getProperty(UnitProperties.SliceCometReadToken);
                                 if(readToken != null) {
                                     logger.debug("Using existing read token=" + readToken);
@@ -1095,6 +1116,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                         if(readToken == null) {
                             readToken = RandomStringUtils.random(10, true, true);
                             logger.debug("New read token=" + readToken);
+                        }
+                        if(sliceUserPwd == null) {
+                            sliceUserPwd = RandomStringUtils.random(10, true, true);
+                            logger.debug("New sliceUserPwd token=" + sliceUserPwd);
                         }
                     }
                     for (ReservationMng rr : a_r) {
@@ -1121,6 +1146,9 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                                     String writeToken = RandomStringUtils.random(10, true, true);
                                     createSliceCometContext((TicketReservationMng)rr, readToken, writeToken);
                                 }
+                            }
+                            if(projectName != null && userName != null && sliceUserPwd != null) {
+                                setSliceOpenstackProperties((TicketReservationMng)rr, projectName, userName, sliceUserPwd);
                             }
                         } catch (Exception ex) {
                             if (rType.endsWith("vm") || rType.endsWith("baremetalce") || rType.equalsIgnoreCase("lun")) {

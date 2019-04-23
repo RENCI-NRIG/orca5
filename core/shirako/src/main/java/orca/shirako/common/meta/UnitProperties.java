@@ -91,6 +91,10 @@ public interface UnitProperties {
     public static final String UnitEC2Instance      = "unit.ec2.instance";
     public static final String UnitEC2PrivateIP     = "unit.ec2.private.ip";
     public static final String UnitEC2Host          = "unit.ec2.host";
+    public static final String UnitEC2SliceUserPwd  = "unit.ec2.slice.user.pwd";
+    public static final String UnitEC2SliceProjectName  = "unit.ec2.slice.project.name";
+    public static final String UnitEC2SliceUserName  = "unit.ec2.slice.user.name";
+    public static final String UnitEC2SliceHorizonUrl  = "unit.ec2.openstack.horizon.url";
 
     /*
      * Comet Properties

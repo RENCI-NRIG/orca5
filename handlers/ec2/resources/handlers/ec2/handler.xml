@@ -48,6 +48,8 @@
             <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
             <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
             <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
             <arg value="${shirako.save.unit.ec2.instance}" />
         </exec>
     </sequential>
@@ -60,8 +62,8 @@
         </tstamp>
         <echo message="EC2 HANDLER: JOIN on ${start.TIME}" />
         <!-- see ec2.site.sample.properties and wiki for description
-     of static properties that can be specified in ec2.site.properties
-    -->
+             of static properties that can be specified in ec2.site.properties
+        -->
         <if>
             <isset property="ec2.site.properties" />
             <then>
@@ -71,8 +73,14 @@
 
         <var name="code" unset="true" />
         <var name="message" unset="true" />
+        <var name="sshkey" unset="true" />
 
         <echo message="Cloud Type: ${cloud.type} " />
+        <for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
+            <sequential>
+                <property name="sshkey" value="${config.ssh.user@{iter}.keys}" />
+            </sequential>
+        </for>
         <if>
             <equals arg1="${emulation}" arg2="true" />
             <then>
@@ -81,13 +89,11 @@
                     <!-- create the NEUCA INI file -->
                     <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
                     <echo message="EMULATION: neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
-                    <ec2.generate.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" outputproperty="iface.list" />
-                    <echo message="EMULATION: iface.list = ${iface.list}" />
+                    <ec2.generate.global.user.data file="${neuca.ini.file}" cloudtype="${cloud.type}"/>
                     <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
                     <echo message="EMULATION: neuca.ini: ${neuca.ini}" />
 
-
-                    <echo message="EMULATION: creating Euca instance ${unit.hostname.url} using emi ${ec2.ami.name} ...(may take some time)" />
+                    <echo message="EMULATION: creating Euca instance ${unit.hostname.url} using emi ${ec2.ami.name} or qcow2 ${ec2.qcow2.name} ...(may take some time)" />
                     <var name="create.instance.output" unset="true" />
                     <var name="code" unset="true" />
                     <var name="message" unset="true" />
@@ -101,11 +107,18 @@
                     <echo message="EUCA_GROUP=${euca.group}" />
                     <echo message="NEUCA_INI=${neuca.ini.file}" />
                     <echo message="AMI_NAME=${ec2.ami.name}" />
+                    <echo message="QCOW2_NAME=${ec2.qcow2.name}" />
                     <echo message="AKI_NAME=${ec2.aki.name}" />
                     <echo message="ARI_NAME=${ec2.ari.name}" />
                     <echo message="EC2_INSTANCE_TYPE=${ec2.instance.type}" />
-                    <echo message="EC2_SSH_KEY=${ec2.ssh.key}" />
-                    <echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
+                    <echo message="EC2_PUBLIC_NETWORK=${ec2.public.network}" />
+                    <echo message="EC2_MGMT_NETWORK=${ec2.management.network}" />
+                    <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
+                    <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
+                    <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
+                    <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
+                    <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+                    <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
                     <echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
                     <echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
                     <echo message="EC2_SSH_TIMEOUT=${ec2.ssh.timeout}" />
@@ -113,6 +126,7 @@
                     <echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
                     <echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
                     <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
+                    <echo message="SSH_KEY=${sshkey}" />
                     <echo message="before create instance" />
                     <exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
                         <env key="EMULATION" value="${emulation}" />
@@ -126,17 +140,25 @@
                         <env key="EUCA_GROUP" value="${euca.group}" />
                         <env key="NEUCA_INI" value="${neuca.ini.file}" />
                         <env key="AMI_NAME" value="${ec2.ami.name}" />
+                        <env key="QCOW2_NAME" value="${ec2.qcow2.name}" />
                         <env key="AKI_NAME" value="${ec2.aki.name}" />
                         <env key="ARI_NAME" value="${ec2.ari.name}" />
                         <env key="EC2_INSTANCE_TYPE" value="${ec2.instance.type}" />
-                        <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                        <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
+                        <env key="EC2_PUBLIC_NETWORK" value="${ec2.public.network}" />
+                        <env key="EC2_MGMT_NETWORK" value="${ec2.management.network}" />
+                        <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
+                        <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
+                        <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
+                        <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+                        <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                        <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                         <env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
                         <env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
                         <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
                         <env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
                         <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                         <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                        <env key="SSH_KEY" value="${sshkey}" />
                     </exec>
 
                     <echo message="Handler running under emulation: exit code ${code}, ${create.instance.output}" />
@@ -189,9 +211,10 @@
                                 <var name="ec2.ami.name" unset="true" />
                                 <var name="ec2.aki.name" unset="true" />
                                 <var name="ec2.ari.name" unset="true" />
+                                <var name="ec2.qcow2.name" unset="true" />
                                 <echo message="invoking image proxy ${ec2.img.proxy.url} to download and install image ${config.image.url}... (may take some time)" />
                                 <!-- config.image.url and config.image.guid are externally specified -->
-                                <ec2.image.proxy.register url="${config.image.url}" signature="${config.image.guid}" axisTimeout="${ec2.img.proxy.timeout}" imgproxyServiceUrl="${ec2.img.proxy.url}" statusPropertyName="img.proxy.status" emiPropertyName="img.proxy.emi" ekiPropertyName="img.proxy.eki" eriPropertyName="img.proxy.eri" />
+                                <ec2.image.proxy.register url="${config.image.url}" signature="${config.image.guid}" axisTimeout="${ec2.img.proxy.timeout}" imgproxyServiceUrl="${ec2.img.proxy.url}" statusPropertyName="img.proxy.status" emiPropertyName="img.proxy.emi" ekiPropertyName="img.proxy.eki" eriPropertyName="img.proxy.eri" qcow2PropertyName="img.proxy.qcow2"/>
                                 <echo message="Status from image proxy is ${img.proxy.status}" />
                                 <if>
                                     <not>
@@ -202,9 +225,22 @@
                                         <property name="message" value="${img.proxy.status}" />
                                     </then>
                                     <else>
-                                        <echo message="New EMI from image proxy is ${img.proxy.emi}" />
-                                        <property name="ec2.ami.name" value="${img.proxy.emi}" />
-                                        <property name="code" value="0" />
+                                        <if>
+                                            <isset property="img.proxy.emi" />
+                                            <then>
+                                                <echo message="New EMI from image proxy is ${img.proxy.emi}" />
+                                                <property name="ec2.ami.name" value="${img.proxy.emi}" />
+                                                <property name="code" value="0" />
+                                            </then>
+                                        </if>
+                                        <if>
+                                            <isset property="img.proxy.qcow2" />
+                                            <then>
+                                                <echo message="New QCOW2 from image proxy is ${img.proxy.qcow2}" />
+                                                <property name="ec2.qcow2.name" value="${img.proxy.qcow2}" />
+                                                <property name="code" value="0" />
+                                            </then>
+                                        </if>
                                         <if>
                                             <isset property="img.proxy.eki" />
                                             <then>
@@ -232,6 +268,8 @@
                     </then>
                     <else>
                         <echo message="Skipping image proxy, using emi ${ec2.ami.name} " />
+                        <var name="code" unset="true" />
+                        <property name="code" value="0" />
                     </else>
                 </if>
 
@@ -256,7 +294,29 @@
                                 <echo message="User did not specify instance type, using default ${ec2.instance.type}" />
                             </else>
                         </if>
-                       <echo message="creating Euca instance ${unit.hostname.url} using emi ${ec2.ami.name} ...(may take some time)" />
+                        <if>
+                            <isset property="img.proxy.qcow2" />
+                            <then>
+                                <echo message="creating Euca instance ${unit.hostname.url} using qcow2 ${ec2.qcow2.name} ...(may take some time)" />
+                            </then>
+                            <else>
+                                <echo message="creating Euca instance ${unit.hostname.url} using emi ${ec2.ami.name} ...(may take some time)" />
+                            </else>
+                        </if>
+                        <!-- create the NEUCA INI file for global user data stored in openstack -->
+                        <trycatch property="failmsg">
+                            <try>
+                                <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
+                                <echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
+                                <ec2.generate.global.user.data file="${neuca.ini.file}" cloudtype="${cloud.type}" />
+                                <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
+                                <echo message="neuca.ini: ${neuca.ini}" />
+                            </try>
+                            <catch>
+                                <echo message="Failed to generate Global user data" />
+                                <fail message="${failmsg}" />
+                            </catch>
+                        </trycatch>
                         <var name="create.instance.output" unset="true" />
                         <var name="code" unset="true" />
                         <var name="message" unset="true" />
@@ -270,11 +330,18 @@
                         <echo message="EUCA_GROUP=${euca.group}" />
                         <echo message="NEUCA_INI=${neuca.ini.file}" />
                         <echo message="AMI_NAME=${ec2.ami.name}" />
+                        <echo message="QCOW2_NAME=${ec2.qcow2.name}" />
                         <echo message="AKI_NAME=${ec2.aki.name}" />
                         <echo message="ARI_NAME=${ec2.ari.name}" />
                         <echo message="EC2_INSTANCE_TYPE=${ec2.instance.type}" />
-                        <echo message="EC2_SSH_KEY=${ec2.ssh.key}" />
-                        <echo message="EC2_USE_PUBLIC_ADDRESSING=${ec2.use.public.addressing}" />
+                        <echo message="EC2_PUBLIC_NETWORK=${ec2.public.network}" />
+                        <echo message="EC2_MGMT_NETWORK=${ec2.management.network}" />
+                        <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
+                        <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
+                        <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
+                        <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
+                        <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+                        <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
                         <echo message="EC2_PING_RETRIES=${ec2.ping.retries}" />
                         <echo message="EC2_SSH_RETRIES=${ec2.ssh.retries}" />
                         <echo message="EC2_SSH_TIMEOUT=${ec2.ssh.timeout}" />
@@ -282,6 +349,7 @@
                         <echo message="EC2_CONNECTION_TIMEOUT=${ec2.connection.timeout}" />
                         <echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
                         <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
+                        <echo message="SSH_KEY=${sshkey}" />
                         <echo message="before create instance" />
                         <exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
                             <env key="EMULATION" value="${emulation}" />
@@ -295,17 +363,25 @@
                             <env key="EUCA_GROUP" value="${euca.group}" />
                             <env key="NEUCA_INI" value="${neuca.ini.file}" />
                             <env key="AMI_NAME" value="${ec2.ami.name}" />
+                            <env key="QCOW2_NAME" value="${ec2.qcow2.name}" />
                             <env key="AKI_NAME" value="${ec2.aki.name}" />
                             <env key="ARI_NAME" value="${ec2.ari.name}" />
                             <env key="EC2_INSTANCE_TYPE" value="${ec2.instance.type}" />
-                            <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                            <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
+                            <env key="EC2_MGMT_NETWORK" value="${ec2.management.network}" />
+                            <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
+                            <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
+                            <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
+                            <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+                            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+                            <env key="EC2_PUBLIC_NETWORK" value="${ec2.public.network}" />
                             <env key="EC2_PING_RETRIES" value="${ec2.ping.retries}" />
                             <env key="EC2_SSH_RETRIES" value="${ec2.ssh.retries}" />
                             <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
                             <env key="EC2_STARTUP_RETRIES" value="${ec2.startup.retries}" />
                             <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                             <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                            <env key="SSH_KEY" value="${sshkey}" />
                         </exec>
                         <echo message="after create instance: exit code ${code}, ${create.instance.output}" />
 
@@ -322,6 +398,10 @@
                             <else>
                                 <var name="shirako.save.unit.ec2.instance" unset="true" />
                                 <property name="shirako.save.unit.ec2.instance" value="${create.instance.output}" />
+                                <property name="shirako.save.unit.ec2.slice.user.pwd" value="${unit.ec2.slice.user.pwd}" />
+                                <property name="shirako.save.unit.ec2.slice.user.name" value="${unit.ec2.slice.user.name}" />
+                                <property name="shirako.save.unit.ec2.slice.project.name" value="${unit.ec2.slice.project.name}" />
+                                <property name="shirako.save.unit.ec2.openstack.horizon.url" value="${ec2.openstack.horizon.url}" />
 
                                 <!-- hairpin the hostname property so the user sees it too -->
                                 <var name="shirako.save.unit.hostname.url" unset="true" />
@@ -390,64 +470,6 @@
                                         <equals arg1="${code}" arg2="0" />
                                     </and>
                                     <then>
-                                        <!-- entering here ${code} should be 0 and will stay this way unless there is an error below -->
-                                        <echo message="installing ${config.ssh.numlogins} user keys and accounts in the instance" />
-                                        <var name="message" unset="true" />
-                                        <for list="${config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
-                                            <sequential>
-                                                <var name="icode" unset="true" />
-
-                                                <var name="loginProperty" unset="true" />
-                                                <var name="keysProperty" unset="true" />
-                                                <var name="sudoProperty" unset="true" />
-
-                                                <property name="loginProperty" value="${config.ssh.user@{iter}.login}" />
-                                                <property name="keysProperty" value="${config.ssh.user@{iter}.keys}" />
-                                                <property name="sudoProperty" value="${config.ssh.user@{iter}.sudo}" />
-
-                                                <echo message="Creating account on ${shirako.save.unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-                                                <exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
-                                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                                                    <env key="EC2_HOME" value="${ec2.home}" />
-                                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                                    <env key="EC2_DIR" value="${ec2.dir}" />
-                                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                                                    <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                                                    <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
-                                                    <env key="AMI_NAME" value="${ec2.ami.name}" />
-                                                    <env key="AKI_NAME" value="${ec2.aki.name}" />
-                                                    <env key="ARI_NAME" value="${ec2.ari.name}" />
-                                                    <arg value="${shirako.save.unit.manage.ip}" />
-                                                    <arg value="${loginProperty}" />
-                                                    <arg value="${keysProperty}" />
-                                                    <arg value="${sudoProperty}" />
-                                                </exec>
-                                                <echo message="Exit code for login ${loginProperty} is ${icode}" />
-                                                <if>
-                                                    <not>
-                                                        <equals arg1="${icode}" arg2="0" />
-                                                    </not>
-                                                    <then>
-                                                        <if>
-                                                            <and>
-                                                                <!-- code 2 reserved for 'soft key insertion failures' -->
-                                                                <equals arg1="${icode}" arg2="2" />
-                                                                <isset property="ssh.key.insertion.soft.failure"/> 
-                                                            </and>
-                                                            <then>
-                                                                <echo message="Unable to create account ${loginProperty}, logging soft failure" />
-                                                            </then>
-                                                            <else>
-                                                                <fail message="Unable to create account ${loginProperty}, failing" />
-                                                            </else>
-                                                        </if>
-                                                    </then>
-                                                </if>
-                                            </sequential>
-                                        </for>
-
                                         <!-- default port is SSH -->
                                         <property name="shirako.save.unit.manage.port" value="22" />
                                         <!-- optionally open shorewall dnat proxy to this host -->
@@ -496,6 +518,8 @@
                                                             <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
                                                             <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                                                             <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
+                                                            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                                                            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                                                             <arg value="${shirako.save.unit.ec2.instance}" />
                                                         </exec>
                                                     </else>
@@ -508,12 +532,8 @@
                                 <!-- create the NEUCA INI file -->
                                 <trycatch property="failmsg">
                                     <try>
-                                        <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
-                                        <echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
-                                        <ec2.generate.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" outputproperty="iface.list" />
+                                        <ec2.comet.data operation="generate" outputproperty="iface.list" />
                                         <echo message="iface.list = ${iface.list}" />
-                                        <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-                                        <echo message="neuca.ini: ${neuca.ini}" />
                                     </try>
                                     <catch>
                                         <delete.instance/>
@@ -532,7 +552,9 @@
                                                 <var name="iface.net.name" unset="true" />
                                                 <var name="iface.net.vlan" unset="true" />
                                                 <var name="iface.mac" unset="true" />
+                                                <var name="iface.net.type" unset="true" />
                                                 <echo>iface @{iface}</echo>
+                                                <property name="iface.net.type" value="ipv4" />
                                                 <propertyregex property="iface.net.name" input="@{iface}" regexp="(.*)\..*\..*" replace="\1" casesensitive="false" />
 
                                                 <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
@@ -552,11 +574,11 @@
                                                 <echo message="EC2_LOG_DIR ${ec2.log.dir}" />
                                                 <echo message="EC2_LOG_FILE ${ec2.log.file}" />
                                                 <echo message="EC2_LOG_LEVEL ${ec2.log.level}" />
-                                                <echo message="QUANTUM_TENANT_ID ${quantum.tenant.id}" />
                                                 <echo message="QUANTUM_NET_INSTANCE_NAME ${shirako.save.unit.ec2.instance}" />
                                                 <echo message="QUANTUM_NET_IFACE_MAC ${iface.mac}" />
                                                 <echo message="QUANTUM_NET_NETWORK ${iface.net.name}" />
                                                 <echo message="QUANTUM_NET_VLAN ${iface.net.vlan}" />
+                                                <echo message="QUANTUM_NET_TYPE ${iface.net.type}" />
 
                                                 <exec executable="${ec2.scripts}/neuca-quantum-add-iface" resultproperty="code" outputproperty="add.iface.output">
                                                     <env key="EC2_HOME" value="${ec2.home}" />
@@ -565,11 +587,13 @@
                                                     <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                                                     <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                                                     <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                                    <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                                                     <env key="QUANTUM_NET_INSTANCE_NAME" value="${shirako.save.unit.ec2.instance}" />
                                                     <env key="QUANTUM_NET_IFACE_MAC" value="${iface.mac}" />
                                                     <env key="QUANTUM_NET_NETWORK" value="${iface.net.name}" />
                                                     <env key="QUANTUM_NET_VLAN" value="${iface.net.vlan}" />
+                                                    <env key="QUANTUM_NET_TYPE" value="${iface.net.type}" />
+                                                    <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                                                    <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                                                 </exec>
                                                 <echo>result code: ${code}</echo>
                                                 <echo>output: ${add.iface.output}</echo>
@@ -602,24 +626,6 @@
                                     </then>
                                 </if>
     
-    
-                                <!-- update the userdata file  -->
-                                <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
-                                <echo message="update userdata instance: ${shirako.save.unit.ec2.instance}" />
-                                <var name="code" unset="true" />
-                                <var name="update.userdata.output" unset="true" />
-                                <exec executable="${ec2.scripts}/${cloud.type}-update-userdata" resultproperty="code" outputproperty="update.userdata.output">
-                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                                    <env key="EC2_HOME" value="${ec2.home}" />
-                                    <env key="EC2_DIR" value="${ec2.dir}" />
-                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                    <env key="NEUCA_INI" value="${neuca.ini.file}" />
-                                    <env key="INSTANCE_ID" value="${shirako.save.unit.ec2.instance}" />
-                                </exec>
-                                <echo message="after update userdata: exit code ${code}, ${update.userdata.output}" />
                                 <delete file="${neuca.ini.file}" />
                             </else>
                         </if>
@@ -671,33 +677,6 @@
 
                     <trycatch property="failmsg">
                     <try>
-                        <!-- re-create the NEUCA INI file -->
-                        <echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-                                            <echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
-                                            <echo message="LoginProperty : ${loginProperty}" />
-                                            <echo message="KeysProperty : ${keysProperty}" />
-                                            <echo message="SudoProperty : ${sudoProperty}" />
-                                            <exec executable="${ec2.scripts}/${cloud.type}-get-userdata" resultproperty="icode" outputproperty="userdata.old" >
-                                                  <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                                                  <env key="EC2_HOME" value="${ec2.home}" />
-                                                  <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                                                  <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                                                  <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                                  <env key="EC2_DIR" value="${ec2.dir}" />
-                                                  <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                                                  <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                                                  <arg value="${unit.ec2.instance}" />
-                                            </exec>
-                                            <echo message="Exit code for get-userdata is ${icode}" />
-                            <echo message="Old userdata : ${userdata.old}" />
-
-                        <!-- setup userdata:  set userdataold the userdata string in order to parse and copy to ${neuca.ini.file} -->
-                        <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
-                                            <echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
-                                            <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${userdata.old}" />
-                                            <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-                                            <echo message="neuca.ini: ${neuca.ini}" />
-
                         <!-- add keys -->
                         <echo message="Modify.ssh, numlogins : ${modify.@{seqnum}.config.ssh.numlogins} " />
                         <for list="${modify.@{seqnum}.config.ssh.numlogins}" param="iter" delimiter="," parallel="false">
@@ -718,61 +697,11 @@
                                 <echo message="KeysProperty : ${keysProperty}" />
                                 <echo message="SudoProperty : ${sudoProperty}" />
 
-                                <!-- add key to userdata:  setuserdataold to ${neuca.ini.file} to read from file -->
-                                <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="users" key="${loginProperty}" value="${keysProperty}" />
-                                <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-                                <echo message="neuca.ini: ${neuca.ini}" />
+                                <ec2.comet.data operation="add"  section="users" key="${loginProperty}" value="${sudoProperty}:${keysProperty}" />
 
-                                <!-- add key to VM -->
-                                <exec executable="${ec2.scripts}/${cloud.type}-prepare-key" resultproperty="icode">
-                                    <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                                    <env key="EC2_HOME" value="${ec2.home}" />
-                                    <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                                    <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                                    <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                    <env key="EC2_DIR" value="${ec2.dir}" />
-                                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                                    <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                                    <env key="EC2_SSH_TIMEOUT" value="${ec2.ssh.timeout}" />
-                                    <env key="AMI_NAME" value="${ec2.ami.name}" />
-                                    <env key="AKI_NAME" value="${ec2.aki.name}" />
-                                    <env key="ARI_NAME" value="${ec2.ari.name}" />
-                                    <arg value="${unit.manage.ip}" />
-                                    <arg value="${loginProperty}" />
-                                    <arg value="${keysProperty}" />
-                                    <arg value="${sudoProperty}" />
-                                </exec>
-                                <echo message="Exit code for login ${loginProperty} is ${icode}" />
-                                <if>
-                                    <not>
-                                        <equals arg1="${icode}" arg2="0" />
-                                    </not>
-                                    <then>
-                                        <fail message="Unable to create account ${loginProperty}, failing" />
-                                    </then>
-                                </if>
                             </sequential>
                         </for>
 
-                        <!-- update the userdata file  -->
-                        <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
-                        <echo message="update userdata instance: ${shirako.save.unit.ec2.instance}" />
-                        <var name="code" unset="true" />
-                        <var name="update.userdata.output" unset="true" />
-                        <exec executable="${ec2.scripts}/${cloud.type}-update-userdata" resultproperty="code" outputproperty="update.userdata.output">
-                             <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                             <env key="EC2_HOME" value="${ec2.home}" />
-                             <env key="EC2_DIR" value="${ec2.dir}" />
-                             <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                             <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                             <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                             <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                             <env key="NEUCA_INI" value="${neuca.ini.file}" />
-                             <env key="INSTANCE_ID" value="${shirako.save.unit.ec2.instance}" />
-                        </exec>
-                        <echo message="after update userdata: exit code ${code}, ${update.userdata.output}" />
-
-                        <delete file="${neuca.ini.file}" />
                     </try>
                     <catch>
                         <echo message="Exception occured while updating users information: ${failmsg}" />
@@ -830,7 +759,7 @@
                     <propertyregex property="iface.net.vlan" input="@{iface}" regexp=".*\.(.*)\..*" replace="\1" casesensitive="false" />
                     <propertyregex property="iface.mac" input="@{iface}" regexp=".*\..*\.(.*)" replace="\1" casesensitive="false" />
                     <echo>quantum.tenant.id ${quantum.tenant.id}</echo>
-                                        <echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
+                    <echo>shirako.save.unit.ec2.instance ${shirako.save.unit.ec2.instance}</echo>
                     <echo>iface.mac ${iface.mac}</echo>
                     <echo>iface.net.vlan ${iface.net.vlan}</echo>
                     <echo>iface.net.name ${iface.net.name}</echo>
@@ -885,34 +814,6 @@
                     </then>
                     </if>
 
-
-                    <!-- Get old userdata -->
-                    <echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
-                    <echo message="LoginProperty : ${loginProperty}" />
-                    <echo message="KeysProperty : ${keysProperty}" />
-                    <echo message="SudoProperty : ${sudoProperty}" />
-                    <exec executable="${ec2.scripts}/${cloud.type}-get-userdata" resultproperty="icode" outputproperty="userdata.old" >
-                        <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                        <env key="EC2_HOME" value="${ec2.home}" />
-                        <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                        <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                        <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                        <env key="EC2_DIR" value="${ec2.dir}" />
-                        <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                        <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                        <arg value="${unit.ec2.instance}" />
-                    </exec>
-                    <echo message="Exit code for get-userdata is ${icode}" />
-                    <echo message="Old userdata : ${userdata.old}" />
-
-                    <!-- setup userdata:  set userdataold the userdata string in order to parse and copy to ${neuca.ini.file} -->
-                    <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
-                    <echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
-                    <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${userdata.old}" />
-                    <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-                    <echo message="neuca.ini: ${neuca.ini}" />
-
-
                     <!-- process each iface to add -->
                     <exec executable="${ec2.scripts}/neuca-quantum-add-iface" resultproperty="code" outputproperty="add.iface.output">
                         <env key="EC2_HOME" value="${ec2.home}" />
@@ -921,11 +822,13 @@
                         <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                         <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                         <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                        <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                         <env key="QUANTUM_NET_INSTANCE_NAME" value="${unit.ec2.instance}" />
                         <env key="QUANTUM_NET_IFACE_MAC" value="${modify.@{seqnum}.mac}" />
                         <env key="QUANTUM_NET_NETWORK" value="${modify.@{seqnum}.hosteth}" />
                         <env key="QUANTUM_NET_VLAN" value="${modify.@{seqnum}.vlan.tag}" />
+                        <env key="QUANTUM_NET_TYPE" value="${ipversion}" />
+                        <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                        <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                     </exec>
                     <echo>result code: ${code}</echo>
                     <echo>output: ${add.iface.output}</echo>
@@ -936,6 +839,39 @@
                         <then>
                             <echo message="neuca-quantum-add-iface: failed to add interface" />
                         </then>
+                        <else>
+                            <var name="instance.quantum.ifaces" unset="true" />
+                            <if>
+                                <isset property="unit.quantum.ifaces" />
+                            <then>
+                                <property name="instance.quantum.ifaces" value="${unit.quantum.ifaces}" />
+                            </then>
+                            </if>
+                            <if>
+                               <isset property="instance.quantum.ifaces" />
+                            <then>
+                                <if>
+                                    <not>
+                                        <contains string="${instance.quantum.ifaces}" substring="${add.iface.output}"/>
+                                    </not>
+                                    <then>
+                                        <var name="instance.quantum.ifaces.tmp" unset="true" />
+                                        <property name="instance.quantum.ifaces.tmp" value="${instance.quantum.ifaces}" />
+                                        <var name="instance.quantum.ifaces" unset="true" />
+                                        <property name="instance.quantum.ifaces" value="${instance.quantum.ifaces.tmp},${add.iface.output}" />
+                                        <echo>Add to iface to existing value ifaces = ${instance.quantum.ifaces}</echo>
+                                    </then>
+                                </if>
+                            </then>
+                            <else>
+                                <echo>Set new value ifaces = ${add.iface.output}</echo>
+                                <property name="instance.quantum.ifaces" value="${add.iface.output}" />
+                            </else>
+                            </if>
+                            <var name="shirako.save.unit.quantum.ifaces" unset="true" />
+                            <property name="shirako.save.unit.quantum.ifaces" value="${instance.quantum.ifaces}" />
+                            <echo>shirako.save.unit.quantum.ifaces: ${shirako.save.unit.quantum.ifaces}</echo>
+                        </else>
                     </if>
 
                     <!-- add properties to userdata file -->
@@ -948,8 +884,7 @@
                     <!-- adding network property to userdata -->
                     <trycatch property="failmsg">
                         <try>
-                            <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${modify.@{seqnum}.mac}" value="${state}:${ipversion}:${ip}" />
-                            <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
+                            <ec2.comet.data operation="add" section="interfaces" key="${modify.@{seqnum}.mac}" value="${state}:${ipversion}:${ip}" />
                         </try>
                         <catch>
                             <echo>"Exception occurred: Ignoring the failure due to eventual consistency of comet on subsequent modifies: ${failmsg}"</echo>
@@ -1077,12 +1012,10 @@
                         <trycatch property="failmsg">
                             <try>
                                 <!-- adding storage property to userdata -->
-                                <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="storage" key="dev.mod.@{seqnum}" value="${storage_type}:${target.ip}:${port}:${target.lun.num}:${chap_user}:${chap_password}:${should_attach}:${fs.type}:${options}:${should_format}:${mount_point}" />
-                                <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
+                                <ec2.comet.data operation="add"  section="storage" key="dev.mod.@{seqnum}" value="${storage_type}:${target.ip}:${port}:${target.lun.num}:${chap_user}:${chap_password}:${should_attach}:${fs.type}:${options}:${should_format}:${mount_point}" />
 
                                 <!-- adding iscsi.initiator.iqn property to userdata -->
-                                <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="global" key="iscsi_initiator_iqn" value="${iscsi.initiator.iqn}" />
-                                <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
+                                <ec2.comet.data operation="add"  section="global" key="iscsi_initiator_iqn" value="${iscsi.initiator.iqn}" />
                             </try>
                             <catch>
                                 <echo>"Exception occurred: Ignoring the failure due to eventual consistency of comet on subsequent modifies: ${failmsg}"</echo>
@@ -1092,23 +1025,6 @@
                     </then>
                     </if>
 
-                    <!-- Finally update the userdata file  -->
-                    <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
-                    <echo message="update userdata instance: ${shirako.save.unit.ec2.instance}" />
-                    <var name="code" unset="true" />
-                    <var name="update.userdata.output" unset="true" />
-                    <exec executable="${ec2.scripts}/${cloud.type}-update-userdata" resultproperty="code" outputproperty="update.userdata.output">
-                        <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                        <env key="EC2_HOME" value="${ec2.home}" />
-                        <env key="EC2_DIR" value="${ec2.dir}" />
-                        <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                        <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                        <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                        <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                        <env key="NEUCA_INI" value="${neuca.ini.file}" />
-                        <env key="INSTANCE_ID" value="${shirako.save.unit.ec2.instance}" />
-                    </exec>
-                    <echo message="after update userdata: exit code ${code}, ${update.userdata.output}" />
                     <delete file="${neuca.ini.file}" />
                 </else>
             </if>
@@ -1183,7 +1099,7 @@
                 </then>
                 <else>  
                     <!-- Actually do it... no emulation -->
-                    <echo message="adding interfaces to instance" />
+                    <echo message="removing interfaces to instance" />
                     <var name="message" unset="true" />
 
                     <echo message="vlan.tag = ${modify.@{seqnum}.vlan.tag}" />
@@ -1194,33 +1110,6 @@
                     <echo message="state = ${modify.@{seqnum}.state}" />
                     <echo message="ipversion = ${modify.@{seqnum}.ipversion}" />
 
-                    <!-- Get old userdata -->
-                    <echo message="Creating account on ${unit.manage.ip} for user ${loginProperty} with sudo=${sudoProperty}" />
-                    <echo message="UNIT_MANAGE_IP: ${unit.manage.ip}" />
-                    <echo message="LoginProperty : ${loginProperty}" />
-                    <echo message="KeysProperty : ${keysProperty}" />
-                    <echo message="SudoProperty : ${sudoProperty}" />
-                    <exec executable="${ec2.scripts}/${cloud.type}-get-userdata" resultproperty="icode" outputproperty="userdata.old" >
-                        <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                        <env key="EC2_HOME" value="${ec2.home}" />
-                        <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                        <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                        <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                        <env key="EC2_DIR" value="${ec2.dir}" />
-                        <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                        <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
-                        <arg value="${unit.ec2.instance}" />
-                    </exec>
-                    <echo message="Exit code for get-userdata is ${icode}" />
-                    <echo message="Old userdata : ${userdata.old}" />
-
-                    <!-- setup userdata:  set userdataold the userdata string in order to parse and copy to ${neuca.ini.file} -->
-                    <tempfile property="neuca.ini.file" destdir="${java.io.tmpdir}" prefix="neuca" suffix=".ini" deleteonexit="false" />
-                    <echo message="neuca.ini.file: ${neuca.ini.file}, cloud.type: ${cloud.type}" />
-                    <ec2.addproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${userdata.old}" />
-                    <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
-                    <echo message="neuca.ini: ${neuca.ini}" />
-
                     <!-- process each iface to remove -->
                     <exec executable="${ec2.scripts}/neuca-quantum-remove-vm-iface" resultproperty="code" outputproperty="add.iface.output">
                       <env key="EC2_HOME" value="${ec2.home}" />
@@ -1229,7 +1118,6 @@
                       <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                       <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                       <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                      <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                       <env key="QUANTUM_NET_INSTANCE_NAME" value="${unit.ec2.instance}" />
                       <env key="QUANTUM_NET_IFACE_MAC" value="${modify.@{seqnum}.mac}" />
                       <env key="QUANTUM_NET_NETWORK" value="${modify.@{seqnum}.hosteth}" />
@@ -1240,35 +1128,14 @@
 
                     <trycatch property="failmsg">
                         <try>
-                            <!-- add property to userdata file TODO: add actual config values -->
-                            <ec2.removeproperty.neuca.inf file="${neuca.ini.file}" cloudtype="${cloud.type}" userdataold="${neuca.ini.file}"  section="interfaces" key="${modify.@{seqnum}.mac}" />
-                            <loadfile property="neuca.ini" srcFile="${neuca.ini.file}" />
+                            <ec2.comet.data operation="delete"  section="interfaces" key="${modify.@{seqnum}.mac}" />
                         </try>
                         <catch>
                             <echo message="Exception occurred: Ignoring the failure due to eventual consistency of comet on subsequent modifies: ${failmsg}" />
                         </catch>
                     </trycatch>
 
-                    <!-- update the userdata file  -->
-                    <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
-                    <echo message="update userdata instance: ${shirako.save.unit.ec2.instance}" />
-                    <var name="code" unset="true" />
-                    <var name="update.userdata.output" unset="true" />
-                    <exec executable="${ec2.scripts}/${cloud.type}-update-userdata" resultproperty="code" outputproperty="update.userdata.output">
-                        <env key="UNIT_HOSTNAME_URL" value="${unit.hostname.url}" />
-                        <env key="EC2_HOME" value="${ec2.home}" />
-                        <env key="EC2_DIR" value="${ec2.dir}" />
-                        <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                        <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
-                        <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
-                        <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                        <env key="NEUCA_INI" value="${neuca.ini.file}" />
-                        <env key="INSTANCE_ID" value="${shirako.save.unit.ec2.instance}" />
-                    </exec>
-                    <echo message="after update userdata: exit code ${code}, ${update.userdata.output}" />
-
                     <delete file="${neuca.ini.file}" />
-
                 </else>
             </if>
         </sequential>
@@ -1331,7 +1198,10 @@
                     <echo message="running under emulation...exiting" />
                     <property name="shirako.target.code" value="0" />
                     <if>
-                        <equals arg1="${cloud.type}" arg2="nova-essex" />
+                        <and>
+                            <equals arg1="${cloud.type}" arg2="nova-essex" />
+                            <isset property="comethost" />
+                        </and>
                         <then>
                             <echo message="EC2_HOME=${ec2.home}" />
                             <echo message="EC2_DIR=${ec2.dir}" />
@@ -1388,7 +1258,6 @@
                                 <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
                                 <env key="EC2_DIR" value="${ec2.dir}" />
                                 <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                                <env key="EC2_SSH_KEY" value="${ec2.ssh.key}" />
                                 <arg value="${unit.ec2.instance}" />
                             </exec>
                             <echo message="get-ip exit code: ${code} ip=${real.ip}" />
@@ -1428,7 +1297,6 @@
                                 <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
                                 <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
                                 <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
-                                <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                                 <env key="UNIT_EC2_INSTANCE" value="${unit.ec2.instance}" />
                                 <env key="UNIT_QUANTUM_IFACES" value="${unit.quantum.ifaces}" />
                             </exec>
@@ -1451,13 +1319,18 @@
                         <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                         <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
                         <env key="EC2_USE_PUBLIC_ADDRESSING" value="${ec2.use.public.addressing}" />
+                        <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                        <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                         <arg value="${unit.ec2.instance}" />
                     </exec>
                     <echo message="terminate-instance exit code: ${code}; ${terminate.instance.output}" />
                     <property name="shirako.target.code" value="${code}" />
 
                     <if>
-                        <equals arg1="${cloud.type}" arg2="nova-essex" />
+                        <and>
+                            <equals arg1="${cloud.type}" arg2="nova-essex" />
+                            <isset property="comethost" />
+                        </and>
                         <then>
                             <echo message="EC2_HOME=${ec2.home}" />
                             <echo message="EC2_DIR=${ec2.dir}" />
@@ -1469,8 +1342,8 @@
                             <echo message="R_ID=${unit.rid}" />
                             <echo message="UNIT_READ_TOKEN=${shirako.save.unit.comet.readToken}" />
                             <echo message="UNIT_WRITE_TOKEN=${shirako.save.unit.comet.writeToken}" />
-							<echo message="SLICE_READ_TOKEN=${slice.comet.readToken}" />
-							<echo message="SLICE_WRITE_TOKEN=${slice.comet.writeToken}" />
+                            <echo message="SLICE_READ_TOKEN=${slice.comet.readToken}" />
+                            <echo message="SLICE_WRITE_TOKEN=${slice.comet.writeToken}" />
                             <echo message="COMETHOST=${comethost}" />
                             <echo message="COMETCLIENTCERT=${comet.clientcert}" />
                             <echo message="COMETCLIENTKEY=${comet.clientkey}" />
@@ -1493,8 +1366,8 @@
                                 <env key="R_ID" value="${unit.rid}" />
                                 <env key="UNIT_READ_TOKEN" value="${shirako.save.unit.comet.readToken}" />
                                 <env key="UNIT_WRITE_TOKEN" value="${shirako.save.unit.comet.writeToken}" />
-								<env key="SLICE_READ_TOKEN" value="${slice.comet.readToken}" />
-								<env key="SLICE_WRITE_TOKEN" value="${slice.comet.writeToken}" />
+                                <env key="SLICE_READ_TOKEN" value="${slice.comet.readToken}" />
+                                <env key="SLICE_WRITE_TOKEN" value="${slice.comet.writeToken}" />
                             </exec>
                             <echo>result code: ${code}</echo>
                             <echo>output: ${remove.scope.output}</echo>

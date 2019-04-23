@@ -14,6 +14,7 @@ public class TestClient {
         // TODO Auto-generated method stub
 
         String FILE_SYSTEM_IMAGE_KEY = "FILESYSTEM";
+        String QCOW2_SYSTEM_IMAGE_KEY = "QCOW2";
         String KERNEL_IMAGE_KEY = "KERNEL";
         String RAMDISK_IMAGE_KEY = "RAMDISK";
         String ERROR_CODE = "ERROR";
@@ -37,7 +38,12 @@ public class TestClient {
                 ByteArrayInputStream stream = new ByteArrayInputStream(returnVal.getBytes());
                 imageIds.load(stream);
 
-                System.out.println("EMI is " + imageIds.getProperty(FILE_SYSTEM_IMAGE_KEY));
+                if (imageIds.getProperty(FILE_SYSTEM_IMAGE_KEY) != null) {
+                    System.out.println("EMI is " + imageIds.getProperty(FILE_SYSTEM_IMAGE_KEY));
+                }
+                if (imageIds.getProperty(QCOW2_SYSTEM_IMAGE_KEY) != null) {
+                    System.out.println("QCOW2 is " + imageIds.getProperty(QCOW2_SYSTEM_IMAGE_KEY));
+                }
                 if (imageIds.getProperty(KERNEL_IMAGE_KEY) != null) {
                     System.out.println("EKI is " + imageIds.getProperty(KERNEL_IMAGE_KEY));
                 }
