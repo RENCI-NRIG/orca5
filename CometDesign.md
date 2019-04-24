@@ -40,20 +40,30 @@ ORCA uses COMET to pass properties to VM instead of ini files from AM. Using com
 
 #### Schema for Comet
 ![Comet Schema](./images/schema.png)
+
 ##### Users JSON Schema
 Users information will be stored in scopeValue field.
+
 ![Users](./images/users.png)
+
 ##### Interfaces JSON Schema
 Interfaces information will be stored in scopeValue field.
+
 ![Interfaces](./images/interfaces.png)
+
 ##### Storage JSON Schema
 Storage information will be stored in scopeValue field.
+
 ![Storage](./images/storage.png)
+
 ##### Routes JSON Schema
 Routes information will be stored in scopeValue field.
+
 ![Routes](./images/routes.png)
+
 ##### Scripts JSON Schema
 Scripts information will be stored in scopeValue field.
+
 ![Scripts](./images/scripts.png)
 
 #### Instance Userdata
