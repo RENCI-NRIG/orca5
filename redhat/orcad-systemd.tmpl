@@ -1,0 +1,13 @@
+[Unit]
+Description=NAME.service
+
+[Service]
+EnvironmentFile=/etc/sysconfig/NAME
+Type=oneshot
+StandardOutput=journal+console
+ExecStart=/etc/init.d/NAME start
+ExecReload=/etc/init.d/NAME restart
+ExecStop=/etc/init.d/NAME stop
+
+[Install]
+WantedBy=default.target

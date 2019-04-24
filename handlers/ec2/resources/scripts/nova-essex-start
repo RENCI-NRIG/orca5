@@ -72,7 +72,8 @@ try:
                              os.environ['EC2_SLICE_USER_ROLE'],
                              os.environ['EC2_SLICE_ADMIN_USER'],
                              os.environ['EC2_MGMT_NETWORK'],
-                             os.environ['SSH_KEY'])
+                             os.environ['SSH_KEY'],
+                             os.environ['EC2_AUTH_URL'])
 
     LOG.info("Started instance: " + str(instance_uuid))
     print instance_uuid

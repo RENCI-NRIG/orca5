@@ -127,6 +127,7 @@
                     <echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
                     <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
                     <echo message="SSH_KEY=${sshkey}" />
+                    <echo message="EC2_AUTH_URL=${ec2.auth.url}" />
                     <echo message="before create instance" />
                     <exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
                         <env key="EMULATION" value="${emulation}" />
@@ -159,6 +160,7 @@
                         <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                         <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
                         <env key="SSH_KEY" value="${sshkey}" />
+                        <env key="EC2_AUTH_URL" value="${ec2.auth.url}" />
                     </exec>
 
                     <echo message="Handler running under emulation: exit code ${code}, ${create.instance.output}" />
@@ -350,6 +352,7 @@
                         <echo message="EC2_REQUEST_TIMEOUT=${ec2.request.timeout}" />
                         <echo message="EC2_SITE_PROPERTIES=${ec2.site.properties}" />
                         <echo message="SSH_KEY=${sshkey}" />
+                        <echo message="EC2_AUTH_URL=${ec2.auth.url}" />
                         <echo message="before create instance" />
                         <exec executable="${ec2.scripts}/${cloud.type}-start" resultproperty="code" outputproperty="create.instance.output">
                             <env key="EMULATION" value="${emulation}" />
@@ -382,6 +385,7 @@
                             <env key="EC2_CONNECTION_TIMEOUT" value="${ec2.connection.timeout}" />
                             <env key="EC2_REQUEST_TIMEOUT" value="${ec2.request.timeout}" />
                             <env key="SSH_KEY" value="${sshkey}" />
+                            <env key="EC2_AUTH_URL" value="${ec2.auth.url}" />
                         </exec>
                         <echo message="after create instance: exit code ${code}, ${create.instance.output}" />
 

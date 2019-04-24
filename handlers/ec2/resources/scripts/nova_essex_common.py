@@ -237,7 +237,7 @@ class Project:
 
 
     @classmethod
-    def generate_user_keystone_file(self, project_name, user_name, user_pwd):
+    def generate_user_keystone_file(self, project_name, user_name, user_pwd, ec2_auth_url):
         keystone_cred_file = self.get_keystone_file_name(project_name, user_name)
         if (os.path.isfile(keystone_cred_file)):
             LOG.debug(keystone_cred_file + " already exists")
@@ -252,7 +252,7 @@ class Project:
             fd.write("unset OS_SERVICE_TOKEN\n")
             fd.write("    export OS_USERNAME=" + user_name + "\n")
             fd.write("    export OS_PASSWORD=" + user_pwd + "\n")
-            fd.write("    export OS_AUTH_URL=http://10.60.10.10:5000/v3\n")
+            fd.write("    export OS_AUTH_URL=" + ec2_auth_url + "\n")
             fd.write("    export PS1='[\u@\h \W(keystone_" + project_name + ")]\$ '\n")
             fd.write("export OS_PROJECT_NAME=" + project_name + "\n")
             fd.write("export OS_USER_DOMAIN_NAME=Default\n")
@@ -642,10 +642,10 @@ class Project:
             raise e
 
     @classmethod
-    def start(self, project_name, user_name, user_email, user_pwd, role, admin_user, ssh_key):
+    def start(self, project_name, user_name, user_email, user_pwd, role, admin_user, ssh_key, ec2_auth_url):
 
         try:
-            keystone_cred_file = self.generate_user_keystone_file(project_name, user_name, user_pwd) 
+            keystone_cred_file = self.generate_user_keystone_file(project_name, user_name, user_pwd, ec2_auth_url) 
 
             project_id = self.create_project(project_name)
 
@@ -1239,11 +1239,11 @@ class VM:
 
     @classmethod
     def start(self, instance_type, ami, qcow2, aki, ari, startup_retries, ping_retries, ssh_retries, user_data_file,
-              name, public_network, project_name, user_name, user_email, user_pwd, role, admin_user, mgmt_network, ssh_key):
+              name, public_network, project_name, user_name, user_email, user_pwd, role, admin_user, mgmt_network, ssh_key, ec2_auth_url):
 
         LOG.debug("start " + str(name))
 
-        keystone_cred_file = Project.start(project_name, user_name, user_email, user_pwd, role, admin_user, ssh_key)
+        keystone_cred_file = Project.start(project_name, user_name, user_email, user_pwd, role, admin_user, ssh_key, ec2_auth_url)
         if (os.path.isfile(keystone_cred_file)):
             LOG.debug("Sourced " + keystone_cred_file)
             Commands.source(keystone_cred_file)
