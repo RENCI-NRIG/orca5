@@ -1177,9 +1177,9 @@ class VM:
         retries = 3
         timeout = 10
         status = None
+        new_vm_id = None
         for i in range(retries):
             try:
-                new_vm_id = None
                 cmd = ["openstack", "server", "create",
                        "--flavor", str(instance_type),
                        "--security-group", str(sec_group),
