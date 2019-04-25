@@ -32,7 +32,7 @@ Requires:       orca-iaas-common = %{version}-%{release}
 %define controller_common_dir /opt/orca-controller
 %define conf_dir %{_sysconfdir}/orca
 %define log_dir %{_localstatedir}/log/orca
-%define pid_dir %{_localstatedir}/run/orca
+%define pid_dir %{_localstatedir}/run
 %define maven_opts "-XX:MaxPermSize=512m -Xms40m -Xmx1024m"
 %define ant_opts "-XX:MaxPermSize=512m -Xms40m -Xmx1024m"
 
@@ -185,15 +185,15 @@ mkdir -p %{buildroot}%{pid_dir}
 # and both log and run directories for each.
 mkdir -p %{buildroot}%{conf_dir}/am+broker-12080
 mkdir -p %{buildroot}%{log_dir}/am+broker-12080
-mkdir -p %{buildroot}%{pid_dir}/am+broker-12080
+mkdir -p %{buildroot}%{pid_dir}/orca_am_broker-12080
 mkdir -p %{buildroot}%{conf_dir}/sm-14080
 mkdir -p %{buildroot}%{log_dir}/sm-14080
-mkdir -p %{buildroot}%{pid_dir}/sm-14080
+mkdir -p %{buildroot}%{pid_dir}/orca_sm-14080
 # Create ORCA_CONTROLLER_HOME directory and
 # the corresponding log and run directories.
 mkdir -p %{buildroot}%{conf_dir}/controller-11080
 mkdir -p %{buildroot}%{log_dir}/controller-11080
-mkdir -p %{buildroot}%{pid_dir}/controller-11080
+mkdir -p %{buildroot}%{pid_dir}/orca_controller-11080
 
 # Populate am+broker-12080
 cp -R server/orca/axis2repository %{buildroot}%{conf_dir}/am+broker-12080
@@ -245,12 +245,13 @@ sed -i -e 's;@@SYSCONFIG@@;"orca_controller-11080";' %{buildroot}%{_initrddir}/o
 mkdir -p %{buildroot}%{_unitdir}
 # Copy in the appropriate service script template for each of the above actors,
 # and modify it appropriately.
-install -p -D -m 644 redhat/orcad-systemd.tmpl %{buildroot}%{_unitdir}/orcaambroker12080.service
-sed -i -e 's;NAME;orca_am_broker-12080;' %{buildroot}%{_unitdir}/orcaambroker12080.service
-install -p -D -m 644 redhat/orcad-systemd.tmpl %{buildroot}%{_unitdir}/orcasm14080.service
-sed -i -e 's;NAME;orca_sm-14080;' %{buildroot}%{_unitdir}/orcasm14080.service
-install -p -D -m 644 redhat/orcad-systemd.tmpl %{buildroot}%{_unitdir}/orcacontroller11080.service
-sed -i -e 's;NAME;orca_controller-11080;' %{buildroot}%{_unitdir}/orcacontroller11080.service
+install -p -D -m 644 redhat/orcad-systemd.tmpl %{buildroot}%{_unitdir}/orca_am_broker-12080.service
+sed -i -e 's;NAME;orca_am_broker-12080;' %{buildroot}%{_unitdir}/orca_am_broker-12080.service
+install -p -D -m 644 redhat/orcad-systemd.tmpl %{buildroot}%{_unitdir}/orca_sm-14080.service
+sed -i -e 's;NAME;orca_sm-14080;' %{buildroot}%{_unitdir}/orca_sm-14080.service
+install -p -D -m 644 redhat/xmlrpcd-systemd.tmpl %{buildroot}%{_unitdir}/orca_controller-11080.service
+sed -i -e 's;NAME;orca_controller-11080;' %{buildroot}%{_unitdir}/orca_controller-11080.service
+sed -i -e 's;REPLACE;orca_sm-14080;' %{buildroot}%{_unitdir}/orca_controller-11080.service
 
 %clean
 rm -rf %{buildroot}
@@ -258,10 +259,10 @@ rm -rf %{_builddir}/orca-%{version}
 
 %preun exogeni-am+broker-config
 if [ "$1" == "0" ]; then
-        /bin/systemctl disable orcaambroker12080 
+        /bin/systemctl disable orca_am_broker-12080 
 	/sbin/chkconfig --del orca_am_broker-12080
 	[ -x "/etc/init.d/orca_am_broker-12080" ] && /etc/init.d/orca_am_broker-12080 stop
-        [ -e %{_unitdir}/orcaambroker12080.service ] && rm %{_unitdir}/orcaambroker12080.service
+        [ -e %{_unitdir}/orca_am_broker-12080.service ] && rm %{_unitdir}/orca_am_broker-12080.service
         [ -e %{conf_dir}/am+broker-12080/logs ] && rm %{conf_dir}/am+broker-12080/logs
         [ -e %{conf_dir}/am+broker-12080/run ] && rm %{conf_dir}/am+broker-12080/run
         [ -e %{conf_dir}/am+broker-12080/startup ] && rm %{conf_dir}/am+broker-12080/startup
@@ -274,17 +275,17 @@ exit 0
 
 %post exogeni-am+broker-config
 [ -L %{conf_dir}/am+broker-12080/logs ] || ln -s %{log_dir}/am+broker-12080 %{conf_dir}/am+broker-12080/logs 2>/dev/null
-[ -L %{conf_dir}/am+broker-12080/run ] || ln -s %{pid_dir}/am+broker-12080 %{conf_dir}/am+broker-12080/run 2>/dev/null
+[ -L %{conf_dir}/am+broker-12080/run ] || ln -s %{pid_dir}/orca_am_broker-12080 %{conf_dir}/am+broker-12080/run 2>/dev/null
 [ -L %{conf_dir}/am+broker-12080/startup ] || ln -s %{daemon_common_dir}/startup %{conf_dir}/am+broker-12080/ 2>/dev/null
 # Force a successful exit even if we didn't exit cleanly.
 exit 0
 
 %preun exogeni-sm-config
 if [ "$1" == "0" ]; then
-        /bin/systemctl disable orcasm14080
+        /bin/systemctl disable orca_sm-14080 
 	/sbin/chkconfig --del orca_sm-14080
 	[ -x "/etc/init.d/orca_sm-14080" ] && /etc/init.d/orca_sm-14080 stop
-        [ -e %{_unitdir}/orcasm14080.service ] && rm %{_unitdir}/orcasm14080.service
+        [ -e %{_unitdir}/orca_sm-14080.service ] && rm %{_unitdir}/orca_sm-14080.service
         [ -e %{conf_dir}/sm-14080/logs ] && rm %{conf_dir}/sm-14080/logs
         [ -e %{conf_dir}/sm-14080/run ] && rm %{conf_dir}/sm-14080/run
         [ -e %{conf_dir}/sm-14080/startup ] && rm %{conf_dir}/sm-14080/startup
@@ -297,17 +298,17 @@ exit 0
 
 %post exogeni-sm-config
 [ -L %{conf_dir}/sm-14080/logs ] || ln -s %{log_dir}/sm-14080 %{conf_dir}/sm-14080/logs 2>/dev/null
-[ -L %{conf_dir}/sm-14080/run ] || ln -s %{pid_dir}/sm-14080 %{conf_dir}/sm-14080/run 2>/dev/null
+[ -L %{conf_dir}/sm-14080/run ] || ln -s %{pid_dir}/orca_sm-14080 %{conf_dir}/sm-14080/run 2>/dev/null
 [ -L %{conf_dir}/sm-14080/startup ] || ln -s %{daemon_common_dir}/startup %{conf_dir}/sm-14080/ 2>/dev/null
 # Force a successful exit even if we didn't exit cleanly.
 exit 0
 
 %preun exogeni-controller-config
 if [ "$1" == "0" ]; then
-        /bin/systemctl disable orcacontroller11080 
+        /bin/systemctl disable orca_controller-11080 
 	/sbin/chkconfig --del orca_controller-11080
 	[ -x "/etc/init.d/orca_controller-11080" ] && /etc/init.d/orca_controller-11080 stop
-        [ -e %{_unitdir}/orcacontroller11080.service ] && rm %{_unitdir}/orcacontroller11080.service
+        [ -e %{_unitdir}/orca_controller-11080.service ] && rm %{_unitdir}/orca_controller-11080.service
         [ -e %{conf_dir}/controller-11080/logs ] && rm %{conf_dir}/controller-11080/logs
         [ -e %{conf_dir}/controller-11080/run ] && rm %{conf_dir}/controller-11080/run
 fi
@@ -316,7 +317,7 @@ exit 0
 
 %post exogeni-controller-config
 [ -L %{conf_dir}/controller-11080/logs ] || ln -s %{log_dir}/controller-11080 %{conf_dir}/controller-11080/logs 2>/dev/null
-[ -L %{conf_dir}/controller-11080/run ] || ln -s %{pid_dir}/controller-11080 %{conf_dir}/controller-11080/run 2>/dev/null
+[ -L %{conf_dir}/controller-11080/run ] || ln -s %{pid_dir}/orca_controller-11080 %{conf_dir}/controller-11080/run 2>/dev/null
 # Force a successful exit even if we didn't exit cleanly.
 exit 0
 
@@ -346,14 +347,14 @@ exit 0
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/am+broker-12080
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/am+broker-12080/config
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{log_dir}/am+broker-12080
-%attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/am+broker-12080
+%attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/orca_am_broker-12080
 %{conf_dir}/am+broker-12080/axis2repository
 %{conf_dir}/am+broker-12080/lib
 %{conf_dir}/am+broker-12080/ndl
 %{conf_dir}/am+broker-12080/ssl
 %attr(755, root, root) %{_initrddir}/orca_am_broker-12080
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_am_broker-12080
-%config(noreplace) %{_unitdir}/orcaambroker12080.service
+%config(noreplace) %{_unitdir}/orca_am_broker-12080.service
 %config(noreplace) %{conf_dir}/am+broker-12080/config/*
 
 %files exogeni-sm-config
@@ -361,13 +362,13 @@ exit 0
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/sm-14080
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/sm-14080/config
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{log_dir}/sm-14080
-%attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/sm-14080
+%attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/orca_sm-14080
 %{conf_dir}/sm-14080/axis2repository
 %{conf_dir}/sm-14080/lib
 %{conf_dir}/sm-14080/ssl
 %attr(755, root, root) %{_initrddir}/orca_sm-14080
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_sm-14080
-%config(noreplace) %{_unitdir}/orcasm14080.service
+%config(noreplace) %{_unitdir}/orca_sm-14080.service
 %config(noreplace) %{conf_dir}/sm-14080/config/*
 
 %files exogeni-controller-config
@@ -376,11 +377,11 @@ exit 0
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/controller-11080/config
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{conf_dir}/controller-11080/ssl
 %attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{log_dir}/controller-11080
-%attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/controller-11080
+%attr(755, %{exogeni_user_id}, %{exogeni_group_id}) %dir %{pid_dir}/orca_controller-11080
 %attr(755, root, root) %{_initrddir}/orca_controller-11080
 %{conf_dir}/controller-11080/ssl
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_controller-11080
-%config(noreplace) %{_unitdir}/orcacontroller11080.service
+%config(noreplace) %{_unitdir}/orca_controller-11080.service
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
