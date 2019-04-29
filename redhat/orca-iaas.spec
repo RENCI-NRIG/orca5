@@ -247,8 +247,10 @@ mkdir -p %{buildroot}%{_unitdir}
 # and modify it appropriately.
 install -p -D -m 644 redhat/orcad-systemd.tmpl %{buildroot}%{_unitdir}/orca_am_broker-12080.service
 sed -i -e 's;NAME;orca_am_broker-12080;' %{buildroot}%{_unitdir}/orca_am_broker-12080.service
+sed -i -e '/REPLACE/d' %{buildroot}%{_unitdir}/orca_am_broker-12080.service
 install -p -D -m 644 redhat/orcad-systemd.tmpl %{buildroot}%{_unitdir}/orca_sm-14080.service
 sed -i -e 's;NAME;orca_sm-14080;' %{buildroot}%{_unitdir}/orca_sm-14080.service
+sed -i -e 's;REPLACE;orca_am_broker-12080;' %{buildroot}%{_unitdir}/orca_sm-14080.service
 install -p -D -m 644 redhat/xmlrpcd-systemd.tmpl %{buildroot}%{_unitdir}/orca_controller-11080.service
 sed -i -e 's;NAME;orca_controller-11080;' %{buildroot}%{_unitdir}/orca_controller-11080.service
 sed -i -e 's;REPLACE;orca_sm-14080;' %{buildroot}%{_unitdir}/orca_controller-11080.service
@@ -277,6 +279,7 @@ exit 0
 [ -L %{conf_dir}/am+broker-12080/logs ] || ln -s %{log_dir}/am+broker-12080 %{conf_dir}/am+broker-12080/logs 2>/dev/null
 [ -L %{conf_dir}/am+broker-12080/run ] || ln -s %{pid_dir}/orca_am_broker-12080 %{conf_dir}/am+broker-12080/run 2>/dev/null
 [ -L %{conf_dir}/am+broker-12080/startup ] || ln -s %{daemon_common_dir}/startup %{conf_dir}/am+broker-12080/ 2>/dev/null
+/bin/systemctl enable orca_am_broker-12080
 # Force a successful exit even if we didn't exit cleanly.
 exit 0
 
@@ -300,6 +303,7 @@ exit 0
 [ -L %{conf_dir}/sm-14080/logs ] || ln -s %{log_dir}/sm-14080 %{conf_dir}/sm-14080/logs 2>/dev/null
 [ -L %{conf_dir}/sm-14080/run ] || ln -s %{pid_dir}/orca_sm-14080 %{conf_dir}/sm-14080/run 2>/dev/null
 [ -L %{conf_dir}/sm-14080/startup ] || ln -s %{daemon_common_dir}/startup %{conf_dir}/sm-14080/ 2>/dev/null
+/bin/systemctl enable orca_sm-14080
 # Force a successful exit even if we didn't exit cleanly.
 exit 0
 
@@ -312,6 +316,7 @@ if [ "$1" == "0" ]; then
         [ -e %{conf_dir}/controller-11080/logs ] && rm %{conf_dir}/controller-11080/logs
         [ -e %{conf_dir}/controller-11080/run ] && rm %{conf_dir}/controller-11080/run
 fi
+/bin/systemctl enable orca_controller-11080
 # Force a successful exit even if we didn't exit cleanly.
 exit 0
 

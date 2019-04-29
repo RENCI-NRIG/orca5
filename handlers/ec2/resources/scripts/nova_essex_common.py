@@ -1196,10 +1196,7 @@ class VM:
                                 ", data_stdout: " + str(data_stdout) +
                                 ", data_stderr: " + str(data_stderr) +
                                 ", retrying (" + str(i) + ")")
-                    cmd = ["openstack", "server", "show", "-c", "id", "-f", "value", str(name)]
-                    rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
-                    if rtncode == 0:
-                        new_vm_id = data_stdout.strip()
+                    new_vm_id = name
                     raise Openstack_Command_Fail, str(cmd)
 
                 new_vm_id = json.loads(data_stdout)['id']
@@ -1221,6 +1218,7 @@ class VM:
 
             # clean up, maybe
             try:
+                new_vm_id = name
                 self._clean_all(new_vm_id)
             except:
                 pass
@@ -1230,6 +1228,7 @@ class VM:
         # if we retried too many time declare failure
         if status != 'active':  # and i >= retries:
             try:
+                new_vm_id = name
                 self._clean_all(new_vm_id)
             except:
                 pass
@@ -1267,6 +1266,7 @@ class VM:
                 if status == 'active':
                     break
             except Exception as e:
+                new_vm_id = name
                 self._clean_all(new_vm_id)
                 if i >= startup_retries:
                     raise e
@@ -1277,6 +1277,7 @@ class VM:
                 console_log = str(VM.get_console_log_by_ID(new_vm_id))
             except Exception:
                 console_log = 'Cannot get console log'
+            new_vm_id = name
             self._clean_all(new_vm_id)
             raise VM_Broken(
                 'THIS ERROR SHOULD NOT BE POSSIBLE (PLEASE CHECK WHY IT OCCURED):  Instance is not "ACTIVE": ' + str(
@@ -1301,6 +1302,7 @@ class VM:
                 console_log = str(VM.get_console_log_by_ID(new_vm_id))
             except Exception:
                 console_log = 'Cannot get console log'
+            new_vm_id = name
             self._clean_all(new_vm_id)
             raise VM_Broken('Openstack failed to allocate floating ip to the VM ' + str(new_vm_id), new_vm_id, console_log)
 
@@ -1312,6 +1314,7 @@ class VM:
                 console_log = str(VM.get_console_log_by_ID(new_vm_id))
             except Exception:
                 console_log = 'Cannot get console log'
+            new_vm_id = name
             self._clean_all(new_vm_id, floating_addr)
             raise VM_Broken_Unpingable('Instance is not pingable: ' + str(new_vm_id), new_vm_id, console_log)
 
