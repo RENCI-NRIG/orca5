@@ -1,4 +1,4 @@
-#!/usr/bin/env python                                                                                                                                                   
+#!/usr/bin/env python
 
 import logging as LOG
 import os
@@ -17,7 +17,7 @@ class Commands:
     def run_cmd(self, args):
         cmd = args
         LOG.debug("running command: " + " ".join(cmd))
-        p = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+        p = Popen(cmd, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         retval = p.communicate()[0]
 
         return retval
@@ -41,7 +41,7 @@ class Commands:
         LOG.debug("run: args= " + str(args))
 
         # p = Popen(args, shell = shell, cwd = cwd, stdout = PIPE, stderr = PIPE, env = env)
-        p = Popen(args, stdout=PIPE, stderr=STDOUT)
+        p = Popen(args, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
 
         if timeout != -1:
             signal(SIGALRM, alarm_handler)
@@ -67,13 +67,13 @@ class Commands:
     @classmethod
     def _get_process_children(self, pid):
         p = Popen('ps --no-headers -o pid --ppid %d' % pid, shell=True,
-                  stdout=PIPE, stderr=PIPE)
+                  stdout=PIPE, stderr=PIPE, universal_newlines=True)
         stdout, stderr = p.communicate()
         return [int(p) for p in stdout.split()]
 
     @classmethod
     def source(self, script, update=1):
-        pipe = Popen(". %s; env" % script, stdout=PIPE, shell=True, env={'PATH': os.environ['PATH']})
+        pipe = Popen(". %s; env" % script, stdout=PIPE, shell=True, env={'PATH': os.environ['PATH']}, universal_newlines=True)
         data = pipe.communicate()[0]
         env = dict((line.split("=", 1) for line in data.splitlines()))
         if update:
@@ -128,6 +128,8 @@ class VM_Broken_Unsshable(VM_Broken):
         VM_Broken.__init__(self, message, vm_id, console_log)
 
 class Project:
+    def __init__(self):
+        setup_env()
     @classmethod
     def _cleanup_user_by_name(self, name):
         try:
@@ -135,7 +137,7 @@ class Project:
             rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60)  # TODO: needs real timeout
 
             if rtncode != 0:
-                raise User_Exception, str(cmd)
+                raise User_Exception(str(cmd))
 
         except User_Exception as e:
             LOG.warning(
@@ -145,7 +147,7 @@ class Project:
         except Exception as e:
             LOG.error(
                 "_cleanup_user_by_name-Exception: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-            raise Openstack_Command_Fail, "openstack user delete commmand failed for " + str(name) + ": " + str(cmd)
+            raise Openstack_Command_Fail("openstack user delete commmand failed for " + str(name) + ": " + str(cmd))
 
     @classmethod
     def _cleanup_project_by_name(self, name):
@@ -154,7 +156,7 @@ class Project:
             rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60)  # TODO: needs real timeout
 
             if rtncode != 0:
-                raise Project_Exception, str(cmd)
+                raise Project_Exception(str(cmd))
 
         except Project_Exception as e:
             LOG.warning(
@@ -164,7 +166,7 @@ class Project:
         except Exception as e:
             LOG.error(
                 "_cleanup_project_by_name-Exception: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-            raise Openstack_Command_Fail, "openstack project delete commmand failed for " + str(name) + ": " + str(cmd)
+            raise Openstack_Command_Fail("openstack project delete commmand failed for " + str(name) + ": " + str(cmd))
 
     @classmethod
     def get_project(self, project_name):
@@ -213,7 +215,7 @@ class Project:
                     if new_project_id is not None:
                         LOG.debug("Project " + str(project_name) + " exists")
                         return new_project_id
-                    raise Openstack_Command_Fail, str(cmd)
+                    raise Openstack_Command_Fail(str(cmd))
 
                 new_project_id = json.loads(data_stdout)['id']
                 if new_project_id is not None:
@@ -231,7 +233,7 @@ class Project:
                 self._cleanup_project_by_name(project_name)
             except:
                 pass
-            raise Openstack_Command_Fail, 'openstack failed to create project ' + str(i) + ' retries, giving up'
+            raise Openstack_Command_Fail('openstack failed to create project ' + str(i) + ' retries, giving up')
 
         return new_project_id 
 
@@ -253,7 +255,7 @@ class Project:
             fd.write("    export OS_USERNAME=" + user_name + "\n")
             fd.write("    export OS_PASSWORD=" + user_pwd + "\n")
             fd.write("    export OS_AUTH_URL=" + ec2_auth_url + "\n")
-            fd.write("    export PS1='[\u@\h \W(keystone_" + project_name + ")]\$ '\n")
+            fd.write("    export PS1='[\\u@\h \W(keystone_" + project_name + ")]\$ '\n")
             fd.write("export OS_PROJECT_NAME=" + project_name + "\n")
             fd.write("export OS_USER_DOMAIN_NAME=Default\n")
             fd.write("export OS_PROJECT_DOMAIN_NAME=Default\n")
@@ -262,7 +264,7 @@ class Project:
         except Exception as e:
             LOG.error("Exception occured while writing to " + keystone_cred_file + " file")
             LOG.error("Exception e=" + str(e))
-            raise Openstack_Command_Fail, 'failed to write to cred file ' + keystone_cred_file
+            raise Openstack_Command_Fail('failed to write to cred file ' + keystone_cred_file)
         LOG.debug("Successfully generated " + keystone_cred_file + " file")
         return keystone_cred_file
 
@@ -316,7 +318,7 @@ class Project:
                        LOG.debug("User " + user_name + " exists")
                        return new_user_id
 
-                    raise Openstack_Command_Fail, str(cmd)
+                    raise Openstack_Command_Fail(str(cmd))
 
                 new_user_id = json.loads(data_stdout)['id']
                 if new_user_id is not None:
@@ -334,7 +336,7 @@ class Project:
                 self._cleanup_user_by_name(user_name)
             except:
                 pass
-            raise Openstack_Command_Fail, 'openstack failed to create project ' + str(i) + ' retries, giving up'
+            raise Openstack_Command_Fail('openstack failed to create project ' + str(i) + ' retries, giving up')
 
         cmd = ["openstack", "role", "add", "--user", str(user_name), "--project", str(project_name), str(role)]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
@@ -343,7 +345,7 @@ class Project:
                         ", rtncode: " + str(rtncode) +
                         ", data_stdout: " + str(data_stdout) +
                         ", data_stderr: " + str(data_stderr))
-            raise Openstack_Command_Fail, str(cmd)
+            raise Openstack_Command_Fail(str(cmd))
 
         cmd = ["openstack", "role", "add", "--user", str(admin_user), "--project", str(project_name), str(role)] 
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
@@ -352,7 +354,7 @@ class Project:
                         ", rtncode: " + str(rtncode) +
                         ", data_stdout: " + str(data_stdout) +
                         ", data_stderr: " + str(data_stderr))
-            raise Openstack_Command_Fail, str(cmd)
+            raise Openstack_Command_Fail(str(cmd))
 
         return new_user_id 
 
@@ -475,7 +477,7 @@ class Project:
                         ", data_stdout: " + str(data_stdout) +
                         ", data_stderr: " + str(data_stderr))
             if data_stdout.find("SecurityGroupRuleExists") == -1:
-                raise Openstack_Command_Fail, str(cmd)
+                raise Openstack_Command_Fail(str(cmd))
 
         cmd = ["openstack", "security", "group", "rule", "create", 
                "--ingress", 
@@ -493,7 +495,7 @@ class Project:
                         ", data_stdout: " + str(data_stdout) +
                         ", data_stderr: " + str(data_stderr))
             if data_stdout.find("SecurityGroupRuleExists") == -1:
-                raise Openstack_Command_Fail, str(cmd)
+                raise Openstack_Command_Fail(str(cmd))
 
         cmd = ["openstack", "security", "group", "rule", "create", 
                "--ingress", 
@@ -510,7 +512,7 @@ class Project:
                         ", data_stdout: " + str(data_stdout) +
                         ", data_stderr: " + str(data_stderr))
             if data_stdout.find("SecurityGroupRuleExists") == -1:
-                raise Openstack_Command_Fail, str(cmd)
+                raise Openstack_Command_Fail(str(cmd))
 
         cmd = ["openstack", "security", "group", "rule", "create", 
                "--ingress", 
@@ -527,7 +529,7 @@ class Project:
                         ", data_stdout: " + str(data_stdout) +
                         ", data_stderr: " + str(data_stderr))
             if data_stdout.find("SecurityGroupRuleExists") == -1:
-                raise Openstack_Command_Fail, str(cmd)
+                raise Openstack_Command_Fail(str(cmd))
 
     @classmethod
     def get_key_pair(self, user_name):
@@ -561,7 +563,7 @@ class Project:
             fd.close
         except Exception as e:
             LOG.error("Exception occured e=" + str(e))
-            raise Openstack_Command_Fail, 'failed to write to key file ' + key_file 
+            raise Openstack_Command_Fail('failed to write to key file ' + key_file)
         LOG.debug("Successfully generated " + key_file + " file")
         return key_file
 
@@ -596,7 +598,7 @@ class Project:
                         LOG.debug(user_name + " already exists")
                         return new_kp_id 
 
-                    raise Openstack_Command_Fail, str(cmd)
+                    raise Openstack_Command_Fail(str(cmd))
 
                 new_kp_id = json.loads(data_stdout)['id']
 
@@ -618,7 +620,7 @@ class Project:
 
         # if we retried too many time declare failure
         if new_kp_id is None:  # and i >= retries:
-            raise Openstack_Command_Fail, 'openstack keypair create failed after ' + str(retries) + ' retries, giving up'
+            raise Openstack_Command_Fail('openstack keypair create failed after ' + str(retries) + ' retries, giving up')
         return new_kp_id
 
     @classmethod
@@ -655,7 +657,7 @@ class Project:
                 LOG.debug("Sourced " + keystone_cred_file)
                 Commands.source(keystone_cred_file)
             else:
-                raise Openstack_Command_Fail, 'failed to load cred file ' + keystone_cred_file
+                raise Openstack_Command_Fail('failed to load cred file ' + keystone_cred_file)
 
             self.create_security_group_rules()
 
@@ -708,7 +710,7 @@ class Project:
                     return
 
                 if time_passed > timeout:
-                    raise Openstack_Command_Fail, "openstack project delete commmand failed for " + str(id)
+                    raise Openstack_Command_Fail("openstack project delete commmand failed for " + str(id))
 
                 time.sleep(10)
         except:
@@ -797,6 +799,9 @@ class Project:
             pass
 
 class VM:
+    def __init__(self):
+        setup_env()
+
     @classmethod
     def _get_console_log_by_ID(self, id):
         try:
@@ -810,7 +815,7 @@ class VM:
             timeout = 5
 
         if id == None:
-            raise Openstack_Command_Fail, "_get_console_log_by_ID Invalid id " + str(id)
+            raise Openstack_Command_Fail("_get_console_log_by_ID Invalid id " + str(id))
 
         data = None
         vm_console_log = ''
@@ -819,9 +824,12 @@ class VM:
                 cmd = ["openstack", "console", "log", "show", str(id)]
                 rtncode, data_stdout, data_stderr = Commands.run(cmd,
                                                                  timeout=60)  # TODO: needs real timeout
+                LOG.debug("rtncode=" + str(rtncode))
+                LOG.debug("data_stdout=" + str(data_stdout))
+                LOG.debug("data_stderr=" + str(data_stderr))
 
                 if rtncode != 0:
-                    raise VM_Does_Not_Exist, str(cmd)
+                    raise VM_Does_Not_Exist(str(cmd))
 
                 vm_console_log = data_stdout
                 break
@@ -832,7 +840,7 @@ class VM:
                 time.sleep(timeout)
 
         if i == retry:
-            raise Openstack_Command_Fail, "Failed cmd  " + str(retry) + " times, giving up: " + str(cmd)
+            raise Openstack_Command_Fail("Failed cmd  " + str(retry) + " times, giving up: " + str(cmd))
 
         return vm_console_log
 
@@ -849,7 +857,7 @@ class VM:
             timeout = 5
 
         if id == None:
-            raise Openstack_Command_Fail, "_get_info_by_ID Invalid id " + str(id)
+            raise Openstack_Command_Fail("_get_info_by_ID Invalid id " + str(id))
 
         data = None
         vm_info = {}
@@ -859,7 +867,7 @@ class VM:
                 rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60)  # TODO: needs real timeout
 
                 if rtncode != 0:
-                    raise VM_Does_Not_Exist, str(cmd)
+                    raise VM_Does_Not_Exist(str(cmd))
 
                 vm_info = json.loads(data_stdout)
                 break
@@ -870,14 +878,14 @@ class VM:
                 time.sleep(timeout)
 
         if i == retry:
-            raise Openstack_Command_Fail, "Failed cmd  " + str(retry) + " times, giving up: " + str(cmd)
+            raise Openstack_Command_Fail("Failed cmd  " + str(retry) + " times, giving up: " + str(cmd))
 
         return vm_info
 
     @classmethod
     def _get_info_by_ID(self, id, field):
         if id == None:
-            raise Openstack_Command_Fail, "Invalid id " + str(id)
+            raise Openstack_Command_Fail("Invalid id " + str(id))
 
         try:
             vm_info = self._get_all_info_by_ID(id)
@@ -885,7 +893,7 @@ class VM:
         except VM_Does_Not_Exist as e:
             raise e
         except Exception as e:
-            raise Openstack_Command_Fail, "No value for " + str(field) + " in info for " + str(id)
+            raise Openstack_Command_Fail("No value for " + str(field) + " in info for " + str(id))
 
     @classmethod
     def _get_info_by_name(self, name, field):
@@ -954,7 +962,7 @@ class VM:
         LOG.debug("data_stderr=" + str(data_stderr))
 
         if rtncode != 0:
-            raise Openstack_Command_Fail, str(cmd) + ": Failed to list floating ips"
+            raise Openstack_Command_Fail(str(cmd) + ": Failed to list floating ips")
 
         addresses = data_stdout.strip().split(";")
         floating_ip = None
@@ -984,7 +992,7 @@ class VM:
             LOG.warning("Failed to allocate floating ip " + str(i) + " times, retrying")
 
             if i >= retries:
-                raise Openstack_Command_Fail, "Failed to allocate floating ip  " + str(i) + " times, giving up: " + str(cmd)
+                raise Openstack_Command_Fail("Failed to allocate floating ip  " + str(i) + " times, giving up: " + str(cmd))
 
             time.sleep(timeout)
 
@@ -999,8 +1007,8 @@ class VM:
                 if rtncode == 0:
                     # check to see if it was actually assigned
                     if self.get_floating_ip_by_id(vm_id) != ipaddr:
-                        raise Openstack_Command_Fail, "Failed check for associated floating ip (" + str(
-                            ipaddr) + ") to vm (" + str(vm_id) + ")"
+                        raise Openstack_Command_Fail("Failed check for associated floating ip (" + str(
+                            ipaddr) + ") to vm (" + str(vm_id) + ")")
 
                     LOG.info("Assigned floating address " + str(ipaddr) + " to vm " + str(vm_id))
                     return ipaddr
@@ -1015,8 +1023,8 @@ class VM:
                 rtncode) + ", data_stdout: " + str(data_stdout) + ", data_stderr: " + str(data_stderr))
 
             if i >= retries:
-                raise Openstack_Command_Fail, str(cmd) + ": Failed to associate floating ip (" + str(
-                    ipaddr) + ") to vm (" + str(vm_id) + ") " + str(i) + " times, giving up: " + str(cmd)
+                raise Openstack_Command_Fail(str(cmd) + ": Failed to associate floating ip (" + str(
+                    ipaddr) + ") to vm (" + str(vm_id) + ") " + str(i) + " times, giving up: " + str(cmd))
 
             time.sleep(timeout)
 
@@ -1028,7 +1036,7 @@ class VM:
             rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60)  # TODO: needs real timeout
 
             if rtncode != 0:
-                raise VM_Does_Not_Exist, str(cmd)
+                raise VM_Does_Not_Exist(str(cmd))
 
         except VM_Does_Not_Exist as e:
             LOG.warning(
@@ -1038,7 +1046,7 @@ class VM:
         except Exception as e:
             LOG.error(
                 "_cleanup_vm_by_name-Exception: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-            raise Openstack_Command_Fail, "openstack server delete commmand failed for " + str(name) + ": " + str(cmd)
+            raise Openstack_Command_Fail("openstack server delete commmand failed for " + str(name) + ": " + str(cmd))
 
     @classmethod
     def _cleanup_vm_by_id(self, id):
@@ -1064,7 +1072,7 @@ class VM:
                     return
 
                 if time_passed > timeout:
-                    raise Openstack_Command_Fail, "openstack server delete commmand failed for " + str(id)
+                    raise Openstack_Command_Fail("openstack server delete commmand failed for " + str(id))
 
                 time.sleep(10)
 
@@ -1095,7 +1103,7 @@ class VM:
             LOG.debug("_cleanup_floating_addr " + floating_addr + "failed. retrying (" + str(i) + ")")
             time.sleep(timeout)
 
-        raise Openstack_Command_Fail, "VM._cleanup_floating_addr " + floating_addr + "failed. giving up."
+        raise Openstack_Command_Fail("VM._cleanup_floating_addr " + floating_addr + "failed. giving up.")
 
     @classmethod
     def _clean_all(self, vm_name, floating_addr=None):
@@ -1190,6 +1198,11 @@ class VM:
                        "--wait",
                        str(name), "-fjson"]
                 rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
+                LOG.debug("openstack server create command for " + str(name) + ": " 
+                                ", rtncode: " + str(rtncode) +
+                                ", data_stdout: " + str(data_stdout) +
+                                ", data_stderr: " + str(data_stderr))
+
                 if rtncode != 0:
                     LOG.warning("openstack server create command with non-zero rtncode " + str(name) + ": " + str(cmd) +
                                 ", rtncode: " + str(rtncode) +
@@ -1197,11 +1210,12 @@ class VM:
                                 ", data_stderr: " + str(data_stderr) +
                                 ", retrying (" + str(i) + ")")
                     new_vm_id = name
-                    raise Openstack_Command_Fail, str(cmd)
+                    raise Openstack_Command_Fail(str(cmd))
 
                 new_vm_id = json.loads(data_stdout)['id']
 
                 status = self.get_status_by_ID(new_vm_id).lower()
+                LOG.debug("openstack server status: " + status)
                 if status == 'active':
                     LOG.info('openstack server create success: ' + str(new_vm_id) + " : " + str(cmd))
                     break;
@@ -1232,7 +1246,7 @@ class VM:
                 self._clean_all(new_vm_id)
             except:
                 pass
-            raise Openstack_Command_Fail, 'openstack server create failed after ' + str(i) + ' retries, giving up'
+            raise Openstack_Command_Fail('openstack server create failed after ' + str(i) + ' retries, giving up')
 
         return new_vm_id
 
@@ -1247,7 +1261,7 @@ class VM:
             LOG.debug("Sourced " + keystone_cred_file)
             Commands.source(keystone_cred_file)
         else:
-            raise Openstack_Command_Fail, 'failed to load cred file ' + keystone_cred_file
+            raise Openstack_Command_Fail('failed to load cred file ' + keystone_cred_file)
 
         mgmt_net_id = "net-id=" + Project.get_management_network(mgmt_network)
 
@@ -1347,7 +1361,7 @@ class VM:
             LOG.error("stop _cleanup_vm_by_id_poll exception: " + str(type(e)) + " : " + str(e) + "\n" + str(
                 traceback.format_exc()))
             exception_msg += ", Failed cleaning up vm (" + str(id) + ")"
-            raise Openstack_Command_Fail, str(exception_msg)
+            raise Openstack_Command_Fail(str(exception_msg))
 
         return
 
@@ -1359,10 +1373,11 @@ class VM:
     def get_ip(self, id):
         return self.get_floating_ip_by_id(id)
 
-# Upon import, read in the needed OpenStack credentials from one of the right places.
-if (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/novarc")):
-    Commands.source(os.environ['EUCA_KEY_DIR'] + "/novarc")
-elif (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/openrc")):
-    Commands.source(os.environ['EUCA_KEY_DIR'] + "/openrc")
-else:
-    pass
+def setup_env():
+    # Upon import, read in the needed OpenStack credentials from one of the right places.
+    if (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/novarc")):
+        Commands.source(os.environ['EUCA_KEY_DIR'] + "/novarc")
+    elif (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/openrc")):
+        Commands.source(os.environ['EUCA_KEY_DIR'] + "/openrc")
+    else:
+        pass

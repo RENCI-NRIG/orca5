@@ -1,4 +1,4 @@
-#!/usr/bin/env python                                                                                                                                                   
+#!/usr/bin/env python
 
 import os 
 import json 
@@ -15,7 +15,7 @@ class Commands:
     def run_cmd(self, args):
         cmd = args
         LOG.debug("running command: " + " ".join(cmd))
-        p = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+        p = Popen(cmd, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         retval = p.communicate()[0]
 
         return retval
@@ -38,7 +38,7 @@ class Commands:
 
         LOG.debug("run: args= " + str(args))
         # p = Popen(args, shell = shell, cwd = cwd, stdout = PIPE, stderr = PIPE, env = env)
-        p = Popen(args, stdout=PIPE, stderr=STDOUT)
+        p = Popen(args, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         if timeout != -1:
             signal(SIGALRM, alarm_handler)
             alarm(timeout)
@@ -63,13 +63,13 @@ class Commands:
     @classmethod
     def _get_process_children(self, pid):
         p = Popen('ps --no-headers -o pid --ppid %d' % pid, shell=True,
-                  stdout=PIPE, stderr=PIPE)
+                  stdout=PIPE, stderr=PIPE, universal_newlines=True)
         stdout, stderr = p.communicate()
         return [int(p) for p in stdout.split()]
 
     @classmethod
     def source(self, script, update=1):
-        pipe = Popen(". %s; env" % script, stdout=PIPE, shell=True, env={'PATH': os.environ['PATH']})
+        pipe = Popen(". %s; env" % script, stdout=PIPE, shell=True, env={'PATH': os.environ['PATH']}, universal_newlines=True)
         data = pipe.communicate()[0]
         env = dict((line.split("=", 1) for line in data.splitlines()))
         if update:
@@ -85,6 +85,8 @@ class NEuca_Quantum_Port_Plugged_In_Exception(Exception):
 
 
 class NEuca_Quantum_Network:
+    def __init__(self):
+        setup_env()
 
     @classmethod
     def create_network(self, net_type, network, vlan_tag, dataplane_network, openflow_network, project_name, max_rate=None, burst_rate=None ):
@@ -129,7 +131,7 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
                       
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "Create Network Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Create Network Failed, bad error code (" + str(rtncode) + ") : " + str(cmd))
 
         network_info = json.loads(data_stdout)
         network_uuid = None
@@ -137,7 +139,7 @@ class NEuca_Quantum_Network:
             LOG.debug(str(data_stdout))
             network_uuid = network_info["id"]
         else:
-            raise NEuca_Quantum_Exception, "Create Network Failed, bad stdout: cmd = " + str(cmd) + "\nstdout = " + str(data_stdout)
+            raise NEuca_Quantum_Exception("Create Network Failed, bad stdout: cmd = " + str(cmd) + "\nstdout = " + str(data_stdout))
 
         return network_uuid
 
@@ -152,7 +154,7 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "Delete Port Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Delete Port Failed, bad error code (" + str(rtncode) + ") : " + str(cmd))
 
     @classmethod
     def _neutron_remove_port_from_server(self, network_uuid, port_uuid, instance_id):
@@ -165,12 +167,12 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "Remove port from server Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Remove port from server Failed, bad error code (" + str(rtncode) + ") : " + str(cmd))
 
         n_uuid, p_uuid, i_id = NEuca_Quantum_Network.__get_network_and_port_by_port_name_or_id(port_uuid)
 
         if n_uuid != network_uuid or p_uuid != port_uuid :
-            raise NEuca_Quantum_Exception, "Remove port from server Failed, bad stdout reported network uuid does not match uuid: cmd = " + str(cmd) + "\nstdout = " + str(data_stdout)
+            raise NEuca_Quantum_Exception("Remove port from server Failed, bad stdout reported network uuid does not match uuid: cmd = " + str(cmd) + "\nstdout = " + str(data_stdout))
 
     @classmethod
     def _clean_port(self, network_uuid, port_uuid, instance_id):
@@ -190,8 +192,8 @@ class NEuca_Quantum_Network:
             delete_port_e = e
 
         if delete_port_e != None or remove_port_from_server_e != None:
-            raise NEuca_Quantum_Exception, "remove_port_from_server exception: " + str(
-                remove_port_from_server_e) + ", delete_port_exception: " + str(delete_port_e)
+            raise NEuca_Quantum_Exception("remove_port_from_server exception: " + str(
+                remove_port_from_server_e) + ", delete_port_exception: " + str(delete_port_e))
 
     @classmethod
     def _get_all_ports_for_network(self, network_uuid):
@@ -204,8 +206,8 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "Getting show_net_detail Failed, bad error code (" + str(
-                rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Getting show_net_detail Failed, bad error code (" + str(
+                rtncode) + ") : " + str(cmd))
 
         LOG.debug("all ports for network " + str(network_uuid) + ", " + str(data_stdout))
 
@@ -246,7 +248,7 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "Delete Network Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Delete Network Failed, bad error code (" + str(rtncode) + ") : " + str(cmd))
 
     @classmethod
     def add_iface_to_network(self, network_uuid, instance_id, instance_name, mac_addr, project_name):
@@ -281,16 +283,16 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "Add iface Failed (create_port), bad error code (" + str(
-                rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Add iface Failed (create_port), bad error code (" + str(
+                rtncode) + ") : " + str(cmd))
 
         port_info = json.loads(data_stdout)
         if port_info is not None:
             LOG.debug(str(data_stdout))
             port_uuid = port_info["id"]
         else:
-            raise NEuca_Quantum_Exception, "Add iface Failed (create_port), bad stdout: cmd = " + str(
-                cmd) + "\nstdout = " + str(data_stdout)
+            raise NEuca_Quantum_Exception("Add iface Failed (create_port), bad stdout: cmd = " + str(
+                cmd) + "\nstdout = " + str(data_stdout))
 
         # openstack server add port $instance_id $port_id instance-00000004.fe:16:3e:00:00:02
         cmd = ["openstack", "server", "add", "port", str(instance_id), str(port_uuid)]
@@ -302,19 +304,19 @@ class NEuca_Quantum_Network:
 
         if rtncode != 0:
             self._clean_port(network_uuid, port_uuid, instance_id)
-            raise NEuca_Quantum_Exception, "Add iface Failed (add_port_to_server), bad error code (" + str(
-                rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Add iface Failed (add_port_to_server), bad error code (" + str(
+                rtncode) + ") : " + str(cmd))
 
         try:
             n_uuid, p_uuid, i_id = NEuca_Quantum_Network.__get_network_and_port_by_port_name_or_id(port_uuid)
         except Exception as e:
             self._clean_port(network_uuid, port_uuid, instance_id)
-            raise NEuca_Quantum_Exception, "Add iface Failed " + str(e)
+            raise NEuca_Quantum_Exception("Add iface Failed " + str(e))
 
         if p_uuid != port_uuid or n_uuid != network_uuid or i_id != instance_id:
             self._clean_port(network_uuid, port_uuid, instance_id)
-            raise NEuca_Quantum_Exception, "Add iface Failed, bad stdout reported info does not match supplied info: cmd = " + str(
-                cmd) + "\nstdout = " + str(data_stdout)
+            raise NEuca_Quantum_Exception("Add iface Failed, bad stdout reported info does not match supplied info: cmd = " + str(
+                cmd) + "\nstdout = " + str(data_stdout))
 
         return port_uuid
 
@@ -332,7 +334,7 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "Port show Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("Port show Failed, bad error code (" + str(rtncode) + ") : " + str(cmd))
 
         port_info = json.loads(data_stdout)
         LOG.debug(str(data_stdout))
@@ -341,8 +343,8 @@ class NEuca_Quantum_Network:
             network_uuid = port_info["network_id"]
             instance_id = port_info["device_id"]
         else:
-            raise NEuca_Quantum_Exception, "Port show Failed, bad stdout: cmd = " + str(cmd) + "\nstdout = " + str(
-                data_stdout)
+            raise NEuca_Quantum_Exception("Port show Failed, bad stdout: cmd = " + str(cmd) + "\nstdout = " + str(
+                data_stdout))
 
         return [network_uuid, port_uuid, instance_id]
 
@@ -369,9 +371,12 @@ class NEuca_Quantum_Network:
         return 'OK'
 
     @classmethod
-    def get_network_uuid(self, vlan_tag, network, net_type, project_name):
-
-        cmd = ["openstack", "network", "list", "--project", project_name, "-fjson" ]
+    def get_network_uuid(self, vlan_tag, network, net_type, project_name=None):
+        cmd = None
+        if project_name is None:        
+            cmd = ["openstack", "network", "list", "-fjson" ]
+        else :
+            cmd = ["openstack", "network", "list", "--project", project_name, "-fjson" ]
         rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout
 
         LOG.debug("rtncode: " + str(rtncode))
@@ -379,7 +384,7 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
     
         if rtncode != 0:
-            raise NEuca_Quantum_Exception, "list_nets_detail failed, bad error code (" + str(rtncode) + ") : " + str(cmd)
+            raise NEuca_Quantum_Exception("list_nets_detail failed, bad error code (" + str(rtncode) + ") : " + str(cmd))
 
         foundIt=False
         networks = json.loads(data_stdout)
@@ -394,10 +399,11 @@ class NEuca_Quantum_Network:
 
         return network_uuid;
 
-# Upon import, read in the needed OpenStack credentials from one of the right places.
-if (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/novarc")):
-    Commands.source(os.environ['EUCA_KEY_DIR'] + "/novarc")
-elif (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/openrc")):
-    Commands.source(os.environ['EUCA_KEY_DIR'] + "/openrc")
-else:
-    pass
+def setup_env():
+    # Upon import, read in the needed OpenStack credentials from one of the right places.
+    if (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/novarc")):
+        Commands.source(os.environ['EUCA_KEY_DIR'] + "/novarc")
+    elif (os.path.isfile(os.environ['EUCA_KEY_DIR'] + "/openrc")):
+        Commands.source(os.environ['EUCA_KEY_DIR'] + "/openrc")
+    else:
+        pass

@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 import logging.handlers
 import os
 import sys
@@ -12,8 +12,8 @@ try:
     from neuca_quantum_common import *
     from nova_essex_common import *
 except Exception as e:
-    print 'Error in neuca-quantum-add-iface: cannot import neuca_quantum_common.py'
-    print str(e) 
+    print ('Error in neuca-quantum-add-iface: cannot import neuca_quantum_common.py')
+    print (str(e))
     sys.exit(1)
 
 try:
@@ -43,10 +43,10 @@ try:
     LOG.info('Starting Logger')
 
 except Exception as e:
-    print 'Error in neuca-quantum-add-iface: Cannot open log file'
-    print type(e)
-    print e.args
-    print e
+    print ('Error in neuca-quantum-add-iface: Cannot open log file')
+    print (type(e))
+    print (e.args)
+    print (e)
     sys.exit(1)
 
 # log the environment
@@ -57,21 +57,20 @@ try:
     # DO THE WORK
     LOG.debug("neuca-quantum-add-iface: " + str(sys.argv))
 
-    network_uuid = NEuca_Quantum_Network.get_network_uuid(os.environ['QUANTUM_NET_VLAN'],
+    network_uuid = NEuca_Quantum_Network().get_network_uuid(os.environ['QUANTUM_NET_VLAN'],
                                                           os.environ['QUANTUM_NET_NETWORK'],
-                                                          os.environ['QUANTUM_NET_TYPE'],
-                                                          os.environ['PROJECT_NAME'])
+                                                          os.environ['QUANTUM_NET_TYPE'])
     if network_uuid == None:
         LOG.error("neuca-quantum-add-iface: no quantum network found for vlan: " + os.environ[
             'QUANTUM_NET_VLAN'] + ", network: " + os.environ['QUANTUM_NET_NETWORK'])
         sys.exit(1)
 
-    iface_uuid = NEuca_Quantum_Network.add_iface_to_network(network_uuid,
+    iface_uuid = NEuca_Quantum_Network().add_iface_to_network(network_uuid,
                                                             os.environ['QUANTUM_NET_INSTANCE_NAME'],
-                                                            VM.get_instance_name_by_ID(os.environ['QUANTUM_NET_INSTANCE_NAME']),
+                                                            VM().get_instance_name_by_ID(os.environ['QUANTUM_NET_INSTANCE_NAME']),
                                                             os.environ['QUANTUM_NET_IFACE_MAC'], os.environ['PROJECT_NAME'])
 
-    print iface_uuid
+    print (iface_uuid)
 
 except Exception as e:
     if str(e).find("error code: 409") != -1 :

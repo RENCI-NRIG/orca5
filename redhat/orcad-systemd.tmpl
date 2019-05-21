@@ -12,7 +12,7 @@ Type=forking
 PIDFile=/var/run/NAME/orcad.pid
 StandardOutput=journal+console
 ExecStart=/etc/init.d/NAME start
-ExecReload=/etc/init.d/NAME restart
+ExecReload=/etc/init.d/NAME clean-restart
 ExecStop=/etc/init.d/NAME stop
 
 [Install]

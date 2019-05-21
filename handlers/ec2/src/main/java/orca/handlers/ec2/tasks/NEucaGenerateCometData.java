@@ -178,8 +178,11 @@ class NEucaGenerateCometData extends NEucaCometDataProcessor{
 
     protected void generateStorage() throws Exception {
         System.out.println("Processing storage section");
+        System.out.println("prop = " + project.getProperties().toString());
+
 
         Integer[] stores = getStores();
+        System.out.println("stores= " + stores.toString());
 
         for (int i = 0; i < stores.length; i++) {
             Integer store = stores[i];

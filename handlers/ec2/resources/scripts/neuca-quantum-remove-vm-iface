@@ -12,7 +12,7 @@ try:
     from neuca_quantum_common import *
     from nova_essex_common import *
 except:
-    print 'Error in neuca-quantum-remove-vm-iface: cannot import neuca_quantum_common.py'
+    print ('Error in neuca-quantum-remove-vm-iface: cannot import neuca_quantum_common.py')
     sys.exit(1)
 
 try:
@@ -43,10 +43,10 @@ try:
     LOG.info('Starting Logger')
 
 except Exception as e:
-    print 'Error in neuca-quantum-remove-vm-iface: Cannot open log file'
-    print type(e)
-    print e.args
-    print e
+    print ('Error in neuca-quantum-remove-vm-iface: Cannot open log file')
+    print (type(e))
+    print (e.args)
+    print (e)
     sys.exit(1)
 
 # log the environment
@@ -59,12 +59,12 @@ try:
               'QUANTUM_NET_INSTANCE_NAME' + os.environ['QUANTUM_NET_INSTANCE_NAME'] +
               'QUANTUM_NET_IFACE_MAC' + os.environ['QUANTUM_NET_IFACE_MAC'])
 
-    NEuca_Quantum_Network.remove_iface(os.environ['QUANTUM_NET_INSTANCE_NAME'],
-                                       str(VM.get_instance_name_by_ID(
+    NEuca_Quantum_Network().remove_iface(os.environ['QUANTUM_NET_INSTANCE_NAME'],
+                                       str(VM().get_instance_name_by_ID(
                                            os.environ['QUANTUM_NET_INSTANCE_NAME'])) + "." + str(
                                            os.environ['QUANTUM_NET_IFACE_MAC']))
 
-    print 'OK'
+    print ('OK')
 
 except Exception as e:
     LOG.error("neuca-quantum-remove-vm-ifaces: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
