@@ -3,6 +3,7 @@ With new ORCA release, users can create their images as below.
 
 ## Determine Horizon details
 Save manifest of the slice which contains the VM for which image needs to be created as shown below
+![alt text](images/manifest.png)
 
 View the manifest to find horizon details:
 ```
@@ -33,7 +34,40 @@ View the manifest to find horizon details:
 ```
 ## Horizon dashboard
 Access dashboard using credentials determined above.
+![alt text](images/horizon1.png)
+![alt text](images/horizon2.png)
 
 ## Create Image
 Go to Compute -> Instances screen and select VM from which to create the image and click 'Create Snapshot'
+![alt text](images/createsnapshot.png)
+
 Go to Compute -> Images screen to check status of image. It would change from queued to Active
+![alt text](images/image.png)
+![alt text](images/image2.png)
+
+## Download Image
+NOTE: Needs to be investigated for Users. For developer can be done as below:
+- Logon to head node and swithc to root user
+- Source Openstack keystone and execute following commands
+```
+source ./xo-openstack-rc/keystonerc_admin
+openstack image list
++--------------------------------------+------------------------------------------------------------+--------+
+| ID                                   | Name                                                       | Status |
++--------------------------------------+------------------------------------------------------------+--------+
+| 494ca0f5-8a37-4880-858d-abce4874b5e7 | myImage                                                    | active |
++--------------------------------------+------------------------------------------------------------+--------+
+glance image-download --file /tmp/myImage.qcow2 494ca0f5-8a37-4880-858d-abce4874b5e7 
+```
+
+## CLI mechanism to create the image (only to be used by developers)
+- Logon to head node and swithc to root user
+- Source Openstack keystone and execute following command
+```
+source  /var/tmp/cred.tenant-kthare10-slice2-aD7NZwyeV8.owner-kthare10-slice2-aD7NZwyeV8
+openstack server list
+nova image-create <server_name> <image_name>
+openstack image show <image_name>
+glance image-download --file /tmp/<image_name>.qcow2 <image_id>
+```
+NOTE: credentials file for each slice would be present in /var/tmp directory with convention /var/tmp/cred.tenant-<slice-name>...
