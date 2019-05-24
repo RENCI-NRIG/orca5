@@ -1,4 +1,4 @@
-#!/usr/bin/env python                                                                                                                                                   
+#!/usr/bin/env python
 
 import os
 import sys
@@ -21,7 +21,7 @@ class Commands:
     def run_cmd(self, args):
         cmd = args
         LOG.debug("running command: " + " ".join(cmd))
-        p = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+        p = Popen(cmd, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         retval = p.communicate()[0]
                 
         return retval
@@ -43,7 +43,7 @@ class Commands:
 
         LOG.debug("run: args= " + str(args))
         #p = Popen(args, shell = shell, cwd = cwd, stdout = PIPE, stderr = PIPE, env = env)
-        p = Popen(args, stdout=PIPE, stderr=STDOUT)
+        p = Popen(args, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         if timeout != -1:
             signal(SIGALRM, alarm_handler)
             alarm(timeout)
@@ -68,7 +68,7 @@ class Commands:
     @classmethod
     def _get_process_children(self, pid):
         p = Popen('ps --no-headers -o pid --ppid %d' % pid, shell = True,
-                  stdout = PIPE, stderr = PIPE)
+                  stdout = PIPE, stderr = PIPE, universal_newlines=True)
         stdout, stderr = p.communicate()
         return [int(p) for p in stdout.split()]
 
@@ -197,12 +197,12 @@ class SLURM_MANAGE:
 
 	#print Popen("echo Hello World", stdout=PIPE, shell=True).stdout.read()
 	#p = Popen("echo Hello World", stdout=PIPE, shell=True)
-	p = Popen("/usr/bin/scontrol show job " + str(allocation_id) + " | grep \" NodeList\" | awk -F \"=\" \'{print $2}\'", stdout=PIPE, shell=True)
+	p = Popen("/usr/bin/scontrol show job " + str(allocation_id) + " | grep \" NodeList\" | awk -F \"=\" \'{print $2}\'", stdout=PIPE, shell=True, universal_newlines=True)
 	# There should be only one line in the output of above command
 	for line in p.stdout.readlines():
 		output = line.rstrip()
 
-	p = Popen("/usr/bin/scontrol show hostname " + str(output) + " | paste -d, -s", stdout=PIPE, shell=True)
+	p = Popen("/usr/bin/scontrol show hostname " + str(output) + " | paste -d, -s", stdout=PIPE, shell=True, universal_newlines=True)
 	# There should be only one line in the output of above command
 	for line in p.stdout.readlines():
 		return line.rstrip()
@@ -215,7 +215,7 @@ class SLURM_MANAGE:
         LOG.info('Getting status of a node')
         LOG.debug('nodename: ' + str(nodename))
 
-	p = Popen("/usr/bin/scontrol show Node " + str(nodename) + " | grep State | awk \'{print $1}\' | awk -F \"=\" \'{print $2}\'", stdout=PIPE, shell=True)
+	p = Popen("/usr/bin/scontrol show Node " + str(nodename) + " | grep State | awk \'{print $1}\' | awk -F \"=\" \'{print $2}\'", stdout=PIPE, shell=True, universal_newlines=True)
 	# There should be only one line in the output of above command
 	for line in p.stdout.readlines():
 		return line.rstrip()

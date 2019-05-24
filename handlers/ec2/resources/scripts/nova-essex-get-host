@@ -1,4 +1,4 @@
-#!/usr/bin/env python                                                                                                                                                                                  
+#!/usr/bin/env python
 import logging.handlers
 import os
 import sys
@@ -11,7 +11,7 @@ try:
     sys.path.append(os.environ['EC2_DIR'] + "/scripts")
     from nova_essex_common import *
 except:
-    print 'Error in nova-essex-get-host: cannot import nova_essex_common.py'
+    print ('Error in nova-essex-get-host: cannot import nova_essex_common.py')
     sys.exit(1)
 
 try:
@@ -41,10 +41,10 @@ try:
     LOG.info('Starting Logger')
 
 except Exception as e:
-    print 'Error in nova-essex-get-host: Cannot open log file'
-    print type(e)
-    print e.args
-    print e
+    print ('Error in nova-essex-get-host: Cannot open log file')
+    print (type(e))
+    print (e.args)
+    print (e)
     sys.exit(1)
 
 # log the environment
@@ -57,10 +57,10 @@ try:
 
     instance_uuid = sys.argv[1]
 
-    instance_host = VM.get_host(instance_uuid)
+    instance_host = VM().get_host(instance_uuid)
 
     LOG.info("Got host for instance: " + str(instance_uuid) + ": " + str(instance_host))
-    print instance_host
+    print (instance_host)
 
 except Exception as e:
     LOG.error("nova-essex-get-host: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))

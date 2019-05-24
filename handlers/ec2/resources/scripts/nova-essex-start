@@ -12,7 +12,7 @@ try:
     sys.path.append(os.environ['EC2_DIR'] + "/scripts")
     from nova_essex_common import *
 except:
-    print 'Error in nova-essex-start: cannot import nova_essex_common.py'
+    print ('Error in nova-essex-start: cannot import nova_essex_common.py')
     sys.exit(1)
 
 try:
@@ -42,10 +42,10 @@ try:
     LOG.info('Starting Logger')
 
 except Exception as e:
-    print 'Error in nova-essex-start: Cannot open log file'
-    print type(e)
-    print e.args
-    print e
+    print ('Error in nova-essex-start: Cannot open log file')
+    print (type(e))
+    print (e.args)
+    print (e)
     sys.exit(1)
 
 # log the environment
@@ -54,36 +54,49 @@ for i in os.environ:
 
 try:
     # DO THE WORK
-    instance_uuid = VM.start(os.environ['EC2_INSTANCE_TYPE'],
+    instance_uuid = VM().start(os.environ['EC2_INSTANCE_TYPE'],
                              os.environ['AMI_NAME'],
+                             os.environ['QCOW2_NAME'],
                              os.environ['AKI_NAME'],
                              os.environ['ARI_NAME'],
-                             os.environ['EC2_SSH_KEY'],
-                             1,  # int(os.environ['EC2_STARTUP_RETRIES']),
+                             int(os.environ['EC2_STARTUP_RETRIES']),
                              int(os.environ['EC2_PING_RETRIES']),
                              int(os.environ['EC2_SSH_RETRIES']),
                              os.environ['NEUCA_INI'],  # userdata
-                             os.environ['UNIT_HOSTNAME_URL'])
+                             os.environ['UNIT_HOSTNAME_URL'],
+                             os.environ['EC2_PUBLIC_NETWORK'],
+                             os.environ['PROJECT_NAME'],
+                             os.environ['USER_NAME'],
+                             os.environ['EC2_SLICE_USER_EMAIL'],
+                             os.environ['EC2_SLICE_USER_PWD'],
+                             os.environ['EC2_SLICE_USER_ROLE'],
+                             os.environ['EC2_SLICE_ADMIN_USER'],
+                             os.environ['EC2_MGMT_NETWORK'],
+                             os.environ['SSH_KEY'],
+                             os.environ['EC2_AUTH_URL'])
 
     LOG.info("Started instance: " + str(instance_uuid))
-    print instance_uuid
+    print (instance_uuid)
 
 except VM_Broken_Unsshable as e:
-    # LOG.error("nova-essex-start: VM_Unsshable: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     LOG.error("nova-essex-start: VM_Unsshable: " + str(e.get_vm_id()) + " : " + str(e.get_console_log()))
-    print e.get_console_log()
+    print (e.get_console_log())
     sys.exit(3)
 except VM_Broken_Unpingable as e:
+    Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     # LOG.error("nova-essex-start: VM_Unpingable: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
     LOG.error("nova-essex-start: VM_Unpingable: " + str(e.get_vm_id()) + " : " + str(e.get_console_log()))
-    print e.get_console_log()
+    print (e.get_console_log())
     sys.exit(2)
 except VM_Broken as e:
+    Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     LOG.error("nova-essex-start: VM_Broken: " + str(e.get_vm_id()) + " : " + str(e.get_console_log()))
     # LOG.error("nova-essex-start: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-    print e.get_console_log()
+    print (e.get_console_log())
     sys.exit(1)
 except Exception as e:
+    Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     LOG.error("nova-essex-start: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
     sys.exit(1)
 

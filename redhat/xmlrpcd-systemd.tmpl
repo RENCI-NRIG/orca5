@@ -1,0 +1,19 @@
+[Unit]
+Description=NAME.service
+Requires=REPLACE.service
+
+[Service]
+EnvironmentFile=/etc/sysconfig/NAME
+RuntimeDirectory=NAME
+RuntimeDirectoryMode=0755
+ExecStartPre=/bin/chown -R geni-orca:geni-orca /var/run/NAME
+Restart=always
+Type=forking
+PIDFile=/var/run/NAME/xmlrpcd.pid
+StandardOutput=journal+console
+ExecStart=/etc/init.d/NAME start
+ExecReload=/etc/init.d/NAME clean-restart
+ExecStop=/etc/init.d/NAME stop
+
+[Install]
+WantedBy=default.target

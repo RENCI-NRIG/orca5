@@ -1,4 +1,4 @@
-#!/usr/bin/env python                                                                                                                                                   
+#!/usr/bin/env python
 
 import os
 import sys
@@ -21,7 +21,7 @@ class Commands:
     def run_cmd(self, args):
         cmd = args
         LOG.debug("running command: " + " ".join(cmd))
-        p = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+        p = Popen(cmd, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         retval = p.communicate()[0]
                 
         return retval
@@ -43,7 +43,7 @@ class Commands:
 
         LOG.debug("run: args= " + str(args))
         #p = Popen(args, shell = shell, cwd = cwd, stdout = PIPE, stderr = PIPE, env = env)
-        p = Popen(args, stdout=PIPE, stderr=STDOUT)
+        p = Popen(args, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         if timeout != -1:
             signal(SIGALRM, alarm_handler)
             alarm(timeout)
@@ -68,7 +68,7 @@ class Commands:
     @classmethod
     def _get_process_children(self, pid):
         p = Popen('ps --no-headers -o pid --ppid %d' % pid, shell = True,
-                  stdout = PIPE, stderr = PIPE)
+                  stdout = PIPE, stderr = PIPE, universal_newlines=True)
         stdout, stderr = p.communicate()
         return [int(p) for p in stdout.split()]
 
@@ -435,7 +435,7 @@ class IBM_DS:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise IBM_DS_Exception, "Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout) + ", stderr: " + str(data_stderr)
+            raise IBM_DS_Exception("Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout) + ", stderr: " + str(data_stderr))
 
     #Creates the host group if it does not exist. 
     @classmethod
@@ -457,7 +457,7 @@ class IBM_DS:
             LOG.debug("data_stderr: " + str(data_stderr))
 
             if rtncode != 0:
-                raise IBM_DS_Exception, "Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr)
+                raise IBM_DS_Exception("Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr))
 
         else:
             LOG.debug("Host Group " + target_group_label + " exists, skipping creation")
@@ -486,7 +486,7 @@ class IBM_DS:
             LOG.debug("data_stderr: " + str(data_stderr))
 
             if rtncode != 0:
-                raise IBM_DS_Exception, "Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr)
+                raise IBM_DS_Exception("Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr))
         else:
             LOG.debug("Host " + target_host_label + " exists, skipping creation")
 
@@ -505,7 +505,7 @@ class IBM_DS:
             LOG.debug("data_stderr: " + str(data_stderr))
 
             if rtncode != 0:
-                raise IBM_DS_Exception, "Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr)
+                raise IBM_DS_Exception("Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr))
         else:
             LOG.debug("Initiator iqn " + initiator_iqn + " exists, skipping creation")
 
@@ -530,7 +530,7 @@ class IBM_DS:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         if rtncode != 0:
-            raise IBM_DS_Exception, "Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr)
+            raise IBM_DS_Exception("Create Lun Failed, bad error code (" + str(rtncode) + ") : " + str(cmd)+ ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr))
 
     @classmethod
     def __delete_host_group(self 
@@ -648,7 +648,7 @@ class IBM_DS:
                     LOG.debug("data_stderr: " + str(data_stderr))
 
                     if rtncode != 0:
-                        raise IBM_DS_Exception, "Delete hostGroup Failed, bad error code (" + str(rtncode) + ") : " + str(cmd) + ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr)
+                        raise IBM_DS_Exception("Delete hostGroup Failed, bad error code (" + str(rtncode) + ") : " + str(cmd) + ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr))
 
                 elif host_type == 'Host':
                 
@@ -692,7 +692,7 @@ class IBM_DS:
                     LOG.debug("data_stderr: " + str(data_stderr))
                 
                     if rtncode != 0:
-                        raise IBM_DS_Exception, "Delete LUN Failed, bad error code (" + str(rtncode) + ") : " + str(cmd) + ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr)
+                        raise IBM_DS_Exception("Delete LUN Failed, bad error code (" + str(rtncode) + ") : " + str(cmd) + ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr))
 
                     if group_luns == None:
                         # sudo /opt/IBM_DS/client/SMcli 192.168.102.11 -p 'password' -c "delete host [ \"host-pruth-1234567890\" ] ; " 
@@ -708,7 +708,7 @@ class IBM_DS:
                         LOG.debug("data_stderr: " + str(data_stderr))
 
                         if rtncode != 0:
-                            raise IBM_DS_Exception, "Delete hostGroup Failed, bad error code (" + str(rtncode) + ") : " + str(cmd) + ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr)
+                            raise IBM_DS_Exception("Delete hostGroup Failed, bad error code (" + str(rtncode) + ") : " + str(cmd) + ", stdout: " + str(data_stdout)+ ", stderr: " + str(data_stderr))
 
 
 
@@ -727,13 +727,3 @@ class IBM_DS:
         LOG.debug("data_stderr: " + str(data_stderr))
 
         return
-
-   
-
-
-
-    
-
-
-
-
