@@ -286,8 +286,60 @@ public class NEucaCometDataGenerator {
             JSONObject u = new JSONObject();
             u.put(JsonKeyUserName, user);
             u.put(JsonKeyUserSudo, sudo);
-            u.put(JsonKeyUserKey, key);
+            JSONArray keys = new JSONArray();
+            keys.add(key);
+            u.put(JsonKeyUserKey, keys);
             retVal = users_.add(u);
+        }
+        catch(Exception e) {
+            System.out.println("NEucaCometDataGenerator::addUser: Exception occurred while addUser: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    /*
+     * @brief function modifyUser a user in the Users JSON object. assumes that user exists in JSON object.
+     *
+     * @param user - user name
+     * @param sudo - sudo permissions
+     * @param key - keys
+     *
+     * @return true for success; otherwise false
+     *
+     */
+    public boolean modifyUser(String user, String sudo, String key) {
+        boolean retVal = false;
+        try {
+            if(user == null|| sudo == null || key == null) {
+                System.out.println("NEucaCometDataGenerator::modifyUser: Missing mandatory user parameters!");
+                return retVal;
+            }
+            if (users_ == null) {
+                return addUser(user, sudo, key);
+            }
+            JSONObject u = null;
+            for(int i = 0; i < users_.size(); ++i) {
+                u = (JSONObject)users_.get(i);
+                if(u.get(JsonKeyUserName)!= null) {
+                    String userName = u.get(JsonKeyUserName).toString();
+                    if(userName.compareToIgnoreCase(user) == 0)
+                        break;
+                }
+                u = null;
+            }
+            if(u == null) {
+                return addUser(user, sudo, key);
+            }
+            System.out.println("NEucaCometDataGenerator::modifyUser: Updating object with user " + user);
+            u.put(JsonKeyUserSudo, sudo);
+            JSONArray keys = (JSONArray)u.get(JsonKeyUserKey);
+            if(keys.contains(key) == false) {
+                retVal = keys.add(key);
+            }
+            else {
+                retVal = true;
+            }
         }
         catch(Exception e) {
             System.out.println("NEucaCometDataGenerator::addUser: Exception occurred while addUser: " + e.getMessage());

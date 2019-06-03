@@ -12,7 +12,7 @@ try:
     sys.path.append(os.environ['EC2_DIR'] + "/scripts")
     from comet_common_iface import *
 except:
-    print 'Error in comet-remove-vm-scope: cannot import comet_common_iface.py'
+    print ('Error in comet-remove-vm-scope: cannot import comet_common_iface.py')
     sys.exit(1)
 
 try:
@@ -43,10 +43,10 @@ try:
     LOG.info('Starting Logger')
 
 except Exception as e:
-    print 'Error in comet-remove-vm-scope: Cannot open log file'
-    print type(e)
-    print e.args
-    print e
+    print ('Error in comet-remove-vm-scope: Cannot open log file')
+    print (type(e))
+    print (e.args)
+    print (e)
     sys.exit(1)
 
 # log the environment
@@ -73,18 +73,18 @@ try:
                                 os.environ['UNIT_READ_TOKEN'],
                                 os.environ['UNIT_WRITE_TOKEN'], None, None)
     if res.status_code == 200:
-        print 'OK'
+        print ('OK')
     else:
-        print 'Comet failed to remove Unit VM scope'
+        print ('Comet failed to remove Unit VM scope')
 
     res = comet.invokeRoundRobinApi('delete_families', os.environ['SLICE_ID'],
                                     os.environ['R_ID'],
                                     os.environ['SLICE_READ_TOKEN'],
                                     os.environ['SLICE_WRITE_TOKEN'], None, None)
     if res.status_code == 200:
-        print 'OK'
+        print ('OK')
     else:
-        print 'Comet failed to remove Slice VM scope'
+        print ('Comet failed to remove Slice VM scope')
 
 except Exception as e:
     LOG.error("comet-remove-vm-scope: " + str(type(e)) + " : " + str(e) + "\n")

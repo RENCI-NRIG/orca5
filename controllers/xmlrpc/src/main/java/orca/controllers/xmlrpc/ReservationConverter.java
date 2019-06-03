@@ -1451,6 +1451,28 @@ public class ReservationConverter implements LayerConstant {
                                                 logger.error("ReservationConverter::getManifestModel():" + UnitProperties.UnitInstanceConfig + " is null");
                                             }
 
+                                            if (p.getProperty(UnitProperties.UnitEC2SliceUserName) != null) {
+                                                vm_ont.addProperty(NdlCommons.hasHorizonUserName,
+                                                        p.getProperty(UnitProperties.UnitEC2SliceUserName));
+                                            } else {
+                                                logger.warn("ReservationConverter::getManifestModel():unit.ec2.slice.user.name is null");
+                                            }
+
+                                            if (p.getProperty(UnitProperties.UnitEC2SliceUserPwd) != null) {
+                                                vm_ont.addProperty(NdlCommons.hasHorizonUserPwd,
+                                                        p.getProperty(UnitProperties.UnitEC2SliceUserPwd));
+                                            } else {
+                                                logger.warn("ReservationConverter::getManifestModel():unit.ec2.slice.user.pwd is null");
+                                            }
+
+                                            if (p.getProperty(UnitProperties.UnitEC2SliceHorizonUrl) != null) {
+                                                vm_ont.addProperty(NdlCommons.hasHorizonUrl,
+                                                        p.getProperty(UnitProperties.UnitEC2SliceHorizonUrl));
+                                            } else {
+                                                logger.warn("ReservationConverter::getManifestModel():unit.ec2.openstack.horizon.url is null");
+                                            }
+                                            System.out.println("KOMAL debug - " + p.toString());
+
                                             updateState(manifestModel, vm_ont, NdlCommons.requestMessage, notice);
                                             updateState(manifestModel, vm_ont, NdlCommons.requestHasReservationState,
                                                     reservationState);

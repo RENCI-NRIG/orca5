@@ -84,4 +84,11 @@ except Exception as e:
     LOG.error("storage_service-delete-lun: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
     sys.exit(1)
 
+except xmlrpclib.ProtocolError as err:
+    LOG.error("A protocol error occurred")
+    LOG.error("URL: %s" % err.url)
+    LOG.error("HTTP/HTTPS headers: %s" % err.headers)
+    LOG.error("Error code: %d" % err.errcode)
+    LOG.error("Error message: %s" % err.errmsg)
+
 sys.exit(0)

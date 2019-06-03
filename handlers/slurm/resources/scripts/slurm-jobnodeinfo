@@ -1,4 +1,4 @@
-#!/usr/bin/env python                                                                                                        
+#!/usr/bin/env python
 import os
 import sys
 import logging as LOG
@@ -11,7 +11,7 @@ try:
     sys.path.append(os.environ['SLURM_MANAGE_HOME'])
     from slurm_common import *
 except:
-    print 'Error in slurm-jobnodeinfo: cannot import slurm_common.py'
+    print ('Error in slurm-jobnodeinfo: cannot import slurm_common.py')
     sys.exit(1)
 
 try:
@@ -20,14 +20,14 @@ try:
     data_stdout=SLURM_MANAGE.get_jobnodeinfo(os.environ['SLURM_ALLOCATIONID'])
 
     if str(data_stdout) == 'FALSE' :
-	print 'FALSE'
+	print ('FALSE')
 	sys.exit(1)
 
-    print data_stdout
-    #print 'OK'
+    print (data_stdout)
+    #print ('OK')
 
 except Exception as e:
-    print 'FALSE'
+    print ('FALSE')
     sys.exit(1)
 
 sys.exit(0)

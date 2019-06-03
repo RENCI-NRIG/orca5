@@ -112,7 +112,7 @@ public class NdlCommons {
             requestHasReservationState, requestMessage, hasDNProperty, hasInstanceIDProperty, workerNodeIDProperty,
             hasBeginningObjectProperty, hasEndObjectProperty, hasDurationDescriptionObjectProperty, inXSDDateTime,
             daysProperty, hoursProperty, minutesProperty, secondsProperty, locationLocatedAtProperty,
-            locationLatProperty, locationLongProperty;
+            locationLatProperty, locationLongProperty, hasHorizonUserName, hasHorizonUserPwd, hasHorizonUrl;
 
     public static final Property hasInputInterface, connectedTo, linkTo, switchedTo, hasSwitchMatrix,
             hasRequestGroupURL, inRequestNetworkConnection, hasOutputInterface, adaptationProperty,
@@ -276,6 +276,9 @@ public class NdlCommons {
         openflowControllerProperty = new PropertyImpl(ORCA_NS + "openflow.owl#controller");
         hasSliceGeniState = new PropertyImpl(ORCA_NS + "geni.owl#hasSliceGeniState");
         hasInstanceIDProperty = new PropertyImpl(ORCA_NS + "ec2.owl#hasInstanceID");
+        hasHorizonUserName = new PropertyImpl(ORCA_NS + "ec2.owl#hasHorizonUserName");
+        hasHorizonUserPwd = new PropertyImpl(ORCA_NS + "ec2.owl#hasHorizonUserPwd");
+        hasHorizonUrl = new PropertyImpl(ORCA_NS + "ec2.owl#hasHorizonUrl");
         workerNodeIDProperty = new PropertyImpl(ORCA_NS + "ec2.owl#workerNodeID");
 
         // classes/types
