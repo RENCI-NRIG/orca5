@@ -1471,7 +1471,7 @@ public class ReservationConverter implements LayerConstant {
                                             } else {
                                                 logger.warn("ReservationConverter::getManifestModel():unit.ec2.openstack.horizon.url is null");
                                             }
-                                            System.out.println("KOMAL debug - " + p.toString());
+                                           // System.out.println("KOMAL debug - " + p.toString());
 
                                             updateState(manifestModel, vm_ont, NdlCommons.requestMessage, notice);
                                             updateState(manifestModel, vm_ont, NdlCommons.requestHasReservationState,

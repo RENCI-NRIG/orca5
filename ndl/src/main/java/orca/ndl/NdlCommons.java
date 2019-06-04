@@ -2535,6 +2535,36 @@ public class NdlCommons {
     }
 
     /**
+     * Get Horizon details from a VM
+     */
+    public static String getHorizonUrl(Resource vm) {
+        assert (vm != null);
+        Statement u = vm.getProperty(hasHorizonUrl);
+        if (u != null) {
+            return u.getString();
+        }
+        return null;
+    }
+    
+    public static String getHorizonUserName(Resource vm) {
+        assert (vm != null);
+        Statement u = vm.getProperty(hasHorizonUserName);
+        if (u != null) {
+            return u.getString();
+        }
+        return null;
+    }
+    
+    public static String getHorizonUserPwd(Resource vm) {
+        assert (vm != null);
+        Statement u = vm.getProperty(hasHorizonUserPwd);
+        if (u != null) {
+            return u.getString();
+        }
+        return null;
+    }
+    
+    /**
      * Get a preconfigured Logger for all things NDL
      * 
      * @return preconfigured Logger for all things NDL
