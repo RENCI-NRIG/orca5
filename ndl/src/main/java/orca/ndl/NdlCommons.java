@@ -112,7 +112,7 @@ public class NdlCommons {
             requestHasReservationState, requestMessage, hasDNProperty, hasInstanceIDProperty, workerNodeIDProperty,
             hasBeginningObjectProperty, hasEndObjectProperty, hasDurationDescriptionObjectProperty, inXSDDateTime,
             daysProperty, hoursProperty, minutesProperty, secondsProperty, locationLocatedAtProperty,
-            locationLatProperty, locationLongProperty, hasHorizonUserName, hasHorizonUserPwd, hasHorizonUrl;
+            locationLatProperty, locationLongProperty, hasHorizonUserName, hasHorizonUserPwd, hasHorizonUrl, hasHorizonProjectName;
 
     public static final Property hasInputInterface, connectedTo, linkTo, switchedTo, hasSwitchMatrix,
             hasRequestGroupURL, inRequestNetworkConnection, hasOutputInterface, adaptationProperty,
@@ -279,6 +279,7 @@ public class NdlCommons {
         hasHorizonUserName = new PropertyImpl(ORCA_NS + "ec2.owl#hasHorizonUserName");
         hasHorizonUserPwd = new PropertyImpl(ORCA_NS + "ec2.owl#hasHorizonUserPwd");
         hasHorizonUrl = new PropertyImpl(ORCA_NS + "ec2.owl#hasHorizonUrl");
+        hasHorizonProjectName = new PropertyImpl(ORCA_NS + "ec2.owl#hasHorizonProjectName");
         workerNodeIDProperty = new PropertyImpl(ORCA_NS + "ec2.owl#workerNodeID");
 
         // classes/types
@@ -2537,6 +2538,14 @@ public class NdlCommons {
     /**
      * Get Horizon details from a VM
      */
+    public static String getHorizonProjectName(Resource vm) {
+        assert (vm != null);
+        Statement u = vm.getProperty(hasHorizonProjectName);
+        if (u != null) {
+            return u.getString();
+        }
+        return null;
+    }
     public static String getHorizonUrl(Resource vm) {
         assert (vm != null);
         Statement u = vm.getProperty(hasHorizonUrl);
