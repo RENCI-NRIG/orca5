@@ -2,63 +2,36 @@
 With new ORCA release, users can create their images as below.
 
 ## Determine Horizon details
-Save manifest of the slice which contains the VM for which image needs to be created as shown below
-![alt text](images/manifest.png)
+Select the Node and rigt click to View Properties of the Node in flukes
+![alt text](images/flukes.png)
 
-View the manifest to find horizon details:
-```
-   <rdf:Description rdf:about="http://geni-orca.renci.org/owl/9d396ac0-781c-4627-b3d8-dbe7b0c4f71b#Node0">
-     <rdf:type rdf:resource="http://geni-orca.renci.org/owl/compute.owl#ComputeElement"/>
-     <j.4:inDomain rdf:resource="http://geni-orca.renci.org/owl/rockyvmsite.rdf#rockyvmsite/Domain/vm"/>
-     <j.4:message>Reservation 5dfc3dba-f845-4d84-a53b-235472a7b1f1 (Slice kthare10-slice2) is in state [Active,None]
- </j.4:message>
-     <j.4:postBootScript>touch /root/psb_was_here
- </j.4:postBootScript>
-     <j.4:hasReservationState rdf:resource="http://geni-orca.renci.org/owl/request.owl#Active"/>
-     <j.4:dependOn rdf:resource="http://geni-orca.renci.org/owl/9d396ac0-781c-4627-b3d8-dbe7b0c4f71b#Storage0"/>
-     <j.9:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
-     <j.17:hasInterface rdf:resource="http://geni-orca.renci.org/owl/9d396ac0-781c-4627-b3d8-dbe7b0c4f71b#C2S0-Node0"/>
-     <j.17:hasInterface rdf:resource="http://geni-orca.renci.org/owl/9d396ac0-781c-4627-b3d8-dbe7b0c4f71b#C2S0-Node0/4/intf"/>
-     <j.17:hasGUID>f2eb963d-5466-4580-927d-bb177526e41d</j.17:hasGUID>
-     <j.12:specificCE rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#XOMedium"/>
-     <j.12:diskImage rdf:resource="http://geni-orca.renci.org/owl/9d396ac0-781c-4627-b3d8-dbe7b0c4f71b#fedora30-v1.2-comet"/>
-     <j.17:hasURL>http://geni-orca.renci.org/owl/rockyvmsite.rdf#rockyvmsite/Domain/vm</j.17:hasURL>
-     <j.1:hasInstanceID>af8b1c13-2057-4831-9d3a-7ae481bd89e3</j.1:hasInstanceID>
-     <j.1:workerNodeID>rocky-w1</j.1:workerNodeID>
-     <j.5:hasParent rdf:resource="http://geni-orca.renci.org/owl/9d396ac0-781c-4627-b3d8-dbe7b0c4f71b#C2S0/Node0"/>
-     <j.9:hasService rdf:resource="http://geni-orca.renci.org/owl/9d396ac0-781c-4627-b3d8-dbe7b0c4f71b#Node0/Service"/>
-     <j.1:hasHorizonUserName>owner-kthare10-slice2-t1KyOTuFHU</j.1:hasHorizonUserName>
-     <j.1:hasHorizonUserPwd>tv4KS5ePKo</j.1:hasHorizonUserPwd>
-     <j.1:hasHorizonUrl>http://152.54.14.213/dashboard/identity/</j.1:hasHorizonUrl>
-   </rdf:Description>
-```
-## Horizon dashboard
-Access dashboard using credentials determined above.
-![alt text](images/horizon1.png)
-![alt text](images/horizon2.png)
+## Horizon dashboard & Create Image
+Access dashboard using credentials determined above and go to Compute -> Instances screen. Note down the Project Name shown on the top left corner.
 
-## Create Image
-Go to Compute -> Instances screen and select VM from which to create the image and click 'Create Snapshot'
+![alt text](images/horizon.png)
+
+Select VM from which to create the image and click 'Create Snapshot'
 ![alt text](images/createsnapshot.png)
 
 Go to Compute -> Images screen to check status of image. It would change from queued to Active
-![alt text](images/image.png)
-![alt text](images/image2.png)
+![alt text](images/queueimage.png)
+![alt text](images/activeimage.png)
+
+Once the image is Active, click on Image Name to find out ID.
+![alt text](images/imageid.png)
 
 ## Download Image
-NOTE: Needs to be investigated for Users. For developer can be done as below:
-- Logon to head node and swithc to root user
-- Source Openstack keystone and execute following commands
+Download python image client which is required to download the image. Use the python client to download the image as indicated below.
+
+python3.6 image_client.py -e http://<headnode>:8222 -p <project name> -u <user name> -w <password> -i <imageid> -f ./testImage.qcow2
+
 ```
-source ./xo-openstack-rc/keystonerc_admin
-openstack image list
-+--------------------------------------+------------------------------------------------------------+--------+
-| ID                                   | Name                                                       | Status |
-+--------------------------------------+------------------------------------------------------------+--------+
-| 494ca0f5-8a37-4880-858d-abce4874b5e7 | myImage                                                    | active |
-+--------------------------------------+------------------------------------------------------------+--------+
-glance image-download --file /tmp/myImage.qcow2 494ca0f5-8a37-4880-858d-abce4874b5e7 
+wget  http://geni-images.renci.org/images/tools/image_client.py
+
+python3.6 image_client.py -e http://rocky-hn.exogeni.net:8222 -p tenant-Slice1-B7P6GiWwOm -u owner-Slice1-B7P6GiWwOm -w GjxUjA2Pwr -i f95b02a4-064f-4c34-8c80-2dbc887c5af9 -f ./testImage.qcow2
+
 ```
+NOTE: Python 3.6 and requests package should be installed before running image_client
 
 ## CLI mechanism to create the image (only to be used by developers)
 - Logon to head node and swithc to root user
