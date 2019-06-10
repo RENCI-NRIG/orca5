@@ -1451,6 +1451,13 @@ public class ReservationConverter implements LayerConstant {
                                                 logger.error("ReservationConverter::getManifestModel():" + UnitProperties.UnitInstanceConfig + " is null");
                                             }
 
+                                            if (p.getProperty(UnitProperties.UnitEC2SliceProjectName) != null) {
+                                                vm_ont.addProperty(NdlCommons.hasHorizonProjectName,
+                                                        p.getProperty(UnitProperties.UnitEC2SliceProjectName));
+                                            } else {
+                                                logger.warn("ReservationConverter::getManifestModel():unit.ec2.slice.project.name is null");
+                                            }
+
                                             if (p.getProperty(UnitProperties.UnitEC2SliceUserName) != null) {
                                                 vm_ont.addProperty(NdlCommons.hasHorizonUserName,
                                                         p.getProperty(UnitProperties.UnitEC2SliceUserName));
@@ -1471,7 +1478,6 @@ public class ReservationConverter implements LayerConstant {
                                             } else {
                                                 logger.warn("ReservationConverter::getManifestModel():unit.ec2.openstack.horizon.url is null");
                                             }
-                                           // System.out.println("KOMAL debug - " + p.toString());
 
                                             updateState(manifestModel, vm_ont, NdlCommons.requestMessage, notice);
                                             updateState(manifestModel, vm_ont, NdlCommons.requestHasReservationState,

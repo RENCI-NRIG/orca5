@@ -131,6 +131,59 @@ class Project:
     def __init__(self):
         setup_env()
     @classmethod
+    def _cleanup_images_by_user_in_project(self, user, project):
+        try:
+            #openstack project show tenant-Thareja-Oue1Sxf2Tx -f value -c id
+            cmd = ["openstack", "project", "show", str(project), "-f", "value", "-c", "id"]
+            rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60)  # TODO: needs real timeout
+
+            if rtncode != 0:
+                LOG.warning("openstack project id could not be determined: " +
+                       str(project) + ": " + str(cmd) +
+                       ", rtncode: " + str(rtncode) +
+                       ", data_stdout: " + str(data_stdout) +
+                       ", data_stderr: " + str(data_stderr))
+                raise User_Exception(str(cmd))
+            owner_id = data_stdout.strip()
+
+            # openstack image list --property owner=8bdd8ecdfbd54db39ddafd91f52e42d8 -f json -c ID
+            cmd = ["openstack", "image", "list", "--property", "owner=" + str(owner_id), "-f", "json", "-c", "ID"]
+            rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60)  # TODO: needs real timeout
+
+            if rtncode != 0:
+                LOG.warning("openstack images for project could not be determined: " +
+                       str(project) + ": " + str(cmd) +
+                       ", rtncode: " + str(rtncode) +
+                       ", data_stdout: " + str(data_stdout) +
+                       ", data_stderr: " + str(data_stderr))
+                raise User_Exception(str(cmd))
+
+            image_list=json.loads(data_stdout.strip())
+            for i in image_list: 
+                cmd = ["openstack", "image", "delete", str(i['ID']) ]
+                rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout
+
+                LOG.debug("rtncode: " + str(rtncode))
+                LOG.debug("data_stdout: " + str(data_stdout))
+                LOG.debug("data_stderr: " + str(data_stderr))
+
+                if rtncode != 0:
+                    LOG.warning("openstack image delete command with non-zero rtncode " + 
+                            str(project) + ": " + str(cmd) +
+                            ", rtncode: " + str(rtncode) +
+                            ", data_stdout: " + str(data_stdout) +
+                            ", data_stderr: " + str(data_stderr)) 
+
+        except User_Exception as e:
+            LOG.warning(
+                "_cleanup_images_by_user_in_project-User_Exception: Usually OK, probably deleting a images that was already deleted, " + str(type(e)) + " : " + str(e))
+            return
+        except Exception as e:
+            LOG.error(
+                "_cleanup_images_by_user_in_project-Exception: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+            raise Openstack_Command_Fail("openstack image delete commmand failed for " + str(name) + ": " + str(cmd))
+
+    @classmethod
     def _cleanup_user_by_name(self, name):
         try:
             cmd = ["openstack", "user", "delete", str(name)]
@@ -673,6 +726,10 @@ class Project:
 
     @classmethod
     def _cleanup(self, project_name, user_name):
+        try:
+            self._cleanup_images_by_user_in_project(user_name, project_name)
+        except:
+            pass
         try:
             group_list=self.get_default_security_group(project_name)
             if group_list is not None and len(group_list) > 0:
