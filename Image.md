@@ -11,6 +11,7 @@ Access dashboard using credentials determined above and go to Compute -> Instanc
 ![alt text](images/horizon.png)
 
 Select VM from which to create the image and click 'Create Snapshot'
+
 ![alt text](images/createsnapshot.png)
 
 Go to Compute -> Images screen to check status of image. It would change from queued to Active
@@ -23,13 +24,10 @@ Once the image is Active, click on Image Name to find out ID.
 ## Download Image
 Download python image client which is required to download the image. Use the python client to download the image as indicated below.
 
-python3.6 image_client.py -e http://<headnode>:8222 -p <project name> -u <user name> -w <password> -i <imageid> -f ./testImage.qcow2
-
 ```
 wget  http://geni-images.renci.org/images/tools/image_client.py
 
 python3.6 image_client.py -e http://rocky-hn.exogeni.net:8222 -p tenant-Slice1-B7P6GiWwOm -u owner-Slice1-B7P6GiWwOm -w GjxUjA2Pwr -i f95b02a4-064f-4c34-8c80-2dbc887c5af9 -f ./testImage.qcow2
-
 ```
 NOTE: Python 3.6 and requests package should be installed before running image_client
 
