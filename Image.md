@@ -31,6 +31,22 @@ python3.6 image_client.py -e http://rocky-hn.exogeni.net:8222 -p tenant-Slice1-B
 ```
 NOTE: Python 3.6 and requests package should be installed before running image_client
 
+## Create xml file for the image
+- Generate shasum for the image
+```
+sha1sum testImage.qcow2
+df9849bcb5bf4c7196b9252238be2cc3b2f0ad9b
+```
+- image xml file should include sha1sum for the image and http link to download the image as shown below:
+```
+<images>
+     <image>
+          <type>QCOW2</type>
+          <signature>df9849bcb5bf4c7196b9252238be2cc3b2f0ad9b</signature>
+          <url>http://<url for the location of the image>/testImage/testImage.qcow2</url>
+     </image>
+</images>
+```
 ## CLI mechanism to create the image (only to be used by developers)
 - Logon to head node and swithc to root user
 - Source Openstack keystone and execute following command
