@@ -2,7 +2,7 @@
 With new ORCA release, users can create their images as below.
 
 ## Determine Horizon details
-Select the Node and rigt click to View Properties of the Node in flukes
+Select the Node and right click to View Properties of the Node in flukes
 ![alt text](images/flukes.png)
 
 ## Horizon dashboard & Create Image
@@ -15,7 +15,6 @@ Select VM from which to create the image and click 'Create Snapshot'
 ![alt text](images/createsnapshot.png)
 
 Go to Compute -> Images screen to check status of image. It would change from queued to Active
-![alt text](images/queueimage.png)
 ![alt text](images/activeimage.png)
 
 Once the image is Active, click on Image Name to find out ID.

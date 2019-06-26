@@ -339,25 +339,25 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/availableVLANSet/1"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">5</collections:size>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3981 -->
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3991 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3981">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3991">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3981.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3991.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3990 -->
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3995 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3990">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3995">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3990.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3995.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -366,8 +366,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/availableVLANSet/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3981"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3990"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3991"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#AL2S/AWS/VLANLabel/3995"/>
     </owl:NamedIndividual>
     
 
@@ -478,7 +478,7 @@
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AWS</topology:hasName>
         <topology:hasURL rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw2.ashb.net.internet2.edu:port=xe-0/1/10:0</topology:hasURL>
-        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw2.ashb.net.internet2.edu:port=xe-0/1/10:0</rdfs:label>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw2.ashb.net.internet2.edu:port=xe-0/1/10:0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -2251,7 +2251,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/NetworkService/1/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/UMass/VLANLabel/533"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">308</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">303</collections:size>
     </owl:NamedIndividual>
     
 
