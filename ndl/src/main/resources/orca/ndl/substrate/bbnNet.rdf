@@ -517,7 +517,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage-1009</topology:hostInterfaceName>
         <ethernet:vlan rdf:resource="&BbnNet;G8052/VLANLabel/1009"/>
         <topology:interfaceOf rdf:resource="&BbnNet;IBM/G8052"/>
         <topology:linkTo rdf:resource="&bbnvmsite;Bbn/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>

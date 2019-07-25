@@ -609,7 +609,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage-1009</topology:hostInterfaceName>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <ethernet:Tagged-Ethernet rdf:resource="&osfvmsite;OSF/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <topology:interfaceOf rdf:resource="&osfvmsite;OSF/ISCSI"/>
@@ -624,7 +624,7 @@
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>35-36,41-50</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage-1009</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/osfNet.rdf#osfNet/IBM/G8052/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <ethernet:vlan rdf:resource="&osfvmsite;OSF/ExoGeni/VLANLabel/1009"/>
         <topology:interfaceOf rdf:resource="&osfvmsite;OSF/ISCSI"/>

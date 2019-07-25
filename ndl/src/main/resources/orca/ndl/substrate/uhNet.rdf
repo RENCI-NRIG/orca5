@@ -422,7 +422,7 @@
         <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
         <rdf:type rdf:resource="&topology;Interface"/>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage-1009</topology:hostInterfaceName>
         <topology:interfaceOf rdf:resource="&UHNet;IBM/G8052"/>
         <ethernet:vlan rdf:resource="&UHNet;IBM/G8052/VLANLabel/1009"/>
         <topology:linkTo rdf:resource="&uhvmsite;UH/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>

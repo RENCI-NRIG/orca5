@@ -619,7 +619,7 @@
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>41-48</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage-1009</topology:hostInterfaceName>
         <layer:hasBitRate rdf:resource="&layer;10G"/>
         <topology:interfaceOf rdf:resource="&tamuvmsite;TAMU/ISCSI"/>
         <ethernet:Tagged-Ethernet rdf:resource="&tamuvmsite;TAMU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
@@ -634,7 +634,7 @@
         <rdf:type rdf:resource="&topology;Interface"/>
         <rdfs:label>41-50</rdfs:label>
         <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">vlan-storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage-1009</topology:hostInterfaceName>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/tamuNet.rdf#tamuNet/IBM/G8264/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <topology:interfaceOf rdf:resource="&tamuvmsite;TAMU/ISCSI"/>
         <ethernet:vlan rdf:resource="&tamuvmsite;TAMU/ExoGeni/VLANLabel/1009"/>
