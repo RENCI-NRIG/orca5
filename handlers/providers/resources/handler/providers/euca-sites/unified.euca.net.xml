@@ -17,7 +17,81 @@
     <!-- Uncomment for handler testing
     <property file="unified.euca.net.test.properties" />
     -->
+    <macrodef name="create.project" description="Create Openstack Project">
+        <sequential>
+            <echo message="Setting up Openstack Project" />
+            <var name="create.project.output" unset="true" />
+            <var name="code" unset="true" />
+            <var name="message" unset="true" />
+            <echo message="PROVIDER_DIR =${provider.dir}" />
+            <echo message="PROVIDER_LOG_DIR= ${provider.log.dir}" />
+            <echo message="PROVIDER_LOG_FILE= ${provider.log.file}" />
+            <echo message="PROVIDER_LOG_LEVEL= ${provider.log.level}" />
+            <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
+            <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
+            <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
+            <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
+            <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+            <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
+            <exec executable="${provider.scripts}/nova-project-create" resultproperty="code" outputproperty="create.project.output">
+                <env key="PROVIDER_DIR" value="${provider.dir}" />
+                <env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
+                <env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
+                <env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
+                <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
+                <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
+                <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
+                <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+                <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+                <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+            </exec>
+            <echo message="exit code ${code}, ${create.project.output}" />
+            <if>
+                <not>
+                    <equals arg1="${code}" arg2="0" />
+                </not>
+                <then>
+                    <echo message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
+                    <fail message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
 
+    <macrodef name="delete.project" description="Delete Openstack Project">
+        <sequential>
+            <echo message="Deleting Openstack Project" />
+            <var name="delete.project.output" unset="true" />
+            <var name="code" unset="true" />
+            <var name="message" unset="true" />
+            <echo message="PROVIDER_DIR =${provider.dir}" />
+            <echo message="PROVIDER_LOG_DIR= ${provider.log.dir}" />
+            <echo message="PROVIDER_LOG_FILE= ${provider.log.file}" />
+            <echo message="PROVIDER_LOG_LEVEL= ${provider.log.level}" />
+            <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+            <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
+            <exec executable="${provider.scripts}/nova-project-delete" resultproperty="code" outputproperty="delete.project.output">
+                <env key="PROVIDER_DIR" value="${provider.dir}" />
+                <env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
+                <env key="PROVIDER_LOG_FILE" value="${provider.log.file}" />
+                <env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
+                <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+                <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+            </exec>
+            <echo message="exit code ${code}, ${delete.project.output}" />
+            <if>
+                <not>
+                    <equals arg1="${code}" arg2="0" />
+                </not>
+                <then>
+                    <echo message="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
+                    <property name="message" value="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
     <target name="join" depends="resolve.configuration,ben.load.tasks">
         <if>
             <not>
@@ -85,30 +159,29 @@
                 <if>
                     <equals arg1="${use.neuca.quantum}" arg2="true" />
                     <then>
-                         <echo message="Starting Add Quantum Network"/> 
+                        <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+                            <create.project/>
+                        <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
+                        <echo message="Starting Add Quantum Network"/>
                         <var name="create.network.output" unset="true" />
                         <var name="code" unset="true" />
                         <var name="message" unset="true" />
                         <echo message="Running: ${provider.scripts}/neuca-quantum-create-net" />
                         <echo message="PROVIDER_DIR = ${provider.dir}" />
-                                                <echo message="PROVIDER_LOG_DIR ${provider.log.dir}" />
-                                                <echo message="PROVIDER_LOG_FILE ${provider.log.file}" />
-                                                <echo message="PROVIDER_LOG_LEVEL ${provider.log.level}" />
-                                                <echo message="QUANTUM_TENANT_ID ${quantum.tenant.id}" />
-                                                <echo message="QUANTUM_NET_TYPE ipv4" />
-                                                <echo message="QUANTUM_NET_NETWORK ${unit.quantum.netname}" />
-                                                <echo message="QUANTUM_NET_VLAN ${unit.vlan.tag}" />
-                                                <echo message="QUANTUM_MAX_RATE ${unit.vlan.qos.rate}" />
-                                                <echo message="QUANTUM_BURST_RATE ${unit.vlan.qos.burst.size}" />
-                                                <echo message="QUANTUM_DATAPLANE_NETWORK= ${quantum.dataplane.network}" />
-                                                <echo message="QUANTUM_OPENFLOW_NETWORK= ${quantum.openflow.network}" />
-                                                <echo message="EUCA_KEY_DIR= ${ec2.keys}" />
-                                                <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
-                                                <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
-                                                <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
-                                                <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
-                                                <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
-                                                <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
+                        <echo message="PROVIDER_LOG_DIR ${provider.log.dir}" />
+                        <echo message="PROVIDER_LOG_FILE ${provider.log.file}" />
+                        <echo message="PROVIDER_LOG_LEVEL ${provider.log.level}" />
+                        <echo message="QUANTUM_TENANT_ID ${quantum.tenant.id}" />
+                        <echo message="QUANTUM_NET_TYPE ipv4" />
+                        <echo message="QUANTUM_NET_NETWORK ${unit.quantum.netname}" />
+                        <echo message="QUANTUM_NET_VLAN ${unit.vlan.tag}" />
+                        <echo message="QUANTUM_MAX_RATE ${unit.vlan.qos.rate}" />
+                        <echo message="QUANTUM_BURST_RATE ${unit.vlan.qos.burst.size}" />
+                        <echo message="QUANTUM_DATAPLANE_NETWORK= ${quantum.dataplane.network}" />
+                        <echo message="QUANTUM_OPENFLOW_NETWORK= ${quantum.openflow.network}" />
+                        <echo message="EUCA_KEY_DIR= ${ec2.keys}" />
+                        <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+                        <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
                         <exec executable="${provider.scripts}/neuca-quantum-create-net" resultproperty="code" outputproperty="create.network.output" >
                             <env key="PROVIDER_DIR" value="${provider.dir}" />
                             <env key="PROVIDER_LOG_DIR" value="${provider.log.dir}" />
@@ -122,11 +195,7 @@
                             <env key="QUANTUM_BURST_RATE" value="${unit.vlan.qos.burst.size}" />
                             <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
                             <env key="QUANTUM_DATAPLANE_NETWORK" value="${quantum.dataplane.network}" />
-                            <env key="QUANTUM_OPENFLOW_NETWORK" value="${quantum.openflow.network}" />
-                            <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
-                            <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
-                            <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
-                            <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+                            <env key="QUANTUM_OPENFLOW_NETWORK" value="${quantum.openflow.network}" />>
                             <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
                             <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                         </exec>
@@ -222,8 +291,7 @@
                             <env key="QUANTUM_TENANT_ID" value="${quantum.tenant.id}" />
                             <env key="QUANTUM_NET_UUID" value="${unit.quantum.net.uuid}" />
                             <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
-                            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+
                         </exec>
                         <echo message="exit code ${code}, ${create.network.output}" />
                         <if>
@@ -234,6 +302,11 @@
                                 <echo message="unable to create quantum network: exit code ${code}, ${create.instance.output}" />
                                 <property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
                             </then>
+                            <else>
+                                <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+                                <delete.project/>
+                                <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
+                            </else>
                         </if>
                     </then>
                 </if>

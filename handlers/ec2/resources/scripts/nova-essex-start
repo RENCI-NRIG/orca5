@@ -67,13 +67,7 @@ try:
                              os.environ['EC2_PUBLIC_NETWORK'],
                              os.environ['PROJECT_NAME'],
                              os.environ['USER_NAME'],
-                             os.environ['EC2_SLICE_USER_EMAIL'],
-                             os.environ['EC2_SLICE_USER_PWD'],
-                             os.environ['EC2_SLICE_USER_ROLE'],
-                             os.environ['EC2_SLICE_ADMIN_USER'],
-                             os.environ['EC2_MGMT_NETWORK'],
-                             os.environ['SSH_KEY'],
-                             os.environ['EC2_AUTH_URL'])
+                             os.environ['EC2_MGMT_NETWORK'])
 
     LOG.info("Started instance: " + str(instance_uuid))
     print (instance_uuid)
