@@ -7,15 +7,13 @@ import traceback
 
 sys.path.append(os.environ['PROVIDER_DIR'] + "/scripts")
 
-from neuca_quantum_common import *
 from nova_essex_common import *
 
 try:
     sys.path.append(os.environ['PROVIDER_DIR'] + "/scripts")
-    from neuca_quantum_common import *
     from nova_essex_common import *
 except:
-    print ('Error in neuca-quantum-delete-net: cannot import neuca_quantum_common.py')
+    print ('Error in nova-project-create: cannot import nova_essex_common.py')
     sys.exit(1)
 
 try:
@@ -36,7 +34,7 @@ try:
     else:
         handler.setLevel(logging.INFO)
 
-    formatter = logging.Formatter('%(asctime)s -- neuca-quantum-delete-net %(process)d %(levelname)s : %(message)s')
+    formatter = logging.Formatter('%(asctime)s -- nova-project-create %(process)d %(levelname)s : %(message)s')
     handler.setFormatter(formatter)
 
     LOG.getLogger('').addHandler(handler)
@@ -44,7 +42,7 @@ try:
     LOG.info('Starting Logger')
 
 except Exception as e:
-    print ('Error in neuca-quantum-delete-net: Cannot open log file')
+    print ('Error in nova-project-create: Cannot open log file')
     print (type(e))
     print (e.args)
     print (e)
@@ -55,21 +53,20 @@ for i in os.environ:
     LOG.debug(str(i) + ": " + str(os.environ[i]) )
 
 try:
-    #DO THE WORK                                                                                                                                                                                       
-    LOG.debug("neuca-quantum-delete-net: " + str(sys.argv))
-    try:
-        max_rate   = os.environ['QUANTUM_MAX_RATE']
-        burst_rate = os.environ['QUANTUM_BURST_RATE']
-    except:
-        max_rate = None
-        burst_rate = None
+    #DO THE WORK
 
-    NEuca_Quantum_Network().delete_network(os.environ['QUANTUM_NET_UUID'])
- 
-    print ('OK')
+    Project().setup_project(os.environ['PROJECT_NAME'], 
+                  os.environ['USER_NAME'],
+                  os.environ['EC2_SLICE_USER_EMAIL'], 
+                  os.environ['EC2_SLICE_USER_PWD'], 
+                  os.environ['EC2_SLICE_USER_ROLE'], 
+                  os.environ['EC2_SLICE_ADMIN_USER'])
+    print("OK")
 
 except Exception as e:
-    LOG.error("neuca-quantum-delete-net: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    LOG.error("nova-project-create: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     sys.exit(1)
 
 sys.exit(0)
+

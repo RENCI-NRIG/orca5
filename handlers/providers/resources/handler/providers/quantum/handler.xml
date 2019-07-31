@@ -35,6 +35,65 @@
                         quantum.tenant.id=geni-orca
 
     -->
+    <macrodef name="create.project" description="Create Openstack Project">
+        <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+        <echo message="Setting up Openstack Project" />
+        <var name="create.project.output" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
+        <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
+        <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
+        <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
+        <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
+        <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+        <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
+        <exec executable="${provider.scripts}/nova-project-create" resultproperty="code" outputproperty="create.project.output">
+            <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
+            <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
+            <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
+            <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+        </exec>
+        <echo message="exit code ${code}, ${create.project.output}" />
+        <if>
+            <not>
+                <equals arg1="${code}" arg2="0" />
+            </not>
+            <then>
+                <echo message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
+                <fail message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
+            </then>
+        </if>
+        <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
+    </macrodef>
+
+    <macrodef name="delete.project" description="Delete Openstack Project">
+        <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+        <echo message="Deleting Openstack Project" />
+        <var name="delete.project.output" unset="true" />
+        <var name="code" unset="true" />
+        <var name="message" unset="true" />
+        <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+        <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
+        <exec executable="${provider.scripts}/nova-project-delete" resultproperty="code" outputproperty="delete.project.output">
+            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+        </exec>
+        <echo message="exit code ${code}, ${delete.project.output}" />
+        <if>
+            <not>
+                <equals arg1="${code}" arg2="0" />
+            </not>
+            <then>
+                <echo message="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
+                <property name="message" value="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
+            </then>
+        </if>
+        <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
+    </macrodef>
     <target name="join" depends="resolve.configuration,ben.load.tasks">
         <tstamp prefix="start">
             <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
@@ -60,6 +119,7 @@
                 <property name="shirako.target.code" value="0" />
             </then>
             <else>
+                <create.project/>
                 <echo message="About to create quantum network, use.neuca.quantum = ${use.neuca.quantum}" />
                 <var name="create.network.output" unset="true" />
                 <var name="code" unset="true" />
@@ -92,15 +152,11 @@
                     <env key="QUANTUM_NET_VLAN" value="${unit.vlan.tag}" />
                     <env key="QUANTUM_MAX_RATE" value="${unit.vlan.qos.rate}" />
                     <env key="QUANTUM_BURST_RATE" value="${unit.vlan.qos.burst.size}" />
-                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
                     <env key="QUANTUM_DATAPLANE_NETWORK" value="${quantum.dataplane.network}" />
                     <env key="QUANTUM_OPENFLOW_NETWORK" value="${quantum.openflow.network}" />
-                    <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
-                    <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
-                    <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
-                    <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
                     <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
                     <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+                    <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
                 </exec>
                 <echo message="exit code ${code}, ${create.network.output}" />
                 <if>
@@ -177,8 +233,6 @@
                     <env key="PROVIDER_LOG_LEVEL" value="${provider.log.level}" />
                     <env key="QUANTUM_NET_UUID" value="${unit.quantum.net.uuid}" />
                     <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-                    <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
-                    <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
                 </exec>
                 <echo message="exit code ${code}, ${create.network.output}" />
                 <if>
@@ -189,6 +243,9 @@
                         <echo message="unable to create quantum network: exit code ${code}, ${create.instance.output}" />
                         <property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
                     </then>
+                    <else>
+                        <delete.prject/>
+                    </else>
                 </if>
             </else>
         </if>

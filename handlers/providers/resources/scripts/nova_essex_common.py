@@ -2,7 +2,7 @@
 
 import logging as LOG
 import os
-import json 
+import json
 import signal
 import time
 import traceback
@@ -28,7 +28,7 @@ class Commands:
         Run a command with a timeout after which it will be forcibly
         killed.
 
-        Mostly from Alex Martelli solution (probably from one of his 
+        Mostly from Alex Martelli solution (probably from one of his
         python books) posted on stackoverflow.com
         '''
 
@@ -159,7 +159,7 @@ class Project:
                 raise User_Exception(str(cmd))
 
             image_list=json.loads(data_stdout.strip())
-            for i in image_list: 
+            for i in image_list:
                 cmd = ["openstack", "image", "delete", str(i['ID']) ]
                 rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout
 
@@ -168,11 +168,11 @@ class Project:
                 LOG.debug("data_stderr: " + str(data_stderr))
 
                 if rtncode != 0:
-                    LOG.warning("openstack image delete command with non-zero rtncode " + 
+                    LOG.warning("openstack image delete command with non-zero rtncode " +
                             str(project) + ": " + str(cmd) +
                             ", rtncode: " + str(rtncode) +
                             ", data_stdout: " + str(data_stdout) +
-                            ", data_stderr: " + str(data_stderr)) 
+                            ", data_stderr: " + str(data_stderr))
 
         except User_Exception as e:
             LOG.warning(
@@ -231,7 +231,7 @@ class Project:
            LOG.warning("openstack project show command with non-zero rtncode " + str(project_name) + ": " + str(cmd) +
                        ", rtncode: " + str(rtncode) +
                        ", data_stdout: " + str(data_stdout) +
-                       ", data_stderr: " + str(data_stderr)) 
+                       ", data_stderr: " + str(data_stderr))
            return None
         else :
            LOG.debug("Project " + str(project_name) + " exists")
@@ -244,7 +244,7 @@ class Project:
 
         if new_project_id is not None:
             LOG.debug("Project " + str(project_name) + " exists")
-            return new_project_id 
+            return new_project_id
 
         retries = 3
         timeout = 10
@@ -288,7 +288,7 @@ class Project:
                 pass
             raise Openstack_Command_Fail('openstack failed to create project ' + str(i) + ' retries, giving up')
 
-        return new_project_id 
+        return new_project_id
 
 
     @classmethod
@@ -400,7 +400,7 @@ class Project:
                         ", data_stderr: " + str(data_stderr))
             raise Openstack_Command_Fail(str(cmd))
 
-        cmd = ["openstack", "role", "add", "--user", str(admin_user), "--project", str(project_name), str(role)] 
+        cmd = ["openstack", "role", "add", "--user", str(admin_user), "--project", str(project_name), str(role)]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
         if rtncode != 0:
             LOG.warning("openstack role add command with non-zero rtncode " + str(user_name) + ": " + str(cmd) +
@@ -409,7 +409,7 @@ class Project:
                         ", data_stderr: " + str(data_stderr))
             raise Openstack_Command_Fail(str(cmd))
 
-        return new_user_id 
+        return new_user_id
 
     @classmethod
     def get_management_network(self, mgmt_network):
@@ -420,7 +420,7 @@ class Project:
         LOG.debug("rtncode: " + str(rtncode))
         LOG.debug("data_stdout: " + str(data_stdout))
         LOG.debug("data_stderr: " + str(data_stderr))
-    
+
         if rtncode == 0:
             nw_id = data_stdout.strip()
             LOG.debug(mgmt_network + "=" + nw_id)
@@ -439,12 +439,12 @@ class Project:
         rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout
 
         if rtncode != 0:
-           LOG.warning("openstack security group rule list command with non-zero rtncode " + 
+           LOG.warning("openstack security group rule list command with non-zero rtncode " +
                        str(project_name) + ": " + str(cmd) +
                        ", rtncode: " + str(rtncode) +
                        ", data_stdout: " + str(data_stdout) +
-                       ", data_stderr: " + str(data_stderr)) 
-           return 
+                       ", data_stderr: " + str(data_stderr))
+           return
 
         group_list=json.loads(data_stdout.strip())
         return group_list
@@ -452,7 +452,7 @@ class Project:
     @classmethod
     def delete_default_security_group(self, project_name):
         group_list=self.get_default_security_group(project_name)
-        for g in group_list: 
+        for g in group_list:
             cmd = ["openstack", "security", "group", "delete", str(g['ID']) ]
             rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout
 
@@ -461,11 +461,11 @@ class Project:
             LOG.debug("data_stderr: " + str(data_stderr))
 
             if rtncode != 0:
-                LOG.warning("openstack security group rule delete command with non-zero rtncode " + 
+                LOG.warning("openstack security group rule delete command with non-zero rtncode " +
                             str(project_name) + ": " + str(cmd) +
                             ", rtncode: " + str(rtncode) +
                             ", data_stdout: " + str(data_stdout) +
-                            ", data_stderr: " + str(data_stderr)) 
+                            ", data_stderr: " + str(data_stderr))
 
     @classmethod
     def get_default_security_group_rules(self, sg_id):
@@ -474,11 +474,11 @@ class Project:
         rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout
 
         if rtncode != 0:
-           LOG.warning("openstack security group rule list command with non-zero rtncode " + 
+           LOG.warning("openstack security group rule list command with non-zero rtncode " +
                        ": " + str(cmd) +
                        ", rtncode: " + str(rtncode) +
                        ", data_stdout: " + str(data_stdout) +
-                       ", data_stderr: " + str(data_stderr)) 
+                       ", data_stderr: " + str(data_stderr))
            return None
 
         rule_list=json.loads(data_stdout.strip())
@@ -488,7 +488,7 @@ class Project:
     @classmethod
     def delete_default_security_group_rules(self, sg_id):
         rule_list=self.get_default_security_group_rules(sg_id)
-        for rule in rule_list: 
+        for rule in rule_list:
             cmd = ["openstack", "security", "group", "rule", "delete", str(rule['ID']) ]
             rtncode,data_stdout,data_stderr = Commands.run(cmd, timeout=60) #TODO: needs real timeout
 
@@ -497,11 +497,11 @@ class Project:
             LOG.debug("data_stderr: " + str(data_stderr))
 
             if rtncode != 0:
-                LOG.warning("openstack security group rule delete command with non-zero rtncode " + 
+                LOG.warning("openstack security group rule delete command with non-zero rtncode " +
                             ": " + str(cmd) +
                             ", rtncode: " + str(rtncode) +
                             ", data_stdout: " + str(data_stdout) +
-                            ", data_stderr: " + str(data_stderr)) 
+                            ", data_stderr: " + str(data_stderr))
 
     @classmethod
     def create_security_group_rules(self):
@@ -512,12 +512,12 @@ class Project:
 
         if len(rule_list) > 4:
             LOG.debug("Rules already exist")
-            return   
-        
-        cmd = ["openstack", "security", "group", "rule", "create", 
-               "--ingress", 
-               "--ethertype", "IPv4", 
-               "--protocol", "icmp", 
+            return
+
+        cmd = ["openstack", "security", "group", "rule", "create",
+               "--ingress",
+               "--ethertype", "IPv4",
+               "--protocol", "icmp",
                "--remote-ip", "0.0.0.0/0",
                "default",
                "-fjson"]
@@ -532,17 +532,17 @@ class Project:
             if data_stdout.find("SecurityGroupRuleExists") == -1:
                 raise Openstack_Command_Fail(str(cmd))
 
-        cmd = ["openstack", "security", "group", "rule", "create", 
-               "--ingress", 
-               "--ethertype", "IPv4", 
-               "--protocol", "tcp", 
+        cmd = ["openstack", "security", "group", "rule", "create",
+               "--ingress",
+               "--ethertype", "IPv4",
+               "--protocol", "tcp",
                "--dst-port", "22",
                "--remote-ip", "0.0.0.0/0",
                "default",
                "-fjson"]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
         if rtncode != 0:
-            LOG.warning("openstack security group rule create command with non-zero rtncode " + 
+            LOG.warning("openstack security group rule create command with non-zero rtncode " +
                         ": " + str(cmd) +
                         ", rtncode: " + str(rtncode) +
                         ", data_stdout: " + str(data_stdout) +
@@ -550,16 +550,16 @@ class Project:
             if data_stdout.find("SecurityGroupRuleExists") == -1:
                 raise Openstack_Command_Fail(str(cmd))
 
-        cmd = ["openstack", "security", "group", "rule", "create", 
-               "--ingress", 
-               "--ethertype", "IPv6", 
-               "--protocol", "tcp", 
+        cmd = ["openstack", "security", "group", "rule", "create",
+               "--ingress",
+               "--ethertype", "IPv6",
+               "--protocol", "tcp",
                "--remote-ip", "::/0",
                "default",
                "-fjson"]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
         if rtncode != 0:
-            LOG.warning("openstack security group rule create command with non-zero rtncode " + 
+            LOG.warning("openstack security group rule create command with non-zero rtncode " +
                         ": " + str(cmd) +
                         ", rtncode: " + str(rtncode) +
                         ", data_stdout: " + str(data_stdout) +
@@ -567,16 +567,16 @@ class Project:
             if data_stdout.find("SecurityGroupRuleExists") == -1:
                 raise Openstack_Command_Fail(str(cmd))
 
-        cmd = ["openstack", "security", "group", "rule", "create", 
-               "--ingress", 
-               "--ethertype", "IPv6", 
-               "--protocol", "udp", 
+        cmd = ["openstack", "security", "group", "rule", "create",
+               "--ingress",
+               "--ethertype", "IPv6",
+               "--protocol", "udp",
                "--remote-ip", "::/0",
                "default",
                "-fjson"]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
         if rtncode != 0:
-            LOG.warning("openstack security group rule create command with non-zero rtncode " + 
+            LOG.warning("openstack security group rule create command with non-zero rtncode " +
                         ": " + str(cmd) +
                         ", rtncode: " + str(rtncode) +
                         ", data_stdout: " + str(data_stdout) +
@@ -592,7 +592,7 @@ class Project:
         LOG.debug("rtncode: " + str(rtncode))
         LOG.debug("data_stdout: " + str(data_stdout))
         LOG.debug("data_stderr: " + str(data_stderr))
-    
+
         if rtncode == 0:
             LOG.debug(user_name + " already exists")
             return data_stdout
@@ -605,7 +605,7 @@ class Project:
         if (os.path.isfile(key_file)):
             LOG.debug(key_file + " already exists")
             time.sleep(4)
-            return key_file 
+            return key_file
 
         fd = None
         try:
@@ -627,7 +627,7 @@ class Project:
 
         if new_kp_id is not None:
             LOG.debug(user_name + " already exists")
-            return new_kp_id 
+            return new_kp_id
 
         retries = 3
         timeout = 10
@@ -635,7 +635,7 @@ class Project:
         for i in range(retries):
             try:
                 new_kp_id = None
-                cmd = ["openstack", "keypair", "create", 
+                cmd = ["openstack", "keypair", "create",
                        "--public-key", str(kp_file),
                        str(user_name),
                        "-fjson"]
@@ -649,7 +649,7 @@ class Project:
                     new_kp_id = self.get_key_pair(user_name)
                     if new_kp_id is not None:
                         LOG.debug(user_name + " already exists")
-                        return new_kp_id 
+                        return new_kp_id
 
                     raise Openstack_Command_Fail(str(cmd))
 
@@ -679,7 +679,7 @@ class Project:
     @classmethod
     def get_key_file(self, user_name):
         key_file="/var/tmp/" + user_name + ".key"
-        return key_file 
+        return key_file
 
     @classmethod
     def get_keystone_file_name(self, project_name, user_name):
@@ -700,7 +700,7 @@ class Project:
     def start(self, project_name, user_name, user_email, user_pwd, role, admin_user, ssh_key, ec2_auth_url):
 
         try:
-            keystone_cred_file = self.generate_user_keystone_file(project_name, user_name, user_pwd, ec2_auth_url) 
+            keystone_cred_file = self.generate_user_keystone_file(project_name, user_name, user_pwd, ec2_auth_url)
 
             project_id = self.create_project(project_name)
 
@@ -718,7 +718,7 @@ class Project:
 
             kp_id = self.create_key_pair(user_name, kp_file)
 
-            return keystone_cred_file  
+            return keystone_cred_file
 
         except Exception as e:
             self._cleanup(project_name, user_name)
@@ -762,7 +762,7 @@ class Project:
                     pass
 
                 pj_id = self.get_project(project_name)
-                if pj_id is None: 
+                if pj_id is None:
                     LOG.debug("Openstack cleanup complete")
                     return
 
@@ -771,7 +771,7 @@ class Project:
 
                 time.sleep(10)
         except:
-            LOG.error("Cleanup project failed: " + project_name) 
+            LOG.error("Cleanup project failed: " + project_name)
 
     @classmethod
     def _has_compute_resources(self, project_name):
@@ -783,11 +783,11 @@ class Project:
            LOG.warning("openstack project show command with non-zero rtncode " + str(project_name) + ": " + str(cmd) +
                        ", rtncode: " + str(rtncode) +
                        ", data_stdout: " + str(data_stdout) +
-                       ", data_stderr: " + str(data_stderr)) 
-           return 0 
+                       ", data_stderr: " + str(data_stderr))
+           return 0
         data_stdout.strip()
         if not data_stdout :
-            return 0 
+            return 0
         val=len(json.loads(data_stdout))
         LOG.debug("Project " + project_name + " has compute resources " + str(val))
         return val
@@ -802,11 +802,11 @@ class Project:
            LOG.warning("openstack project show command with non-zero rtncode " + str(project_name) + ": " + str(cmd) +
                        ", rtncode: " + str(rtncode) +
                        ", data_stdout: " + str(data_stdout) +
-                       ", data_stderr: " + str(data_stderr)) 
-           return 0 
+                       ", data_stderr: " + str(data_stderr))
+           return 0
         data_stdout.strip()
         if not data_stdout :
-            return 0 
+            return 0
         val=len(json.loads(data_stdout))
         LOG.debug("Project " + project_name + " has network resources " + str(val))
         return val
@@ -818,7 +818,7 @@ class Project:
         if self._has_network_resources(project_name) != 0 :
             return True
         return False
-    
+
     @classmethod
     def _has_resources_poll(self, project_name, timeout):
 
@@ -829,7 +829,7 @@ class Project:
 
             if res == False:
                 LOG.warning("openstack project " + str(project_name) + " has no resources")
-                return False 
+                return False
 
             if time_passed > timeout:
                 break
@@ -848,7 +848,7 @@ class Project:
             LOG.debug("openstack project cleanup could not be started as project has resources")
             return
         LOG.debug("openstack project cleanup begin")
-        self._cleanup_poll(project_name, user_name, 30*60) 
+        self._cleanup_poll(project_name, user_name, 30*60)
         try:
             os.remove(self.get_keystone_file_name(project_name, user_name))
             os.remove(self.get_key_file(user_name))
@@ -1029,7 +1029,7 @@ class VM:
                ips=add.split(",")
                floating_ip = ips[1].strip()
 
-        return floating_ip 
+        return floating_ip
 
     @classmethod
     def _allocate_floating_ip(self, network, project_name, new_vm_id, retries=10, timeout=20):
@@ -1041,7 +1041,7 @@ class VM:
                                                                  timeout=60)  # TODO: needs real timeout
 
                 if rtncode == 0:
-                    return data_stdout.strip() 
+                    return data_stdout.strip()
 
             except Exception as e:
                 pass
@@ -1255,7 +1255,7 @@ class VM:
                        "--wait",
                        str(name), "-fjson"]
                 rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
-                LOG.debug("openstack server create command for " + str(name) + ": " 
+                LOG.debug("openstack server create command for " + str(name) + ": "
                                 ", rtncode: " + str(rtncode) +
                                 ", data_stdout: " + str(data_stdout) +
                                 ", data_stderr: " + str(data_stderr))
@@ -1309,11 +1309,11 @@ class VM:
 
     @classmethod
     def start(self, instance_type, ami, qcow2, aki, ari, startup_retries, ping_retries, ssh_retries, user_data_file,
-              name, public_network, project_name, user_name, user_email, user_pwd, role, admin_user, mgmt_network, ssh_key, ec2_auth_url):
+              name, public_network, project_name, user_name, mgmt_network):
 
         LOG.debug("start " + str(name))
 
-        keystone_cred_file = Project.start(project_name, user_name, user_email, user_pwd, role, admin_user, ssh_key, ec2_auth_url)
+        keystone_cred_file = Project.get_keystone_file_name(project_name, user_name)
         if (os.path.isfile(keystone_cred_file)):
             LOG.debug("Sourced " + keystone_cred_file)
             Commands.source(keystone_cred_file)
@@ -1325,7 +1325,7 @@ class VM:
         key_file = Project.get_key_file(user_name)
 
         sec_group="default"
-        img = ami 
+        img = ami
         if qcow2 is not None:
            img = qcow2
         for i in range(startup_retries):
