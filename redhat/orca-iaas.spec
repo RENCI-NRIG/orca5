@@ -242,6 +242,7 @@ install -p -D -m 755 redhat/xmlrpcd-init.tmpl %{buildroot}%{_initrddir}/orca_con
 sed -i -e 's;@@SYSCONFIG@@;"orca_controller-11080";' %{buildroot}%{_initrddir}/orca_controller-11080
 
 # Create an system directory
+%if 0%{?centos} > 6 
 mkdir -p %{buildroot}%{_unitdir}
 # Copy in the appropriate service script template for each of the above actors,
 # and modify it appropriately.
@@ -254,6 +255,8 @@ sed -i -e 's;REPLACE;orca_am_broker-12080;' %{buildroot}%{_unitdir}/orca_sm-1408
 install -p -D -m 644 redhat/xmlrpcd-systemd.tmpl %{buildroot}%{_unitdir}/orca_controller-11080.service
 sed -i -e 's;NAME;orca_controller-11080;' %{buildroot}%{_unitdir}/orca_controller-11080.service
 sed -i -e 's;REPLACE;orca_sm-14080;' %{buildroot}%{_unitdir}/orca_controller-11080.service
+%endif
+
 
 %clean
 rm -rf %{buildroot}
@@ -264,7 +267,9 @@ if [ "$1" == "0" ]; then
         /bin/systemctl disable orca_am_broker-12080 
 	/sbin/chkconfig --del orca_am_broker-12080
 	[ -x "/etc/init.d/orca_am_broker-12080" ] && /etc/init.d/orca_am_broker-12080 stop
-        [ -e %{_unitdir}/orca_am_broker-12080.service ] && rm %{_unitdir}/orca_am_broker-12080.service
+        %if 0%{?centos} > 6
+            [ -e %{_unitdir}/orca_am_broker-12080.service ] && rm %{_unitdir}/orca_am_broker-12080.service
+        %endif
         [ -e %{conf_dir}/am+broker-12080/logs ] && rm %{conf_dir}/am+broker-12080/logs
         [ -e %{conf_dir}/am+broker-12080/run ] && rm %{conf_dir}/am+broker-12080/run
         [ -e %{conf_dir}/am+broker-12080/startup ] && rm %{conf_dir}/am+broker-12080/startup
@@ -288,7 +293,9 @@ if [ "$1" == "0" ]; then
         /bin/systemctl disable orca_sm-14080 
 	/sbin/chkconfig --del orca_sm-14080
 	[ -x "/etc/init.d/orca_sm-14080" ] && /etc/init.d/orca_sm-14080 stop
-        [ -e %{_unitdir}/orca_sm-14080.service ] && rm %{_unitdir}/orca_sm-14080.service
+        %if 0%{?centos} > 6
+            [ -e %{_unitdir}/orca_sm-14080.service ] && rm %{_unitdir}/orca_sm-14080.service
+        %endif
         [ -e %{conf_dir}/sm-14080/logs ] && rm %{conf_dir}/sm-14080/logs
         [ -e %{conf_dir}/sm-14080/run ] && rm %{conf_dir}/sm-14080/run
         [ -e %{conf_dir}/sm-14080/startup ] && rm %{conf_dir}/sm-14080/startup
@@ -312,7 +319,9 @@ if [ "$1" == "0" ]; then
         /bin/systemctl disable orca_controller-11080 
 	/sbin/chkconfig --del orca_controller-11080
 	[ -x "/etc/init.d/orca_controller-11080" ] && /etc/init.d/orca_controller-11080 stop
-        [ -e %{_unitdir}/orca_controller-11080.service ] && rm %{_unitdir}/orca_controller-11080.service
+        %if 0%{?centos} > 6
+             [ -e %{_unitdir}/orca_controller-11080.service ] && rm %{_unitdir}/orca_controller-11080.service
+        %endif
         [ -e %{conf_dir}/controller-11080/logs ] && rm %{conf_dir}/controller-11080/logs
         [ -e %{conf_dir}/controller-11080/run ] && rm %{conf_dir}/controller-11080/run
 fi
@@ -359,7 +368,9 @@ exit 0
 %{conf_dir}/am+broker-12080/ssl
 %attr(755, root, root) %{_initrddir}/orca_am_broker-12080
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_am_broker-12080
+%if 0%{?centos} > 6 
 %config(noreplace) %{_unitdir}/orca_am_broker-12080.service
+%endif
 %config(noreplace) %{conf_dir}/am+broker-12080/config/*
 
 %files exogeni-sm-config
@@ -373,7 +384,9 @@ exit 0
 %{conf_dir}/sm-14080/ssl
 %attr(755, root, root) %{_initrddir}/orca_sm-14080
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_sm-14080
+%if 0%{?centos} > 6 
 %config(noreplace) %{_unitdir}/orca_sm-14080.service
+%endif
 %config(noreplace) %{conf_dir}/sm-14080/config/*
 
 %files exogeni-controller-config
@@ -386,7 +399,9 @@ exit 0
 %attr(755, root, root) %{_initrddir}/orca_controller-11080
 %{conf_dir}/controller-11080/ssl
 %config(noreplace) %{_sysconfdir}/sysconfig/orca_controller-11080
+%if 0%{?centos} > 6 
 %config(noreplace) %{_unitdir}/orca_controller-11080.service
+%endif
 %config(noreplace) %{conf_dir}/controller-11080/config/*
 
 %changelog
