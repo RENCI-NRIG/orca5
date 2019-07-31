@@ -1,3 +1,6 @@
 ec2.generate.global.user.data=orca.handlers.ec2.tasks.NEucaGenerateGlobalUserDataTask
 ec2.comet.data=orca.handlers.ec2.tasks.NEucaCometDataTask
 ec2.image.proxy.register=orca.handlers.ec2.tasks.imgproxy.ImgProxyRegisterTask
+atomic.sequence.start=orca.handlers.network.tasks.StartAtomicSequenceTask
+atomic.sequence.stop=orca.handlers.network.tasks.StopAtomicSequenceTask
+atomic.sequence.clear=orca.handlers.network.tasks.ClearAtomicSequenceTask

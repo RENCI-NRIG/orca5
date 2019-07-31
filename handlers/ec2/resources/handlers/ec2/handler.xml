@@ -34,67 +34,87 @@
         </sequential>
     </macrodef>
     <macrodef name="create.project" description="Create Openstack Project">
-        <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
-        <echo message="Setting up Openstack Project" />
-        <var name="create.project.output" unset="true" />
-        <var name="code" unset="true" />
-        <var name="message" unset="true" />
-        <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
-        <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
-        <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
-        <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
-        <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
-        <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
-        <echo message="SSH_KEY=${sshkey}" />
-        <echo message="EC2_AUTH_URL=${ec2.auth.url}" />
-        <exec executable="${ec2.scripts}/nova-project-create" resultproperty="code" outputproperty="create.project.output">
-            <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
-            <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
-            <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
-            <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
-            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
-            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
-            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-            <env key="SSH_KEY" value="${sshkey}" />
-            <env key="EC2_AUTH_URL" value="${ec2.auth.url}" />
-        </exec>
-        <echo message="exit code ${code}, ${create.project.output}" />
-        <if>
-            <not>
-                <equals arg1="${code}" arg2="0" />
-            </not>
-            <then>
-                <echo message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
-                <fail message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
-            </then>
-        </if>
-        <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
+        <sequential>
+            <echo message="Setting up Openstack Project" />
+            <var name="create.project.output" unset="true" />
+            <var name="code" unset="true" />
+            <var name="message" unset="true" />
+            <echo message="EC2_HOME=${ec2.home}" />
+            <echo message="EUCA_KEY_DIR=${ec2.keys}" />
+            <echo message="EC2_LOG_DIR=${ec2.log.dir}" />
+            <echo message="EC2_LOG_FILE=${ec2.log.file}" />
+            <echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
+            <echo message="EC2_SLICE_USER_EMAIL=${ec2.slice.user.email}" />
+            <echo message="EC2_SLICE_USER_PWD=${unit.ec2.slice.user.pwd}" />
+            <echo message="EC2_SLICE_USER_ROLE=${ec2.slice.user.role}" />
+            <echo message="EC2_SLICE_ADMIN_USER=${ec2.slice.admin.user}" />
+            <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+            <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
+            <echo message="SSH_KEY=${sshkey}" />
+            <echo message="EC2_AUTH_URL=${ec2.auth.url}" />
+            <exec executable="${ec2.scripts}/nova-project-create" resultproperty="code" outputproperty="create.project.output">
+                <env key="EC2_HOME" value="${ec2.home}" />
+                <env key="EC2_DIR" value="${ec2.dir}" />
+                <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                <env key="EC2_SLICE_USER_EMAIL" value="${ec2.slice.user.email}" />
+                <env key="EC2_SLICE_USER_PWD" value="${unit.ec2.slice.user.pwd}" />
+                <env key="EC2_SLICE_USER_ROLE" value="${ec2.slice.user.role}" />
+                <env key="EC2_SLICE_ADMIN_USER" value="${ec2.slice.admin.user}" />
+                <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+                <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+                <env key="SSH_KEY" value="${sshkey}" />
+                <env key="EC2_AUTH_URL" value="${ec2.auth.url}" />
+            </exec>
+            <echo message="exit code ${code}, ${create.project.output}" />
+            <if>
+                <not>
+                    <equals arg1="${code}" arg2="0" />
+                </not>
+                <then>
+                    <echo message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
+                    <fail message="unable to create openstack project: exit code ${code}, ${create.project.output}" />
+                </then>
+            </if>
+        </sequential>
     </macrodef>
 
     <macrodef name="delete.project" description="Delete Openstack Project">
-        <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
-        <echo message="Deleting Openstack Project" />
-        <var name="delete.project.output" unset="true" />
-        <var name="code" unset="true" />
-        <var name="message" unset="true" />
-        <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
-        <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
-        <exec executable="${ec2.scripts}/nova-project-delete" resultproperty="code" outputproperty="delete.project.output">
-            <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
-            <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
-            <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
-        </exec>
-        <echo message="exit code ${code}, ${delete.project.output}" />
-        <if>
-            <not>
-                <equals arg1="${code}" arg2="0" />
-            </not>
-            <then>
-                <echo message="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
-                <property name="message" value="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
-            </then>
-        </if>
-        <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
+        <sequential>
+            <echo message="Deleting Openstack Project" />
+            <var name="delete.project.output" unset="true" />
+            <var name="code" unset="true" />
+            <var name="message" unset="true" />
+            <echo message="EC2_HOME=${ec2.home}" />
+            <echo message="EUCA_KEY_DIR=${ec2.keys}" />
+            <echo message="EC2_LOG_DIR=${ec2.log.dir}" />
+            <echo message="EC2_LOG_FILE=${ec2.log.file}" />
+            <echo message="EC2_LOG_LEVEL=${ec2.log.level}" />
+            <echo message="PROJECT_NAME=${unit.ec2.slice.project.name}" />
+            <echo message="USER_NAME=${unit.ec2.slice.user.name}" />
+            <exec executable="${ec2.scripts}/nova-project-delete" resultproperty="code" outputproperty="delete.project.output">
+                <env key="EC2_HOME" value="${ec2.home}" />
+                <env key="EC2_DIR" value="${ec2.dir}" />
+                <env key="EC2_LOG_DIR" value="${ec2.log.dir}" />
+                <env key="EC2_LOG_FILE" value="${ec2.log.file}" />
+                <env key="EC2_LOG_LEVEL" value="${ec2.log.level}" />
+                <env key="PROJECT_NAME" value="${unit.ec2.slice.project.name}" />
+                <env key="USER_NAME" value="${unit.ec2.slice.user.name}" />
+                <env key="EUCA_KEY_DIR" value="${ec2.keys}" />
+            </exec>
+            <echo message="exit code ${code}, ${delete.project.output}" />
+            <if>
+                <not>
+                    <equals arg1="${code}" arg2="0" />
+                </not>
+                <then>
+                    <echo message="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
+                    <property name="message" value="unable to delete openstack project: exit code ${code}, ${delete.project.output}" />
+                </then>
+            </if>
+        </sequential>
     </macrodef>
     <macrodef name="delete.instance" description="delete an instance in case of failure">
     <sequential>
@@ -377,7 +397,9 @@
                                 <echo message="creating Euca instance ${unit.hostname.url} using emi ${ec2.ami.name} ...(may take some time)" />
                             </else>
                         </if>
-                        <create.project/>
+                        <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+                            <create.project/>
+                        <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
                         <!-- create the NEUCA INI file for global user data stored in openstack -->
                         <trycatch property="failmsg">
                             <try>
@@ -1403,8 +1425,9 @@
                     <echo message="terminate-instance exit code: ${code}; ${terminate.instance.output}" />
                     <property name="shirako.target.code" value="${code}" />
 
-                    <delete.project/>
-
+                    <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+                        <delete.project/>
+                    <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
                     <if>
                         <and>
                             <equals arg1="${cloud.type}" arg2="nova-essex" />
