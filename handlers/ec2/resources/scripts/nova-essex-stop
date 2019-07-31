@@ -64,7 +64,6 @@ try:
     else:
         LOG.error("nova-essex-stop: missing instance argument")
         sys.exit(1)
-    Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
 
 except Exception as e:
     LOG.error("nova-essex-stop: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))

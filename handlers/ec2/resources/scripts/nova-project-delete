@@ -12,7 +12,7 @@ try:
     sys.path.append(os.environ['EC2_DIR'] + "/scripts")
     from nova_essex_common import *
 except:
-    print ('Error in nova-essex-stop: cannot import nova_essex_common.py')
+    print ('Error in nova-project-delete: cannot import nova_essex_common.py')
     sys.exit(1)
 
 try:
@@ -42,7 +42,7 @@ try:
     LOG.info('Starting Logger')
 
 except Exception as e:
-    print ('Error in nova-essex-stop: Cannot open log file')
+    print ('Error in nova-project-delete: Cannot open log file')
     print (type(e))
     print (e.args)
     print (e)
@@ -55,19 +55,10 @@ except Exception as e:
 
 try:
     # DO THE WORK
-    if len(sys.argv) >= 2:
-        LOG.debug("nova-essex-stop: " + str(sys.argv[1]))
-        instance_id = str(sys.argv[1])
-
-        VM().stop(instance_id)
-        LOG.info("Stopped instance: " + str(instance_id))
-    else:
-        LOG.error("nova-essex-stop: missing instance argument")
-        sys.exit(1)
     Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
 
 except Exception as e:
-    LOG.error("nova-essex-stop: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
+    LOG.error("nova-project-delete: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
     Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     sys.exit(1)
 

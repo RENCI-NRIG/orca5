@@ -54,7 +54,7 @@ for i in os.environ:
 
 try:
     # DO THE WORK
-    Project.start(os.environ['PROJECT_NAME'],
+    Project().start(os.environ['PROJECT_NAME'],
                   os.environ['USER_NAME'],
                   os.environ['EC2_SLICE_USER_EMAIL'],
                   os.environ['EC2_SLICE_USER_PWD'],

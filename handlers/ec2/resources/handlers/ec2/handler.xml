@@ -161,6 +161,7 @@
 
     <target name="join" depends="resolve.configuration">
         <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+        <taskdef resource="orca/handlers/network/network.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
         <tstamp prefix="start">
             <format property="TIME" pattern="MM/dd/yyyy HH:mm:ss z" />
         </tstamp>
@@ -1273,6 +1274,7 @@
     <!-- leave target -->
     <target name="leave" depends="resolve.configuration">
         <taskdef resource="orca/handlers/ec2/ec2.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
+        <taskdef resource="orca/handlers/network/network.xml" classpathref="run.classpath" loaderref="run.classpath.loader" />
         <tstamp prefix="start">
             <format property="TIME" pattern="MM/dd/yyyy hh:mm" />
         </tstamp>
