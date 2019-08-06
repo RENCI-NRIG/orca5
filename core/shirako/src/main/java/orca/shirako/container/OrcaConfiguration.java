@@ -64,6 +64,11 @@ public class OrcaConfiguration implements IOrcaConfiguration
     public static final String CometClientKey = "comet.clientkey";
 
     /**
+     * Slice Name Regex
+     */
+    public static final String SliceNameRegex = "orca.slicename.regex";
+
+    /**
      * Are we using secure communication with the node agent service: true|false.
      */
     public static final String PropertySecureCommunication = "secure.communication";
@@ -129,6 +134,8 @@ public class OrcaConfiguration implements IOrcaConfiguration
     protected String cometClientCertKeyStorePwd;
     protected String cometClientCert;
     protected String cometClientKey;
+    protected String sliceNameRegex;
+
 
     /**
      * Class name for the ticket factory implementation.
@@ -221,6 +228,12 @@ public class OrcaConfiguration implements IOrcaConfiguration
     {
         return cometClientKey;
     }
+
+    public String getSliceNameRegex() 
+    { 
+        return sliceNameRegex; 
+    }
+
 
     /**
      * Returns the object stored under the given key.
@@ -353,6 +366,10 @@ public class OrcaConfiguration implements IOrcaConfiguration
 
         if (properties.containsKey(OrcaConfiguration.CometClientKey)) {
             cometClientKey = properties.getProperty(OrcaConfiguration.CometClientKey);
+        }
+
+        if(properties.contains(OrcaConfiguration.SliceNameRegex)) {
+            sliceNameRegex = properties.getProperty(OrcaConfiguration.SliceNameRegex);
         }
 
         if (properties.containsKey(TicketFactoryClass)){

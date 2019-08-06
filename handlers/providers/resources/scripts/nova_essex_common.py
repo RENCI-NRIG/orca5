@@ -553,8 +553,7 @@ class Project:
         cmd = ["openstack", "security", "group", "rule", "create",
                "--ingress",
                "--ethertype", "IPv6",
-               "--protocol", "tcp",
-               "--remote-ip", "::/0",
+               "--protocol", "any",
                "default",
                "-fjson"]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
@@ -570,8 +569,7 @@ class Project:
         cmd = ["openstack", "security", "group", "rule", "create",
                "--ingress",
                "--ethertype", "IPv6",
-               "--protocol", "udp",
-               "--remote-ip", "::/0",
+               "--protocol", "any",
                "default",
                "-fjson"]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)

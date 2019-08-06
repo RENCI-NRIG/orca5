@@ -17,6 +17,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
 
 import javax.security.auth.login.CredentialException;
@@ -90,8 +91,7 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
     public static final int PER_RESERVATION_BUILDER_SIZE = 180;
     private static final int MAX_NUMBER_OF_CHARS_TO_USE_FROM_SLICE_NAME_FOR_PROJECT_NAME = 40;
     private static final String sliceIdentifier = "+slice+";
-
-
+    public static final String defaulSliceNameRegex = "^[ A-Za-z0-9-]*$";
 
     protected final Logger logger = OrcaController.getLogger(this.getClass().getSimpleName());
 
@@ -253,6 +253,29 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
             }
         }
 
+    }
+
+    private static boolean validateSliceName(String slice_urn) {
+        boolean retVal = false;
+        String regex = OrcaController.getProperty(OrcaConfiguration.SliceNameRegex);
+        if(regex == null) {
+            regex = defaulSliceNameRegex;
+        }
+
+        int index = slice_urn.lastIndexOf(sliceIdentifier);
+        String sliceName = slice_urn;
+        if(index >= 0) {
+            index = index + sliceIdentifier.length();
+            sliceName = sliceName.substring(index);
+        }
+
+        if(sliceName.length() > MAX_NUMBER_OF_CHARS_TO_USE_FROM_SLICE_NAME_FOR_PROJECT_NAME) {
+            sliceName = sliceName.substring(0,MAX_NUMBER_OF_CHARS_TO_USE_FROM_SLICE_NAME_FOR_PROJECT_NAME);
+        }
+
+        retVal = Pattern.matches(regex, sliceName);
+
+        return retVal;
     }
 
     private void deleteSliceCometContext(TicketReservationMng currRes) {
@@ -485,6 +508,10 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
 
                 if (!LabelSyncThread.tryLock(LabelSyncThread.getWaitTime())) {
                     return setError("system is busy, please try again in a few minutes");
+                }
+
+                if(validateSliceName(slice_urn) == false) {
+                    return setError("Invalid slice name. Allowed characters in slice name are [ A-Za-z0-9-]");
                 }
 
                 String userDN = validateOrcaCredential(slice_urn, credentials,

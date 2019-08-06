@@ -117,6 +117,7 @@ class NEucaGenerateCometData extends NEucaCometDataProcessor{
         System.out.println("Processing interfaces section");
 
         Integer[] eths = getEths();
+        System.out.println("interfaces count=" + eths.length);
 
         for (int i = 0; i < eths.length; i++) {
             Integer eth = eths[i];
