@@ -552,7 +552,7 @@ class Project:
 
         cmd = ["openstack", "security", "group", "rule", "create",
                "--ingress",
-               "--ethertype", "IPv6",
+               "--ethertype", "IPv4",
                "--protocol", "any",
                "default",
                "-fjson"]
