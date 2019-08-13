@@ -47,7 +47,69 @@ df9849bcb5bf4c7196b9252238be2cc3b2f0ad9b
 </images>
 ```
 ## CLI mechanism to create the image (only to be used by developers)
-- Logon to head node and swithc to root user
+- Create a VM instance on Openstack with the base OS image like centos, debian etc.
+- Logon to the VM, switch to root user and install neuca tools
+NOTE: neuca-tools must be installed with python2.7
+```
+sudo su - 
+git clone https://github.com/RENCI-NRIG/neuca-guest-tools.git
+cd neuca-guest-tools/neuca-py
+python setup.py install
+```
+- Edit /etc/cloud/cloud.cfg to ensure root login is enabled
+- Edit /root/.ssh/authorized_keys file to remove any redirect messages
+- Create a service file /usr/lib/systemd/system/neucad.service for centos7 based system
+```
+[Unit]
+Description=neucad.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+StandardOutput=journal+console
+ExecStart=/bin/python /usr/bin/neucad start
+ExecStop=/bin/python /usr/bin/neucad stop
+
+[Install]
+WantedBy=default.target
+```
+- Create an init file for centos6, debian, fedora or ubuntu system
+```
+#!/bin/sh
+#
+### BEGIN INIT INFO
+# Provides: lampp
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: A front-end init script that starts neucad
+### END INIT INFO
+
+prog="neucad"
+exec=" /usr/bin/neucad"
+
+start() {
+     /usr/bin/python /usr/local/bin/neucad start
+}
+
+stop() {
+     /usr/bin/python /usr/local/bin/neucad stop
+}
+case "$1" in
+    start)
+        $1
+        ;;
+    stop)
+        $1
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop}"
+        exit 2
+esac
+exit $?
+```
+- Logon to head node and switch to root user
 - Source Openstack keystone and execute following command
 ```
 source  /var/tmp/cred.tenant-kthare10-slice2-aD7NZwyeV8.owner-kthare10-slice2-aD7NZwyeV8
