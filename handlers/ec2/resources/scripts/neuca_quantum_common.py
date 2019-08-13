@@ -87,6 +87,16 @@ class NEuca_Quantum_Port_Plugged_In_Exception(Exception):
 class NEuca_Quantum_Network:
     def __init__(self):
         setup_env()
+    @classmethod
+    def _cleanup(self, vlan_tag, network, net_type, project_name):
+        try:
+            network_uuid = NEuca_Quantum_Network.get_network_uuid(vlan_tag, network, net_type, project_name)
+            if network_uuid is None:
+                LOG.debug("neuca_quantum_common: existing network found for vlan: " + vlan_tag + ", network: " + network)
+                LOG.debug("neuca_quantum_common: delete existing network: " + str(network_uuid))
+                NEuca_Quantum_Network.delete_network(network_uuid)
+        except Exception as e:
+                LOG.debug("neuca_quantum_common: attempting to delete non-existing network; ignore the error: " + str(network_uuid))
 
     @classmethod
     def create_network(self, net_type, network, vlan_tag, dataplane_network, openflow_network, project_name, max_rate=None, burst_rate=None ):
@@ -104,7 +114,7 @@ class NEuca_Quantum_Network:
                 NEuca_Quantum_Network.delete_network(network_uuid)
 
 
-        name = str(net_type) + ":" + str(network) + ":" + str(vlan_tag)
+        name = str(net_type) + ":" + str(network) + ":" + str(vlan_tag) + ":"
         physNetwork = None
         type = "vlan"
         if network == "vlan-data" :
@@ -113,7 +123,7 @@ class NEuca_Quantum_Network:
             physNetwork = openflow_network
         
         if max_rate != None:
-            name += ":" + str(max_rate)
+            name += str(max_rate)
             if burst_rate != None:
                 name += ":" + str(burst_rate)
 
@@ -131,6 +141,7 @@ class NEuca_Quantum_Network:
         LOG.debug("data_stderr: " + str(data_stderr))
                       
         if rtncode != 0:
+            NEuca_Quantum_Network._cleanup(vlan_tag, network, net_type, project_name)
             raise NEuca_Quantum_Exception("Create Network Failed, bad error code (" + str(rtncode) + ") : " + str(cmd))
 
         network_info = json.loads(data_stdout)
@@ -139,6 +150,8 @@ class NEuca_Quantum_Network:
             LOG.debug(str(data_stdout))
             network_uuid = network_info["id"]
         else:
+            LOG.debug("Create network succeeded but unable to fetch network info")
+            NEuca_Quantum_Network._cleanup(vlan_tag, network, net_type, project_name)
             raise NEuca_Quantum_Exception("Create Network Failed, bad stdout: cmd = " + str(cmd) + "\nstdout = " + str(data_stdout))
 
         return network_uuid
@@ -389,7 +402,7 @@ class NEuca_Quantum_Network:
         foundIt=False
         networks = json.loads(data_stdout)
         network_uuid = None
-        name = str(net_type) + ":" + str(network) + ":" + str(vlan_tag)
+        name = str(net_type) + ":" + str(network) + ":" + str(vlan_tag) + ":"
         LOG.debug("looking for network=" + str(name))
         for n in networks:
             if name in n["Name"]:

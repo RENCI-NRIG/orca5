@@ -75,7 +75,6 @@ try:
     
 except Exception as e:
     LOG.error("neuca-quantum-create-net: " + str(type(e)) + " : " + str(e) + "\n" + str(traceback.format_exc()))
-    Project().cleanup(os.environ['PROJECT_NAME'], os.environ['USER_NAME'])
     sys.exit(1)
 
 sys.exit(0)

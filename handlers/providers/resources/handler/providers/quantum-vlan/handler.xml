@@ -388,6 +388,9 @@ in a *hybrid* or OF only rack switch /ib -->
                             <then>
                                 <echo message="unable to create quantum network: exit code ${code}, ${create.network.output}" />
                                 <property name="message" value="unable to create instance: exit code ${code}, ${create.network.output}" />
+                                <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+                                    <delete.project/>
+                                <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
                             </then>
                             <else>
                                 <var name="shirako.save.unit.quantum.net.uuid" unset="true" />
