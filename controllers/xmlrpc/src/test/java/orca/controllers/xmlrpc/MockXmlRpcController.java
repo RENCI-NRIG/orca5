@@ -9,6 +9,7 @@ import orca.ndl.NdlCommons;
 import orca.shirako.common.ConfigurationException;
 import orca.shirako.common.ReservationID;
 import orca.shirako.container.Globals;
+import orca.shirako.container.OrcaConfiguration;
 import orca.util.ID;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -69,6 +70,7 @@ public class MockXmlRpcController extends XmlRpcController {
         XmlrpcOrcaState.getInstance().resetInstance();
         XmlrpcOrcaState.getInstance().setController(this);
         initConnectionFactory();
+        setProperty(OrcaConfiguration.SliceNameRegex,"^[A-Za-z0-9-_.]*$");
     }
 
     /**
@@ -99,7 +101,6 @@ public class MockXmlRpcController extends XmlRpcController {
      */
     @Override
     public void start() throws Exception {
-        setProperty("orca.slicename.regex","^[ A-Za-z0-9-_]*$");
         // the handler
         ServletContextHandler servletHandler = new ServletContextHandler(
                 ServletContextHandler.SECURITY | ServletContextHandler.SECURITY);
