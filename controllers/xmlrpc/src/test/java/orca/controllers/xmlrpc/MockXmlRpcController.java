@@ -86,6 +86,7 @@ public class MockXmlRpcController extends XmlRpcController {
         String url = controllerProperties.getProperty(OrcaURL);
         String user = controllerProperties.getProperty(OrcaUser);
         String password = controllerProperties.getProperty(OrcaLogin);
+        setProperty("orca.slicename.regex","^[ A-Za-z0-9-_]*$");
 
         orca = new MockOrcaConnectionFactory(url, user, password, new ID(smGuid), reservationMap, failReservation);
     }
