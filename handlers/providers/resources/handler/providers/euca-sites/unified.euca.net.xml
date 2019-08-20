@@ -208,6 +208,9 @@
                             <then>
                                 <echo message="unable to create quantum network: exit code ${code}, ${create.network.output}" />
                                 <property name="message" value="unable to create instance: exit code ${code}, ${create.network.output}" />
+                                <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />
+                                     <delete.project/>
+                                <atomic.sequence.stop.macro device="${unit.ec2.slice.project.name}" />
                             </then>
                             <else>
                                 <var name="shirako.save.unit.quantum.net.uuid" unset="true" />
@@ -299,8 +302,8 @@
                                 <equals arg1="${code}" arg2="0" />
                             </not>
                             <then>
-                                <echo message="unable to create quantum network: exit code ${code}, ${create.instance.output}" />
-                                <property name="message" value="unable to create instance: exit code ${code}, ${create.instance.output}" />
+                                <echo message="unable to delete quantum network: exit code ${code}, ${create.instance.output}" />
+                                <property name="message" value="unable to delete instance: exit code ${code}, ${create.instance.output}" />
                             </then>
                             <else>
                                 <atomic.sequence.start.macro device="${unit.ec2.slice.project.name}" />

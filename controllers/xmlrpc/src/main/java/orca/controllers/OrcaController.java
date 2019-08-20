@@ -35,6 +35,8 @@ public class OrcaController {
     public static final String ControllerServiceManager = "controller.sm.guid";
     public static final String CometPubKeysEnabled = "orca.comet.pubkeys.enabled";
     public static final String CometHostNamesEnabled = "orca.comet.hosts.enabled";
+    public static final String SliceNameRegex = "orca.slicename.regex";
+
 
     public OrcaConnectionFactory orca;
     protected boolean fresh = true;

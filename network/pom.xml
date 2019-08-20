@@ -147,13 +147,13 @@
         </dependency> 
         <dependency> 
             <groupId>
-                 velocity 
+                 org.apache.velocity 
             </groupId> 
             <artifactId>
                  velocity 
             </artifactId> 
             <version>
-                 1.4 
+                 2.0 
             </version> 
         </dependency> 
         <dependency> 

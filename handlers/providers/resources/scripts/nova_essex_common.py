@@ -517,27 +517,7 @@ class Project:
         cmd = ["openstack", "security", "group", "rule", "create",
                "--ingress",
                "--ethertype", "IPv4",
-               "--protocol", "icmp",
-               "--remote-ip", "0.0.0.0/0",
-               "default",
-               "-fjson"]
-
-        rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
-        if rtncode != 0:
-            LOG.warning("openstack security group rule create command with non-zero rtncode " +
-                        ": " + str(cmd) +
-                        ", rtncode: " + str(rtncode) +
-                        ", data_stdout: " + str(data_stdout) +
-                        ", data_stderr: " + str(data_stderr))
-            if data_stdout.find("SecurityGroupRuleExists") == -1:
-                raise Openstack_Command_Fail(str(cmd))
-
-        cmd = ["openstack", "security", "group", "rule", "create",
-               "--ingress",
-               "--ethertype", "IPv4",
-               "--protocol", "tcp",
-               "--dst-port", "22",
-               "--remote-ip", "0.0.0.0/0",
+               "--protocol", "any",
                "default",
                "-fjson"]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
@@ -553,25 +533,7 @@ class Project:
         cmd = ["openstack", "security", "group", "rule", "create",
                "--ingress",
                "--ethertype", "IPv6",
-               "--protocol", "tcp",
-               "--remote-ip", "::/0",
-               "default",
-               "-fjson"]
-        rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
-        if rtncode != 0:
-            LOG.warning("openstack security group rule create command with non-zero rtncode " +
-                        ": " + str(cmd) +
-                        ", rtncode: " + str(rtncode) +
-                        ", data_stdout: " + str(data_stdout) +
-                        ", data_stderr: " + str(data_stderr))
-            if data_stdout.find("SecurityGroupRuleExists") == -1:
-                raise Openstack_Command_Fail(str(cmd))
-
-        cmd = ["openstack", "security", "group", "rule", "create",
-               "--ingress",
-               "--ethertype", "IPv6",
-               "--protocol", "udp",
-               "--remote-ip", "::/0",
+               "--protocol", "any",
                "default",
                "-fjson"]
         rtncode, data_stdout, data_stderr = Commands.run(cmd, timeout=60 * 30)
