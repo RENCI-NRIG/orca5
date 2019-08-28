@@ -338,7 +338,7 @@
     <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/Uva-nlNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/Uva-nlNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
-        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.newy32aoa.net.internet2.edu:port=et-3/1/0.0:link=manlan</topology:hasURN>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.newy32aoa.net.internet2.edu:port=et-4/1/0.0:link=manlan</topology:hasURN>
     </owl:NamedIndividual>
     
 
