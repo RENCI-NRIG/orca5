@@ -112,6 +112,9 @@ public class ScriptConstructor {
         public Collection<String> Links() {
             return links;
         }
+        public String AllLinks() {
+            return links.toString();
+        }
 
         public String toString() {
             return "name: " + name + ", macs: " + macs.toString() + ", ips: " + ips.toString() + ", links: "
