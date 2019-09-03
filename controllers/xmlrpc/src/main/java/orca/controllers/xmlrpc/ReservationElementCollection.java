@@ -237,16 +237,20 @@ public class ReservationElementCollection {
     public Collection<String> vm_getAllLinks(String vm) {
         DomainElement de = AllNodeMap.get(vm);
         Set<String> linkCollection = new HashSet();
+        LinkedList<String> retVal = new LinkedList<>();
         if (de != null) {
             if (de.getPrecededBySet() != null) {
                 for (Entry<DomainElement, OntResource> parent : de.getPrecededBySet()) {
                     DomainElement parent_de = parent.getKey();
                     String de_url = parent_de.getName();
+                    if(!linkCollection.contains(de_url)) {
+                        retVal.add(de_url);
+                    }
                     linkCollection.add(de_url);
                 }
             }
         }
-        return linkCollection;
+        return retVal;
     }
 
     /* methods for group info */
