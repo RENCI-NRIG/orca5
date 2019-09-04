@@ -215,13 +215,16 @@ public class ScriptConstructor {
                     vm.group = reservations.group_getName(group_url);
                     while (i_links.hasNext()) {
                         String link_url = i_links.next();
+                        String name = reservations.link_getName(link_url, vm_url);
                         // System.out.println("XXXXXX-PRUTH: ScriptConstructor (group): processing link " + link_url + "
                         // (" + reservations.link_getName(link_url,vm_url) + ")");
-                        vm.ips.put(reservations.link_getName(link_url, vm_url),
+                        if(name != null) {
+                            vm.ips.put(reservations.link_getName(link_url, vm_url),
                                 reservations.vm_getIfaceIP(vm_url, link_url));
-                        vm.macs.put(reservations.link_getName(link_url, vm_url),
+                            vm.macs.put(reservations.link_getName(link_url, vm_url),
                                 reservations.vm_getIfaceMAC(vm_url, link_url));
-                        vm.links.add(reservations.link_getName(link_url, vm_url));
+                            vm.links.add(reservations.link_getName(link_url, vm_url));
+                        }
                     }
                     // Add vm to group
                     group.vms.add(vm);
@@ -250,13 +253,16 @@ public class ScriptConstructor {
                     Iterator<String> i_links = reservations.vm_getAllLinks(vm_url).iterator();
                     while (i_links.hasNext()) {
                         String link_url = i_links.next();
+                        String name = reservations.link_getName(link_url, vm_url);
                         // System.out.println("XXXXXX-PRUTH: ScriptConstructor (individual): processing link " +
                         // link_url+ " (" + reservations.link_getName(link_url,vm_url) + ")");
-                        vm.ips.put(reservations.link_getName(link_url, vm_url),
+                        if( name != null ) {
+                            vm.ips.put(reservations.link_getName(link_url, vm_url),
                                 reservations.vm_getIfaceIP(vm_url, link_url));
-                        vm.macs.put(reservations.link_getName(link_url, vm_url),
+                            vm.macs.put(reservations.link_getName(link_url, vm_url),
                                 reservations.vm_getIfaceMAC(vm_url, link_url));
-                        vm.links.add(reservations.link_getName(link_url, vm_url));
+                            vm.links.add(reservations.link_getName(link_url, vm_url));
+                        }
                     }
                     // Add vm to list of all vms
                     vm_table.put(vm_url, vm);
