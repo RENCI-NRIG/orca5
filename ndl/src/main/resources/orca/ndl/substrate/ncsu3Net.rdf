@@ -519,7 +519,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <ethernet:vlan rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/1009"/>
-        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vlan-storage</topology:hostInterfaceName>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">storage-1009</topology:hostInterfaceName>
     </owl:NamedIndividual>
     
 
