@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#set -x
 # This script expects the following environment variables
 # FVVLAN - mandatory
 # FLHOST - mandatory (FQDN or IP of the host on which this runs)
@@ -44,13 +45,13 @@ fi
 
 # need to know where FL is
 if [ -z "$FLEXEC" ]; then
-	FLEXEC="./floodlight.sh"
+	FLEXEC="/opt/floodlight/floodlight.jar"
 fi
 
-if [ ! -e "$FLEXEC" ]; then
-	echo "$FLEXEC is not a valid executable or cannot be found"
-	exit 1
-fi
+#if [ ! -e "$FLEXEC" ]; then
+#	echo "$FLEXEC is not a valid executable or cannot be found"
+#	exit 1
+#fi
 
 function my_lockfile ()
 {
@@ -187,49 +188,38 @@ return 0
 lock_file /tmp/fl_lock
 
 # start FL
+FPORT=$(findRandomPort)
+DOCKER_IMAGE="floodlight_image"
+DOCKER_CONTAINER_NAME="floodlight-${FVVLAN}"
+DOCKER_DIR="/opt/floodlight"
+FLJAR="/opt/floodlight/floodlight.jar"
+DOCKER_OPT="dit"
 
-# Flowvisor is compatible with Java 7
-JAVA_DIR="/usr/java/java7"
+IMAGE=$(docker image ls --filter "reference=${DOCKER_IMAGE}"  --format "{{.Repository}}")
+if [ "${IMAGE}" != "${DOCKER_IMAGE}" ]; then
+    docker image build -t ${DOCKER_IMAGE} ${DOCKER_DIR}        
+fi
 
-# Set JVM options
-JVM_OPTS=""
-JVM_OPTS="$JVM_OPTS -server -d64"
-JVM_OPTS="$JVM_OPTS -Xmx128m -Xms64m -Xmn32m -Xss256k"
-JVM_OPTS="$JVM_OPTS -XX:+UseParallelOldGC -XX:+AggressiveOpts -XX:+UseFastAccessorMethods"
-JVM_OPTS="$JVM_OPTS -XX:InlineSmallCode=8192 -XX:MaxInlineSize=8192 -XX:FreqInlineSize=8192"
-JVM_OPTS="$JVM_OPTS -XX:CompileThreshold=1500 -XX:PreBlockSpin=8"
+docker run --user $(id -u):$(id -g) -${DOCKER_OPT} -p ${FPORT}:${FPORT} -e FLPORT=${FPORT} -e FLEXEC=${FLJAR} -e FVVLAN=${FVVLAN} --name=${DOCKER_CONTAINER_NAME} ${DOCKER_IMAGE} > /dev/null 2>&1
+ 
+# let floodlight get started
+count=5
+while [ "$count" != "0" ]; do
+    RUNNING_CONT=$(docker ps --filter status=running --format "{{.Names}}" --filter "name=${DOCKER_CONTAINER_NAME}")
+    if [ "${RUNNING_CONT}" != "${DOCKER_CONTAINER_NAME}" ]; then
+        echo "ERROR: Unable to start Floodlight" 
+        exit 1
+    else 
+        break
+    fi
+    ###checkListeningPorts $FLPORT > /dev/null || break
+    sleep 1
 
-retry=5
+    # no more than count times to ensure progress
+    count=$(($count - 1))
+done 
 
-while [ "$retry" != "0" ]; do
-	FLPORT=$(findRandomPort)
-	RESTPORT=$(( $FLPORT + 5000 ))
-	#java ${JVM_OPTS} -Dnet.orca.vlan=vlan-$FVVLAN- -Dnet.floodlightcontroller.restserver.RestApiServer.port=$RESTPORT -Dnet.floodlightcontroller.core.FloodlightProvider.openflowport=$FLPORT -Dfloodlight.modules=net.floodlightcontroller.learningswitch.LearningSwitch,net.floodlightcontroller.counter.NullCounterStore,net.floodlightcontroller.perfmon.NullPktInProcessingTime -jar ${FLEXEC} > /dev/null 2>&1 &
-	${JAVA_DIR}/bin/java ${JVM_OPTS} -Dnet.orca.vlan=vlan-$FVVLAN- -Dnet.floodlightcontroller.jython.JythonDebugInterface.port=0 -Dnet.floodlightcontroller.restserver.RestApiServer.port=$RESTPORT -Dnet.floodlightcontroller.core.FloodlightProvider.openflowport=$FLPORT -jar ${FLEXEC} > /dev/null 2>&1 &
 
-	if [ "$?" != "0" ]; then
-		echo "ERROR: Unable to start Floodlight" 
-		exit 1
-	fi
-
-	# let floodlight get started
-	count=60
-	while [ "$count" != "0" ]; do
-		checkListeningPorts $FLPORT > /dev/null || break
-		sleep 1
-
-		# no more than count times to ensure progress
-		count=$(($count - 1))
-	done 
-	if [ "$count" != "0" ]; then
-		break
-	else
-		FLPID=`pgrep -f "net.orca.vlan=vlan-$FVVLAN-"`
-		kill -TERM $FLPID
-	fi
-	retry=$(($retry - 1))
-done
-
-echo "tcp:$FLHOST:$FLPORT"
+echo "tcp:$FLHOST:$FPORT"
 
 unlock_file /tmp/fl_lock
