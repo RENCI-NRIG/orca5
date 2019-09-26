@@ -2337,7 +2337,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/NetworkService/1/availableVLANSet/1"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/UMass/VLANLabel/533"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">308</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">346</collections:size>
     </owl:NamedIndividual>
     
 
@@ -2551,6 +2551,52 @@
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.bato.net.internet2.edu:port=et-8/0/0</topology:hasURN>
         <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.bato.net.internet2.edu:port=et-8/0/0</rdfs:label>
+    </owl:NamedIndividual>
+
+    
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/NCSU/PoP -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSU/PoP">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509"/>
+        <location:locatedAt rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet"/>
+        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509/EthernetSwitchingMatrix"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509/EthernetSwitchingMatrix -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509/EthernetSwitchingMatrix">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix"/>
+        <layer:swappingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <layer:switchingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509/TenGigabitEthernet/1/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Domain/NetworkService/1/availableVLANSet"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSUNet/Cisco/6509"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/0/0/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=et-9/0/0</topology:hasURN>
+        <rdfs:label>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=et-9/0/0</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -2948,6 +2994,7 @@
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/DD/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/ESNET/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/LAT/PoP"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/NCSU/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Nicta/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/UFL/PoP"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ion.rdf#ION/Uva-nlNet/PoP"/>
@@ -2966,6 +3013,18 @@
     <!-- http://geni-orca.renci.org/owl/latvmsite.rdf#LAT -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latvmsite.rdf#LAT"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/0/0/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/0/0/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU"/>
     
 
 
