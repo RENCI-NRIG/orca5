@@ -564,6 +564,15 @@
     
 
 
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3940 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3940">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3940.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3959 -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3959">
@@ -573,20 +582,11 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3968 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3960 -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3968">
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3960">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3968.0</layer:label_ID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3969 -->
-
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3969">
-        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
-        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3969.0</layer:label_ID>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3960.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
@@ -606,7 +606,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/availableVLANSet/3"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</collections:size>
     </owl:NamedIndividual>
     
 
@@ -617,7 +617,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/availableVLANSet/4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">18</collections:size>
     </owl:NamedIndividual>
     
 
@@ -626,8 +626,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/availableVLANSet/3">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3959"/>
-        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3968"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3940"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3959"/>
     </owl:NamedIndividual>
     
 
@@ -636,7 +636,7 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/availableVLANSet/4">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
-        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3969"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3960"/>
         <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/VLANLabel/3978"/>
     </owl:NamedIndividual>
     
