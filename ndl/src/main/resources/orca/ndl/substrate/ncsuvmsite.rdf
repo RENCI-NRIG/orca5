@@ -1,70 +1,38 @@
 <?xml version="1.0"?>
-
-
-<!DOCTYPE rdf:RDF [
-    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
-    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
-    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
-    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
-    <!ENTITY ip4 "http://geni-orca.renci.org/owl/ip4.owl#" >
-    <!ENTITY geni "http://geni-orca.renci.org/owl/geni.owl#" >
-    <!ENTITY wgs84_pos "http://www.w3.org/2003/01/geo/wgs84_pos#" >
-    <!ENTITY orca "http://geni-orca.renci.org/owl/orca.owl#" >
-    <!ENTITY layer "http://geni-orca.renci.org/owl/layer.owl#" >
-    <!ENTITY domain "http://geni-orca.renci.org/owl/domain.owl#" >
-    <!ENTITY storage "http://geni-orca.renci.org/owl/storage.owl#" >
-    <!ENTITY compute "http://geni-orca.renci.org/owl/compute.owl#" >
-    <!ENTITY layer2 "http://geni-orca.renci.org/owl/layer.owl#10" >
-    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY exogeni "http://geni-orca.renci.org/owl/exogeni.owl#" >
-    <!ENTITY ethernet "http://geni-orca.renci.org/owl/ethernet.owl#" >
-    <!ENTITY location "http://geni-orca.renci.org/owl/location.owl#" >
-    <!ENTITY topology "http://geni-orca.renci.org/owl/topology.owl#" >
-    <!ENTITY ncsuvmsite "http://geni-orca.renci.org/owl/ncsuvmsite.rdf#" >
-    <!ENTITY collections "http://geni-orca.renci.org/owl/collections.owl#" >
-    <!ENTITY NCSU "http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/" >
-    <!ENTITY ncsuvmsite2 "http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/" >
-    <!ENTITY ExoGeni "http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/" >
-    <!ENTITY BareMetal2 "http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/BareMetal/" >
-    <!ENTITY TenGigabitEthernet2 "http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TenGigabitEthernet/1/" >
-    <!ENTITY TengigabitEthernet2 "http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TengigabitEthernet/2/" >
-    <!ENTITY TenGigabitEthernet3 "http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/IBM/G8052/TenGigabitEthernet/1/2/" >
-    <!ENTITY TenGigabitEthernet "http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/IBM/G8052/TenGigabitEthernet/1/1/" >
-]>
-
-
 <rdf:RDF xmlns="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#"
      xml:base="http://geni-orca.renci.org/owl/ncsuvmsite.rdf"
-     xmlns:layer2="&layer;10"
-     xmlns:location="http://geni-orca.renci.org/owl/location.owl#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
-     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
-     xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
-     xmlns:TengigabitEthernet2="&ncsuvmsite;NCSU/ExoGeni/TengigabitEthernet/2/"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
-     xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
-     xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
-     xmlns:ncsuvmsite="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#"
-     xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
-     xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
-     xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
-     xmlns:NCSU="&ncsuvmsite;NCSU/"
-     xmlns:BareMetal2="&ncsuvmsite;NCSU/BareMetal/"
-     xmlns:ExoGeni="&ncsuvmsite;NCSU/ExoGeni/"
-     xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
-     xmlns:orca="http://geni-orca.renci.org/owl/orca.owl#"
-     xmlns:TenGigabitEthernet2="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/1/"
-     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:orca2="http://geni-orca.renci.org/owl/orca.rdf#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
-     xmlns:TenGigabitEthernet="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/IBM/G8052/TenGigabitEthernet/1/1/"
-     xmlns:exogeni="http://geni-orca.renci.org/owl/exogeni.owl#"
-     xmlns:TenGigabitEthernet3="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/IBM/G8052/TenGigabitEthernet/1/2/"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:ncsuvmsite="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:storage="http://geni-orca.renci.org/owl/storage.owl#"
-     xmlns:ncsuvmsite2="&ncsuvmsite;ncsuvmsite/">
+     xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
+     xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
+     xmlns:compute="http://geni-orca.renci.org/owl/compute.owl#"
+     xmlns:exogeni="http://geni-orca.renci.org/owl/exogeni.owl#"
+     xmlns:TenGigabitEthernet="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/1/"
+     xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:layer2="http://geni-orca.renci.org/owl/layer.owl#10"
+     xmlns:ncsu="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/"
+     xmlns:ncsuvmsite2="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/"
+     xmlns:ExoGeni="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/"
+     xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
+     xmlns:geni="http://geni-orca.renci.org/owl/geni.owl#"
+     xmlns:ip4="http://geni-orca.renci.org/owl/ip4.owl#"
+     xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
+     xmlns:orca="http://geni-orca.renci.org/owl/orca.owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:domain="http://geni-orca.renci.org/owl/domain.owl#"
+     xmlns:location="http://geni-orca.renci.org/owl/location.owl#"
+     xmlns:TenGigabitEthernet5="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/1/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
     <owl:Ontology rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf">
         <owl:imports rdf:resource="http://geni-orca.renci.org/owl/geni.owl"/>
+        <owl:imports rdf:resource="http://geni-orca.renci.org/owl/orca.rdf"/>
     </owl:Ontology>
     
 
@@ -82,109 +50,145 @@
 
     <!-- http://geni-orca.renci.org/owl/collections.owl#element -->
 
-    <owl:ObjectProperty rdf:about="&collections;element"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/collections.owl#element"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#availableVMLabelSet -->
 
-    <owl:ObjectProperty rdf:about="&compute;availableVMLabelSet"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/compute.owl#availableVMLabelSet"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/compute.owl#hasUnitServer -->
 
-    <owl:ObjectProperty rdf:about="&compute;hasUnitServer"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/compute.owl#hasUnitServer"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/domain.owl#hasAccessMethod -->
 
-    <owl:ObjectProperty rdf:about="&domain;hasAccessMethod"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasAccessMethod"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#hasAggregateManager -->
+
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasAggregateManager"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/domain.owl#hasResourceType -->
 
-    <owl:ObjectProperty rdf:about="&domain;hasResourceType"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasResourceType"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/domain.owl#hasService -->
 
-    <owl:ObjectProperty rdf:about="&domain;hasService"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasService"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/domain.owl#hasTopology -->
 
-    <owl:ObjectProperty rdf:about="&domain;hasTopology"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasTopology"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#Tagged-Ethernet -->
+
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#Tagged-Ethernet"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/ethernet.owl#availableVLANSet -->
 
-    <owl:ObjectProperty rdf:about="&ethernet;availableVLANSet"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#availableVLANSet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#vlan -->
+
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#vlan"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ip4.owl#localIPAddress -->
+
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/ip4.owl#localIPAddress"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#atLayer -->
 
-    <owl:ObjectProperty rdf:about="&layer;atLayer"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#atLayer"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#hasBitRate -->
 
-    <owl:ObjectProperty rdf:about="&layer;hasBitRate"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#hasBitRate"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#lowerBound -->
 
-    <owl:ObjectProperty rdf:about="&layer;lowerBound"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#lowerBound"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#switchingCapability -->
 
-    <owl:ObjectProperty rdf:about="&layer;switchingCapability"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#switchingCapability"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#upperBound -->
 
-    <owl:ObjectProperty rdf:about="&layer;upperBound"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#upperBound"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/location.owl#locatedAt -->
 
-    <owl:ObjectProperty rdf:about="&location;locatedAt"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/location.owl#locatedAt"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#openflowCapable -->
+
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/openflow.owl#openflowCapable"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#availableLUNLabelSet -->
+
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/storage.owl#availableLUNLabelSet"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#hasInterface -->
 
-    <owl:ObjectProperty rdf:about="&topology;hasInterface"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasInterface"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#hasSwitchMatrix -->
 
-    <owl:ObjectProperty rdf:about="&topology;hasSwitchMatrix"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasSwitchMatrix"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#interfaceOf -->
 
-    <owl:ObjectProperty rdf:about="&topology;interfaceOf"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/topology.owl#interfaceOf"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#linkTo -->
 
-    <owl:ObjectProperty rdf:about="&topology;linkTo"/>
+    <owl:ObjectProperty rdf:about="http://geni-orca.renci.org/owl/topology.owl#linkTo"/>
     
 
 
@@ -201,49 +205,61 @@
 
     <!-- http://geni-orca.renci.org/owl/collections.owl#size -->
 
-    <owl:DatatypeProperty rdf:about="&collections;size"/>
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/collections.owl#size"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/domain.owl#isAllocatable -->
 
-    <owl:DatatypeProperty rdf:about="&domain;isAllocatable"/>
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/domain.owl#isAllocatable"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#bandwidth -->
 
-    <owl:DatatypeProperty rdf:about="&layer;bandwidth"/>
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#bandwidth"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#isLabelProducer -->
 
-    <owl:DatatypeProperty rdf:about="&layer;isLabelProducer"/>
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#isLabelProducer"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#isPrimary -->
+
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#isPrimary"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#label_ID -->
 
-    <owl:DatatypeProperty rdf:about="&layer;label_ID"/>
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/layer.owl#label_ID"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#storageCapacity -->
+
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/storage.owl#storageCapacity"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#hostInterfaceName -->
 
-    <owl:DatatypeProperty rdf:about="&topology;hostInterfaceName"/>
+    <owl:DatatypeProperty rdf:about="http://geni-orca.renci.org/owl/topology.owl#hostInterfaceName"/>
     
 
 
-    <!-- http://www.w3.org/2003/01/geo/wgs84_pos#lat -->
+    <!-- http://www.w3.org/2003/01/geo/wgs84_pos#ncsu -->
 
-    <owl:DatatypeProperty rdf:about="&wgs84_pos;lat"/>
+    <owl:DatatypeProperty rdf:about="http://www.w3.org/2003/01/geo/wgs84_pos#ncsu"/>
     
 
 
     <!-- http://www.w3.org/2003/01/geo/wgs84_pos#long -->
 
-    <owl:DatatypeProperty rdf:about="&wgs84_pos;long"/>
+    <owl:DatatypeProperty rdf:about="http://www.w3.org/2003/01/geo/wgs84_pos#long"/>
     
 
 
@@ -260,79 +276,97 @@
 
     <!-- http://geni-orca.renci.org/owl/collections.owl#Set -->
 
-    <owl:Class rdf:about="&collections;Set"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/collections.owl#Set"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/domain.owl#NetworkService -->
 
-    <owl:Class rdf:about="&domain;NetworkService"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/domain.owl#NetworkService"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement -->
 
-    <owl:Class rdf:about="&ethernet;EthernetNetworkElement"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix -->
 
-    <owl:Class rdf:about="&ethernet;EthernetSwitchingMatrix"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/ethernet.owl#VLAN -->
 
-    <owl:Class rdf:about="&ethernet;VLAN"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/exogeni.owl#BareMetalCluster -->
 
-    <owl:Class rdf:about="&exogeni;BareMetalCluster"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/exogeni.owl#BareMetalCluster"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/exogeni.owl#ExoGENICluster -->
 
-    <owl:Class rdf:about="&exogeni;ExoGENICluster"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENICluster"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ip4.owl#IPAddress -->
+
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#LabelRange -->
 
-    <owl:Class rdf:about="&layer;LabelRange"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/layer.owl#LabelSet -->
 
-    <owl:Class rdf:about="&layer;LabelSet"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/location.owl#Location -->
 
-    <owl:Class rdf:about="&location;Location"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/location.owl#Location"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#ISCSI -->
+
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/storage.owl#ISCSI"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#LUN -->
+
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/storage.owl#LUN"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#Device -->
 
-    <owl:Class rdf:about="&topology;Device"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/topology.owl#Device"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#Interface -->
 
-    <owl:Class rdf:about="&topology;Interface"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
     
 
 
     <!-- http://geni-orca.renci.org/owl/topology.owl#NetworkDomain -->
 
-    <owl:Class rdf:about="&topology;NetworkDomain"/>
+    <owl:Class rdf:about="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
     
 
 
@@ -347,349 +381,517 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/compute.owl#BareMetalCE -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/1/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/compute.owl#BareMetalCE"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/2/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/compute.owl#VM -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/2/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/compute.owl#VM"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/3/ethernet/VLAN/1009 -->
+    <!-- http://geni-orca.renci.org/owl/domain.owl#Node -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/3/ethernet/VLAN/1009"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/domain.owl#Node"/>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU -->
+    <!-- http://geni-orca.renci.org/owl/domain.owl#ORCAActor -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU">
-        <rdf:type rdf:resource="&location;Location"/>
-        <wgs84_pos:lat>35.774154</wgs84_pos:lat>
-        <wgs84_pos:long>-78.677136</wgs84_pos:long>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/domain.owl#ORCAActor"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/domain.owl#VLAN -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/exogeni.owl#ExoGENI-M4 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENI-M4"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/exogeni.owl#ExoGENIUnitServer -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENIUnitServer"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/2/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/3/ethernet/VLAN/1009 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/3/ethernet/VLAN/1009"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/BareMetal/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/BareMetal/1/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/BareMetal/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/BareMetal/2/ethernet"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/location.owl#Location"/>
+        <wgs84_pos:ncsu>-77.0823839</wgs84_pos:ncsu>
+        <wgs84_pos:long>-12.0689378</wgs84_pos:long>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/BareMetal -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/Baremetal -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/BareMetal">
-        <rdf:type rdf:resource="&exogeni;BareMetalCluster"/>
-        <rdf:type rdf:resource="&topology;Device"/>
-        <topology:hasSwitchMatrix rdf:resource="&ncsuvmsite;NCSU/BareMetal/EthernetSwitchMatrix"/>
-        <compute:availableVMLabelSet rdf:resource="&ncsuvmsite;NCSU/BareMetal/availableBareMetalLabelSet"/>
-        <topology:hasInterface rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TengigabitEthernet/2/ethernet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/Baremetal">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#BareMetalCluster"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+        <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/availableBareMetalLabelSet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/TenGigabitEthernet/1/ethernet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/TenGigabitEthernet/2/ethernet"/>
+        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/EthernetSwitchMatrix"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/BareMetal/EthernetSwitchMatrix -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/BareMetal/EthernetSwitchMatrix">
-        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
-        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENICluster"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+        <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVMLabelSet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/1/ethernet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/2/ethernet"/>
+        <topology:hasSwitchMatrix rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/EthernetSwitchMatrix"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/BareMetal/availableBareMetalLabelSet -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ISCSI -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/BareMetal/availableBareMetalLabelSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">2</collections:size>
-        <domain:hasResourceType rdf:resource="&compute;BareMetalCE"/>
-        <compute:hasUnitServer rdf:resource="&exogeni;ExoGENI-M4"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ISCSI">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/storage.owl#ISCSI"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Device"/>
+        <storage:availableLUNLabelSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableLUNLabelSet"/>
+        <topology:hasInterface rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet"/>
+        <storage:storageCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3000</storage:storageCapacity>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/EthernetSwitchMatrix -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni">
-        <rdf:type rdf:resource="&exogeni;ExoGENICluster"/>
-        <rdf:type rdf:resource="&topology;Device"/>
-        <topology:hasSwitchMatrix rdf:resource="&ncsuvmsite;NCSU/ExoGeni/EthernetSwitchMatrix"/>
-        <topology:hasInterface rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/1/ethernet"/>
-        <compute:availableVMLabelSet rdf:resource="&ncsuvmsite;NCSU/ExoGeni/availableVMLabelSet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni//VLANLabel/100 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/availableBareMetalLabelSet -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni//VLANLabel/100">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">100.0</layer:label_ID>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/availableBareMetalLabelSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <compute:hasUnitServer rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENI-M4"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#BareMetalCE"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</collections:size>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/EthernetSwitchMatrix -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/TenGigabitEthernet/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/EthernetSwitchMatrix">
-        <rdf:type rdf:resource="&ethernet;EthernetSwitchingMatrix"/>
-        <layer:switchingCapability rdf:resource="&ethernet;EthernetNetworkElement"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/TenGigabitEthernet/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <openflow:openflowCapable rdf:resource="http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.0"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/Baremetal"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/BareMetal/1/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">of-data</topology:hostInterfaceName>
+        <rdfs:label>20-31</rdfs:label>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/LUNLabel/1 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/TenGigabitEthernet/2/ethernet -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/LUNLabel/1">
-        <rdf:type rdf:resource="&storage;LUN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">1.0</layer:label_ID>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/TenGigabitEthernet/2/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/Baremetal"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/BareMetal/2/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vlan-data</topology:hostInterfaceName>
+        <rdfs:label>20-31</rdfs:label>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/LUNLabel/116 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/EthernetSwitchMatrix -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/LUNLabel/116">
-        <rdf:type rdf:resource="&storage;LUN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">116.0</layer:label_ID>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/EthernetSwitchMatrix">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetSwitchingMatrix"/>
+        <layer:switchingCapability rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/PoP -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/PoP -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/PoP">
-        <rdf:type rdf:resource="&collections;Set"/>
-        <location:locatedAt rdf:resource="&ncsuvmsite;NCSU"/>
-        <collections:element rdf:resource="&ncsuvmsite;NCSU/BareMetal"/>
-        <collections:element rdf:resource="&ncsuvmsite;NCSU/ExoGeni"/>
-        <collections:element rdf:resource="&ncsuvmsite;NCSU/ISCSI"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/PoP">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/collections.owl#Set"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/Baremetal"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ISCSI"/>
+        <location:locatedAt rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TenGigabitEthernet/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableLUNLabelSet -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/1/ethernet">
-        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>41-50</rdfs:label>
-        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName>data</topology:hostInterfaceName>
-        <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/1/ethernet"/>
-        <topology:interfaceOf rdf:resource="&ncsuvmsite;NCSU/ExoGeni"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableLUNLabelSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableLUNLabelSet/1"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/storage.owl#LUN"/>
+        <collections:size>116</collections:size>
+        <storage:storageCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3000</storage:storageCapacity>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TenGigabitEthernet/3/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVLANSet -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet">
-        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <rdf:type rdf:resource="&topology;Interface"/>
-        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage</topology:hostInterfaceName>
-        <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <ethernet:Tagged-Ethernet rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
-        <topology:interfaceOf rdf:resource="&ncsuvmsite;NCSU/ISCSI"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVLANSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVLANSet/1"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1000</collections:size>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVMLabelSet -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009">
-        <rdf:type rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <rdf:type rdf:resource="&topology;Interface"/>
-        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName rdf:datatype="&xsd;string">storage</topology:hostInterfaceName>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/3/ethernet/VLAN/1009"/>
-        <ethernet:vlan rdf:resource="&ncsuvmsite;NCSU/ExoGeni/VLANLabel/1009"/>
-        <topology:interfaceOf rdf:resource="&ncsuvmsite;NCSU/ISCSI"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVMLabelSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <compute:hasUnitServer rdf:resource="http://geni-orca.renci.org/owl/exogeni.owl#ExoGENIUnitServer"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/compute.owl#VM"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">104</collections:size>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/1 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/1">
-        <rdf:type rdf:resource="&ip4;IPAddress"/>
-        <layer:isPrimary rdf:datatype="&xsd;boolean">true</layer:isPrimary>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet/1"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet/2"/>
+        <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">50</collections:size>
+        <domain:isAllocatable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</domain:isAllocatable>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni//VLANLabel/2 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni//VLANLabel/2">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">2.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/LUNLabel/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/LUNLabel/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/storage.owl#LUN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/LUNLabel/116 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/LUNLabel/116">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/storage.owl#LUN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">116.0</layer:label_ID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/1/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/1/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <openflow:openflowCapable rdf:resource="http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.0"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/1/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">of-data</topology:hostInterfaceName>
+        <rdfs:label>209,213,217,221,225,229,233,237,241,166,168</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/2/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/2/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/2/ethernet"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName>vlan-data</topology:hostInterfaceName>
+        <rdfs:label>139,133,137,141,145,149,153,157,161,165,167</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:Tagged-Ethernet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#Interface"/>
+        <ethernet:vlan rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/1009"/>
+        <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ISCSI"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/3/ethernet/VLAN/1009"/>
+        <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">storage-1009</topology:hostInterfaceName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/1 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
+        <layer:isPrimary rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</layer:isPrimary>
         <layer:label_ID>10.104.0.2</layer:label_ID>
-        <ip4:netmask>255.255.255.0</ip4:netmask>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2">
-        <rdf:type rdf:resource="&ip4;IPAddress"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
         <layer:label_ID>10.104.0.3</layer:label_ID>
-        <ip4:netmask>255.255.255.0</ip4:netmask>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/3 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/3 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/3">
-        <rdf:type rdf:resource="&ip4;IPAddress"/>
-        <ip4:netmask>255.255.255.0</ip4:netmask>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/3">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ip4.owl#IPAddress"/>
         <layer:label_ID>10.104.0.4</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/TengigabitEthernet/2/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/100 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/TengigabitEthernet/2/ethernet">
-        <rdf:type rdf:resource="&topology;Interface"/>
-        <rdfs:label>41-50</rdfs:label>
-        <layer:bandwidth rdf:datatype="&xsd;long">10000000000</layer:bandwidth>
-        <topology:hostInterfaceName>data</topology:hostInterfaceName>
-        <layer:hasBitRate rdf:resource="&layer;10G"/>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#NCSUNet/Cisco/UCSFI/TenGigabitEthernet/1/2/ethernet"/>
-        <topology:interfaceOf rdf:resource="&ncsuvmsite;NCSU/BareMetal"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/100">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/VLANLabel/1009 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/1001 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/VLANLabel/1009">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;int">1009</layer:label_ID>
-        <ip4:localIPAddress rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/1"/>
-        <ip4:localIPAddress rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2"/>
-        <ip4:localIPAddress rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/3"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/1001">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1001.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/VLANLabel/1760 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/1009 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/VLANLabel/1760">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">1760.0</layer:label_ID>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/1009">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/1"/>
+        <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/2"/>
+        <ip4:localIPAddress rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009/ipaddress/3"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1009.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/VLANLabel/179 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/109 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/VLANLabel/179">
-        <rdf:type rdf:resource="&ethernet;VLAN"/>
-        <layer:label_ID rdf:datatype="&xsd;float">179.0</layer:label_ID>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/109">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">109.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/availableLUNLabelSet/1 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/110 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/availableLUNLabelSet/1">
-        <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&ncsuvmsite;NCSU/ExoGeni/LUNLabel/1"/>
-        <layer:upperBound rdf:resource="&ncsuvmsite;NCSU/ExoGeni/LUNLabel/116"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/110">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">110.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/availableLUNLabelset -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/149 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/availableLUNLabelset">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">116</collections:size>
-        <storage:storageCapacity rdf:datatype="&xsd;int">6000</storage:storageCapacity>
-        <collections:element rdf:resource="&ncsuvmsite;NCSU/ExoGeni/availableLUNLabelSet/1"/>
-        <domain:hasResourceType rdf:resource="&storage;LUN"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/149">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#VLAN"/>
+        <layer:label_ID rdf:datatype="http://www.w3.org/2001/XMLSchema#float">149.0</layer:label_ID>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/availableVLANSet -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableLUNLabelSet/1 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/availableVLANSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">80</collections:size>
-        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
-        <collections:element rdf:resource="&ncsuvmsite;NCSU/ExoGeni/availableVLANSet/1"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableLUNLabelSet/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/LUNLabel/1"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/LUNLabel/116"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/availableVLANSet/1 -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVLANSet/1 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/availableVLANSet/1">
-        <rdf:type rdf:resource="&layer;LabelRange"/>
-        <layer:lowerBound rdf:resource="&ncsuvmsite;NCSU/ExoGeni//VLANLabel/100"/>
-        <layer:upperBound rdf:resource="&ncsuvmsite;NCSU/ExoGeni/VLANLabel/179"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVLANSet/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni//VLANLabel/2"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/1001"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/availableVMLabelSet -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet/1 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/availableVMLabelSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">208</collections:size>
-        <domain:hasResourceType rdf:resource="&compute;VM"/>
-        <compute:hasUnitServer rdf:resource="&exogeni;ExoGENIUnitServer"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/100"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/109"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ExoGeni/staticVLANSet -->
+    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet/2 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ExoGeni/staticVLANSet">
-        <rdf:type rdf:resource="&layer;LabelSet"/>
-        <collections:size rdf:datatype="&xsd;int">1</collections:size>
-        <domain:isAllocatable rdf:datatype="&xsd;boolean">false</domain:isAllocatable>
-        <domain:hasResourceType rdf:resource="&domain;VLAN"/>
-        <collections:element rdf:resource="&ncsuvmsite;NCSU/ExoGeni/VLANLabel/1760"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#NCSU/ISCSI -->
-
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;NCSU/ISCSI">
-        <rdf:type rdf:resource="&storage;ISCSI"/>
-        <rdf:type rdf:resource="&topology;Device"/>
-        <storage:storageCapacity rdf:datatype="&xsd;int">6000</storage:storageCapacity>
-        <topology:hasInterface rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet"/>
-        <topology:hasInterface rdf:resource="&ncsuvmsite;NCSU/ExoGeni/TenGigabitEthernet/3/ethernet/VLAN/1009"/>
-        <storage:availableLUNLabelSet rdf:resource="&ncsuvmsite;NCSU/ExoGeni/availableLUNLabelset"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet/2">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelRange"/>
+        <layer:lowerBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/110"/>
+        <layer:upperBound rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/VLANLabel/149"/>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;ncsuvmsite/Domain">
-        <rdf:type rdf:resource="&topology;NetworkDomain"/>
-        <layer:isLabelProducer rdf:datatype="&xsd;boolean">true</layer:isLabelProducer>
-        <collections:element rdf:resource="&ncsuvmsite;NCSU/ExoGeni/PoP"/>
-        <domain:hasService rdf:resource="&ncsuvmsite;ncsuvmsite/Domain/NetworkService/1"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/topology.owl#NetworkDomain"/>
+        <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/PoP"/>
+        <domain:hasService rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain/NetworkService/1"/>
+        <layer:isLabelProducer rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</layer:isLabelProducer>
     </owl:NamedIndividual>
     
 
 
     <!-- http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain/NetworkService/1 -->
 
-    <owl:NamedIndividual rdf:about="&ncsuvmsite;ncsuvmsite/Domain/NetworkService/1">
-        <rdf:type rdf:resource="&domain;NetworkService"/>
-        <domain:hasTopology rdf:resource="&domain;Node"/>
-        <domain:hasAccessMethod rdf:resource="&domain;ORCAActor"/>
-        <layer:atLayer rdf:resource="&ethernet;EthernetNetworkElement"/>
-        <compute:availableVMLabelSet rdf:resource="&ncsuvmsite;NCSU/BareMetal/availableBareMetalLabelSet"/>
-        <ethernet:availableVLANSet rdf:resource="&ncsuvmsite;NCSU/ExoGeni/availableVLANSet"/>
-        <compute:availableVMLabelSet rdf:resource="&ncsuvmsite;NCSU/ExoGeni/availableVMLabelSet"/>
-        <ethernet:availableVLANSet rdf:resource="&ncsuvmsite;NCSU/ExoGeni/staticVLANSet"/>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsuvmsite/Domain/NetworkService/1">
+        <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#NetworkService"/>
+        <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/BareMetal/availableBareMetalLabelSet"/>
+        <compute:availableVMLabelSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVMLabelSet"/>
+        <domain:hasAccessMethod rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ORCAActor"/>
+        <domain:hasAggregateManager rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIController"/>
+        <domain:hasAggregateManager rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ncsuRackController"/>
+        <domain:hasTopology rdf:resource="http://geni-orca.renci.org/owl/domain.owl#Node"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableVLANSet"/>
+        <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/staticVLANSet"/>
+        <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
+        <storage:availableLUNLabelSet rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/availableLUNLabelSet"/>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/layer.owl#10G -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/layer.owl#10G"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.0 -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/openflow.owl#OpenFlow-1.0"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/orca.rdf#ExoGENIController -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIController"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/orca.rdf#ncsuRackController -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/orca.rdf#ncsuRackController"/>
+    
+
+
+    <!-- http://geni-orca.renci.org/owl/storage.owl#LUN -->
+
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/storage.owl#LUN"/>
 </rdf:RDF>
 
 
 
-<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 4.2.6.20160910-2108) https://github.com/owlcs/owlapi -->
 
