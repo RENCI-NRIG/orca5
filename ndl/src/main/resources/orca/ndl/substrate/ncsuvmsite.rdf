@@ -679,7 +679,7 @@
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/2/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hostInterfaceName>vlan-data</topology:hostInterfaceName>
-        <rdfs:label>139,133,137,141,145,149,153,157,161,165,167</rdfs:label>
+        <rdfs:label>129,133,137,141,145,149,153,157,161,165,167</rdfs:label>
     </owl:NamedIndividual>
     
 

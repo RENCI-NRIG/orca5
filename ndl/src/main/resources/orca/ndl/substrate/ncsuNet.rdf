@@ -343,7 +343,7 @@
     <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/ncsu/Cisco/6509/TenGigabitEthernet/0/1/ethernet -->
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/ncsu/Cisco/6509/TenGigabitEthernet/0/1/ethernet">
-        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.bato.net.internet2.edu:port=et-8/0/0</topology:hasURN>
+        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=et-9/0/0</topology:hasURN>
     </owl:NamedIndividual>
     
 
@@ -477,6 +477,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">of-data</topology:hostInterfaceName>
         <rdfs:label>209,213,217,221,225,229,233,237,241</rdfs:label>
     </owl:NamedIndividual>
     
@@ -492,6 +493,7 @@
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810"/>
         <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/ncsuvmsite.rdf#ncsu/ExoGeni/TenGigabitEthernet/2/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
+        <topology:hostInterfaceName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vlan-data</topology:hostInterfaceName>
         <rdfs:label>129,133,137,141,145,149,153,157,161</rdfs:label>
     </owl:NamedIndividual>
     
@@ -617,7 +619,7 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/availableVLANSet/4"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
-        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">18</collections:size>
+        <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">19</collections:size>
     </owl:NamedIndividual>
     
 
