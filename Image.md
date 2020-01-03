@@ -52,6 +52,14 @@ df9849bcb5bf4c7196b9252238be2cc3b2f0ad9b
 NOTE: neuca-tools must be installed with python2.7
 ```
 sudo su - 
+yum install -y iscsi-initiator-utils
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+pip install -U pip
+pip install -U boto
+pip install python-daemon==2.1.2
+pip install netaddr
+yum install -y git
 git clone https://github.com/RENCI-NRIG/neuca-guest-tools.git
 cd neuca-guest-tools/neuca-py
 python setup.py install
@@ -72,6 +80,11 @@ ExecStop=/bin/python /usr/bin/neucad stop
 
 [Install]
 WantedBy=default.target
+```
+- Enable neucad service
+```
+systemctl enable neucad.service
+service neucad start
 ```
 - Create an init file for centos6, debian, fedora or ubuntu system
 ```
