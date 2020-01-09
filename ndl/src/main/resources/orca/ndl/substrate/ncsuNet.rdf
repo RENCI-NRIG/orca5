@@ -6,16 +6,16 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:openflow="http://geni-orca.renci.org/owl/openflow.owl#"
-     xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
      xmlns:pS4810="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/"
+     xmlns:layer="http://geni-orca.renci.org/owl/layer.owl#"
      xmlns:collections="http://geni-orca.renci.org/owl/collections.owl#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:layer2="http://geni-orca.renci.org/owl/layer.owl#10"
      xmlns:ncsu="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsu/"
-     xmlns:ncsuNet="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/"
      xmlns:AcisRenci="http://geni-orca.renci.org/owl/ncsuNet.rdf#AcisRenci/"
      xmlns:topology="http://geni-orca.renci.org/owl/topology.owl#"
+     xmlns:ncsuNet="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/"
      xmlns:ethernet="http://geni-orca.renci.org/owl/ethernet.owl#"
      xmlns:TenGigabitEthernet2="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/TenGigabitEthernet/1/1/"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -234,15 +234,15 @@
     
 
 
-    <!-- http://www.w3.org/2003/01/geo/wgs84_pos#ncsu -->
-
-    <owl:DatatypeProperty rdf:about="http://www.w3.org/2003/01/geo/wgs84_pos#ncsu"/>
-    
-
-
     <!-- http://www.w3.org/2003/01/geo/wgs84_pos#long -->
 
     <owl:DatatypeProperty rdf:about="http://www.w3.org/2003/01/geo/wgs84_pos#long"/>
+    
+
+
+    <!-- http://www.w3.org/2003/01/geo/wgs84_pos#ncsu -->
+
+    <owl:DatatypeProperty rdf:about="http://www.w3.org/2003/01/geo/wgs84_pos#ncsu"/>
     
 
 
@@ -340,10 +340,10 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/ncsu/Cisco/6509/TenGigabitEthernet/0/1/ethernet -->
+    <!-- http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/NCSU/Cisco/6509/TenGigabitEthernet/0/1/ethernet -->
 
-    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/ncsu/Cisco/6509/TenGigabitEthernet/0/1/ethernet">
-        <topology:hasURN>urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.bato.net.internet2.edu:port=et-8/0/0</topology:hasURN>
+    <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/NCSU/Cisco/6509/TenGigabitEthernet/0/1/ethernet">
+        <topology:hasURN rdf:datatype="http://www.w3.org/2001/XMLSchema#string">urn:ogf:network:domain=al2s.net.internet2.edu:node=rtsw.rale.net.internet2.edu:port=et-9/0/0</topology:hasURN>
     </owl:NamedIndividual>
     
 
@@ -358,8 +358,8 @@
 
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsu/Net">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/location.owl#Location"/>
-        <wgs84_pos:ncsu>35.7720220.</wgs84_pos:ncsu>
         <wgs84_pos:long>-78.6738620</wgs84_pos:long>
+        <wgs84_pos:ncsu>35.7720220.</wgs84_pos:ncsu>
     </owl:NamedIndividual>
     
 
@@ -458,7 +458,7 @@
         <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810/availableVLANSet/SDN"/>
         <layer:hasBitRate rdf:resource="http://geni-orca.renci.org/owl/layer.owl#10G"/>
         <topology:interfaceOf rdf:resource="http://geni-orca.renci.org/owl/ncsuNet.rdf#ncsuNet/Force10/S4810"/>
-        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/ncsu/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
+        <topology:linkTo rdf:resource="http://geni-orca.renci.org/owl/instageni.rdf#InstaGeni/NCSU/Cisco/6509/TenGigabitEthernet/0/1/ethernet"/>
         <layer:bandwidth rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10000000000</layer:bandwidth>
         <topology:hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SDN</topology:hasName>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">253</rdfs:label>
