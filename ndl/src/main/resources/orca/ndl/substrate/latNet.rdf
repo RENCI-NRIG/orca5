@@ -44,12 +44,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/domain.owl#hasBroker -->
-
-    <owl:AnnotationProperty rdf:about="http://geni-orca.renci.org/owl/domain.owl#hasBroker"/>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/ethernet.owl#Tagged-Ethernet -->
 
     <owl:AnnotationProperty rdf:about="http://geni-orca.renci.org/owl/ethernet.owl#Tagged-Ethernet"/>
@@ -384,8 +378,6 @@
     <owl:NamedIndividual rdf:about="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Domain/NetworkService/1">
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/domain.owl#NetworkService"/>
         <domain:hasAccessMethod rdf:resource="http://geni-orca.renci.org/owl/domain.owl#ORCAActor"/>
-        <domain:hasAggregateManager rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIController"/>
-        <domain:hasAggregateManager rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#latRackController"/>
         <domain:hasTopology rdf:resource="http://geni-orca.renci.org/owl/domain.owl#Node"/>
         <ethernet:availableVLANSet rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet"/>
         <layer:atLayer rdf:resource="http://geni-orca.renci.org/owl/ethernet.owl#EthernetNetworkElement"/>
@@ -422,9 +414,9 @@
         <rdf:type rdf:resource="http://geni-orca.renci.org/owl/layer.owl#LabelSet"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/3"/>
         <collections:element rdf:resource="http://geni-orca.renci.org/owl/latNet.rdf#latNet/Force10/S4810/availableVLANSet/4"/>
+        <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
         <domain:hasResourceType rdf:resource="http://geni-orca.renci.org/owl/domain.owl#VLAN"/>
         <collections:size rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</collections:size>
-        <domain:hasBroker rdf:resource="http://geni-orca.renci.org/owl/orca.rdf#ExoGENIBroker"/>
     </owl:NamedIndividual>
     
 
