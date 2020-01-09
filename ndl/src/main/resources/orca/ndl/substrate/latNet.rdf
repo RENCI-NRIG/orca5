@@ -62,12 +62,6 @@
     
 
 
-    <!-- http://geni-orca.renci.org/owl/topology.owl#hasName -->
-
-    <owl:AnnotationProperty rdf:about="http://geni-orca.renci.org/owl/topology.owl#hasName"/>
-    
-
-
     <!-- http://geni-orca.renci.org/owl/topology.owl#hostInterfaceName -->
 
     <owl:AnnotationProperty rdf:about="http://geni-orca.renci.org/owl/topology.owl#hostInterfaceName"/>
