@@ -783,20 +783,21 @@ class Project:
 
     @classmethod
     def _has_resources_poll(self, project_name, timeout):
+        retry = 3
 
-        begin = time.time()
-        while True:
-            time_passed = time.time() - begin
-            res = self._has_resources(project_name)
+        res = True
+        for i in range(retry):
+            begin = time.time()
+            while True:
+                time_passed = time.time() - begin
+                res = self._has_resources(project_name)
 
-            if res == False:
-                LOG.warning("openstack project " + str(project_name) + " has no resources")
-                return False
-
-            if time_passed > timeout:
-                break
-            time.sleep(10)
-        return True
+                if time_passed > timeout:
+                    break
+                time.sleep(10)
+        if res == False:
+            LOG.warning("openstack project " + str(project_name) + " has no resources")
+        return res
 
     @classmethod
     def cleanup(self, project_name, user_name):

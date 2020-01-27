@@ -2119,6 +2119,11 @@ public class OrcaXmlrpcHandler extends XmlrpcHandlerHelper implements IOrcaXmlrp
                 // lock the slice
                 ndlSlice.lock();
 
+                if (!ndlSlice.isStableOK() && !ndlSlice.isStableError()) {
+                    logger.info("deleteSlice(): unable to delete slice that is not yet stable, try again later");
+                    return setError("unable to delete slice that is not yet stable, try again later");
+                }
+
                 if (ndlSlice.isDeadOrClosing())
                     return setError("slice already closed");
 
