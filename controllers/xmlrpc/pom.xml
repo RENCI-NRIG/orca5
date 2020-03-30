@@ -164,6 +164,14 @@
                                                 </property> 
                                                 <property> 
                                                     <name>
+                                                         wrapper.shutdown.timeout 
+                                                    </name> 
+                                                    <value>
+                                                         300 
+                                                    </value> 
+                                                </property> 
+                                                <property> 
+                                                    <name>
                                                          wrapper.ping.timeout 
                                                     </name> 
                                                     <value>
