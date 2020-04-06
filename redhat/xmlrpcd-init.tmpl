@@ -22,7 +22,7 @@ exec="/opt/orca-controller/bin/xmlrpcd"
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
 start() {
-    echo "-17" > /proc/self/oom_adj
+    sudo echo "-17" > /proc/self/oom_score_adj
     [ -x $exec ] || exit 5
     [ -n "$ORCA_CONTROLLER_HOME" ] || exit 6
     echo -n $"Starting $prog: "
