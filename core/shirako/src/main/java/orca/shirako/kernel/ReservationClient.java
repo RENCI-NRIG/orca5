@@ -784,6 +784,15 @@ class ReservationClient extends Reservation implements IKernelClientReservation,
                 // delay the close until the redeem comes back
                 logger.info("Received close for a redeeming reservation. Deferring close until redeem completes.");
                 closedDuringRedeem = true;
+                if(term != null) {
+                    Date now = new Date();
+                    if(term.expired(now)) {
+                        logger.info("Ticket has expired, closing a redeeming reservations");
+                        transition("close", ReservationStates.Closed, pending);
+                        // tell the broker we do not need the resources anymore
+                        doRelinquish();
+                    }
+                }
             }
             break;
         case ReservationStates.Active:
