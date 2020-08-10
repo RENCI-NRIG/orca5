@@ -807,7 +807,14 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                     if (r.getState() == OrcaConstants.ReservationStateFailed) {
                         en.put(ApiReturnFields.GENI_ERROR.name, (r.getNotices() != null ? r.getNotices()
                                 : "ERROR: no detailed error message available"));
-                    } else {
+                    } 
+                    else if (r.getState() == OrcaConstants.ReservationStateClosed && r.getNotices() != null &&
+                            r.getNotices().toLowerCase().contains("insufficient")) {
+                        en.put(ApiReturnFields.GENI_ERROR.name, (r.getNotices() != null ? r.getNotices()
+                                : "ERROR: no detailed error message available"));
+                        en.put(ApiReturnFields.GENI_STATUS.name, GeniStates.FAILED.name);
+                    }
+                    else {
                         en.put(ApiReturnFields.GENI_ERROR.name, "");
                     }
                     // en.put(ApiReturnFields.ORCA_EXPIRES.name, (new Date(r.getEnd())).toString()); //ORCA reservation

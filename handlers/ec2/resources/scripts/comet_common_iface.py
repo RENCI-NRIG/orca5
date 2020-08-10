@@ -62,10 +62,7 @@ class CometInterface:
             'Key':rId,
             'readToken':readToken
         }
-        if self._verify == False:
-            response = requests.get((host + '/readScope'), headers=self._headers(), params=params, verify=False)
-        else:
-            response = requests.get((host + '/readScope'), headers=self._headers(), params=params, cert= self._cert, verify=False)
+        response = requests.get((host + '/readScope'), headers=self._headers(), params=params, verify=False)
         self._log.debug ("get_family: Received Response Status Code: " + str(response.status_code))
         if response.status_code == 200 :
             self._log.debug ("get_family: Received Response Message: " + response.json()["message"])
@@ -105,7 +102,7 @@ class CometInterface:
         if self._verify == False:
             response = requests.delete((host +'/deleteScope'), headers=self._headers(), params=params, verify=False)
         else:
-            response = requests.delete((host +'/deleteScope'), headers=self._headers(), params=params, cert= self._cert, verify=False)
+            response = requests.delete((host +'/deleteScope'), headers=self._headers(), params=params, cert= self._cert, verify=self._verify)
         self._log.debug ("delete_family: Received Response Status Code: " + str(response.status_code))
         if response.status_code == 200 :
             self._log.debug ("delete_family: Received Response Message: " + response.json()["message"])
@@ -128,10 +125,7 @@ class CometInterface:
                'family':family,
             }
 
-        if self._verify == False:
-            response = requests.get((host +'/enumerateScope'), headers=self._headers(), params=params, verify=False)
-        else:
-            response = requests.get((host +'/enumerateScope'), headers=self._headers(), params=params, cert= self._cert, verify=False)
+        response = requests.get((host +'/enumerateScope'), headers=self._headers(), params=params, verify=False)
         self._log.debug ("enumerate_families: Received Response Status Code: " + str(response.status_code))
         if response.status_code == 200 :
             self._log.debug ("enumerate_families: Received Response Message: " + response.json()["message"])
