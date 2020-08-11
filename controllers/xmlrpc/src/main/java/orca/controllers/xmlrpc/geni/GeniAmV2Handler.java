@@ -804,14 +804,18 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                             NdlToRSpecHelper.getControllerForUrl(baseUrl));
                     en.put(ApiReturnFields.GENI_URN.name, resUrn);
                     en.put(ApiReturnFields.GENI_STATUS.name, getSliverGeniState(r).name);
+                    String errorDetail = r.getNotices();
+                    if (errorDetail == null) {
+                        errorDetail = "no further information available";
+                    }
+                    String errorMessage = "ERROR: unable to provision requested resource (" + errorDetail + ")";
+
                     if (r.getState() == OrcaConstants.ReservationStateFailed) {
-                        en.put(ApiReturnFields.GENI_ERROR.name, (r.getNotices() != null ? r.getNotices()
-                                : "ERROR: no detailed error message available"));
+                        en.put(ApiReturnFields.GENI_ERROR.name, errorMessage);
                     } 
-                    else if (r.getState() == OrcaConstants.ReservationStateClosed && r.getNotices() != null &&
-                            r.getNotices().toLowerCase().contains("insufficient")) {
-                        en.put(ApiReturnFields.GENI_ERROR.name, (r.getNotices() != null ? r.getNotices()
-                                : "ERROR: no detailed error message available"));
+                    else if (r.getState() == OrcaConstants.ReservationStateClosed && errorDetail != null &&
+                            errorDetail.toLowerCase().contains("insufficient")) {
+                        en.put(ApiReturnFields.GENI_ERROR.name, errorMessage);
                         en.put(ApiReturnFields.GENI_STATUS.name, GeniStates.FAILED.name);
                     }
                     else {
