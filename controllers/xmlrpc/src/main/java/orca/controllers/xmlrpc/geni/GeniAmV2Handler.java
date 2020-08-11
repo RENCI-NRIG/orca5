@@ -158,6 +158,14 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                             "ERROR: slice " + slice_urn + " contains no reservations");
                 }
 
+                for (ReservationMng reservationMng : allRes) {
+                    String notice = reservationMng.getNotices();
+                    if (reservationMng.getState() == OrcaConstants.ReservationStateClosed &&
+                            notice != null && notice.toLowerCase().contains("insufficient") ) {
+                        reservationMng.setState(OrcaConstants.ReservationStateFailed);
+                    }
+                }
+
                 String ndlMan = null;
                 GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
                 try {
@@ -184,6 +192,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                 } else {
                     result = (String) convRes.get("ret");
                 }
+
                 if (compressed)
                     result = CompressEncode.compressEncode(result);
             }
