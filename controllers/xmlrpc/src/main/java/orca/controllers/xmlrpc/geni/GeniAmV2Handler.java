@@ -847,7 +847,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                 ss.put(ApiReturnFields.GENI_RESOURCES.name, resourceList);
                 if (reservationsClosedDueToInsuffificentResources) {
                     ss.put(ApiReturnFields.GENI_STATUS.name, GeniStates.FAILED.name);
-                    return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, "Not sufficient resources available!");
+                    return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, "Insufficient resources at the aggregate!");
                 }
                 else {
                     ss.put(ApiReturnFields.GENI_STATUS.name, getSliceGeniState(instance, slice_urn).name);
