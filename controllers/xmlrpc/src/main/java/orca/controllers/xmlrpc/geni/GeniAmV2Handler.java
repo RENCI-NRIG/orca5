@@ -751,6 +751,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 
         IOrcaServiceManager sm = null;
         XmlrpcControllerSlice ndlSlice = null;
+        boolean reservationsClosedDueToInsuffificentResources = false;
         try {
             logger.info("GENI AM v2 SliverStatus() invoked for " + slice_urn);
             validateGeniCredential(slice_urn, credentials, new String[] { "*", "pi", "instantiate", "control" },
@@ -826,6 +827,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                             errorDetail.toLowerCase().contains("insufficient")) {
                         en.put(ApiReturnFields.GENI_ERROR.name, errorMessage);
                         en.put(ApiReturnFields.GENI_STATUS.name, GeniStates.FAILED.name);
+                        reservationsClosedDueToInsuffificentResources = true;
                     }
                     else {
                         en.put(ApiReturnFields.GENI_ERROR.name, "");
@@ -843,9 +845,14 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                     resourceList.add(en);
                 }
                 ss.put(ApiReturnFields.GENI_RESOURCES.name, resourceList);
-                ss.put(ApiReturnFields.GENI_STATUS.name, getSliceGeniState(instance, slice_urn).name);
-
-                return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, null);
+                if (reservationsClosedDueToInsuffificentResources) {
+                    ss.put(ApiReturnFields.GENI_STATUS.name, GeniStates.FAILED.name);
+                    return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, "Not sufficient resources available!");
+                }
+                else {
+                    ss.put(ApiReturnFields.GENI_STATUS.name, getSliceGeniState(instance, slice_urn).name);
+                    return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, null);
+                }
             }
         } catch (CredentialException ce) {
             logger.error("GENI SliverStatus: Credential Exception: " + ce);
