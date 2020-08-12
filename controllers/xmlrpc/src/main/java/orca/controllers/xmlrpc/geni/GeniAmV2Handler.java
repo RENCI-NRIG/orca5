@@ -158,6 +158,14 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                             "ERROR: slice " + slice_urn + " contains no reservations");
                 }
 
+                for (ReservationMng reservationMng : allRes) {
+                    String notice = reservationMng.getNotices();
+                    if (reservationMng.getState() == OrcaConstants.ReservationStateClosed &&
+                            notice != null && notice.toLowerCase().contains("insufficient") ) {
+                        reservationMng.setState(OrcaConstants.ReservationStateFailed);
+                    }
+                }
+
                 String ndlMan = null;
                 GeniStates geniStates = GeniAmV2Handler.getSliceGeniState(instance, slice_urn);
                 try {
@@ -184,6 +192,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                 } else {
                     result = (String) convRes.get("ret");
                 }
+
                 if (compressed)
                     result = CompressEncode.compressEncode(result);
             }
@@ -742,6 +751,7 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
 
         IOrcaServiceManager sm = null;
         XmlrpcControllerSlice ndlSlice = null;
+        boolean reservationsClosedDueToInsuffificentResources = false;
         try {
             logger.info("GENI AM v2 SliverStatus() invoked for " + slice_urn);
             validateGeniCredential(slice_urn, credentials, new String[] { "*", "pi", "instantiate", "control" },
@@ -804,10 +814,22 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                             NdlToRSpecHelper.getControllerForUrl(baseUrl));
                     en.put(ApiReturnFields.GENI_URN.name, resUrn);
                     en.put(ApiReturnFields.GENI_STATUS.name, getSliverGeniState(r).name);
+                    String errorDetail = r.getNotices();
+                    if (errorDetail == null) {
+                        errorDetail = "no further information available";
+                    }
+                    String errorMessage = "ERROR: unable to provision requested resource (" + errorDetail + ")";
+
                     if (r.getState() == OrcaConstants.ReservationStateFailed) {
-                        en.put(ApiReturnFields.GENI_ERROR.name, (r.getNotices() != null ? r.getNotices()
-                                : "ERROR: no detailed error message available"));
-                    } else {
+                        en.put(ApiReturnFields.GENI_ERROR.name, errorMessage);
+                    } 
+                    else if (r.getState() == OrcaConstants.ReservationStateClosed && errorDetail != null &&
+                            errorDetail.toLowerCase().contains("insufficient")) {
+                        en.put(ApiReturnFields.GENI_ERROR.name, errorMessage);
+                        en.put(ApiReturnFields.GENI_STATUS.name, GeniStates.FAILED.name);
+                        reservationsClosedDueToInsuffificentResources = true;
+                    }
+                    else {
                         en.put(ApiReturnFields.GENI_ERROR.name, "");
                     }
                     // en.put(ApiReturnFields.ORCA_EXPIRES.name, (new Date(r.getEnd())).toString()); //ORCA reservation
@@ -823,9 +845,14 @@ public class GeniAmV2Handler extends XmlrpcHandlerHelper implements IGeniAmV2Int
                     resourceList.add(en);
                 }
                 ss.put(ApiReturnFields.GENI_RESOURCES.name, resourceList);
-                ss.put(ApiReturnFields.GENI_STATUS.name, getSliceGeniState(instance, slice_urn).name);
-
-                return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, null);
+                if (reservationsClosedDueToInsuffificentResources) {
+                    ss.put(ApiReturnFields.GENI_STATUS.name, GeniStates.FAILED.name);
+                    return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, "Insufficient resources at the aggregate!");
+                }
+                else {
+                    ss.put(ApiReturnFields.GENI_STATUS.name, getSliceGeniState(instance, slice_urn).name);
+                    return getStandardApiReturn(ApiReturnCodes.SUCCESS.code, ss, null);
+                }
             }
         } catch (CredentialException ce) {
             logger.error("GENI SliverStatus: Credential Exception: " + ce);

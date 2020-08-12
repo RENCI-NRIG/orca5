@@ -6,6 +6,8 @@ import json
 import signal
 import time
 import traceback
+import stat
+import tempfile
 from os import kill
 from signal import alarm, signal, SIGALRM, SIGKILL
 from subprocess import *
@@ -290,6 +292,53 @@ class Project:
 
         return new_project_id
 
+    @classmethod
+    def atomic_output(self, file_contents, output_fname):
+        """
+        Take a Python object and attempt to serialize it to JSON and write
+        the resulting bytes to an output file atomically.
+
+        This function does not return a value and throws an exception on failure.
+
+        :param output_object: A Python object to be serialized into JSON.
+        :param output_fname: A filename to write the object into.
+        :type output_fname: string
+        """
+
+        dir_name, file_name = os.path.split(output_fname)
+    
+        tmp_fd, tmp_file_name = tempfile.mkstemp(dir = dir_name, prefix=file_name)
+        try:
+            with os.fdopen(tmp_fd, 'w') as fp:
+                fp.write(file_contents)
+
+            # atomically move new tokens in place
+            self.atomic_rename(tmp_file_name, output_fname)
+
+        finally:
+            try:
+                os.unlink(tmp_file_name)
+            except OSError:
+                pass
+
+
+    @classmethod
+    def atomic_rename(self, tmp_file, target_file, mode=stat.S_IRUSR):
+        """
+        If successful Credmgr will only be dealing with fully prepared and
+        usable credential cache files.
+
+        :param tmp_file: The temp file path containing
+            the TGT acquired from the ngbauth service.
+        :type tmp_file: string
+        :param target_file: The target file.
+        :return: Whether the chmod/rename was successful.
+        :rtype: bool
+        """
+
+        os.chmod(tmp_file, mode)
+        os.rename(tmp_file, target_file)
+
 
     @classmethod
     def generate_user_keystone_file(self, project_name, user_name, user_pwd, ec2_auth_url):
@@ -569,13 +618,8 @@ class Project:
             time.sleep(4)
             return key_file
 
-        fd = None
         try:
-            fd = open(key_file, 'a+')
-            fd.seek(0)
-            fd.truncate()
-            fd.write(ssh_key)
-            fd.close
+            self.atomic_output(ssh_key, key_file)
         except Exception as e:
             LOG.error("Exception occured e=" + str(e))
             raise Openstack_Command_Fail('failed to write to key file ' + key_file)
@@ -783,20 +827,21 @@ class Project:
 
     @classmethod
     def _has_resources_poll(self, project_name, timeout):
+        retry = 3
 
-        begin = time.time()
-        while True:
-            time_passed = time.time() - begin
-            res = self._has_resources(project_name)
+        res = True
+        for i in range(retry):
+            begin = time.time()
+            while True:
+                time_passed = time.time() - begin
+                res = self._has_resources(project_name)
 
-            if res == False:
-                LOG.warning("openstack project " + str(project_name) + " has no resources")
-                return False
-
-            if time_passed > timeout:
-                break
-            time.sleep(10)
-        return True
+                if time_passed > timeout:
+                    break
+                time.sleep(10)
+        if res == False:
+            LOG.warning("openstack project " + str(project_name) + " has no resources")
+        return res
 
     @classmethod
     def cleanup(self, project_name, user_name):
