@@ -76,14 +76,6 @@ cat << EOF > "${ORCA_BLD}/settings.xml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <mirrors>
-    <mirror>
-      <mirrorOf>external:*,!geni-imf-libs,!geni-orca-libs,!geni-orca-snapshot</mirrorOf>
-      <name>remote-repos</name>
-        <url>https://nrig-nexus.renci.org/repository/geni-orca/</url>
-      <id>remote-repos</id>
-    </mirror>
-  </mirrors>
   <localRepository>${MVN_REPO}</localRepository>
 </settings>
 EOF
