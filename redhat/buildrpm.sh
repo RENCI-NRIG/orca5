@@ -76,14 +76,6 @@ cat << EOF > "${ORCA_BLD}/settings.xml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <mirrors>
-    <mirror>
-      <mirrorOf>external:*,!geni-imf-libs,!geni-orca-libs,!geni-orca-snapshot</mirrorOf>
-      <name>remote-repos</name>
-        <url>http://ci-dev.renci.org/nexus/content/groups/public/</url>
-      <id>remote-repos</id>
-    </mirror>
-  </mirrors>
   <localRepository>${MVN_REPO}</localRepository>
 </settings>
 EOF
@@ -119,7 +111,7 @@ export MAVEN_ARGS="-s ${ORCA_BLD}/settings.xml"
 
 # Build RPM from tarball
 # the build scripts use Bash specific functions (pushd/popd), so make sure we use that buildshell
-# /bin/sh defaults to bash on RedHat, but it does not on Ubuntu. 
+# /bin/sh defaults to bash on RedHat, but it does not on Ubuntu.
 rpmbuild --define '_buildshell /bin/bash' --define "_topdir ${RPM_BUILD_DIR}" --define '_tmppath %{_topdir}/tmp' --define '%packager RENCI/ExoGENI <exogeni-ops@renci.org>' -ta ${BUILD_NAME}.tar.gz
 
 BLD_STATUS=$?
