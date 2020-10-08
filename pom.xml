@@ -27,7 +27,7 @@
     <!-- Project licenses -->
     <ciManagement>
         <system>hudson</system>
-        <url>http://ci-dev.renci.org/hudson/view/GENI-ORCA/</url>
+        <url>https://nrig-nexus.renci.org/hudson/view/GENI-ORCA/</url>
     </ciManagement>
 
     <licenses>
@@ -51,10 +51,10 @@
         <orca.repository.id>geni-orca-libs</orca.repository.id>
         <orca.snap.repository.id>geni-orca-snapshot</orca.snap.repository.id>
         <orca.rel.repository.id>geni-orca-release</orca.rel.repository.id>
-        <orca.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-libs</orca.repository.url>
-        <orca.snap.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-snapshot/
+        <orca.repository.url>https://nrig-nexus.renci.org/repository/geni-orca-libs</orca.repository.url>
+        <orca.snap.repository.url>https://nrig-nexus.renci.org/repository/geni-orca-snapshot/
         </orca.snap.repository.url>
-        <orca.rel.repository.url>http://ci-dev.renci.org/nexus/content/repositories/geni-orca-release/
+        <orca.rel.repository.url>https://nrig-nexus.renci.org/repository/geni-orca-release/
         </orca.rel.repository.url>
         <orca.website.id>orca.website</orca.website.id>
         <orca.website.url>dav:https://geni-orca.renci.org/orca-doc/current</orca.website.url>
